@@ -20,7 +20,8 @@ const {
   getLockVerdict,
   LOCKED_REVISION_MESSAGE,
   getUnreleasedChangeOrderItems,
-  getUnreleasedChangeOrderIssue
+  getUnreleasedChangeOrderIssue,
+  getItemOrderabilityIssue
 } = await import("./items.server");
 
 describe("getLockVerdict", () => {
@@ -290,5 +291,69 @@ describe("getUnreleasedChangeOrderIssue", () => {
     expect(await getUnreleasedChangeOrderIssue(client, args)).toBe(
       "These items could not be checked against their change orders."
     );
+  });
+});
+
+// Stands in for the two reads the guard makes: the `item` row and, when that
+// row names a change order, the `changeOrder` row.
+function fakeClient(rows: { item?: Row; changeOrder?: Row }) {
+  return {
+    from(table: string) {
+      const builder = {
+        select: () => builder,
+        eq: () => builder,
+        maybeSingle: async () => ({
+          data: rows[table as keyof typeof rows] ?? null,
+          error: null
+        })
+      };
+      return builder;
+    }
+  } as never;
+}
+
+const revision = {
+  readableIdWithRevision: "P000001.A",
+  active: true,
+  changeOrderId: "co_1"
+};
+
+describe("getItemOrderabilityIssue", () => {
+  it("rejects an inactive item, naming it", async () => {
+    const client = fakeClient({
+      item: {
+        readableIdWithRevision: "P000001",
+        active: false,
+        changeOrderId: null
+      }
+    });
+
+    expect(await getItemOrderabilityIssue(client, args)).toBe(
+      "P000001 is inactive."
+    );
+  });
+
+  // `active` alone cannot catch this: a draft revision can be switched Active
+  // by hand before its change order ships.
+  it("rejects an active item whose change order is unreleased", async () => {
+    const client = fakeClient({
+      item: revision,
+      changeOrder: { changeOrderId: "ECO-000001", status: "Draft" }
+    });
+
+    expect(await getItemOrderabilityIssue(client, args)).toBe(
+      "P000001.A was created by change order ECO-000001, which has not been released yet."
+    );
+  });
+
+  // Release leaves changeOrderId in place as a provenance link, so the column
+  // alone cannot answer "is this still a draft".
+  it("passes an item whose change order is released", async () => {
+    const client = fakeClient({
+      item: revision,
+      changeOrder: { changeOrderId: "ECO-000001", status: "Done" }
+    });
+
+    expect(await getItemOrderabilityIssue(client, args)).toBeNull();
   });
 });
