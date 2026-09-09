@@ -3,6 +3,7 @@ import type { jobStatus } from "../production/production.models";
 import type { QuantityEffect } from "../shared";
 import type {
   getCustomer,
+  getCustomerBankAccounts,
   getCustomerContacts,
   getCustomerLocations,
   getCustomerStatuses,
@@ -278,3 +279,7 @@ export type SalesRFQLine = NonNullable<
 >[number];
 
 export type SalesRFQStatusType = Database["public"]["Enums"]["salesRfqStatus"];
+
+export type CustomerBankAccount = NonNullable<
+  Awaited<ReturnType<typeof getCustomerBankAccounts>>["data"]
+>[number];

@@ -1,7 +1,12 @@
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
-import { address, contact } from "~/types/validators";
+import {
+  address,
+  bankAccountFields,
+  contact,
+  refineBankFields
+} from "~/types/validators";
 import { incoterms, itemType, taxExemptionReasons } from "../shared";
 
 export const KPIs = [
@@ -646,3 +651,17 @@ export function canCreatePurchaseOrderRevision(transition: {
     Boolean(transition.orderDate)
   );
 }
+
+/**
+ * A supplier's bank details — where we pay them.
+ *
+ * `id` identifies the version being superseded, not a row to update: the table has no
+ * UPDATE policy, so saving an edit inserts a new version and stamps the old one Inactive.
+ */
+export const supplierBankAccountValidator = z
+  .object({
+    id: zfd.text(z.string().optional()),
+    name: z.string().min(1, { message: "Name is required" }),
+    ...bankAccountFields
+  })
+  .superRefine(refineBankFields);

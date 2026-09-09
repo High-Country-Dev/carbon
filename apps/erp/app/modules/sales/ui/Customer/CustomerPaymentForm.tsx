@@ -20,6 +20,7 @@ import {
 } from "~/components/Form";
 import PaymentTerm from "~/components/Form/PaymentTerm";
 import { usePermissions } from "~/hooks";
+import { path } from "~/utils/path";
 import { customerPaymentValidator } from "../../sales.models";
 
 type CustomerPaymentFormProps = {
@@ -38,6 +39,9 @@ const CustomerPaymentForm = ({ initialValues }: CustomerPaymentFormProps) => {
   return (
     <ValidatedForm
       method="post"
+      // Explicit: the bank-account drawers are child routes of this page, and a form with
+      // no action posts to whichever route is deepest in the match.
+      action={path.to.customerPayment(initialValues.customerId)}
       validator={customerPaymentValidator}
       defaultValues={initialValues}
     >

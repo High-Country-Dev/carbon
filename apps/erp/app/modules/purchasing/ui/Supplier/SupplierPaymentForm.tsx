@@ -21,6 +21,7 @@ import {
 import PaymentTerm from "~/components/Form/PaymentTerm";
 import { usePermissions } from "~/hooks";
 import { supplierPaymentValidator } from "~/modules/purchasing";
+import { path } from "~/utils/path";
 
 type SupplierPaymentFormProps = {
   initialValues: z.infer<typeof supplierPaymentValidator>;
@@ -38,6 +39,9 @@ const SupplierPaymentForm = ({ initialValues }: SupplierPaymentFormProps) => {
   return (
     <ValidatedForm
       method="post"
+      // Explicit: the bank-account drawers are child routes of this page, and a form with
+      // no action posts to whichever route is deepest in the match.
+      action={path.to.supplierPayment(initialValues.supplierId)}
       validator={supplierPaymentValidator}
       defaultValues={initialValues}
     >

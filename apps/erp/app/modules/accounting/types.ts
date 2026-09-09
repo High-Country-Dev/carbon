@@ -3,6 +3,8 @@ import type {
   getAccount,
   getAccountingPeriods,
   getAccountsList,
+  getBankAccount,
+  getBankAccounts,
   getCostCenters,
   getCostCentersTree,
   getCurrencies,
@@ -547,3 +549,11 @@ export type AssetDepreciationHistoryItem = NonNullable<
 export type FixedAssetDisposal = NonNullable<
   Awaited<ReturnType<typeof getFixedAssetDisposal>>["data"]
 >;
+
+export type BankAccount = NonNullable<
+  Awaited<ReturnType<typeof getBankAccount>>["data"]
+>;
+
+export type BankAccountListItem = NonNullable<
+  NonNullable<Awaited<ReturnType<typeof getBankAccounts>>>["data"]
+>[number];

@@ -40,7 +40,6 @@ export const path = {
     account: `${x}/account`,
     accounting: `${x}/accounting`,
     accountingDefaults: `${x}/accounting/defaults`,
-    accountingGroupsBankAccounts: `${x}/accounting/groups/bank-accounts`,
     accountingGroupsFixedAssets: `${x}/accounting/groups/fixed-assets`,
     accountingGroupsInventory: `${x}/accounting/groups/inventory`,
     accountingGroupsPurchasing: `${x}/accounting/groups/purchasing`,
@@ -404,6 +403,9 @@ export const path = {
     balanceSheet: `${x}/reports/balance-sheet`,
     balanceSheetLedger: (id: string) =>
       generatePath(`${x}/reports/balance-sheet/${id}`),
+    bankAccount: (id: string) =>
+      generatePath(`${x}/accounting/bank-accounts/${id}`),
+    bankAccounts: `${x}/accounting/bank-accounts`,
     batchProperty: (itemId: string) =>
       generatePath(`${x}/inventory/batch-property/${itemId}/property`),
     batchPropertyOrder: (itemId: string) =>
@@ -550,6 +552,8 @@ export const path = {
     customerAccounting: (id: string) =>
       generatePath(`${x}/customer/${id}/accounting`),
     customerAccounts: `${x}/users/customers`,
+    customerBankAccount: (customerId: string, id: string) =>
+      generatePath(`${x}/customer/${customerId}/payments/bank-accounts/${id}`),
     customerContact: (customerId: string, id: string) =>
       generatePath(`${x}/customer/${customerId}/contacts/${id}`),
     customerContacts: (id: string) =>
@@ -588,6 +592,14 @@ export const path = {
     customFields: `${x}/settings/custom-fields`,
     customFieldsTable: (table: string) =>
       generatePath(`${x}/settings/custom-fields/${table}`),
+    deactivateCustomerBankAccount: (customerId: string, id: string) =>
+      generatePath(
+        `${x}/customer/${customerId}/payments/bank-accounts/deactivate/${id}`
+      ),
+    deactivateSupplierBankAccount: (supplierId: string, id: string) =>
+      generatePath(
+        `${x}/supplier/${supplierId}/payments/bank-accounts/deactivate/${id}`
+      ),
 
     deactivateUsers: `${x}/users/deactivate`,
     defaultRevision: (id: string) =>
@@ -622,6 +634,8 @@ export const path = {
       generatePath(`${x}/people/attribute/delete/${id}`),
     deleteAttributeCategory: (id: string) =>
       generatePath(`${x}/people/attributes/delete/${id}`),
+    deleteBankAccount: (id: string) =>
+      generatePath(`${x}/accounting/bank-accounts/delete/${id}`),
     deleteBatchProperty: (itemId: string, id: string) =>
       generatePath(
         `${x}/inventory/batch-property/${itemId}/property/delete/${id}`
@@ -1468,6 +1482,7 @@ export const path = {
     newAttributeCategory: `${x}/people/attributes/new`,
     newAttributeForCategory: (id: string) =>
       generatePath(`${x}/people/attributes/list/${id}/new`),
+    newBankAccount: `${x}/accounting/bank-accounts/new`,
     newBatch: `${x}/inventory/batches/new`,
     newBulkJob: `${x}/job/bulk/new`,
     // Create form lives at its own top-level route (like /x/part/new and
@@ -1491,6 +1506,8 @@ export const path = {
     newCostCenter: `${x}/accounting/cost-centers/new`,
     newCustomer: `${x}/customer/new`,
     newCustomerAccount: `${x}/users/customers/new`,
+    newCustomerBankAccount: (id: string) =>
+      generatePath(`${x}/customer/${id}/payments/bank-accounts/new`),
     newCustomerContact: (id: string) =>
       generatePath(`${x}/customer/${id}/contacts/new`),
     newCustomerLocation: (id: string) =>
@@ -1638,6 +1655,8 @@ export const path = {
     newSuggestion: `${x}/resources/suggestions/new`,
     newSupplier: `${x}/supplier/new`,
     newSupplierAccount: `${x}/users/suppliers/new`,
+    newSupplierBankAccount: (id: string) =>
+      generatePath(`${x}/supplier/${id}/payments/bank-accounts/new`),
     newSupplierContact: (id: string) =>
       generatePath(`${x}/supplier/${id}/contacts/new`),
     newSupplierLocation: (id: string) =>
@@ -2110,6 +2129,8 @@ export const path = {
     supplierAccounts: `${x}/users/suppliers`,
     supplierApproval: (id: string) =>
       generatePath(`${x}/supplier/${id}/approval`),
+    supplierBankAccount: (supplierId: string, id: string) =>
+      generatePath(`${x}/supplier/${supplierId}/payments/bank-accounts/${id}`),
     supplierContact: (supplierId: string, id: string) =>
       generatePath(`${x}/supplier/${supplierId}/contacts/${id}`),
     supplierContacts: (id: string) =>

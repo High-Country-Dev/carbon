@@ -1,6 +1,11 @@
 import { z } from "zod";
 import { zfd } from "zod-form-data";
-import { address, contact } from "~/types/validators";
+import {
+  address,
+  bankAccountFields,
+  contact,
+  refineBankFields
+} from "~/types/validators";
 import { currencyCodes } from "../accounting";
 import {
   incoterms,
@@ -979,3 +984,16 @@ export function isSalesRfqLocked(status: string | null | undefined): boolean {
 export function isQuoteLocked(status: string | null | undefined): boolean {
   return status !== null && status !== undefined && status !== "Draft";
 }
+
+/**
+ * A customer's bank details — where they pay from, for direct debit and for recognising
+ * an incoming wire. Same versioned model as the supplier side: saving an edit inserts a
+ * new version rather than updating the row.
+ */
+export const customerBankAccountValidator = z
+  .object({
+    id: zfd.text(z.string().optional()),
+    name: z.string().min(1, { message: "Name is required" }),
+    ...bankAccountFields
+  })
+  .superRefine(refineBankFields);

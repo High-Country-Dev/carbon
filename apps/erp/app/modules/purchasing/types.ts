@@ -9,6 +9,7 @@ import type {
   getPurchasingRFQSuppliers,
   getPurchasingRFQs,
   getSupplier,
+  getSupplierBankAccounts,
   getSupplierContacts,
   getSupplierInteraction,
   getSupplierLocations,
@@ -110,4 +111,8 @@ export type SupplierQuoteLinePrice = NonNullable<
 
 export type SupplierType = NonNullable<
   Awaited<ReturnType<typeof getSupplierTypes>>["data"]
+>[number];
+
+export type SupplierBankAccount = NonNullable<
+  Awaited<ReturnType<typeof getSupplierBankAccounts>>["data"]
 >[number];

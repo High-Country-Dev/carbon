@@ -2,12 +2,17 @@ import type { Database, Json } from "@carbon/database";
 import { fetchAllFromTable, getCompanyTimeZone } from "@carbon/database";
 import type { Kysely, KyselyDatabase } from "@carbon/database/client";
 import { getLogger } from "@carbon/logger";
-import { datetime, getPurchaseOrderStatus } from "@carbon/utils";
+import {
+  datetime,
+  getPurchaseOrderStatus,
+  splitBankFieldsForStorage
+} from "@carbon/utils";
 import type {
   PostgrestResponse,
   PostgrestSingleResponse,
   SupabaseClient
 } from "@supabase/supabase-js";
+import { sql } from "kysely";
 import type { z } from "zod";
 import { getEmployeeJob } from "~/modules/people";
 import type { GenericQueryFilters } from "~/utils/query";
@@ -30,6 +35,7 @@ import type {
   purchasingRfqStatusType,
   selectedLinesValidator,
   supplierAccountingValidator,
+  supplierBankAccountValidator,
   supplierContactValidator,
   supplierPaymentValidator,
   supplierProcessValidator,
@@ -3056,5 +3062,201 @@ export async function getDefaultAttachmentsForPO(
           : null,
       path: `${prefix}/${f.name}`
     }));
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Supplier bank accounts
+// ---------------------------------------------------------------------------
+// Versioned and never edited in place. `supplierBankAccount` has SELECT and INSERT policies
+// only — no UPDATE, no DELETE — so business fields are immutable against PostgREST and
+// not merely against the UI. Changing where money moves is the classic payment-fraud
+// vector, and "never live-edited" has to hold against a direct API call.
+//
+// Every change therefore runs through `proposeSupplierBankChange` on a Kysely
+// transaction: the new version is inserted, its identifiers are encrypted into Supabase
+// Vault by the same transaction, and the version it replaces is stamped Inactive. Calling
+// the vault RPC inside the transaction is what makes the whole change atomic — a failed
+// secret write rolls the new row back rather than leaving one whose account number cannot
+// be read.
+//
+// When the approval gate lands (.ai/specs/2026-07-04-master-data-controls.md) it inserts
+// the same row with status 'Pending Approval' instead of 'Active'; nothing here changes
+// shape and no data migrates.
+
+export async function getSupplierBankAccount(
+  client: SupabaseClient<Database>,
+  id: string,
+  companyId: string
+) {
+  return client
+    .from("supplierBankAccount")
+    .select("*")
+    .eq("id", id)
+    .eq("companyId", companyId)
+    .single();
+}
+
+/** Every version, newest first — the history a reviewer needs. */
+export async function getSupplierBankAccounts(
+  client: SupabaseClient<Database>,
+  supplierId: string,
+  companyId: string
+) {
+  return client
+    .from("supplierBankAccount")
+    .select("*")
+    .eq("supplierId", supplierId)
+    .eq("companyId", companyId)
+    .order("createdAt", { ascending: false });
+}
+
+/**
+ * The accounts in force right now.
+ *
+ * This is the ONLY reader a payment surface may use. Reading the table directly would see
+ * superseded versions and, once the approval gate exists, unapproved ones.
+ */
+export async function getActiveSupplierBankAccounts(
+  client: SupabaseClient<Database>,
+  supplierId: string,
+  companyId: string
+) {
+  return client
+    .from("supplierBankAccount")
+    .select("*")
+    .eq("supplierId", supplierId)
+    .eq("companyId", companyId)
+    .eq("status", "Active")
+    .order("createdAt", { ascending: false });
+}
+
+type SupplierBankChange = {
+  companyId: string;
+  supplierId: string;
+  userId: string;
+  /** The Active version this change supersedes, for an update or a deactivation. */
+  replacesId?: string;
+  customFields?: Json;
+} & (
+  | ({
+      changeType: "Create" | "Update";
+    } & Omit<
+      z.infer<typeof supplierBankAccountValidator>,
+      "id" | "storedSecrets"
+    >)
+  | { changeType: "Deactivate" }
+);
+
+export async function proposeSupplierBankChange(
+  db: Kysely<KyselyDatabase>,
+  change: SupplierBankChange
+) {
+  const { companyId, supplierId, userId, replacesId } = change;
+
+  return db.transaction().execute(async (trx) => {
+    const now = new Date().toISOString();
+
+    const supersede = async () => {
+      if (!replacesId) return;
+      await trx
+        .updateTable("supplierBankAccount")
+        .set({
+          status: "Inactive",
+          effectiveTo: now,
+          updatedBy: userId,
+          updatedAt: now
+        })
+        .where("id", "=", replacesId)
+        .where("companyId", "=", companyId)
+        .where("status", "=", "Active")
+        .execute();
+    };
+
+    // Deactivation retires the current version and adds nothing. The change columns are
+    // already on the table, so gating a deactivation later is an insert, not a migration.
+    if (change.changeType === "Deactivate") {
+      if (!replacesId) {
+        throw new Error("Cannot deactivate without the version being retired");
+      }
+      await supersede();
+      return { id: replacesId };
+    }
+
+    const {
+      changeType,
+      name,
+      bankName,
+      accountHolderName,
+      countryCode,
+      currencyCode,
+      ...identifiers
+    } = change;
+
+    const storage = splitBankFieldsForStorage(countryCode, identifiers);
+
+    // An identifier the user left untouched keeps the version it is replacing: its mask
+    // travels with the secret below, so a name-only edit does not produce a version that
+    // identifies no account.
+    const prior = replacesId
+      ? await trx
+          .selectFrom("supplierBankAccount")
+          .select(["accountNumberLastFour", "ibanLastFour"])
+          .where("id", "=", replacesId)
+          .where("companyId", "=", companyId)
+          .executeTakeFirst()
+      : undefined;
+
+    const inserted = await trx
+      .insertInto("supplierBankAccount")
+      .values({
+        companyId,
+        supplierId,
+        status: "Active",
+        changeType,
+        replacesId: replacesId ?? null,
+        name,
+        bankName: bankName ?? null,
+        accountHolderName: accountHolderName ?? null,
+        countryCode,
+        currencyCode,
+        formatId: storage.formatId,
+        swiftBic: storage.columns.swiftBic,
+        routingNumber: storage.columns.routingNumber,
+        bankIdentifiers: JSON.stringify(storage.bankIdentifiers),
+        accountNumberLastFour:
+          storage.lastFour.accountNumber ??
+          prior?.accountNumberLastFour ??
+          null,
+        ibanLastFour: storage.lastFour.iban ?? prior?.ibanLastFour ?? null,
+        effectiveFrom: now,
+        customFields: change.customFields
+          ? JSON.stringify(change.customFields)
+          : null,
+        createdBy: userId
+      } as never)
+      .returning("id")
+      .executeTakeFirstOrThrow();
+
+    let secrets = storage.secrets;
+    if (replacesId) {
+      const carried = await sql<{ secret: Record<string, string> | null }>`
+        SELECT get_bank_account_secret(${companyId}, 'supplier', ${replacesId}) AS secret
+      `.execute(trx);
+      secrets = { ...(carried.rows[0]?.secret ?? {}), ...storage.secrets };
+    }
+
+    if (Object.keys(secrets).length > 0) {
+      await sql`
+        SELECT upsert_bank_account_secret(
+          ${companyId}, 'supplier', ${inserted.id}, ${JSON.stringify(secrets)}::jsonb
+        )
+      `.execute(trx);
+    }
+
+    // Last, so a failure above leaves the existing version in force.
+    await supersede();
+
+    return inserted;
   });
 }

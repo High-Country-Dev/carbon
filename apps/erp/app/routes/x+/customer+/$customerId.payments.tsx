@@ -2,25 +2,31 @@ import { assertIsPost, error, success } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
+import { VStack } from "@carbon/react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { redirect, useLoaderData } from "react-router";
 import {
   customerPaymentValidator,
+  getCustomerBankAccounts,
   getCustomerPayment,
   updateCustomerPayment
 } from "~/modules/sales";
 import { CustomerPaymentForm } from "~/modules/sales/ui/Customer";
+import CustomerBankAccounts from "~/modules/sales/ui/Customer/CustomerBankAccounts";
 import { path } from "~/utils/path";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
-  const { client } = await requirePermissions(request, {
+  const { client, companyId } = await requirePermissions(request, {
     view: "sales"
   });
 
   const { customerId } = params;
   if (!customerId) throw new Error("Could not find customerId");
 
-  const customerPayment = await getCustomerPayment(client, customerId);
+  const [customerPayment, bankAccounts] = await Promise.all([
+    getCustomerPayment(client, customerId),
+    getCustomerBankAccounts(client, customerId, companyId)
+  ]);
 
   if (customerPayment.error || !customerPayment.data) {
     throw redirect(
@@ -33,7 +39,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   return {
-    customerPayment: customerPayment.data
+    customerPayment: customerPayment.data,
+    bankAccounts: bankAccounts.data ?? []
   };
 }
 
@@ -77,7 +84,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 
 export default function CustomerPaymentRoute() {
-  const { customerPayment } = useLoaderData<typeof loader>();
+  const { customerPayment, bankAccounts } = useLoaderData<typeof loader>();
   const initialValues = {
     customerId: customerPayment?.customerId ?? "",
     invoiceCustomerId: customerPayment?.invoiceCustomerId ?? "",
@@ -86,5 +93,11 @@ export default function CustomerPaymentRoute() {
     paymentTermId: customerPayment?.paymentTermId ?? ""
   };
 
-  return <CustomerPaymentForm initialValues={initialValues} />;
+  return (
+    <VStack spacing={4} className="w-full">
+      <CustomerPaymentForm initialValues={initialValues} />
+      {/* Renders the drawer routes through its own Outlet. */}
+      <CustomerBankAccounts bankAccounts={bankAccounts} />
+    </VStack>
+  );
 }

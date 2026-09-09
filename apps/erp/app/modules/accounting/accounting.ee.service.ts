@@ -6551,3 +6551,76 @@ export async function getAccountingSyncTieOutCell(
 
   return { data: { cell, journals, truncated }, error: null };
 }
+
+// ---------------------------------------------------------------------------
+// Bank accounts (the company's own)
+// ---------------------------------------------------------------------------
+// Reads and deletes only. The write path needs a service-role client for the Vault RPC,
+// so it lives in accounting.ee.server.ts — this file is re-exported by the module barrel
+// that client components import.
+
+export async function getBankAccount(
+  client: SupabaseClient<Database>,
+  bankAccountId: string,
+  companyId: string
+) {
+  return client
+    .from("bankAccount")
+    .select("*, account(id, number, name)")
+    .eq("id", bankAccountId)
+    .eq("companyId", companyId)
+    .single();
+}
+
+export async function getBankAccounts(
+  client: SupabaseClient<Database>,
+  companyId: string,
+  args: GenericQueryFilters & {
+    search: string | null;
+  }
+) {
+  let query = client
+    .from("bankAccount")
+    .select("*, account(id, number, name)", {
+      count: "exact"
+    })
+    .eq("companyId", companyId);
+
+  if (args.search) {
+    // Strip PostgREST filter-grammar characters so a search term can't alter the
+    // `or` expression or filter unintended columns.
+    const search = args.search.replace(/[,()\\]/g, " ");
+    query = query.or(`name.ilike.%${search}%,bankName.ilike.%${search}%`);
+  }
+
+  query = setGenericQueryFilters(query, args, [
+    { column: "name", ascending: true }
+  ]);
+  return query;
+}
+
+/** Active accounts only, for pickers. Never carries identifiers beyond the last four. */
+export async function getBankAccountsList(
+  client: SupabaseClient<Database>,
+  companyId: string
+) {
+  return client
+    .from("bankAccount")
+    .select("id, name, currencyCode, accountNumberLastFour, ibanLastFour")
+    .eq("companyId", companyId)
+    .eq("active", true)
+    .order("name");
+}
+
+export async function deleteBankAccount(
+  client: SupabaseClient<Database>,
+  bankAccountId: string,
+  companyId: string
+) {
+  // The vault secret goes with the row via the AFTER DELETE trigger.
+  return client
+    .from("bankAccount")
+    .delete()
+    .eq("id", bankAccountId)
+    .eq("companyId", companyId);
+}

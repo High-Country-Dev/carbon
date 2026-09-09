@@ -151,6 +151,7 @@ export const auditConfig = {
             }
           }
         },
+        customerBankAccount: { entityIdColumn: "customerId" },
         customerPayment: { role: "extension" }, // PK = customerId
         customerShipping: { role: "extension" }, // PK = customerId
         customerTax: { role: "extension" }, // PK = customerId
@@ -180,6 +181,7 @@ export const auditConfig = {
             supplierTypeId: { table: "supplierType", displayColumns: ["name"] }
           }
         },
+        supplierBankAccount: { entityIdColumn: "supplierId" },
         supplierPayment: { role: "extension" }, // PK = supplierId
         supplierShipping: { role: "extension" }, // PK = supplierId
         supplierTax: { role: "extension" }, // PK = supplierId
@@ -595,6 +597,13 @@ export const auditConfig = {
       }
     },
 
+    bankAccount: {
+      label: "Bank Account",
+      tables: {
+        bankAccount: { role: "root" }
+      }
+    },
+
     accountingPeriod: {
       label: "Accounting Period",
       tables: {
@@ -613,12 +622,14 @@ export const auditConfig = {
    */
   tableLabels: {
     customer: "Customer",
+    customerBankAccount: "Bank Account",
     customerPayment: "Payment",
     customerShipping: "Shipping",
     customerTax: "Tax",
     contact: "Contact",
     address: "Address",
     supplier: "Supplier",
+    supplierBankAccount: "Bank Account",
     supplierPayment: "Payment",
     supplierShipping: "Shipping",
     supplierTax: "Tax",
@@ -687,7 +698,16 @@ export const auditConfig = {
   } satisfies Partial<Record<TableName, string>>,
 
   /** Fields to skip in diff computation */
-  skipFields: ["updatedAt", "updatedBy", "embedding"],
+  // `secretRef` is a vault pointer and the two last-four columns are masks of a secret —
+  // none of them belong in a diff that is readable by anyone with audit access.
+  skipFields: [
+    "updatedAt",
+    "updatedBy",
+    "embedding",
+    "secretRef",
+    "accountNumberLastFour",
+    "ibanLastFour"
+  ],
 
   /** Retention period before archival (days) */
   retentionDays: 30,

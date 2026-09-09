@@ -1416,3 +1416,23 @@ full-screen ERP route.
 **Rule:** When triaging sweep failures, grep the response bodies for known fallback strings (`"Failed to *"` service fallbacks, `getEdgeFunctionErrorMessage` second arguments) and treat each match as a defect to root-cause: either the advertised schema disagrees with the actual acceptor (enum/shape drift between a `.models.ts` validator and an edge function's `payloadValidator`), or an error-sanitization layer is eating a legible message. Published-schema enums must be exactly what the write path accepts — never a wider "domain" enum reused for convenience.
 
 **Applies to:** API/MCP sweep scripts, `apps/erp/app/modules/*/[a-z]*.models.ts` validators that feed `client.functions.invoke` wrappers, `packages/database/supabase/functions/lib/response.ts`, `apps/erp/app/utils/error.ts`.
+
+## `sanitize()` nulls the key it can't fill — never route "leave this alone" through it
+
+**Context:** The bank-account update path built its payload with `sanitize({ ...row, accountNumberLastFour: storage.lastFour.accountNumber ?? undefined })`, on the reading that `sanitize` strips undefined keys so an identifier the user never re-entered would keep its stored mask. It does the opposite: `packages/utils/src/supabase.ts` REWRITES `undefined` to `null` for every key except `id`. Every edit that did not re-type the account number nulled its own last-four and was rejected by the row's identifier check with a generic "Failed to update".
+
+**Problem:** "Strip the empty values" and "null the empty values" produce identical-looking call sites and opposite database writes. On a column with a CHECK or a NOT NULL the difference surfaces as an opaque failure; on a plain column it silently erases data, which is worse.
+
+**Rule:** `sanitize()` means "write NULL where the caller gave nothing" — use it only for fields the form always submits. A field that means "unchanged when absent" must be conditionally spread into the payload (`...(value ? { field: value } : {})`) OUTSIDE the `sanitize` call, and the reason belongs in a comment because the next reader will assume stripping.
+
+**Applies to:** any `.update(sanitize(...))` in a `{module}.service.ts` / `{module}.server.ts` whose payload includes a field the UI can legitimately leave blank — masked secrets, write-once values, partially-rendered conditional forms.
+
+## A drawer form that submits by navigation races the Submit blocker — pass a fetcher
+
+**Context:** Three new drawer forms were written without `fetcher={fetcher}` on their `ValidatedForm`, unlike `SupplierLocationForm` and `PaymentTermForm`. Saving intermittently produced the "Unsaved changes — are you sure you want to leave this page?" modal and, on choosing "Leave this page", discarded the save entirely.
+
+**Problem:** `Submit`'s `useBlocker` predicate is `withBlocker && isTouched && !isSubmitting && currentLocation.pathname !== nextLocation.pathname`. An action that ends in `throw redirect(...)` to a different route IS a cross-pathname navigation; whether the blocker fires depends on whether `isSubmitting` has already flipped back to false when the redirect is evaluated. A navigation submit loses that race often enough to look like an intermittent product bug; a fetcher submit does not, which is why every shipped drawer form uses one.
+
+**Rule:** Any `ValidatedForm` rendered inside a `ModalDrawer` passes a `useFetcher()` as `fetcher`, whether or not it needs the response. Copy `SupplierLocationForm`, not the plain-form shape.
+
+**Applies to:** `apps/erp/app/modules/*/ui/**/*Form.tsx` rendered in a drawer or modal, `packages/form/src/components/Submit.tsx`.

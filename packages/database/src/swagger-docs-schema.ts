@@ -17052,6 +17052,285 @@ export default {
         tags: ["openPurchaseOrderLines"]
       }
     },
+    "/bankAccount": {
+      get: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.id"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.companyId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.name"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.glAccountId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.bankName"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.accountHolderName"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.countryCode"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.currencyCode"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.formatId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.swiftBic"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.routingNumber"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.bankIdentifiers"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.secretRef"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.accountNumberLastFour"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.ibanLastFour"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.active"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.customFields"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.createdBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.createdAt"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.updatedBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.updatedAt"
+          },
+          {
+            $ref: "#/parameters/select"
+          },
+          {
+            $ref: "#/parameters/order"
+          },
+          {
+            $ref: "#/parameters/range"
+          },
+          {
+            $ref: "#/parameters/rangeUnit"
+          },
+          {
+            $ref: "#/parameters/offset"
+          },
+          {
+            $ref: "#/parameters/limit"
+          },
+          {
+            $ref: "#/parameters/preferCount"
+          }
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+            schema: {
+              items: {
+                $ref: "#/definitions/bankAccount"
+              },
+              type: "array"
+            }
+          },
+          "206": {
+            description: "Partial Content"
+          }
+        },
+        tags: ["bankAccount"]
+      },
+      post: {
+        parameters: [
+          {
+            $ref: "#/parameters/body.bankAccount"
+          },
+          {
+            $ref: "#/parameters/select"
+          },
+          {
+            $ref: "#/parameters/preferPost"
+          }
+        ],
+        responses: {
+          "201": {
+            description: "Created"
+          }
+        },
+        tags: ["bankAccount"]
+      },
+      delete: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.id"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.companyId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.name"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.glAccountId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.bankName"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.accountHolderName"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.countryCode"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.currencyCode"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.formatId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.swiftBic"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.routingNumber"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.bankIdentifiers"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.secretRef"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.accountNumberLastFour"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.ibanLastFour"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.active"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.customFields"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.createdBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.createdAt"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.updatedBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.updatedAt"
+          },
+          {
+            $ref: "#/parameters/preferReturn"
+          }
+        ],
+        responses: {
+          "204": {
+            description: "No Content"
+          }
+        },
+        tags: ["bankAccount"]
+      },
+      patch: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.id"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.companyId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.name"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.glAccountId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.bankName"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.accountHolderName"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.countryCode"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.currencyCode"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.formatId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.swiftBic"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.routingNumber"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.bankIdentifiers"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.secretRef"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.accountNumberLastFour"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.ibanLastFour"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.active"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.customFields"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.createdBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.createdAt"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.updatedBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.bankAccount.updatedAt"
+          },
+          {
+            $ref: "#/parameters/body.bankAccount"
+          },
+          {
+            $ref: "#/parameters/preferReturn"
+          }
+        ],
+        responses: {
+          "204": {
+            description: "No Content"
+          }
+        },
+        tags: ["bankAccount"]
+      }
+    },
     "/jobOperationBatch": {
       get: {
         parameters: [
@@ -26614,6 +26893,357 @@ export default {
           }
         },
         tags: ["salesOrder"]
+      }
+    },
+    "/supplierBankAccount": {
+      get: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.id"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.companyId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.supplierId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.status"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.changeType"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.replacesId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.name"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.bankName"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.accountHolderName"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.countryCode"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.currencyCode"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.formatId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.swiftBic"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.routingNumber"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.bankIdentifiers"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.secretRef"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.accountNumberLastFour"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.ibanLastFour"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.effectiveFrom"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.effectiveTo"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.verifiedBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.verifiedAt"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.verificationMethod"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.verificationNotes"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.customFields"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.createdBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.createdAt"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.updatedBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.updatedAt"
+          },
+          {
+            $ref: "#/parameters/select"
+          },
+          {
+            $ref: "#/parameters/order"
+          },
+          {
+            $ref: "#/parameters/range"
+          },
+          {
+            $ref: "#/parameters/rangeUnit"
+          },
+          {
+            $ref: "#/parameters/offset"
+          },
+          {
+            $ref: "#/parameters/limit"
+          },
+          {
+            $ref: "#/parameters/preferCount"
+          }
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+            schema: {
+              items: {
+                $ref: "#/definitions/supplierBankAccount"
+              },
+              type: "array"
+            }
+          },
+          "206": {
+            description: "Partial Content"
+          }
+        },
+        tags: ["supplierBankAccount"]
+      },
+      post: {
+        parameters: [
+          {
+            $ref: "#/parameters/body.supplierBankAccount"
+          },
+          {
+            $ref: "#/parameters/select"
+          },
+          {
+            $ref: "#/parameters/preferPost"
+          }
+        ],
+        responses: {
+          "201": {
+            description: "Created"
+          }
+        },
+        tags: ["supplierBankAccount"]
+      },
+      delete: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.id"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.companyId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.supplierId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.status"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.changeType"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.replacesId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.name"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.bankName"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.accountHolderName"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.countryCode"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.currencyCode"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.formatId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.swiftBic"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.routingNumber"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.bankIdentifiers"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.secretRef"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.accountNumberLastFour"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.ibanLastFour"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.effectiveFrom"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.effectiveTo"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.verifiedBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.verifiedAt"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.verificationMethod"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.verificationNotes"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.customFields"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.createdBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.createdAt"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.updatedBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.updatedAt"
+          },
+          {
+            $ref: "#/parameters/preferReturn"
+          }
+        ],
+        responses: {
+          "204": {
+            description: "No Content"
+          }
+        },
+        tags: ["supplierBankAccount"]
+      },
+      patch: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.id"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.companyId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.supplierId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.status"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.changeType"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.replacesId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.name"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.bankName"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.accountHolderName"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.countryCode"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.currencyCode"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.formatId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.swiftBic"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.routingNumber"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.bankIdentifiers"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.secretRef"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.accountNumberLastFour"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.ibanLastFour"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.effectiveFrom"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.effectiveTo"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.verifiedBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.verifiedAt"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.verificationMethod"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.verificationNotes"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.customFields"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.createdBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.createdAt"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.updatedBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.supplierBankAccount.updatedAt"
+          },
+          {
+            $ref: "#/parameters/body.supplierBankAccount"
+          },
+          {
+            $ref: "#/parameters/preferReturn"
+          }
+        ],
+        responses: {
+          "204": {
+            description: "No Content"
+          }
+        },
+        tags: ["supplierBankAccount"]
       }
     },
     "/jobOperationTool": {
@@ -72957,6 +73587,357 @@ export default {
         tags: ["quoteMaterialStep"]
       }
     },
+    "/customerBankAccount": {
+      get: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.id"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.companyId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.customerId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.status"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.changeType"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.replacesId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.name"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.bankName"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.accountHolderName"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.countryCode"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.currencyCode"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.formatId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.swiftBic"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.routingNumber"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.bankIdentifiers"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.secretRef"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.accountNumberLastFour"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.ibanLastFour"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.effectiveFrom"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.effectiveTo"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.verifiedBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.verifiedAt"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.verificationMethod"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.verificationNotes"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.customFields"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.createdBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.createdAt"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.updatedBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.updatedAt"
+          },
+          {
+            $ref: "#/parameters/select"
+          },
+          {
+            $ref: "#/parameters/order"
+          },
+          {
+            $ref: "#/parameters/range"
+          },
+          {
+            $ref: "#/parameters/rangeUnit"
+          },
+          {
+            $ref: "#/parameters/offset"
+          },
+          {
+            $ref: "#/parameters/limit"
+          },
+          {
+            $ref: "#/parameters/preferCount"
+          }
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+            schema: {
+              items: {
+                $ref: "#/definitions/customerBankAccount"
+              },
+              type: "array"
+            }
+          },
+          "206": {
+            description: "Partial Content"
+          }
+        },
+        tags: ["customerBankAccount"]
+      },
+      post: {
+        parameters: [
+          {
+            $ref: "#/parameters/body.customerBankAccount"
+          },
+          {
+            $ref: "#/parameters/select"
+          },
+          {
+            $ref: "#/parameters/preferPost"
+          }
+        ],
+        responses: {
+          "201": {
+            description: "Created"
+          }
+        },
+        tags: ["customerBankAccount"]
+      },
+      delete: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.id"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.companyId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.customerId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.status"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.changeType"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.replacesId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.name"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.bankName"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.accountHolderName"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.countryCode"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.currencyCode"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.formatId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.swiftBic"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.routingNumber"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.bankIdentifiers"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.secretRef"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.accountNumberLastFour"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.ibanLastFour"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.effectiveFrom"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.effectiveTo"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.verifiedBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.verifiedAt"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.verificationMethod"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.verificationNotes"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.customFields"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.createdBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.createdAt"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.updatedBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.updatedAt"
+          },
+          {
+            $ref: "#/parameters/preferReturn"
+          }
+        ],
+        responses: {
+          "204": {
+            description: "No Content"
+          }
+        },
+        tags: ["customerBankAccount"]
+      },
+      patch: {
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.id"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.companyId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.customerId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.status"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.changeType"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.replacesId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.name"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.bankName"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.accountHolderName"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.countryCode"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.currencyCode"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.formatId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.swiftBic"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.routingNumber"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.bankIdentifiers"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.secretRef"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.accountNumberLastFour"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.ibanLastFour"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.effectiveFrom"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.effectiveTo"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.verifiedBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.verifiedAt"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.verificationMethod"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.verificationNotes"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.customFields"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.createdBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.createdAt"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.updatedBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.customerBankAccount.updatedAt"
+          },
+          {
+            $ref: "#/parameters/body.customerBankAccount"
+          },
+          {
+            $ref: "#/parameters/preferReturn"
+          }
+        ],
+        responses: {
+          "204": {
+            description: "No Content"
+          }
+        },
+        tags: ["customerBankAccount"]
+      }
+    },
     "/nonConformanceSupplier": {
       get: {
         parameters: [
@@ -90781,6 +91762,63 @@ export default {
           }
         },
         tags: ["(rpc) sync_edit_document_transaction"]
+      }
+    },
+    "/rpc/bank_account_secret_table": {
+      get: {
+        parameters: [
+          {
+            format: "text",
+            in: "query",
+            name: "p_scope",
+            required: true,
+            type: "string"
+          }
+        ],
+        produces: [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json"
+        ],
+        responses: {
+          "200": {
+            description: "OK"
+          }
+        },
+        tags: ["(rpc) bank_account_secret_table"]
+      },
+      post: {
+        parameters: [
+          {
+            in: "body",
+            name: "args",
+            required: true,
+            schema: {
+              properties: {
+                p_scope: {
+                  format: "text",
+                  type: "string"
+                }
+              },
+              required: ["p_scope"],
+              type: "object"
+            }
+          },
+          {
+            $ref: "#/parameters/preferParams"
+          }
+        ],
+        produces: [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json"
+        ],
+        responses: {
+          "200": {
+            description: "OK"
+          }
+        },
+        tags: ["(rpc) bank_account_secret_table"]
       }
     },
     "/rpc/workflow_merge_custom_fields": {
@@ -108805,6 +109843,122 @@ export default {
       },
       type: "object"
     },
+    bankAccount: {
+      required: [
+        "id",
+        "companyId",
+        "name",
+        "glAccountId",
+        "countryCode",
+        "currencyCode",
+        "formatId",
+        "bankIdentifiers",
+        "active",
+        "createdBy",
+        "createdAt"
+      ],
+      properties: {
+        id: {
+          default: "public.id('bka'::text)",
+          description: "Note:\nThis is a Primary Key.<pk/>",
+          format: "text",
+          type: "string"
+        },
+        companyId: {
+          description:
+            "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `company.id`.<fk table='company' column='id'/>",
+          format: "text",
+          type: "string"
+        },
+        name: {
+          format: "text",
+          type: "string"
+        },
+        glAccountId: {
+          description:
+            "Note:\nThis is a Foreign Key to `account.id`.<fk table='account' column='id'/>",
+          format: "text",
+          type: "string"
+        },
+        bankName: {
+          format: "text",
+          type: "string"
+        },
+        accountHolderName: {
+          format: "text",
+          type: "string"
+        },
+        countryCode: {
+          description:
+            "Note:\nThis is a Foreign Key to `country.alpha2`.<fk table='country' column='alpha2'/>",
+          format: "text",
+          type: "string"
+        },
+        currencyCode: {
+          description:
+            "Note:\nThis is a Foreign Key to `currencyCode.code`.<fk table='currencyCode' column='code'/>",
+          format: "text",
+          type: "string"
+        },
+        formatId: {
+          format: "text",
+          type: "string"
+        },
+        swiftBic: {
+          format: "text",
+          type: "string"
+        },
+        routingNumber: {
+          format: "text",
+          type: "string"
+        },
+        bankIdentifiers: {
+          format: "jsonb"
+        },
+        secretRef: {
+          format: "text",
+          type: "string"
+        },
+        accountNumberLastFour: {
+          format: "text",
+          type: "string"
+        },
+        ibanLastFour: {
+          format: "text",
+          type: "string"
+        },
+        active: {
+          default: true,
+          format: "boolean",
+          type: "boolean"
+        },
+        customFields: {
+          format: "jsonb"
+        },
+        createdBy: {
+          description:
+            "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
+          format: "text",
+          type: "string"
+        },
+        createdAt: {
+          default: "now()",
+          format: "timestamp with time zone",
+          type: "string"
+        },
+        updatedBy: {
+          description:
+            "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
+          format: "text",
+          type: "string"
+        },
+        updatedAt: {
+          format: "timestamp with time zone",
+          type: "string"
+        }
+      },
+      type: "object"
+    },
     jobOperationBatch: {
       required: [
         "id",
@@ -113530,6 +114684,167 @@ export default {
           description:
             "Note:\nThis is a Foreign Key to `customerContact.id`.<fk table='customerContact' column='id'/>",
           format: "text",
+          type: "string"
+        }
+      },
+      type: "object"
+    },
+    supplierBankAccount: {
+      required: [
+        "id",
+        "companyId",
+        "supplierId",
+        "status",
+        "changeType",
+        "name",
+        "countryCode",
+        "currencyCode",
+        "formatId",
+        "bankIdentifiers",
+        "createdBy",
+        "createdAt"
+      ],
+      properties: {
+        id: {
+          default: "public.id('sba'::text)",
+          description: "Note:\nThis is a Primary Key.<pk/>",
+          format: "text",
+          type: "string"
+        },
+        companyId: {
+          description:
+            "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `company.id`.<fk table='company' column='id'/>",
+          format: "text",
+          type: "string"
+        },
+        supplierId: {
+          description:
+            "Note:\nThis is a Foreign Key to `supplier.id`.<fk table='supplier' column='id'/>",
+          format: "text",
+          type: "string"
+        },
+        status: {
+          default: "Active",
+          enum: ["Pending Approval", "Active", "Rejected", "Inactive"],
+          format: 'public."bankAccountStatus"',
+          type: "string"
+        },
+        changeType: {
+          default: "Create",
+          enum: ["Create", "Update", "Deactivate"],
+          format: 'public."bankAccountChangeType"',
+          type: "string"
+        },
+        replacesId: {
+          format: "text",
+          type: "string"
+        },
+        name: {
+          format: "text",
+          type: "string"
+        },
+        bankName: {
+          format: "text",
+          type: "string"
+        },
+        accountHolderName: {
+          format: "text",
+          type: "string"
+        },
+        countryCode: {
+          description:
+            "Note:\nThis is a Foreign Key to `country.alpha2`.<fk table='country' column='alpha2'/>",
+          format: "text",
+          type: "string"
+        },
+        currencyCode: {
+          description:
+            "Note:\nThis is a Foreign Key to `currencyCode.code`.<fk table='currencyCode' column='code'/>",
+          format: "text",
+          type: "string"
+        },
+        formatId: {
+          format: "text",
+          type: "string"
+        },
+        swiftBic: {
+          format: "text",
+          type: "string"
+        },
+        routingNumber: {
+          format: "text",
+          type: "string"
+        },
+        bankIdentifiers: {
+          format: "jsonb"
+        },
+        secretRef: {
+          format: "text",
+          type: "string"
+        },
+        accountNumberLastFour: {
+          format: "text",
+          type: "string"
+        },
+        ibanLastFour: {
+          format: "text",
+          type: "string"
+        },
+        effectiveFrom: {
+          format: "timestamp with time zone",
+          type: "string"
+        },
+        effectiveTo: {
+          format: "timestamp with time zone",
+          type: "string"
+        },
+        verifiedBy: {
+          description:
+            "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
+          format: "text",
+          type: "string"
+        },
+        verifiedAt: {
+          format: "timestamp with time zone",
+          type: "string"
+        },
+        verificationMethod: {
+          enum: [
+            "Callback",
+            "Bank Letter",
+            "Micro-deposit",
+            "Counterparty Portal",
+            "Other"
+          ],
+          format: 'public."bankVerificationMethod"',
+          type: "string"
+        },
+        verificationNotes: {
+          format: "text",
+          type: "string"
+        },
+        customFields: {
+          format: "jsonb"
+        },
+        createdBy: {
+          description:
+            "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
+          format: "text",
+          type: "string"
+        },
+        createdAt: {
+          default: "now()",
+          format: "timestamp with time zone",
+          type: "string"
+        },
+        updatedBy: {
+          description:
+            "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
+          format: "text",
+          type: "string"
+        },
+        updatedAt: {
+          format: "timestamp with time zone",
           type: "string"
         }
       },
@@ -135116,6 +136431,167 @@ export default {
       },
       type: "object"
     },
+    customerBankAccount: {
+      required: [
+        "id",
+        "companyId",
+        "customerId",
+        "status",
+        "changeType",
+        "name",
+        "countryCode",
+        "currencyCode",
+        "formatId",
+        "bankIdentifiers",
+        "createdBy",
+        "createdAt"
+      ],
+      properties: {
+        id: {
+          default: "public.id('cba'::text)",
+          description: "Note:\nThis is a Primary Key.<pk/>",
+          format: "text",
+          type: "string"
+        },
+        companyId: {
+          description:
+            "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `company.id`.<fk table='company' column='id'/>",
+          format: "text",
+          type: "string"
+        },
+        customerId: {
+          description:
+            "Note:\nThis is a Foreign Key to `customer.id`.<fk table='customer' column='id'/>",
+          format: "text",
+          type: "string"
+        },
+        status: {
+          default: "Active",
+          enum: ["Pending Approval", "Active", "Rejected", "Inactive"],
+          format: 'public."bankAccountStatus"',
+          type: "string"
+        },
+        changeType: {
+          default: "Create",
+          enum: ["Create", "Update", "Deactivate"],
+          format: 'public."bankAccountChangeType"',
+          type: "string"
+        },
+        replacesId: {
+          format: "text",
+          type: "string"
+        },
+        name: {
+          format: "text",
+          type: "string"
+        },
+        bankName: {
+          format: "text",
+          type: "string"
+        },
+        accountHolderName: {
+          format: "text",
+          type: "string"
+        },
+        countryCode: {
+          description:
+            "Note:\nThis is a Foreign Key to `country.alpha2`.<fk table='country' column='alpha2'/>",
+          format: "text",
+          type: "string"
+        },
+        currencyCode: {
+          description:
+            "Note:\nThis is a Foreign Key to `currencyCode.code`.<fk table='currencyCode' column='code'/>",
+          format: "text",
+          type: "string"
+        },
+        formatId: {
+          format: "text",
+          type: "string"
+        },
+        swiftBic: {
+          format: "text",
+          type: "string"
+        },
+        routingNumber: {
+          format: "text",
+          type: "string"
+        },
+        bankIdentifiers: {
+          format: "jsonb"
+        },
+        secretRef: {
+          format: "text",
+          type: "string"
+        },
+        accountNumberLastFour: {
+          format: "text",
+          type: "string"
+        },
+        ibanLastFour: {
+          format: "text",
+          type: "string"
+        },
+        effectiveFrom: {
+          format: "timestamp with time zone",
+          type: "string"
+        },
+        effectiveTo: {
+          format: "timestamp with time zone",
+          type: "string"
+        },
+        verifiedBy: {
+          description:
+            "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
+          format: "text",
+          type: "string"
+        },
+        verifiedAt: {
+          format: "timestamp with time zone",
+          type: "string"
+        },
+        verificationMethod: {
+          enum: [
+            "Callback",
+            "Bank Letter",
+            "Micro-deposit",
+            "Counterparty Portal",
+            "Other"
+          ],
+          format: 'public."bankVerificationMethod"',
+          type: "string"
+        },
+        verificationNotes: {
+          format: "text",
+          type: "string"
+        },
+        customFields: {
+          format: "jsonb"
+        },
+        createdBy: {
+          description:
+            "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
+          format: "text",
+          type: "string"
+        },
+        createdAt: {
+          default: "now()",
+          format: "timestamp with time zone",
+          type: "string"
+        },
+        updatedBy: {
+          description:
+            "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
+          format: "text",
+          type: "string"
+        },
+        updatedAt: {
+          format: "timestamp with time zone",
+          type: "string"
+        }
+      },
+      type: "object"
+    },
     nonConformanceSupplier: {
       required: [
         "id",
@@ -152164,6 +153640,141 @@ export default {
       in: "query",
       type: "string"
     },
+    "body.bankAccount": {
+      name: "bankAccount",
+      description: "bankAccount",
+      required: false,
+      in: "body",
+      schema: {
+        $ref: "#/definitions/bankAccount"
+      }
+    },
+    "rowFilter.bankAccount.id": {
+      name: "id",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.bankAccount.companyId": {
+      name: "companyId",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.bankAccount.name": {
+      name: "name",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.bankAccount.glAccountId": {
+      name: "glAccountId",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.bankAccount.bankName": {
+      name: "bankName",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.bankAccount.accountHolderName": {
+      name: "accountHolderName",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.bankAccount.countryCode": {
+      name: "countryCode",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.bankAccount.currencyCode": {
+      name: "currencyCode",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.bankAccount.formatId": {
+      name: "formatId",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.bankAccount.swiftBic": {
+      name: "swiftBic",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.bankAccount.routingNumber": {
+      name: "routingNumber",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.bankAccount.bankIdentifiers": {
+      name: "bankIdentifiers",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.bankAccount.secretRef": {
+      name: "secretRef",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.bankAccount.accountNumberLastFour": {
+      name: "accountNumberLastFour",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.bankAccount.ibanLastFour": {
+      name: "ibanLastFour",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.bankAccount.active": {
+      name: "active",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.bankAccount.customFields": {
+      name: "customFields",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.bankAccount.createdBy": {
+      name: "createdBy",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.bankAccount.createdAt": {
+      name: "createdAt",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.bankAccount.updatedBy": {
+      name: "updatedBy",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.bankAccount.updatedAt": {
+      name: "updatedAt",
+      required: false,
+      in: "query",
+      type: "string"
+    },
     "body.jobOperationBatch": {
       name: "jobOperationBatch",
       description: "jobOperationBatch",
@@ -157484,6 +159095,189 @@ export default {
     },
     "rowFilter.salesOrder.customerEngineeringContactId": {
       name: "customerEngineeringContactId",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "body.supplierBankAccount": {
+      name: "supplierBankAccount",
+      description: "supplierBankAccount",
+      required: false,
+      in: "body",
+      schema: {
+        $ref: "#/definitions/supplierBankAccount"
+      }
+    },
+    "rowFilter.supplierBankAccount.id": {
+      name: "id",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.companyId": {
+      name: "companyId",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.supplierId": {
+      name: "supplierId",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.status": {
+      name: "status",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.changeType": {
+      name: "changeType",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.replacesId": {
+      name: "replacesId",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.name": {
+      name: "name",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.bankName": {
+      name: "bankName",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.accountHolderName": {
+      name: "accountHolderName",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.countryCode": {
+      name: "countryCode",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.currencyCode": {
+      name: "currencyCode",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.formatId": {
+      name: "formatId",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.swiftBic": {
+      name: "swiftBic",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.routingNumber": {
+      name: "routingNumber",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.bankIdentifiers": {
+      name: "bankIdentifiers",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.secretRef": {
+      name: "secretRef",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.accountNumberLastFour": {
+      name: "accountNumberLastFour",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.ibanLastFour": {
+      name: "ibanLastFour",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.effectiveFrom": {
+      name: "effectiveFrom",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.effectiveTo": {
+      name: "effectiveTo",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.verifiedBy": {
+      name: "verifiedBy",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.verifiedAt": {
+      name: "verifiedAt",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.verificationMethod": {
+      name: "verificationMethod",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.verificationNotes": {
+      name: "verificationNotes",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.customFields": {
+      name: "customFields",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.createdBy": {
+      name: "createdBy",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.createdAt": {
+      name: "createdAt",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.updatedBy": {
+      name: "updatedBy",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.supplierBankAccount.updatedAt": {
+      name: "updatedAt",
       required: false,
       in: "query",
       type: "string"
@@ -181448,6 +183242,189 @@ export default {
     },
     "rowFilter.quoteMaterialStep.quantity": {
       name: "quantity",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "body.customerBankAccount": {
+      name: "customerBankAccount",
+      description: "customerBankAccount",
+      required: false,
+      in: "body",
+      schema: {
+        $ref: "#/definitions/customerBankAccount"
+      }
+    },
+    "rowFilter.customerBankAccount.id": {
+      name: "id",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.companyId": {
+      name: "companyId",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.customerId": {
+      name: "customerId",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.status": {
+      name: "status",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.changeType": {
+      name: "changeType",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.replacesId": {
+      name: "replacesId",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.name": {
+      name: "name",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.bankName": {
+      name: "bankName",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.accountHolderName": {
+      name: "accountHolderName",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.countryCode": {
+      name: "countryCode",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.currencyCode": {
+      name: "currencyCode",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.formatId": {
+      name: "formatId",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.swiftBic": {
+      name: "swiftBic",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.routingNumber": {
+      name: "routingNumber",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.bankIdentifiers": {
+      name: "bankIdentifiers",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.secretRef": {
+      name: "secretRef",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.accountNumberLastFour": {
+      name: "accountNumberLastFour",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.ibanLastFour": {
+      name: "ibanLastFour",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.effectiveFrom": {
+      name: "effectiveFrom",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.effectiveTo": {
+      name: "effectiveTo",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.verifiedBy": {
+      name: "verifiedBy",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.verifiedAt": {
+      name: "verifiedAt",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.verificationMethod": {
+      name: "verificationMethod",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.verificationNotes": {
+      name: "verificationNotes",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.customFields": {
+      name: "customFields",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.createdBy": {
+      name: "createdBy",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.createdAt": {
+      name: "createdAt",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.updatedBy": {
+      name: "updatedBy",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.customerBankAccount.updatedAt": {
+      name: "updatedAt",
       required: false,
       in: "query",
       type: "string"

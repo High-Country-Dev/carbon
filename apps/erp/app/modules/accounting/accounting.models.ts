@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 import { months } from "~/modules/shared";
+import { bankAccountFields, refineBankFields } from "~/types/validators";
 import {
   itemLedgerDocumentTypes,
   itemLedgerTypes
@@ -1009,3 +1010,18 @@ export const fixedAssetUsageLogValidator = z.object({
 export const fixedAssetDisposalValidator = z.object({
   disposalDate: z.string().min(1, { message: "Disposal date is required" })
 });
+
+/**
+ * The company's own bank accounts. Which identifier fields are required comes from the
+ * account's country via `refineBankFields`, so this validator carries every field any
+ * country can ask for and lets the format registry decide.
+ */
+export const bankAccountValidator = z
+  .object({
+    id: zfd.text(z.string().optional()),
+    name: z.string().min(1, { message: "Name is required" }),
+    glAccountId: z.string().min(1, { message: "GL account is required" }),
+    active: zfd.checkbox(),
+    ...bankAccountFields
+  })
+  .superRefine(refineBankFields);

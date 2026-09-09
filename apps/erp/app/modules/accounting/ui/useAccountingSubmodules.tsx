@@ -13,6 +13,7 @@ import {
   LuEuro,
   LuFileSpreadsheet,
   LuHandCoins,
+  LuLandmark,
   LuLayers,
   LuScale,
   LuSheet
@@ -97,6 +98,12 @@ export default function useAccountingSubmodules() {
             to: path.to.assetClasses,
             role: "employee",
             icon: <LuLayers />
+          },
+          {
+            name: t`Bank Accounts`,
+            to: path.to.bankAccounts,
+            role: "employee",
+            icon: <LuLandmark />
           },
           {
             name: t`Chart of Accounts`,
