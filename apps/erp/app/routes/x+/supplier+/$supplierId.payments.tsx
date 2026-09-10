@@ -97,7 +97,10 @@ export default function SupplierPaymentRoute() {
   };
 
   return (
-    <VStack spacing={4} className="w-full">
+    // items-stretch, not VStack's default items-start: the payment-terms form is a bare
+    // <form> with no width of its own, so it would shrink to its content while the
+    // Bank Accounts card (which carries w-full) stretched beside it.
+    <VStack spacing={4} className="items-stretch">
       <SupplierPaymentForm
         key={initialValues.supplierId}
         initialValues={initialValues}

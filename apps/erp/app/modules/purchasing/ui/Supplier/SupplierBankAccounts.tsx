@@ -88,9 +88,11 @@ const SupplierBankAccounts = ({ bankAccounts }: SupplierBankAccountsProps) => {
       key={account.id}
       className="flex items-start justify-between gap-4 border rounded-lg p-4 w-full"
     >
-      <VStack spacing={1}>
-        <HStack className="items-center gap-2">
-          <span className="font-medium">{account.name}</span>
+      {/* min-w-0 so a long account name truncates instead of pushing the action menu
+          off the row — a flex item's default min-width is its content. */}
+      <VStack spacing={1} className="min-w-0">
+        <HStack className="items-center gap-2 max-w-full">
+          <span className="font-medium line-clamp-1">{account.name}</span>
           {!isActive && (
             <Status color="gray">
               {replacedIds.has(account.id) ? (
@@ -101,12 +103,12 @@ const SupplierBankAccounts = ({ bankAccounts }: SupplierBankAccountsProps) => {
             </Status>
           )}
         </HStack>
-        <span className="text-muted-foreground text-sm">
+        <span className="text-muted-foreground text-sm line-clamp-1">
           {[account.bankName, maskedIdentifier(account)]
             .filter(Boolean)
             .join(" · ")}
         </span>
-        <span className="text-muted-foreground text-xs">
+        <span className="text-muted-foreground text-xs line-clamp-1">
           {[account.countryCode, account.currencyCode]
             .filter(Boolean)
             .join(" · ")}
