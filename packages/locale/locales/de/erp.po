@@ -2278,6 +2278,10 @@ msgstr "Sind Sie sicher, dass Sie die Preisregel: {0} löschen möchten? Dies ka
 msgid "Are you sure you want to delete the printer \"{0}\"? Any assignments referencing this printer will be cleared. This cannot be undone."
 msgstr "Sind Sie sicher, dass Sie den Drucker \"{0}\" löschen möchten? Alle Zuweisungen, die auf diesen Drucker verweisen, werden gelöscht. Dies kann nicht rückgängig gemacht werden."
 
+#. placeholder {0}: project.name
+msgid "Are you sure you want to delete the project: {0}? This cannot be undone."
+msgstr ""
+
 #. placeholder {0}: purchaseInvoiceLine.quantity ?? 0
 #. placeholder {1}: purchaseInvoiceLine.description ?? ""
 msgid "Are you sure you want to delete the purchase invoice line for {0} {1}? This cannot be undone."
@@ -2449,6 +2453,10 @@ msgstr "Sind Sie sicher, dass Sie eine Einladung an diese Benutzer senden möcht
 
 msgid "Are you sure you want to send an invite to this user?"
 msgstr "Sind Sie sicher, dass Sie eine Einladung an diesen Benutzer senden möchten?"
+
+#. placeholder {0}: cardTransaction.cardTransactionId
+msgid "Are you sure you want to void {0}? This posts a reversing journal entry and cannot be undone."
+msgstr ""
 
 msgid "Are you sure you want to void this memo? This will reverse its accounting entries and applications. This cannot be undone."
 msgstr "Sind Sie sicher, dass Sie diese Notiz stornieren möchten? Dies wird ihre Buchhaltungseinträge und Zuordnungen stornieren. Dies kann nicht rückgängig gemacht werden."
@@ -4657,6 +4665,9 @@ msgstr "Zahlungsbedingung erstellt"
 msgid "Created process"
 msgstr "Prozess erstellt"
 
+msgid "Created project"
+msgstr ""
+
 msgid "Created required action"
 msgstr "Erforderliche Aktion erstellt"
 
@@ -5487,6 +5498,9 @@ msgstr "Verfahrensanweisung löschen"
 
 msgid "Delete Process"
 msgstr "Prozess löschen"
+
+msgid "Delete Project"
+msgstr ""
 
 msgid "Delete Purchase Invoice"
 msgstr "Eingangsrechnung löschen"
@@ -6417,6 +6431,9 @@ msgstr "Produktionsereignis bearbeiten"
 msgid "Edit Production Quantity"
 msgstr "Produktionsmenge bearbeiten"
 
+msgid "Edit Project"
+msgstr ""
+
 msgid "Edit purchase order line type"
 msgstr "Bestellpositionstyp bearbeiten"
 
@@ -7251,6 +7268,10 @@ msgstr "Zahlungsbedingung konnte nicht erstellt werden: {0}"
 #. placeholder {0}: fetcher.data.error.message
 msgid "Failed to create process: {0}"
 msgstr "Fehler beim Erstellen des Prozesses: {0}"
+
+#. placeholder {0}: fetcher.data.error.message
+msgid "Failed to create project: {0}"
+msgstr ""
 
 #. placeholder {0}: fetcher.data.error.message
 msgid "Failed to create return reason: {0}"
@@ -10648,6 +10669,9 @@ msgstr "Neue Verfahrensanweisung"
 msgid "New Process"
 msgstr "Neuer Prozess"
 
+msgid "New Project"
+msgstr ""
+
 msgid "New Quality Document"
 msgstr "Neues Qualitätsdokument"
 
@@ -12870,6 +12894,9 @@ msgstr "Proj. {0}"
 msgid "Project"
 msgstr "Projekt"
 
+msgid "Project Name"
+msgstr ""
+
 msgid "Project owner"
 msgstr "Projektverantwortlicher"
 
@@ -12920,6 +12947,9 @@ msgstr "Projektion"
 
 msgid "Projections"
 msgstr "Prognosen"
+
+msgid "Projects"
+msgstr ""
 
 msgid "Promised Date"
 msgstr "Zugesagter Termin"
@@ -14147,8 +14177,6 @@ msgstr "Zurücksetzen erneut versuchen"
 msgid "Return Home"
 msgstr "Zur Startseite zurück"
 
-msgid "Return to Integrations and connect Ramp again."
-msgstr "Kehren Sie zu „Integrationen“ zurück und verbinden Sie Ramp erneut."
 msgid "Return ID"
 msgstr "Rückgabe-ID"
 
@@ -14166,6 +14194,9 @@ msgstr "Rückgabegrund"
 
 msgid "Return Reasons"
 msgstr "Rückgabegründe"
+
+msgid "Return to Integrations and connect Ramp again."
+msgstr "Kehren Sie zu „Integrationen“ zurück und verbinden Sie Ramp erneut."
 
 msgid "returnable"
 msgstr "rückgabefähig"
@@ -19002,6 +19033,9 @@ msgstr "Stornieren"
 #. placeholder {0}: initialValues.paymentId
 msgid "Void {0}"
 msgstr "Stornieren {0}"
+
+msgid "Void Card Transaction"
+msgstr ""
 
 msgid "Void Invoice"
 msgstr "Rechnung stornieren"

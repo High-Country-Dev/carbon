@@ -2278,6 +2278,10 @@ msgstr "Fiyatlandırma kuralını silmek istediğinizden emin misiniz: {0}? Bu g
 msgid "Are you sure you want to delete the printer \"{0}\"? Any assignments referencing this printer will be cleared. This cannot be undone."
 msgstr "Yazıcı \"{0}\" cihazını silmek istediğinizden emin misiniz? Bu yazıcıya atıfta bulunan tüm görevlendirmeler temizlenecektir. Bu işlem geri alınamaz."
 
+#. placeholder {0}: project.name
+msgid "Are you sure you want to delete the project: {0}? This cannot be undone."
+msgstr ""
+
 #. placeholder {0}: purchaseInvoiceLine.quantity ?? 0
 #. placeholder {1}: purchaseInvoiceLine.description ?? ""
 msgid "Are you sure you want to delete the purchase invoice line for {0} {1}? This cannot be undone."
@@ -2449,6 +2453,10 @@ msgstr "Bu kullanıcılara daveti göndermek istediğinizden emin misiniz?"
 
 msgid "Are you sure you want to send an invite to this user?"
 msgstr "Bu kullanıcıya daveti göndermek istediğinizden emin misiniz?"
+
+#. placeholder {0}: cardTransaction.cardTransactionId
+msgid "Are you sure you want to void {0}? This posts a reversing journal entry and cannot be undone."
+msgstr ""
 
 msgid "Are you sure you want to void this memo? This will reverse its accounting entries and applications. This cannot be undone."
 msgstr "Bu notu hükümsüz kılmak istediğinizden emin misiniz? Bu, muhasebe girişlerini ve uygulamalarını tersine çevirecektir. Bu geri alınamaz."
@@ -4657,6 +4665,9 @@ msgstr "Ödeme koşulu oluşturuldu"
 msgid "Created process"
 msgstr "Oluşturulan süreç"
 
+msgid "Created project"
+msgstr ""
+
 msgid "Created required action"
 msgstr "Gerekli eylem oluşturuldu"
 
@@ -5487,6 +5498,9 @@ msgstr "Prosedürü Sil"
 
 msgid "Delete Process"
 msgstr "İşlemi Sil"
+
+msgid "Delete Project"
+msgstr ""
 
 msgid "Delete Purchase Invoice"
 msgstr "Alış Faturasını Sil"
@@ -6417,6 +6431,9 @@ msgstr "Üretim Olayı Düzenle"
 msgid "Edit Production Quantity"
 msgstr "Üretim Miktarını Düzenle"
 
+msgid "Edit Project"
+msgstr ""
+
 msgid "Edit purchase order line type"
 msgstr "Satın alma siparişi satır türünü düzenle"
 
@@ -7251,6 +7268,10 @@ msgstr "Ödeme koşulu oluşturulamadı: {0}"
 #. placeholder {0}: fetcher.data.error.message
 msgid "Failed to create process: {0}"
 msgstr "İşlemi oluşturulamadı: {0}"
+
+#. placeholder {0}: fetcher.data.error.message
+msgid "Failed to create project: {0}"
+msgstr ""
 
 #. placeholder {0}: fetcher.data.error.message
 msgid "Failed to create return reason: {0}"
@@ -10648,6 +10669,9 @@ msgstr "Yeni Prosedür"
 msgid "New Process"
 msgstr "Yeni Süreç"
 
+msgid "New Project"
+msgstr ""
+
 msgid "New Quality Document"
 msgstr "Yeni Kalite Belgesi"
 
@@ -12870,6 +12894,9 @@ msgstr "Proj. {0}"
 msgid "Project"
 msgstr "Proje"
 
+msgid "Project Name"
+msgstr ""
+
 msgid "Project owner"
 msgstr "Proje sahibi"
 
@@ -12920,6 +12947,9 @@ msgstr "Projeksiyon"
 
 msgid "Projections"
 msgstr "Projeksiyonlar"
+
+msgid "Projects"
+msgstr ""
 
 msgid "Promised Date"
 msgstr "Taahhüt Tarihi"
@@ -14147,8 +14177,6 @@ msgstr "Geri alma'yı tekrar dene"
 msgid "Return Home"
 msgstr "Ana Sayfaya Dön"
 
-msgid "Return to Integrations and connect Ramp again."
-msgstr "Entegrasyonlara geri dönün ve Ramp'i yeniden bağlayın."
 msgid "Return ID"
 msgstr "İade Kimliği"
 
@@ -14166,6 +14194,9 @@ msgstr "İade Nedeni"
 
 msgid "Return Reasons"
 msgstr "İade Nedenleri"
+
+msgid "Return to Integrations and connect Ramp again."
+msgstr "Entegrasyonlara geri dönün ve Ramp'i yeniden bağlayın."
 
 msgid "returnable"
 msgstr "iadesine uygun"
@@ -19002,6 +19033,9 @@ msgstr "Hükümsüz kıl"
 #. placeholder {0}: initialValues.paymentId
 msgid "Void {0}"
 msgstr "Hükümsüz Kıl {0}"
+
+msgid "Void Card Transaction"
+msgstr ""
 
 msgid "Void Invoice"
 msgstr "Faturayı hükümsüz kıl"

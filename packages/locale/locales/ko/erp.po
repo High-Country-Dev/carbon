@@ -2278,6 +2278,10 @@ msgstr "가격 규칙 {0}을(를) 삭제하시겠습니까? 이 작업은 되돌
 msgid "Are you sure you want to delete the printer \"{0}\"? Any assignments referencing this printer will be cleared. This cannot be undone."
 msgstr "프린터 \"{0}\"을(를) 삭제하시겠습니까? 이 프린터를 참조하는 모든 배정이 해제됩니다. 이 작업은 되돌릴 수 없습니다."
 
+#. placeholder {0}: project.name
+msgid "Are you sure you want to delete the project: {0}? This cannot be undone."
+msgstr ""
+
 #. placeholder {0}: purchaseInvoiceLine.quantity ?? 0
 #. placeholder {1}: purchaseInvoiceLine.description ?? ""
 msgid "Are you sure you want to delete the purchase invoice line for {0} {1}? This cannot be undone."
@@ -2449,6 +2453,10 @@ msgstr "이 사용자들에게 초대를 보내시겠습니까?"
 
 msgid "Are you sure you want to send an invite to this user?"
 msgstr "이 사용자에게 초대를 보내시겠습니까?"
+
+#. placeholder {0}: cardTransaction.cardTransactionId
+msgid "Are you sure you want to void {0}? This posts a reversing journal entry and cannot be undone."
+msgstr ""
 
 msgid "Are you sure you want to void this memo? This will reverse its accounting entries and applications. This cannot be undone."
 msgstr "이 메모를 무효 처리하시겠습니까? 회계 항목 및 적용 내역이 역변환됩니다. 이 작업은 되돌릴 수 없습니다."
@@ -4657,6 +4665,9 @@ msgstr "지불 조건이 생성되었습니다."
 msgid "Created process"
 msgstr "공정 생성됨"
 
+msgid "Created project"
+msgstr ""
+
 msgid "Created required action"
 msgstr "필수 조치 생성됨"
 
@@ -5487,6 +5498,9 @@ msgstr "절차서 삭제"
 
 msgid "Delete Process"
 msgstr "공정 삭제"
+
+msgid "Delete Project"
+msgstr ""
 
 msgid "Delete Purchase Invoice"
 msgstr "매입 송장 삭제"
@@ -6417,6 +6431,9 @@ msgstr "생산 이벤트 편집"
 msgid "Edit Production Quantity"
 msgstr "생산 수량 편집"
 
+msgid "Edit Project"
+msgstr ""
+
 msgid "Edit purchase order line type"
 msgstr "발주서 라인 유형 편집"
 
@@ -7251,6 +7268,10 @@ msgstr "지불 조건 생성 실패: {0}"
 #. placeholder {0}: fetcher.data.error.message
 msgid "Failed to create process: {0}"
 msgstr "공정 생성 실패: {0}"
+
+#. placeholder {0}: fetcher.data.error.message
+msgid "Failed to create project: {0}"
+msgstr ""
 
 #. placeholder {0}: fetcher.data.error.message
 msgid "Failed to create return reason: {0}"
@@ -10648,6 +10669,9 @@ msgstr "신규 절차서"
 msgid "New Process"
 msgstr "새 공정"
 
+msgid "New Project"
+msgstr ""
+
 msgid "New Quality Document"
 msgstr "새 품질 문서"
 
@@ -12870,6 +12894,9 @@ msgstr "예상. {0}"
 msgid "Project"
 msgstr "프로젝트"
 
+msgid "Project Name"
+msgstr ""
+
 msgid "Project owner"
 msgstr "프로젝트 책임자"
 
@@ -12920,6 +12947,9 @@ msgstr "예측"
 
 msgid "Projections"
 msgstr "예측"
+
+msgid "Projects"
+msgstr ""
 
 msgid "Promised Date"
 msgstr "약속일"
@@ -14147,8 +14177,6 @@ msgstr "복원 재시도"
 msgid "Return Home"
 msgstr "홈으로 돌아가기"
 
-msgid "Return to Integrations and connect Ramp again."
-msgstr "연동으로 돌아가 Ramp를 다시 연결하세요."
 msgid "Return ID"
 msgstr "반품 ID"
 
@@ -14166,6 +14194,9 @@ msgstr "반품 사유"
 
 msgid "Return Reasons"
 msgstr "반품 사유"
+
+msgid "Return to Integrations and connect Ramp again."
+msgstr "연동으로 돌아가 Ramp를 다시 연결하세요."
 
 msgid "returnable"
 msgstr "반품 가능"
@@ -19002,6 +19033,9 @@ msgstr "무효 처리"
 #. placeholder {0}: initialValues.paymentId
 msgid "Void {0}"
 msgstr "{0} 무효 처리"
+
+msgid "Void Card Transaction"
+msgstr ""
 
 msgid "Void Invoice"
 msgstr "송장 무효 처리"

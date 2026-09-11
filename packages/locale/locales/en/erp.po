@@ -2278,6 +2278,10 @@ msgstr "Are you sure you want to delete the pricing rule: {0}? This cannot be un
 msgid "Are you sure you want to delete the printer \"{0}\"? Any assignments referencing this printer will be cleared. This cannot be undone."
 msgstr "Are you sure you want to delete the printer \"{0}\"? Any assignments referencing this printer will be cleared. This cannot be undone."
 
+#. placeholder {0}: project.name
+msgid "Are you sure you want to delete the project: {0}? This cannot be undone."
+msgstr "Are you sure you want to delete the project: {0}? This cannot be undone."
+
 #. placeholder {0}: purchaseInvoiceLine.quantity ?? 0
 #. placeholder {1}: purchaseInvoiceLine.description ?? ""
 msgid "Are you sure you want to delete the purchase invoice line for {0} {1}? This cannot be undone."
@@ -2449,6 +2453,10 @@ msgstr "Are you sure you want to send an invite to these users?"
 
 msgid "Are you sure you want to send an invite to this user?"
 msgstr "Are you sure you want to send an invite to this user?"
+
+#. placeholder {0}: cardTransaction.cardTransactionId
+msgid "Are you sure you want to void {0}? This posts a reversing journal entry and cannot be undone."
+msgstr "Are you sure you want to void {0}? This posts a reversing journal entry and cannot be undone."
 
 msgid "Are you sure you want to void this memo? This will reverse its accounting entries and applications. This cannot be undone."
 msgstr "Are you sure you want to void this memo? This will reverse its accounting entries and applications. This cannot be undone."
@@ -4657,6 +4665,9 @@ msgstr "Created payment term"
 msgid "Created process"
 msgstr "Created process"
 
+msgid "Created project"
+msgstr "Created project"
+
 msgid "Created required action"
 msgstr "Created required action"
 
@@ -5487,6 +5498,9 @@ msgstr "Delete Procedure"
 
 msgid "Delete Process"
 msgstr "Delete Process"
+
+msgid "Delete Project"
+msgstr "Delete Project"
 
 msgid "Delete Purchase Invoice"
 msgstr "Delete Purchase Invoice"
@@ -6417,6 +6431,9 @@ msgstr "Edit Production Event"
 msgid "Edit Production Quantity"
 msgstr "Edit Production Quantity"
 
+msgid "Edit Project"
+msgstr "Edit Project"
+
 msgid "Edit purchase order line type"
 msgstr "Edit purchase order line type"
 
@@ -7251,6 +7268,10 @@ msgstr "Failed to create payment term: {0}"
 #. placeholder {0}: fetcher.data.error.message
 msgid "Failed to create process: {0}"
 msgstr "Failed to create process: {0}"
+
+#. placeholder {0}: fetcher.data.error.message
+msgid "Failed to create project: {0}"
+msgstr "Failed to create project: {0}"
 
 #. placeholder {0}: fetcher.data.error.message
 msgid "Failed to create return reason: {0}"
@@ -10648,6 +10669,9 @@ msgstr "New Procedure"
 msgid "New Process"
 msgstr "New Process"
 
+msgid "New Project"
+msgstr "New Project"
+
 msgid "New Quality Document"
 msgstr "New Quality Document"
 
@@ -12870,6 +12894,9 @@ msgstr "Proj. {0}"
 msgid "Project"
 msgstr "Project"
 
+msgid "Project Name"
+msgstr "Project Name"
+
 msgid "Project owner"
 msgstr "Project owner"
 
@@ -12920,6 +12947,9 @@ msgstr "Projection"
 
 msgid "Projections"
 msgstr "Projections"
+
+msgid "Projects"
+msgstr "Projects"
 
 msgid "Promised Date"
 msgstr "Promised Date"
@@ -14147,8 +14177,6 @@ msgstr "Retry revert"
 msgid "Return Home"
 msgstr "Return Home"
 
-msgid "Return to Integrations and connect Ramp again."
-msgstr "Return to Integrations and connect Ramp again."
 msgid "Return ID"
 msgstr "Return ID"
 
@@ -14166,6 +14194,9 @@ msgstr "Return Reason"
 
 msgid "Return Reasons"
 msgstr "Return Reasons"
+
+msgid "Return to Integrations and connect Ramp again."
+msgstr "Return to Integrations and connect Ramp again."
 
 msgid "returnable"
 msgstr "returnable"
@@ -19002,6 +19033,9 @@ msgstr "Void"
 #. placeholder {0}: initialValues.paymentId
 msgid "Void {0}"
 msgstr "Void {0}"
+
+msgid "Void Card Transaction"
+msgstr "Void Card Transaction"
 
 msgid "Void Invoice"
 msgstr "Void Invoice"

@@ -2278,6 +2278,10 @@ msgstr "本当に価格設定ルール: {0} を削除してもよろしいです
 msgid "Are you sure you want to delete the printer \"{0}\"? Any assignments referencing this printer will be cleared. This cannot be undone."
 msgstr "このプリンター「{0}」を削除してもよろしいですか？このプリンターを参照しているすべての割り当ては削除されます。この操作は取り消せません。"
 
+#. placeholder {0}: project.name
+msgid "Are you sure you want to delete the project: {0}? This cannot be undone."
+msgstr ""
+
 #. placeholder {0}: purchaseInvoiceLine.quantity ?? 0
 #. placeholder {1}: purchaseInvoiceLine.description ?? ""
 msgid "Are you sure you want to delete the purchase invoice line for {0} {1}? This cannot be undone."
@@ -2449,6 +2453,10 @@ msgstr "これらのユーザーに招待を送信してもよろしいですか
 
 msgid "Are you sure you want to send an invite to this user?"
 msgstr "このユーザーに招待を送信してもよろしいですか?"
+
+#. placeholder {0}: cardTransaction.cardTransactionId
+msgid "Are you sure you want to void {0}? This posts a reversing journal entry and cannot be undone."
+msgstr ""
 
 msgid "Are you sure you want to void this memo? This will reverse its accounting entries and applications. This cannot be undone."
 msgstr "このメモを取消しますか？会計エントリと適用が反転されます。この操作は元に戻すことができません。"
@@ -4657,6 +4665,9 @@ msgstr "支払条件を作成しました"
 msgid "Created process"
 msgstr "プロセスを作成しました"
 
+msgid "Created project"
+msgstr ""
+
 msgid "Created required action"
 msgstr "必須アクションを作成しました"
 
@@ -5487,6 +5498,9 @@ msgstr "手順書を削除"
 
 msgid "Delete Process"
 msgstr "プロセスを削除"
+
+msgid "Delete Project"
+msgstr ""
 
 msgid "Delete Purchase Invoice"
 msgstr "仕入先請求書を削除"
@@ -6417,6 +6431,9 @@ msgstr "生産イベントを編集"
 msgid "Edit Production Quantity"
 msgstr "生産数量を編集"
 
+msgid "Edit Project"
+msgstr ""
+
 msgid "Edit purchase order line type"
 msgstr "発注書明細タイプを編集"
 
@@ -7251,6 +7268,10 @@ msgstr "支払条件を作成できませんでした: {0}"
 #. placeholder {0}: fetcher.data.error.message
 msgid "Failed to create process: {0}"
 msgstr "プロセスの作成に失敗しました: {0}"
+
+#. placeholder {0}: fetcher.data.error.message
+msgid "Failed to create project: {0}"
+msgstr ""
 
 #. placeholder {0}: fetcher.data.error.message
 msgid "Failed to create return reason: {0}"
@@ -10648,6 +10669,9 @@ msgstr "新規手順書"
 msgid "New Process"
 msgstr "新しいプロセス"
 
+msgid "New Project"
+msgstr ""
+
 msgid "New Quality Document"
 msgstr "新規品質文書"
 
@@ -12870,6 +12894,9 @@ msgstr "予定. {0}"
 msgid "Project"
 msgstr "プロジェクト"
 
+msgid "Project Name"
+msgstr ""
+
 msgid "Project owner"
 msgstr "プロジェクト責任者"
 
@@ -12920,6 +12947,9 @@ msgstr "予測"
 
 msgid "Projections"
 msgstr "予測"
+
+msgid "Projects"
+msgstr ""
 
 msgid "Promised Date"
 msgstr "回答納期"
@@ -14147,8 +14177,6 @@ msgstr "リバートを再試行"
 msgid "Return Home"
 msgstr "ホームに戻る"
 
-msgid "Return to Integrations and connect Ramp again."
-msgstr "連携に戻り、Ramp にもう一度接続してください。"
 msgid "Return ID"
 msgstr "返品ID"
 
@@ -14166,6 +14194,9 @@ msgstr "返品理由"
 
 msgid "Return Reasons"
 msgstr "返品理由一覧"
+
+msgid "Return to Integrations and connect Ramp again."
+msgstr "連携に戻り、Ramp にもう一度接続してください。"
 
 msgid "returnable"
 msgstr "返品可能"
@@ -19002,6 +19033,9 @@ msgstr "取消"
 #. placeholder {0}: initialValues.paymentId
 msgid "Void {0}"
 msgstr "取消 {0}"
+
+msgid "Void Card Transaction"
+msgstr ""
 
 msgid "Void Invoice"
 msgstr "請求書を取消"

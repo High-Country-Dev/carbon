@@ -2278,6 +2278,10 @@ msgstr "您确定要删除定价规则：{0}？此操作无法撤销。"
 msgid "Are you sure you want to delete the printer \"{0}\"? Any assignments referencing this printer will be cleared. This cannot be undone."
 msgstr "你确定要删除打印机\"{0}\"吗？任何引用此打印机的分配都将被清除。此操作无法撤销。"
 
+#. placeholder {0}: project.name
+msgid "Are you sure you want to delete the project: {0}? This cannot be undone."
+msgstr ""
+
 #. placeholder {0}: purchaseInvoiceLine.quantity ?? 0
 #. placeholder {1}: purchaseInvoiceLine.description ?? ""
 msgid "Are you sure you want to delete the purchase invoice line for {0} {1}? This cannot be undone."
@@ -2449,6 +2453,10 @@ msgstr "你确定要向这些用户发送邀请吗？"
 
 msgid "Are you sure you want to send an invite to this user?"
 msgstr "你确定要向此用户发送邀请吗？"
+
+#. placeholder {0}: cardTransaction.cardTransactionId
+msgid "Are you sure you want to void {0}? This posts a reversing journal entry and cannot be undone."
+msgstr ""
 
 msgid "Are you sure you want to void this memo? This will reverse its accounting entries and applications. This cannot be undone."
 msgstr "你确定要作废此备忘录吗？这将反转其会计分录和应用。此操作无法撤销。"
@@ -4657,6 +4665,9 @@ msgstr "已创建付款条件"
 msgid "Created process"
 msgstr "已创建流程"
 
+msgid "Created project"
+msgstr ""
+
 msgid "Created required action"
 msgstr "已创建必需操作"
 
@@ -5487,6 +5498,9 @@ msgstr "删除程序文件"
 
 msgid "Delete Process"
 msgstr "删除流程"
+
+msgid "Delete Project"
+msgstr ""
 
 msgid "Delete Purchase Invoice"
 msgstr "删除采购发票"
@@ -6417,6 +6431,9 @@ msgstr "编辑生产事件"
 msgid "Edit Production Quantity"
 msgstr "编辑生产数量"
 
+msgid "Edit Project"
+msgstr ""
+
 msgid "Edit purchase order line type"
 msgstr "编辑采购订单行类型"
 
@@ -7251,6 +7268,10 @@ msgstr "创建付款条件失败：{0}"
 #. placeholder {0}: fetcher.data.error.message
 msgid "Failed to create process: {0}"
 msgstr "创建流程失败：{0}"
+
+#. placeholder {0}: fetcher.data.error.message
+msgid "Failed to create project: {0}"
+msgstr ""
 
 #. placeholder {0}: fetcher.data.error.message
 msgid "Failed to create return reason: {0}"
@@ -10648,6 +10669,9 @@ msgstr "新建程序文件"
 msgid "New Process"
 msgstr "新流程"
 
+msgid "New Project"
+msgstr ""
+
 msgid "New Quality Document"
 msgstr "新质量文件"
 
@@ -12870,6 +12894,9 @@ msgstr "预计 {0}"
 msgid "Project"
 msgstr "项目"
 
+msgid "Project Name"
+msgstr ""
+
 msgid "Project owner"
 msgstr "项目负责人"
 
@@ -12920,6 +12947,9 @@ msgstr "预测"
 
 msgid "Projections"
 msgstr "预测"
+
+msgid "Projects"
+msgstr ""
 
 msgid "Promised Date"
 msgstr "承诺日期"
@@ -14147,8 +14177,6 @@ msgstr "重试还原"
 msgid "Return Home"
 msgstr "返回首页"
 
-msgid "Return to Integrations and connect Ramp again."
-msgstr "返回集成页面并重新连接 Ramp。"
 msgid "Return ID"
 msgstr "退货编号"
 
@@ -14166,6 +14194,9 @@ msgstr "退货原因"
 
 msgid "Return Reasons"
 msgstr "退货原因"
+
+msgid "Return to Integrations and connect Ramp again."
+msgstr "返回集成页面并重新连接 Ramp。"
 
 msgid "returnable"
 msgstr "可退货的"
@@ -19002,6 +19033,9 @@ msgstr "作废"
 #. placeholder {0}: initialValues.paymentId
 msgid "Void {0}"
 msgstr "作废 {0}"
+
+msgid "Void Card Transaction"
+msgstr ""
 
 msgid "Void Invoice"
 msgstr "作废发票"
