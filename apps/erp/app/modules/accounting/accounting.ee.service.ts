@@ -6599,14 +6599,14 @@ export async function getBankAccounts(
   return query;
 }
 
-/** Active accounts only, for pickers. Never carries identifiers beyond the last four. */
+/** Active accounts only, for pickers. */
 export async function getBankAccountsList(
   client: SupabaseClient<Database>,
   companyId: string
 ) {
   return client
     .from("bankAccount")
-    .select("id, name, currencyCode, accountNumberLastFour, ibanLastFour")
+    .select("id, name, currencyCode, bankName")
     .eq("companyId", companyId)
     .eq("active", true)
     .order("name");
@@ -6617,7 +6617,6 @@ export async function deleteBankAccount(
   bankAccountId: string,
   companyId: string
 ) {
-  // The vault secret goes with the row via the AFTER DELETE trigger.
   return client
     .from("bankAccount")
     .delete()

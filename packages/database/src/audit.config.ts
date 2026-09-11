@@ -698,16 +698,7 @@ export const auditConfig = {
   } satisfies Partial<Record<TableName, string>>,
 
   /** Fields to skip in diff computation */
-  // `secretRef` is a vault pointer and the two last-four columns are masks of a secret —
-  // none of them belong in a diff that is readable by anyone with audit access.
-  skipFields: [
-    "updatedAt",
-    "updatedBy",
-    "embedding",
-    "secretRef",
-    "accountNumberLastFour",
-    "ibanLastFour"
-  ],
+  skipFields: ["updatedAt", "updatedBy", "embedding"],
 
   /** Retention period before archival (days) */
   retentionDays: 30,

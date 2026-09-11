@@ -1039,6 +1039,9 @@ msgstr "고정자산 처분 시 원가 계정"
 msgid "Account for the purchase cost of fixed assets"
 msgstr "고정자산 구매 원가 계정"
 
+msgid "Account Holder"
+msgstr ""
+
 msgid "Account manager"
 msgstr "계정 관리자"
 
@@ -1292,6 +1295,9 @@ msgstr "외주 인력 추가"
 msgid "Add cost center"
 msgstr "원가 센터 추가"
 
+msgid "Add Detail"
+msgstr ""
+
 msgid "Add Employee"
 msgstr "직원 추가"
 
@@ -1418,6 +1424,9 @@ msgstr "재고 이전 추가"
 
 msgid "Add Supplier"
 msgstr "공급업체 추가"
+
+msgid "Add the details your bank quotes — an IBAN, an account and routing number, or anything else this account needs."
+msgstr ""
 
 msgid "Add the next capability on the same system instead of buying another tool."
 msgstr "다른 도구를 구매하는 대신 같은 시스템에 다음 기능을 추가하세요."
@@ -2090,6 +2099,10 @@ msgstr "API 키 {0}을(를) 삭제하시겠습니까? 이 작업은 되돌릴 �
 msgid "Are you sure you want to delete the asset class: {0}? This cannot be undone."
 msgstr "자산 클래스: {0}를 삭제하시겠습니까? 이 작업은 실행 취소할 수 없습니다."
 
+#. placeholder {0}: bankAccount.name
+msgid "Are you sure you want to delete the bank account: {0}? This cannot be undone."
+msgstr ""
+
 #. placeholder {0}: requiredAction.name
 msgid "Are you sure you want to delete the change notice action: {0}? This cannot be undone."
 msgstr "변경 통지 작업을 삭제하시겠습니까: {0}? 이 작업은 취소할 수 없습니다."
@@ -2693,6 +2706,9 @@ msgstr "말풍선"
 msgid "Ballooned drawings with inspection features."
 msgstr "검사 기능이 표시된 주석 도면."
 
+msgid "Bank"
+msgstr ""
+
 msgid "Bank - Cash"
 msgstr "은행 - 현금"
 
@@ -2714,14 +2730,29 @@ msgstr "은행 — 자국통화(기본값)"
 msgid "Bank / Cash Account"
 msgstr "은행/현금 계정"
 
+msgid "Bank Account"
+msgstr ""
+
 msgid "Bank account denominated in a foreign currency"
 msgstr "외화로 표시된 은행 계좌"
 
 msgid "Bank account denominated in the local currency"
 msgstr "자국통화로 표시된 은행 계좌"
 
+msgid "Bank Accounts"
+msgstr ""
+
 msgid "Bank and financial service charge expenses"
 msgstr "은행 및 금융 서비스 요금 비용"
+
+msgid "Bank Country"
+msgstr ""
+
+msgid "Bank Details"
+msgstr ""
+
+msgid "Bank Name"
+msgstr ""
 
 msgid "Bars show each week's flow: <0>supply</0> pushes inventory up, <1>demand</1> pulls it down. The <2>line</2> is your projected on-hand inventory — when it dips below <3>safety stock</3> you're at risk, and below zero is a <4>stockout</4>."
 msgstr "막대는 매주의 흐름을 보여줍니다: <0>공급</0>은 재고를 올리고, <1>소요량</1>은 내립니다. <2>라인</2>은 예상 현재고 — <3>안전 재고</3> 아래로 떨어지면 위험에 처해 있고, 0 아래는 <4>재고 부족</4>입니다."
@@ -5198,6 +5229,9 @@ msgstr "연결 삭제"
 msgid "Delete Attribute"
 msgstr "속성 삭제"
 
+msgid "Delete Bank Account"
+msgstr ""
+
 msgid "Delete Category"
 msgstr "카테고리 삭제"
 
@@ -6075,6 +6109,9 @@ msgstr "속성 편집"
 
 msgid "Edit Attribute Category"
 msgstr "속성 카테고리 편집"
+
+msgid "Edit Bank Account"
+msgstr ""
 
 msgid "Edit Category"
 msgstr "카테고리 편집"
@@ -10238,6 +10275,9 @@ msgstr "신규 속성"
 msgid "New Attribute Category"
 msgstr "신규 속성 카테고리"
 
+msgid "New Bank Account"
+msgstr ""
+
 msgid "New Batch"
 msgstr "새 배치"
 
@@ -10625,6 +10665,9 @@ msgstr "사용 가능한 필터가 없습니다."
 
 msgid "No available tracked entities found"
 msgstr "추적 가능한 항목을 찾을 수 없습니다."
+
+msgid "No bank accounts have been recorded yet."
+msgstr ""
 
 msgid "No batches"
 msgstr "배치 없음"
@@ -14496,6 +14539,9 @@ msgstr "기본 승인자 선택"
 msgid "Select a destination"
 msgstr "목적지 선택"
 
+msgid "Select a detail"
+msgstr ""
+
 msgid "Select a document"
 msgstr "문서 선택"
 
@@ -16154,6 +16200,9 @@ msgstr "\"{0}\" 단계가 완료되었습니다 — \"{1}\" 체크포인트를 �
 msgid "The {0} phases to go live, each ending at a checkpoint. Tick off each task as you complete it."
 msgstr "도입까지 {0}단계이며, 각 단계는 체크포인트로 마무리됩니다. 완료한 작업은 체크 표시하세요."
 
+msgid "The account this bank's cash posts through."
+msgstr ""
+
 msgid "The accounting dimension that categorizes items for reporting and analysis."
 msgstr "보고 및 분석을 위해 항목을 분류하는 회계 차원입니다."
 
@@ -17005,6 +17054,10 @@ msgstr "이 담당자는 이메일 주소가 없습니다."
 
 msgid "This counterparty has nothing outstanding — the payment will be recorded on-account."
 msgstr "이 거래처는 미결 항목이 없으므로 지불이 외상으로 기록됩니다."
+
+#. placeholder {0}: row.label
+msgid "This does not look like a valid {0}. Saved as entered."
+msgstr ""
 
 msgid "This download link is invalid or has been tampered with."
 msgstr "이 다운로드 링크가 유효하지 않거나 변조되었습니다."
@@ -18672,6 +18725,9 @@ msgstr "이 작업의 의미"
 msgid "What this time entry counts as — Labor (operator time), Machine (run time), or Setup (changeover time); each rolls up under a different rate."
 msgstr "이 시간 항목이 다음 중 무엇으로 계산되는지 — 노무 (작업자 시간), 기계 (가공 시간), 또는 셋업 (교환 시간); 각각은 다른 요율로 누적됩니다."
 
+msgid "What to call this account, e.g. \"Operating — USD\"."
+msgstr ""
+
 msgid "What to set up"
 msgstr "설정할 항목"
 
@@ -18815,6 +18871,9 @@ msgstr "이 품목의 신규 재고가 입고 시 기본적으로 저장되는 �
 
 msgid "Where stock lives and how it ships."
 msgstr "재고가 어디에 있고 어떻게 출하되는지."
+
+msgid "Where the account is held. This orders the suggested details below."
+msgstr ""
 
 msgid "Where the affected items are used across the system. Informational — nothing here blocks releasing."
 msgstr "영향받은 항목이 시스템 전체에서 사용되는 위치입니다. 참고 사항 — 여기의 내용은 릴리스를 막지 않습니다."

@@ -2,7 +2,7 @@ import { assertIsPost, error, notFound, success } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
-import { bankFieldValuesFromStorage } from "@carbon/utils";
+import { parseBankFields } from "@carbon/utils";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { data, redirect, useLoaderData, useNavigate } from "react-router";
 import { bankAccountValidator, getBankAccount } from "~/modules/accounting";
@@ -50,7 +50,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
-  const { id: _id, storedSecrets: _storedSecrets, ...rest } = validation.data;
+  const { id: _id, ...rest } = validation.data;
 
   const updateBankAccount = await upsertBankAccount(client, {
     ...rest,
@@ -80,9 +80,8 @@ export default function EditBankAccountRoute() {
   const { bankAccount } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
 
-  // The stored account number and IBAN are deliberately absent: they live in the vault
-  // and never reach the client. The form renders their last four as a placeholder, and
-  // leaving the input empty keeps what the server already holds.
+  const fields = parseBankFields(bankAccount?.fields);
+
   const initialValues = {
     id: bankAccount?.id ?? undefined,
     name: bankAccount?.name ?? "",
@@ -92,13 +91,7 @@ export default function EditBankAccountRoute() {
     accountHolderName: bankAccount?.accountHolderName ?? "",
     countryCode: bankAccount?.countryCode ?? "",
     currencyCode: bankAccount?.currencyCode ?? "",
-    ...bankFieldValuesFromStorage({
-      formatId: bankAccount?.formatId,
-      countryCode: bankAccount?.countryCode,
-      swiftBic: bankAccount?.swiftBic,
-      routingNumber: bankAccount?.routingNumber,
-      bankIdentifiers: bankAccount?.bankIdentifiers as Record<string, unknown>
-    }),
+    fields: JSON.stringify(fields),
     ...getCustomFields(bankAccount?.customFields)
   };
 
@@ -106,10 +99,7 @@ export default function EditBankAccountRoute() {
     <BankAccountForm
       key={initialValues.id}
       initialValues={initialValues}
-      storedLastFour={{
-        accountNumber: bankAccount?.accountNumberLastFour,
-        iban: bankAccount?.ibanLastFour
-      }}
+      storedFields={fields}
       onClose={() => navigate(-1)}
     />
   );

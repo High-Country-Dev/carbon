@@ -1,184 +1,198 @@
 import { useControlField } from "@carbon/form";
-import { VStack } from "@carbon/react";
-import type { BankFieldSpec } from "@carbon/utils";
-import { resolveBankFormat, US_ACCOUNT_TYPES } from "@carbon/utils";
-import { useLingui } from "@lingui/react/macro";
-import { Hidden, Input, Select } from "~/components/Form";
+import {
+  Button,
+  CreatableCombobox,
+  HStack,
+  IconButton,
+  Input as InputBase,
+  VStack
+} from "@carbon/react";
+import type { BankFieldEntry } from "@carbon/utils";
+import {
+  customBankField,
+  getSeededBankField,
+  hasBankFieldWarning,
+  serializeBankFields,
+  suggestBankFields
+} from "@carbon/utils";
+import { Trans, useLingui } from "@lingui/react/macro";
+import { useMemo, useRef, useState } from "react";
+import { LuPlus, LuTrash, LuTriangleAlert } from "react-icons/lu";
+import { Hidden, Input } from "~/components/Form";
 import Country from "~/components/Form/Country";
 import Currency from "~/components/Form/Currency";
 
 /**
- * The bank-identifier half of every bank account form — the company's own accounts,
- * suppliers' and customers' alike.
+ * The identifier half of every bank account form — the company's own accounts, suppliers'
+ * and customers' alike.
  *
- * Which inputs appear is decided by the account's country through the format registry in
- * `@carbon/utils`: pick the United States and you get a routing number, an account number
- * and an account type; pick Germany and you get an IBAN. The fields for other countries
- * are not hidden, they are unmounted, so their values never reach FormData — and
- * `splitBankFieldsForStorage` drops anything the format does not declare anyway, so a
- * stale identifier cannot ride onto a row by either path.
+ * A bank account's identifiers are not a fixed set of inputs. The user adds as many as the
+ * account needs, choosing each one from the catalog Carbon seeds or typing a name of their
+ * own, and the whole bag is submitted as a single JSON string in the hidden `fields` input.
+ * The country selection reorders the catalog; it never restricts it, because a supplier
+ * abroad can bank anywhere.
  *
- * Account numbers and IBANs are never sent to the client. On an existing record the input
- * renders the stored last four as its placeholder and stays empty; leaving it that way
- * keeps what the server already holds, and `storedSecrets` tells the validator so.
+ * Rows live in local state rather than as registered form fields. A registered field per
+ * row would mean the field set changing shape as the user edits it, which `ValidatedForm`
+ * has no way to express — and the server wants one bag anyway.
  */
 
 type BankAccountFieldsProps = {
-  /** Last four of the identifiers already stored, when editing. */
-  storedLastFour?: {
-    accountNumber?: string | null;
-    iban?: string | null;
-  };
+  /** The bag already stored, when editing. */
+  initialFields?: BankFieldEntry[];
 };
 
-const BankAccountFields = ({ storedLastFour }: BankAccountFieldsProps) => {
+/** A row in the editor. `rowId` is stable across re-renders; the key can be edited. */
+type FieldRow = BankFieldEntry & { rowId: string };
+
+const BankAccountFields = ({ initialFields }: BankAccountFieldsProps) => {
   const { t } = useLingui();
   const [countryCode] = useControlField<string>("countryCode");
 
-  const format = resolveBankFormat(countryCode);
+  // Monotonic, so removing a row never lets a later one reuse its key and inherit its
+  // uncommitted input state.
+  const nextRowId = useRef(0);
+  const makeRow = (entry: BankFieldEntry): FieldRow => ({
+    ...entry,
+    rowId: `row-${nextRowId.current++}`
+  });
 
-  const storedSecrets = [
-    storedLastFour?.accountNumber ? "accountNumber" : null,
-    storedLastFour?.iban ? "iban" : null
-  ]
-    .filter(Boolean)
-    .join(",");
+  const [rows, setRows] = useState<FieldRow[]>(() =>
+    (initialFields ?? []).map(makeRow)
+  );
 
-  const masked = (lastFour: string | null | undefined) =>
-    lastFour ? `•••• ${lastFour}` : undefined;
+  const suggestions = useMemo(
+    () => suggestBankFields(countryCode),
+    [countryCode]
+  );
 
-  // `isRequired` comes from the format rather than the zod schema: every identifier is
-  // optional in the schema and enforced per country by `refineBankFields`, so the label
-  // would otherwise read "Optional" on a field the save is about to reject.
-  const renderField = ({ key, required }: BankFieldSpec) => {
-    switch (key) {
-      case "accountNumber":
-        return (
-          <Input
-            key={key}
-            name="accountNumber"
-            isRequired={required}
-            label={t`Account Number`}
-            placeholder={masked(storedLastFour?.accountNumber)}
-            autoComplete="off"
-          />
-        );
-      case "accountType":
-        return (
-          <Select
-            key={key}
-            name="accountType"
-            isRequired={required}
-            label={t`Account Type`}
-            options={US_ACCOUNT_TYPES.map((type) => ({
-              value: type,
-              label: type
-            }))}
-          />
-        );
-      case "bankCode":
-        return (
-          <Input
-            key={key}
-            name="bankCode"
-            isRequired={required}
-            label={t`Bank Code`}
-            helperText={t`The domestic clearing code your bank uses, if it has one.`}
-          />
-        );
-      case "bsb":
-        return (
-          <Input
-            key={key}
-            name="bsb"
-            isRequired={required}
-            label={t`BSB`}
-            placeholder={t`e.g. 083-004`}
-          />
-        );
-      case "iban":
-        return (
-          <Input
-            key={key}
-            name="iban"
-            isRequired={required}
-            label={t`IBAN`}
-            placeholder={
-              masked(storedLastFour?.iban) ??
-              t`e.g. DE89 3704 0044 0532 0130 00`
-            }
-            autoComplete="off"
-          />
-        );
-      case "institutionNumber":
-        return (
-          <Input
-            key={key}
-            name="institutionNumber"
-            isRequired={required}
-            label={t`Institution Number`}
-            placeholder={t`e.g. 003`}
-          />
-        );
-      case "routingNumber":
-        return (
-          <Input
-            key={key}
-            name="routingNumber"
-            isRequired={required}
-            label={t`Routing Number`}
-            placeholder={t`e.g. 021000021`}
-          />
-        );
-      case "sortCode":
-        return (
-          <Input
-            key={key}
-            name="sortCode"
-            isRequired={required}
-            label={t`Sort Code`}
-            placeholder={t`e.g. 12-34-56`}
-          />
-        );
-      case "swiftBic":
-        return (
-          <Input
-            key={key}
-            name="swiftBic"
-            isRequired={required}
-            label={t`SWIFT / BIC`}
-            placeholder={t`e.g. CHASUS33`}
-            helperText={t`Needed for international payments.`}
-          />
-        );
-      case "transitNumber":
-        return (
-          <Input
-            key={key}
-            name="transitNumber"
-            isRequired={required}
-            label={t`Transit Number`}
-            placeholder={t`e.g. 12345`}
-          />
-        );
-      default:
-        return null;
+  const updateRow = (rowId: string, patch: Partial<BankFieldEntry>) =>
+    setRows((current) =>
+      current.map((row) => (row.rowId === rowId ? { ...row, ...patch } : row))
+    );
+
+  const addRow = () =>
+    setRows((current) => [
+      ...current,
+      makeRow({ key: "", label: "", value: "" })
+    ]);
+
+  const removeRow = (rowId: string) =>
+    setRows((current) => current.filter((row) => row.rowId !== rowId));
+
+  const renderRow = (row: FieldRow) => {
+    // A row whose key is not in the catalog — a custom one, or a seeded key retired since
+    // the row was saved — still has to render as the selected option.
+    const options = suggestions.map((field) => ({
+      value: field.key,
+      label: field.label
+    }));
+    if (row.key && !suggestions.some((field) => field.key === row.key)) {
+      options.unshift({ value: row.key, label: row.label || row.key });
     }
+
+    const seeded = getSeededBankField(row.key);
+    const showWarning = hasBankFieldWarning(row.key, row.value);
+
+    return (
+      <VStack key={row.rowId} spacing={1} className="w-full">
+        {/* Wraps to one column on a narrow drawer rather than crushing both inputs. */}
+        <HStack className="w-full items-center gap-2 flex-wrap">
+          <div className="flex-1 min-w-[180px]">
+            <CreatableCombobox
+              value={row.key}
+              options={options}
+              placeholder={t`Select a detail`}
+              inlineAddLabel={t`Add`}
+              onChange={(key) => {
+                const field = getSeededBankField(key);
+                updateRow(row.rowId, {
+                  key,
+                  label: field?.label ?? row.label ?? key
+                });
+              }}
+              onCreateOption={(typed) => {
+                const field = customBankField(typed);
+                updateRow(row.rowId, { key: field.key, label: field.label });
+              }}
+            />
+          </div>
+          <div className="flex-1 min-w-[180px]">
+            <InputBase
+              value={row.value}
+              placeholder={seeded?.placeholder}
+              autoComplete="off"
+              aria-label={row.label || t`Value`}
+              onChange={(event) =>
+                updateRow(row.rowId, { value: event.target.value })
+              }
+            />
+          </div>
+          <IconButton
+            aria-label={t`Remove`}
+            variant="ghost"
+            icon={<LuTrash />}
+            onClick={() => removeRow(row.rowId)}
+          />
+        </HStack>
+        {showWarning && (
+          <HStack className="items-center gap-1 text-xs text-amber-600 dark:text-amber-500">
+            <LuTriangleAlert />
+            <span>
+              <Trans>
+                This does not look like a valid {row.label}. Saved as entered.
+              </Trans>
+            </span>
+          </HStack>
+        )}
+      </VStack>
+    );
   };
 
   return (
     <VStack spacing={4}>
-      <Hidden name="storedSecrets" value={storedSecrets} />
       <Input name="bankName" label={t`Bank Name`} />
       <Input name="accountHolderName" label={t`Account Holder`} />
       {/* The account's own country, not the party's — a supplier abroad can bank here. */}
       <Country
         name="countryCode"
         label={t`Bank Country`}
-        helperText={t`Where the account is held. This decides which details are required.`}
+        helperText={t`Where the account is held. This orders the suggested details below.`}
       />
       <Currency name="currencyCode" label={t`Currency`} />
-      {format.fields.map((field) => renderField(field))}
+
+      <VStack spacing={2}>
+        {/* A plain label, not `FormLabel` — that reads `useFormControlContext` and
+            throws outside a `FormControl`, and this heading labels the whole list
+            rather than any one input. */}
+        <span className="text-xs font-medium text-muted-foreground">
+          <Trans>Bank Details</Trans>
+        </span>
+        {rows.length === 0 ? (
+          <p className="text-muted-foreground text-sm">
+            <Trans>
+              Add the details your bank quotes — an IBAN, an account and routing
+              number, or anything else this account needs.
+            </Trans>
+          </p>
+        ) : (
+          rows.map(renderRow)
+        )}
+        <Button
+          variant="secondary"
+          leftIcon={<LuPlus />}
+          onClick={addRow}
+          type="button"
+        >
+          <Trans>Add Detail</Trans>
+        </Button>
+        {/* Carries the whole bag, and the place the bag-level error renders. Serialized
+            here rather than on the server so what is validated is what is stored. */}
+        <Hidden
+          name="fields"
+          value={JSON.stringify(serializeBankFields(rows))}
+        />
+      </VStack>
     </VStack>
   );
 };

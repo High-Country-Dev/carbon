@@ -3,7 +3,7 @@ export * from "./address";
 export * from "./all";
 export * from "./arrays";
 export * from "./assembly-units";
-export * from "./bank-formats";
+export * from "./bank-fields";
 export * from "./batch-compatibility";
 export * from "./batch-duration";
 export * from "./batch-time-split";

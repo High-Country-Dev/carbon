@@ -1039,6 +1039,9 @@ msgstr "Rozliczaj koszt środków trwałych podczas ich zbycia."
 msgid "Account for the purchase cost of fixed assets"
 msgstr "Rozliczaj koszt nabycia środków trwałych."
 
+msgid "Account Holder"
+msgstr ""
+
 msgid "Account manager"
 msgstr "Menedżer konta"
 
@@ -1292,6 +1295,9 @@ msgstr "Dodaj Pracownika zewnętrznego"
 msgid "Add cost center"
 msgstr "Dodaj miejsce powstawania kosztów"
 
+msgid "Add Detail"
+msgstr ""
+
 msgid "Add Employee"
 msgstr "Dodaj Pracownika"
 
@@ -1418,6 +1424,9 @@ msgstr "Dodaj transfer magazynowy"
 
 msgid "Add Supplier"
 msgstr "Dodaj dostawcę"
+
+msgid "Add the details your bank quotes — an IBAN, an account and routing number, or anything else this account needs."
+msgstr ""
 
 msgid "Add the next capability on the same system instead of buying another tool."
 msgstr "Dodaj następną funkcję w tym samym systemie zamiast kupować inne narzędzie."
@@ -2090,6 +2099,10 @@ msgstr "Czy na pewno chcesz usunąć klucz API: {0}? Tej czynności nie można c
 msgid "Are you sure you want to delete the asset class: {0}? This cannot be undone."
 msgstr "Czy chcesz usunąć klasę środków trwałych: {0}? Tej czynności nie można cofnąć."
 
+#. placeholder {0}: bankAccount.name
+msgid "Are you sure you want to delete the bank account: {0}? This cannot be undone."
+msgstr ""
+
 #. placeholder {0}: requiredAction.name
 msgid "Are you sure you want to delete the change notice action: {0}? This cannot be undone."
 msgstr "Czy chcesz usunąć czynność zawiadomienia o zmianie: {0}? Tej czynności nie można cofnąć."
@@ -2693,6 +2706,9 @@ msgstr "Balon"
 msgid "Ballooned drawings with inspection features."
 msgstr "Rysunki ze wskazaniami zawierające funkcje kontroli."
 
+msgid "Bank"
+msgstr ""
+
 msgid "Bank - Cash"
 msgstr "Bank - Gotówka"
 
@@ -2714,14 +2730,29 @@ msgstr "Bank — Waluta lokalna (domyślnie)"
 msgid "Bank / Cash Account"
 msgstr "Konto bankowe / gotówkowe"
 
+msgid "Bank Account"
+msgstr ""
+
 msgid "Bank account denominated in a foreign currency"
 msgstr "Rachunek bankowy denominowany w walucie obcej."
 
 msgid "Bank account denominated in the local currency"
 msgstr "Rachunek bankowy denominowany w walucie lokalnej."
 
+msgid "Bank Accounts"
+msgstr ""
+
 msgid "Bank and financial service charge expenses"
 msgstr "Wydatki na opłaty bankowe i usługi finansowe."
+
+msgid "Bank Country"
+msgstr ""
+
+msgid "Bank Details"
+msgstr ""
+
+msgid "Bank Name"
+msgstr ""
 
 msgid "Bars show each week's flow: <0>supply</0> pushes inventory up, <1>demand</1> pulls it down. The <2>line</2> is your projected on-hand inventory — when it dips below <3>safety stock</3> you're at risk, and below zero is a <4>stockout</4>."
 msgstr "Paski pokazują przepływ każdego tygodnia: <0>pokrycie</0> zwiększa zapasy, <1>zapotrzebowanie</1> je zmniejsza. <2>Linia</2> to twoje prognozowane zapasy w magazynie — gdy spadną poniżej <3>zapasu bezpieczeństwa</3>, jesteś zagrożony, a poniżej zera to <4>brak zapasu</4>."
@@ -5198,6 +5229,9 @@ msgstr "Usuń powiązanie"
 msgid "Delete Attribute"
 msgstr "Usuń atrybut"
 
+msgid "Delete Bank Account"
+msgstr ""
+
 msgid "Delete Category"
 msgstr "Usuń kategorię"
 
@@ -6075,6 +6109,9 @@ msgstr "Edytuj atrybut"
 
 msgid "Edit Attribute Category"
 msgstr "Edytuj kategorię atrybutu"
+
+msgid "Edit Bank Account"
+msgstr ""
 
 msgid "Edit Category"
 msgstr "Edytuj kategorię"
@@ -10238,6 +10275,9 @@ msgstr "Nowy atrybut"
 msgid "New Attribute Category"
 msgstr "Nowa Kategoria Atrybutu"
 
+msgid "New Bank Account"
+msgstr ""
+
 msgid "New Batch"
 msgstr "Nowy wsad"
 
@@ -10625,6 +10665,9 @@ msgstr "Brak dostępnych filtrów"
 
 msgid "No available tracked entities found"
 msgstr "Nie znaleziono dostępnych śledzonych jednostek"
+
+msgid "No bank accounts have been recorded yet."
+msgstr ""
 
 msgid "No batches"
 msgstr "Brak partii produkcyjnych"
@@ -14496,6 +14539,9 @@ msgstr "Wybierz domyślnego zatwierdzającego"
 msgid "Select a destination"
 msgstr "Wybierz miejsce docelowe"
 
+msgid "Select a detail"
+msgstr ""
+
 msgid "Select a document"
 msgstr "Wybierz dokument"
 
@@ -16154,6 +16200,9 @@ msgstr "Faza \"{0}\" jest gotowa — jej punkt kontrolny \"{1}\" został zaliczo
 msgid "The {0} phases to go live, each ending at a checkpoint. Tick off each task as you complete it."
 msgstr "Fazy {0} przed wdrożeniem, każda kończąca się punktem kontrolnym. Zaznaczaj każde zadanie po jego ukończeniu."
 
+msgid "The account this bank's cash posts through."
+msgstr ""
+
 msgid "The accounting dimension that categorizes items for reporting and analysis."
 msgstr "Wymiar księgowy, który kategoryzuje artykuły do raportowania i analizy."
 
@@ -17005,6 +17054,10 @@ msgstr "Ten kontakt nie ma adresu e-mail"
 
 msgid "This counterparty has nothing outstanding — the payment will be recorded on-account."
 msgstr "Ta strona nie ma żadnych zaległości — płatność zostanie zarejestrowana na koncie."
+
+#. placeholder {0}: row.label
+msgid "This does not look like a valid {0}. Saved as entered."
+msgstr ""
 
 msgid "This download link is invalid or has been tampered with."
 msgstr "Ten link pobierania jest nieprawidłowy lub został zmieniony."
@@ -18672,6 +18725,9 @@ msgstr "Co to zadanie oznacza"
 msgid "What this time entry counts as — Labor (operator time), Machine (run time), or Setup (changeover time); each rolls up under a different rate."
 msgstr "Co ta wpis czasu reprezentuje — Robocizna (czas operatora), Maszyna (czas obróbki), czy Przezbrojenie (czas przezbrojenia); każda kumuluje się pod inną stawką."
 
+msgid "What to call this account, e.g. \"Operating — USD\"."
+msgstr ""
+
 msgid "What to set up"
 msgstr "Co skonfigurować"
 
@@ -18815,6 +18871,9 @@ msgstr "Gdzie nowy zapas tego artykułu ląduje domyślnie przy przyjęciu; wybo
 
 msgid "Where stock lives and how it ships."
 msgstr "Gdzie znajduje się zapas i jak się wysyła."
+
+msgid "Where the account is held. This orders the suggested details below."
+msgstr ""
 
 msgid "Where the affected items are used across the system. Informational — nothing here blocks releasing."
 msgstr "Gdzie używane są dotknięte elementy w całym systemie. Informacyjne — nic tutaj nie blokuje wydawania."

@@ -1419,7 +1419,7 @@ full-screen ERP route.
 
 ## `sanitize()` nulls the key it can't fill — never route "leave this alone" through it
 
-**Context:** The bank-account update path built its payload with `sanitize({ ...row, accountNumberLastFour: storage.lastFour.accountNumber ?? undefined })`, on the reading that `sanitize` strips undefined keys so an identifier the user never re-entered would keep its stored mask. It does the opposite: `packages/utils/src/supabase.ts` REWRITES `undefined` to `null` for every key except `id`. Every edit that did not re-type the account number nulled its own last-four and was rejected by the row's identifier check with a generic "Failed to update".
+**Context:** An update path built its payload with `sanitize({ ...row, maskColumn: newValue ?? undefined })`, on the reading that `sanitize` strips undefined keys so a value the user never re-entered would keep what was stored. It does the opposite: `packages/utils/src/supabase.ts` REWRITES `undefined` to `null` for every key except `id`. Every edit that did not re-type the value nulled the column and tripped its CHECK constraint with a generic "Failed to update". (Found on an early bank-account design since replaced; the `sanitize` behaviour is unchanged and repo-wide.)
 
 **Problem:** "Strip the empty values" and "null the empty values" produce identical-looking call sites and opposite database writes. On a column with a CHECK or a NOT NULL the difference surfaces as an opaque failure; on a plain column it silently erases data, which is worse.
 
@@ -1436,3 +1436,13 @@ full-screen ERP route.
 **Rule:** Any `ValidatedForm` rendered inside a `ModalDrawer` passes a `useFetcher()` as `fetcher`, whether or not it needs the response. Copy `SupplierLocationForm`, not the plain-form shape.
 
 **Applies to:** `apps/erp/app/modules/*/ui/**/*Form.tsx` rendered in a drawer or modal, `packages/form/src/components/Submit.tsx`.
+
+## A storage-only PR should not encode its unbuilt consumer's constraints
+
+**Context:** The bank-account PR's job was configuration — let a user record account details for their own company, suppliers and customers. It shipped a per-country format registry, one column per identifier class, per-country required-field sets, vault encryption and a version chain with an approval status. Every one of those existed to serve a payment-execution surface that had not been specified, let alone built. Re-scoped to an open key-value bag, the feature did the same job in ~2,500 fewer lines.
+
+**Problem:** Designing storage around an imagined consumer converts guesses into schema. The guesses are load-bearing (a required field set, an enum, a column) and cost a migration to revise, while the real consumer's requirements only become knowable when someone writes it — at which point the schema is already wrong in a way that is expensive rather than cheap to correct. The tell is a Design Decisions table whose justifications are all future tense.
+
+**Rule:** When a PR stores data nothing reads yet, constrain only what is true independent of any consumer — tenancy, ownership, referential integrity, "this row identifies something". Push the field-level vocabulary into data the user controls. Add the constraint in the PR that introduces the code that depends on it, where its shape can be checked against a real requirement. Widening a permissive column later is a migration; narrowing one that customers have already filled is a migration plus a data-cleanup conversation.
+
+**Applies to:** any `.ai/specs/` design whose Out of Scope section says a consumer comes later; new tables in `packages/database/supabase/migrations/`; registry modules in `packages/utils/src/` that enumerate a domain's variants.

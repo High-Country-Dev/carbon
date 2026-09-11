@@ -1,4 +1,5 @@
 import { MenuIcon, MenuItem } from "@carbon/react";
+import { parseBankFields, summarizeBankFields } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo } from "react";
@@ -24,10 +25,9 @@ type BankAccountsTableProps = {
   count: number;
 };
 
-/** Masked identifier, preferring the account number and falling back to the IBAN. */
-function maskedIdentifier(row: BankAccountListItem) {
-  const lastFour = row.accountNumberLastFour ?? row.ibanLastFour;
-  return lastFour ? `•••• ${lastFour}` : "—";
+/** The account's primary identifier, abbreviated to its last four. */
+function identifierSummary(row: BankAccountListItem) {
+  return summarizeBankFields(parseBankFields(row.fields)) ?? "—";
 }
 
 const BankAccountsTable = memo(({ data, count }: BankAccountsTableProps) => {
@@ -58,7 +58,7 @@ const BankAccountsTable = memo(({ data, count }: BankAccountsTableProps) => {
       {
         id: "identifier",
         header: t`Account`,
-        cell: ({ row }) => maskedIdentifier(row.original),
+        cell: ({ row }) => identifierSummary(row.original),
         meta: { icon: <LuHash /> }
       },
       {

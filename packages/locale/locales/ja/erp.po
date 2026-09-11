@@ -1039,6 +1039,9 @@ msgstr "固定資産を除却する際の原価を会計処理する"
 msgid "Account for the purchase cost of fixed assets"
 msgstr "固定資産の購入原価を会計処理する"
 
+msgid "Account Holder"
+msgstr ""
+
 msgid "Account manager"
 msgstr "アカウント マネージャー"
 
@@ -1292,6 +1295,9 @@ msgstr "外部作業者を追加"
 msgid "Add cost center"
 msgstr "原価センターを追加"
 
+msgid "Add Detail"
+msgstr ""
+
 msgid "Add Employee"
 msgstr "従業員を追加"
 
@@ -1418,6 +1424,9 @@ msgstr "在庫移動を追加"
 
 msgid "Add Supplier"
 msgstr "仕入先を追加"
+
+msgid "Add the details your bank quotes — an IBAN, an account and routing number, or anything else this account needs."
+msgstr ""
 
 msgid "Add the next capability on the same system instead of buying another tool."
 msgstr "同じシステム上に次の機能を追加して、別のツールを購入する代わりにします。"
@@ -2090,6 +2099,10 @@ msgstr "APIキー: {0} を削除してもよろしいですか?これは元に�
 msgid "Are you sure you want to delete the asset class: {0}? This cannot be undone."
 msgstr "資産クラス {0} を削除してもよろしいですか。この操作は元に戻せません。"
 
+#. placeholder {0}: bankAccount.name
+msgid "Are you sure you want to delete the bank account: {0}? This cannot be undone."
+msgstr ""
+
 #. placeholder {0}: requiredAction.name
 msgid "Are you sure you want to delete the change notice action: {0}? This cannot be undone."
 msgstr "変更通知アクション「{0}」を削除してもよろしいですか？この操作は取り消せません。"
@@ -2693,6 +2706,9 @@ msgstr "バルーン"
 msgid "Ballooned drawings with inspection features."
 msgstr "検査機能を持つ拡大図"
 
+msgid "Bank"
+msgstr ""
+
 msgid "Bank - Cash"
 msgstr "銀行-現金"
 
@@ -2714,14 +2730,29 @@ msgstr "銀行—地元通貨（デフォルト）"
 msgid "Bank / Cash Account"
 msgstr "銀行 / 現金口座"
 
+msgid "Bank Account"
+msgstr ""
+
 msgid "Bank account denominated in a foreign currency"
 msgstr "外国通貨で表示される銀行口座"
 
 msgid "Bank account denominated in the local currency"
 msgstr "地元通貨で示された銀行口座。"
 
+msgid "Bank Accounts"
+msgstr ""
+
 msgid "Bank and financial service charge expenses"
 msgstr "銀行およびサービス料費用"
+
+msgid "Bank Country"
+msgstr ""
+
+msgid "Bank Details"
+msgstr ""
+
+msgid "Bank Name"
+msgstr ""
 
 msgid "Bars show each week's flow: <0>supply</0> pushes inventory up, <1>demand</1> pulls it down. The <2>line</2> is your projected on-hand inventory — when it dips below <3>safety stock</3> you're at risk, and below zero is a <4>stockout</4>."
 msgstr "棒グラフは毎週の流れを表示します：<0>供給</0>は在庫を増加させ、<1>所要量</1>は減少させます。<2>線</2>は予測在庫です。<3>安全在庫</3>を下回る場合はリスク状態であり、ゼロを下回る場合は<4>欠品</4>です。"
@@ -5198,6 +5229,9 @@ msgstr "関連付けを削除"
 msgid "Delete Attribute"
 msgstr "属性を削除"
 
+msgid "Delete Bank Account"
+msgstr ""
+
 msgid "Delete Category"
 msgstr "カテゴリを削除"
 
@@ -6075,6 +6109,9 @@ msgstr "属性を編集"
 
 msgid "Edit Attribute Category"
 msgstr "属性カテゴリを編集"
+
+msgid "Edit Bank Account"
+msgstr ""
 
 msgid "Edit Category"
 msgstr "カテゴリを編集"
@@ -10238,6 +10275,9 @@ msgstr "新しい属性"
 msgid "New Attribute Category"
 msgstr "新しい属性カテゴリ"
 
+msgid "New Bank Account"
+msgstr ""
+
 msgid "New Batch"
 msgstr "新規バッチ"
 
@@ -10625,6 +10665,9 @@ msgstr "利用可能な絞り込みはありません"
 
 msgid "No available tracked entities found"
 msgstr "利用可能な追跡対象エンティティが見つかりません"
+
+msgid "No bank accounts have been recorded yet."
+msgstr ""
 
 msgid "No batches"
 msgstr "バッチなし"
@@ -14496,6 +14539,9 @@ msgstr "デフォルト承認者を選択"
 msgid "Select a destination"
 msgstr "宛先を選択"
 
+msgid "Select a detail"
+msgstr ""
+
 msgid "Select a document"
 msgstr "文書を選択"
 
@@ -16154,6 +16200,9 @@ msgstr "「{0}」フェーズが完了しました — その「{1}」チェッ�
 msgid "The {0} phases to go live, each ending at a checkpoint. Tick off each task as you complete it."
 msgstr "{0}個のフェーズをリリースするまで進め、各フェーズはチェックポイントで終了します。完了したタスクをチェックオフしてください。"
 
+msgid "The account this bank's cash posts through."
+msgstr ""
+
 msgid "The accounting dimension that categorizes items for reporting and analysis."
 msgstr "レポートと分析のためにアイテムを分類する会計ディメンション。"
 
@@ -17005,6 +17054,10 @@ msgstr "この担当者はメールアドレスを持っていません"
 
 msgid "This counterparty has nothing outstanding — the payment will be recorded on-account."
 msgstr "この取引先には未払い金がありません。支払いは掛け金として記録されます。"
+
+#. placeholder {0}: row.label
+msgid "This does not look like a valid {0}. Saved as entered."
+msgstr ""
 
 msgid "This download link is invalid or has been tampered with."
 msgstr "このダウンロードリンクは無効であるか、改ざんされています。"
@@ -18672,6 +18725,9 @@ msgstr "このタスクの意味"
 msgid "What this time entry counts as — Labor (operator time), Machine (run time), or Setup (changeover time); each rolls up under a different rate."
 msgstr "このタイムエントリが計算される対象 — 労務（作業者時間）、機械（加工時間）、または段取り（段取り時間）。各々は異なるレート下にロールアップされます。"
 
+msgid "What to call this account, e.g. \"Operating — USD\"."
+msgstr ""
+
 msgid "What to set up"
 msgstr "セットアップする内容"
 
@@ -18815,6 +18871,9 @@ msgstr "このアイテムの新しいストックが受取時にデフォルト
 
 msgid "Where stock lives and how it ships."
 msgstr "在庫がどこに保管され、どのように出荷されるか。"
+
+msgid "Where the account is held. This orders the suggested details below."
+msgstr ""
 
 msgid "Where the affected items are used across the system. Informational — nothing here blocks releasing."
 msgstr "影響を受けるアイテムがシステム全体でどこで使用されているか。情報提供 - ここに何もリリースをブロックしません。"

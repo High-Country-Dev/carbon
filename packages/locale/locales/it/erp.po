@@ -1039,6 +1039,9 @@ msgstr "Contabilizzate il costo dei cespiti quando ceduti."
 msgid "Account for the purchase cost of fixed assets"
 msgstr "Contabilizzate il costo di acquisizione dei cespiti."
 
+msgid "Account Holder"
+msgstr ""
+
 msgid "Account manager"
 msgstr "Responsabile account"
 
@@ -1292,6 +1295,9 @@ msgstr "Aggiungi un collaboratore esterno"
 msgid "Add cost center"
 msgstr "Aggiungi centro di costo"
 
+msgid "Add Detail"
+msgstr ""
+
 msgid "Add Employee"
 msgstr "Aggiungi Dipendente"
 
@@ -1418,6 +1424,9 @@ msgstr "Aggiungi trasferimento di stock"
 
 msgid "Add Supplier"
 msgstr "Aggiungi Fornitore"
+
+msgid "Add the details your bank quotes — an IBAN, an account and routing number, or anything else this account needs."
+msgstr ""
 
 msgid "Add the next capability on the same system instead of buying another tool."
 msgstr "Aggiungi la prossima funzionalità nello stesso sistema invece di acquistare un altro strumento."
@@ -2090,6 +2099,10 @@ msgstr "Sei sicuro di voler eliminare la chiave API: {0}? Questa azione non può
 msgid "Are you sure you want to delete the asset class: {0}? This cannot be undone."
 msgstr "Sei sicuro di voler eliminare la classe di cespiti: {0}? Questa azione non può essere annullata."
 
+#. placeholder {0}: bankAccount.name
+msgid "Are you sure you want to delete the bank account: {0}? This cannot be undone."
+msgstr ""
+
 #. placeholder {0}: requiredAction.name
 msgid "Are you sure you want to delete the change notice action: {0}? This cannot be undone."
 msgstr "Sei sicuro di voler eliminare l'azione dell'avviso di modifica: {0}? Questa operazione non può essere annullata."
@@ -2693,6 +2706,9 @@ msgstr "Palloncino"
 msgid "Ballooned drawings with inspection features."
 msgstr "Disegni con annotazioni per il controllo."
 
+msgid "Bank"
+msgstr ""
+
 msgid "Bank - Cash"
 msgstr "Banca - Cassa"
 
@@ -2714,14 +2730,29 @@ msgstr "Banca — Valuta locale (predefinita)"
 msgid "Bank / Cash Account"
 msgstr "Conto Bancario / Cassa"
 
+msgid "Bank Account"
+msgstr ""
+
 msgid "Bank account denominated in a foreign currency"
 msgstr "Conto bancario denominato in una valuta estera."
 
 msgid "Bank account denominated in the local currency"
 msgstr "Conto bancario denominato nella valuta locale."
 
+msgid "Bank Accounts"
+msgstr ""
+
 msgid "Bank and financial service charge expenses"
 msgstr "Spese per commissioni di servizi bancari e finanziari."
+
+msgid "Bank Country"
+msgstr ""
+
+msgid "Bank Details"
+msgstr ""
+
+msgid "Bank Name"
+msgstr ""
 
 msgid "Bars show each week's flow: <0>supply</0> pushes inventory up, <1>demand</1> pulls it down. The <2>line</2> is your projected on-hand inventory — when it dips below <3>safety stock</3> you're at risk, and below zero is a <4>stockout</4>."
 msgstr "I grafici mostrano il flusso di ogni settimana: <0>copertura</0> spinge il magazzino verso l'alto, <1>fabbisogno</1> lo tira verso il basso. La <2>riga</2> è il tuo magazzino disponibile previsto — quando scende al di sotto della <3>scorta di sicurezza</3> sei a rischio, e al di sotto di zero è una <4>rottura di stock</4>."
@@ -5198,6 +5229,9 @@ msgstr "Elimina Associazione"
 msgid "Delete Attribute"
 msgstr "Elimina Attributo"
 
+msgid "Delete Bank Account"
+msgstr ""
+
 msgid "Delete Category"
 msgstr "Elimina Categoria"
 
@@ -6075,6 +6109,9 @@ msgstr "Modifica Attributo"
 
 msgid "Edit Attribute Category"
 msgstr "Modifica Categoria Attributo"
+
+msgid "Edit Bank Account"
+msgstr ""
 
 msgid "Edit Category"
 msgstr "Modifica Categoria"
@@ -10238,6 +10275,9 @@ msgstr "Nuovo Attributo"
 msgid "New Attribute Category"
 msgstr "Nuova Categoria Attributo"
 
+msgid "New Bank Account"
+msgstr ""
+
 msgid "New Batch"
 msgstr "Nuovo Batch"
 
@@ -10625,6 +10665,9 @@ msgstr "Nessun filtro disponibile"
 
 msgid "No available tracked entities found"
 msgstr "Nessuna entità tracciata disponibile trovata"
+
+msgid "No bank accounts have been recorded yet."
+msgstr ""
 
 msgid "No batches"
 msgstr "Nessun lotto di produzione"
@@ -14496,6 +14539,9 @@ msgstr "Seleziona un approvatore predefinito"
 msgid "Select a destination"
 msgstr "Seleziona una destinazione"
 
+msgid "Select a detail"
+msgstr ""
+
 msgid "Select a document"
 msgstr "Seleziona un documento"
 
@@ -16154,6 +16200,9 @@ msgstr "La fase \"{0}\" è fatta — il suo checkpoint \"{1}\" è stato superato
 msgid "The {0} phases to go live, each ending at a checkpoint. Tick off each task as you complete it."
 msgstr "I {0} fasi per andare live, ognuna che termina a un checkpoint. Spunta ogni attività mentre la completi."
 
+msgid "The account this bank's cash posts through."
+msgstr ""
+
 msgid "The accounting dimension that categorizes items for reporting and analysis."
 msgstr "La dimensione contabile che categorizza gli articoli per il reporting e l'analisi."
 
@@ -17005,6 +17054,10 @@ msgstr "Questo contatto non ha un indirizzo email"
 
 msgid "This counterparty has nothing outstanding — the payment will be recorded on-account."
 msgstr "Questa controparte non ha nulla in sospeso — il pagamento verrà registrato come credito in conto."
+
+#. placeholder {0}: row.label
+msgid "This does not look like a valid {0}. Saved as entered."
+msgstr ""
 
 msgid "This download link is invalid or has been tampered with."
 msgstr "Questo link di download non è valido o è stato manomesso."
@@ -18672,6 +18725,9 @@ msgstr "Cosa significa questa attività"
 msgid "What this time entry counts as — Labor (operator time), Machine (run time), or Setup (changeover time); each rolls up under a different rate."
 msgstr "Cosa conta questa registrazione di tempo — Manodopera (tempo operatore), Macchina (tempo di lavorazione), o Attrezzaggio (tempo di cambio); ognuna si accumula sotto un tariffario diverso."
 
+msgid "What to call this account, e.g. \"Operating — USD\"."
+msgstr ""
+
 msgid "What to set up"
 msgstr "Cosa configurare"
 
@@ -18815,6 +18871,9 @@ msgstr "Dove la nuova giacenza di questo articolo atterra per impostazione prede
 
 msgid "Where stock lives and how it ships."
 msgstr "Dove il magazzino risiede e come viene spedito."
+
+msgid "Where the account is held. This orders the suggested details below."
+msgstr ""
 
 msgid "Where the affected items are used across the system. Informational — nothing here blocks releasing."
 msgstr "Dove gli elementi interessati sono utilizzati in tutto il sistema. Informativo — niente qui blocca il rilascio."

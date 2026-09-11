@@ -1039,6 +1039,9 @@ msgstr "处置固定资产时计入其成本"
 msgid "Account for the purchase cost of fixed assets"
 msgstr "固定资产的收购成本计账。"
 
+msgid "Account Holder"
+msgstr ""
+
 msgid "Account manager"
 msgstr "账户经理"
 
@@ -1292,6 +1295,9 @@ msgstr "添加外协人员"
 msgid "Add cost center"
 msgstr "添加成本中心"
 
+msgid "Add Detail"
+msgstr ""
+
 msgid "Add Employee"
 msgstr "添加员工"
 
@@ -1418,6 +1424,9 @@ msgstr "添加库存转移"
 
 msgid "Add Supplier"
 msgstr "添加供应商"
+
+msgid "Add the details your bank quotes — an IBAN, an account and routing number, or anything else this account needs."
+msgstr ""
 
 msgid "Add the next capability on the same system instead of buying another tool."
 msgstr "在同一系统上添加下一个功能，而不是购买另一个工具。"
@@ -2090,6 +2099,10 @@ msgstr "确定要删除API密钥：{0}吗？此操作无法撤消。"
 msgid "Are you sure you want to delete the asset class: {0}? This cannot be undone."
 msgstr "确定要删除资产类别: {0}吗?此操作无法撤销。"
 
+#. placeholder {0}: bankAccount.name
+msgid "Are you sure you want to delete the bank account: {0}? This cannot be undone."
+msgstr ""
+
 #. placeholder {0}: requiredAction.name
 msgid "Are you sure you want to delete the change notice action: {0}? This cannot be undone."
 msgstr "确定要删除变更通知操作：{0}吗？此操作无法撤消。"
@@ -2693,6 +2706,9 @@ msgstr "气球"
 msgid "Ballooned drawings with inspection features."
 msgstr "带有检验特性的标注图纸。"
 
+msgid "Bank"
+msgstr ""
+
 msgid "Bank - Cash"
 msgstr "银行-现金"
 
@@ -2714,14 +2730,29 @@ msgstr "银行—本地货币（默认）"
 msgid "Bank / Cash Account"
 msgstr "银行/现金账户"
 
+msgid "Bank Account"
+msgstr ""
+
 msgid "Bank account denominated in a foreign currency"
 msgstr "以外币计价的银行账户"
 
 msgid "Bank account denominated in the local currency"
 msgstr "以本地货币计价的银行账户。"
 
+msgid "Bank Accounts"
+msgstr ""
+
 msgid "Bank and financial service charge expenses"
 msgstr "银行和金融服务费用。"
+
+msgid "Bank Country"
+msgstr ""
+
+msgid "Bank Details"
+msgstr ""
+
+msgid "Bank Name"
+msgstr ""
 
 msgid "Bars show each week's flow: <0>supply</0> pushes inventory up, <1>demand</1> pulls it down. The <2>line</2> is your projected on-hand inventory — when it dips below <3>safety stock</3> you're at risk, and below zero is a <4>stockout</4>."
 msgstr "柱状图显示每周的流向：<0>供应</0>推高库存，<1>需求</1>拉低库存。<2>线</2>表示您的预计现有库存 — 当它跌破<3>安全库存</3>时，您面临风险；跌破零则是<4>缺货</4>。"
@@ -5198,6 +5229,9 @@ msgstr "删除关联"
 msgid "Delete Attribute"
 msgstr "删除属性"
 
+msgid "Delete Bank Account"
+msgstr ""
+
 msgid "Delete Category"
 msgstr "删除分类"
 
@@ -6075,6 +6109,9 @@ msgstr "编辑属性"
 
 msgid "Edit Attribute Category"
 msgstr "编辑属性类别"
+
+msgid "Edit Bank Account"
+msgstr ""
 
 msgid "Edit Category"
 msgstr "编辑分类"
@@ -10238,6 +10275,9 @@ msgstr "新属性"
 msgid "New Attribute Category"
 msgstr "新属性类别"
 
+msgid "New Bank Account"
+msgstr ""
+
 msgid "New Batch"
 msgstr "新批次"
 
@@ -10625,6 +10665,9 @@ msgstr "没有可用的筛选器"
 
 msgid "No available tracked entities found"
 msgstr "未找到可用的追踪实体"
+
+msgid "No bank accounts have been recorded yet."
+msgstr ""
 
 msgid "No batches"
 msgstr "无生产批次"
@@ -14496,6 +14539,9 @@ msgstr "选择默认审批人"
 msgid "Select a destination"
 msgstr "选择目标位置"
 
+msgid "Select a detail"
+msgstr ""
+
 msgid "Select a document"
 msgstr "选择文件"
 
@@ -16154,6 +16200,9 @@ msgstr "\"{0}\"阶段已完成——其\"{1}\"检查点已通过。"
 msgid "The {0} phases to go live, each ending at a checkpoint. Tick off each task as you complete it."
 msgstr "达成上线的{0}个阶段，每个阶段以检查点结束。当您完成每个任务时，将其勾选。"
 
+msgid "The account this bank's cash posts through."
+msgstr ""
+
 msgid "The accounting dimension that categorizes items for reporting and analysis."
 msgstr "对物料进行分类以用于报告和分析的会计维度。"
 
@@ -17005,6 +17054,10 @@ msgstr "此联系人没有电子邮件地址"
 
 msgid "This counterparty has nothing outstanding — the payment will be recorded on-account."
 msgstr "该交易对手没有未结余额——该付款将记录为应收账款。"
+
+#. placeholder {0}: row.label
+msgid "This does not look like a valid {0}. Saved as entered."
+msgstr ""
 
 msgid "This download link is invalid or has been tampered with."
 msgstr "此下载链接无效或已被篡改。"
@@ -18672,6 +18725,9 @@ msgstr "此任务的含义"
 msgid "What this time entry counts as — Labor (operator time), Machine (run time), or Setup (changeover time); each rolls up under a different rate."
 msgstr "这个时间记录计为——人工(操作员时间)、机器(加工时间)或换型(换型时间)；每个都按不同费率累积。"
 
+msgid "What to call this account, e.g. \"Operating — USD\"."
+msgstr ""
+
 msgid "What to set up"
 msgstr "要设置什么"
 
@@ -18815,6 +18871,9 @@ msgstr "此项目的新库存在收据时默认登陆到哪里;收据上每行�
 
 msgid "Where stock lives and how it ships."
 msgstr "库存存放位置及其发货方式。"
+
+msgid "Where the account is held. This orders the suggested details below."
+msgstr ""
 
 msgid "Where the affected items are used across the system. Informational — nothing here blocks releasing."
 msgstr "受影响的物料在整个系统中的使用位置。仅供参考——此处没有任何内容阻止已下达。"

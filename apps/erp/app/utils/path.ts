@@ -592,14 +592,6 @@ export const path = {
     customFields: `${x}/settings/custom-fields`,
     customFieldsTable: (table: string) =>
       generatePath(`${x}/settings/custom-fields/${table}`),
-    deactivateCustomerBankAccount: (customerId: string, id: string) =>
-      generatePath(
-        `${x}/customer/${customerId}/payments/bank-accounts/deactivate/${id}`
-      ),
-    deactivateSupplierBankAccount: (supplierId: string, id: string) =>
-      generatePath(
-        `${x}/supplier/${supplierId}/payments/bank-accounts/deactivate/${id}`
-      ),
 
     deactivateUsers: `${x}/users/deactivate`,
     defaultRevision: (id: string) =>
@@ -667,6 +659,10 @@ export const path = {
     deleteCostCenter: (id: string) =>
       generatePath(`${x}/accounting/cost-centers/delete/${id}`),
     deleteCustomer: (id: string) => generatePath(`${x}/customer/${id}/delete`),
+    deleteCustomerBankAccount: (customerId: string, id: string) =>
+      generatePath(
+        `${x}/customer/${customerId}/payments/bank-accounts/delete/${id}`
+      ),
     deleteCustomerContact: (customerId: string, id: string) =>
       generatePath(`${x}/customer/${customerId}/contacts/delete/${id}`),
     deleteCustomerLocation: (customerId: string, id: string) =>
@@ -879,6 +875,10 @@ export const path = {
     deleteSuggestion: (id: string) =>
       generatePath(`${x}/resources/suggestions/delete/${id}`),
     deleteSupplier: (id: string) => generatePath(`${x}/supplier/${id}/delete`),
+    deleteSupplierBankAccount: (supplierId: string, id: string) =>
+      generatePath(
+        `${x}/supplier/${supplierId}/payments/bank-accounts/delete/${id}`
+      ),
     deleteSupplierContact: (supplierId: string, id: string) =>
       generatePath(`${x}/supplier/${supplierId}/contacts/delete/${id}`),
     deleteSupplierLocation: (supplierId: string, id: string) =>

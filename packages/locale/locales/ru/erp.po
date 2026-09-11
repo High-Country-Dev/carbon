@@ -1039,6 +1039,9 @@ msgstr "Учесть себестоимость основного средст�
 msgid "Account for the purchase cost of fixed assets"
 msgstr "Учесть себестоимость приобретения основного средства"
 
+msgid "Account Holder"
+msgstr ""
+
 msgid "Account manager"
 msgstr "Менеджер счета"
 
@@ -1292,6 +1295,9 @@ msgstr "Добавить подрядчика"
 msgid "Add cost center"
 msgstr "Добавить центр затрат"
 
+msgid "Add Detail"
+msgstr ""
+
 msgid "Add Employee"
 msgstr "Добавить сотрудника"
 
@@ -1418,6 +1424,9 @@ msgstr "Добавить передачу запасов"
 
 msgid "Add Supplier"
 msgstr "Добавить поставщика"
+
+msgid "Add the details your bank quotes — an IBAN, an account and routing number, or anything else this account needs."
+msgstr ""
 
 msgid "Add the next capability on the same system instead of buying another tool."
 msgstr "Добавьте следующую возможность в ту же систему вместо покупки другого инструмента."
@@ -2090,6 +2099,10 @@ msgstr "Вы уверены, что хотите удалить API-ключ: {0
 msgid "Are you sure you want to delete the asset class: {0}? This cannot be undone."
 msgstr "Вы уверены, что хотите удалить класс основных средств: {0}? Это невозможно отменить."
 
+#. placeholder {0}: bankAccount.name
+msgid "Are you sure you want to delete the bank account: {0}? This cannot be undone."
+msgstr ""
+
 #. placeholder {0}: requiredAction.name
 msgid "Are you sure you want to delete the change notice action: {0}? This cannot be undone."
 msgstr "Вы уверены, что хотите удалить действие извещения об изменении: {0}? Это невозможно отменить."
@@ -2693,6 +2706,9 @@ msgstr "Выноска"
 msgid "Ballooned drawings with inspection features."
 msgstr "Детализированные чертежи с функциями контроля."
 
+msgid "Bank"
+msgstr ""
+
 msgid "Bank - Cash"
 msgstr "Банк - Денежные средства"
 
@@ -2714,14 +2730,29 @@ msgstr "Банк — Местная валюта (по умолчанию)"
 msgid "Bank / Cash Account"
 msgstr "Банк / Счет денежных средств"
 
+msgid "Bank Account"
+msgstr ""
+
 msgid "Bank account denominated in a foreign currency"
 msgstr "Банковский счет в иностранной валюте."
 
 msgid "Bank account denominated in the local currency"
 msgstr "Банковский счет в местной валюте."
 
+msgid "Bank Accounts"
+msgstr ""
+
 msgid "Bank and financial service charge expenses"
 msgstr "Расходы банка и сервисного сбора финансовых услуг"
+
+msgid "Bank Country"
+msgstr ""
+
+msgid "Bank Details"
+msgstr ""
+
+msgid "Bank Name"
+msgstr ""
 
 msgid "Bars show each week's flow: <0>supply</0> pushes inventory up, <1>demand</1> pulls it down. The <2>line</2> is your projected on-hand inventory — when it dips below <3>safety stock</3> you're at risk, and below zero is a <4>stockout</4>."
 msgstr "Столбцы показывают поток каждой недели: <0>обеспечение</0> увеличивает запасы, <1>потребность</1> снижает их. <2>Строка</2> — это ваши прогнозируемые запасы на складе — когда она падает ниже <3>страхового запаса</3>, вы в зоне риска, а ниже нуля — <4>дефицит</4>."
@@ -5198,6 +5229,9 @@ msgstr "Удалить ассоциацию"
 msgid "Delete Attribute"
 msgstr "Удалить атрибут"
 
+msgid "Delete Bank Account"
+msgstr ""
+
 msgid "Delete Category"
 msgstr "Удалить категорию"
 
@@ -6075,6 +6109,9 @@ msgstr "Изменить атрибут"
 
 msgid "Edit Attribute Category"
 msgstr "Изменить категорию атрибутов"
+
+msgid "Edit Bank Account"
+msgstr ""
 
 msgid "Edit Category"
 msgstr "Изменить категорию"
@@ -10238,6 +10275,9 @@ msgstr "Новый атрибут"
 msgid "New Attribute Category"
 msgstr "Новая категория атрибутов"
 
+msgid "New Bank Account"
+msgstr ""
+
 msgid "New Batch"
 msgstr "Новый пакет"
 
@@ -10625,6 +10665,9 @@ msgstr "Нет доступных фильтров"
 
 msgid "No available tracked entities found"
 msgstr "Не найдено доступных отслеживаемых объектов"
+
+msgid "No bank accounts have been recorded yet."
+msgstr ""
 
 msgid "No batches"
 msgstr "Нет серий"
@@ -14496,6 +14539,9 @@ msgstr "Выберите утверждающего по умолчанию"
 msgid "Select a destination"
 msgstr "Выберите пункт назначения"
 
+msgid "Select a detail"
+msgstr ""
+
 msgid "Select a document"
 msgstr "Выберите документ"
 
@@ -16154,6 +16200,9 @@ msgstr "Фаза «{0}» завершена — её контрольная то
 msgid "The {0} phases to go live, each ending at a checkpoint. Tick off each task as you complete it."
 msgstr "Фазы {0} до запуска, каждая заканчивается контрольной точкой. Отмечайте каждую задачу по мере её выполнения."
 
+msgid "The account this bank's cash posts through."
+msgstr ""
+
 msgid "The accounting dimension that categorizes items for reporting and analysis."
 msgstr "Измерение бухгалтерии, которое категоризирует номенклатуру для отчетности и анализа."
 
@@ -17005,6 +17054,10 @@ msgstr "Это контактное лицо не имеет адреса эле
 
 msgid "This counterparty has nothing outstanding — the payment will be recorded on-account."
 msgstr "Эта контрагент не имеет задолженности — платеж будет записан на счет."
+
+#. placeholder {0}: row.label
+msgid "This does not look like a valid {0}. Saved as entered."
+msgstr ""
 
 msgid "This download link is invalid or has been tampered with."
 msgstr "Эта ссылка для скачивания недействительна или была подделана."
@@ -18672,6 +18725,9 @@ msgstr "Что означает эта задача"
 msgid "What this time entry counts as — Labor (operator time), Machine (run time), or Setup (changeover time); each rolls up under a different rate."
 msgstr "Что считает эта запись времени — Труд (время оператора), Станок (время обработки) или Наладка (время переналадки); каждое значение накапливается с другой ставкой."
 
+msgid "What to call this account, e.g. \"Operating — USD\"."
+msgstr ""
+
 msgid "What to set up"
 msgstr "Что настроить"
 
@@ -18815,6 +18871,9 @@ msgstr "Куда новый запас этого товара попадает 
 
 msgid "Where stock lives and how it ships."
 msgstr "Где находится запас и как он отправляется."
+
+msgid "Where the account is held. This orders the suggested details below."
+msgstr ""
 
 msgid "Where the affected items are used across the system. Informational — nothing here blocks releasing."
 msgstr "Где затронутые элементы используются по всей системе. Информационно — ничто здесь не блокирует выпуск."

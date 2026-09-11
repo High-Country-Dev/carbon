@@ -32,7 +32,7 @@ export async function action({ request }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
-  const { id: _id, storedSecrets: _storedSecrets, ...rest } = validation.data;
+  const { id: _id, ...rest } = validation.data;
 
   const insertBankAccount = await upsertBankAccount(client, {
     ...rest,
@@ -70,7 +70,8 @@ export default function NewBankAccountRoute() {
     // Default to where the company is, then let the user change it — a company can
     // hold an account outside its own country.
     countryCode: company?.countryCode ?? "",
-    currencyCode: company?.baseCurrencyCode ?? ""
+    currencyCode: company?.baseCurrencyCode ?? "",
+    fields: "[]"
   };
 
   return (

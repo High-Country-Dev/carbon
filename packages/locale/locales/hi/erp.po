@@ -1039,6 +1039,9 @@ msgstr "निपटान के समय अचल संपत्तिय�
 msgid "Account for the purchase cost of fixed assets"
 msgstr "अचल संपत्तियों की अधिग्रहण लागत के लिए खाता।"
 
+msgid "Account Holder"
+msgstr ""
+
 msgid "Account manager"
 msgstr "खाता प्रबंधक"
 
@@ -1292,6 +1295,9 @@ msgstr "ठेकेदार जोड़ें"
 msgid "Add cost center"
 msgstr "लागत केंद्र जोड़ें"
 
+msgid "Add Detail"
+msgstr ""
+
 msgid "Add Employee"
 msgstr "कर्मचारी जोड़ें"
 
@@ -1418,6 +1424,9 @@ msgstr "स्टॉक ट्रांसफर जोड़ें"
 
 msgid "Add Supplier"
 msgstr "आपूर्तिकर्ता जोड़ें"
+
+msgid "Add the details your bank quotes — an IBAN, an account and routing number, or anything else this account needs."
+msgstr ""
 
 msgid "Add the next capability on the same system instead of buying another tool."
 msgstr "अगली क्षमता को एक ही सिस्टम पर जोड़ें, दूसरा टूल खरीदने के बजाय।"
@@ -2090,6 +2099,10 @@ msgstr "क्या आप API कुंजी को हटाना चाह
 msgid "Are you sure you want to delete the asset class: {0}? This cannot be undone."
 msgstr "क्या आप परिसंपत्ति वर्ग को हटाना चाहते हैं: {0}? यह पूर्ववत नहीं किया जा सकता।"
 
+#. placeholder {0}: bankAccount.name
+msgid "Are you sure you want to delete the bank account: {0}? This cannot be undone."
+msgstr ""
+
 #. placeholder {0}: requiredAction.name
 msgid "Are you sure you want to delete the change notice action: {0}? This cannot be undone."
 msgstr "क्या आप परिवर्तन सूचना क्रिया को हटाना चाहते हैं: {0}? यह पूर्ववत नहीं किया जा सकता।"
@@ -2693,6 +2706,9 @@ msgstr "गुब्बारा"
 msgid "Ballooned drawings with inspection features."
 msgstr "निरीक्षण विशेषताओं वाले विस्तृत चित्र।"
 
+msgid "Bank"
+msgstr ""
+
 msgid "Bank - Cash"
 msgstr "बैंक - नकद"
 
@@ -2714,14 +2730,29 @@ msgstr "बैंक — स्थानीय मुद्रा (डिफ़�
 msgid "Bank / Cash Account"
 msgstr "बैंक / नकद खाता"
 
+msgid "Bank Account"
+msgstr ""
+
 msgid "Bank account denominated in a foreign currency"
 msgstr "बैंक खाता एक विदेशी मुद्रा में मूल्यवर्गित।"
 
 msgid "Bank account denominated in the local currency"
 msgstr "बैंक खाता स्थानीय मुद्रा में मूल्यवर्गित।"
 
+msgid "Bank Accounts"
+msgstr ""
+
 msgid "Bank and financial service charge expenses"
 msgstr "बैंक और वित्तीय सेवा शुल्क व्यय।"
+
+msgid "Bank Country"
+msgstr ""
+
+msgid "Bank Details"
+msgstr ""
+
+msgid "Bank Name"
+msgstr ""
 
 msgid "Bars show each week's flow: <0>supply</0> pushes inventory up, <1>demand</1> pulls it down. The <2>line</2> is your projected on-hand inventory — when it dips below <3>safety stock</3> you're at risk, and below zero is a <4>stockout</4>."
 msgstr "बार प्रत्येक सप्ताह के प्रवाह को दिखाते हैं: &lt;0&gt;आपूर्ति&lt;/0&gt; इन्वेंटरी को ऊपर धकेलती है, &lt;1&gt;मांग&lt;/1&gt; इसे नीचे खींचती है। &lt;2&gt;लाइन&lt;/2&gt; आपकी अनुमानित उपलब्ध इन्वेंटरी है — जब यह &lt;3&gt;सुरक्षा स्टॉक&lt;/3&gt; के नीचे गिरती है तो आप जोखिम में हैं, और शून्य से नीचे एक &lt;4&gt;स्टॉकआउट&lt;/4&gt; है।"
@@ -5198,6 +5229,9 @@ msgstr "संबंध हटाएं"
 msgid "Delete Attribute"
 msgstr "विशेषता हटाएं"
 
+msgid "Delete Bank Account"
+msgstr ""
+
 msgid "Delete Category"
 msgstr "श्रेणी हटाएं"
 
@@ -6075,6 +6109,9 @@ msgstr "विशेषता संपादित करें"
 
 msgid "Edit Attribute Category"
 msgstr "विशेषता श्रेणी संपादित करें"
+
+msgid "Edit Bank Account"
+msgstr ""
 
 msgid "Edit Category"
 msgstr "श्रेणी संपादित करें"
@@ -10238,6 +10275,9 @@ msgstr "नई विशेषता"
 msgid "New Attribute Category"
 msgstr "नई विशेषता श्रेणी"
 
+msgid "New Bank Account"
+msgstr ""
+
 msgid "New Batch"
 msgstr "नया बैच"
 
@@ -10625,6 +10665,9 @@ msgstr "कोई उपलब्ध फ़िल्टर नहीं"
 
 msgid "No available tracked entities found"
 msgstr "कोई उपलब्ध ट्रैक किए गए इकाइयां नहीं मिलीं"
+
+msgid "No bank accounts have been recorded yet."
+msgstr ""
 
 msgid "No batches"
 msgstr "कोई बैच नहीं"
@@ -14496,6 +14539,9 @@ msgstr "एक डिफ़ॉल्ट अनुमोदक चुनें"
 msgid "Select a destination"
 msgstr "गंतव्य चुनें"
 
+msgid "Select a detail"
+msgstr ""
+
 msgid "Select a document"
 msgstr "एक दस्तावेज़ चुनें"
 
@@ -16154,6 +16200,9 @@ msgstr "यह \"{0}\" चरण पूर्ण हो गया — इसक�
 msgid "The {0} phases to go live, each ending at a checkpoint. Tick off each task as you complete it."
 msgstr "{0} चरणों को लाइव करने के लिए, प्रत्येक एक चेकपॉइंट पर समाप्त होता है। जैसे ही आप प्रत्येक कार्य को पूरा करते हैं, उसे टिक करें।"
 
+msgid "The account this bank's cash posts through."
+msgstr ""
+
 msgid "The accounting dimension that categorizes items for reporting and analysis."
 msgstr "लेखांकन आयाम जो रिपोर्टिंग और विश्लेषण के लिए आइटम को वर्गीकृत करता है।"
 
@@ -17005,6 +17054,10 @@ msgstr "इस संपर्क के पास कोई ईमेल पत
 
 msgid "This counterparty has nothing outstanding — the payment will be recorded on-account."
 msgstr "यह प्रतिपक्ष के पास कुछ भी बकाया नहीं है — भुगतान खाते पर दर्ज किया जाएगा।"
+
+#. placeholder {0}: row.label
+msgid "This does not look like a valid {0}. Saved as entered."
+msgstr ""
 
 msgid "This download link is invalid or has been tampered with."
 msgstr "यह डाउनलोड लिंक अमान्य है या इसमें छेड़छाड़ की गई है।"
@@ -18672,6 +18725,9 @@ msgstr "इस कार्य का मतलब क्या है"
 msgid "What this time entry counts as — Labor (operator time), Machine (run time), or Setup (changeover time); each rolls up under a different rate."
 msgstr "यह समय प्रविष्टि कितनी गिनती करती है — श्रम (ऑपरेटर समय), मशीन (रन समय) या सेटअप (परिवर्तन समय); प्रत्येक एक अलग दर के तहत समेकित होता है।"
 
+msgid "What to call this account, e.g. \"Operating — USD\"."
+msgstr ""
+
 msgid "What to set up"
 msgstr "सेटअप करने के लिए क्या"
 
@@ -18815,6 +18871,9 @@ msgstr "जहां इस आइटम की नई स्टॉक डिफ
 
 msgid "Where stock lives and how it ships."
 msgstr "स्टॉक कहाँ रहता है और यह कैसे भेजा जाता है।"
+
+msgid "Where the account is held. This orders the suggested details below."
+msgstr ""
 
 msgid "Where the affected items are used across the system. Informational — nothing here blocks releasing."
 msgstr "जहां प्रभावित आइटम पूरे सिस्टम में उपयोग किए जाते हैं। सूचनात्मक — यहां कुछ भी जारी करने में बाधा नहीं डालता।"

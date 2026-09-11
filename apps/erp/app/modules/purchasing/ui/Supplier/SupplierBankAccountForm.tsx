@@ -10,6 +10,7 @@ import {
   ModalDrawerTitle,
   VStack
 } from "@carbon/react";
+import type { BankFieldEntry } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useFetcher } from "react-router";
 import type { z } from "zod";
@@ -22,23 +23,15 @@ import { path } from "~/utils/path";
 type SupplierBankAccountFormProps = {
   supplierId: string;
   initialValues: z.infer<typeof supplierBankAccountValidator>;
-  /** Last four of the identifiers already stored, so the inputs can render a mask. */
-  storedLastFour?: {
-    accountNumber?: string | null;
-    iban?: string | null;
-  };
+  /** The bag already stored, when editing. */
+  storedFields?: BankFieldEntry[];
   onClose: () => void;
 };
 
-/**
- * Saving an edit here does not update the record — it inserts a new version and retires
- * the old one, because `supplierBankAccount` has no UPDATE policy. `initialValues.id` is
- * therefore the version being superseded, not a row to write over.
- */
 const SupplierBankAccountForm = ({
   supplierId,
   initialValues,
-  storedLastFour,
+  storedFields,
   onClose
 }: SupplierBankAccountFormProps) => {
   const { t } = useLingui();
@@ -89,7 +82,7 @@ const SupplierBankAccountForm = ({
                   label={t`Name`}
                   helperText={t`What to call this account, e.g. "Operating — USD".`}
                 />
-                <BankAccountFields storedLastFour={storedLastFour} />
+                <BankAccountFields initialFields={storedFields} />
                 <CustomFormFields table="supplierBankAccount" />
               </VStack>
             </ModalDrawerBody>

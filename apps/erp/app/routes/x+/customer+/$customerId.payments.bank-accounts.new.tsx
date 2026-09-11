@@ -7,17 +7,16 @@ import { data, redirect, useNavigate, useParams } from "react-router";
 import { useUser } from "~/hooks";
 import {
   customerBankAccountValidator,
-  proposeCustomerBankChange
+  upsertCustomerBankAccount
 } from "~/modules/sales";
 import CustomerBankAccountForm from "~/modules/sales/ui/Customer/CustomerBankAccountForm";
-import { getDatabaseClient } from "~/services/database.server";
 import { setCustomFields } from "~/utils/form";
 import { path } from "~/utils/path";
 
 export async function action({ request, params }: ActionFunctionArgs) {
   assertIsPost(request);
-  const { companyId, userId } = await requirePermissions(request, {
-    update: "sales"
+  const { client, companyId, userId } = await requirePermissions(request, {
+    create: "sales"
   });
 
   const { customerId } = params;
@@ -32,21 +31,20 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
-  const { id: _id, storedSecrets: _storedSecrets, ...rest } = validation.data;
+  const { id: _id, ...rest } = validation.data;
 
-  try {
-    await proposeCustomerBankChange(getDatabaseClient(), {
-      ...rest,
-      changeType: "Create",
-      companyId,
-      customerId,
-      userId,
-      customFields: setCustomFields(formData)
-    });
-  } catch (err) {
+  const insert = await upsertCustomerBankAccount(client, {
+    ...rest,
+    companyId,
+    customerId,
+    createdBy: userId,
+    customFields: setCustomFields(formData)
+  });
+
+  if (insert.error) {
     return data(
       {},
-      await flash(request, error(err, "Failed to create bank account"))
+      await flash(request, error(insert.error, "Failed to create bank account"))
     );
   }
 
@@ -68,7 +66,8 @@ export default function NewCustomerBankAccountRoute() {
     accountHolderName: "",
     // Defaults to the company's own country and currency; the account can be anywhere.
     countryCode: company?.countryCode ?? "",
-    currencyCode: company?.baseCurrencyCode ?? ""
+    currencyCode: company?.baseCurrencyCode ?? "",
+    fields: "[]"
   };
 
   return (

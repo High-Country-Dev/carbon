@@ -1,6 +1,5 @@
 import type { Validator } from "@carbon/form";
-import type { BankFieldKey, BankFieldValues } from "@carbon/utils";
-import { validateBankFields } from "@carbon/utils";
+import { parseBankFields } from "@carbon/utils";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 
@@ -40,102 +39,55 @@ export const favoriteSchema = z.object({
 });
 
 /**
- * The fields a bank account form can submit, across every country. Which of them are
- * actually required is decided per country by the format registry in `@carbon/utils`,
- * applied through `refineBankFields` below — a country's unused fields are simply
- * ignored, so a stale value left over from switching country never blocks a save.
+ * The fields a bank account form submits.
  *
- * `storedSecrets` is how an edit avoids re-typing what the server already holds: the form
- * renders a masked placeholder and submits the names of the secrets already on the record
- * (`accountNumber`, `iban`), which count as satisfying a required field.
+ * The identifiers themselves are NOT individual form fields — they are an ordered bag the
+ * user builds by picking or naming each one, submitted as a single JSON string in
+ * `fields`. That is what lets a user record an identifier Carbon has never heard of, and
+ * it is why this fragment is the same four inputs for every country.
+ *
+ * `refineBankFields` rejects only an unreadable bag or an empty one. Whether a particular
+ * identifier is present is the user's business — nothing reads these rows yet, and the
+ * user is looking at the bank's own paperwork.
  */
 export const bankAccountFields = {
   bankName: zfd.text(z.string().optional()),
   accountHolderName: zfd.text(z.string().optional()),
   countryCode: z.string().min(1, { message: "Country is required" }),
   currencyCode: z.string().min(1, { message: "Currency is required" }),
-  storedSecrets: zfd.text(z.string().optional()),
-
-  accountNumber: zfd.text(z.string().optional()),
-  accountType: zfd.text(z.string().optional()),
-  bankCode: zfd.text(z.string().optional()),
-  bsb: zfd.text(z.string().optional()),
-  iban: zfd.text(z.string().optional()),
-  institutionNumber: zfd.text(z.string().optional()),
-  routingNumber: zfd.text(z.string().optional()),
-  sortCode: zfd.text(z.string().optional()),
-  swiftBic: zfd.text(z.string().optional()),
-  transitNumber: zfd.text(z.string().optional())
+  /** JSON array of `{ key, label, value }`; see `@carbon/utils` `parseBankFields`. */
+  fields: zfd.text(z.string().optional())
 };
 
-type BankAccountFieldValues = {
-  countryCode?: string;
-  storedSecrets?: string;
-} & BankFieldValues;
+type BankAccountFieldValues = { fields?: string };
 
-const BANK_FIELD_MESSAGES: Record<
-  BankFieldKey,
-  { required: string; invalid: string }
-> = {
-  accountNumber: {
-    required: "Account number is required",
-    invalid: "Account number is not valid for this country"
-  },
-  accountType: {
-    required: "Account type is required",
-    invalid: "Account type is not valid"
-  },
-  bankCode: {
-    required: "Bank code is required",
-    invalid: "Bank code is not valid"
-  },
-  bsb: { required: "BSB is required", invalid: "BSB must be 6 digits" },
-  iban: { required: "IBAN is required", invalid: "IBAN is not valid" },
-  institutionNumber: {
-    required: "Institution number is required",
-    invalid: "Institution number must be 3 digits"
-  },
-  routingNumber: {
-    required: "Routing number is required",
-    invalid: "Routing number is not valid"
-  },
-  sortCode: {
-    required: "Sort code is required",
-    invalid: "Sort code must be 6 digits"
-  },
-  swiftBic: {
-    required: "SWIFT/BIC is required",
-    invalid: "SWIFT/BIC is not valid"
-  },
-  transitNumber: {
-    required: "Transit number is required",
-    invalid: "Transit number must be 5 digits"
-  }
-};
-
-/**
- * Apply the selected country's bank format to a schema built on `bankAccountFields`.
- * Every issue is attached to the field that caused it so the form can surface it inline.
- */
+/** Attach bag-level issues to the `fields` path so the form can surface them inline. */
 export function refineBankFields<T extends BankAccountFieldValues>(
   values: T,
   ctx: z.RefinementCtx
 ) {
-  const stored = new Set(
-    (values.storedSecrets ?? "")
-      .split(",")
-      .map((name) => name.trim())
-      .filter(Boolean)
-  );
+  const raw = values.fields?.trim();
 
-  for (const issue of validateBankFields(values.countryCode, values)) {
-    // A secret the server already holds satisfies the requirement without re-entry.
-    if (issue.code === "required" && stored.has(issue.field)) continue;
+  // An unparseable bag reads as zero entries, which is indistinguishable from an empty
+  // form. Check the string itself so a serialization bug cannot present as user error.
+  if (raw && raw !== "[]") {
+    try {
+      if (!Array.isArray(JSON.parse(raw))) throw new Error("not an array");
+    } catch {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["fields"],
+        message: "Bank details could not be read"
+      });
+      return;
+    }
+  }
 
+  if (parseBankFields(raw).filter((field) => field.value.trim()).length === 0) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      path: [issue.field],
-      message: BANK_FIELD_MESSAGES[issue.field][issue.code]
+      path: ["fields"],
+      message: "Add at least one bank detail"
     });
   }
 }

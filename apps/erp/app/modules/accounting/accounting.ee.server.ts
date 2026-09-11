@@ -3,10 +3,9 @@ import type { Database, Json } from "@carbon/database";
 import type { Kysely, KyselyDatabase } from "@carbon/database/client";
 import { getNextSequence } from "@carbon/database/sequence";
 import type { ReportPeriodBucket } from "@carbon/utils";
-import { splitBankFieldsForStorage, toStoredAmount } from "@carbon/utils";
+import { parseBankFields, toStoredAmount } from "@carbon/utils";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { z } from "zod";
-import { writeBankAccountSecret } from "~/services/bank-accounts.server";
 import { sanitize } from "~/utils/supabase";
 import {
   getAccountLedger,
@@ -773,21 +772,13 @@ export async function postDepreciationRun(
 /**
  * Create or update one of the company's bank accounts.
  *
- * Server-only because the account number and IBAN go to Supabase Vault, which needs a
- * service-role client. The row is written first so the secret can be keyed on its id;
- * if the vault write then fails on a create, the row is removed rather than left behind
- * advertising identifiers nobody can read.
- *
- * On an update, an identifier the user did not re-enter is left exactly as it was —
- * `splitBankFieldsForStorage` returns no secret for an empty input, and `sanitize` drops
- * the resulting `undefined` before the update is sent.
+ * The identifiers arrive as a JSON string from the form and are parsed here rather than
+ * trusted: the column is free-form JSONB, so this is the only point at which the bag's
+ * shape is enforced.
  */
 export async function upsertBankAccount(
   client: SupabaseClient<Database>,
-  bankAccount: Omit<
-    z.infer<typeof bankAccountValidator>,
-    "id" | "storedSecrets"
-  > & {
+  bankAccount: Omit<z.infer<typeof bankAccountValidator>, "id"> & {
     companyId: string;
     customFields?: Json;
   } & ({ createdBy: string } | { id: string; updatedBy: string })
@@ -802,10 +793,8 @@ export async function upsertBankAccount(
     accountHolderName,
     countryCode,
     currencyCode,
-    ...identifiers
+    fields
   } = bankAccount;
-
-  const storage = splitBankFieldsForStorage(countryCode, identifiers);
 
   const row = {
     name,
@@ -815,89 +804,29 @@ export async function upsertBankAccount(
     accountHolderName,
     countryCode,
     currencyCode,
-    formatId: storage.formatId,
-    swiftBic: storage.columns.swiftBic,
-    routingNumber: storage.columns.routingNumber,
-    bankIdentifiers: storage.bankIdentifiers as Json,
+    fields: parseBankFields(fields) as unknown as Json,
     customFields
   };
 
   if ("createdBy" in bankAccount) {
-    const insert = await client
+    return client
       .from("bankAccount")
-      .insert([
-        {
-          ...row,
-          companyId,
-          createdBy: bankAccount.createdBy,
-          accountNumberLastFour: storage.lastFour.accountNumber,
-          ibanLastFour: storage.lastFour.iban
-        }
-      ])
+      .insert([{ ...row, companyId, createdBy: bankAccount.createdBy }])
       .select("id")
       .single();
-
-    if (insert.error || !insert.data) return insert;
-
-    const secret = await writeBankAccountSecret(
-      companyId,
-      "company",
-      insert.data.id,
-      storage.secrets
-    );
-
-    if (secret.error) {
-      await client
-        .from("bankAccount")
-        .delete()
-        .eq("id", insert.data.id)
-        .eq("companyId", companyId);
-      return { data: null, error: secret.error };
-    }
-
-    return insert;
   }
 
-  // The masks are added only when a new value was actually supplied. They cannot go
-  // through `sanitize`, which turns `undefined` into `null` rather than dropping the key —
-  // that would erase the mask of an identifier the user never touched, and the row's
-  // identifier check would reject the update.
-  const masks: {
-    accountNumberLastFour?: string;
-    ibanLastFour?: string;
-  } = {};
-  if (storage.lastFour.accountNumber) {
-    masks.accountNumberLastFour = storage.lastFour.accountNumber;
-  }
-  if (storage.lastFour.iban) {
-    masks.ibanLastFour = storage.lastFour.iban;
-  }
-
-  const update = await client
+  return client
     .from("bankAccount")
-    .update({
-      ...sanitize({
+    .update(
+      sanitize({
         ...row,
         updatedBy: bankAccount.updatedBy,
         updatedAt: new Date().toISOString()
-      }),
-      ...masks
-    })
+      })
+    )
     .eq("id", bankAccount.id)
     .eq("companyId", companyId)
     .select("id")
     .single();
-
-  if (update.error) return update;
-
-  const secret = await writeBankAccountSecret(
-    companyId,
-    "company",
-    bankAccount.id,
-    storage.secrets
-  );
-
-  if (secret.error) return { data: null, error: secret.error };
-
-  return update;
 }

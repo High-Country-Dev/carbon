@@ -1039,6 +1039,9 @@ msgstr "Comptabilisez le coût des immobilisations corporelles lors de leur ali�
 msgid "Account for the purchase cost of fixed assets"
 msgstr "Comptabilisez le coût d'acquisition des immobilisations corporelles."
 
+msgid "Account Holder"
+msgstr ""
+
 msgid "Account manager"
 msgstr "Responsable de compte"
 
@@ -1292,6 +1295,9 @@ msgstr "Ajouter Prestataire"
 msgid "Add cost center"
 msgstr "Ajouter un centre de coûts"
 
+msgid "Add Detail"
+msgstr ""
+
 msgid "Add Employee"
 msgstr "Ajouter un employé"
 
@@ -1418,6 +1424,9 @@ msgstr "Ajouter un transfert de stock"
 
 msgid "Add Supplier"
 msgstr "Ajouter un fournisseur"
+
+msgid "Add the details your bank quotes — an IBAN, an account and routing number, or anything else this account needs."
+msgstr ""
 
 msgid "Add the next capability on the same system instead of buying another tool."
 msgstr "Ajoutez la prochaine fonctionnalité sur le même système au lieu d'acheter un autre outil."
@@ -2090,6 +2099,10 @@ msgstr "Êtes-vous sûr de vouloir supprimer la clé API : {0}? Cette action ne 
 msgid "Are you sure you want to delete the asset class: {0}? This cannot be undone."
 msgstr "Êtes-vous sûr de vouloir supprimer la catégorie d'immobilisation : {0} ? Cette action ne peut pas être annulée."
 
+#. placeholder {0}: bankAccount.name
+msgid "Are you sure you want to delete the bank account: {0}? This cannot be undone."
+msgstr ""
+
 #. placeholder {0}: requiredAction.name
 msgid "Are you sure you want to delete the change notice action: {0}? This cannot be undone."
 msgstr "Êtes-vous sûr de vouloir supprimer l'action d'avis de modification : {0} ? Cela ne peut pas être annulé."
@@ -2693,6 +2706,9 @@ msgstr "Ballon"
 msgid "Ballooned drawings with inspection features."
 msgstr "Dessins éclatés avec fonctionnalités de contrôle."
 
+msgid "Bank"
+msgstr ""
+
 msgid "Bank - Cash"
 msgstr "Banque - Trésorerie"
 
@@ -2714,14 +2730,29 @@ msgstr "Banque — Devise locale (par défaut)"
 msgid "Bank / Cash Account"
 msgstr "Compte banque / Trésorerie"
 
+msgid "Bank Account"
+msgstr ""
+
 msgid "Bank account denominated in a foreign currency"
 msgstr "Compte bancaire libellé en devise étrangère"
 
 msgid "Bank account denominated in the local currency"
 msgstr "Compte bancaire libellé en devise locale"
 
+msgid "Bank Accounts"
+msgstr ""
+
 msgid "Bank and financial service charge expenses"
 msgstr "Dépenses de frais bancaires et de services financiers"
+
+msgid "Bank Country"
+msgstr ""
+
+msgid "Bank Details"
+msgstr ""
+
+msgid "Bank Name"
+msgstr ""
 
 msgid "Bars show each week's flow: <0>supply</0> pushes inventory up, <1>demand</1> pulls it down. The <2>line</2> is your projected on-hand inventory — when it dips below <3>safety stock</3> you're at risk, and below zero is a <4>stockout</4>."
 msgstr "Les barres montrent le flux de chaque semaine : <0>l'approvisionnement</0> augmente les stocks, <1>les besoins</1> les diminuent. La <2>ligne</2> est votre inventaire prévu en main — quand elle descend en dessous du <3>stock de sécurité</3>, vous êtes à risque, et en dessous de zéro c'est une <4>rupture de stock</4>."
@@ -5198,6 +5229,9 @@ msgstr "Supprimer l'association"
 msgid "Delete Attribute"
 msgstr "Supprimer l'attribut"
 
+msgid "Delete Bank Account"
+msgstr ""
+
 msgid "Delete Category"
 msgstr "Supprimer la catégorie"
 
@@ -6075,6 +6109,9 @@ msgstr "Modifier l'attribut"
 
 msgid "Edit Attribute Category"
 msgstr "Modifier la catégorie d'attribut"
+
+msgid "Edit Bank Account"
+msgstr ""
 
 msgid "Edit Category"
 msgstr "Modifier la catégorie"
@@ -10238,6 +10275,9 @@ msgstr "Nouvel Attribut"
 msgid "New Attribute Category"
 msgstr "Nouvelle Catégorie d'Attribut"
 
+msgid "New Bank Account"
+msgstr ""
+
 msgid "New Batch"
 msgstr "Nouveau lot"
 
@@ -10625,6 +10665,9 @@ msgstr "Aucun filtre disponible"
 
 msgid "No available tracked entities found"
 msgstr "Aucune entité suivie disponible trouvée"
+
+msgid "No bank accounts have been recorded yet."
+msgstr ""
 
 msgid "No batches"
 msgstr "Aucun lot de production"
@@ -14496,6 +14539,9 @@ msgstr "Sélectionner un approbateur par défaut"
 msgid "Select a destination"
 msgstr "Sélectionnez une destination"
 
+msgid "Select a detail"
+msgstr ""
+
 msgid "Select a document"
 msgstr "Sélectionner un document"
 
@@ -16154,6 +16200,9 @@ msgstr "La phase « {0} » est terminée — son point de contrôle « {1} » a 
 msgid "The {0} phases to go live, each ending at a checkpoint. Tick off each task as you complete it."
 msgstr "Les {0} phases pour le lancement, chacune se terminant à un point de contrôle. Cochez chaque tâche au fur et à mesure que vous la terminez."
 
+msgid "The account this bank's cash posts through."
+msgstr ""
+
 msgid "The accounting dimension that categorizes items for reporting and analysis."
 msgstr "L'axe analytique comptable qui classe les articles pour les rapports et l'analyse."
 
@@ -17005,6 +17054,10 @@ msgstr "Ce contact n'a pas d'adresse e-mail"
 
 msgid "This counterparty has nothing outstanding — the payment will be recorded on-account."
 msgstr "Ce tiers n'a rien en suspens — le paiement sera enregistré en compte courant."
+
+#. placeholder {0}: row.label
+msgid "This does not look like a valid {0}. Saved as entered."
+msgstr ""
 
 msgid "This download link is invalid or has been tampered with."
 msgstr "Ce lien de téléchargement est invalide ou a été modifié."
@@ -18672,6 +18725,9 @@ msgstr "Ce que signifie cette tâche"
 msgid "What this time entry counts as — Labor (operator time), Machine (run time), or Setup (changeover time); each rolls up under a different rate."
 msgstr "Ce que cette saisie de temps compte comme — Main-d'œuvre (temps opérateur), Machine (temps de production), ou Réglage (temps de changement) ; chacun s'accumule sous un taux différent."
 
+msgid "What to call this account, e.g. \"Operating — USD\"."
+msgstr ""
+
 msgid "What to set up"
 msgstr "Quoi configurer"
 
@@ -18815,6 +18871,9 @@ msgstr "Où le nouveau stock de cet article se place par défaut à la réceptio
 
 msgid "Where stock lives and how it ships."
 msgstr "Où le stock se trouve et comment il est expédié."
+
+msgid "Where the account is held. This orders the suggested details below."
+msgstr ""
 
 msgid "Where the affected items are used across the system. Informational — nothing here blocks releasing."
 msgstr "Où les articles affectés sont utilisés dans le système. Informatif — rien ici ne bloque la publication."

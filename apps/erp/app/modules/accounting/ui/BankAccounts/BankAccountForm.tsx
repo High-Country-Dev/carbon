@@ -10,6 +10,7 @@ import {
   ModalDrawerTitle,
   VStack
 } from "@carbon/react";
+import type { BankFieldEntry } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useFetcher } from "react-router";
 import type { z } from "zod";
@@ -29,11 +30,8 @@ import { bankAccountValidator as validator } from "../../accounting.models";
 
 type BankAccountFormProps = {
   initialValues: z.infer<typeof bankAccountValidator>;
-  /** Last four of the identifiers already stored, so the inputs can render a mask. */
-  storedLastFour?: {
-    accountNumber?: string | null;
-    iban?: string | null;
-  };
+  /** The bag already stored, when editing. */
+  storedFields?: BankFieldEntry[];
   type?: "modal" | "drawer";
   open?: boolean;
   onClose: () => void;
@@ -41,7 +39,7 @@ type BankAccountFormProps = {
 
 const BankAccountForm = ({
   initialValues,
-  storedLastFour,
+  storedFields,
   open = true,
   type = "drawer",
   onClose
@@ -99,7 +97,7 @@ const BankAccountForm = ({
                   classes={["Asset"]}
                   helperText={t`The account this bank's cash posts through.`}
                 />
-                <BankAccountFields storedLastFour={storedLastFour} />
+                <BankAccountFields initialFields={storedFields} />
                 <Boolean name="active" label={t`Active`} />
                 <CustomFormFields table="bankAccount" />
               </VStack>

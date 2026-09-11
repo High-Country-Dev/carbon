@@ -2,7 +2,7 @@ import { assertIsPost, error, notFound, success } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
-import { bankFieldValuesFromStorage } from "@carbon/utils";
+import { parseBankFields } from "@carbon/utils";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import {
   data,
@@ -14,10 +14,9 @@ import {
 import {
   customerBankAccountValidator,
   getCustomerBankAccount,
-  proposeCustomerBankChange
+  upsertCustomerBankAccount
 } from "~/modules/sales";
 import CustomerBankAccountForm from "~/modules/sales/ui/Customer/CustomerBankAccountForm";
-import { getDatabaseClient } from "~/services/database.server";
 import { getCustomFields, setCustomFields } from "~/utils/form";
 import { path } from "~/utils/path";
 
@@ -51,7 +50,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 
 export async function action({ request, params }: ActionFunctionArgs) {
   assertIsPost(request);
-  const { companyId, userId } = await requirePermissions(request, {
+  const { client, companyId, userId } = await requirePermissions(request, {
     update: "sales"
   });
 
@@ -68,23 +67,21 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
-  const { id: _id, storedSecrets: _storedSecrets, ...rest } = validation.data;
+  const { id: _id, ...rest } = validation.data;
 
-  try {
-    // Inserts a new version and retires this one; the row itself is never updated.
-    await proposeCustomerBankChange(getDatabaseClient(), {
-      ...rest,
-      changeType: "Update",
-      companyId,
-      customerId,
-      userId,
-      replacesId: bankAccountId,
-      customFields: setCustomFields(formData)
-    });
-  } catch (err) {
+  const update = await upsertCustomerBankAccount(client, {
+    ...rest,
+    id: bankAccountId,
+    companyId,
+    customerId,
+    updatedBy: userId,
+    customFields: setCustomFields(formData)
+  });
+
+  if (update.error) {
     return data(
       {},
-      await flash(request, error(err, "Failed to update bank account"))
+      await flash(request, error(update.error, "Failed to update bank account"))
     );
   }
 
@@ -101,8 +98,8 @@ export default function EditCustomerBankAccountRoute() {
   const { customerId } = useParams();
   if (!customerId) throw new Error("customerId not found");
 
-  // The stored account number and IBAN stay in the vault. The form renders their last
-  // four as a placeholder; leaving the input empty carries them onto the new version.
+  const fields = parseBankFields(bankAccount?.fields);
+
   const initialValues = {
     id: bankAccount?.id ?? undefined,
     name: bankAccount?.name ?? "",
@@ -110,13 +107,7 @@ export default function EditCustomerBankAccountRoute() {
     accountHolderName: bankAccount?.accountHolderName ?? "",
     countryCode: bankAccount?.countryCode ?? "",
     currencyCode: bankAccount?.currencyCode ?? "",
-    ...bankFieldValuesFromStorage({
-      formatId: bankAccount?.formatId,
-      countryCode: bankAccount?.countryCode,
-      swiftBic: bankAccount?.swiftBic,
-      routingNumber: bankAccount?.routingNumber,
-      bankIdentifiers: bankAccount?.bankIdentifiers as Record<string, unknown>
-    }),
+    fields: JSON.stringify(fields),
     ...getCustomFields(bankAccount?.customFields)
   };
 
@@ -125,10 +116,7 @@ export default function EditCustomerBankAccountRoute() {
       key={initialValues.id}
       customerId={customerId}
       initialValues={initialValues}
-      storedLastFour={{
-        accountNumber: bankAccount?.accountNumberLastFour,
-        iban: bankAccount?.ibanLastFour
-      }}
+      storedFields={fields}
       onClose={() => navigate(path.to.customerPayment(customerId))}
     />
   );

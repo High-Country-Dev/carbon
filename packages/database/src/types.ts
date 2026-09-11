@@ -4956,9 +4956,7 @@ export type Database = {
       bankAccount: {
         Row: {
           accountHolderName: string | null
-          accountNumberLastFour: string | null
           active: boolean
-          bankIdentifiers: Json
           bankName: string | null
           companyId: string
           countryCode: string
@@ -4966,22 +4964,16 @@ export type Database = {
           createdBy: string
           currencyCode: string
           customFields: Json | null
-          formatId: string
+          fields: Json
           glAccountId: string
-          ibanLastFour: string | null
           id: string
           name: string
-          routingNumber: string | null
-          secretRef: string | null
-          swiftBic: string | null
           updatedAt: string | null
           updatedBy: string | null
         }
         Insert: {
           accountHolderName?: string | null
-          accountNumberLastFour?: string | null
           active?: boolean
-          bankIdentifiers?: Json
           bankName?: string | null
           companyId: string
           countryCode: string
@@ -4989,22 +4981,16 @@ export type Database = {
           createdBy: string
           currencyCode: string
           customFields?: Json | null
-          formatId: string
+          fields?: Json
           glAccountId: string
-          ibanLastFour?: string | null
           id?: string
           name: string
-          routingNumber?: string | null
-          secretRef?: string | null
-          swiftBic?: string | null
           updatedAt?: string | null
           updatedBy?: string | null
         }
         Update: {
           accountHolderName?: string | null
-          accountNumberLastFour?: string | null
           active?: boolean
-          bankIdentifiers?: Json
           bankName?: string | null
           companyId?: string
           countryCode?: string
@@ -5012,14 +4998,10 @@ export type Database = {
           createdBy?: string
           currencyCode?: string
           customFields?: Json | null
-          formatId?: string
+          fields?: Json
           glAccountId?: string
-          ibanLastFour?: string | null
           id?: string
           name?: string
-          routingNumber?: string | null
-          secretRef?: string | null
-          swiftBic?: string | null
           updatedAt?: string | null
           updatedBy?: string | null
         }
@@ -9630,10 +9612,7 @@ export type Database = {
       customerBankAccount: {
         Row: {
           accountHolderName: string | null
-          accountNumberLastFour: string | null
-          bankIdentifiers: Json
           bankName: string | null
-          changeType: Database["public"]["Enums"]["bankAccountChangeType"]
           companyId: string
           countryCode: string
           createdAt: string
@@ -9641,32 +9620,15 @@ export type Database = {
           currencyCode: string
           customerId: string
           customFields: Json | null
-          effectiveFrom: string | null
-          effectiveTo: string | null
-          formatId: string
-          ibanLastFour: string | null
+          fields: Json
           id: string
           name: string
-          replacesId: string | null
-          routingNumber: string | null
-          secretRef: string | null
-          status: Database["public"]["Enums"]["bankAccountStatus"]
-          swiftBic: string | null
           updatedAt: string | null
           updatedBy: string | null
-          verificationMethod:
-            | Database["public"]["Enums"]["bankVerificationMethod"]
-            | null
-          verificationNotes: string | null
-          verifiedAt: string | null
-          verifiedBy: string | null
         }
         Insert: {
           accountHolderName?: string | null
-          accountNumberLastFour?: string | null
-          bankIdentifiers?: Json
           bankName?: string | null
-          changeType?: Database["public"]["Enums"]["bankAccountChangeType"]
           companyId: string
           countryCode: string
           createdAt?: string
@@ -9674,32 +9636,15 @@ export type Database = {
           currencyCode: string
           customerId: string
           customFields?: Json | null
-          effectiveFrom?: string | null
-          effectiveTo?: string | null
-          formatId: string
-          ibanLastFour?: string | null
+          fields?: Json
           id?: string
           name: string
-          replacesId?: string | null
-          routingNumber?: string | null
-          secretRef?: string | null
-          status?: Database["public"]["Enums"]["bankAccountStatus"]
-          swiftBic?: string | null
           updatedAt?: string | null
           updatedBy?: string | null
-          verificationMethod?:
-            | Database["public"]["Enums"]["bankVerificationMethod"]
-            | null
-          verificationNotes?: string | null
-          verifiedAt?: string | null
-          verifiedBy?: string | null
         }
         Update: {
           accountHolderName?: string | null
-          accountNumberLastFour?: string | null
-          bankIdentifiers?: Json
           bankName?: string | null
-          changeType?: Database["public"]["Enums"]["bankAccountChangeType"]
           companyId?: string
           countryCode?: string
           createdAt?: string
@@ -9707,25 +9652,11 @@ export type Database = {
           currencyCode?: string
           customerId?: string
           customFields?: Json | null
-          effectiveFrom?: string | null
-          effectiveTo?: string | null
-          formatId?: string
-          ibanLastFour?: string | null
+          fields?: Json
           id?: string
           name?: string
-          replacesId?: string | null
-          routingNumber?: string | null
-          secretRef?: string | null
-          status?: Database["public"]["Enums"]["bankAccountStatus"]
-          swiftBic?: string | null
           updatedAt?: string | null
           updatedBy?: string | null
-          verificationMethod?:
-            | Database["public"]["Enums"]["bankVerificationMethod"]
-            | null
-          verificationNotes?: string | null
-          verifiedAt?: string | null
-          verifiedBy?: string | null
         }
         Relationships: [
           {
@@ -9827,13 +9758,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "customerBankAccount_replacesId_fkey"
-            columns: ["replacesId", "companyId"]
-            isOneToOne: false
-            referencedRelation: "customerBankAccount"
-            referencedColumns: ["id", "companyId"]
-          },
-          {
             foreignKeyName: "customerBankAccount_updatedBy_fkey"
             columns: ["updatedBy"]
             isOneToOne: false
@@ -9864,41 +9788,6 @@ export type Database = {
           {
             foreignKeyName: "customerBankAccount_updatedBy_fkey"
             columns: ["updatedBy"]
-            isOneToOne: false
-            referencedRelation: "userDefaults"
-            referencedColumns: ["userId"]
-          },
-          {
-            foreignKeyName: "customerBankAccount_verifiedBy_fkey"
-            columns: ["verifiedBy"]
-            isOneToOne: false
-            referencedRelation: "employees"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "customerBankAccount_verifiedBy_fkey"
-            columns: ["verifiedBy"]
-            isOneToOne: false
-            referencedRelation: "employeesAcrossCompanies"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "customerBankAccount_verifiedBy_fkey"
-            columns: ["verifiedBy"]
-            isOneToOne: false
-            referencedRelation: "employeeSummary"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "customerBankAccount_verifiedBy_fkey"
-            columns: ["verifiedBy"]
-            isOneToOne: false
-            referencedRelation: "user"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "customerBankAccount_verifiedBy_fkey"
-            columns: ["verifiedBy"]
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
@@ -54207,102 +54096,51 @@ export type Database = {
       supplierBankAccount: {
         Row: {
           accountHolderName: string | null
-          accountNumberLastFour: string | null
-          bankIdentifiers: Json
           bankName: string | null
-          changeType: Database["public"]["Enums"]["bankAccountChangeType"]
           companyId: string
           countryCode: string
           createdAt: string
           createdBy: string
           currencyCode: string
           customFields: Json | null
-          effectiveFrom: string | null
-          effectiveTo: string | null
-          formatId: string
-          ibanLastFour: string | null
+          fields: Json
           id: string
           name: string
-          replacesId: string | null
-          routingNumber: string | null
-          secretRef: string | null
-          status: Database["public"]["Enums"]["bankAccountStatus"]
           supplierId: string
-          swiftBic: string | null
           updatedAt: string | null
           updatedBy: string | null
-          verificationMethod:
-            | Database["public"]["Enums"]["bankVerificationMethod"]
-            | null
-          verificationNotes: string | null
-          verifiedAt: string | null
-          verifiedBy: string | null
         }
         Insert: {
           accountHolderName?: string | null
-          accountNumberLastFour?: string | null
-          bankIdentifiers?: Json
           bankName?: string | null
-          changeType?: Database["public"]["Enums"]["bankAccountChangeType"]
           companyId: string
           countryCode: string
           createdAt?: string
           createdBy: string
           currencyCode: string
           customFields?: Json | null
-          effectiveFrom?: string | null
-          effectiveTo?: string | null
-          formatId: string
-          ibanLastFour?: string | null
+          fields?: Json
           id?: string
           name: string
-          replacesId?: string | null
-          routingNumber?: string | null
-          secretRef?: string | null
-          status?: Database["public"]["Enums"]["bankAccountStatus"]
           supplierId: string
-          swiftBic?: string | null
           updatedAt?: string | null
           updatedBy?: string | null
-          verificationMethod?:
-            | Database["public"]["Enums"]["bankVerificationMethod"]
-            | null
-          verificationNotes?: string | null
-          verifiedAt?: string | null
-          verifiedBy?: string | null
         }
         Update: {
           accountHolderName?: string | null
-          accountNumberLastFour?: string | null
-          bankIdentifiers?: Json
           bankName?: string | null
-          changeType?: Database["public"]["Enums"]["bankAccountChangeType"]
           companyId?: string
           countryCode?: string
           createdAt?: string
           createdBy?: string
           currencyCode?: string
           customFields?: Json | null
-          effectiveFrom?: string | null
-          effectiveTo?: string | null
-          formatId?: string
-          ibanLastFour?: string | null
+          fields?: Json
           id?: string
           name?: string
-          replacesId?: string | null
-          routingNumber?: string | null
-          secretRef?: string | null
-          status?: Database["public"]["Enums"]["bankAccountStatus"]
           supplierId?: string
-          swiftBic?: string | null
           updatedAt?: string | null
           updatedBy?: string | null
-          verificationMethod?:
-            | Database["public"]["Enums"]["bankVerificationMethod"]
-            | null
-          verificationNotes?: string | null
-          verifiedAt?: string | null
-          verifiedBy?: string | null
         }
         Relationships: [
           {
@@ -54383,13 +54221,6 @@ export type Database = {
             referencedColumns: ["code"]
           },
           {
-            foreignKeyName: "supplierBankAccount_replacesId_fkey"
-            columns: ["replacesId", "companyId"]
-            isOneToOne: false
-            referencedRelation: "supplierBankAccount"
-            referencedColumns: ["id", "companyId"]
-          },
-          {
             foreignKeyName: "supplierBankAccount_supplierId_fkey"
             columns: ["supplierId"]
             isOneToOne: false
@@ -54455,41 +54286,6 @@ export type Database = {
           {
             foreignKeyName: "supplierBankAccount_updatedBy_fkey"
             columns: ["updatedBy"]
-            isOneToOne: false
-            referencedRelation: "userDefaults"
-            referencedColumns: ["userId"]
-          },
-          {
-            foreignKeyName: "supplierBankAccount_verifiedBy_fkey"
-            columns: ["verifiedBy"]
-            isOneToOne: false
-            referencedRelation: "employees"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "supplierBankAccount_verifiedBy_fkey"
-            columns: ["verifiedBy"]
-            isOneToOne: false
-            referencedRelation: "employeesAcrossCompanies"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "supplierBankAccount_verifiedBy_fkey"
-            columns: ["verifiedBy"]
-            isOneToOne: false
-            referencedRelation: "employeeSummary"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "supplierBankAccount_verifiedBy_fkey"
-            columns: ["verifiedBy"]
-            isOneToOne: false
-            referencedRelation: "user"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "supplierBankAccount_verifiedBy_fkey"
-            columns: ["verifiedBy"]
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
@@ -78494,7 +78290,6 @@ export type Database = {
         }
         Returns: undefined
       }
-      bank_account_secret_table: { Args: { p_scope: string }; Returns: string }
       calculate_quantity_to_order: {
         Args: {
           p_demand_accumulation_period: number
@@ -78605,10 +78400,6 @@ export type Database = {
       }
       create_search_subscriptions_for_company: {
         Args: { p_company_id: string }
-        Returns: undefined
-      }
-      delete_bank_account_secret: {
-        Args: { p_company_id: string; p_record_id: string; p_scope: string }
         Returns: undefined
       }
       delete_event_system_subscription: {
@@ -78961,10 +78752,6 @@ export type Database = {
           storageUnitName: string
           trackedEntityId: string
         }[]
-      }
-      get_bank_account_secret: {
-        Args: { p_company_id: string; p_record_id: string; p_scope: string }
-        Returns: Json
       }
       get_batchable_operations: {
         Args: { location_id: string; process_id: string }
@@ -81147,15 +80934,6 @@ export type Database = {
         }
         Returns: undefined
       }
-      upsert_bank_account_secret: {
-        Args: {
-          p_company_id: string
-          p_record_id: string
-          p_scope: string
-          p_secret: Json
-        }
-        Returns: string
-      }
       upsert_integration_secret: {
         Args: { p_company_id: string; p_integration_id: string; p_secret: Json }
         Returns: string
@@ -81227,14 +81005,6 @@ export type Database = {
       approvalStatus: "Pending" | "Approved" | "Rejected" | "Cancelled"
       assemblyInstructionStatus: "Draft" | "Published" | "Archived"
       assemblyStepStatus: "Todo" | "Review" | "Done"
-      bankAccountChangeType: "Create" | "Update" | "Deactivate"
-      bankAccountStatus: "Pending Approval" | "Active" | "Rejected" | "Inactive"
-      bankVerificationMethod:
-        | "Callback"
-        | "Bank Letter"
-        | "Micro-deposit"
-        | "Counterparty Portal"
-        | "Other"
       batchType: "Sequential" | "Simultaneous"
       capacityResourceKind: "WorkCenter" | "OperatorPool" | "Employee"
       changeOrderChangeType:
@@ -82614,15 +82384,6 @@ export const Constants = {
       approvalStatus: ["Pending", "Approved", "Rejected", "Cancelled"],
       assemblyInstructionStatus: ["Draft", "Published", "Archived"],
       assemblyStepStatus: ["Todo", "Review", "Done"],
-      bankAccountChangeType: ["Create", "Update", "Deactivate"],
-      bankAccountStatus: ["Pending Approval", "Active", "Rejected", "Inactive"],
-      bankVerificationMethod: [
-        "Callback",
-        "Bank Letter",
-        "Micro-deposit",
-        "Counterparty Portal",
-        "Other",
-      ],
       batchType: ["Sequential", "Simultaneous"],
       capacityResourceKind: ["WorkCenter", "OperatorPool", "Employee"],
       changeOrderChangeType: [

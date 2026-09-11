@@ -17080,25 +17080,7 @@ export default {
             $ref: "#/parameters/rowFilter.bankAccount.currencyCode"
           },
           {
-            $ref: "#/parameters/rowFilter.bankAccount.formatId"
-          },
-          {
-            $ref: "#/parameters/rowFilter.bankAccount.swiftBic"
-          },
-          {
-            $ref: "#/parameters/rowFilter.bankAccount.routingNumber"
-          },
-          {
-            $ref: "#/parameters/rowFilter.bankAccount.bankIdentifiers"
-          },
-          {
-            $ref: "#/parameters/rowFilter.bankAccount.secretRef"
-          },
-          {
-            $ref: "#/parameters/rowFilter.bankAccount.accountNumberLastFour"
-          },
-          {
-            $ref: "#/parameters/rowFilter.bankAccount.ibanLastFour"
+            $ref: "#/parameters/rowFilter.bankAccount.fields"
           },
           {
             $ref: "#/parameters/rowFilter.bankAccount.active"
@@ -17202,25 +17184,7 @@ export default {
             $ref: "#/parameters/rowFilter.bankAccount.currencyCode"
           },
           {
-            $ref: "#/parameters/rowFilter.bankAccount.formatId"
-          },
-          {
-            $ref: "#/parameters/rowFilter.bankAccount.swiftBic"
-          },
-          {
-            $ref: "#/parameters/rowFilter.bankAccount.routingNumber"
-          },
-          {
-            $ref: "#/parameters/rowFilter.bankAccount.bankIdentifiers"
-          },
-          {
-            $ref: "#/parameters/rowFilter.bankAccount.secretRef"
-          },
-          {
-            $ref: "#/parameters/rowFilter.bankAccount.accountNumberLastFour"
-          },
-          {
-            $ref: "#/parameters/rowFilter.bankAccount.ibanLastFour"
+            $ref: "#/parameters/rowFilter.bankAccount.fields"
           },
           {
             $ref: "#/parameters/rowFilter.bankAccount.active"
@@ -17278,25 +17242,7 @@ export default {
             $ref: "#/parameters/rowFilter.bankAccount.currencyCode"
           },
           {
-            $ref: "#/parameters/rowFilter.bankAccount.formatId"
-          },
-          {
-            $ref: "#/parameters/rowFilter.bankAccount.swiftBic"
-          },
-          {
-            $ref: "#/parameters/rowFilter.bankAccount.routingNumber"
-          },
-          {
-            $ref: "#/parameters/rowFilter.bankAccount.bankIdentifiers"
-          },
-          {
-            $ref: "#/parameters/rowFilter.bankAccount.secretRef"
-          },
-          {
-            $ref: "#/parameters/rowFilter.bankAccount.accountNumberLastFour"
-          },
-          {
-            $ref: "#/parameters/rowFilter.bankAccount.ibanLastFour"
+            $ref: "#/parameters/rowFilter.bankAccount.fields"
           },
           {
             $ref: "#/parameters/rowFilter.bankAccount.active"
@@ -26908,15 +26854,6 @@ export default {
             $ref: "#/parameters/rowFilter.supplierBankAccount.supplierId"
           },
           {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.status"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.changeType"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.replacesId"
-          },
-          {
             $ref: "#/parameters/rowFilter.supplierBankAccount.name"
           },
           {
@@ -26932,43 +26869,7 @@ export default {
             $ref: "#/parameters/rowFilter.supplierBankAccount.currencyCode"
           },
           {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.formatId"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.swiftBic"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.routingNumber"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.bankIdentifiers"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.secretRef"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.accountNumberLastFour"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.ibanLastFour"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.effectiveFrom"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.effectiveTo"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.verifiedBy"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.verifiedAt"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.verificationMethod"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.verificationNotes"
+            $ref: "#/parameters/rowFilter.supplierBankAccount.fields"
           },
           {
             $ref: "#/parameters/rowFilter.supplierBankAccount.customFields"
@@ -27054,15 +26955,6 @@ export default {
             $ref: "#/parameters/rowFilter.supplierBankAccount.supplierId"
           },
           {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.status"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.changeType"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.replacesId"
-          },
-          {
             $ref: "#/parameters/rowFilter.supplierBankAccount.name"
           },
           {
@@ -27078,43 +26970,7 @@ export default {
             $ref: "#/parameters/rowFilter.supplierBankAccount.currencyCode"
           },
           {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.formatId"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.swiftBic"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.routingNumber"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.bankIdentifiers"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.secretRef"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.accountNumberLastFour"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.ibanLastFour"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.effectiveFrom"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.effectiveTo"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.verifiedBy"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.verifiedAt"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.verificationMethod"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.verificationNotes"
+            $ref: "#/parameters/rowFilter.supplierBankAccount.fields"
           },
           {
             $ref: "#/parameters/rowFilter.supplierBankAccount.customFields"
@@ -27154,15 +27010,6 @@ export default {
             $ref: "#/parameters/rowFilter.supplierBankAccount.supplierId"
           },
           {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.status"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.changeType"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.replacesId"
-          },
-          {
             $ref: "#/parameters/rowFilter.supplierBankAccount.name"
           },
           {
@@ -27178,43 +27025,7 @@ export default {
             $ref: "#/parameters/rowFilter.supplierBankAccount.currencyCode"
           },
           {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.formatId"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.swiftBic"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.routingNumber"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.bankIdentifiers"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.secretRef"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.accountNumberLastFour"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.ibanLastFour"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.effectiveFrom"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.effectiveTo"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.verifiedBy"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.verifiedAt"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.verificationMethod"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.verificationNotes"
+            $ref: "#/parameters/rowFilter.supplierBankAccount.fields"
           },
           {
             $ref: "#/parameters/rowFilter.supplierBankAccount.customFields"
@@ -73600,15 +73411,6 @@ export default {
             $ref: "#/parameters/rowFilter.customerBankAccount.customerId"
           },
           {
-            $ref: "#/parameters/rowFilter.customerBankAccount.status"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.changeType"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.replacesId"
-          },
-          {
             $ref: "#/parameters/rowFilter.customerBankAccount.name"
           },
           {
@@ -73624,43 +73426,7 @@ export default {
             $ref: "#/parameters/rowFilter.customerBankAccount.currencyCode"
           },
           {
-            $ref: "#/parameters/rowFilter.customerBankAccount.formatId"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.swiftBic"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.routingNumber"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.bankIdentifiers"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.secretRef"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.accountNumberLastFour"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.ibanLastFour"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.effectiveFrom"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.effectiveTo"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.verifiedBy"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.verifiedAt"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.verificationMethod"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.verificationNotes"
+            $ref: "#/parameters/rowFilter.customerBankAccount.fields"
           },
           {
             $ref: "#/parameters/rowFilter.customerBankAccount.customFields"
@@ -73746,15 +73512,6 @@ export default {
             $ref: "#/parameters/rowFilter.customerBankAccount.customerId"
           },
           {
-            $ref: "#/parameters/rowFilter.customerBankAccount.status"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.changeType"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.replacesId"
-          },
-          {
             $ref: "#/parameters/rowFilter.customerBankAccount.name"
           },
           {
@@ -73770,43 +73527,7 @@ export default {
             $ref: "#/parameters/rowFilter.customerBankAccount.currencyCode"
           },
           {
-            $ref: "#/parameters/rowFilter.customerBankAccount.formatId"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.swiftBic"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.routingNumber"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.bankIdentifiers"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.secretRef"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.accountNumberLastFour"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.ibanLastFour"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.effectiveFrom"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.effectiveTo"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.verifiedBy"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.verifiedAt"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.verificationMethod"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.verificationNotes"
+            $ref: "#/parameters/rowFilter.customerBankAccount.fields"
           },
           {
             $ref: "#/parameters/rowFilter.customerBankAccount.customFields"
@@ -73846,15 +73567,6 @@ export default {
             $ref: "#/parameters/rowFilter.customerBankAccount.customerId"
           },
           {
-            $ref: "#/parameters/rowFilter.customerBankAccount.status"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.changeType"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.replacesId"
-          },
-          {
             $ref: "#/parameters/rowFilter.customerBankAccount.name"
           },
           {
@@ -73870,43 +73582,7 @@ export default {
             $ref: "#/parameters/rowFilter.customerBankAccount.currencyCode"
           },
           {
-            $ref: "#/parameters/rowFilter.customerBankAccount.formatId"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.swiftBic"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.routingNumber"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.bankIdentifiers"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.secretRef"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.accountNumberLastFour"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.ibanLastFour"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.effectiveFrom"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.effectiveTo"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.verifiedBy"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.verifiedAt"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.verificationMethod"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.verificationNotes"
+            $ref: "#/parameters/rowFilter.customerBankAccount.fields"
           },
           {
             $ref: "#/parameters/rowFilter.customerBankAccount.customFields"
@@ -91762,63 +91438,6 @@ export default {
           }
         },
         tags: ["(rpc) sync_edit_document_transaction"]
-      }
-    },
-    "/rpc/bank_account_secret_table": {
-      get: {
-        parameters: [
-          {
-            format: "text",
-            in: "query",
-            name: "p_scope",
-            required: true,
-            type: "string"
-          }
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json"
-        ],
-        responses: {
-          "200": {
-            description: "OK"
-          }
-        },
-        tags: ["(rpc) bank_account_secret_table"]
-      },
-      post: {
-        parameters: [
-          {
-            in: "body",
-            name: "args",
-            required: true,
-            schema: {
-              properties: {
-                p_scope: {
-                  format: "text",
-                  type: "string"
-                }
-              },
-              required: ["p_scope"],
-              type: "object"
-            }
-          },
-          {
-            $ref: "#/parameters/preferParams"
-          }
-        ],
-        produces: [
-          "application/json",
-          "application/vnd.pgrst.object+json;nulls=stripped",
-          "application/vnd.pgrst.object+json"
-        ],
-        responses: {
-          "200": {
-            description: "OK"
-          }
-        },
-        tags: ["(rpc) bank_account_secret_table"]
       }
     },
     "/rpc/workflow_merge_custom_fields": {
@@ -109851,8 +109470,7 @@ export default {
         "glAccountId",
         "countryCode",
         "currencyCode",
-        "formatId",
-        "bankIdentifiers",
+        "fields",
         "active",
         "createdBy",
         "createdAt"
@@ -109900,32 +109518,8 @@ export default {
           format: "text",
           type: "string"
         },
-        formatId: {
-          format: "text",
-          type: "string"
-        },
-        swiftBic: {
-          format: "text",
-          type: "string"
-        },
-        routingNumber: {
-          format: "text",
-          type: "string"
-        },
-        bankIdentifiers: {
+        fields: {
           format: "jsonb"
-        },
-        secretRef: {
-          format: "text",
-          type: "string"
-        },
-        accountNumberLastFour: {
-          format: "text",
-          type: "string"
-        },
-        ibanLastFour: {
-          format: "text",
-          type: "string"
         },
         active: {
           default: true,
@@ -114694,13 +114288,10 @@ export default {
         "id",
         "companyId",
         "supplierId",
-        "status",
-        "changeType",
         "name",
         "countryCode",
         "currencyCode",
-        "formatId",
-        "bankIdentifiers",
+        "fields",
         "createdBy",
         "createdAt"
       ],
@@ -114720,22 +114311,6 @@ export default {
         supplierId: {
           description:
             "Note:\nThis is a Foreign Key to `supplier.id`.<fk table='supplier' column='id'/>",
-          format: "text",
-          type: "string"
-        },
-        status: {
-          default: "Active",
-          enum: ["Pending Approval", "Active", "Rejected", "Inactive"],
-          format: 'public."bankAccountStatus"',
-          type: "string"
-        },
-        changeType: {
-          default: "Create",
-          enum: ["Create", "Update", "Deactivate"],
-          format: 'public."bankAccountChangeType"',
-          type: "string"
-        },
-        replacesId: {
           format: "text",
           type: "string"
         },
@@ -114763,65 +114338,8 @@ export default {
           format: "text",
           type: "string"
         },
-        formatId: {
-          format: "text",
-          type: "string"
-        },
-        swiftBic: {
-          format: "text",
-          type: "string"
-        },
-        routingNumber: {
-          format: "text",
-          type: "string"
-        },
-        bankIdentifiers: {
+        fields: {
           format: "jsonb"
-        },
-        secretRef: {
-          format: "text",
-          type: "string"
-        },
-        accountNumberLastFour: {
-          format: "text",
-          type: "string"
-        },
-        ibanLastFour: {
-          format: "text",
-          type: "string"
-        },
-        effectiveFrom: {
-          format: "timestamp with time zone",
-          type: "string"
-        },
-        effectiveTo: {
-          format: "timestamp with time zone",
-          type: "string"
-        },
-        verifiedBy: {
-          description:
-            "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
-          format: "text",
-          type: "string"
-        },
-        verifiedAt: {
-          format: "timestamp with time zone",
-          type: "string"
-        },
-        verificationMethod: {
-          enum: [
-            "Callback",
-            "Bank Letter",
-            "Micro-deposit",
-            "Counterparty Portal",
-            "Other"
-          ],
-          format: 'public."bankVerificationMethod"',
-          type: "string"
-        },
-        verificationNotes: {
-          format: "text",
-          type: "string"
         },
         customFields: {
           format: "jsonb"
@@ -136436,13 +135954,10 @@ export default {
         "id",
         "companyId",
         "customerId",
-        "status",
-        "changeType",
         "name",
         "countryCode",
         "currencyCode",
-        "formatId",
-        "bankIdentifiers",
+        "fields",
         "createdBy",
         "createdAt"
       ],
@@ -136462,22 +135977,6 @@ export default {
         customerId: {
           description:
             "Note:\nThis is a Foreign Key to `customer.id`.<fk table='customer' column='id'/>",
-          format: "text",
-          type: "string"
-        },
-        status: {
-          default: "Active",
-          enum: ["Pending Approval", "Active", "Rejected", "Inactive"],
-          format: 'public."bankAccountStatus"',
-          type: "string"
-        },
-        changeType: {
-          default: "Create",
-          enum: ["Create", "Update", "Deactivate"],
-          format: 'public."bankAccountChangeType"',
-          type: "string"
-        },
-        replacesId: {
           format: "text",
           type: "string"
         },
@@ -136505,65 +136004,8 @@ export default {
           format: "text",
           type: "string"
         },
-        formatId: {
-          format: "text",
-          type: "string"
-        },
-        swiftBic: {
-          format: "text",
-          type: "string"
-        },
-        routingNumber: {
-          format: "text",
-          type: "string"
-        },
-        bankIdentifiers: {
+        fields: {
           format: "jsonb"
-        },
-        secretRef: {
-          format: "text",
-          type: "string"
-        },
-        accountNumberLastFour: {
-          format: "text",
-          type: "string"
-        },
-        ibanLastFour: {
-          format: "text",
-          type: "string"
-        },
-        effectiveFrom: {
-          format: "timestamp with time zone",
-          type: "string"
-        },
-        effectiveTo: {
-          format: "timestamp with time zone",
-          type: "string"
-        },
-        verifiedBy: {
-          description:
-            "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
-          format: "text",
-          type: "string"
-        },
-        verifiedAt: {
-          format: "timestamp with time zone",
-          type: "string"
-        },
-        verificationMethod: {
-          enum: [
-            "Callback",
-            "Bank Letter",
-            "Micro-deposit",
-            "Counterparty Portal",
-            "Other"
-          ],
-          format: 'public."bankVerificationMethod"',
-          type: "string"
-        },
-        verificationNotes: {
-          format: "text",
-          type: "string"
         },
         customFields: {
           format: "jsonb"
@@ -153697,44 +153139,8 @@ export default {
       in: "query",
       type: "string"
     },
-    "rowFilter.bankAccount.formatId": {
-      name: "formatId",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.bankAccount.swiftBic": {
-      name: "swiftBic",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.bankAccount.routingNumber": {
-      name: "routingNumber",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.bankAccount.bankIdentifiers": {
-      name: "bankIdentifiers",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.bankAccount.secretRef": {
-      name: "secretRef",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.bankAccount.accountNumberLastFour": {
-      name: "accountNumberLastFour",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.bankAccount.ibanLastFour": {
-      name: "ibanLastFour",
+    "rowFilter.bankAccount.fields": {
+      name: "fields",
       required: false,
       in: "query",
       type: "string"
@@ -159126,24 +158532,6 @@ export default {
       in: "query",
       type: "string"
     },
-    "rowFilter.supplierBankAccount.status": {
-      name: "status",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.supplierBankAccount.changeType": {
-      name: "changeType",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.supplierBankAccount.replacesId": {
-      name: "replacesId",
-      required: false,
-      in: "query",
-      type: "string"
-    },
     "rowFilter.supplierBankAccount.name": {
       name: "name",
       required: false,
@@ -159174,80 +158562,8 @@ export default {
       in: "query",
       type: "string"
     },
-    "rowFilter.supplierBankAccount.formatId": {
-      name: "formatId",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.supplierBankAccount.swiftBic": {
-      name: "swiftBic",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.supplierBankAccount.routingNumber": {
-      name: "routingNumber",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.supplierBankAccount.bankIdentifiers": {
-      name: "bankIdentifiers",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.supplierBankAccount.secretRef": {
-      name: "secretRef",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.supplierBankAccount.accountNumberLastFour": {
-      name: "accountNumberLastFour",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.supplierBankAccount.ibanLastFour": {
-      name: "ibanLastFour",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.supplierBankAccount.effectiveFrom": {
-      name: "effectiveFrom",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.supplierBankAccount.effectiveTo": {
-      name: "effectiveTo",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.supplierBankAccount.verifiedBy": {
-      name: "verifiedBy",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.supplierBankAccount.verifiedAt": {
-      name: "verifiedAt",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.supplierBankAccount.verificationMethod": {
-      name: "verificationMethod",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.supplierBankAccount.verificationNotes": {
-      name: "verificationNotes",
+    "rowFilter.supplierBankAccount.fields": {
+      name: "fields",
       required: false,
       in: "query",
       type: "string"
@@ -183273,24 +182589,6 @@ export default {
       in: "query",
       type: "string"
     },
-    "rowFilter.customerBankAccount.status": {
-      name: "status",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.customerBankAccount.changeType": {
-      name: "changeType",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.customerBankAccount.replacesId": {
-      name: "replacesId",
-      required: false,
-      in: "query",
-      type: "string"
-    },
     "rowFilter.customerBankAccount.name": {
       name: "name",
       required: false,
@@ -183321,80 +182619,8 @@ export default {
       in: "query",
       type: "string"
     },
-    "rowFilter.customerBankAccount.formatId": {
-      name: "formatId",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.customerBankAccount.swiftBic": {
-      name: "swiftBic",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.customerBankAccount.routingNumber": {
-      name: "routingNumber",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.customerBankAccount.bankIdentifiers": {
-      name: "bankIdentifiers",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.customerBankAccount.secretRef": {
-      name: "secretRef",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.customerBankAccount.accountNumberLastFour": {
-      name: "accountNumberLastFour",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.customerBankAccount.ibanLastFour": {
-      name: "ibanLastFour",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.customerBankAccount.effectiveFrom": {
-      name: "effectiveFrom",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.customerBankAccount.effectiveTo": {
-      name: "effectiveTo",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.customerBankAccount.verifiedBy": {
-      name: "verifiedBy",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.customerBankAccount.verifiedAt": {
-      name: "verifiedAt",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.customerBankAccount.verificationMethod": {
-      name: "verificationMethod",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.customerBankAccount.verificationNotes": {
-      name: "verificationNotes",
+    "rowFilter.customerBankAccount.fields": {
+      name: "fields",
       required: false,
       in: "query",
       type: "string"

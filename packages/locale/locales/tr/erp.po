@@ -1039,6 +1039,9 @@ msgstr "Elden çıkarıldığında sabit kıymetlerin maliyetini hesaba kat"
 msgid "Account for the purchase cost of fixed assets"
 msgstr "Sabit kıymetlerin satın alma maliyetini hesaba kat"
 
+msgid "Account Holder"
+msgstr ""
+
 msgid "Account manager"
 msgstr "Hesap yöneticisi"
 
@@ -1292,6 +1295,9 @@ msgstr "Taşeron Ekle"
 msgid "Add cost center"
 msgstr "Maliyet Merkezi Ekle"
 
+msgid "Add Detail"
+msgstr ""
+
 msgid "Add Employee"
 msgstr "Çalışan Ekle"
 
@@ -1418,6 +1424,9 @@ msgstr "Stok Transferi Ekle"
 
 msgid "Add Supplier"
 msgstr "Tedarikçi Ekle"
+
+msgid "Add the details your bank quotes — an IBAN, an account and routing number, or anything else this account needs."
+msgstr ""
 
 msgid "Add the next capability on the same system instead of buying another tool."
 msgstr "Aynı sistem üzerinde bir sonraki özelliği ekleyin, başka bir araç satın almak yerine."
@@ -2090,6 +2099,10 @@ msgstr "API anahtarını silmek istediğinizden emin misiniz: {0}? Bu geri alın
 msgid "Are you sure you want to delete the asset class: {0}? This cannot be undone."
 msgstr "Varlık Sınıfını silmek istediğinizden emin misiniz: {0}? Bu işlem geri alınamaz."
 
+#. placeholder {0}: bankAccount.name
+msgid "Are you sure you want to delete the bank account: {0}? This cannot be undone."
+msgstr ""
+
 #. placeholder {0}: requiredAction.name
 msgid "Are you sure you want to delete the change notice action: {0}? This cannot be undone."
 msgstr "{0} değişiklik bildirisi işlemini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
@@ -2693,6 +2706,9 @@ msgstr "Balon"
 msgid "Ballooned drawings with inspection features."
 msgstr "Muayene özellikleriyle ayrıntılı çizimler."
 
+msgid "Bank"
+msgstr ""
+
 msgid "Bank - Cash"
 msgstr "Banka - Nakit"
 
@@ -2714,14 +2730,29 @@ msgstr "Banka — Yerel Para Birimi (varsayılan)"
 msgid "Bank / Cash Account"
 msgstr "Banka / Nakit Hesabı"
 
+msgid "Bank Account"
+msgstr ""
+
 msgid "Bank account denominated in a foreign currency"
 msgstr "Yabancı para biriminde yapılandırılmış banka hesabı"
 
 msgid "Bank account denominated in the local currency"
 msgstr "Yerel para biriminde yapılandırılmış banka hesabı"
 
+msgid "Bank Accounts"
+msgstr ""
+
 msgid "Bank and financial service charge expenses"
 msgstr "Banka ve mali hizmet bedeli giderleri"
+
+msgid "Bank Country"
+msgstr ""
+
+msgid "Bank Details"
+msgstr ""
+
+msgid "Bank Name"
+msgstr ""
 
 msgid "Bars show each week's flow: <0>supply</0> pushes inventory up, <1>demand</1> pulls it down. The <2>line</2> is your projected on-hand inventory — when it dips below <3>safety stock</3> you're at risk, and below zero is a <4>stockout</4>."
 msgstr "Çubuklar her haftanın akışını gösterir: <0>arz</0> envanteri yukarı iter, <1>talep</1> onu aşağı çeker. <2>Satır</2> tahmini eldeki envanterdir — <3>emniyet stoku</3> altına düştüğünde risk altındasın ve sıfırın altı bir <4>stoksuzluk</4>."
@@ -5198,6 +5229,9 @@ msgstr "İlişkiyi Sil"
 msgid "Delete Attribute"
 msgstr "Özniteliği Sil"
 
+msgid "Delete Bank Account"
+msgstr ""
+
 msgid "Delete Category"
 msgstr "Kategoriyi Sil"
 
@@ -6075,6 +6109,9 @@ msgstr "Özniteliği Düzenle"
 
 msgid "Edit Attribute Category"
 msgstr "Öznitelik Kategorisini Düzenle"
+
+msgid "Edit Bank Account"
+msgstr ""
 
 msgid "Edit Category"
 msgstr "Kategoriyi Düzenle"
@@ -10238,6 +10275,9 @@ msgstr "Yeni Öznitelik"
 msgid "New Attribute Category"
 msgstr "Yeni Öznitelik Kategorisi"
 
+msgid "New Bank Account"
+msgstr ""
+
 msgid "New Batch"
 msgstr "Yeni Toplu İş"
 
@@ -10625,6 +10665,9 @@ msgstr "Kullanılabilir filtre yok"
 
 msgid "No available tracked entities found"
 msgstr "Kullanılabilir izlenen varlık bulunamadı"
+
+msgid "No bank accounts have been recorded yet."
+msgstr ""
 
 msgid "No batches"
 msgstr "Parti yok"
@@ -14496,6 +14539,9 @@ msgstr "Varsayılan onaylayıcı seçin"
 msgid "Select a destination"
 msgstr "Hedefi seçin"
 
+msgid "Select a detail"
+msgstr ""
+
 msgid "Select a document"
 msgstr "Belge seçin"
 
@@ -16154,6 +16200,9 @@ msgstr "\"{0}\" aşaması tamamlandı — \"{1}\" denetim noktası geçti."
 msgid "The {0} phases to go live, each ending at a checkpoint. Tick off each task as you complete it."
 msgstr "{0} aşamayı canlı yayına almak için, her biri bir kontrol noktasında sona eriyor. Her görevi tamamladıkça işaretleyin."
 
+msgid "The account this bank's cash posts through."
+msgstr ""
+
 msgid "The accounting dimension that categorizes items for reporting and analysis."
 msgstr "Raporlama ve analiz için öğeleri kategorize eden muhasebe boyutu."
 
@@ -17005,6 +17054,10 @@ msgstr "Bu ilgili kişinin e-posta adresi yok"
 
 msgid "This counterparty has nothing outstanding — the payment will be recorded on-account."
 msgstr "Bu muhasebe ortağının ödenmemiş bir borcu yok — ödeme hesap üzerinde kaydedilecektir."
+
+#. placeholder {0}: row.label
+msgid "This does not look like a valid {0}. Saved as entered."
+msgstr ""
 
 msgid "This download link is invalid or has been tampered with."
 msgstr "Bu indirme bağlantısı geçersiz veya değiştirilmiş."
@@ -18672,6 +18725,9 @@ msgstr "Bu görev ne anlama geliyor"
 msgid "What this time entry counts as — Labor (operator time), Machine (run time), or Setup (changeover time); each rolls up under a different rate."
 msgstr "Bu zaman girişinin neyi temsil ettiği — İşçilik (operatör zamanı), Makine (işleme süresi), veya Hazırlık (değişim zamanı); her biri farklı bir oran altında toplanır."
 
+msgid "What to call this account, e.g. \"Operating — USD\"."
+msgstr ""
+
 msgid "What to set up"
 msgstr "Kurulacak şey"
 
@@ -18815,6 +18871,9 @@ msgstr "Bu öğenin yeni stoğu varsayılan olarak mal kabul sırasında nereye 
 
 msgid "Where stock lives and how it ships."
 msgstr "Stokun nerede bulunduğu ve nasıl gönderildiği."
+
+msgid "Where the account is held. This orders the suggested details below."
+msgstr ""
 
 msgid "Where the affected items are used across the system. Informational — nothing here blocks releasing."
 msgstr "Etkilenen ürünlerin sistem genelinde nerede kullanıldığı. Bilgilendirici — burada hiçbir şey yayınlamayı engellemiyor."
