@@ -180,21 +180,45 @@ const IBAN_COUNTRIES = [
 ] as const;
 
 /**
- * The identifiers Carbon offers out of the box. Ordering within the list is the tie-break
- * when several fields match a country, so the more commonly quoted ones come first.
+ * The identifiers Carbon offers out of the box.
+ *
+ * Deliberately small. This is the set that covers the domestic rails Carbon's customers
+ * actually pay on today, and nothing else:
+ *
+ *   United States   routing number (ABA) + account number + account type
+ *   Europe (SEPA)   IBAN
+ *   United Kingdom  sort code + account number, IBAN for international
+ *   South Africa     branch code + account number
+ *   India           IFSC code + account number
+ *   China           CNAPS code + account number
+ *
+ * with SWIFT/BIC alongside any of them for a cross-border payment. Anything else — a BSB,
+ * a Canadian transit and institution pair, a CLABE, an intermediary bank, a payment
+ * reference — is one typed field name away, which is the whole point of the open bag. Add
+ * an entry here only when a rail becomes common enough that typing it every time is the
+ * wrong default.
+ *
+ * Declaration order is the tie-break inside a rank (see `suggestBankFields`), so a
+ * country's own fields appear in the order its banks quote them.
  */
 export const SEEDED_BANK_FIELDS: readonly SeededBankField[] = [
+  {
+    key: "accountNumber",
+    label: "Account Number",
+    placeholder: "000123456789"
+  },
+  {
+    key: "sortCode",
+    label: "Sort Code",
+    countries: ["GB", "IE"],
+    placeholder: "12-34-56"
+  },
   {
     key: "iban",
     label: "IBAN",
     countries: IBAN_COUNTRIES,
     placeholder: "DE89 3704 0044 0532 0130 00",
     check: isValidIban
-  },
-  {
-    key: "accountNumber",
-    label: "Account Number",
-    placeholder: "000123456789"
   },
   {
     key: "routingNumber",
@@ -204,34 +228,20 @@ export const SEEDED_BANK_FIELDS: readonly SeededBankField[] = [
     check: isValidAbaRoutingNumber
   },
   {
+    // The US ACH network encodes this in the transaction code, so a US payment file
+    // cannot be written without it.
     key: "accountType",
     label: "Account Type",
-    countries: ["US", "CA"],
+    countries: ["US"],
     placeholder: "Checking"
   },
   {
-    key: "sortCode",
-    label: "Sort Code",
-    countries: ["GB", "IE"],
-    placeholder: "12-34-56"
-  },
-  { key: "bsb", label: "BSB", countries: ["AU"], placeholder: "083-004" },
-  {
-    key: "institutionNumber",
-    label: "Institution Number",
-    countries: ["CA"],
-    placeholder: "003"
-  },
-  {
-    key: "transitNumber",
-    label: "Transit Number",
-    countries: ["CA"],
-    placeholder: "12345"
-  },
-  {
-    key: "swiftBic",
-    label: "SWIFT / BIC",
-    placeholder: "CHASUS33"
+    // South Africa's universal branch code; also the generic name for a branch
+    // identifier anywhere that quotes one.
+    key: "branchCode",
+    label: "Branch Code",
+    countries: ["ZA"],
+    placeholder: "632005"
   },
   {
     key: "ifscCode",
@@ -240,35 +250,16 @@ export const SEEDED_BANK_FIELDS: readonly SeededBankField[] = [
     placeholder: "HDFC0000123"
   },
   {
-    key: "clabe",
-    label: "CLABE",
-    countries: ["MX"],
-    placeholder: "032180000118359719"
-  },
-  {
     key: "cnapsCode",
     label: "CNAPS Code",
     countries: ["CN"],
     placeholder: "301290000007"
   },
   {
-    key: "clearingNumber",
-    label: "Clearing Number",
-    countries: ["SE", "CH", "DK", "NO"],
-    placeholder: "6789"
-  },
-  { key: "bankCode", label: "Bank Code", placeholder: "0001" },
-  { key: "branchCode", label: "Branch Code", placeholder: "021" },
-  { key: "branchName", label: "Branch Name" },
-  { key: "branchAddress", label: "Branch Address" },
-  {
-    key: "intermediaryBic",
-    label: "Intermediary SWIFT / BIC",
-    placeholder: "DEUTDEFF"
-  },
-  { key: "intermediaryAccountNumber", label: "Intermediary Account Number" },
-  { key: "beneficiaryAddress", label: "Beneficiary Address" },
-  { key: "paymentReference", label: "Payment Reference" }
+    key: "swiftBic",
+    label: "SWIFT / BIC",
+    placeholder: "CHASUS33"
+  }
 ];
 
 const SEEDED_BY_KEY = new Map(
@@ -413,16 +404,11 @@ export function hasBankFieldWarning(key: string, value: string): boolean {
 }
 
 /**
- * Priority when summarizing an account in one line. Keys outside this list fall back to
- * bag order, so a custom-only account still shows something.
+ * Priority when summarizing an account in one line — the entries that identify the
+ * ACCOUNT, not the bank routing to it. Keys outside this list fall back to bag order, so a
+ * custom-only account still shows something.
  */
-const DISPLAY_PRIORITY = [
-  "iban",
-  "accountNumber",
-  "clabe",
-  "ifscCode",
-  "swiftBic"
-];
+const DISPLAY_PRIORITY = ["iban", "accountNumber", "swiftBic"];
 
 /** The entry that best identifies an account, for a list row. */
 export function primaryBankField(

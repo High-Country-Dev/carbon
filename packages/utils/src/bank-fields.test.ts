@@ -76,6 +76,43 @@ describe("suggestBankFields", () => {
   });
 });
 
+/**
+ * The catalog is deliberately minimal, so what it must still do is lead with the right
+ * field for each rail Carbon ships support for. These are the six the set was cut to.
+ */
+describe("coverage of the supported rails", () => {
+  it.each([
+    ["US", ["routingNumber", "accountType", "accountNumber", "swiftBic"]],
+    ["GB", ["sortCode", "iban", "accountNumber", "swiftBic"]],
+    ["DE", ["iban", "accountNumber", "swiftBic"]],
+    ["FR", ["iban", "accountNumber", "swiftBic"]],
+    ["PT", ["iban", "accountNumber", "swiftBic"]],
+    ["ZA", ["branchCode", "accountNumber", "swiftBic"]],
+    ["IN", ["ifscCode", "accountNumber", "swiftBic"]],
+    ["CN", ["cnapsCode", "accountNumber", "swiftBic"]]
+  ])("leads with the fields %s banks quote", (country, expected) => {
+    const leading = suggestBankFields(country)
+      .slice(0, expected.length)
+      .map((field) => field.key);
+    expect(leading).toEqual(expected);
+  });
+
+  it("offers every seeded field for every country, whatever the order", () => {
+    // A supplier abroad can bank anywhere, so nothing is ever filtered out.
+    for (const country of ["US", "GB", "DE", "ZA", "IN", "CN", "ZZ"]) {
+      expect(suggestBankFields(country)).toHaveLength(
+        SEEDED_BANK_FIELDS.length
+      );
+    }
+  });
+
+  it("stays small enough to read in one pass", () => {
+    // Not arbitrary: past ~a dozen, the combobox stops being a shortlist and the open
+    // bag is the better answer. Raise this only with a rail to justify it.
+    expect(SEEDED_BANK_FIELDS.length).toBeLessThanOrEqual(12);
+  });
+});
+
 describe("slugifyBankFieldKey / customBankField", () => {
   it("camel-cases an arbitrary label", () => {
     expect(slugifyBankFieldKey("Agência / Conta")).toBe("agenciaConta");

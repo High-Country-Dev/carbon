@@ -96,9 +96,10 @@ const BankAccountFields = ({ initialFields }: BankAccountFieldsProps) => {
 
     return (
       <VStack key={row.rowId} spacing={1} className="w-full">
-        {/* Wraps to one column on a narrow drawer rather than crushing both inputs. */}
+        {/* 140px keeps the name, the value and the remove button on one line inside a
+            standard drawer; below that the pair wraps rather than crushing both inputs. */}
         <HStack className="w-full items-center gap-2 flex-wrap">
-          <div className="flex-1 min-w-[180px]">
+          <div className="flex-1 min-w-[140px]">
             <CreatableCombobox
               value={row.key}
               options={options}
@@ -117,7 +118,7 @@ const BankAccountFields = ({ initialFields }: BankAccountFieldsProps) => {
               }}
             />
           </div>
-          <div className="flex-1 min-w-[180px]">
+          <div className="flex-1 min-w-[140px]">
             <InputBase
               value={row.value}
               placeholder={seeded?.placeholder}
@@ -131,6 +132,7 @@ const BankAccountFields = ({ initialFields }: BankAccountFieldsProps) => {
           <IconButton
             aria-label={t`Remove`}
             variant="ghost"
+            className="shrink-0"
             icon={<LuTrash />}
             onClick={() => removeRow(row.rowId)}
           />
