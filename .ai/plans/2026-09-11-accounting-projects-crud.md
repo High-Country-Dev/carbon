@@ -6,7 +6,7 @@
 
 ## Progress
 
-- [ ] Task 1: Add the company-scoped Project table and regenerate schema artifacts
+- [x] Task 1: Add the company-scoped Project table and regenerate schema artifacts
 - [ ] Task 2: Add and test the Project validator
 - [ ] Task 3: Add company-scoped Project services and inferred type
 - [ ] Task 4: Add flat Projects CRUD routes/UI, navigation, translations, and browser verification
