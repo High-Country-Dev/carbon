@@ -32,31 +32,3 @@ export async function loadRampPurchaseOrderLines(
   }
   return result.data;
 }
-
-export async function loadRampPurchaseInvoiceLines(
-  client: SupabaseClient<Database>,
-  companyId: string,
-  invoiceIds: string[]
-) {
-  const result = await fetchAllFromTable<{
-    invoiceId: string;
-    description: string | null;
-    totalAmount: number | null;
-    sortOrder: number;
-  }>(
-    client,
-    "purchaseInvoiceLine",
-    "invoiceId, description, totalAmount, sortOrder",
-    (query) =>
-      query
-        .eq("companyId", companyId)
-        .in("invoiceId", invoiceIds)
-        .order("sortOrder", { ascending: true })
-  );
-  if (result.error) {
-    throw new Error(
-      `Failed to load Ramp purchase-invoice lines: ${result.error.message}`
-    );
-  }
-  return result.data;
-}

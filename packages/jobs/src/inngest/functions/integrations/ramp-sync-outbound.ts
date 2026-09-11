@@ -1,6 +1,5 @@
 import type { Database } from "@carbon/database";
 import {
-  archiveRampBillForInvoice,
   patchRampCursor,
   prepareRampPurchaseOrderBatch,
   pushInvoiceDraftBill,
@@ -9,7 +8,6 @@ import {
   type RampIntegrationMetadata,
   type RampVendorSupplier
 } from "@carbon/ee/ramp.server";
-import { chunkArray, toDocumentAmount } from "@carbon/utils";
 import {
   decodeRampKeysetCursor,
   encodeRampKeysetCursor,
@@ -20,14 +18,8 @@ import {
   type RampFailureResult,
   recordRampFamilyError
 } from "./ramp-sync-observability";
-import {
-  loadRampPurchaseInvoiceLines,
-  loadRampPurchaseOrderLines
-} from "./ramp-sync-outbound-lines";
-import {
-  getRampCurrencyDecimals,
-  type RampSyncContext
-} from "./ramp-sync-shared";
+import { loadRampPurchaseOrderLines } from "./ramp-sync-outbound-lines";
+import type { RampSyncContext } from "./ramp-sync-shared";
 
 const OUTBOUND_PAGE_SIZE = 100;
 const PO_PUSH_STATUSES: Database["public"]["Enums"]["purchaseOrderStatus"][] = [
@@ -38,8 +30,10 @@ const PO_PUSH_STATUSES: Database["public"]["Enums"]["purchaseOrderStatus"][] = [
   "Completed",
   "Closed"
 ];
-const INVOICE_PUSH_STATUSES = ["Open", "Partially Paid"];
-const INVOICE_SETTLED_STATUSES = new Set(["Paid", "Voided"]);
+// Posted-and-unpaid view statuses. "Overdue" is just Open past its due date, so
+// it must push too — otherwise a bill silently stops being eligible the day it
+// goes overdue.
+const INVOICE_PUSH_STATUSES = ["Open", "Partially Paid", "Overdue"];
 
 /** A supplier row with its purchasing contact + a location's address embedded. */
 type SupplierVendorRow = {
@@ -326,38 +320,48 @@ export async function syncRampOutbound(
     }
   }
 
-  // -- 2 + 3. Invoice draft-bill push & archive-on-settlement -------------
+  // -- 2. Invoice draft-bill push -----------------------------------------
+  // Carbon pushes a coded DRAFT ("provisional bill") and hands off; the
+  // customer completes payment + approves it in Ramp. There is no
+  // archive-on-settlement: a Ramp draft has no delete endpoint (verified
+  // 405/404), and once handed off Ramp owns the bill's lifecycle.
   if (metadata.sync.pushInvoices) {
     try {
-      // One scan of the `bill` mappings drives BOTH the push dedupe (skip an
-      // invoice already mapped in either direction — Task 8) and the archive.
+      // Skip an invoice already mapped in either direction (Task 8).
       const billMappings = await ctx.mapping.getAllByIntegration(
         "ramp",
         "bill"
       );
       const mappedInvoiceIds = new Set(billMappings.map((m) => m.entityId));
 
-      // 2. Push posted invoices that are still Open / Partially Paid.
-      const storedCursor =
-        metadata.cursors?.invoicePushUpdatedAt ??
-        integrationRow.data?.updatedAt ??
-        undefined;
+      // 2. Push posted, still-unpaid invoices. Page on `createdAt`, NOT
+      // `updatedAt`: a purchase invoice's `updatedAt` is null until an
+      // app-level edit (posting never sets it), so an updatedAt keyset makes
+      // every posted invoice invisible. The mapping guard (mappedInvoiceIds) is
+      // the real idempotency — the push is create-once, so createdAt is a
+      // sufficient, always-set page key. On first run (no stored cursor) start
+      // from the beginning so pre-existing open payables are pushed; do NOT
+      // floor at the integration's own updatedAt (that excluded everything).
+      const storedCursor = metadata.cursors?.invoicePushUpdatedAt ?? undefined;
       const cursor = decodeRampKeysetCursor(storedCursor);
 
       let invQuery = client
         .from("purchaseInvoices")
         .select(
-          "id, invoiceId, supplierId, supplierReference, currencyCode, exchangeRate, dateIssued, dateDue, updatedAt"
+          "id, invoiceId, supplierId, supplierReference, dateIssued, dateDue, createdAt"
         )
         .eq("companyId", companyId)
         .in("status", INVOICE_PUSH_STATUSES)
-        .order("updatedAt", { ascending: true })
+        .order("createdAt", { ascending: true })
         .order("id", { ascending: true })
         .limit(OUTBOUND_PAGE_SIZE);
       if (cursor?.id) {
-        invQuery = invQuery.or(rampKeysetFilter(cursor).value);
+        invQuery = invQuery.or(rampKeysetFilter(cursor, "createdAt").value);
       } else if (cursor) {
-        invQuery = invQuery.gte("updatedAt", rampKeysetFilter(cursor).value);
+        invQuery = invQuery.gte(
+          "createdAt",
+          rampKeysetFilter(cursor, "createdAt").value
+        );
       }
       const invoices = await invQuery;
       if (invoices.error) throw invoices.error;
@@ -406,30 +410,19 @@ export async function syncRampOutbound(
           }
         }
 
-        const invoiceIds = candidates
-          .map((row) => row.id)
-          .filter((id): id is string => Boolean(id));
-        // `totalAmount` is the generated COMPANY-BASE line total
-        // (supplierUnitPrice·qty ÷ rate + shipping ÷ rate + tax ÷ rate). It
-        // is converted back to the invoice's document currency per candidate
-        // below, since Ramp is told `invoice_currency: invoice.currencyCode`.
-        const invLines = await loadRampPurchaseInvoiceLines(
-          client,
-          companyId,
-          invoiceIds
-        );
-        const linesByInvoice = new Map<
-          string,
-          Array<{ description: string | null; amount: number }>
-        >();
-        for (const line of invLines) {
-          const list = linesByInvoice.get(line.invoiceId) ?? [];
-          list.push({
-            description: line.description,
-            amount: line.totalAmount ?? 0
-          });
-          linesByInvoice.set(line.invoiceId, list);
-        }
+        // Only accounts / cost centers Carbon has pushed to Ramp are valid
+        // coding options; coding a line to an unpushed option would 422 the
+        // whole bill, so a line coded to one degrades to uncoded instead.
+        const [accountMappings, costCenterMappings] = await Promise.all([
+          ctx.mapping.getAllByIntegration("ramp", "account"),
+          ctx.mapping.getAllByIntegration("ramp", "costCenter")
+        ]);
+        const pushed = {
+          pushedAccountIds: new Set(accountMappings.map((m) => m.entityId)),
+          pushedCostCenterIds: new Set(
+            costCenterMappings.map((m) => m.entityId)
+          )
+        };
 
         for (const row of candidates) {
           const invoiceRowId = row.id;
@@ -443,39 +436,11 @@ export async function syncRampOutbound(
             continue;
           }
           try {
-            // Convert each base line total to the invoice's document
-            // currency (base × foreign-per-base rate, rounded at the
-            // currency's decimals) so the pushed amounts match the
-            // `invoice_currency` label. A base-currency invoice has rate 1,
-            // so this only rounds to settlement precision.
-            const invoiceCurrency = row.currencyCode ?? ctx.baseCurrency;
-            const invoiceRate =
-              invoiceCurrency === ctx.baseCurrency ? 1 : row.exchangeRate;
-            if (
-              typeof invoiceRate !== "number" ||
-              !Number.isFinite(invoiceRate) ||
-              invoiceRate <= 0
-            ) {
-              throw new Error(
-                `Invoice in ${invoiceCurrency} requires a finite positive exchange rate`
-              );
-            }
-            const invoiceDecimals = await getRampCurrencyDecimals(
-              ctx,
-              invoiceCurrency
-            );
-            const documentLines = (linesByInvoice.get(invoiceRowId) ?? []).map(
-              (line) => ({
-                description: line.description,
-                amount: toDocumentAmount(
-                  line.amount,
-                  invoiceRate,
-                  invoiceDecimals
-                )
-              })
-            );
+            // Line amounts + GL/cost-center coding are read from the invoice's
+            // POSTED journal inside pushInvoiceDraftBill (loadBillCostingLines),
+            // not from the invoice line — an item line has no account of its own.
             const outcome = await pushInvoiceDraftBill(
-              client,
+              ctx.db,
               companyId,
               ctx.mapping,
               ramp,
@@ -483,14 +448,13 @@ export async function syncRampOutbound(
                 id: invoiceRowId,
                 readableId: row.invoiceId ?? invoiceRowId,
                 supplierReference: row.supplierReference,
-                currencyCode: invoiceCurrency,
                 dateIssued: row.dateIssued,
                 dateDue: row.dateDue,
                 supplier:
                   supplier ??
-                  emptyRampVendorSupplier(row.supplierId ?? "", null),
-                lines: documentLines
-              }
+                  emptyRampVendorSupplier(row.supplierId ?? "", null)
+              },
+              pushed
             );
             if (outcome === "pushed") result.invoices.pushed += 1;
           } catch (invoiceError) {
@@ -506,10 +470,13 @@ export async function syncRampOutbound(
         }
       }
 
-      const cursorRows = invRows.filter(
-        (row): row is typeof row & { id: string; updatedAt: string } =>
-          Boolean(row.id && row.updatedAt)
-      );
+      // The keyset advances on `createdAt` (mapped into the cursor's timestamp
+      // slot), since that is the column the invoice page is ordered by.
+      const cursorRows = invRows
+        .filter((row): row is typeof row & { id: string; createdAt: string } =>
+          Boolean(row.id && row.createdAt)
+        )
+        .map((row) => ({ id: row.id, updatedAt: row.createdAt }));
       const next =
         cursorRows.length === invRows.length
           ? nextRampKeysetCursor(cursorRows, failedIds)
@@ -522,50 +489,9 @@ export async function syncRampOutbound(
           encodeRampKeysetCursor(next)
         );
       }
-
-      // 3. Archive-on-settlement: pushed bills whose invoice is now settled.
-      const notArchived = billMappings.filter((m) => {
-        const meta = (m.metadata ?? {}) as Record<string, unknown>;
-        return meta.archived !== true && meta.rampPaid !== true;
-      });
-      if (notArchived.length > 0) {
-        const settledIds = [...new Set(notArchived.map((m) => m.entityId))];
-        const statusById = new Map<string, string | null>();
-        // Bound both the .in URL and response size. Mappings are unbounded;
-        // one status query would otherwise silently stop at PostgREST's cap.
-        for (const ids of chunkArray(settledIds, OUTBOUND_PAGE_SIZE)) {
-          const statuses = await client
-            .from("purchaseInvoices")
-            .select("id, status")
-            .eq("companyId", companyId)
-            .in("id", ids);
-          if (statuses.error) {
-            throw new Error(
-              `Failed to load Ramp invoice settlement statuses: ${statuses.error.message}`
-            );
-          }
-          for (const row of statuses.data ?? []) {
-            if (row.id) statusById.set(row.id, row.status);
-          }
-        }
-        for (const m of notArchived) {
-          const status = statusById.get(m.entityId);
-          if (!status || !INVOICE_SETTLED_STATUSES.has(status)) continue;
-          try {
-            await archiveRampBillForInvoice(ctx.mapping, ramp, m);
-            result.invoices.archived += 1;
-          } catch (archiveError) {
-            result.invoices.failed += 1;
-            console.error(
-              `[RAMP SYNC] ${companyId}: bill archive for invoice ${m.entityId} failed`,
-              archiveError
-            );
-          }
-        }
-      }
     } catch (familyError) {
       console.error(
-        `[RAMP SYNC] ${companyId}: invoice push / archive failed`,
+        `[RAMP SYNC] ${companyId}: invoice push failed`,
         familyError
       );
       recordRampFamilyError(result.invoices, familyError);

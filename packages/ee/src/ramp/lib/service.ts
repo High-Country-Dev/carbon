@@ -5,15 +5,10 @@
  * contract while implementation domains remain independently maintainable.
  */
 
-export type {
-  RampAccountMapping,
-  RampCodingAccountScope,
-  RampGlAccount
-} from "./chart-of-accounts";
+export type { RampAccountMapping, RampGlAccount } from "./chart-of-accounts";
 export {
   chunk,
   diffChartOfAccounts,
-  isCodableAccount,
   pushChartOfAccounts,
   RAMP_ACCOUNTS_BATCH_SIZE,
   rampClassificationForClass,
@@ -41,14 +36,12 @@ export {
 } from "./cost-centers";
 export type {
   RampInvoicePush,
-  RampInvoicePushLine,
   RampPurchaseOrderBatch,
   RampPurchaseOrderPush,
   RampPurchaseOrderPushLine,
   RampVendorSupplier
 } from "./spend";
 export {
-  archiveRampBillForInvoice,
   prepareRampPurchaseOrderBatch,
   pushInvoiceDraftBill,
   pushPurchaseOrder,

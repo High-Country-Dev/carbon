@@ -14,7 +14,6 @@ const RAMP_SETTINGS_PATHS = [
   "statementBankAccountId",
   "cashbackIncomeAccountId",
   "reimbursementBankAccountId",
-  "codingAccountScope",
   "pullTransactions",
   "pullBills",
   "pullReimbursements",

@@ -16,8 +16,67 @@
 /** The remote id Carbon creates the custom cost-center field with. */
 export const RAMP_COST_CENTER_FIELD_ID = "carbon-cost-center";
 
+/**
+ * The `field_external_id` of Ramp's NATIVE GL-account field. Ramp names its
+ * built-in GL account field `"Category"` (verified live 2026-09-11: a coded
+ * transaction's `category_info` reads `{ type: "GL_ACCOUNT", external_id:
+ * "Category" }`, and a draft-bill line written with this id read back correctly
+ * coded to the account). The field is Ramp-provided, so it does NOT appear in
+ * `GET /accounting/fields` (which lists only Carbon's custom cost-center field)
+ * — this is the one place its id is pinned.
+ */
+export const RAMP_GL_ACCOUNT_FIELD_ID = "Category";
+
 /** Ramp's native accounting-field type for a GL account selection. */
 const GL_ACCOUNT = "GL_ACCOUNT";
+
+/**
+ * A Ramp accounting-field selection in WRITE shape
+ * (`ApiCreateAccountingFieldParamsRequestBody`): the field's external id plus
+ * the selected option's external id. Distinct from the READ shape
+ * ({@link RampCodingSelection}), which nests everything under `category_info`.
+ */
+export type RampCodingWriteSelection = {
+  field_external_id: string;
+  field_option_external_id: string;
+};
+
+/**
+ * Build the `accounting_field_selections` to code ONE pushed draft-bill line
+ * from a Carbon purchase-invoice line's GL account and cost center. The mirror
+ * of {@link codeSelections}: the GL account rides Ramp's native `"Category"`
+ * field, the cost center rides Carbon's custom `"carbon-cost-center"` field,
+ * and the option external id is the Carbon `account.id` / `costCenter.id`
+ * (verified live — Ramp stores the pushed id as the option's external id).
+ *
+ * A selection is emitted ONLY when the account / cost center was actually
+ * pushed to Ramp (present in `pushedAccountIds` / `pushedCostCenterIds`).
+ * Coding to an unknown option would 422 the whole bill, so an unpushed account
+ * degrades the line to uncoded rather than failing the push — the same
+ * fail-soft stance the inbound reader takes on an unresolvable code.
+ */
+export function buildLineCodingSelections(
+  line: { accountId: string | null; costCenterId: string | null },
+  pushed: {
+    pushedAccountIds: ReadonlySet<string>;
+    pushedCostCenterIds: ReadonlySet<string>;
+  }
+): RampCodingWriteSelection[] {
+  const selections: RampCodingWriteSelection[] = [];
+  if (line.accountId && pushed.pushedAccountIds.has(line.accountId)) {
+    selections.push({
+      field_external_id: RAMP_GL_ACCOUNT_FIELD_ID,
+      field_option_external_id: line.accountId
+    });
+  }
+  if (line.costCenterId && pushed.pushedCostCenterIds.has(line.costCenterId)) {
+    selections.push({
+      field_external_id: RAMP_COST_CENTER_FIELD_ID,
+      field_option_external_id: line.costCenterId
+    });
+  }
+  return selections;
+}
 
 /** The subset of a Ramp accounting-field selection the coding reads. */
 export type RampCodingSelection = {

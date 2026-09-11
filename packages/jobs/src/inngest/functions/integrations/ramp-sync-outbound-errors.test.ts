@@ -48,7 +48,10 @@ function fixture(family: Family, failedLookup?: Lookup) {
       exchangeRate: 1,
       dateIssued: "2026-09-11",
       dateDue: "2026-09-30",
-      updatedAt
+      // POs page on updatedAt; invoices page on createdAt. Same value here so
+      // the keyset cursor assertions hold for both families.
+      updatedAt,
+      createdAt: updatedAt
     })),
     supplier: [
       {
@@ -178,89 +181,10 @@ describe("Ramp outbound prerequisites", () => {
   });
   afterEach(() => vi.restoreAllMocks());
 
-  it.each([
-    null,
-    undefined,
-    0,
-    -1,
-    Number.NaN,
-    Number.POSITIVE_INFINITY,
-    Number.NEGATIVE_INFINITY,
-    "1.25"
-  ])("holds foreign-currency invoices with invalid rate %s until corrected", async (exchangeRate) => {
-    const { ctx, ramp, rows, ids, cursorKey } = fixture("invoices");
-    ctx.decimalsCache.set("EUR", 2);
-    for (const invoice of rows.purchaseInvoices ?? []) {
-      invoice.currencyCode = "EUR";
-      invoice.exchangeRate = exchangeRate;
-    }
-
-    const failed = await syncRampOutbound(ctx, ramp, null);
-    expect(failed.invoices).toMatchObject({ pushed: 0, failed: 2 });
-    expect(pushInvoiceDraftBill).not.toHaveBeenCalled();
-    expect(patchRampCursor).not.toHaveBeenCalled();
-
-    for (const invoice of rows.purchaseInvoices ?? [])
-      invoice.exchangeRate = 1.25;
-    const recovered = await syncRampOutbound(ctx, ramp, null);
-    expect(recovered.invoices).toMatchObject({ pushed: 2, failed: 0 });
-    expect(pushInvoiceDraftBill).toHaveBeenCalledTimes(2);
-    for (const call of vi.mocked(pushInvoiceDraftBill).mock.calls) {
-      expect(call[4]).toMatchObject({
-        currencyCode: "EUR",
-        lines: [{ description: "Line", amount: 12.5 }]
-      });
-    }
-    expect(patchRampCursor).toHaveBeenCalledExactlyOnceWith(
-      ctx.client,
-      ctx.companyId,
-      cursorKey,
-      encodeRampKeysetCursor({ updatedAt, id: ids[1]! })
-    );
-  });
-
-  it.each([
-    null,
-    undefined,
-    0,
-    Number.NaN,
-    Number.POSITIVE_INFINITY,
-    2
-  ])("uses identity conversion for base-currency invoices despite stored rate %s", async (exchangeRate) => {
-    const { ctx, ramp, rows } = fixture("invoices");
-    for (const invoice of rows.purchaseInvoices ?? [])
-      invoice.exchangeRate = exchangeRate;
-
-    const result = await syncRampOutbound(ctx, ramp, null);
-    expect(result.invoices).toMatchObject({ pushed: 2, failed: 0 });
-    expect(pushInvoiceDraftBill).toHaveBeenCalledTimes(2);
-    for (const call of vi.mocked(pushInvoiceDraftBill).mock.calls) {
-      expect(call[4]).toMatchObject({
-        currencyCode: "USD",
-        lines: [{ description: "Line", amount: 10 }]
-      });
-    }
-    expect(patchRampCursor).toHaveBeenCalledOnce();
-  });
-
-  it("labels an invoice with no currency using the company base currency", async () => {
-    const { ctx, ramp, rows } = fixture("invoices");
-    ctx.baseCurrency = "CAD";
-    ctx.decimalsCache.set("CAD", 2);
-    for (const invoice of rows.purchaseInvoices ?? []) {
-      invoice.currencyCode = null;
-      invoice.exchangeRate = null;
-    }
-
-    const result = await syncRampOutbound(ctx, ramp, null);
-    expect(result.invoices).toMatchObject({ pushed: 2, failed: 0 });
-    for (const call of vi.mocked(pushInvoiceDraftBill).mock.calls) {
-      expect(call[4]).toMatchObject({
-        currencyCode: "CAD",
-        lines: [{ description: "Line", amount: 10 }]
-      });
-    }
-  });
+  // Invoice currency conversion + coding now live inside pushInvoiceDraftBill
+  // (loadBillCostingLines reads the posted journal), so they are covered by the
+  // ee unit tests, not the job. The job-level cases below are supplier resolution
+  // and cursor behavior, which remain the job's responsibility.
 
   const cases = [
     { family: "purchaseOrders", lookup: "supplier" },
@@ -314,13 +238,19 @@ describe("Ramp outbound prerequisites", () => {
       cursorKey,
       encodeRampKeysetCursor({ updatedAt, id: ids[1]! })
     );
+    // Invoices page on createdAt (updatedAt is null on posted invoices); POs on updatedAt.
+    const keyCol = family === "invoices" ? "createdAt" : "updatedAt";
     expect(
       filters.filter(
         (filter) => filter.table === table && filter.operator === "or"
       )
     ).toEqual([
-      { table, operator: "or", value: rampKeysetFilter(previous).value },
-      { table, operator: "or", value: rampKeysetFilter(previous).value }
+      {
+        table,
+        operator: "or",
+        value: rampKeysetFilter(previous, keyCol).value
+      },
+      { table, operator: "or", value: rampKeysetFilter(previous, keyCol).value }
     ]);
     if (lookup === "supplierType")
       expect(pushInvoiceDraftBill).not.toHaveBeenCalled();

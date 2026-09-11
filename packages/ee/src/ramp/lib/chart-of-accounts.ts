@@ -51,7 +51,7 @@ export type RampGlAccount = {
   name: string;
   code?: string;
   classification: string;
-  /** Selectable in Ramp's coding picker (see {@link isCodableAccount}); default true. */
+  /** Selectable in Ramp's coding picker; every pushed account is visible. */
   visible?: boolean;
 };
 
@@ -89,28 +89,6 @@ export function toRampGlAccountPayload(account: RampGlAccount): {
     ...(account.code ? { code: account.code } : {}),
     classification: account.classification
   };
-}
-
-export type RampCodingAccountScope = "expense" | "all";
-
-/**
- * Whether an account should be selectable when coding in Ramp. `"expense"`
- * keeps the picker to what a card holder can sensibly code to — Expense-class
- * accounts plus the card-liability account Ramp itself needs (CREDCARD) — and
- * hides the rest of the chart (balance sheet, revenue, control accounts) so a
- * salesperson is not choosing from 300 accounts. `"all"` exposes every
- * classifiable account, which a customer who codes bills in Ramp needs.
- */
-export function isCodableAccount(
-  account: { id: string; class: string | null | undefined },
-  opts: {
-    scope: RampCodingAccountScope;
-    cardLiabilityAccountId: string | null | undefined;
-  }
-): boolean {
-  if (account.id === opts.cardLiabilityAccountId) return true;
-  if (opts.scope === "all") return true;
-  return account.class === "Expense";
 }
 
 /** An `account` mapping row: Carbon id ↔ Ramp id + the last-pushed fingerprint. */
@@ -269,10 +247,11 @@ export async function pushChartOfAccounts(
       name: account.name,
       code: account.number ?? undefined,
       classification,
-      visible: isCodableAccount(account, {
-        scope: metadata.codingAccountScope,
-        cardLiabilityAccountId: cardLiabilityId
-      })
+      // Every classifiable account is a Ramp coding option (bills post to
+      // inventory / GR-IR / variance accounts, not just expense accounts). An
+      // account previously PATCHed HIDDEN under the old "expense" scope flips
+      // back to VISIBLE here via its changed fingerprint.
+      visible: true
     });
   }
 
@@ -357,7 +336,8 @@ export async function pushChartOfAccounts(
       continue;
     }
     // name, code and visibility are PATCHable in Ramp; classification is
-    // create-only. Visibility is what scopes the coding picker (isCodableAccount).
+    // create-only. Every pushed account is visible (a HIDDEN account left by
+    // the old "expense" scope flips to VISIBLE here).
     await client.patchAccountingAccount(rampId, {
       name: account.name,
       code: account.code,

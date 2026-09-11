@@ -402,13 +402,22 @@ states are `APPROVED`, `AWAITING_PAYMENT`, `AWAITING_PUSH_PAYMENT`, and
 also explicit: only documented lowercase `ach` currently selects the bank offset; unknown
 or statement-credit funding cannot fall through to a bank account.
 
-Ramp outbound invoice export is release-gated off until its money/coding/PDF/submit-identity
-contract is verified. The gated implementation requires a finite positive stored rate for
-foreign-currency invoices. Supplier lookup errors and blocked exports retain their outbound
-cursor positions. Archive-on-settlement stamps mapping metadata only after a successful
-provider archive; arbitrary errors never close the retry path. Ramp ownership challenges
-likewise require a valid body HMAC before callback or echo; query parameters are unsigned
-and cannot supply the challenge. See `ramp-integration.md` for these support boundaries.
+Ramp outbound invoice export ships as a coded DRAFT-only bill push (live-verified
+2026-09-11; the old release gate is gone). Like the AP bills pushed to QBO/Xero/Rillet, its
+lines are the **account-costed replay of the posted "Purchase Invoice" journal**
+(`loadBillCostingLines` + `toTransactionCurrencyLines`), NOT `purchaseInvoiceLine.accountId`
+(null for item lines). Carbon `POST /bills/drafts` with `remote_id` (the echo guard +
+bill-match key the inbound bill step dedupes on; Ramp 422s `enable_accounting_sync: false`
+alongside a remote_id, and a draft is not in the `/bills` feed anyway), decimal
+document-currency line amounts, per-line coding on Ramp's `"Category"` GL field + the custom
+`"carbon-cost-center"` field, and NEVER submits (submit needs per-vendor Ramp payment config
+Carbon doesn't own). Foreign-currency invoices require a finite positive
+stored rate. Supplier lookup errors and failed pushes retain their outbound cursor
+positions. There is no bill archive-on-settlement — a Ramp draft has no delete endpoint, so
+Ramp owns the bill lifecycle after handoff (PO archive on Completed/Closed is separate).
+Ramp ownership challenges require a valid body HMAC before callback or echo; query
+parameters are unsigned and cannot supply the challenge. See `ramp-integration.md` for
+these support boundaries.
 
 **Rillet reimbursements.** A purchase invoice to an "Employee" supplier (what the
 Ramp reimbursement sync creates) is ALWAYS written to `POST /reimbursements`, Rillet's

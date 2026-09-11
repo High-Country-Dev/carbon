@@ -48,12 +48,16 @@ export function decodeRampKeysetCursor(
 }
 
 export function rampKeysetFilter(
-  cursor: RampKeysetCursor
+  cursor: RampKeysetCursor,
+  // The keyset column. Purchase orders page on `updatedAt`; purchase invoices
+  // page on `createdAt` because their `updatedAt` is null until an app-level
+  // edit (posting never sets it), which would make posted invoices invisible.
+  column = "updatedAt"
 ): { operator: "gte"; value: string } | { operator: "or"; value: string } {
   if (!cursor.id) return { operator: "gte", value: cursor.updatedAt };
   return {
     operator: "or",
-    value: `updatedAt.gt.${cursor.updatedAt},and(updatedAt.eq.${cursor.updatedAt},id.gt.${cursor.id})`
+    value: `${column}.gt.${cursor.updatedAt},and(${column}.eq.${cursor.updatedAt},id.gt.${cursor.id})`
   };
 }
 

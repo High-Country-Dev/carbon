@@ -311,7 +311,6 @@ describe.skipIf(!runDatabaseTests)("Ramp card staging (Postgres)", () => {
           clientSecret: "integration-test",
           environment: "sandbox"
         },
-        codingAccountScope: "expense",
         sync: {
           pullTransactions: true,
           pullBills: true,
@@ -437,7 +436,6 @@ describe.skipIf(!runDatabaseTests)("Ramp card staging (Postgres)", () => {
           clientSecret: "integration-test",
           environment: "sandbox"
         },
-        codingAccountScope: "expense",
         sync: {
           pullTransactions: true,
           pullBills: true,

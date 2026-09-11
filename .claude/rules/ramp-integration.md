@@ -55,10 +55,23 @@ providers, which own the data and mirror it out.
 >   `external_vendor_id`/name then CREATES one with the supplier's synced purchasing-contact
 >   email + `country` + `state` (US requires it) and `business_vendor_contacts` as a **single
 >   object** (plural name, `allOf` of one). `loadRampVendorSuppliers` batches the
->   supplier→purchasing-contact/address embed. `archiveBill` now `DELETE /bills/{id}` (bills
->   have no `/archive`). Webhook signing encoding is the one thing the public docs don't cover.
->   Historical draft-bill acceptance did not verify money/coding/submit identity; outbound
->   invoice export is now release-gated off pending that contract proof (see below).
+>   supplier→purchasing-contact/address embed. Webhook signing encoding is the one thing the
+>   public docs don't cover.
+> - **Outbound bill push (draft-only)** — SHIPPED + live-verified 2026-09-11 (the release
+>   gate is gone; see `.ai/runs/2026-09-11-ramp-draft-bill-push-verification.md`). Carbon
+>   pushes a coded DRAFT ("provisional bill") and hands off — it NEVER submits, because
+>   `POST /bills/drafts/{id}/submit` needs payment method + payee contact (per-vendor Ramp
+>   bill-pay config Carbon doesn't own; verified `400 BILL_PAY_7145`). Line `amount` is a
+>   decimal in document currency (Ramp stored 12.34 → 1234 minor units); coding rides
+>   `accounting_field_selections: [{ field_external_id, field_option_external_id }]` — GL
+>   account on Ramp's native `"Category"` field (option = `account.id`), cost center on the
+>   custom `"carbon-cost-center"` field (option = `costCenter.id`). The draft carries
+>   `remote_id: invoice.id` — the echo guard AND bill-match key (the inbound `ramp-bills`
+>   step dedupes on it). Do NOT also send `enable_accounting_sync: false`: Ramp 422s
+>   "enable_accounting_sync cannot be False if remote_id is provided" (verified live
+>   2026-09-11), and a draft is not in Ramp's `/bills` feed so it cannot echo anyway. There
+>   is NO archive-on-settlement: a draft has no delete endpoint
+>   (`DELETE /bills/drafts/{id}` → 405), so once handed off Ramp owns the bill's lifecycle.
 
 ## Pieces
 
@@ -67,9 +80,8 @@ providers, which own the data and mirror it out.
   The UI connection is the production OAuth `oauth` block; the form carries no customer
   client credentials. `RampSettingsSchema` is flat: optional `entityId`, account mapping
   (`cardLiabilityAccountId` + `statementBankAccountId` **required**;
-  `cashbackIncomeAccountId`, `reimbursementBankAccountId` optional),
-  `codingAccountScope` (`"expense"` default | `"all"` — which accounts Ramp's coding
-  picker offers, see "Coding" below), and five sync toggles (`pullTransactions`,
+  `cashbackIncomeAccountId`, `reimbursementBankAccountId` optional), and five sync toggles
+  (`pullTransactions`,
   `pullBills`, `pullReimbursements`, `pushPurchaseOrders`, `pushInvoices`, all default
   `"true"`). Renders `SetupInstructions` with the webhook URL
   `${origin}/api/webhook/ramp/${companyId}` — **see "The webhook route" below.**
@@ -158,12 +170,14 @@ uses a lazy runtime `import("@carbon/jobs")` because `jobs → ee` is the depend
   `classification` (Asset→ASSET, etc.); an unclassifiable account is skipped.
   The POST item is built by `toRampGlAccountPayload` — the Carbon-side `visible` flag must
   never reach the wire (Ramp 422 DEVELOPER_7001 "Unknown field" rejects the whole batch).
-  **Picker scope**: `isCodableAccount` decides whether an account is selectable —
-  under the default `codingAccountScope: "expense"` only Expense-class accounts plus
-  the card-liability account are; the rest are never created, and ones already in
-  Ramp are `PATCH`ed `visibility: "HIDDEN"` once (visibility is part of the mapping
-  fingerprint, so a Ramp-side manual change survives until Carbon's rule changes).
-  Ramp's native GL-account field keeps Ramp's own label; only its contents shrink.
+  **Every classifiable account is pushed VISIBLE** (`visible: true`). There is no
+  `codingAccountScope` setting — it was removed (2026-09-11); the old `"expense"` scope only
+  changed a Ramp-side `visibility` flag, never whether an account was pushed or whether a
+  bill could be coded to it (Ramp accepts coding to a HIDDEN account — verified live), so it
+  only hid the very accounts manufacturing bills post to (inventory, GR-IR clearing) from the
+  human reviewing the draft in Ramp. Accounts a prior `"expense"` install PATCHed HIDDEN flip
+  back to VISIBLE via their changed fingerprint. Visibility is part of the mapping
+  fingerprint. Ramp's native GL-account field keeps Ramp's own label.
 - `pushCostCenters` converges `costCenter` rows into ONE custom `SINGLE_CHOICE` field
   (remote `id: "carbon-cost-center"`, `RAMP_COST_CENTER_FIELD_ID` in `lib/coding.ts`)
   whose `name`/`display_name` are the company group's CostCenter **`dimension.name`**
@@ -246,7 +260,7 @@ total. Durable steps remain, in order:
 | `ramp-bill-payments` | paid bills' `payment` | AP `payment` + `invoiceSettlement` | `BILL_PAYMENT_SYNC` |
 | `ramp-reimbursements` | reimbursements `SYNC_READY` | `purchaseInvoice` (Employee supplier) | `REIMBURSEMENT_SYNC` |
 | `ramp-repayments` | repayments (`from_repaid_at` cursor) | `cardTransaction` Repayment | *(no Ramp confirm)* |
-| `ramp-outbound` | Carbon POs + posted invoices | Ramp POs; invoice export release-gated; archive settled | *(no confirm)* |
+| `ramp-outbound` | Carbon POs + posted invoices | Ramp POs (archived on Completed/Closed) + coded Ramp DRAFT bills (never submitted) | *(no confirm)* |
 
 Card families use `stageOrResumeRampCardTransaction` to advisory-lock the company/Ramp id
 and atomically create or resume the **Draft** `cardTransaction`, lines, and mapping before
@@ -289,9 +303,9 @@ resolved `exchangeRate` on header and lines (NEVER write the generated `unitPric
 generated base `unitPrice`.
 Outbound pushes send DOCUMENT currency under the `currency`/`invoice_currency`
 label — PO push uses `purchaseOrderLine.supplierUnitPrice` (already document),
-the release-gated draft-bill implementation converts the generated base `totalAmount` back
-via `toDocumentAmount(total, rate, decimals)`. Its foreign-currency path requires a finite
-positive stored invoice rate; only base currency uses rate one.
+the draft-bill push converts the generated base line `totalAmount` back to document
+currency via `toDocumentAmount(total, rate, decimals)`. Its foreign-currency path requires a
+finite positive stored invoice rate; only base currency uses rate one.
 
 Coding: `codeSelections` (pure, `packages/ee/src/ramp/lib/coding.ts`, unit-tested) reads a
 Ramp `accounting_field_selections` list — the first `category_info.type === "GL_ACCOUNT"`
@@ -303,6 +317,12 @@ never fires and dropped every project tag silently. A line coded to an account C
 can't find (verified against `account` in one `.in()` query) — or to a cost center Carbon
 can't find (`verifyCostCenters`, one company-scoped `.in()` query) — fails that item as
 "uncoded" without creating anything; the tag is never dropped.
+
+`buildLineCodingSelections` (same file, unit-tested) is the OUTBOUND mirror: it builds the
+draft-bill line's `accounting_field_selections` WRITE shape
+(`{ field_external_id, field_option_external_id }`) — GL account on `"Category"`, cost
+center on `"carbon-cost-center"`, option ids `account.id`/`costCenter.id`. What it writes
+reads back through `codeSelections` as the same ids (round-trip pinned by the test).
 
 ### Confirm semantics (`confirmSyncs`)
 
@@ -389,20 +409,33 @@ lookups are failures, not missing/excluded suppliers, and cannot advance either 
   preloads PO/vendor mappings in two reads and, only when named suppliers remain unmapped,
   drains one paginated Ramp vendor snapshot. Successful creates update that page cache, so
   shared suppliers never repeat mapping or provider lookups inside the PO loop.
-- **Invoices** (`pushInvoiceDraftBill`): **release-gated off**. `spend.ts` keeps
-  `RAMP_DRAFT_BILL_CONTRACT_VERIFIED = false`
-  until monetary units, coding, PDF fields, and the submit response's bill identity
-  have verified contract tests. The gate runs before any vendor/document/provider
-  I/O and applies even to existing `pushInvoices: true` installs; it has no customer
-  setting or environment override. Blocked exports count as failures and retain the
-  cursor for retry. Purchase-order push and archive-on-settlement remain available.
-  The gated implementation targets unmapped Open/Partially Paid invoices from non-Employee
-  suppliers and uses draft + submit, never an auto-approved `POST /bills`. Its payload/PDF
-  assumptions are not a supported export contract while this gate is closed.
-- **Archive-on-settlement**: a pushed bill whose Carbon invoice is now Paid/Voided is
-  stamped `archived: true` only after Ramp confirms the archive request. Provider/network
-  errors propagate and leave it eligible for retry; 404 or "already paid" wording alone is
-  not proof of archival.
+- **Invoices** (`pushInvoiceDraftBill`): **DRAFT-ONLY, shipped + live-verified 2026-09-11**
+  (the `RAMP_DRAFT_BILL_CONTRACT_VERIFIED` gate is gone). Targets unmapped Open/Partially
+  Paid invoices from non-Employee suppliers. Ensures the Ramp SPEND vendor, reads the
+  invoice's POSTED "Purchase Invoice" journal for its account-costed lines via
+  `loadBillCostingLines` + `toTransactionCurrencyLines` (the SAME path QBO/Xero/Rillet use —
+  NOT `purchaseInvoiceLine.accountId`, which is null for item/part lines since posting
+  resolves the real inventory / GR-IR / variance / tax accounts), then `POST /bills/drafts`
+  with `remote_id: invoice.id` (the echo guard + bill-match key — the inbound `ramp-bills`
+  step dedupes on it; do NOT also send `enable_accounting_sync: false`, which Ramp 422s
+  against a remote_id), decimal document-currency line `amount`s, and per-line coding via
+  `buildLineCodingSelections` (`lib/coding.ts`): GL account on Ramp's native `"Category"`
+  field (`field_option_external_id` = the costing line's `account.id`), cost center on the
+  custom `"carbon-cost-center"` field (option = the journal-line dimension `valueId` that is
+  a `costCenter.id`). Only accounts/cost centers Carbon has pushed (present in
+  `externalIntegrationMapping` entityType `account`/`costCenter`) are coded; an unpushed one
+  degrades the line to uncoded rather than 422-ing the whole bill. An invoice with no posted
+  journal (accounting disabled at post time) fails with `UNMAPPED_ACCOUNTS` and retains its
+  cursor.
+  Maps `("bill", invoice.id, "ramp", <draft id>)`. It **NEVER submits** — Carbon hands off a
+  provisional bill the customer completes/approves/pays in Ramp, because
+  `POST /bills/drafts/{id}/submit` needs payment method + payee contact (per-vendor Ramp
+  bill-pay config Carbon doesn't own; verified `400 BILL_PAY_7145`). PDF attach
+  (`POST /bills/drafts/{id}/attachments`) is a deferred follow-up, NOT a create-body field.
+- **No bill archive-on-settlement**: a Ramp draft has no delete endpoint
+  (`DELETE /bills/drafts/{id}` → 405; `DELETE /bills/{id}` on a draft id → 404), so a
+  handed-off draft is not retracted when its Carbon invoice settles — Ramp owns the bill's
+  lifecycle after handoff. (PO archive on Completed/Closed is separate and still runs.)
 
 If any family leaves failures, a final `ramp-notify-failures` step sends one in-app
 `NotificationEvent.IntegrationSync` to the integration's configurer (`updatedBy`, unless

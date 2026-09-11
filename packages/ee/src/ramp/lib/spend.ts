@@ -1,22 +1,18 @@
 import type { Database } from "@carbon/database";
-import type { SupabaseClient } from "@supabase/supabase-js";
-import type {
-  ExternalIntegrationMapping,
-  ExternalIntegrationMappingService
-} from "../../accounting/core/external-mapping";
+import type { Kysely, KyselyDatabase } from "@carbon/database/client";
+import {
+  loadBillCostingLines,
+  toTransactionCurrencyLines
+} from "../../accounting/core/document-costing";
+import type { ExternalIntegrationMappingService } from "../../accounting/core/external-mapping";
 import { buildRampIdempotencyKey, type RampClient } from "./client";
+import { buildLineCodingSelections } from "./coding";
 import { RAMP } from "./connection";
 import type { RampVendor } from "./models";
 
 // /********************************************************\
 // *          Outbound push (POs, draft bills)             *
 // \********************************************************/
-
-// Release gate, intentionally not a customer setting or environment override.
-// Existing installs commonly have pushInvoices=true. Enable only after the
-// draft body's monetary units/coding/PDF fields and submit's returned identity
-// are verified and pinned by contract tests. PO push and bill archive are separate.
-const RAMP_DRAFT_BILL_CONTRACT_VERIFIED = false;
 
 /** A Carbon purchase-order line, shaped for a Ramp PO push. */
 export type RampPurchaseOrderPushLine = {
@@ -41,23 +37,22 @@ export type RampPurchaseOrderPush = {
   lines: RampPurchaseOrderPushLine[];
 };
 
-/** A Carbon purchase-invoice line, shaped for a Ramp draft-bill push. */
-export type RampInvoicePushLine = {
-  description: string | null;
-  amount: number;
-};
-
-/** The Carbon purchase invoice the job hands to {@link pushInvoiceDraftBill}. */
+/**
+ * The Carbon purchase invoice the job hands to {@link pushInvoiceDraftBill}.
+ * The line amounts and GL/cost-center coding are NOT passed in — they are read
+ * from the invoice's posted "Purchase Invoice" journal via `loadBillCostingLines`
+ * (the same authoritative source the QBO/Xero/Rillet bill syncers use), because
+ * an item/part invoice line carries no account of its own; posting resolves the
+ * real GL accounts (inventory / GR-IR clearing / variance / tax).
+ */
 export type RampInvoicePush = {
   /** Carbon `purchaseInvoice.id` (the mapping's entityId + the bill `remote_id`). */
   id: string;
   /** Human-readable `purchaseInvoice.invoiceId` (the fallback invoice number). */
   readableId: string;
   supplierReference: string | null;
-  currencyCode: string | null;
   dateIssued: string | null;
   dateDue: string | null;
-  lines: RampInvoicePushLine[];
 };
 
 /**
@@ -420,31 +415,52 @@ export async function pushPurchaseOrder(
 }
 
 /**
- * Push one posted Carbon purchase invoice to Ramp as a DRAFT bill, then SUBMIT it
- * (draft + submit only — submit lands the bill in Ramp "Pending approval"; an
- * auto-approved `POST /bills` is never used). Ensures the Ramp vendor, creates the
- * draft with `remote_id: invoice.id`, best-effort attaches the invoice PDF when one
- * exists in storage (silently skipped when absent), submits, and links
- * `("bill", invoice.id, "ramp", <submitted id>)`.
+ * Push one posted Carbon purchase invoice to Ramp as a coded DRAFT bill — a
+ * "provisional bill" the customer reviews, completes (payment method + payee
+ * contact live in Ramp, not Carbon), and approves/pays inside Ramp. Carbon does
+ * NOT submit it: submit (`POST /bills/drafts/{id}/submit`) requires per-vendor
+ * Ramp bill-pay config Carbon does not own (verified live 2026-09-11 — submit
+ * 400s `BILL_PAY_7145` without a payment method + payee contact). So Carbon owns
+ * the DRAFT and hands off; Ramp owns the bill lifecycle after.
+ *
+ * Ensures the Ramp spend vendor, reads the invoice's posted "Purchase Invoice"
+ * journal for its authoritative account-costed lines (`loadBillCostingLines` →
+ * `toTransactionCurrencyLines`, the same path QBO/Xero/Rillet use), then creates
+ * the draft with `remote_id: invoice.id` (Ramp bill↔Carbon matching),
+ * `enable_accounting_sync: false` (the accounting provider IS Carbon, so a synced
+ * bill would echo straight back through the inbound `ramp-bills` step), decimal
+ * document-currency line amounts, and per-line GL/cost-center coding (see
+ * {@link buildLineCodingSelections}). Links `("bill", invoice.id, "ramp", <draft id>)`.
+ *
+ * The GL account comes from the POSTED JOURNAL, never `purchaseInvoiceLine.accountId`
+ * — an item/part line carries no account of its own (posting resolves inventory /
+ * GR-IR / variance / tax accounts), so reading the line would leave item bills
+ * uncoded. The cost center is the journal line dimension whose `valueId` is a
+ * `costCenter.id` Carbon pushed (`pushedCostCenterIds`).
  *
  * The CALLER filters candidates (no existing `("bill")` mapping in either
  * direction, not an Employee-supplier reimbursement, view-status Open/Partially
- * Paid). Returns `"pushed"` or `"skipped"` (vendor without a name).
- * Currently fails closed at the release gate before any vendor/document/provider
- * I/O; the caller must retain this invoice's cursor position for a future retry.
+ * Paid) and supplies the sets of accounts / cost centers Carbon has pushed to
+ * Ramp so a line coded to an unpushed option degrades to uncoded instead of
+ * 422-ing the whole bill. Returns `"pushed"` or `"skipped"` (vendor without a
+ * name). Any throw retains the invoice's cursor position for a future retry —
+ * including `loadBillCostingLines`'s `UNMAPPED_ACCOUNTS` when the invoice has no
+ * posted journal (accounting was disabled at post time).
+ *
+ * Contract verified live against the Ramp sandbox 2026-09-11 (draft create +
+ * coded read-back); see `.ai/runs/2026-09-11-ramp-draft-bill-push-verification.md`.
  */
 export async function pushInvoiceDraftBill(
-  serviceRole: SupabaseClient<Database>,
+  db: Kysely<KyselyDatabase>,
   companyId: string,
   mapping: ExternalIntegrationMappingService,
   client: RampClient,
-  invoice: RampInvoicePush & { supplier: RampVendorSupplier }
-): Promise<"pushed" | "skipped"> {
-  if (!RAMP_DRAFT_BILL_CONTRACT_VERIFIED) {
-    throw new Error(
-      "Ramp draft-bill export is disabled until its API contract is verified"
-    );
+  invoice: RampInvoicePush & { supplier: RampVendorSupplier },
+  pushed: {
+    pushedAccountIds: ReadonlySet<string>;
+    pushedCostCenterIds: ReadonlySet<string>;
   }
+): Promise<"pushed" | "skipped"> {
   // A bill REQUIRES a `vendor_id`, so a supplier we can't match/create a Ramp
   // spend vendor for is skipped (needs a name, and to create: an email + country).
   const rampVendorId = await resolveOrCreateRampSpendVendor(
@@ -455,46 +471,55 @@ export async function pushInvoiceDraftBill(
   );
   if (!rampVendorId) return "skipped";
 
-  // Best-effort PDF attach: locate the invoice's PDF document, sign a short-lived
-  // URL. Skipped silently when the invoice has no PDF in storage.
-  let documentUrls: string[] | undefined;
-  const pdf = await serviceRole
-    .from("document")
-    .select("path")
-    .eq("companyId", companyId)
-    .eq("sourceDocumentId", invoice.id)
-    .eq("type", "PDF")
-    .order("createdAt", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-  if (pdf.data?.path) {
-    const signed = await serviceRole.storage
-      .from("private")
-      .createSignedUrl(pdf.data.path, 3600);
-    if (signed.data?.signedUrl) documentUrls = [signed.data.signedUrl];
-  }
+  // Authoritative account-costed lines from the posted journal, converted once
+  // to the invoice's document currency (base × rate, rounding reconciled).
+  const costing = await loadBillCostingLines(db, {
+    companyId,
+    billId: invoice.id
+  });
+  const documentLines = toTransactionCurrencyLines(costing.lines, {
+    exchangeRate: costing.exchangeRate,
+    documentTotal: costing.documentTotal,
+    decimalPlaces: costing.decimalPlaces
+  });
 
   const invoiceNumber =
     (invoice.supplierReference ?? "").trim() || invoice.readableId;
 
-  // TODO(task-1): confirm the POST /bills/drafts body — line_items shape (amount
-  // as minor units vs decimal, accounting_field_selections) and the PDF-attach
-  // field name (document_urls here is a placeholder).
   const created = (await client.createDraftBill(
     {
       vendor_id: rampVendorId,
       invoice_number: invoiceNumber,
-      ...(invoice.currencyCode
-        ? { invoice_currency: invoice.currencyCode }
-        : {}),
+      invoice_currency: costing.currencyCode,
       ...(invoice.dateIssued ? { issued_at: invoice.dateIssued } : {}),
       ...(invoice.dateDue ? { due_at: invoice.dateDue } : {}),
+      // `remote_id` is the echo guard AND the bill-match key: it marks the bill
+      // as originating from Carbon (the ERP), so the inbound `ramp-bills` step
+      // dedupes on it (`syncBill`) instead of re-creating the invoice. Do NOT
+      // also send `enable_accounting_sync: false` — Ramp 422s that combination
+      // ("enable_accounting_sync cannot be False if remote_id is provided",
+      // verified live 2026-09-11). A draft is not in Ramp's `/bills` feed, so it
+      // cannot echo before the customer submits it anyway.
       remote_id: invoice.id,
-      ...(documentUrls ? { document_urls: documentUrls } : {}),
-      line_items: invoice.lines.map((line) => ({
-        memo: line.description ?? undefined,
-        amount: line.amount
-      }))
+      // `amount` is a decimal in document currency (verified live: Ramp stores
+      // 12.34 as 1234 minor units). PDF attach (POST /bills/drafts/{id}/
+      // attachments) is a deferred follow-up — it is NOT a create-body field.
+      line_items: documentLines.map((line) => {
+        // The cost center is the journal-line dimension whose value is a
+        // costCenter Carbon pushed to Ramp; `valueId` = the costCenter.id.
+        const costCenterId =
+          line.dimensions?.find((dimension) =>
+            pushed.pushedCostCenterIds.has(dimension.valueId)
+          )?.valueId ?? null;
+        return {
+          memo: (line.sourceItem?.name ?? line.description) || undefined,
+          amount: line.amount,
+          accounting_field_selections: buildLineCodingSelections(
+            { accountId: line.accountId, costCenterId },
+            pushed
+          )
+        };
+      })
     },
     // Entity-scoped idempotency key (keyed on the Carbon purchase-invoice id) so a
     // retried push cannot create a duplicate draft bill at Ramp.
@@ -511,45 +536,8 @@ export async function pushInvoiceDraftBill(
     );
   }
 
-  // TODO(task-1): confirm whether submit returns the draft id or a promoted bill
-  // id; store WHICH id the submit returns (falls back to the draft id).
-  const submitted = (await client.submitDraftBill(
-    draftId,
-    // Entity-scoped idempotency key (keyed on the Ramp draft-bill id) so a retried
-    // submit cannot promote/duplicate the bill twice at Ramp.
-    buildRampIdempotencyKey({
-      companyId,
-      operation: "submitDraftBill",
-      scope: draftId
-    })
-  )) as {
-    id?: string;
-  } | null;
-  const billId = submitted?.id ?? draftId;
-
-  await mapping.link("bill", invoice.id, RAMP, billId, {
+  await mapping.link("bill", invoice.id, RAMP, draftId, {
     createdBy: "system"
   });
   return "pushed";
-}
-
-/**
- * Archive a pushed Ramp bill once its Carbon invoice has settled (view-status
- * Paid/Voided). Only a successful provider response stamps `archived: true`
- * onto the mapping metadata (preserving e.g. `rampPaid`). Errors propagate so
- * the caller can report failure and retry; neither a 404 nor error wording
- * proves the bill was archived or settled.
- * The CALLER decides which mappings are eligible (settled + not yet archived).
- */
-export async function archiveRampBillForInvoice(
-  mapping: ExternalIntegrationMappingService,
-  client: RampClient,
-  mappingRow: ExternalIntegrationMapping
-): Promise<void> {
-  await client.archiveBill(mappingRow.externalId);
-
-  await mapping.link("bill", mappingRow.entityId, RAMP, mappingRow.externalId, {
-    createdBy: mappingRow.createdBy ?? "system",
-    metadata: { ...(mappingRow.metadata ?? {}), archived: true }
-  });
 }

@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { codeSelections, RAMP_COST_CENTER_FIELD_ID } from "../coding";
+import {
+  buildLineCodingSelections,
+  codeSelections,
+  RAMP_COST_CENTER_FIELD_ID,
+  RAMP_GL_ACCOUNT_FIELD_ID
+} from "../coding";
 
 const glAccount = (externalId: string) => ({
   external_id: externalId,
@@ -77,5 +82,72 @@ describe("codeSelections", () => {
       accountId: null,
       costCenterId: null
     });
+  });
+});
+
+describe("buildLineCodingSelections (outbound write shape)", () => {
+  const pushed = {
+    pushedAccountIds: new Set(["acct_travel"]),
+    pushedCostCenterIds: new Set(["cc_apollo"])
+  };
+
+  it("codes both the GL account and the cost center when both are pushed", () => {
+    expect(
+      buildLineCodingSelections(
+        { accountId: "acct_travel", costCenterId: "cc_apollo" },
+        pushed
+      )
+    ).toEqual([
+      {
+        field_external_id: RAMP_GL_ACCOUNT_FIELD_ID,
+        field_option_external_id: "acct_travel"
+      },
+      {
+        field_external_id: RAMP_COST_CENTER_FIELD_ID,
+        field_option_external_id: "cc_apollo"
+      }
+    ]);
+  });
+
+  it("omits an account/cost center Carbon has not pushed (fail-soft, never 422)", () => {
+    expect(
+      buildLineCodingSelections(
+        { accountId: "acct_unknown", costCenterId: "cc_unknown" },
+        pushed
+      )
+    ).toEqual([]);
+  });
+
+  it("codes only the pushed side when the other is null or unpushed", () => {
+    expect(
+      buildLineCodingSelections(
+        { accountId: "acct_travel", costCenterId: null },
+        pushed
+      )
+    ).toEqual([
+      {
+        field_external_id: RAMP_GL_ACCOUNT_FIELD_ID,
+        field_option_external_id: "acct_travel"
+      }
+    ]);
+  });
+
+  it("is round-trip consistent with codeSelections' read shape", () => {
+    // What we WRITE for an account should READ back as that same account.
+    const [selection] = buildLineCodingSelections(
+      { accountId: "acct_travel", costCenterId: null },
+      pushed
+    );
+    expect(
+      codeSelections([
+        {
+          external_id: selection!.field_option_external_id,
+          category_info: {
+            type: "GL_ACCOUNT",
+            external_id: selection!.field_external_id
+          }
+        }
+      ]).accountId
+    ).toBe("acct_travel");
   });
 });

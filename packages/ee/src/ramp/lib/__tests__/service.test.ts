@@ -10,7 +10,6 @@ import {
   costCenterFingerprint,
   diffChartOfAccounts,
   diffCostCenterOptions,
-  isCodableAccount,
   RAMP_ACCOUNTS_BATCH_SIZE,
   type RampAccountMapping,
   type RampCostCenterMapping,
@@ -389,34 +388,6 @@ describe("diffCostCenterOptions", () => {
       []
     );
     expect(diff.toCreate).toEqual([apollo]);
-  });
-});
-
-describe("isCodableAccount", () => {
-  const card = {
-    scope: "expense" as const,
-    cardLiabilityAccountId: "acc_ramp"
-  };
-
-  it("keeps the picker to Expense accounts under the expense scope", () => {
-    expect(isCodableAccount({ id: "a", class: "Expense" }, card)).toBe(true);
-    expect(isCodableAccount({ id: "a", class: "Asset" }, card)).toBe(false);
-    expect(isCodableAccount({ id: "a", class: "Liability" }, card)).toBe(false);
-    expect(isCodableAccount({ id: "a", class: "Equity" }, card)).toBe(false);
-    expect(isCodableAccount({ id: "a", class: "Revenue" }, card)).toBe(false);
-    expect(isCodableAccount({ id: "a", class: null }, card)).toBe(false);
-  });
-
-  it("always keeps the card-liability account (Ramp needs its CREDCARD account)", () => {
-    expect(isCodableAccount({ id: "acc_ramp", class: "Liability" }, card)).toBe(
-      true
-    );
-  });
-
-  it("exposes everything under the all scope", () => {
-    const all = { scope: "all" as const, cardLiabilityAccountId: "acc_ramp" };
-    expect(isCodableAccount({ id: "a", class: "Asset" }, all)).toBe(true);
-    expect(isCodableAccount({ id: "a", class: "Revenue" }, all)).toBe(true);
   });
 });
 
