@@ -39,6 +39,7 @@ import {
   LuExternalLink,
   LuEye,
   LuFlaskConical,
+  LuFolderKanban,
   LuGroup,
   LuHammer,
   LuHandCoins,
@@ -689,6 +690,8 @@ export const DimensionEntityTypeIcon = ({
       return <LuLocateFixed className={className} />;
     case "Process":
       return <LuRedoDot className={className} />;
+    case "Project":
+      return <LuFolderKanban className={className} />;
     case "ScrapReason":
       return <LuTriangleAlert className={className} />;
   }

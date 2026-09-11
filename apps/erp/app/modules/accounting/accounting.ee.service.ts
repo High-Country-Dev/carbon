@@ -4496,6 +4496,12 @@ function getEntityDimensionValues(
         .select("id, name")
         .eq("companyId", companyId)
         .order("name");
+    case "Project":
+      return client
+        .from("project")
+        .select("id, name")
+        .eq("companyId", companyId)
+        .order("name");
     // Customer / Supplier / Item are high-cardinality: intentionally NOT
     // eager-loaded here. The DimensionSelector sources their options lazily
     // from the client stores (useCustomers / useSuppliers / useItems).
@@ -4622,6 +4628,8 @@ function getEntityValuesByIds(
       return client.from("costCenter").select("id, name").in("id", ids);
     case "ScrapReason":
       return client.from("scrapReason").select("id, name").in("id", ids);
+    case "Project":
+      return client.from("project").select("id, name").in("id", ids);
     case "FixedAssetClass":
       return client.from("fixedAssetClass").select("id, name").in("id", ids);
     case "Customer":
