@@ -62,30 +62,32 @@ break every consumer silently.
 
 ### Country coverage: a catalog, not a schema
 
-`packages/utils/src/bank-fields.ts` seeds **nine** identifiers, each with a label, an
-optional placeholder, an optional country list and an optional checksum.
-`suggestBankFields(country)` **orders** that list — the country's own fields, then the ones
-that apply anywhere, then everything else — and never filters it, because a German supplier
-can hold a US account.
+`packages/utils/src/bank-fields.ts` seeds **three** identifiers — account number, IBAN and
+SWIFT/BIC — each with a label, an optional placeholder and an optional country list.
+`suggestBankFields(country)` **orders** that list and never filters it, because a German
+supplier can hold a US account.
 
-Nine is the set that covers the rails Carbon ships support for, and nothing beyond them:
+Three, because the bar for a seeded field is that it applies **everywhere or across at
+least three countries**. That admits the account number and the BIC (universal) and the
+IBAN (~80 countries), and excludes every national identifier: the US routing number and
+account type, the UK sort code, the South African branch code, the Indian IFSC, the Chinese
+CNAPS code. Those are typed by the user, which is what the open bag is for. The rule is
+enforced by test, so a fourth seeded field has to earn it.
 
-| Rail | Leads with |
-|---|---|
-| United States | routing number (ABA), account type, account number |
-| Europe (SEPA) | IBAN |
-| United Kingdom | sort code, IBAN, account number |
-| South Africa | branch code, account number |
-| India | IFSC code, account number |
-| China | CNAPS code, account number |
+The consequence, stated plainly: a US user types "Routing Number" the first time they
+record a US account, and a UK user types "Sort Code". That is one typed label against a
+suggestion list that is otherwise mostly fields they will never need.
 
-plus SWIFT/BIC alongside any of them for a cross-border payment. The per-rail lead order is
-pinned by test. A BSB, a Canadian transit/institution pair, a CLABE, an intermediary bank
-or a payment reference is one typed field name away — that is what the open bag is for, and
-seeding every rail on earth would defeat the point of a shortlist.
+| Country | Seeded, in order | Typed by the user |
+|---|---|---|
+| Europe (SEPA), UK | IBAN, account number, SWIFT/BIC | sort code (UK domestic) |
+| United States | account number, SWIFT/BIC, IBAN | routing number, account type |
+| South Africa | account number, SWIFT/BIC, IBAN | branch code |
+| India | account number, SWIFT/BIC, IBAN | IFSC code |
+| China | account number, SWIFT/BIC, IBAN | CNAPS code |
 
-Adding a country Carbon has never heard of is data entry by the user. Adding a *suggestion*
-for one is an entry in that array plus a test. Neither is a migration.
+Adding a country Carbon has never heard of is data entry by the user, and needs no code at
+all. Adding a *suggestion* is an entry in that array plus a test. Neither is a migration.
 
 ### Validation is advisory
 
@@ -109,7 +111,8 @@ position** — see Open Questions.
 | 2 | vs. a junction table | Rejected | Pays off only if an individual field needs querying, indexing or permissioning. Nothing does |
 | 3 | vs. one column per identifier | Rejected | Every new country becomes a migration, and the set is unbounded |
 | 4 | Key vocabulary | Seeded catalog, open set | One click for the common case without closing the set |
-| 4a | Catalog size | Nine, covering six rails | A shortlist stops being one past ~a dozen; a rail Carbon does not support is better typed than seeded. Guarded by a test |
+| 4a | Catalog size | Three | A seeded field must be universal or span 3+ countries. A suggestion list that is mostly fields you do not need is a second form to read before the first. Enforced by test |
+| 4b | Checksum location | Keyed by field key, not by catalog membership | A user who types "Routing Number" gets the ABA check digit verified exactly as a seeded field would — so dropping a field from the catalog costs the suggestion, never the validation |
 | 5 | Country handling | Reorders suggestions | An account's country predicts its fields; it does not determine them |
 | 6 | Label storage | On the row | It is data the user can edit, not UI chrome. Same reason a unit-of-measure name is not translated |
 | 7 | Checksums | Advisory warning | A false negative must never block a real account |
@@ -161,8 +164,11 @@ cascading from the parent.
 - [x] A bank account can be created for the company, a supplier and a customer.
 - [x] The field-name combobox offers the seeded catalog, ordered by the account's country,
       and accepts a name the user types.
-- [x] US, SEPA, UK, South Africa, India and China each lead with the fields their banks
-      quote, and every seeded field stays offerable for every country (parameterised test).
+- [x] IBAN leads across SEPA and the UK; the universal pair leads elsewhere; every seeded
+      field stays offerable for every country (parameterised test).
+- [x] Every seeded field is universal or spans 3+ countries (test enforces the rule).
+- [x] A typed "Routing Number" slugs to `routingNumber` and still gets its ABA check digit
+      verified; a typed field with no checksum is left alone.
 - [x] Switching country reorders suggestions and never discards an entered value.
 - [x] A bad IBAN or routing number warns inline and still saves.
 - [x] Saving with no details reports "Add at least one bank detail".
@@ -219,3 +225,6 @@ cascading from the parent.
   approval status were dropped. Net −2,500 lines against the first implementation.
 - 2026-09-11: Catalog cut from 21 seeded identifiers to nine, scoped to the US, SEPA, UK,
   South Africa, India and China. Per-rail lead order pinned by test.
+- 2026-09-11: Catalog cut again, from nine to three, on the rule that a seeded field must
+  be universal or span at least three countries. Checksums re-keyed so a user-typed field
+  keeps its verification.

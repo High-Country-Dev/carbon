@@ -47,12 +47,12 @@ describe("isValidAbaRoutingNumber", () => {
 });
 
 describe("suggestBankFields", () => {
-  it("floats the country's own fields to the top without removing any", () => {
-    const us = suggestBankFields("US");
-    expect(us[0]!.key).toBe("routingNumber");
-    expect(us).toHaveLength(SEEDED_BANK_FIELDS.length);
+  it("floats a country's own field to the top without removing any", () => {
+    const de = suggestBankFields("DE");
+    expect(de[0]!.key).toBe("iban");
+    expect(de).toHaveLength(SEEDED_BANK_FIELDS.length);
     // An IBAN is not a US field, but a US-held account can still record one.
-    expect(us.some((field) => field.key === "iban")).toBe(true);
+    expect(suggestBankFields("US").some((f) => f.key === "iban")).toBe(true);
   });
 
   it("puts IBAN first for an IBAN country", () => {
@@ -68,36 +68,43 @@ describe("suggestBankFields", () => {
     }
   });
 
-  it("keeps country-specific fields ahead of universal ones", () => {
+  it("keeps a country-specific field ahead of universal ones", () => {
     const gb = suggestBankFields("GB");
-    const sortCode = gb.findIndex((field) => field.key === "sortCode");
-    const swift = gb.findIndex((field) => field.key === "swiftBic");
-    expect(sortCode).toBeLessThan(swift);
+    expect(gb.findIndex((f) => f.key === "iban")).toBeLessThan(
+      gb.findIndex((f) => f.key === "swiftBic")
+    );
   });
 });
 
 /**
- * The catalog is deliberately minimal, so what it must still do is lead with the right
- * field for each rail Carbon ships support for. These are the six the set was cut to.
+ * The catalog is three fields. What it must still do is float IBAN for the countries that
+ * use one, keep everything offerable everywhere, and stay honest that the country-specific
+ * identifiers are the user's to name.
  */
-describe("coverage of the supported rails", () => {
+describe("coverage", () => {
   it.each([
-    ["US", ["routingNumber", "accountType", "accountNumber", "swiftBic"]],
-    ["GB", ["sortCode", "iban", "accountNumber", "swiftBic"]],
     ["DE", ["iban", "accountNumber", "swiftBic"]],
     ["FR", ["iban", "accountNumber", "swiftBic"]],
     ["PT", ["iban", "accountNumber", "swiftBic"]],
-    ["ZA", ["branchCode", "accountNumber", "swiftBic"]],
-    ["IN", ["ifscCode", "accountNumber", "swiftBic"]],
-    ["CN", ["cnapsCode", "accountNumber", "swiftBic"]]
-  ])("leads with the fields %s banks quote", (country, expected) => {
-    const leading = suggestBankFields(country)
-      .slice(0, expected.length)
-      .map((field) => field.key);
-    expect(leading).toEqual(expected);
+    ["GB", ["iban", "accountNumber", "swiftBic"]]
+  ])("floats IBAN to the top for %s", (country, expected) => {
+    expect(suggestBankFields(country).map((f) => f.key)).toEqual(expected);
   });
 
-  it("offers every seeded field for every country, whatever the order", () => {
+  it.each([
+    ["US"],
+    ["ZA"],
+    ["IN"],
+    ["CN"]
+  ])("leads with the universal pair for %s, IBAN last", (country) => {
+    expect(suggestBankFields(country).map((f) => f.key)).toEqual([
+      "accountNumber",
+      "swiftBic",
+      "iban"
+    ]);
+  });
+
+  it("offers every seeded field for every country", () => {
     // A supplier abroad can bank anywhere, so nothing is ever filtered out.
     for (const country of ["US", "GB", "DE", "ZA", "IN", "CN", "ZZ"]) {
       expect(suggestBankFields(country)).toHaveLength(
@@ -106,10 +113,46 @@ describe("coverage of the supported rails", () => {
     }
   });
 
-  it("stays small enough to read in one pass", () => {
-    // Not arbitrary: past ~a dozen, the combobox stops being a shortlist and the open
-    // bag is the better answer. Raise this only with a rail to justify it.
-    expect(SEEDED_BANK_FIELDS.length).toBeLessThanOrEqual(12);
+  it("seeds only fields that are universal or span at least three countries", () => {
+    // The bar for a fourth seeded field. A one- or two-country identifier is typed.
+    for (const field of SEEDED_BANK_FIELDS) {
+      if (!field.countries) continue;
+      expect(field.countries.length).toBeGreaterThanOrEqual(3);
+    }
+  });
+});
+
+/**
+ * The country-specific identifiers are no longer seeded, so the typed path IS the
+ * supported path for the US, the UK, South Africa, India and China. It has to produce a
+ * stable key and keep whatever verification we can honestly offer.
+ */
+describe("user-created fields for the unseeded rails", () => {
+  it.each([
+    ["Routing Number", "routingNumber"],
+    ["Account Type", "accountType"],
+    ["Sort Code", "sortCode"],
+    ["Branch Code", "branchCode"],
+    ["IFSC Code", "ifscCode"],
+    ["CNAPS Code", "cnapsCode"]
+  ])("turns %s into a stable key", (label, key) => {
+    const field = customBankField(label);
+    expect(field.key).toBe(key);
+    expect(field.label).toBe(label);
+  });
+
+  it("still verifies a typed routing number's check digit", () => {
+    // The ABA checksum is keyed on the canonical key, not on catalog membership, so a
+    // field the user named themselves is checked exactly as a seeded one would be.
+    const field = customBankField("Routing Number");
+    expect(hasBankFieldWarning(field.key, "021000022")).toBe(true);
+    expect(hasBankFieldWarning(field.key, "021000021")).toBe(false);
+  });
+
+  it("leaves a typed field with no checksum alone", () => {
+    const field = customBankField("Branch Code");
+    expect(hasBankFieldWarning(field.key, "632005")).toBe(false);
+    expect(hasBankFieldWarning(field.key, "anything at all")).toBe(false);
   });
 });
 

@@ -36,8 +36,6 @@ export type SeededBankField = {
   /** Countries that use this field, for ordering only. Omitted means "anywhere". */
   countries?: readonly string[];
   placeholder?: string;
-  /** Advisory check. Absent means anything is accepted. */
-  check?: (value: string) => boolean;
 };
 
 // ---------------------------------------------------------------------------
@@ -182,24 +180,17 @@ const IBAN_COUNTRIES = [
 /**
  * The identifiers Carbon offers out of the box.
  *
- * Deliberately small. This is the set that covers the domestic rails Carbon's customers
- * actually pay on today, and nothing else:
+ * Three, and the bar for a fourth is high: a seeded field must apply either everywhere or
+ * across at least three countries. Everything narrower — a US routing number, a UK sort
+ * code, an Indian IFSC, a Chinese CNAPS code, a South African branch code — is typed by
+ * the user, which is what the open bag is for. A suggestion list that is mostly fields
+ * you do not need is a second form to read before filling in the first one.
  *
- *   United States   routing number (ABA) + account number + account type
- *   Europe (SEPA)   IBAN
- *   United Kingdom  sort code + account number, IBAN for international
- *   South Africa     branch code + account number
- *   India           IFSC code + account number
- *   China           CNAPS code + account number
+ * So the list is what is true almost everywhere: an account has a number, an IBAN if it
+ * is held somewhere that issues them, and a BIC if anyone is paying it from abroad.
  *
- * with SWIFT/BIC alongside any of them for a cross-border payment. Anything else — a BSB,
- * a Canadian transit and institution pair, a CLABE, an intermediary bank, a payment
- * reference — is one typed field name away, which is the whole point of the open bag. Add
- * an entry here only when a rail becomes common enough that typing it every time is the
- * wrong default.
- *
- * Declaration order is the tie-break inside a rank (see `suggestBankFields`), so a
- * country's own fields appear in the order its banks quote them.
+ * `countries` is for ordering only, so IBAN floats to the top across the SEPA zone and
+ * sinks below the universal pair everywhere else. Declaration order breaks ties.
  */
 export const SEEDED_BANK_FIELDS: readonly SeededBankField[] = [
   {
@@ -208,52 +199,10 @@ export const SEEDED_BANK_FIELDS: readonly SeededBankField[] = [
     placeholder: "000123456789"
   },
   {
-    key: "sortCode",
-    label: "Sort Code",
-    countries: ["GB", "IE"],
-    placeholder: "12-34-56"
-  },
-  {
     key: "iban",
     label: "IBAN",
     countries: IBAN_COUNTRIES,
-    placeholder: "DE89 3704 0044 0532 0130 00",
-    check: isValidIban
-  },
-  {
-    key: "routingNumber",
-    label: "Routing Number (ABA)",
-    countries: ["US"],
-    placeholder: "021000021",
-    check: isValidAbaRoutingNumber
-  },
-  {
-    // The US ACH network encodes this in the transaction code, so a US payment file
-    // cannot be written without it.
-    key: "accountType",
-    label: "Account Type",
-    countries: ["US"],
-    placeholder: "Checking"
-  },
-  {
-    // South Africa's universal branch code; also the generic name for a branch
-    // identifier anywhere that quotes one.
-    key: "branchCode",
-    label: "Branch Code",
-    countries: ["ZA"],
-    placeholder: "632005"
-  },
-  {
-    key: "ifscCode",
-    label: "IFSC Code",
-    countries: ["IN"],
-    placeholder: "HDFC0000123"
-  },
-  {
-    key: "cnapsCode",
-    label: "CNAPS Code",
-    countries: ["CN"],
-    placeholder: "301290000007"
+    placeholder: "DE89 3704 0044 0532 0130 00"
   },
   {
     key: "swiftBic",
@@ -261,6 +210,21 @@ export const SEEDED_BANK_FIELDS: readonly SeededBankField[] = [
     placeholder: "CHASUS33"
   }
 ];
+
+/**
+ * Advisory checks, keyed by canonical field key rather than hung off the catalog — so a
+ * field the USER created still gets one when its name slugs to a key we can verify.
+ * Typing "Routing Number" yields `routingNumber` (see `slugifyBankFieldKey`), and that
+ * account number gets its ABA check digit verified exactly as if Carbon had seeded it.
+ *
+ * Only add an entry that is a real checksum. A format regex produces false warnings on
+ * valid values, and this feature's whole posture is that we do not know better than the
+ * bank's own paperwork.
+ */
+const FIELD_CHECKS: Record<string, (value: string) => boolean> = {
+  iban: isValidIban,
+  routingNumber: isValidAbaRoutingNumber
+};
 
 const SEEDED_BY_KEY = new Map(
   SEEDED_BANK_FIELDS.map((field) => [field.key, field])
@@ -398,9 +362,9 @@ export function serializeBankFields(
 
 /** `true` when the value fails its field's checksum. Advisory — never blocks a save. */
 export function hasBankFieldWarning(key: string, value: string): boolean {
-  const seeded = getSeededBankField(key);
-  if (!seeded?.check || !value.trim()) return false;
-  return !seeded.check(value);
+  const check = FIELD_CHECKS[key];
+  if (!check || !value.trim()) return false;
+  return !check(value);
 }
 
 /**
