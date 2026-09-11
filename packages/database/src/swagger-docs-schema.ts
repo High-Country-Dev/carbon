@@ -108161,7 +108161,8 @@ export default {
             "Customer",
             "Supplier",
             "Item",
-            "ScrapReason"
+            "ScrapReason",
+            "Project"
           ],
           format: 'public."dimensionEntityType"',
           type: "string"
@@ -135153,7 +135154,8 @@ export default {
             "Customer",
             "Supplier",
             "Item",
-            "ScrapReason"
+            "ScrapReason",
+            "Project"
           ],
           format: 'public."dimensionEntityType"',
           type: "string"

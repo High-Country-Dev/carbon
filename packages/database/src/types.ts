@@ -84064,6 +84064,7 @@ export type Database = {
         | "Supplier"
         | "Item"
         | "ScrapReason"
+        | "Project"
       disposalMethod: "Sale" | "Scrapping"
       disposition:
         | "Conditional Acceptance"
@@ -85467,6 +85468,7 @@ export const Constants = {
         "Supplier",
         "Item",
         "ScrapReason",
+        "Project",
       ],
       disposalMethod: ["Sale", "Scrapping"],
       disposition: [
