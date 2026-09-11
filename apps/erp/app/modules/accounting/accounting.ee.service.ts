@@ -4497,10 +4497,14 @@ function getEntityDimensionValues(
         .eq("companyId", companyId)
         .order("name");
     case "Project":
+      // Only ACTIVE projects are selectable for new dimension assignments;
+      // soft-deleted (active = false) projects stay resolvable for history via
+      // getEntityValuesByIds but must not appear as new options.
       return client
         .from("project")
         .select("id, name")
         .eq("companyId", companyId)
+        .eq("active", true)
         .order("name");
     // Customer / Supplier / Item are high-cardinality: intentionally NOT
     // eager-loaded here. The DimensionSelector sources their options lazily
