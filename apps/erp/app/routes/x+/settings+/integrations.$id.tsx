@@ -688,8 +688,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     flattenedMetadata = unfoldRilletCredentials(flattenedMetadata);
   }
 
-  // Server-fetched options for "options"-type settings fields, merged over a
-  // setting's static `listOptions` by name.
+  // Server-fetched options for "options"-type settings fields. No current
+  // integration config populates this, but IntegrationForm still accepts it
+  // generically for a future provider-fetched choice list.
   const dynamicOptions: Record<
     string,
     Array<{ value: string; label: string; description?: string }>
