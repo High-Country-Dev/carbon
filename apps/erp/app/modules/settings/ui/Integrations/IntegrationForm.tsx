@@ -39,7 +39,14 @@ import {
 import { SUPPORT_EMAIL } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { ReactNode } from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState
+} from "react";
 import { useParams } from "react-router";
 import { Processes } from "~/components/Form";
 import { MethodIcon, TrackingTypeIcon } from "~/components/Icons";
@@ -171,6 +178,17 @@ function ConditionalSettingField({ setting }: { setting: IntegrationSetting }) {
 }
 
 /**
+ * Whether this form marks optional fields at all.
+ *
+ * "Optional" earns its place only when a form mixes the two — email is seven
+ * required fields and one optional, and the badge is what tells them apart.
+ * A form whose every field is optional (Onshape, Xero, Stripe Connect) puts
+ * the same badge on every row, which distinguishes nothing and just adds a
+ * column of grey text to read past.
+ */
+const MarkOptionalFields = createContext(true);
+
+/**
  * Renders a single setting field based on its type,
  * honouring any `visibleWhen` gating.
  */
@@ -182,6 +200,7 @@ function SettingField({ setting }: { setting: IntegrationSetting }) {
 }
 
 function SettingFieldInner({ setting }: { setting: IntegrationSetting }) {
+  const markOptional = useContext(MarkOptionalFields);
   switch (setting.type) {
     case "text":
       return (
@@ -189,7 +208,7 @@ function SettingFieldInner({ setting }: { setting: IntegrationSetting }) {
           <Input
             name={setting.name}
             label={setting.label}
-            isOptional={!setting.required}
+            isOptional={markOptional && !setting.required}
           />
           {setting.description && (
             <p className="text-xs text-muted-foreground mt-1.5">
@@ -273,13 +292,19 @@ function SettingFieldInner({ setting }: { setting: IntegrationSetting }) {
         </div>
       );
 
+    case "select":
     case "options": {
       const listOptions = setting.listOptions ?? [];
 
       // Small static enums render as Choice cards (the same affordance as
       // the explicit `cards` type). Long / dynamically-loaded lists keep
       // the dropdown so things like Xero account pickers stay usable.
+      //
+      // `select` opts out of that sizing rule and is always a dropdown, for a
+      // form whose fields should read like the rest of the app's forms rather
+      // than turning every short enum into a bank of cards.
       if (
+        setting.type === "options" &&
         listOptions.length > 0 &&
         listOptions.length <= CHOICE_CARD_MAX_OPTIONS
       ) {
@@ -311,7 +336,12 @@ function SettingFieldInner({ setting }: { setting: IntegrationSetting }) {
 
       return (
         <div className="w-full">
-          <Select name={setting.name} label={setting.label} options={options} />
+          <Select
+            name={setting.name}
+            label={setting.label}
+            options={options}
+            {...(markOptional ? {} : { isOptional: false })}
+          />
           {setting.description && (
             <p className="text-xs text-muted-foreground mt-1">
               {setting.description}
@@ -745,125 +775,133 @@ export function IntegrationForm({
     </TabsList>
   ) : null;
 
+  // See `MarkOptionalFields`: a badge on every field is noise, so only a form
+  // that actually mixes required and optional fields marks them.
+  const markOptionalFields = integration.settings.some(
+    (setting) => (setting as IntegrationSetting).required
+  );
+
   const settingsForm = (
-    <ValidatedForm
-      validator={integration.schema}
-      method="post"
-      action={path.to.integration(integration.id)}
-      defaultValues={initialValues}
-      className="flex flex-col h-full"
-    >
-      {!hasTabs && <DrawerHeader>{headerContent}</DrawerHeader>}
-      <DrawerBody>
-        {tabBar}
-        <ScrollArea
-          className={cn(
-            "-mx-2 pb-8",
-            hasTabs ? "h-[calc(100dvh-320px)]" : "h-[calc(100dvh-240px)]"
-          )}
-        >
-          <VStack spacing={4} className="px-2">
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              {integration.description}
-            </p>
-
-            {/* @ts-expect-error TS2339 */}
-            {integration.setupInstructions && (
-              <div className="flex flex-col gap-2">
-                <div className="text-[0.6875rem] font-semibold uppercase tracking-wider text-foreground/70">
-                  <Trans>Setup instructions</Trans>
-                </div>
-                {/* @ts-expect-error TS2339 */}
-                <integration.setupInstructions
-                  companyId={companyId}
-                  metadata={metadata}
-                  installed={installed}
-                />
-              </div>
+    <MarkOptionalFields.Provider value={markOptionalFields}>
+      <ValidatedForm
+        validator={integration.schema}
+        method="post"
+        action={path.to.integration(integration.id)}
+        defaultValues={initialValues}
+        className="flex flex-col h-full"
+      >
+        {!hasTabs && <DrawerHeader>{headerContent}</DrawerHeader>}
+        <DrawerBody>
+          {tabBar}
+          <ScrollArea
+            className={cn(
+              "-mx-2 pb-8",
+              hasTabs ? "h-[calc(100dvh-320px)]" : "h-[calc(100dvh-240px)]"
             )}
+          >
+            <VStack spacing={4} className="px-2">
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                {integration.description}
+              </p>
 
-            {/* Ungrouped settings appear first */}
-            {ungroupedSettings.length > 0 && (
-              <VStack spacing={4} className="w-full">
-                {ungroupedSettings.map((setting) => (
-                  <SettingField key={setting.name} setting={setting} />
-                ))}
-              </VStack>
-            )}
-
-            {/* Grouped settings in flat sections */}
-            {groupNames.map((groupName) => (
-              <ConditionalSettingsGroup
-                key={groupName}
-                name={groupName}
-                description={groupDescriptions.get(groupName)}
-                settings={groupedSettings.get(groupName) ?? []}
-              />
-            ))}
-
-            {installed && integrationActions.length > 0 && (
-              // `has-[button]` collapses the whole section (header included)
-              // when every gated action is hidden, so the toggle live-controls
-              // visibility without leaving an empty "Actions" header.
-              <div className="hidden has-[button]:flex w-full flex-col gap-3 border-t border-border pt-4">
-                <div className="text-[0.6875rem] font-semibold uppercase tracking-wider text-foreground/70">
-                  <Trans>Actions</Trans>
+              {/* @ts-expect-error TS2339 */}
+              {integration.setupInstructions && (
+                <div className="flex flex-col gap-2">
+                  <div className="text-[0.6875rem] font-semibold uppercase tracking-wider text-foreground/70">
+                    <Trans>Setup instructions</Trans>
+                  </div>
+                  {/* @ts-expect-error TS2339 */}
+                  <integration.setupInstructions
+                    companyId={companyId}
+                    metadata={metadata}
+                    installed={installed}
+                  />
                 </div>
-                <VStack spacing={2} className="w-full">
-                  {integrationActions.map((action) =>
-                    action.enabledWhenSetting ? (
-                      <GatedIntegrationActionButton
-                        key={action.id}
-                        action={action}
-                        isDisabled={isDisabled}
-                      />
-                    ) : (
-                      <IntegrationActionButton
-                        key={action.id}
-                        action={action}
-                        isDisabled={isDisabled}
-                      />
-                    )
-                  )}
+              )}
+
+              {/* Ungrouped settings appear first */}
+              {ungroupedSettings.length > 0 && (
+                <VStack spacing={4} className="w-full">
+                  {ungroupedSettings.map((setting) => (
+                    <SettingField key={setting.name} setting={setting} />
+                  ))}
                 </VStack>
-              </div>
-            )}
-          </VStack>
-        </ScrollArea>
-        <div className="mt-2">
-          <p className="text-[0.6875rem] leading-relaxed text-muted-foreground">
-            Carbon Manufacturing Systems does not endorse any third-party
-            software.{" "}
-            <a
-              href={`mailto:${SUPPORT_EMAIL}`}
-              className="underline decoration-dotted underline-offset-2 hover:text-foreground"
-            >
-              Report integration
-            </a>
-            .
-          </p>
-        </div>
-      </DrawerBody>
-      <DrawerFooter>
-        <HStack>
-          {integration.settings.length > 0 ? (
-            installed ? (
-              <Submit isDisabled={isDisabled}>
-                <Trans>Update</Trans>
-              </Submit>
-            ) : (
-              <Submit isDisabled={isDisabled}>
-                <Trans>Install</Trans>
-              </Submit>
-            )
-          ) : null}
+              )}
 
-          <Button variant="solid" onClick={onClose}>
-            <Trans>Close</Trans>
-          </Button>
-        </HStack>
-      </DrawerFooter>
-    </ValidatedForm>
+              {/* Grouped settings in flat sections */}
+              {groupNames.map((groupName) => (
+                <ConditionalSettingsGroup
+                  key={groupName}
+                  name={groupName}
+                  description={groupDescriptions.get(groupName)}
+                  settings={groupedSettings.get(groupName) ?? []}
+                />
+              ))}
+
+              {installed && integrationActions.length > 0 && (
+                // `has-[button]` collapses the whole section (header included)
+                // when every gated action is hidden, so the toggle live-controls
+                // visibility without leaving an empty "Actions" header.
+                <div className="hidden has-[button]:flex w-full flex-col gap-3 border-t border-border pt-4">
+                  <div className="text-[0.6875rem] font-semibold uppercase tracking-wider text-foreground/70">
+                    <Trans>Actions</Trans>
+                  </div>
+                  <VStack spacing={2} className="w-full">
+                    {integrationActions.map((action) =>
+                      action.enabledWhenSetting ? (
+                        <GatedIntegrationActionButton
+                          key={action.id}
+                          action={action}
+                          isDisabled={isDisabled}
+                        />
+                      ) : (
+                        <IntegrationActionButton
+                          key={action.id}
+                          action={action}
+                          isDisabled={isDisabled}
+                        />
+                      )
+                    )}
+                  </VStack>
+                </div>
+              )}
+            </VStack>
+          </ScrollArea>
+          <div className="mt-2">
+            <p className="text-[0.6875rem] leading-relaxed text-muted-foreground">
+              Carbon Manufacturing Systems does not endorse any third-party
+              software.{" "}
+              <a
+                href={`mailto:${SUPPORT_EMAIL}`}
+                className="underline decoration-dotted underline-offset-2 hover:text-foreground"
+              >
+                Report integration
+              </a>
+              .
+            </p>
+          </div>
+        </DrawerBody>
+        <DrawerFooter>
+          <HStack>
+            {integration.settings.length > 0 ? (
+              installed ? (
+                <Submit isDisabled={isDisabled}>
+                  <Trans>Update</Trans>
+                </Submit>
+              ) : (
+                <Submit isDisabled={isDisabled}>
+                  <Trans>Install</Trans>
+                </Submit>
+              )
+            ) : null}
+
+            <Button variant="solid" onClick={onClose}>
+              <Trans>Close</Trans>
+            </Button>
+          </HStack>
+        </DrawerFooter>
+      </ValidatedForm>
+    </MarkOptionalFields.Provider>
   );
 
   return (
