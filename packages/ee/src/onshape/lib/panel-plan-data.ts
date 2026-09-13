@@ -1,6 +1,7 @@
 import type { Database } from "@carbon/database";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { PlanLine, PlanMethodRow, PlanOptions } from "../panel/plan";
+import { parsePushDefaults } from "../panel/preferences";
 import { selectInBatches } from "./batched-filter";
 
 /**
@@ -17,21 +18,35 @@ import { selectInBatches } from "./batched-filter";
 
 type Client = SupabaseClient<Database>;
 
-/** The company's units, for the unit-of-measure choice on a create. */
+/**
+ * The company's units and its configured push defaults — everything the pure
+ * planners need that is neither Onshape's nor the user's. Both reads are
+ * fail-soft: no units yields the "EA" fallback, and unreadable settings yield
+ * the documented defaults, because a plan must always build.
+ */
 export async function loadPlanOptions(
   client: Client,
   companyId: string
 ): Promise<PlanOptions> {
-  const units = await client
-    .from("unitOfMeasure")
-    .select("code, name")
-    .eq("companyId", companyId)
-    .order("name");
+  const [units, integration] = await Promise.all([
+    client
+      .from("unitOfMeasure")
+      .select("code, name")
+      .eq("companyId", companyId)
+      .order("name"),
+    client
+      .from("companyIntegration")
+      .select("metadata")
+      .eq("id", "onshape")
+      .eq("companyId", companyId)
+      .maybeSingle()
+  ]);
   return {
     unitsOfMeasure: (units.data ?? []).map((unit) => ({
       code: unit.code,
       name: unit.name
-    }))
+    })),
+    defaults: parsePushDefaults(integration.data?.metadata)
   };
 }
 

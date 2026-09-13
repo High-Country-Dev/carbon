@@ -65,7 +65,8 @@ const payloadSchema = z.object({
     })
     .nullable()
     .optional(),
-  makeDefault: z.boolean().optional()
+  makeDefault: z.boolean().optional(),
+  createChangeNotice: z.boolean().optional()
 });
 
 type PushSummary = {
@@ -175,6 +176,11 @@ export async function action({ request }: ActionFunctionArgs) {
   }
   const plan = stored.plan as StoredReleasePlan;
   const makeDefault = parsed.data.makeDefault ?? plan.makeDefault;
+  // Whether to record a change notice is the review's call. The plan proposes
+  // one whenever the push creates something; an older client that does not send
+  // the flag keeps the previous behaviour.
+  const createChangeNotice =
+    parsed.data.createChangeNotice ?? plan.changeNotice !== null;
 
   // ---- Merge the review's edits before any write --------------------------
   // Items and children are keyed by part number; the two sets are disjoint
@@ -923,7 +929,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   // ---- Pass 4: one Draft change notice for what this push created ---------
-  if (created.length > 0) {
+  if (created.length > 0 && createChangeNotice) {
     const description = changeNoticeDescriptionJson(
       changeNoticeValues.description
     );
