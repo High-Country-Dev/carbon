@@ -34,6 +34,15 @@ export {
   ensureCostCenterDimension,
   pushCostCenters
 } from "./cost-centers";
+export type { RampProjectMapping, RampProjectOption } from "./projects";
+export {
+  buildProjectFieldBody,
+  buildProjectOptionsBody,
+  diffProjectOptions,
+  ensureProjectDimension,
+  projectFingerprint,
+  pushProjects
+} from "./projects";
 export type {
   RampInvoicePush,
   RampPurchaseOrderBatch,

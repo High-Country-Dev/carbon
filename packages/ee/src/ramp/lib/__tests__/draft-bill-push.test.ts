@@ -81,7 +81,8 @@ describe("pushInvoiceDraftBill (draft-only, coded from the posted journal)", () 
       invoice,
       {
         pushedAccountIds: new Set(["acct_expense"]),
-        pushedCostCenterIds: new Set(["cc_ga"])
+        pushedCostCenterIds: new Set(["cc_ga"]),
+        pushedProjectIds: new Set<string>()
       }
     );
 
@@ -143,7 +144,11 @@ describe("pushInvoiceDraftBill (draft-only, coded from the posted journal)", () 
       { getExternalId, link } as unknown as ExternalIntegrationMappingService,
       { createDraftBill } as unknown as RampClient,
       { ...invoice, supplier: { ...supplier, name: null } },
-      { pushedAccountIds: new Set(), pushedCostCenterIds: new Set() }
+      {
+        pushedAccountIds: new Set<string>(),
+        pushedCostCenterIds: new Set<string>(),
+        pushedProjectIds: new Set<string>()
+      }
     );
 
     expect(outcome).toBe("skipped");

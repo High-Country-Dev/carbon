@@ -6,7 +6,8 @@ import {
   ensureRampWebhook,
   getRampIntegration,
   pushChartOfAccounts,
-  pushCostCenters
+  pushCostCenters,
+  pushProjects
 } from "./lib/service";
 
 /**
@@ -89,6 +90,16 @@ async function convergeRamp(
   } catch (err) {
     console.warn(
       `[ramp] cost-center push failed for company ${companyId}; continuing convergence`,
+      err
+    );
+  }
+  // Converge the Project field + its options — a second custom field, kept
+  // independent of the cost-center one. Same fail-soft stance: the sweep retries.
+  try {
+    await pushProjects(serviceRole, companyId);
+  } catch (err) {
+    console.warn(
+      `[ramp] project push failed for company ${companyId}; continuing convergence`,
       err
     );
   }

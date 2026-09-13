@@ -413,15 +413,18 @@ export async function syncRampOutbound(
         // Only accounts / cost centers Carbon has pushed to Ramp are valid
         // coding options; coding a line to an unpushed option would 422 the
         // whole bill, so a line coded to one degrades to uncoded instead.
-        const [accountMappings, costCenterMappings] = await Promise.all([
-          ctx.mapping.getAllByIntegration("ramp", "account"),
-          ctx.mapping.getAllByIntegration("ramp", "costCenter")
-        ]);
+        const [accountMappings, costCenterMappings, projectMappings] =
+          await Promise.all([
+            ctx.mapping.getAllByIntegration("ramp", "account"),
+            ctx.mapping.getAllByIntegration("ramp", "costCenter"),
+            ctx.mapping.getAllByIntegration("ramp", "project")
+          ]);
         const pushed = {
           pushedAccountIds: new Set(accountMappings.map((m) => m.entityId)),
           pushedCostCenterIds: new Set(
             costCenterMappings.map((m) => m.entityId)
-          )
+          ),
+          pushedProjectIds: new Set(projectMappings.map((m) => m.entityId))
         };
 
         for (const row of candidates) {

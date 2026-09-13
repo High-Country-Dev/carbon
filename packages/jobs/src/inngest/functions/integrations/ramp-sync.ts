@@ -10,7 +10,8 @@ import { createMappingService } from "@carbon/ee/accounting";
 import {
   getRampIntegration,
   pushChartOfAccounts,
-  pushCostCenters
+  pushCostCenters,
+  pushProjects
 } from "@carbon/ee/ramp.server";
 import { trigger } from "@carbon/lib/trigger";
 import { NotificationEvent } from "@carbon/notifications";
@@ -124,6 +125,26 @@ export const rampSyncFunction = inngest.createFunction(
       }
     });
 
+    const projectResult = await step.run("ramp-projects", async () => {
+      try {
+        const { created, renamed, hidden, shown } = await pushProjects(
+          client,
+          companyId
+        );
+        return { created, renamed, hidden, shown, failed: 0 };
+      } catch (err) {
+        console.error(`[RAMP SYNC] ${companyId}: project push failed`, err);
+        return {
+          created: 0,
+          renamed: 0,
+          hidden: 0,
+          shown: 0,
+          failed: 1,
+          error: err instanceof Error ? err.message : String(err)
+        };
+      }
+    });
+
     const cardResult = await step.run("ramp-card-transactions", () =>
       syncRampCardTransactions(ctx, ramp, entityId, cardLiabilityAccountId)
     );
@@ -158,6 +179,7 @@ export const rampSyncFunction = inngest.createFunction(
     const totalFailed = countRampSyncFailures([
       coaResult,
       costCenterResult,
+      projectResult,
       cardResult,
       transferResult,
       cashbackResult,
@@ -199,6 +221,7 @@ export const rampSyncFunction = inngest.createFunction(
       companyId,
       chartOfAccounts: coaResult,
       costCenters: costCenterResult,
+      projects: projectResult,
       card: cardResult,
       transfers: transferResult,
       cashbacks: cashbackResult,

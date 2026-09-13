@@ -7,6 +7,7 @@ const ensureRampConnection = vi.hoisted(() => vi.fn());
 const ensureRampWebhook = vi.hoisted(() => vi.fn());
 const pushChartOfAccounts = vi.hoisted(() => vi.fn());
 const pushCostCenters = vi.hoisted(() => vi.fn());
+const pushProjects = vi.hoisted(() => vi.fn());
 const trigger = vi.hoisted(() => vi.fn());
 
 vi.mock("@carbon/auth", () => ({ getAppUrl: () => "https://erp.example.com" }));
@@ -20,7 +21,8 @@ vi.mock("./lib/service", () => ({
   ensureRampWebhook,
   getRampIntegration,
   pushChartOfAccounts,
-  pushCostCenters
+  pushCostCenters,
+  pushProjects
 }));
 
 import { rampOnInstall, rampOnUpdate } from "./hooks.server";
@@ -47,6 +49,7 @@ describe("Ramp install convergence", () => {
     ensureRampWebhook.mockResolvedValue({ webhookId: "webhook-1" });
     pushChartOfAccounts.mockResolvedValue(undefined);
     pushCostCenters.mockResolvedValue(undefined);
+    pushProjects.mockResolvedValue(undefined);
     trigger.mockResolvedValue(undefined);
   });
 
@@ -60,6 +63,7 @@ describe("Ramp install convergence", () => {
     expect(ensureRampWebhook).toHaveBeenCalledOnce();
     expect(pushChartOfAccounts).not.toHaveBeenCalled();
     expect(pushCostCenters).not.toHaveBeenCalled();
+    expect(pushProjects).not.toHaveBeenCalled();
     expect(trigger).not.toHaveBeenCalled();
   });
 
@@ -77,6 +81,7 @@ describe("Ramp install convergence", () => {
     expect(getEntities).toHaveBeenCalledOnce();
     expect(pushChartOfAccounts).toHaveBeenCalledOnce();
     expect(pushCostCenters).toHaveBeenCalledOnce();
+    expect(pushProjects).toHaveBeenCalledOnce();
     expect(trigger).toHaveBeenCalledWith("ramp-sync", {
       companyId: "company-1",
       reason: "settings-update"

@@ -17,6 +17,16 @@
 export const RAMP_COST_CENTER_FIELD_ID = "carbon-cost-center";
 
 /**
+ * The remote id Carbon creates the custom PROJECT field with. A second custom
+ * SINGLE_CHOICE field parallel to the cost-center one, so a card holder can pick
+ * a Carbon project on a transaction independently of its cost center. Its
+ * options are converged in `projects.ts` (option external id = `project.id`);
+ * a selection is matched inbound by this `category_info.external_id`, never by a
+ * Ramp type enum (a custom field's selections come back typed `OTHER`).
+ */
+export const RAMP_PROJECT_FIELD_ID = "carbon-project";
+
+/**
  * The `field_external_id` of Ramp's NATIVE GL-account field. Ramp names its
  * built-in GL account field `"Category"` (verified live 2026-09-11: a coded
  * transaction's `category_info` reads `{ type: "GL_ACCOUNT", external_id:
@@ -56,10 +66,15 @@ export type RampCodingWriteSelection = {
  * fail-soft stance the inbound reader takes on an unresolvable code.
  */
 export function buildLineCodingSelections(
-  line: { accountId: string | null; costCenterId: string | null },
+  line: {
+    accountId: string | null;
+    costCenterId: string | null;
+    projectId: string | null;
+  },
   pushed: {
     pushedAccountIds: ReadonlySet<string>;
     pushedCostCenterIds: ReadonlySet<string>;
+    pushedProjectIds: ReadonlySet<string>;
   }
 ): RampCodingWriteSelection[] {
   const selections: RampCodingWriteSelection[] = [];
@@ -73,6 +88,12 @@ export function buildLineCodingSelections(
     selections.push({
       field_external_id: RAMP_COST_CENTER_FIELD_ID,
       field_option_external_id: line.costCenterId
+    });
+  }
+  if (line.projectId && pushed.pushedProjectIds.has(line.projectId)) {
+    selections.push({
+      field_external_id: RAMP_PROJECT_FIELD_ID,
+      field_option_external_id: line.projectId
     });
   }
   return selections;
@@ -93,6 +114,7 @@ export type RampCodingSelection = {
 export type RampCoding = {
   accountId: string | null;
   costCenterId: string | null;
+  projectId: string | null;
 };
 
 /**
@@ -107,10 +129,15 @@ export function codeSelections(
 ): RampCoding {
   let accountId: string | null = null;
   let costCenterId: string | null = null;
+  let projectId: string | null = null;
   for (const selection of selections ?? []) {
     if (!selection.external_id) continue;
     if (selection.category_info?.external_id === RAMP_COST_CENTER_FIELD_ID) {
       if (!costCenterId) costCenterId = selection.external_id;
+      continue;
+    }
+    if (selection.category_info?.external_id === RAMP_PROJECT_FIELD_ID) {
+      if (!projectId) projectId = selection.external_id;
       continue;
     }
     // The field TYPE is at `category_info.type` per the Ramp OpenAPI spec
@@ -120,5 +147,5 @@ export function codeSelections(
       accountId = selection.external_id;
     }
   }
-  return { accountId, costCenterId };
+  return { accountId, costCenterId, projectId };
 }

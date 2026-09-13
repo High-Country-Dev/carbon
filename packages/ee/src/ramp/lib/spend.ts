@@ -459,6 +459,7 @@ export async function pushInvoiceDraftBill(
   pushed: {
     pushedAccountIds: ReadonlySet<string>;
     pushedCostCenterIds: ReadonlySet<string>;
+    pushedProjectIds: ReadonlySet<string>;
   }
 ): Promise<"pushed" | "skipped"> {
   // A bill REQUIRES a `vendor_id`, so a supplier we can't match/create a Ramp
@@ -511,11 +512,17 @@ export async function pushInvoiceDraftBill(
           line.dimensions?.find((dimension) =>
             pushed.pushedCostCenterIds.has(dimension.valueId)
           )?.valueId ?? null;
+        // The project is the journal-line dimension whose value is a project
+        // Carbon pushed to Ramp; `valueId` = the project.id.
+        const projectId =
+          line.dimensions?.find((dimension) =>
+            pushed.pushedProjectIds.has(dimension.valueId)
+          )?.valueId ?? null;
         return {
           memo: (line.sourceItem?.name ?? line.description) || undefined,
           amount: line.amount,
           accounting_field_selections: buildLineCodingSelections(
-            { accountId: line.accountId, costCenterId },
+            { accountId: line.accountId, costCenterId, projectId },
             pushed
           )
         };
