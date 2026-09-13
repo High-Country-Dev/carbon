@@ -198,6 +198,21 @@ uses a lazy runtime `import("@carbon/jobs")` because `jobs → ee` is the depend
   `20260228024512` backfill). Runs on install / settings save AND as the
   `ramp-cost-centers` step of every `ramp-sync`, so a new cost center reaches Ramp
   within ≤1h.
+- `pushProjects` (`lib/projects.ts`, `RAMP_PROJECT_FIELD_ID = "carbon-project"`) is
+  the exact parallel of `pushCostCenters` for the Carbon **Project** entity — a
+  SECOND custom `SINGLE_CHOICE` field, kept entirely independent of the cost-center
+  field. Same true-diff convergence (create / rename / **HIDE** a project that fell
+  out of Carbon's ACTIVE set, i.e. a soft-deleted or renamed project / re-show a
+  restored one), tracked in `externalIntegrationMapping` (`project` per option,
+  `projectField` for the field), and `ensureProjectDimension` resolves the group's
+  active `Project` dimension (seeded by the slice-2 migration; it FINDS, rarely
+  creates). Runs in `convergeRamp` and the `ramp-projects` step of every `ramp-sync`.
+  Inbound: `codeSelections` decodes a `carbon-project` selection to `projectId`, the
+  card/bill/reimbursement staging writes it to `cardTransactionLine.projectId` /
+  `purchaseInvoiceLine.projectId` (verified by `verifyProjects`), and
+  `post-card-transaction` / `post-purchase-invoice` write a Project
+  `journalLineDimension` per line — the same round-trip cost centers use.
+  `buildLineCodingSelections` emits the project on outbound draft bills.
 - Every purchase invoice the sync creates (bill AND reimbursement) gets its required
   `purchaseInvoiceDelivery` row in the same database transaction as the header, lines, and
   mapping — `post-purchase-invoice` reads it with `.single()` and refuses to post without it.
