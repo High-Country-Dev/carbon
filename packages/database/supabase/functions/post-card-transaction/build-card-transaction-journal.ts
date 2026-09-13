@@ -47,6 +47,7 @@ export interface CardTransactionLineInput {
   accountId: string;
   amount: number;
   costCenterId?: string | null;
+  projectId?: string | null;
   description?: string | null;
 }
 
@@ -80,6 +81,7 @@ export interface CardTransactionJournalLine {
   documentType: "Card Transaction";
   documentId: string;
   costCenterId?: string | null;
+  projectId?: string | null;
 }
 
 export interface BuildCardTransactionJournalResult {
@@ -134,6 +136,7 @@ export function buildCardTransactionJournal(
       accountId: string;
       description: string;
       costCenterId?: string | null;
+      projectId?: string | null;
     },
   ) => {
     signedDebitTotal += side === "debit" ? magnitude : -magnitude;
@@ -146,6 +149,7 @@ export function buildCardTransactionJournal(
       documentType: "Card Transaction",
       documentId,
       costCenterId: fields.costCenterId ?? null,
+      projectId: fields.projectId ?? null,
     });
   };
 
@@ -203,6 +207,7 @@ export function buildCardTransactionJournal(
           accountId: line.accountId,
           description: line.description ?? "Card charge",
           costCenterId: line.costCenterId,
+          projectId: line.projectId,
         });
       }
       pushLine("credit", "liability", cardMagnitude, {
@@ -223,6 +228,7 @@ export function buildCardTransactionJournal(
           accountId: line.accountId,
           description: line.description ?? "Card credit",
           costCenterId: line.costCenterId,
+          projectId: line.projectId,
         });
       }
       pushLine("debit", "liability", cardMagnitude, {
@@ -280,6 +286,7 @@ export function buildCardTransactionJournal(
           accountId: line.accountId,
           description: line.description ?? "Card repayment",
           costCenterId: line.costCenterId,
+          projectId: line.projectId,
         });
       });
       break;

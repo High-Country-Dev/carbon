@@ -17,6 +17,7 @@ type PurchaseInvoiceStatus =
 export type RampReimbursementInvoiceLine = {
   accountId: string;
   costCenterId: string | null;
+  projectId: string | null;
   amount: number;
   description: string | null;
 };
@@ -162,6 +163,7 @@ async function validateLegacyDraft(
         line.invoiceLineType !== "G/L Account" ||
         line.accountId !== expected.accountId ||
         line.costCenterId !== expected.costCenterId ||
+        line.projectId !== expected.projectId ||
         line.description !== expected.description ||
         line.quantity !== 1 ||
         line.supplierUnitPrice !== expected.amount ||
@@ -195,6 +197,7 @@ async function insertInvoiceLines(
         invoiceLineType: "G/L Account" as const,
         accountId: line.accountId,
         costCenterId: line.costCenterId,
+        projectId: line.projectId,
         description: line.description,
         quantity: 1,
         supplierUnitPrice: line.amount,
@@ -410,7 +413,7 @@ async function buildReimbursementLines(
     "Reimbursement line is coded to an account Carbon doesn't recognize — recode it in Ramp";
   const lines: RampReimbursementInvoiceLine[] = [];
   for (const item of items) {
-    const { accountId, costCenterId } = codeSelections(
+    const { accountId, costCenterId, projectId } = codeSelections(
       item.accounting_field_selections
     );
     if (!accountId) return { error: uncoded };
@@ -423,6 +426,7 @@ async function buildReimbursementLines(
     lines.push({
       accountId,
       costCenterId,
+      projectId,
       amount: Math.abs(normalized.value),
       description: item.memo ?? null
     });
@@ -470,6 +474,33 @@ async function buildReimbursementLines(
       return {
         error:
           "Line is coded to a cost center Carbon doesn't recognize — recode it in Ramp"
+      };
+    }
+  }
+
+  const projectIds = [
+    ...new Set(
+      lines
+        .map((line) => line.projectId)
+        .filter((id): id is string => Boolean(id))
+    )
+  ];
+  if (projectIds.length > 0) {
+    const projects = await deps.client
+      .from("project")
+      .select("id")
+      .in("id", projectIds)
+      .eq("companyId", deps.companyId);
+    if (projects.error) {
+      return {
+        error: `Failed to verify projects: ${projects.error.message}`
+      };
+    }
+    const knownProjects = new Set((projects.data ?? []).map((row) => row.id));
+    if (projectIds.some((id) => !knownProjects.has(id))) {
+      return {
+        error:
+          "Line is coded to a project Carbon doesn't recognize — recode it in Ramp"
       };
     }
   }

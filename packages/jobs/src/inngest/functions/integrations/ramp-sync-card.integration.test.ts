@@ -135,6 +135,7 @@ describe.skipIf(!runDatabaseTests)("Ramp card staging (Postgres)", () => {
         {
           accountId,
           costCenterId: null,
+          projectId: null,
           description: "Ramp card staging",
           amount: 25
         }
@@ -202,7 +203,8 @@ describe.skipIf(!runDatabaseTests)("Ramp card staging (Postgres)", () => {
           accountId: fixture.correctedAccountId,
           amount: 30,
           description: "Recoded",
-          costCenterId: null
+          costCenterId: null,
+          projectId: null
         }
       ]
     };
@@ -467,6 +469,7 @@ describe.skipIf(!runDatabaseTests)("Ramp card staging (Postgres)", () => {
         {
           accountId: fixture.expenseAccountId,
           costCenterId: null,
+          projectId: null,
           description: "Ambiguous post response",
           amount: 25
         }

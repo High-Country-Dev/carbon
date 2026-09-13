@@ -157,7 +157,7 @@ export async function syncRampRepayments(
         }
         const originalLines = await ctx.client
           .from("cardTransactionLine")
-          .select("accountId, amount, costCenterId, description")
+          .select("accountId, amount, costCenterId, projectId, description")
           .eq("cardTransactionId", originalEntityId)
           .eq("companyId", companyId)
           .order("sequence", { ascending: true });
@@ -208,6 +208,7 @@ export async function syncRampRepayments(
             accountId: line.accountId,
             amount: line.amount,
             costCenterId: line.costCenterId,
+            projectId: line.projectId,
             description: line.description
           })),
           repaymentAmount,
@@ -243,6 +244,7 @@ export async function syncRampRepayments(
             accountId: line.accountId,
             amount: line.amount,
             costCenterId: line.costCenterId,
+            projectId: line.projectId,
             description: line.description
           })),
           receiptIds: [],

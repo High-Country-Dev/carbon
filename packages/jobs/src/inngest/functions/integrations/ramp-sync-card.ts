@@ -28,7 +28,8 @@ import {
   type RampSyncContext,
   type SyncItem,
   stripSpecialCharacters,
-  verifyCostCenters
+  verifyCostCenters,
+  verifyProjects
 } from "./ramp-sync-shared";
 
 /**
@@ -111,6 +112,7 @@ type BuiltLine = {
   accountId: string;
   amount: number;
   costCenterId: string | null;
+  projectId: string | null;
   description: string | null;
 };
 
@@ -133,7 +135,7 @@ async function buildTransactionLines(
 
   if (tx.line_items && tx.line_items.length > 0) {
     for (const item of tx.line_items) {
-      const { accountId, costCenterId } = codeSelections(
+      const { accountId, costCenterId, projectId } = codeSelections(
         item.accounting_field_selections
       );
       if (!accountId) return { error: uncoded };
@@ -149,11 +151,12 @@ async function buildTransactionLines(
         accountId,
         amount: Math.abs(normalized.value),
         costCenterId,
+        projectId,
         description: item.memo ?? null
       });
     }
   } else {
-    const { accountId, costCenterId } = codeSelections(
+    const { accountId, costCenterId, projectId } = codeSelections(
       tx.accounting_field_selections
     );
     if (!accountId) return { error: uncoded };
@@ -161,6 +164,7 @@ async function buildTransactionLines(
       accountId,
       amount: headerAmount,
       costCenterId,
+      projectId,
       description: tx.memo ?? null
     });
   }
@@ -198,6 +202,9 @@ async function buildTransactionLines(
 
   const costCenterError = await verifyCostCenters(ctx, settledLines);
   if (costCenterError) return { error: costCenterError };
+
+  const projectError = await verifyProjects(ctx, settledLines);
+  if (projectError) return { error: projectError };
 
   return { lines: settledLines };
 }

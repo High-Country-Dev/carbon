@@ -127,6 +127,21 @@ export async function postCardTransaction(
     }
   }
 
+  const projectIds = [
+    ...new Set(
+      lines.flatMap((line) => line.projectId ? [line.projectId] : []),
+    ),
+  ];
+  if (projectIds.length) {
+    const projects = await trx.selectFrom("project").select("id")
+      .where("companyId", "=", companyId)
+      .where("id", "in", projectIds)
+      .execute();
+    if (projects.length !== projectIds.length) {
+      throw new Error("Card transaction project not found in this company");
+    }
+  }
+
   let postingDate = cardTransaction.postingDate ??
     cardTransaction.transactionDate;
   let journalId: string | null = null;
@@ -151,6 +166,7 @@ export async function postCardTransaction(
         accountId: line.accountId,
         amount: Number(line.amount),
         costCenterId: line.costCenterId,
+        projectId: line.projectId,
         description: line.description,
       })),
       accounts,
@@ -170,6 +186,20 @@ export async function postCardTransaction(
     const costCenterDimensionId = dimensions[0]?.id ?? null;
     if (costCenterIds.length && !costCenterDimensionId) {
       throw new Error("Company group has no active Cost Center dimension");
+    }
+    const projectDimensions = projectIds.length
+      ? await trx.selectFrom("dimension").select("id")
+        .where("companyGroupId", "=", company.companyGroupId)
+        .where("active", "=", true)
+        .where("entityType", "=", "Project")
+        .orderBy("createdAt")
+        .orderBy("id")
+        .limit(1)
+        .execute()
+      : [];
+    const projectDimensionId = projectDimensions[0]?.id ?? null;
+    if (projectIds.length && !projectDimensionId) {
+      throw new Error("Company group has no active Project dimension");
     }
 
     const journal = await trx.insertInto("journal").values({
@@ -220,6 +250,26 @@ export async function postCardTransaction(
       if (dimensionValues.length) {
         await trx.insertInto("journalLineDimension").values(dimensionValues)
           .execute();
+      }
+    }
+    if (projectDimensionId) {
+      const projectDimensionValues = built.journalLines.flatMap(
+        (line, index) => {
+          const journalLineId = journalLineIds[index];
+          if (!line.projectId) return [];
+          if (!journalLineId) throw new Error("Failed to map card journal line");
+          return [{
+            journalLineId,
+            dimensionId: projectDimensionId,
+            valueId: line.projectId,
+            companyId,
+          }];
+        },
+      );
+      if (projectDimensionValues.length) {
+        await trx.insertInto("journalLineDimension").values(
+          projectDimensionValues,
+        ).execute();
       }
     }
   }

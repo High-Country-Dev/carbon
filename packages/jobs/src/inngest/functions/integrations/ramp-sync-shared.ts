@@ -67,6 +67,31 @@ export async function verifyCostCenters(
   return null;
 }
 
+export async function verifyProjects(
+  ctx: RampSyncContext,
+  lines: ReadonlyArray<{ projectId: string | null }>
+): Promise<string | null> {
+  const ids = [
+    ...new Set(
+      lines
+        .map((line) => line.projectId)
+        .filter((id): id is string => Boolean(id))
+    )
+  ];
+  if (ids.length === 0) return null;
+  const { data, error } = await ctx.client
+    .from("project")
+    .select("id")
+    .in("id", ids)
+    .eq("companyId", ctx.companyId);
+  if (error) return `Failed to verify projects: ${error.message}`;
+  const known = new Set((data ?? []).map((row) => row.id));
+  if (ids.some((id) => !known.has(id))) {
+    return "Line is coded to a project Carbon doesn't recognize — recode it in Ramp";
+  }
+  return null;
+}
+
 export function cardTransactionsDeepLinkUrl(): string {
   return `${getAppUrl()}${CARD_TRANSACTIONS_PATH}`;
 }

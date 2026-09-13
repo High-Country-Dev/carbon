@@ -210,6 +210,7 @@ describe.skipIf(process.env.RUN_RAMP_DB_TESTS !== "true")(
           {
             accountId: scope.accountId,
             costCenterId: null,
+            projectId: null,
             amount: 100,
             description: token
           }

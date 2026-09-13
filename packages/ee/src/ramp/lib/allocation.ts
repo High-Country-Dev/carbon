@@ -5,6 +5,7 @@ export type RepaymentLineInput = {
   accountId: string;
   amount: number;
   costCenterId?: string | null;
+  projectId?: string | null;
   description?: string | null;
 };
 
@@ -12,6 +13,7 @@ export type ScaledRepaymentLine = {
   accountId: string;
   amount: number;
   costCenterId: string | null;
+  projectId: string | null;
   description: string | null;
 };
 
@@ -100,6 +102,7 @@ export function scaleRepaymentLines(
       accountId: line.accountId,
       amount: 0,
       costCenterId: line.costCenterId ?? null,
+      projectId: line.projectId ?? null,
       description: line.description ?? null
     }));
   }
@@ -115,6 +118,7 @@ export function scaleRepaymentLines(
     accountId: line.accountId,
     amount: amounts[index]!,
     costCenterId: line.costCenterId ?? null,
+    projectId: line.projectId ?? null,
     description: line.description ?? null
   }));
 }

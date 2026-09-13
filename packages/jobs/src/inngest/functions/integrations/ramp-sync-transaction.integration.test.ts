@@ -136,6 +136,7 @@ describe.skipIf(!runDatabaseTests)(
           {
             accountId,
             costCenterId: null,
+            projectId: null,
             amount: 100,
             description: "Ramp integration test"
           }

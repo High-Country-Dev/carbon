@@ -28,7 +28,8 @@ import {
   type RampSyncContext,
   type SyncItem,
   stripSpecialCharacters,
-  verifyCostCenters
+  verifyCostCenters,
+  verifyProjects
 } from "./ramp-sync-shared";
 
 /** Ramp bill status that means the bill has been fully paid. */
@@ -82,7 +83,7 @@ async function buildBillLines(
 
   const lines: BuiltInvoiceLine[] = [];
   for (const item of items) {
-    const { accountId, costCenterId } = codeSelections(
+    const { accountId, costCenterId, projectId } = codeSelections(
       item.accounting_field_selections
     );
     if (!accountId) return { error: uncoded };
@@ -96,6 +97,7 @@ async function buildBillLines(
     lines.push({
       accountId,
       costCenterId,
+      projectId,
       amount: normalized.value,
       ...(typeof item.purchase_order_line_item_id === "string"
         ? { purchaseOrderLineId: item.purchase_order_line_item_id }
@@ -129,6 +131,9 @@ async function buildBillLines(
 
   const costCenterError = await verifyCostCenters(ctx, lines);
   if (costCenterError) return { error: costCenterError };
+
+  const projectError = await verifyProjects(ctx, lines);
+  if (projectError) return { error: projectError };
 
   return { lines };
 }
@@ -325,7 +330,7 @@ async function syncBill(
       // choose an arbitrary account when the bill splits several dimensions.
       const coding = new Map(
         built.lines.map((line) => [
-          JSON.stringify([line.accountId, line.costCenterId]),
+          JSON.stringify([line.accountId, line.costCenterId, line.projectId]),
           line
         ])
       );
@@ -337,6 +342,7 @@ async function syncBill(
       built.lines.push({
         accountId: line.accountId,
         costCenterId: line.costCenterId,
+        projectId: line.projectId,
         amount: difference,
         description: "Ramp bill total adjustment"
       });

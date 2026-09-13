@@ -7,6 +7,7 @@ import { buildRampBillPurchaseOrderLines } from "./ramp-sync-bill-po";
 export type RampBillLine = {
   accountId: string;
   costCenterId: string | null;
+  projectId: string | null;
   amount: number;
   description: string | null;
   purchaseOrderLineId?: string;
@@ -188,6 +189,7 @@ export async function stageOrResumeRampBill(
             return (
               line.accountId !== expected.accountId ||
               line.costCenterId !== expected.costCenterId ||
+              line.projectId !== expected.projectId ||
               line.invoiceLineType !==
                 (poLine?.invoiceLineType ?? "G/L Account") ||
               round(Number(line.quantity)) !==
@@ -283,6 +285,7 @@ export async function stageOrResumeRampBill(
         invoiceLineType: po?.lines[index]?.invoiceLineType ?? "G/L Account",
         accountId: line.accountId,
         costCenterId: line.costCenterId,
+        projectId: line.projectId,
         description: line.description,
         quantity: po?.lines[index]?.quantity ?? 1,
         supplierUnitPrice: po?.lines[index]?.supplierUnitPrice ?? line.amount,

@@ -11,6 +11,7 @@ export type RampCardLineDraft = {
   accountId: string;
   amount: number;
   costCenterId: string | null;
+  projectId: string | null;
   description: string | null;
 };
 
