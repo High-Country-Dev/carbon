@@ -2,6 +2,7 @@ import { Email } from "./email/config";
 import { Jira } from "./jira/config";
 import { Linear } from "./linear/config";
 import { Onshape } from "./onshape/config";
+import { OnshapeV2 } from "./onshape/config-v2";
 import { PaperlessParts } from "./paperless-parts/config";
 import { QuickBooks } from "./quickbooks/config";
 // import { Radan } from "./radan/config";
@@ -34,6 +35,7 @@ export const integrations = [
   Jira,
   Linear,
   Onshape,
+  OnshapeV2,
   PaperlessParts,
   QuickBooks,
   Rillet,
@@ -46,8 +48,9 @@ export const integrations = [
 export type IntegrationID = (typeof integrations)[number]["id"];
 
 export { Jira } from "./jira/config";
-export { openOAuthPopup } from "./oauth-popup";
+export { beginOAuthPopup, openOAuthPopup } from "./oauth-popup";
 export { Logo as OnshapeLogo, Onshape } from "./onshape/config";
+export { OnshapeV2 } from "./onshape/config-v2";
 export type { OnshapeDocument } from "./onshape/lib";
 export type { OnshapeBomNode } from "./onshape/panel/bom";
 export {

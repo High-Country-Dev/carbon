@@ -14,6 +14,8 @@ import {
 } from "../../integrations/secrets";
 import type { OnshapeDocument } from "./document.type";
 import type { OnshapeElementType } from "./element.type";
+import type { OnshapeIntegrationId } from "./integration-id";
+import { ONSHAPE_INTEGRATION_ID } from "./integration-id";
 
 const logger = getLogger("ee", "onshape");
 
@@ -872,14 +874,19 @@ const REFRESH_WAIT_MS = 150;
 export async function getOnshapeClient(
   client: SupabaseClient<Database>,
   companyId: string,
-  userId: string
+  userId: string,
+  /**
+   * Which of the two Onshape integrations to authenticate as. Defaults to the
+   * original so existing v1 callers are unchanged; the panel passes v2.
+   */
+  integrationId: OnshapeIntegrationId = ONSHAPE_INTEGRATION_ID
 ): Promise<
   { client: OnshapeClient; error: null } | { client: null; error: string }
 > {
   const integration = await client
     .from("companyIntegration")
     .select("*")
-    .eq("id", "onshape")
+    .eq("id", integrationId)
     .eq("companyId", companyId)
     .maybeSingle();
 
@@ -897,7 +904,7 @@ export async function getOnshapeClient(
   const metadata = (await resolveIntegrationSecrets(
     serviceRole,
     companyId,
-    "onshape",
+    integrationId,
     integration.data.metadata,
     integration.data.secretRef
   )) as Record<string, any>;
@@ -935,7 +942,7 @@ export async function getOnshapeClient(
         const current = (await resolveIntegrationSecrets(
           serviceRole,
           companyId,
-          "onshape",
+          integrationId,
           integrationRow.metadata,
           integrationRow.secretRef
         ).catch(() => null)) as Record<string, any> | null;
@@ -952,7 +959,7 @@ export async function getOnshapeClient(
       // Onshape tells us how long the token is good for; assuming an hour is
       // how a stored expiry ends up outliving the real credential.
       const lifetimeSeconds = refreshed.expires_in ?? 3600;
-      await persistIntegrationSecrets(serviceRole, companyId, "onshape", {
+      await persistIntegrationSecrets(serviceRole, companyId, integrationId, {
         ...metadata,
         credentials: {
           ...credentials,

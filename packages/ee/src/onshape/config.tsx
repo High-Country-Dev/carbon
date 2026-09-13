@@ -2,7 +2,7 @@ import { ONSHAPE_CLIENT_ID } from "@carbon/auth";
 import type { SVGProps } from "react";
 import { z } from "zod";
 import { defineIntegration } from "../fns";
-import { openOAuthPopup } from "../oauth-popup";
+import { beginOAuthPopup } from "../oauth-popup";
 
 export const Onshape = defineIntegration({
   name: "Onshape",
@@ -50,15 +50,23 @@ export const Onshape = defineIntegration({
     }
   ],
   onClientInstall: async () => {
-    const response = await fetch("/api/integrations/onshape/install").then(
-      (res) => res.json()
-    );
-
-    const { url } = response;
-
-    // The callback (api/integrations/onshape/oauth) posts an OAuthPopupResult
-    // back to this window and closes the popup; IntegrationCard listens for it.
-    openOAuthPopup(url);
+    // Opened here, inside the click, so the browser still holds user
+    // activation; the fetch below can take as long as it needs.
+    const popup = beginOAuthPopup();
+    try {
+      const response = await fetch("/api/integrations/onshape/install");
+      const body = await response.json();
+      if (!response.ok || !body?.url) {
+        throw new Error(body?.error ?? `Carbon answered ${response.status}`);
+      }
+      // The callback (api/integrations/onshape/oauth) posts an
+      // OAuthPopupResult back to this window and closes the popup;
+      // IntegrationCard listens for it.
+      popup.navigate(body.url);
+    } catch (error) {
+      popup.close();
+      throw error;
+    }
   }
 });
 

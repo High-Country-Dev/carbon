@@ -6,6 +6,7 @@ import type {
   KyselyDatabase,
   KyselyTx
 } from "@carbon/database/client";
+import { ONSHAPE_INTEGRATION_IDS } from "@carbon/ee/onshape/integration-id";
 import { getLogger } from "@carbon/logger";
 import { datetime } from "@carbon/utils";
 import type { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
@@ -3554,7 +3555,9 @@ export async function upsertPart(
     .select("id")
     .eq("entityType", "item")
     .eq("entityId", part.id)
-    .eq("integration", "onshape")
+    // Either Onshape integration owning the item locks the same fields.
+    .in("integration", [...ONSHAPE_INTEGRATION_IDS])
+    .limit(1)
     .maybeSingle();
   if (externalSource.data) {
     itemUpdate.name = undefined;
