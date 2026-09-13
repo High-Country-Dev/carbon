@@ -66,9 +66,22 @@
     {
       "slug": "docs/integrations/cad",
       "title": "CAD",
-      "description": "Sync CAD data from Onshape into Carbon.",
+      "description": "Push CAD data from Onshape into Carbon.",
       "keywords": ["cad", "docs", "integrations"],
-      "headings": ["Onshape", "Related"]
+      "headings": [
+        "Two Onshape integrations",
+        "Set up the Onshape application",
+        "Connect a company",
+        "The Carbon panel in Onshape",
+        "Parts / Assembly",
+        "Review before anything is written",
+        "Push a part",
+        "Push an assembly",
+        "Push a release",
+        "Settings",
+        "Troubleshooting the panel",
+        "Related"
+      ]
     },
     {
       "slug": "docs/integrations/email",

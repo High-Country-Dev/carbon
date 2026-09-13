@@ -84,10 +84,16 @@ Jira OAuth client id.
 Jira OAuth client secret.
 Slack OAuth client id.
 Slack OAuth client secret.
-Onshape OAuth client id.
+Onshape OAuth client id. Shared by both Onshape integrations; neither card appears without it.
 Onshape OAuth client secret.
+Callback for the pull integration (`onshape`): `https://<erp-host>/api/integrations/onshape/oauth`. Must be registered on the Onshape OAuth application.
+Callback for the panel integration (`onshape-v2`): `https://<erp-host>/api/integrations/onshape-v2/oauth`. Register it as a second redirect URI on the same Onshape application. Without it the Onshape V2 Connect button fails with "Onshape isn't configured".
 Currency exchange-rate feed.
 Address autocomplete.
+
+The Onshape panel also needs an extension registered on the Onshape application and the
+panel's users subscribed to it — see `docs/integrations/cad`. Panel sessions and push
+reviews are held in Redis, so `REDIS_URL` is required for the panel to work.
 
 ## Infrastructure — SST
 
