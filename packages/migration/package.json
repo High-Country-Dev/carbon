@@ -1,0 +1,32 @@
+{
+  "name": "@carbon/migration",
+  "dependencies": {
+    "@carbon/database": "workspace:*",
+    "kysely": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@carbon/config": "workspace:*",
+    "@types/node": "catalog:",
+    "rimraf": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./gaps": "./src/gaps/index.ts",
+    "./plan": "./src/plan.ts",
+    "./sources": "./src/sources/index.ts"
+  },
+  "private": true,
+  "scripts": {
+    "clean": "rimraf .turbo node_modules dist",
+    "generate:gaps": "tsx scripts/generate-gaps.ts",
+    "lint": "biome lint --write ",
+    "test": "vitest run",
+    "typecheck": "tsgo --noEmit"
+  },
+  "sideEffects": false,
+  "version": "0.0.0"
+}

@@ -3,7 +3,7 @@ title: Migrate from NetSuite
 description: Move your NetSuite account into Carbon in one click — chart of accounts, customers, suppliers, items, bills of material, stock on hand and open orders — with a preview first and a one-click undo.
 ---
 
-Carbon can read your NetSuite account and write it into a Carbon company: the chart of accounts, your customers and suppliers with their addresses and contacts, your items with their costs and prices, your bills of material, what you have on hand, and the sales and purchase orders that are still open. You run it from **Settings → Migrate from NetSuite**.
+Carbon can read your NetSuite account and write it into a Carbon company: the chart of accounts, your customers and suppliers with their addresses and contacts, your items with their costs and prices, your bills of material, what you have on hand, and the sales and purchase orders that are still open. You run it from **Settings → Migrate**.
 
 Two things are true throughout, and both are deliberate:
 
@@ -33,7 +33,7 @@ Set the integration role's Subsidiary Restriction to **All**, and give it read a
 
 ## Preview first
 
-The page offers **"Preview the migration"** and **"Migrate now"**. Preview does the whole thing — reads NetSuite, matches every record to Carbon, writes them — and then throws the write away. It runs the identical code, so what it reports is what a real migration does.
+The NetSuite card on that page offers **"Preview the migration"** and **"Migrate now"**. Preview does the whole thing — reads NetSuite, matches every record to Carbon, writes them — and then throws the write away. It runs the identical code, so what it reports is what a real migration does.
 
 Preview takes a few minutes on a large account. The page shows each phase as it goes, from **"Reading your NetSuite account"** through **"Writing records into Carbon"**, and keeps running if you leave the page.
 
@@ -79,7 +79,7 @@ If your NetSuite account is OneWorld with more than one subsidiary, Carbon stops
 </Callout>
 
 <Callout type="info" title="Who can see this page">
-Migrate from NetSuite sits behind the same gate as Backups, since it writes across a company's whole dataset. On production deployments it is currently limited to Carbon staff; on a local development stack it is open to everyone.
+Migrate sits behind the same gate as Backups, since it writes across a company's whole dataset. On production deployments it is currently limited to Carbon staff; on a local development stack it is open to everyone.
 </Callout>
 
 <AgentContext>

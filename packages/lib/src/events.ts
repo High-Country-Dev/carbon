@@ -226,22 +226,26 @@ export type Events = {
     };
   };
 
-  // NetSuite migration — read a NetSuite account and write it into this company.
-  // Three phases in one durable step: extract (SuiteQL), map (pure), load (one
-  // transaction). Credentials are NOT in the payload: the job resolves them from
-  // the company's NetSuite integration and Supabase Vault, so a secret never
-  // lands in an Inngest event body or its run history.
-  "carbon/netsuite-migration": {
+  // ERP migration — read another system (see @carbon/migration's source
+  // registry) and write it into this company. Three phases in one durable step:
+  // the source reads and maps, the harness loads in one transaction.
+  // Credentials are NOT in the payload: the job resolves them from the company's
+  // integration and Supabase Vault, so a secret never lands in an Inngest event
+  // body or its run history. `sourceId` is a plain string so @carbon/lib does
+  // not depend on @carbon/migration; the job validates it against the registry.
+  "carbon/migration": {
     data: {
       companyId: string;
       userId: string;
       migrationRunId: string;
+      sourceId: string;
       /**
-       * Which OneWorld subsidiary to migrate. Required when the account has more
-       * than one — merging subsidiaries into a single company double-counts
-       * intercompany revenue and inventory, so the job refuses rather than guess.
+       * Which scope to migrate — a NetSuite subsidiary, an accounting tenant.
+       * Required when the source account holds more than one: merging them into
+       * a single company double-counts whatever flows between them, so the job
+       * refuses rather than guess.
        */
-      subsidiaryId?: string | null;
+      scopeId?: string | null;
       /**
        * Read and map, then roll the load back and report what WOULD happen.
        * This is what the preview screen runs, and it is the same code path as
@@ -251,17 +255,16 @@ export type Events = {
     };
   };
 
-  // Keep a completed NetSuite migration — drop the pre-migration snapshot and
-  // clear the marker.
-  "carbon/netsuite-migration-finalize": {
+  // Keep a completed migration — drop the pre-migration snapshot and clear the marker.
+  "carbon/migration-finalize": {
     data: {
       companyId: string;
       migrationRunId: string;
     };
   };
 
-  // Undo a completed NetSuite migration — wipe and reload the pre-migration snapshot.
-  "carbon/netsuite-migration-revert": {
+  // Undo a completed migration — wipe and reload the pre-migration snapshot.
+  "carbon/migration-revert": {
     data: {
       companyId: string;
       userId: string;

@@ -282,7 +282,7 @@ export async function getCompanyRestoreRuns(
 async function readIntegrationMarker(
   client: SupabaseClient<Database>,
   companyId: string,
-  integration: "company-export" | "company-template" | "netsuite-migration"
+  integration: "company-export" | "company-template" | "migration"
 ): Promise<{
   data: { meta: Record<string, unknown>; createdAt: string } | null;
   error: Error | null;
@@ -435,8 +435,10 @@ export async function getCompanyTemplateRun(
 }
 
 export type MigrationRunReport = {
+  /** Which system the data came from — the id of a registered migration source. */
+  sourceId: string;
   accountId: string;
-  subsidiaryId: string | null;
+  scopeId: string | null;
   sandbox: boolean;
   /** Rows written per plan section. */
   counts: Record<
@@ -448,12 +450,13 @@ export type MigrationRunReport = {
   linked: number;
   warnings: string[];
   notes: string[];
-  /** Gap ids plus what they cost THIS account. The prose lives in the catalog. */
+  /** Gap ids plus what they cost THIS account. The prose lives in the source's catalog. */
   gaps: { id: string; count: number | null; examples: string[] }[];
 };
 
-export type NetSuiteMigrationRun = {
+export type MigrationRun = {
   migrationRunId: string;
+  sourceId: string;
   status: "running" | "ready" | "failed" | "reverting";
   startedAt: string | null;
   error: string | null;
@@ -465,36 +468,33 @@ export type NetSuiteMigrationRun = {
    *  there is actually something to put back. */
   hasSnapshot: boolean;
   report: MigrationRunReport | null;
-  /** Set when the NetSuite account has several subsidiaries and one must be picked. */
-  subsidiaryChoices:
+  /** Set when the source account holds several scopes and one must be picked. */
+  scopeChoices:
     | { id: string; name: string; currencyCode: string | null }[]
     | null;
 };
 
 /**
- * The current NetSuite migration marker, or null when none. Written by the
- * netsuite-migration job: absent = no migration is outstanding, "running" = in
- * flight, "ready" = finished and waiting on a keep/revert decision, "reverting" =
- * the undo is in flight, "failed" = it did not land and the user hasn't
- * dismissed it yet.
+ * The current migration marker, or null when none. One per company whatever the
+ * source. Written by the migration job: absent = no migration is outstanding,
+ * "running" = in flight, "ready" = finished and waiting on a keep/revert
+ * decision, "reverting" = the undo is in flight, "failed" = it did not land and
+ * the user hasn't dismissed it yet.
  *
  * The metadata shape is typed here rather than imported from `@carbon/jobs` —
  * the app must not pull job internals (and Node `Buffer` with them) into its
  * bundle.
  */
-export async function getNetSuiteMigrationRun(
+export async function getMigrationRun(
   client: SupabaseClient<Database>,
   companyId: string
-): Promise<{ data: NetSuiteMigrationRun | null; error: Error | null }> {
-  const marker = await readIntegrationMarker(
-    client,
-    companyId,
-    "netsuite-migration"
-  );
+): Promise<{ data: MigrationRun | null; error: Error | null }> {
+  const marker = await readIntegrationMarker(client, companyId, "migration");
   if (marker.error || !marker.data) return { data: null, error: marker.error };
 
   const meta = marker.data.meta as {
     migrationRunId?: string;
+    sourceId?: string;
     status?: "running" | "ready" | "failed" | "reverting";
     startedAt?: string;
     error?: string;
@@ -502,7 +502,7 @@ export async function getNetSuiteMigrationRun(
     snapshotPath?: string;
     dryRun?: boolean;
     report?: MigrationRunReport | null;
-    subsidiaryChoices?:
+    scopeChoices?:
       | { id: string; name: string; currencyCode: string | null }[]
       | null;
   };
@@ -512,6 +512,7 @@ export async function getNetSuiteMigrationRun(
   return {
     data: {
       migrationRunId: meta.migrationRunId ?? "",
+      sourceId: meta.sourceId ?? "",
       status: meta.status ?? "running",
       startedAt: meta.startedAt ?? marker.data.createdAt,
       error: meta.error ?? null,
@@ -519,7 +520,7 @@ export async function getNetSuiteMigrationRun(
       dryRun: Boolean(meta.dryRun),
       hasSnapshot: Boolean(meta.snapshotPath),
       report: meta.report ?? null,
-      subsidiaryChoices: meta.subsidiaryChoices ?? null
+      scopeChoices: meta.scopeChoices ?? null
     },
     error: null
   };

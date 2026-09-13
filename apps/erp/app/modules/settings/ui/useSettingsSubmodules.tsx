@@ -40,10 +40,10 @@ const internalOnlyRoutes = new Set<string>([path.to.companies]);
 const localOrInternalRoutes = new Set<string>([
   path.to.backups,
   path.to.demoData,
-  // A migration replaces a company's data wholesale and carries the same
+  // A migration writes across a company's whole dataset and carries the same
   // unhardened multi-tenant caveats as Backups — it stays internal-only in real
   // deployments while that is true, and open to everyone on a local dev stack.
-  path.to.netsuiteMigration
+  path.to.migrate
 ]);
 
 export default function useSettingsSubmodules() {
@@ -200,8 +200,8 @@ export default function useSettingsSubmodules() {
             icon: <LuFlaskConical />
           },
           {
-            name: t`Migrate from NetSuite`,
-            to: path.to.netsuiteMigration,
+            name: t`Migrate`,
+            to: path.to.migrate,
             role: "employee",
             icon: <LuImport />
           },

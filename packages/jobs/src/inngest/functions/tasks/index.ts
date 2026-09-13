@@ -12,14 +12,14 @@ export {
   companyTemplateFunction,
   companyTemplateRevertFunction
 } from "./company-template";
+export {
+  migrationFinalizeFunction,
+  migrationFunction,
+  migrationRevertFunction
+} from "./migration";
 export { modelCompactFunction } from "./model-compact";
 export { modelOptimizeFunction } from "./model-optimize";
 export { modelThumbnailFunction } from "./model-thumbnail";
-export {
-  netsuiteMigrationFinalizeFunction,
-  netsuiteMigrationFunction,
-  netsuiteMigrationRevertFunction
-} from "./netsuite-migration";
 export { onboardFunction } from "./onboard";
 export { postTransactionFunction } from "./post-transaction";
 export { printJobFunction } from "./print-job";
