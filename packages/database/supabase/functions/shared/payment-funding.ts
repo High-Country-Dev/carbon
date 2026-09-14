@@ -246,6 +246,27 @@ function sourcePrincipal(value: number | null): number {
   return nonnegativeAmount(Number(value), "Settlement document principal");
 }
 
+/**
+ * Settlements written before `sourceAmount` existed (migration
+ * 20260908021155) keep a NULL principal by design and the schema treats them
+ * as valid. Derive it the way those rows were originally relieved: the applied
+ * base converted at the caller's document rate. Rows that MUST carry a
+ * principal (source-linked funding) are enforced by a DB constraint, so a NULL
+ * here can only be a legacy row.
+ */
+function settlementPrincipal(
+  row: { sourceAmount: number | null; appliedAmount: number },
+  exchangeRate: number,
+  decimals: number
+): number {
+  if (row.sourceAmount !== null) return sourcePrincipal(row.sourceAmount);
+  return toDocumentAmount(
+    nonnegativeAmount(Number(row.appliedAmount), "Settlement applied amount"),
+    exchangeRate,
+    decimals
+  );
+}
+
 /** Accumulate first; each adjustment is rounded at its document boundary. */
 export function reduceInvoiceSettlements(
   rows: readonly Pick<SettlementBalanceRow, "sourceAmount" | "appliedAmount" | "discountAmount" | "writeOffAmount">[],
@@ -257,7 +278,7 @@ export function reduceInvoiceSettlements(
   for (const row of rows) {
     const adjustments = nonnegativeAmount(Number(row.discountAmount), "Settlement discount") +
       nonnegativeAmount(Number(row.writeOffAmount), "Settlement write-off");
-    document += sourcePrincipal(row.sourceAmount) + toDocumentAmount(adjustments, exchangeRate, decimals);
+    document += settlementPrincipal(row, exchangeRate, decimals) + toDocumentAmount(adjustments, exchangeRate, decimals);
     base += nonnegativeAmount(Number(row.appliedAmount), "Settlement applied amount") + adjustments;
   }
   return { document: toDocumentAmount(document, 1, decimals), base: round(base) };
@@ -311,12 +332,18 @@ export function remainingFundingSources(
   decimals: ReadonlyMap<string, number>,
   isAR: boolean
 ): FundingSource[] {
-  const consumed = new Map<string, { document: number; base: number }>();
+  // `legacyBase` holds direct applications recorded before `sourceAmount`
+  // existed; it is converted at the source's own rate once that is known below.
+  const consumed = new Map<string, { document: number; base: number; legacyBase: number }>();
   for (const row of consumption) {
     const sourceId = row.sourcePaymentId ?? row.paymentId;
     if (!sourceId) continue;
-    const current = consumed.get(sourceId) ?? { document: 0, base: 0 };
-    current.document += sourcePrincipal(row.sourceAmount);
+    const current = consumed.get(sourceId) ?? { document: 0, base: 0, legacyBase: 0 };
+    if (row.sourceAmount === null && row.sourcePaymentId === null) {
+      current.legacyBase += nonnegativeAmount(Number(row.appliedAmount), "Settlement applied amount");
+    } else {
+      current.document += sourcePrincipal(row.sourceAmount);
+    }
     const fx = Number(row.fxGainLossAmount ?? 0);
     if (!Number.isFinite(fx)) throw new Error("Settlement FX must be finite");
     current.base += nonnegativeAmount(Number(row.appliedAmount), "Settlement applied amount") + (isAR ? 1 : -1) * fx;
@@ -327,7 +354,8 @@ export function remainingFundingSources(
     if (precision == null) throw new Error(`Currency ${payment.currencyCode} requires configured decimal places`);
     const use = consumed.get(payment.id);
     const total = nonnegativeAmount(Number(payment.totalAmount), "Funding document total");
-    const remainingDocument = toDocumentAmount(total - (use?.document ?? 0), 1, precision);
+    const legacyDocument = use ? toDocumentAmount(use.legacyBase, Number(payment.exchangeRate), precision) : 0;
+    const remainingDocument = toDocumentAmount(total - (use?.document ?? 0) - legacyDocument, 1, precision);
     const remainingBase = round(toBaseAmount(total, Number(payment.exchangeRate)) - (use?.base ?? 0));
     if (remainingDocument < 0 || remainingBase < 0 || (remainingDocument === 0 && remainingBase !== 0)) {
       throw new Error(`Invalid remaining funding balance for payment ${payment.id}`);
