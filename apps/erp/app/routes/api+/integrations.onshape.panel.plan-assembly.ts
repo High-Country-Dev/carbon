@@ -3,8 +3,11 @@ import { getCarbonServiceRole } from "@carbon/auth/client.server";
 import type { PlanItemRow } from "@carbon/ee";
 import {
   buildAssemblyPlan,
+  externalIdForAssembly,
+  externalIdForBomLine,
   flattenNodes,
   metadataProperty,
+  normalizeConfiguration,
   parseBomTree,
   parseProperties,
   parsePropertyMap,
@@ -19,6 +22,7 @@ import {
   loadPartCustomFieldDefinitions,
   loadPlanOptions,
   OnshapeWVMType,
+  onshapeFailure,
   selectInBatches
 } from "@carbon/ee/onshape";
 import type { ActionFunctionArgs } from "react-router";
@@ -35,7 +39,9 @@ const payloadSchema = z.object({
   wvId: z.string().min(1),
   elementId: z.string().min(1),
   /** Omitted by older panels, which only ever pushed the whole tree. */
-  depth: z.enum(["all", "top"]).default("all")
+  depth: z.enum(["all", "top"]).default("all"),
+  /** The assembly configuration the panel was opened in; absent = default. */
+  configuration: z.string().nullish()
 });
 
 /**
@@ -80,6 +86,7 @@ export async function action({ request }: ActionFunctionArgs) {
     return data({ error: "Invalid plan payload" }, { status: 400 });
   }
   const { documentId, wv, wvId, elementId, depth } = parsed.data;
+  const configuration = normalizeConfiguration(parsed.data.configuration);
 
   const onshape = await getOnshapeClient(client, companyId, userId);
   if (onshape.error || !onshape.client) {
@@ -97,14 +104,14 @@ export async function action({ request }: ActionFunctionArgs) {
 
   let bom: unknown;
   try {
-    bom = await onshape.client.getBillOfMaterialsIn(document, elementId);
-  } catch (error) {
-    return data(
-      {
-        error: error instanceof Error ? error.message : "Onshape request failed"
-      },
-      { status: 502 }
+    bom = await onshape.client.getBillOfMaterialsIn(
+      document,
+      elementId,
+      configuration
     );
+  } catch (error) {
+    const failure = onshapeFailure(error, "bom");
+    return data(failure.body, { status: failure.status });
   }
 
   // The indented BOM never carries the assembly's own row; its identity comes
@@ -120,7 +127,8 @@ export async function action({ request }: ActionFunctionArgs) {
   try {
     elementMetadata = await onshape.client.getElementMetadata(
       document,
-      elementId
+      elementId,
+      configuration
     );
     rootPartNumber =
       metadataProperty(elementMetadata, "Part number") ?? rootPartNumber;
@@ -152,13 +160,21 @@ export async function action({ request }: ActionFunctionArgs) {
     const subAssemblies = lines.filter(
       (node) => node.children.length > 0
     ).length;
+    /*
+     * The advice has to be something the panel can actually do. It used to say
+     * "push the sub-assemblies first, then this one", which could not work:
+     * this count is over the WHOLE tree regardless of what is already in
+     * Carbon, so the parent is refused just the same afterwards. A level-only
+     * push is the real way out, and `code` lets the panel offer it as a button.
+     */
     return data(
       {
+        code: "too-large" as const,
         error:
-          `This assembly has ${partNumbers.length} distinct parts, and one push handles up to ${MAX_PLAN_PARTS}. ` +
+          `It has ${partNumbers.length.toLocaleString("en-US")} distinct part numbers; one push handles ${MAX_PLAN_PARTS.toLocaleString("en-US")}. ` +
           (subAssemblies > 0
-            ? `Push its ${subAssemblies} sub-assemblies from their own tabs first, then push this one — Carbon links each level to the one below it.`
-            : "Split it into sub-assemblies in Onshape, push those first, then push this one.")
+            ? `Push this level on its own — its ${subAssemblies} sub-assemblies become single lines, and each can then be pushed from its own tab in Onshape.`
+            : "Split it into sub-assemblies in Onshape, then push this level on its own.")
       },
       { status: 422 }
     );
@@ -208,11 +224,46 @@ export async function action({ request }: ActionFunctionArgs) {
     .filter((item) => parentPartNumbers.has(item.readableId))
     .map((item) => item.id);
 
+  // The links the status badges read, so the review can tell a reuse the user
+  // already linked from one found by part number alone (a conflict).
+  const linkExternalIds = [
+    ...new Set(
+      [
+        externalIdForAssembly(documentId, elementId, configuration),
+        ...flattenNodes(lines).map((node) =>
+          externalIdForBomLine(node.itemSource ?? null)
+        )
+      ].filter((id): id is string => !!id)
+    )
+  ];
+
   const serviceRole = getCarbonServiceRole();
-  const [options, methodByItemId] = await Promise.all([
+  const [options, methodByItemId, links] = await Promise.all([
     loadPlanOptions(client, companyId),
-    loadActiveMakeMethods(client, companyId, parentItemIds)
+    loadActiveMakeMethods(client, companyId, parentItemIds),
+    selectInBatches(linkExternalIds, (batch) =>
+      client
+        .from("externalIntegrationMapping")
+        .select("entityId, externalId")
+        .eq("companyId", companyId)
+        .eq("integration", "onshape")
+        .eq("entityType", "item")
+        .in("externalId", batch)
+    )
   ]);
+  // A failed read would mark every reuse a conflict; say so instead.
+  if (links.error) {
+    return data(
+      { error: "Carbon couldn't read its Onshape links. Try again." },
+      { status: 500 }
+    );
+  }
+  const linkedItemIdByExternalId = new Map<string, string>();
+  for (const link of links.data ?? []) {
+    if (link.externalId) {
+      linkedItemIdByExternalId.set(link.externalId, link.entityId);
+    }
+  }
   let ownership: Awaited<ReturnType<typeof loadMethodLineOwnership>>;
   try {
     ownership = await loadMethodLineOwnership(
@@ -250,7 +301,9 @@ export async function action({ request }: ActionFunctionArgs) {
     mappedLinesByMethodId: ownership.mapped,
     manualLinesByMethodId: ownership.manual,
     options,
-    depth
+    depth,
+    linkedItemIdByExternalId,
+    configuration
   });
 
   // ---- Root custom fields (property map) ---------------------------------
@@ -321,7 +374,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const created = await createPanelPlan({ companyId, userId, plan: stored });
   if (!created) {
     return data(
-      { error: "Could not save the review; try again" },
+      { error: "Carbon couldn't save this review. Try again." },
       { status: 503 }
     );
   }

@@ -9,9 +9,11 @@ import { getLogger } from "@carbon/logger";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import axios from "axios";
 import {
+  IntegrationSecretUnavailableError,
   persistIntegrationSecrets,
   resolveIntegrationSecrets
 } from "../../integrations/secrets";
+import { normalizeConfiguration } from "../panel/status";
 import type { OnshapeDocument } from "./document.type";
 import type { OnshapeElementType } from "./element.type";
 
@@ -147,6 +149,15 @@ export interface OnshapeRevision {
   configuration?: string | null;
   isObsolete?: boolean;
   [key: string]: unknown;
+}
+
+/**
+ * `&configuration=…` for a non-default configuration, nothing for the default:
+ * an unconfigured read keeps the URL (and so the dev cache key) it always had.
+ */
+function configurationQuery(configuration?: string | null): string {
+  const normalized = normalizeConfiguration(configuration);
+  return normalized ? `&configuration=${encodeURIComponent(normalized)}` : "";
 }
 
 // Typed API error so callers can detect rate limiting (status 429) and honor
@@ -549,11 +560,12 @@ export class OnshapeClient {
   /** Indented multi-level BOM of an assembly at w/v/m. One call. */
   async getBillOfMaterialsIn(
     document: OnshapeDocument,
-    elementId: string
+    elementId: string,
+    configuration?: string | null
   ): Promise<Record<string, unknown>> {
     return this.request<Record<string, unknown>>(
       "GET",
-      `/api/v10/assemblies/d/${document.documentId}/${document.wvm}/${document.wvmId}/e/${elementId}/bom?indented=true&multiLevel=true&generateIfAbsent=true&onlyVisibleColumns=false&includeItemMicroversions=true&includeTopLevelAssemblyRow=true&thumbnail=false`
+      `/api/v10/assemblies/d/${document.documentId}/${document.wvm}/${document.wvmId}/e/${elementId}/bom?indented=true&multiLevel=true&generateIfAbsent=true&onlyVisibleColumns=false&includeItemMicroversions=true&includeTopLevelAssemblyRow=true&thumbnail=false${configurationQuery(configuration)}`
     );
   }
 
@@ -563,11 +575,12 @@ export class OnshapeClient {
    */
   async getElementMetadata(
     document: OnshapeDocument,
-    elementId: string
+    elementId: string,
+    configuration?: string | null
   ): Promise<Record<string, unknown>> {
     return this.request<Record<string, unknown>>(
       "GET",
-      `/api/v10/metadata/d/${document.documentId}/${document.wvm}/${document.wvmId}/e/${elementId}?inferMetadataOwner=false&depth=1`
+      `/api/v10/metadata/d/${document.documentId}/${document.wvm}/${document.wvmId}/e/${elementId}?inferMetadataOwner=false&depth=1${configurationQuery(configuration)}`
     );
   }
 
@@ -580,11 +593,12 @@ export class OnshapeClient {
    */
   async getElementMetadataWithParts(
     document: OnshapeDocument,
-    elementId: string
+    elementId: string,
+    configuration?: string | null
   ): Promise<Record<string, unknown>> {
     return this.request<Record<string, unknown>>(
       "GET",
-      `/api/v10/metadata/d/${document.documentId}/${document.wvm}/${document.wvmId}/e/${elementId}?inferMetadataOwner=false&depth=2`
+      `/api/v10/metadata/d/${document.documentId}/${document.wvm}/${document.wvmId}/e/${elementId}?inferMetadataOwner=false&depth=2${configurationQuery(configuration)}`
     );
   }
 
@@ -592,22 +606,24 @@ export class OnshapeClient {
   async getPartMetadata(
     document: OnshapeDocument,
     elementId: string,
-    partId: string
+    partId: string,
+    configuration?: string | null
   ): Promise<Record<string, unknown>> {
     return this.request<Record<string, unknown>>(
       "GET",
-      `/api/v10/metadata/d/${document.documentId}/${document.wvm}/${document.wvmId}/e/${elementId}/p/${encodeURIComponent(partId)}?inferMetadataOwner=false`
+      `/api/v10/metadata/d/${document.documentId}/${document.wvm}/${document.wvmId}/e/${elementId}/p/${encodeURIComponent(partId)}?inferMetadataOwner=false${configurationQuery(configuration)}`
     );
   }
 
   /** Parts of one element at a workspace, version or microversion. One call. */
   async getPartsInElement(
     document: OnshapeDocument,
-    elementId: string
+    elementId: string,
+    configuration?: string | null
   ): Promise<OnshapeElementPart[]> {
     return this.request<OnshapeElementPart[]>(
       "GET",
-      `/api/v10/parts/d/${document.documentId}/${document.wvm}/${document.wvmId}/e/${elementId}?includePropertyDefaults=true`
+      `/api/v10/parts/d/${document.documentId}/${document.wvm}/${document.wvmId}/e/${elementId}?includePropertyDefaults=true${configurationQuery(configuration)}`
     );
   }
 
@@ -866,8 +882,7 @@ export class OnshapeClient {
  */
 const REFRESH_MARGIN_SECONDS = 120;
 const REFRESH_LOCK_TTL_SECONDS = 20;
-const REFRESH_WAIT_ATTEMPTS = 20;
-const REFRESH_WAIT_MS = 150;
+const REFRESH_WAIT_MS = 250;
 
 export async function getOnshapeClient(
   client: SupabaseClient<Database>,
@@ -876,31 +891,39 @@ export async function getOnshapeClient(
 ): Promise<
   { client: OnshapeClient; error: null } | { client: null; error: string }
 > {
+  const integrationId = "onshape";
   const integration = await client
     .from("companyIntegration")
     .select("*")
-    .eq("id", "onshape")
+    .eq("id", integrationId)
     .eq("companyId", companyId)
     .maybeSingle();
 
   if (integration.error || !integration.data) {
     return { client: null, error: "Onshape integration not found" };
   }
-  // Captured so the refresh closure below keeps the narrowing.
-  const integrationRow = integration.data;
-
   // Secret material (accessToken/refreshToken) lives in Supabase Vault; merge it
   // back so we read `metadata.credentials` the same as before. Vault RPCs require
   // the service-role client (the passed `client` may be RLS-scoped).
   const { getCarbonServiceRole } = await import("@carbon/auth/client.server");
   const serviceRole = getCarbonServiceRole();
-  const metadata = (await resolveIntegrationSecrets(
-    serviceRole,
-    companyId,
-    "onshape",
-    integration.data.metadata,
-    integration.data.secretRef
-  )) as Record<string, any>;
+  // A row with no vaulted secret is a company that saved panel settings but
+  // never connected: that is "not connected", not a server error.
+  let metadata: Record<string, any>;
+  try {
+    metadata = (await resolveIntegrationSecrets(
+      serviceRole,
+      companyId,
+      integrationId,
+      integration.data.metadata,
+      integration.data.secretRef
+    )) as Record<string, any>;
+  } catch (error) {
+    if (error instanceof IntegrationSecretUnavailableError) {
+      return { client: null, error: "Onshape credentials not found" };
+    }
+    throw error;
+  }
   const credentials = metadata?.credentials;
 
   if (!credentials?.accessToken) {
@@ -922,25 +945,61 @@ export async function getOnshapeClient(
    */
   const refreshNow = async (): Promise<string | null> => {
     if (!credentials.refreshToken) return null;
-    const lockKey = `onshape-token-refresh:${companyId}`;
+    // One refresh at a time per company connection: Onshape rotates the
+    // refresh token, so a second concurrent refresh would spend a dead one.
+    const lockKey = `onshape-token-refresh:${companyId}:${integrationId}`;
     const held = await redis
       .set(lockKey, "1", "EX", REFRESH_LOCK_TTL_SECONDS, "NX")
       .catch(() => null);
 
     if (held !== "OK") {
-      // Someone else is refreshing. Wait for them and re-read what they
-      // stored rather than spending our own (now stale) refresh token.
-      for (let attempt = 0; attempt < REFRESH_WAIT_ATTEMPTS; attempt++) {
-        await new Promise((resolve) => setTimeout(resolve, REFRESH_WAIT_MS));
+      /*
+       * Someone else is refreshing. Wait for them and re-read what they stored
+       * rather than spending our own (now stale) refresh token.
+       *
+       * The wait follows the lock holder, not a fixed count of polls. It used
+       * to give up after about three seconds, which an Onshape token exchange
+       * plus a vault write can outlast — and the loser then reported the
+       * connection as missing. In practice that was the panel's first open
+       * after a token expired: two tabs read at once, and one showed "Onshape
+       * is not connected" while the other loaded, until Retry.
+       */
+      /*
+       * Re-read the ROW, not the copy loaded when this request started. The
+       * resolver only reaches the database for vaulted secrets; given the old
+       * copy, anything still inline came back unchanged, so a waiter never saw
+       * the holder's new token and reported the connection as missing.
+       */
+      const readToken = async () => {
+        const row = await serviceRole
+          .from("companyIntegration")
+          .select("metadata, secretRef")
+          .eq("id", integrationId)
+          .eq("companyId", companyId)
+          .maybeSingle();
+        if (row.error || !row.data) return null;
         const current = (await resolveIntegrationSecrets(
           serviceRole,
           companyId,
-          "onshape",
-          integrationRow.metadata,
-          integrationRow.secretRef
+          integrationId,
+          row.data.metadata,
+          row.data.secretRef
         ).catch(() => null)) as Record<string, any> | null;
         const token = current?.credentials?.accessToken;
-        if (token && token !== accessToken) return token;
+        return token && token !== accessToken ? (token as string) : null;
+      };
+      const deadline = Date.now() + REFRESH_LOCK_TTL_SECONDS * 1000;
+      while (Date.now() < deadline) {
+        await new Promise((resolve) => setTimeout(resolve, REFRESH_WAIT_MS));
+        const token = await readToken();
+        if (token) return token;
+        // Unreadable lock state reads as still held: waiting is the safe side.
+        const stillHeld = await redis.exists(lockKey).catch(() => 1);
+        if (!stillHeld) {
+          // Released between the read above and now: one last look, since the
+          // holder persists before it releases.
+          return readToken();
+        }
       }
       return null;
     }
@@ -952,7 +1011,7 @@ export async function getOnshapeClient(
       // Onshape tells us how long the token is good for; assuming an hour is
       // how a stored expiry ends up outliving the real credential.
       const lifetimeSeconds = refreshed.expires_in ?? 3600;
-      await persistIntegrationSecrets(serviceRole, companyId, "onshape", {
+      await persistIntegrationSecrets(serviceRole, companyId, integrationId, {
         ...metadata,
         credentials: {
           ...credentials,

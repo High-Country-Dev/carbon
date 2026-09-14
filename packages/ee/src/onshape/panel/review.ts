@@ -3,17 +3,10 @@ import type {
   AssemblyPlanMethod,
   ChangeNoticeEdit,
   ItemEdit,
-  ItemMethodType,
   PartPlan,
   PartPlanRow,
   ProposedItem,
   ReleasePlan
-} from "./plan";
-import {
-  ITEM_METHOD_TYPES,
-  ITEM_REPLENISHMENT_SYSTEMS,
-  ITEM_TRACKING_TYPES,
-  VALID_METHOD_TYPES_BY_REPLENISHMENT
 } from "./plan";
 import type { PlanCustomField } from "./properties";
 import { BOOLEAN_TRUE, CUSTOM_FIELD_DATA_TYPES } from "./properties";
@@ -31,14 +24,6 @@ import type { PanelPartStatus } from "./status";
  * an untouched row sends nothing. The key is the plan's own: partId for
  * parts, part number for assemblies and releases.
  */
-
-export type EditableItemField =
-  | "name"
-  | "description"
-  | "replenishmentSystem"
-  | "defaultMethodType"
-  | "itemTrackingType"
-  | "unitOfMeasureCode";
 
 type ReviewBase = {
   planId: string;
@@ -168,118 +153,6 @@ export function editedItem(
   return item;
 }
 
-function isOneOf<T extends string>(
-  list: readonly T[],
-  value: string
-): value is T {
-  return (list as readonly string[]).includes(value);
-}
-
-/** Only the fields where `next` departs from the proposal. */
-function diffItem(proposed: ProposedItem, next: ProposedItem): ItemEdit {
-  const edit: ItemEdit = {};
-  if (next.name !== proposed.name) edit.name = next.name;
-  if (next.description !== proposed.description)
-    edit.description = next.description;
-  if (next.replenishmentSystem !== proposed.replenishmentSystem)
-    edit.replenishmentSystem = next.replenishmentSystem;
-  if (next.defaultMethodType !== proposed.defaultMethodType)
-    edit.defaultMethodType = next.defaultMethodType;
-  if (next.itemTrackingType !== proposed.itemTrackingType)
-    edit.itemTrackingType = next.itemTrackingType;
-  if (next.unitOfMeasureCode !== proposed.unitOfMeasureCode)
-    edit.unitOfMeasureCode = next.unitOfMeasureCode;
-  return edit;
-}
-
-/**
- * Record one field change for one row, keeping `edits` sparse: a value typed
- * back to the proposal drops out of the edit, and an edit with nothing left
- * drops out of the record. Text is stored as typed — the server trims — so a
- * trailing space survives while the user is still writing the next word; an
- * empty description means "none", as the proposal itself encodes it.
- *
- * Changing the replenishment system re-checks the ERP's interlock: when the
- * current default method is not allowed for the new system, the method moves
- * to the first allowed one, the same coercion the Part form applies. An enum
- * value the plan does not know is ignored rather than sent to be refused.
- */
-export function applyItemEdit(
-  edits: Record<string, ItemEdit>,
-  key: string,
-  proposed: ProposedItem,
-  field: EditableItemField,
-  value: string
-): Record<string, ItemEdit> {
-  const next: ProposedItem = { ...editedItem(proposed, edits[key]) };
-  switch (field) {
-    case "name":
-      next.name = value;
-      break;
-    case "description":
-      next.description = value === "" ? null : value;
-      break;
-    case "replenishmentSystem": {
-      if (!isOneOf(ITEM_REPLENISHMENT_SYSTEMS, value)) return edits;
-      next.replenishmentSystem = value;
-      const allowed = VALID_METHOD_TYPES_BY_REPLENISHMENT[value];
-      const [first] = allowed;
-      if (first && !allowed.includes(next.defaultMethodType)) {
-        next.defaultMethodType = first;
-      }
-      break;
-    }
-    case "defaultMethodType":
-      if (!isOneOf(ITEM_METHOD_TYPES, value)) return edits;
-      next.defaultMethodType = value;
-      break;
-    case "itemTrackingType":
-      if (!isOneOf(ITEM_TRACKING_TYPES, value)) return edits;
-      next.itemTrackingType = value;
-      break;
-    case "unitOfMeasureCode":
-      next.unitOfMeasureCode = value;
-      break;
-  }
-
-  const edit = diffItem(proposed, next);
-  // Custom-field edits live on the same entry (applyCustomFieldEdit): an
-  // item field typed back to the proposal must not drop them with its diff.
-  const customFields = edits[key]?.customFields;
-  if (customFields && Object.keys(customFields).length > 0) {
-    edit.customFields = customFields;
-  }
-  const out: Record<string, ItemEdit> = { ...edits };
-  if (Object.keys(edit).length === 0) delete out[key];
-  else out[key] = edit;
-  return out;
-}
-
-/**
- * The plan's value as the editor's input string. A Yes/No field holds what
- * the ERP's checkbox posts — BOOLEAN_TRUE when ticked and nothing at all
- * otherwise (properties.ts) — so an unticked one reads as unset, not "no".
- */
-export function customFieldInputValue(
-  field: Pick<PlanCustomField, "value" | "dataTypeId">
-): string {
-  if (field.dataTypeId === CUSTOM_FIELD_DATA_TYPES.boolean) {
-    return field.value === BOOLEAN_TRUE || field.value === true ? "yes" : "";
-  }
-  if (field.value === null) return "";
-  if (typeof field.value === "boolean") return field.value ? "yes" : "no";
-  return String(field.value);
-}
-
-/** What a field's editor shows: the typed edit when present, else the plan. */
-export function customFieldEditValue(
-  field: PlanCustomField,
-  customFields: Record<string, unknown> | null | undefined
-): string {
-  const raw = customFields?.[field.fieldId];
-  return typeof raw === "string" ? raw : customFieldInputValue(field);
-}
-
 /**
  * A mapped value as review text; "—" when nothing will be written. A Yes/No
  * field stores BOOLEAN_TRUE or no key, so the raw "on" never reaches the
@@ -294,54 +167,6 @@ export function customFieldDisplayValue(
   if (field.value === null) return "—";
   if (typeof field.value === "boolean") return field.value ? "Yes" : "No";
   return String(field.value);
-}
-
-/**
- * Record one custom-field change for one row, sparse like applyItemEdit: a
- * value typed back to the plan's drops out, and an entry with nothing left
- * drops out of the record. Only `default`-mode fields of the reviewed plan
- * take an edit — an owned value is Onshape's, and the server refuses the
- * edit anyway (mergeCustomFieldEdits). Values stay the strings the inputs
- * produce; the server coerces them against the field's type at apply.
- */
-export function applyCustomFieldEdit(
-  edits: Record<string, ItemEdit>,
-  key: string,
-  fields: PlanCustomField[],
-  fieldId: string,
-  value: string
-): Record<string, ItemEdit> {
-  const field = fields.find((f) => f.fieldId === fieldId);
-  if (!field || field.mode === "owned") return edits;
-  const customFields = { ...edits[key]?.customFields };
-  if (value === customFieldInputValue(field)) delete customFields[fieldId];
-  else customFields[fieldId] = value;
-  const entry: ItemEdit = { ...edits[key] };
-  if (Object.keys(customFields).length === 0) delete entry.customFields;
-  else entry.customFields = customFields;
-  const out: Record<string, ItemEdit> = { ...edits };
-  if (Object.keys(entry).length === 0) delete out[key];
-  else out[key] = entry;
-  return out;
-}
-
-/** The method choices the editor offers for the current replenishment. */
-export function methodTypesFor(
-  item: Pick<ProposedItem, "replenishmentSystem">
-): readonly ItemMethodType[] {
-  return VALID_METHOD_TYPES_BY_REPLENISHMENT[item.replenishmentSystem];
-}
-
-/** A new Set with `key` present or absent — state is never mutated. */
-export function withMember(
-  set: Set<string>,
-  key: string,
-  present: boolean
-): Set<string> {
-  const next = new Set(set);
-  if (present) next.add(key);
-  else next.delete(key);
-  return next;
 }
 
 // ---------------------------------------------------------------------------
@@ -481,17 +306,6 @@ export function indexFieldErrors(
   return out;
 }
 
-/** Errors for `key` are stale once the user edits that row again. */
-export function clearFieldErrors(
-  fieldErrors: Record<string, string[]>,
-  key: string
-): Record<string, string[]> {
-  if (!(key in fieldErrors)) return fieldErrors;
-  const out = { ...fieldErrors };
-  delete out[key];
-  return out;
-}
-
 /**
  * plan-release reports assemblies whose BOM could not be read (their lines
  * are stored empty rather than failing the plan). The panel renders them as
@@ -518,9 +332,14 @@ export function normalizeWarnings(value: unknown): string[] {
 // Rendering helpers
 // ---------------------------------------------------------------------------
 
+/**
+ * `warning`: this method will NOT be written — the reviewer must see it before
+ * pushing. `notice`: it will be written, into a new Draft version, so nothing
+ * live changes until someone releases it. Neither is an error.
+ */
 export type MethodDescription = {
   text: string;
-  tone: "normal" | "muted" | "destructive";
+  tone: "normal" | "muted" | "notice" | "warning";
 };
 
 /**
@@ -536,25 +355,30 @@ export function describeMethod(
   if (excluded.has(parent)) {
     return { text: `${parent} · excluded`, tone: "muted" };
   }
-  if (method.status === "active") {
-    return {
-      text: `${parent} · released in Carbon — lines will not be applied`,
-      tone: "destructive"
-    };
-  }
   if (method.status === "missing") {
-    return { text: `${parent} · no make method`, tone: "destructive" };
+    return {
+      text: `${parent} · no make method in Carbon, so its lines won't be written`,
+      tone: "warning"
+    };
   }
   const added = method.writes.filter(
     (line) => !excluded.has(line.partNumber)
   ).length;
+  const counts =
+    `${added} added, ${method.replaces.length} replaced, ` +
+    `${method.keeps.length} manual kept`;
+  // A released method is not skipped: the push writes a new Draft version of
+  // it (see `ensureDraftMakeMethod`). This used to say "lines will not be
+  // applied", which stopped being true when that landed — and told reviewers
+  // to expect a no-op from a push that does write.
+  if (method.status === "active") {
+    return {
+      text: `${parent} · released in Carbon — new Draft version: ${counts}`,
+      tone: "notice"
+    };
+  }
   const label = method.status === "new" ? "new method" : "Draft";
-  return {
-    text:
-      `${parent} · ${label}: ${added} added, ${method.replaces.length} replaced, ` +
-      `${method.keeps.length} manual kept`,
-    tone: "normal"
-  };
+  return { text: `${parent} · ${label}: ${counts}`, tone: "normal" };
 }
 
 export type PartApplyResult = {

@@ -126,6 +126,8 @@ export async function action({ request }: ActionFunctionArgs) {
   }
   const plan: PartPlan = stored.plan;
   const { documentId, wv, wvId, elementId, options } = plan;
+  // Absent on a plan stored before configurations were considered: default.
+  const configuration = plan.configuration ?? null;
 
   const rowByPartId = new Map(plan.rows.map((row) => [row.partId, row]));
   const selectedRows = selected
@@ -515,7 +517,12 @@ export async function action({ request }: ActionFunctionArgs) {
 
     // Upsert the mapping: one row per item, one per external part. The delete
     // by entityId OR externalId is what the uniqueness constraints rely on.
-    const externalId = externalIdForPart(documentId, elementId, partId);
+    const externalId = externalIdForPart(
+      documentId,
+      elementId,
+      partId,
+      configuration
+    );
     const now = datetime.timestamp();
     // Both deletes must land before the insert. A second row for the same
     // item makes the owned-field lock's `.maybeSingle()` error, which
@@ -555,6 +562,7 @@ export async function action({ request }: ActionFunctionArgs) {
         documentId,
         elementId,
         partId,
+        configuration,
         wv,
         wvId,
         // The plan-time microversion: the only "unchanged" signal a later
@@ -598,6 +606,7 @@ export async function action({ request }: ActionFunctionArgs) {
           elementId,
           elementKind: "partstudio",
           partId,
+          ...(configuration ? { configuration } : {}),
           assetBaseName: row.partNumber ?? row.name
         },
         { id: `${planId}:${itemId}:${elementId}` }

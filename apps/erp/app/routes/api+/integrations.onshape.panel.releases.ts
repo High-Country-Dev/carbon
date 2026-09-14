@@ -5,7 +5,11 @@ import {
   isModelReleaseItem,
   resolveReleaseStates
 } from "@carbon/ee";
-import { getOnshapeClient, selectInBatches } from "@carbon/ee/onshape";
+import {
+  getOnshapeClient,
+  onshapeFailure,
+  selectInBatches
+} from "@carbon/ee/onshape";
 import type { LoaderFunctionArgs } from "react-router";
 import { data } from "react-router";
 
@@ -46,12 +50,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   try {
     revisions = await onshape.client.getDocumentRevisions(documentId);
   } catch (error) {
-    return data(
-      {
-        error: error instanceof Error ? error.message : "Onshape request failed"
-      },
-      { status: 502 }
-    );
+    const failure = onshapeFailure(error);
+    return data(failure.body, { status: failure.status });
   }
 
   const releases = groupRevisionsIntoReleases(revisions.items ?? []).slice(

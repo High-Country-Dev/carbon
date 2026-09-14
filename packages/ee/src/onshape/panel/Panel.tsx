@@ -3,17 +3,8 @@ import {
   AlertDescription,
   AlertTitle,
   Button,
-  Checkbox,
   cn,
   HStack,
-  Input,
-  Label,
-  PulsingDot,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
   Skeleton,
   Spinner,
   Status,
@@ -21,15 +12,11 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-  ToggleGroup,
-  ToggleGroupItem,
-  toast,
   VStack
 } from "@carbon/react";
 import type { ReactNode } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  LuArrowRight,
   LuChevronRight,
   LuCircleCheck,
   LuCircleDashed,
@@ -37,45 +24,23 @@ import {
   LuRefreshCw,
   LuTriangleAlert
 } from "react-icons/lu";
-import {
-  bomParentIndexes,
-  buildBomViewTree,
-  flattenBomView,
-  visibleBomRows
-} from "./bom-view";
+import { bomParentIndexes, buildBomViewTree, visibleBomRows } from "./bom-view";
 import type { OnshapePanelContext } from "./messages";
 import { isPanelSessionMessage, postApplicationInit } from "./messages";
 import type {
   AssemblyPlan,
   AssemblyPlanDepth,
-  ItemEdit,
   PartPlan,
   PartPlanRow,
-  PlanOptions,
   ProposedItem,
   ReleasePlan,
   ReleasePlanItem
 } from "./plan";
-import { ITEM_REPLENISHMENT_SYSTEMS, ITEM_TRACKING_TYPES } from "./plan";
-import type { OnshapePushDefaults } from "./preferences";
-import { pushDefaultsEqual, reconcilePushDefaults } from "./preferences";
-import type {
-  PlanCustomField,
-  PlanCustomFieldDefinition,
-  PropertyMapEntry,
-  UnmappedProperty
-} from "./properties";
-import {
-  CUSTOM_FIELD_DATA_TYPES,
-  MAPPABLE_VALUE_TYPES,
-  propertyMapEqual
-} from "./properties";
+import type { PlanCustomField } from "./properties";
 import type { PanelRelease } from "./releases";
 import type {
   ApplyFieldError,
   AssemblyReview,
-  EditableItemField,
-  MethodDescription,
   PartApplyResult,
   PartReview,
   ReleaseReview,
@@ -83,20 +48,13 @@ import type {
 } from "./review";
 import {
   applyCount,
-  applyCustomFieldEdit,
-  applyItemEdit,
   applyRequestBody,
-  clearFieldErrors,
   createReview,
   customFieldDisplayValue,
-  customFieldEditValue,
   describeMethod,
-  editedItem,
   indexFieldErrors,
-  methodTypesFor,
   normalizeWarnings,
-  patchPartStatuses,
-  withMember
+  patchPartStatuses
 } from "./review";
 import {
   clearPanelSessionToken,
@@ -123,6 +81,12 @@ export type PanelAssemblyStatus = {
   root: {
     partNumber: string | null;
     name: string | null;
+    /**
+     * Onshape's element metadata could not be read, so a null part number
+     * says nothing about the assembly itself. Optional so an older status
+     * response still type-checks.
+     */
+    identityUnavailable?: boolean;
     state: "linked" | "matched" | "missing";
     itemId: string | null;
     lastSyncedAt: string | null;
@@ -137,119 +101,57 @@ export type PanelAssemblyStatus = {
  * cursor left them, and the list does not collapse and reflow. Only a first
  * read has nothing to show, and that is the one case that draws a skeleton.
  */
+/**
+ * Why a read failed. `forbidden` is the one failure a Retry cannot fix and the
+ * one that is not an error in anything: it renders as a warning naming the
+ * permission problem, with no Retry to press.
+ */
+type LoadFailure = { message: string; forbidden: boolean };
+
+/*
+ * `refreshFailure` is a Refresh that failed while rows were already on screen.
+ * The rows stay: a transient blip used to replace a hundred-row BOM with an
+ * error, destroying exactly the thing the user was reading.
+ */
 type PanelStatusState =
   | { status: "idle" }
   | { status: "loading" }
-  | { status: "ready"; rows: PanelPartStatus[]; refreshing?: boolean }
+  | {
+      status: "ready";
+      rows: PanelPartStatus[];
+      refreshing?: boolean;
+      refreshFailure?: LoadFailure;
+    }
   | {
       status: "ready-assembly";
       assembly: PanelAssemblyStatus;
       refreshing?: boolean;
+      refreshFailure?: LoadFailure;
     }
-  | { status: "ready-other"; refreshing?: boolean }
-  | { status: "error"; message: string };
+  | {
+      status: "ready-other";
+      refreshing?: boolean;
+      refreshFailure?: LoadFailure;
+    }
+  | { status: "error"; message: string; forbidden?: boolean };
 
 type PanelReleasesState =
   | { status: "idle" }
   | { status: "loading" }
-  | { status: "ready"; releases: PanelRelease[]; refreshing?: boolean }
-  | { status: "error"; message: string };
-
-/** A property of the current element as the fields route lists it. */
-type PanelFieldsProperty = {
-  propertyId: string;
-  name: string;
-  valueType: string;
-  /** Whether the value type has a Carbon type to map onto. */
-  mappable: boolean;
-};
-
-type PanelFieldsData = {
-  properties: PanelFieldsProperty[];
-  map: PropertyMapEntry[];
-  definitions: PlanCustomFieldDefinition[];
-  /** Saving needs settings update; the editor is read-only without it. */
-  canEdit: boolean;
-};
-
-/**
- * One entry of the draft map the Fields editor posts — a PropertyMapEntry
- * except that a field being created has no id yet: the server creates it and
- * resolves `create` into `carbonFieldId`.
- */
-type FieldsDraftEntry = {
-  onshapePropertyId: string;
-  onshapeName: string;
-  valueType: string;
-  mode: "owned" | "default";
-  carbonFieldId?: string;
-};
-
-type PushDefaultsState =
-  | { status: "idle" }
-  | {
-      status: "editing";
-      draft: OnshapePushDefaults;
-      /**
-       * What the company actually holds — the draft as last loaded or saved.
-       * The page's one Save writes only the sections that differ from their
-       * baseline, so each section needs its own.
-       */
-      baseline: OnshapePushDefaults;
-      saving: boolean;
-      error: string | null;
-    };
-
-type PanelFieldsState =
-  | { status: "closed" }
-  | { status: "loading" }
   | {
       status: "ready";
-      data: PanelFieldsData;
-      /**
-       * The WHOLE next map, not just this element's rows: the save is a full
-       * replacement, so entries mapped from other elements must ride along
-       * untouched or saving here would silently unmap them.
-       */
-      entries: FieldsDraftEntry[];
-      saving: boolean;
-      /** A re-read is in flight; the rows on screen are the previous ones. */
+      releases: PanelRelease[];
       refreshing?: boolean;
-      error: string | null;
-      /** Per-property 422 errors, keyed by onshapePropertyId. */
-      fieldErrors: Record<string, string[]>;
+      refreshFailure?: LoadFailure;
     }
-  | { status: "error"; message: string };
+  | { status: "error"; message: string; forbidden?: boolean };
 
 /**
  * The panel's pages. `push` is the current element — an assembly or a part
  * studio; `releases` is the whole document, which is why it survives on an
- * element that has nothing to push; `settings` is the company, which is why it
- * survives everywhere.
+ * element that has nothing to push.
  */
-type PanelTab = "push" | "releases" | "settings";
-
-/**
- * Radix Select refuses an empty value, and "no unit chosen" is a real choice —
- * it means "resolve from the company's list at plan time", which is what a
- * company that deleted EA relies on.
- */
-const UNIT_FROM_COMPANY = "__company-default__";
-
-/** Radix Select refuses empty item values, so the two specials are named. */
-const FIELDS_NOT_MAPPED = "__not-mapped__";
-/** Same reason: the review's Yes/No and List editors need an unset choice. */
-const CUSTOM_FIELD_UNSET = "__unset__";
-
-/**
- * The Carbon types an Onshape value type may map onto. MAPPABLE_VALUE_TYPES
- * is a plain object, so a valueType of "constructor" would otherwise resolve
- * to Object.prototype's and crash the render on `.includes`.
- */
-function mappableTypesFor(valueType: string): readonly number[] {
-  if (!Object.hasOwn(MAPPABLE_VALUE_TYPES, valueType)) return [];
-  return MAPPABLE_VALUE_TYPES[valueType] ?? [];
-}
+type PanelTab = "push" | "releases";
 
 export type OnshapePanelPaths = {
   /** Popup route that mints a panel session for the signed-in user. */
@@ -260,11 +162,7 @@ export type OnshapePanelPaths = {
   session: string;
   /** Carbon status for the current element's parts. */
   status: string;
-  /** GET: Onshape properties + Carbon fields + the map. POST: save the map. */
-  fields: string;
-  /** POST: save the company's push defaults. */
-  preferences: string;
-  /** POST: plan a part push — what would happen, editable, nothing written. */
+  /** POST: plan a part push — what would happen, nothing written. */
   planPart: string;
   /** POST: plan an assembly push (items + BOM line diff), nothing written. */
   planAssembly: string;
@@ -284,21 +182,17 @@ export type OnshapePanelMe = {
   userId: string;
   email: string;
   company: { id: string; name: string } | null;
-  /** Company push defaults, editable on the Settings page. */
-  pushDefaults: OnshapePushDefaults;
-  /** The company's units, for the default-unit choice. */
-  unitsOfMeasure: Array<{ code: string; name: string }>;
-  /**
-   * Whether this user may save anything on the Settings page. One flag for
-   * the page because it has one Save, and both of its writes need the same
-   * `settings.update` permission.
-   */
-  canEditSettings: boolean;
 };
 
 type SessionState =
   | { status: "unknown" }
-  | { status: "signed-out" }
+  /**
+   * `popupBlocked`: the browser refused the sign-in window. That is still the
+   * signed-out state — the way forward is the same button — not a Carbon
+   * error; it used to render as "Carbon is not reachable" with a Retry that
+   * did nothing, since there was no token to retry with.
+   */
+  | { status: "signed-out"; popupBlocked?: boolean }
   | { status: "loading"; token: string }
   | { status: "signed-in"; token: string; me: OnshapePanelMe }
   | { status: "error"; token: string | null; message: string };
@@ -313,7 +207,12 @@ type PlanResponse<P> = {
 };
 
 /** Every panel error body is `{ error }`; a 422 apply adds per-row errors. */
-type PanelErrorResponse = { error: string; fieldErrors?: ApplyFieldError[] };
+type PanelErrorResponse = {
+  error: string;
+  fieldErrors?: ApplyFieldError[];
+  /** A machine-readable refusal the panel answers with an action, not just text. */
+  code?: "too-large";
+};
 
 type AssemblyPushSummary = {
   itemsCreated: number;
@@ -342,19 +241,65 @@ type ReleasePushSummary = {
   errors: string[];
 };
 
-function partOutcome(result: PartApplyResult): string {
+/**
+ * What happened to one part, with its severity carried alongside the words.
+ *
+ * It used to be a bare string rendered in muted grey whatever it said, so
+ * "Created" and "Item saved but the Onshape link failed; push again" looked
+ * identical. The assembly and release pushes had already been moved off that
+ * shape; the part push had not.
+ */
+type PartRowOutcome = { kind: "ok" | "skipped" | "error"; text: string };
+
+function partOutcome(result: PartApplyResult): PartRowOutcome {
   switch (result.action) {
     case "created":
-      return "Created";
+      return { kind: "ok", text: "Created" };
     case "adopted":
-      return "Linked";
+      return { kind: "ok", text: "Linked" };
     case "updated":
-      return "Updated";
+      return { kind: "ok", text: "Updated" };
     case "unchanged":
-      return "Up to date";
+      return { kind: "ok", text: "Up to date" };
+    case "skipped":
+      return { kind: "skipped", text: "Skipped" };
     default:
-      return result.message ?? result.action;
+      // The full message goes in the section's alert; the row only has to
+      // say that this is the one that failed.
+      return { kind: "error", text: "Failed" };
   }
+}
+
+/** The section-level summary of a part push, in the shape the others use. */
+function partsOutcomeText(
+  results: PartApplyResult[],
+  rows: Array<{ partId: string; partNumber: string | null }>,
+  warnings: string[]
+): PushOutcome {
+  const label = (r: PartApplyResult) =>
+    rows.find((row) => row.partId === r.partId)?.partNumber ??
+    r.readableId ??
+    r.partId;
+  const count = (action: PartApplyResult["action"]) =>
+    results.filter((r) => r.action === action).length;
+  const parts = [
+    [count("created"), "created"],
+    [count("adopted"), "linked"],
+    [count("updated"), "updated"],
+    [count("unchanged"), "already up to date"]
+  ]
+    .filter(([n]) => (n as number) > 0)
+    .map(([n, what]) => `${n} ${what}`);
+  return {
+    text: parts.length > 0 ? `Parts: ${parts.join(", ")}` : "",
+    skipped: results
+      .filter((r) => r.action === "skipped")
+      .map((r) => `${label(r)}: ${r.message ?? "skipped"}`),
+    errors: results
+      .filter((r) => r.action === "error")
+      .map((r) => `${label(r)}: ${r.message ?? "failed"}`),
+    warnings
+  };
 }
 
 /**
@@ -367,6 +312,11 @@ type PushOutcome = {
   text: string;
   skipped: string[];
   errors: string[];
+  /**
+   * Went through, but something about it needs checking — e.g. a value that
+   * landed in a List custom field whose option could not be added.
+   */
+  warnings?: string[];
   /**
    * Things that went through but the user has to know about — a released
    * method superseded by a Draft version, which takes effect only once
@@ -387,8 +337,7 @@ function assemblyOutcomeText(s: AssemblyPushSummary): PushOutcome {
         (unchanged > 0 ? ` (${unchanged} unchanged)` : "");
   const text =
     `${s.itemsCreated} items created, ${s.itemsReused} reused, ` +
-    `${lines} across ${s.methodsTouched} methods` +
-    (s.skipped.length > 0 ? ` · ${s.skipped.join(" · ")}` : "");
+    `${lines} across ${s.methodsTouched} methods`;
   const drafts = s.draftVersionsCreated ?? [];
   return {
     text,
@@ -402,13 +351,14 @@ function assemblyOutcomeText(s: AssemblyPushSummary): PushOutcome {
 }
 
 function releaseOutcomeText(s: ReleasePushSummary): PushOutcome {
-  const tail = s.skipped.length > 0 ? ` · ${s.skipped.join(" · ")}` : "";
+  // Skipped items are not appended to this line: it becomes the title of a
+  // success alert, and "PN-77: drawing has no matching model item" read as a
+  // clause of the success. They render as their own warning.
   const text = s.alreadyPushed
-    ? "Revisions already in Carbon — BOMs refreshed" + tail
+    ? "Revisions already in Carbon — BOMs refreshed"
     : `${s.revisionsCreated} revisions + ${s.itemsCreated} new items, ` +
       `${s.linesWritten} BOM lines` +
-      (s.changeNotice ? ` · change notice ${s.changeNotice}` : "") +
-      tail;
+      (s.changeNotice ? ` · change notice ${s.changeNotice}` : "");
   return { text, skipped: s.skipped, errors: s.errors };
 }
 
@@ -449,6 +399,40 @@ function PushOutcomeView({ outcome }: { outcome: PushOutcome }) {
             <ul className="list-disc space-y-1 pl-4">
               {(outcome.notes ?? []).map((note) => (
                 <li key={note}>{note}</li>
+              ))}
+            </ul>
+          </AlertDescription>
+        </Alert>
+      ) : null}
+      {outcome.skipped.length > 0 ? (
+        <Alert variant="warning">
+          <LuTriangleAlert />
+          <AlertTitle>
+            {outcome.skipped.length === 1
+              ? "1 thing was skipped"
+              : `${outcome.skipped.length} things were skipped`}
+          </AlertTitle>
+          <AlertDescription>
+            <ul className="list-disc space-y-1 pl-4">
+              {outcome.skipped.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </AlertDescription>
+        </Alert>
+      ) : null}
+      {(outcome.warnings ?? []).length > 0 ? (
+        <Alert variant="warning">
+          <LuTriangleAlert />
+          <AlertTitle>
+            {(outcome.warnings ?? []).length === 1
+              ? "1 thing to check"
+              : `${(outcome.warnings ?? []).length} things to check`}
+          </AlertTitle>
+          <AlertDescription>
+            <ul className="list-disc space-y-1 pl-4">
+              {(outcome.warnings ?? []).map((item) => (
+                <li key={item}>{item}</li>
               ))}
             </ul>
           </AlertDescription>
@@ -518,6 +502,143 @@ function PanelListSkeleton({ rows = 5 }: { rows?: number }) {
   );
 }
 
+/**
+ * What to say when a request threw instead of answering.
+ *
+ * `fetch` rejects with a TypeError when the request never completed — offline,
+ * DNS, a dropped connection — and each browser's wording for it ("Failed to
+ * fetch", "Load failed", "NetworkError when attempting to fetch resource") is
+ * machine text. Matched on the wording as well as the type, so a TypeError that
+ * is a genuine bug still reports itself rather than blaming the network.
+ */
+function thrownMessage(error: unknown): string {
+  if (
+    error instanceof TypeError &&
+    /fetch|network|load failed/i.test(error.message)
+  ) {
+    return "Carbon couldn't be reached. Check your connection and try again.";
+  }
+  return error instanceof Error ? error.message : String(error);
+}
+
+/**
+ * A warning listing things, bounded.
+ *
+ * Skipped BOM components arrive one per occurrence, so a real assembly lists
+ * the same fastener dozens of times: a 300-line assembly produced a 314-item
+ * alert several screens tall, burying the Push bar it was meant to inform.
+ * Identical lines fold into one with a count, and only the first few show
+ * until asked. The title counts occurrences, since that is what the push
+ * leaves out.
+ */
+const CAPPED_WARNING_VISIBLE = 6;
+
+function CappedWarningList({
+  title,
+  lines,
+  description,
+  variant = "warning"
+}: {
+  title: (count: number) => string;
+  lines: string[];
+  description?: string;
+  variant?: "warning" | "destructive";
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const folded = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const line of lines) counts.set(line, (counts.get(line) ?? 0) + 1);
+    return [...counts.entries()];
+  }, [lines]);
+  const visible = expanded ? folded : folded.slice(0, CAPPED_WARNING_VISIBLE);
+  const hidden = folded.length - visible.length;
+  return (
+    <Alert variant={variant}>
+      <LuTriangleAlert />
+      <AlertTitle>{title(lines.length)}</AlertTitle>
+      <AlertDescription>
+        {description ? <p className="mb-1">{description}</p> : null}
+        <ul className="list-disc space-y-1 pl-4">
+          {visible.map(([line, count]) => (
+            <li key={line}>
+              {line}
+              {count > 1 ? ` (×${count})` : null}
+            </li>
+          ))}
+        </ul>
+        {hidden > 0 || expanded ? (
+          <Button
+            variant="link"
+            size="sm"
+            className="mt-1 h-auto p-0"
+            onClick={() => setExpanded((current) => !current)}
+          >
+            {expanded ? "Show fewer" : `Show ${hidden} more`}
+          </Button>
+        ) : null}
+      </AlertDescription>
+    </Alert>
+  );
+}
+
+/**
+ * A read that failed, in the one shape every section uses.
+ *
+ * A permission denial is a warning with no Retry — nothing is broken, and
+ * retrying cannot help. Anything else is destructive with a Retry in the alert
+ * itself, beside the message it answers. `stale` marks a failed Refresh over
+ * rows that are still on screen, which must say those rows are the old ones.
+ */
+function PanelLoadError({
+  title,
+  failure,
+  stale,
+  retrying,
+  onRetry
+}: {
+  title: string;
+  failure: LoadFailure;
+  stale?: boolean;
+  retrying?: boolean;
+  onRetry?: () => void;
+}) {
+  if (failure.forbidden) {
+    return (
+      <Alert variant="warning">
+        <LuTriangleAlert />
+        <AlertTitle>You don't have permission for this</AlertTitle>
+        <AlertDescription>{failure.message}</AlertDescription>
+      </Alert>
+    );
+  }
+  return (
+    <Alert variant="destructive">
+      <LuTriangleAlert />
+      <AlertTitle>{title}</AlertTitle>
+      <AlertDescription>
+        {failure.message}
+        {/* Its own line: a message without a full stop ran straight into it. */}
+        {stale ? (
+          <span className="mt-1 block">Showing what was loaded before.</span>
+        ) : null}
+      </AlertDescription>
+      {onRetry ? (
+        <HStack className="mt-2">
+          <Button
+            size="sm"
+            variant="secondary"
+            onClick={onRetry}
+            isDisabled={retrying}
+            isLoading={retrying}
+          >
+            Retry
+          </Button>
+        </HStack>
+      ) : null}
+    </Alert>
+  );
+}
+
 function PanelEmpty({ children }: { children: ReactNode }) {
   return (
     <HStack
@@ -564,24 +685,15 @@ export function OnshapePanel({
     !!context.elementId;
   const canPush = canLoadParts && (context.wv === "w" || context.wv === "v");
   const [pushing, setPushing] = useState<Set<string> | null>(null);
-  const [pushOutcome, setPushOutcome] = useState<Record<string, string>>({});
+  const [pushOutcome, setPushOutcome] = useState<
+    Record<string, PartRowOutcome>
+  >({});
+  /** The part push's section-level result: counts, problems, warnings. */
+  const [partsOutcome, setPartsOutcome] = useState<PushOutcome | null>(null);
 
-  // The Fields editor (Onshape properties → Carbon custom fields). One shared
-  // section for the whole panel: the map is company-wide, not per element.
   /*
-   * The push defaults, as a draft. They arrive with identity (`panel.me`), so
-   * the Settings page never waits on a read of its own; the draft is seeded
-   * from that and saved as a whole, the way the integration settings form did.
-   */
-  const [pushDefaults, setPushDefaults] = useState<PushDefaultsState>({
-    status: "idle"
-  });
-  const [fields, setFields] = useState<PanelFieldsState>({ status: "closed" });
-  /*
-   * Three pages, not three sections of one. They share nothing on screen and
-   * are used on different days: the element's BOM is the daily job, releases
-   * are occasional, and the property map is set up once. Stacked, each one
-   * stood between the user and the next.
+   * Two pages, not two sections of one: the element's BOM is the daily job and
+   * releases are occasional. Stacked, one stood between the user and the other.
    */
   const [tab, setTab] = useState<PanelTab>("push");
 
@@ -606,10 +718,11 @@ export function OnshapePanel({
         current.kind === "release" ? documentScope : elementScope;
       return current.scope === expected ? current : null;
     });
-    // The Fields editor lists the CURRENT element's properties while its
-    // draft is the whole company map: left open across a move it would edit
-    // one element's map against another element's property list.
-    setFields({ status: "closed" });
+    // A refusal or outcome is about the element it was produced for.
+    setAssemblyOutcome(null);
+    setPartsOutcome(null);
+    setPushOutcome({});
+    setAssemblyTooLarge(null);
     setTab("push");
   }, [elementScope, documentScope]);
 
@@ -617,6 +730,13 @@ export function OnshapePanel({
   useEffect(() => {
     if (session.status === "signed-out") {
       setReview(null);
+      /*
+       * Everything read under the old session goes with it: the next sign-in
+       * can be a different user or company, and a section abandoned mid-read
+       * by a 401 would otherwise stay `loading` with no way out.
+       */
+      setParts({ status: "idle" });
+      setReleases({ status: "idle" });
       setTab("push");
     }
   }, [session.status]);
@@ -624,11 +744,25 @@ export function OnshapePanel({
   const loadParts = useCallback(
     async (token: string) => {
       if (!canLoadParts) return;
+      // A refusal was about the BOM as it was; a re-read may have changed it.
+      setAssemblyTooLarge(null);
+      const fail = (message: string, forbidden: boolean) =>
+        setParts((current) =>
+          current.status === "ready" ||
+          current.status === "ready-assembly" ||
+          current.status === "ready-other"
+            ? {
+                ...current,
+                refreshing: false,
+                refreshFailure: { message, forbidden }
+              }
+            : { status: "error", message, forbidden }
+        );
       setParts((current) =>
         current.status === "ready" ||
         current.status === "ready-assembly" ||
         current.status === "ready-other"
-          ? { ...current, refreshing: true }
+          ? { ...current, refreshing: true, refreshFailure: undefined }
           : { status: "loading" }
       );
       try {
@@ -638,25 +772,22 @@ export function OnshapePanel({
           wvId: context.wvId as string,
           elementId: context.elementId as string
         });
+        // A configured part's part number, and so its identity in Carbon,
+        // depends on the configuration the element is open in.
+        if (context.configuration) {
+          query.set("configuration", context.configuration);
+        }
         const response = await panelFetch(token, `${paths.status}?${query}`);
         const body = (await response.json()) as
           | { kind: "partstudio"; parts: PanelPartStatus[] }
           | { kind: "assembly"; assembly: PanelAssemblyStatus }
           | { kind: "other" }
           | { error: string };
-        // eslint-disable-next-line no-console
-        console.debug("[onshape-panel] status", {
-          ok: response.ok,
-          kind: (body as { kind?: string }).kind
-        });
         if (!response.ok || "error" in body) {
-          setParts({
-            status: "error",
-            message:
-              "error" in body
-                ? body.error
-                : `Carbon answered ${response.status}`
-          });
+          fail(
+            "error" in body ? body.error : `Carbon answered ${response.status}`,
+            response.status === 403
+          );
           return;
         }
         if (body.kind === "assembly" && body.assembly) {
@@ -672,10 +803,7 @@ export function OnshapePanel({
           setParts({ status: "idle" });
           return;
         }
-        setParts({
-          status: "error",
-          message: error instanceof Error ? error.message : String(error)
-        });
+        fail(thrownMessage(error), false);
       }
     },
     [canLoadParts, context, paths.status]
@@ -684,9 +812,19 @@ export function OnshapePanel({
   const loadReleases = useCallback(
     async (token: string) => {
       if (!context.documentId) return;
+      const fail = (message: string, forbidden: boolean) =>
+        setReleases((current) =>
+          current.status === "ready"
+            ? {
+                ...current,
+                refreshing: false,
+                refreshFailure: { message, forbidden }
+              }
+            : { status: "error", message, forbidden }
+        );
       setReleases((current) =>
         current.status === "ready"
-          ? { ...current, refreshing: true }
+          ? { ...current, refreshing: true, refreshFailure: undefined }
           : { status: "loading" }
       );
       try {
@@ -696,13 +834,10 @@ export function OnshapePanel({
           | { releases: PanelRelease[] }
           | { error: string };
         if (!response.ok || "error" in body) {
-          setReleases({
-            status: "error",
-            message:
-              "error" in body
-                ? body.error
-                : `Carbon answered ${response.status}`
-          });
+          fail(
+            "error" in body ? body.error : `Carbon answered ${response.status}`,
+            response.status === 403
+          );
           return;
         }
         setReleases({ status: "ready", releases: body.releases });
@@ -711,89 +846,10 @@ export function OnshapePanel({
           setSession({ status: "signed-out" });
           return;
         }
-        setReleases({
-          status: "error",
-          message: error instanceof Error ? error.message : String(error)
-        });
+        fail(thrownMessage(error), false);
       }
     },
     [context.documentId, paths.releases]
-  );
-
-  const loadFields = useCallback(
-    async (token: string) => {
-      if (!canLoadParts) return;
-      setFields((current) =>
-        current.status === "ready"
-          ? { ...current, refreshing: true }
-          : { status: "loading" }
-      );
-      try {
-        const query = new URLSearchParams({
-          documentId: context.documentId as string,
-          wv: context.wv as string,
-          wvId: context.wvId as string,
-          elementId: context.elementId as string
-        });
-        const response = await panelFetch(token, `${paths.fields}?${query}`);
-        const body = (await response.json()) as
-          | PanelFieldsData
-          | { error: string };
-        /*
-         * Every landing commits only while this read is still the one the
-         * section is waiting for: hiding it, or a move to another element,
-         * leaves `closed` behind and must not be undone when the answer
-         * arrives. A Refresh keeps the previous rows on screen and so stays
-         * `ready` with `refreshing` set — that is also a read in flight, and
-         * leaving it out was the bug that made Refresh spin forever.
-         */
-        const awaitingRead = (current: PanelFieldsState) =>
-          current.status === "loading" ||
-          (current.status === "ready" && !!current.refreshing);
-        if (!response.ok || "error" in body) {
-          setFields((current) =>
-            awaitingRead(current)
-              ? {
-                  status: "error",
-                  message:
-                    "error" in body
-                      ? body.error
-                      : `Carbon answered ${response.status}`
-                }
-              : current
-          );
-          return;
-        }
-        setFields((current) =>
-          awaitingRead(current)
-            ? {
-                status: "ready",
-                data: body,
-                // A re-read is the company's map as it now stands, so it
-                // replaces the draft rather than merging with it.
-                entries: body.map.map((entry) => ({ ...entry })),
-                saving: false,
-                error: null,
-                fieldErrors: {}
-              }
-            : current
-        );
-      } catch (error) {
-        if (error instanceof PanelUnauthorizedError) {
-          setSession({ status: "signed-out" });
-          return;
-        }
-        setFields((current) =>
-          current.status === "loading"
-            ? {
-                status: "error",
-                message: error instanceof Error ? error.message : String(error)
-              }
-            : current
-        );
-      }
-    },
-    [canLoadParts, context, paths.fields]
   );
 
   const loadMe = useCallback(
@@ -811,13 +867,6 @@ export function OnshapePanel({
         }
         const me = (await response.json()) as OnshapePanelMe;
         setSession({ status: "signed-in", token, me });
-        setPushDefaults({
-          status: "editing",
-          draft: me.pushDefaults,
-          baseline: me.pushDefaults,
-          saving: false,
-          error: null
-        });
         void loadParts(token);
         void loadReleases(token);
       } catch (error) {
@@ -828,7 +877,7 @@ export function OnshapePanel({
         setSession({
           status: "error",
           token,
-          message: error instanceof Error ? error.message : String(error)
+          message: thrownMessage(error)
         });
       }
     },
@@ -878,6 +927,7 @@ export function OnshapePanel({
     async (token: string, partIds: string[]) => {
       if (!canPush || partIds.length === 0) return;
       setPushing(new Set(partIds));
+      setPartsOutcome(null);
       try {
         const response = await panelFetch(token, paths.planPart, {
           method: "POST",
@@ -887,6 +937,7 @@ export function OnshapePanel({
             wv: context.wv,
             wvId: context.wvId,
             elementId: context.elementId,
+            configuration: context.configuration,
             partIds
           })
         });
@@ -894,11 +945,15 @@ export function OnshapePanel({
           | PlanResponse<PartPlan>
           | PanelErrorResponse;
         if (!response.ok || "error" in body) {
-          const message =
-            "error" in body ? body.error : `Carbon answered ${response.status}`;
+          // One failure, so one alert. Copying the message onto every selected
+          // row said the same sentence fourteen times in grey.
           setReview(null);
-          setPushOutcome(
-            Object.fromEntries(partIds.map((id) => [id, message]))
+          setPartsOutcome(
+            failedOutcome(
+              "error" in body
+                ? body.error
+                : `Carbon answered ${response.status}`
+            )
           );
           return;
         }
@@ -915,9 +970,8 @@ export function OnshapePanel({
           setSession({ status: "signed-out" });
           return;
         }
-        const message = error instanceof Error ? error.message : String(error);
         setReview(null);
-        setPushOutcome(Object.fromEntries(partIds.map((id) => [id, message])));
+        setPartsOutcome(failedOutcome(thrownMessage(error)));
       } finally {
         setPushing(null);
       }
@@ -928,20 +982,25 @@ export function OnshapePanel({
   const [assemblyOutcome, setAssemblyOutcome] = useState<PushOutcome | null>(
     null
   );
+  /** The plan route refused the whole tree as too large; holds its message. */
+  const [assemblyTooLarge, setAssemblyTooLarge] = useState<string | null>(null);
   /*
-   * Always the whole tree. The route still takes a `depth`, and a `top` plan
-   * is still a valid thing to hold — it writes the root's BOM and leaves each
-   * sub-assembly as one line pointing at its own make method — but choosing
-   * per push was a question the panel could not help anyone answer: the cost
-   * it trades away (one request's size) is invisible until the push is too
-   * big, and the result it trades away (a real BOM below the top level) is
-   * the thing the user came for.
+   * The whole tree by default. Choosing a depth per push was a question the
+   * panel could not help anyone answer: the cost it trades away (one request's
+   * size) is invisible until the push is too big, and the result it trades away
+   * (a real BOM below the top level) is the thing the user came for.
+   *
+   * So `top` is offered only at the moment it is the answer — when the route
+   * refuses the whole tree as too large. The refusal counts distinct part
+   * numbers across the WHOLE tree whatever is already in Carbon, so pushing
+   * sub-assemblies first never lowers it; a level-only push is the one way out.
    */
   const planAssembly = useCallback(
-    async (token: string) => {
+    async (token: string, depth: AssemblyPlanDepth = "all") => {
       if (!canPush) return;
       setPushing(new Set(["__assembly__"]));
       setAssemblyOutcome(null);
+      setAssemblyTooLarge(null);
       try {
         const response = await panelFetch(token, paths.planAssembly, {
           method: "POST",
@@ -951,7 +1010,8 @@ export function OnshapePanel({
             wv: context.wv,
             wvId: context.wvId,
             elementId: context.elementId,
-            depth: "all" satisfies AssemblyPlanDepth
+            configuration: context.configuration,
+            depth
           })
         });
         const body = (await response.json()) as
@@ -959,6 +1019,10 @@ export function OnshapePanel({
           | PanelErrorResponse;
         if (!response.ok || "error" in body) {
           setReview(null);
+          if ("error" in body && body.code === "too-large") {
+            setAssemblyTooLarge(body.error);
+            return;
+          }
           setAssemblyOutcome(
             failedOutcome(
               "error" in body
@@ -982,9 +1046,7 @@ export function OnshapePanel({
           return;
         }
         setReview(null);
-        setAssemblyOutcome(
-          failedOutcome(error instanceof Error ? error.message : String(error))
-        );
+        setAssemblyOutcome(failedOutcome(thrownMessage(error)));
       } finally {
         setPushing(null);
       }
@@ -1033,9 +1095,7 @@ export function OnshapePanel({
         setReview(null);
         setReleaseOutcome((prev) => ({
           ...prev,
-          [releaseId]: failedOutcome(
-            error instanceof Error ? error.message : String(error)
-          )
+          [releaseId]: failedOutcome(thrownMessage(error))
         }));
       } finally {
         setPushingReleaseId(null);
@@ -1070,7 +1130,7 @@ export function OnshapePanel({
           body: JSON.stringify(applyRequestBody(current))
         });
         const body = (await response.json()) as
-          | { results: PartApplyResult[] }
+          | { results: PartApplyResult[]; warnings?: string[] }
           | { summary: AssemblyPushSummary | ReleasePushSummary }
           | PanelErrorResponse;
         if (!response.ok || "error" in body) {
@@ -1098,6 +1158,15 @@ export function OnshapePanel({
               results.map((r) => [r.partId, partOutcome(r)])
             )
           }));
+          // The route computes `warnings` and says they must NOT be silent;
+          // they were never read here, so they were.
+          setPartsOutcome(
+            partsOutcomeText(
+              results,
+              current.plan.rows,
+              "warnings" in body ? (body.warnings ?? []) : []
+            )
+          );
           setParts((prev) =>
             prev.status === "ready"
               ? {
@@ -1127,7 +1196,7 @@ export function OnshapePanel({
         setReview({
           ...current,
           applying: false,
-          error: error instanceof Error ? error.message : String(error)
+          error: thrownMessage(error)
         });
       }
     },
@@ -1152,353 +1221,10 @@ export function OnshapePanel({
         review.plan.rows.map((row) => row.partId)
       );
     } else if (review.kind === "assembly") {
-      void planAssembly(token);
+      // The same depth the expired review was built at, not the default.
+      void planAssembly(token, review.plan.depth);
     } else {
       void planRelease(token, review.plan.releaseId);
-    }
-  };
-
-  const editReviewItem = (
-    key: string,
-    proposed: ProposedItem,
-    field: EditableItemField,
-    value: string
-  ) =>
-    setReview((current) =>
-      current
-        ? {
-            ...current,
-            edits: applyItemEdit(current.edits, key, proposed, field, value),
-            fieldErrors: clearFieldErrors(current.fieldErrors, key)
-          }
-        : current
-    );
-
-  const editReviewCustomField = (
-    key: string,
-    rowFields: PlanCustomField[],
-    fieldId: string,
-    value: string
-  ) =>
-    setReview((current) =>
-      current
-        ? {
-            ...current,
-            edits: applyCustomFieldEdit(
-              current.edits,
-              key,
-              rowFields,
-              fieldId,
-              value
-            ),
-            fieldErrors: clearFieldErrors(current.fieldErrors, key)
-          }
-        : current
-    );
-
-  const selectPart = (partId: string, selected: boolean) =>
-    setReview((current) =>
-      current?.kind === "part"
-        ? {
-            ...current,
-            selected: withMember(current.selected, partId, selected)
-          }
-        : current
-    );
-
-  /** Bulk tick/untick, one state update however many rows the filter covers. */
-  const selectManyParts = (partIds: string[], selected: boolean) =>
-    setReview((current) => {
-      if (current?.kind !== "part") return current;
-      const next = new Set(current.selected);
-      for (const partId of partIds) {
-        if (selected) next.add(partId);
-        else next.delete(partId);
-      }
-      return { ...current, selected: next };
-    });
-
-  const includeAssemblyItem = (partNumber: string, included: boolean) =>
-    setReview((current) =>
-      current?.kind === "assembly"
-        ? {
-            ...current,
-            excluded: withMember(current.excluded, partNumber, !included)
-          }
-        : current
-    );
-
-  /** Bulk include/exclude for assembly components, one state update. */
-  const includeManyAssemblyItems = (partNumbers: string[], included: boolean) =>
-    setReview((current) => {
-      if (current?.kind !== "assembly") return current;
-      const next = new Set(current.excluded);
-      for (const partNumber of partNumbers) {
-        if (included) next.delete(partNumber);
-        else next.add(partNumber);
-      }
-      return { ...current, excluded: next };
-    });
-
-  const editChangeNotice = (field: "name" | "description", value: string) =>
-    setReview((current) => {
-      if (current?.kind !== "release" || !current.changeNotice) return current;
-      const changeNotice =
-        field === "name"
-          ? { ...current.changeNotice, name: value }
-          : {
-              ...current.changeNotice,
-              description: value === "" ? null : value
-            };
-      return {
-        ...current,
-        changeNotice,
-        fieldErrors: clearFieldErrors(current.fieldErrors, "changeNotice")
-      };
-    });
-
-  const setMakeDefault = (makeDefault: boolean) =>
-    setReview((current) =>
-      current?.kind === "release" ? { ...current, makeDefault } : current
-    );
-
-  const setCreateChangeNotice = (createChangeNotice: boolean) =>
-    setReview((current) =>
-      current?.kind === "release"
-        ? {
-            ...current,
-            createChangeNotice,
-            // Dropping the notice drops its validation errors with it.
-            fieldErrors: createChangeNotice
-              ? current.fieldErrors
-              : clearFieldErrors(current.fieldErrors, "changeNotice")
-          }
-        : current
-    );
-
-  /**
-   * Save the property map: the whole entries list, a full replacement. A 422
-   * pins errors to properties; success re-seeds the draft from what the server
-   * now holds, so the page stays where it is with nothing left to save.
-   *
-   * Returns whether it wrote, because the page's one Save may be driving both
-   * sections and only reports success if every write it made succeeded.
-   */
-  const saveFields = useCallback(
-    async (token: string): Promise<boolean> => {
-      if (fields.status !== "ready" || fields.saving) return false;
-      const current = fields;
-      setFields({ ...current, saving: true, error: null, fieldErrors: {} });
-      try {
-        const response = await panelFetch(token, paths.fields, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ entries: current.entries })
-        });
-        const body = (await response.json()) as
-          | { map: PropertyMapEntry[] }
-          | PanelErrorResponse;
-        if (!response.ok || "error" in body) {
-          setFields({
-            ...current,
-            saving: false,
-            error:
-              "error" in body
-                ? body.error
-                : `Carbon answered ${response.status}`,
-            fieldErrors:
-              response.status === 422 && "fieldErrors" in body
-                ? indexFieldErrors(body.fieldErrors)
-                : {}
-          });
-          return false;
-        }
-        // The map the server answers with, not the draft that was posted: the
-        // two agree, and taking the server's leaves no way for the baseline to
-        // drift from the row.
-        setFields({
-          ...current,
-          data: { ...current.data, map: body.map },
-          entries: body.map.map((entry) => ({ ...entry })),
-          saving: false,
-          error: null,
-          fieldErrors: {}
-        });
-        return true;
-      } catch (error) {
-        if (error instanceof PanelUnauthorizedError) {
-          setSession({ status: "signed-out" });
-          return false;
-        }
-        setFields({
-          ...current,
-          saving: false,
-          error: error instanceof Error ? error.message : String(error)
-        });
-        return false;
-      }
-    },
-    [fields, paths.fields]
-  );
-
-  /** Replace one property's draft entry; every other entry survives. */
-  const editFieldsEntry = (
-    propertyId: string,
-    updater: (entry: FieldsDraftEntry | undefined) => FieldsDraftEntry | null
-  ) =>
-    setFields((current) => {
-      if (current.status !== "ready") return current;
-      const existing = current.entries.find(
-        (entry) => entry.onshapePropertyId === propertyId
-      );
-      const next = updater(existing);
-      const entries = current.entries.filter(
-        (entry) => entry.onshapePropertyId !== propertyId
-      );
-      if (next) entries.push(next);
-      return {
-        ...current,
-        entries,
-        error: null,
-        fieldErrors: clearFieldErrors(current.fieldErrors, propertyId)
-      };
-    });
-
-  const mapFieldsProperty = (
-    property: PanelFieldsProperty,
-    selection: string
-  ) =>
-    editFieldsEntry(property.propertyId, (entry) => {
-      if (selection === FIELDS_NOT_MAPPED) return null;
-      const base = {
-        onshapePropertyId: property.propertyId,
-        onshapeName: property.name,
-        valueType: property.valueType,
-        mode: entry?.mode ?? ("owned" as const)
-      };
-      return { ...base, carbonFieldId: selection };
-    });
-
-  const editPushDefault = <K extends keyof OnshapePushDefaults>(
-    key: K,
-    value: OnshapePushDefaults[K]
-  ) =>
-    setPushDefaults((current) =>
-      current.status === "editing"
-        ? {
-            ...current,
-            // The ERP refuses a replenishment/method pair its own Part form
-            // would, so changing the replenishment re-resolves the method the
-            // same way `parsePushDefaults` does on the way in.
-            draft: reconcilePushDefaults({ ...current.draft, [key]: value }),
-            error: null
-          }
-        : current
-    );
-
-  /** As `saveFields`: reports whether it wrote, for the page's one Save. */
-  const savePushDefaults = async (token: string): Promise<boolean> => {
-    if (pushDefaults.status !== "editing" || pushDefaults.saving) return false;
-    const current = pushDefaults;
-    setPushDefaults({ ...current, saving: true, error: null });
-    try {
-      const response = await panelFetch(token, paths.preferences, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          defaultUnitOfMeasureCode: current.draft.unitOfMeasureCode ?? "",
-          defaultReplenishmentSystem: current.draft.replenishmentSystem,
-          defaultMethodTypeForMake: current.draft.methodTypeForMake,
-          defaultMethodTypeForBuy: current.draft.methodTypeForBuy,
-          defaultItemTrackingType: current.draft.itemTrackingType
-        })
-      });
-      const body = (await response.json()) as
-        | { defaults: unknown }
-        | PanelErrorResponse;
-      if (!response.ok || "error" in body) {
-        setPushDefaults({
-          ...current,
-          saving: false,
-          error:
-            "error" in body ? body.error : `Carbon answered ${response.status}`
-        });
-        return false;
-      }
-      setPushDefaults({
-        ...current,
-        baseline: current.draft,
-        saving: false,
-        error: null
-      });
-      return true;
-    } catch (error) {
-      if (error instanceof PanelUnauthorizedError) {
-        setSession({ status: "signed-out" });
-        return false;
-      }
-      setPushDefaults({
-        ...current,
-        saving: false,
-        error: error instanceof Error ? error.message : String(error)
-      });
-      return false;
-    }
-  };
-
-  const setFieldsMode = (propertyId: string, mode: "owned" | "default") =>
-    editFieldsEntry(propertyId, (entry) => (entry ? { ...entry, mode } : null));
-
-  /*
-   * The Settings page has one Save, so what is unsaved is a property of the
-   * page rather than of a section. Both sections write the same integration
-   * row, and a page with two buttons made the user guess which one their edit
-   * belonged to — worse, a page where both were visible at once suggested two
-   * independent saves where there is one decision.
-   */
-  const pushDefaultsDirty =
-    pushDefaults.status === "editing" &&
-    !pushDefaultsEqual(pushDefaults.draft, pushDefaults.baseline);
-  const fieldsDirty =
-    fields.status === "ready" &&
-    !propertyMapEqual(fields.entries, fields.data.map);
-  const settingsSaving =
-    (pushDefaults.status === "editing" && pushDefaults.saving) ||
-    (fields.status === "ready" && fields.saving);
-  const settingsBusy =
-    settingsSaving || (fields.status === "ready" && !!fields.refreshing);
-
-  /**
-   * Save whatever the page has changed, in one action.
-   *
-   * Sequential, and the second write is attempted even if the first failed:
-   * they are separate keys of the same row, so a rejected unit code must not
-   * silently drop a property map the user also edited. Both sections keep
-   * their own error, so a partial failure says which half to look at.
-   */
-  const saveSettings = async (token: string) => {
-    if (settingsBusy) return;
-    const wrote: boolean[] = [];
-    if (pushDefaultsDirty) wrote.push(await savePushDefaults(token));
-    if (fieldsDirty) wrote.push(await saveFields(token));
-    if (wrote.length > 0 && wrote.every(Boolean)) {
-      toast.success("Settings saved");
-    }
-  };
-
-  /*
-   * Selecting Fields is what loads it, so opening the panel still costs one
-   * status read. A previous load that errored is retried on the way back in —
-   * Radix does not fire this for the tab already showing, so there is no loop.
-   */
-  const showTab = (next: PanelTab, token: string) => {
-    setTab(next);
-    if (
-      next === "settings" &&
-      canLoadParts &&
-      (fields.status === "closed" || fields.status === "error")
-    ) {
-      void loadFields(token);
     }
   };
 
@@ -1512,14 +1238,11 @@ export function OnshapePanel({
       "carbon-onshape-auth",
       `popup=yes,width=${width},height=${height},left=${left},top=${top}`
     );
-    if (!popup) {
-      setSession({
-        status: "error",
-        token: null,
-        message:
-          "The sign-in window was blocked. Allow pop-ups for this page and try again."
-      });
-    }
+    setSession(
+      popup
+        ? { status: "signed-out" }
+        : { status: "signed-out", popupBlocked: true }
+    );
   };
 
   const signOut = async () => {
@@ -1536,17 +1259,14 @@ export function OnshapePanel({
   };
 
   /*
-   * Not every page applies to every element. A drawing has no parts and no
-   * properties to map, but it belongs to a document that has releases.
+   * Not every page applies to every element. A drawing has no parts, but it
+   * belongs to a document that has releases.
    */
   const availableTabs = useMemo<PanelTab[]>(() => {
     if (session.status !== "signed-in") return [];
     const tabs: PanelTab[] = [];
     if (canLoadParts) tabs.push("push");
     if (context.documentId) tabs.push("releases");
-    // Settings is the company, not the element: it holds the connection and
-    // the push defaults, which are worth reaching from anywhere.
-    tabs.push("settings");
     return tabs;
   }, [session.status, canLoadParts, context.documentId]);
 
@@ -1569,6 +1289,42 @@ export function OnshapePanel({
         ? "Parts"
         : "Push";
 
+  /*
+   * Before sign-in the panel IS the sign-in: `availableTabs` is empty until
+   * there is a session, every pane renders null, and the only thing to say is
+   * who is asking and how to answer. Returning here rather than threading the
+   * empty Tabs shell around it is what lets the block own the full height —
+   * inside the scrolling body it centred within its own content box, which
+   * left it stranded near the top of a tall, empty panel.
+   *
+   * Every hook has already run above; this is the last branch before render.
+   */
+  if (session.status === "signed-out" || session.status === "unknown") {
+    return (
+      <div className="flex h-full min-h-0 flex-col items-center justify-center gap-6 p-4">
+        {!serverOrigin ? (
+          <Alert variant="warning" className="max-w-sm">
+            <LuTriangleAlert />
+            <AlertTitle>Open this panel from Onshape</AlertTitle>
+          </Alert>
+        ) : null}
+        {session.status === "signed-out" && session.popupBlocked ? (
+          <Alert variant="warning" className="max-w-sm">
+            <LuTriangleAlert />
+            <AlertTitle>Your browser blocked the sign-in window</AlertTitle>
+            <AlertDescription>
+              Allow pop-ups for this page, then press Sign in to Carbon again.
+            </AlertDescription>
+          </Alert>
+        ) : null}
+        <PanelSignIn
+          onSignIn={signIn}
+          disabled={session.status === "unknown"}
+        />
+      </div>
+    );
+  }
+
   return (
     /*
      * Three bands: a header that stays put, one scrolling body, and whatever
@@ -1583,27 +1339,18 @@ export function OnshapePanel({
     <Tabs
       value={tab}
       onValueChange={(value) =>
-        session.status === "signed-in" &&
-        (value === "push" || value === "releases" || value === "settings") &&
-        showTab(value, session.token)
+        (value === "push" || value === "releases") && setTab(value)
       }
       className="flex h-full min-h-0 flex-col"
     >
       {/*
-       * The tab strip IS the top band. There was a header above it carrying a
-       * Carbon mark, the word "Carbon" and a connected dot, and all three were
-       * redundant: Onshape already labels the panel in its own icon rail, and
-       * the connection now states itself properly on Settings — which company,
-       * which user — instead of as a green dot. That row was ~44px of a panel
-       * about twenty rows tall.
-       *
-       * Pinned, not scrolled with the pane: the push view is a long list, and
-       * a tab strip you have to scroll back up to reach is not a tab strip.
-       * One page needs no strip at all — an element with nothing but releases
-       * is not a choice.
+       * The top band: the pages, and which Carbon company this panel writes
+       * into with the way out. The company is not cosmetic — a user in more
+       * than one has no other way to tell where a push will land. Pinned, not
+       * scrolled with the pane: the push view is a long list.
        */}
-      {availableTabs.length > 1 ? (
-        <HStack className="w-full shrink-0 justify-between border-b border-border px-4 py-2">
+      <HStack className="w-full shrink-0 justify-between gap-2 border-b border-border px-4 py-2">
+        {availableTabs.length > 1 ? (
           <TabsList>
             {availableTabs.includes("push") ? (
               <TabsTrigger value="push">{pushTabLabel}</TabsTrigger>
@@ -1611,27 +1358,33 @@ export function OnshapePanel({
             {availableTabs.includes("releases") ? (
               <TabsTrigger value="releases">Releases</TabsTrigger>
             ) : null}
-            {availableTabs.includes("settings") ? (
-              <TabsTrigger value="settings">Settings</TabsTrigger>
-            ) : null}
           </TabsList>
-        </HStack>
-      ) : null}
+        ) : (
+          <span />
+        )}
+        {session.status === "signed-in" ? (
+          <HStack spacing={1} className="min-w-0">
+            <span
+              className="truncate text-xs text-muted-foreground"
+              title={session.me.email}
+            >
+              {session.me.company?.name ?? session.me.email}
+            </span>
+            <Button variant="ghost" size="sm" onClick={signOut}>
+              Sign out
+            </Button>
+          </HStack>
+        ) : null}
+      </HStack>
 
       <VStack spacing={4} className="min-h-0 flex-1 overflow-y-auto p-4">
+        {/* Not broken, just opened outside its host: a warning, as on the
+            sign-in screen. */}
         {!serverOrigin ? (
-          <Alert variant="destructive">
+          <Alert variant="warning">
             <LuTriangleAlert />
             <AlertTitle>Open this panel from Onshape</AlertTitle>
           </Alert>
-        ) : null}
-
-        <ContextSummary context={context} />
-
-        {session.status === "signed-out" || session.status === "unknown" ? (
-          <Button onClick={signIn} isDisabled={session.status === "unknown"}>
-            Sign in to Carbon
-          </Button>
         ) : null}
 
         {session.status === "loading" ? (
@@ -1648,6 +1401,8 @@ export function OnshapePanel({
                 size="sm"
                 variant="secondary"
                 onClick={() => session.token && loadMe(session.token)}
+                // Never render a button that does nothing.
+                isDisabled={!session.token}
               >
                 Retry
               </Button>
@@ -1690,11 +1445,6 @@ export function OnshapePanel({
                     onApply={() => applyReview(session.token)}
                     onReplan={() => replan(session.token)}
                     replanning={!!pushing}
-                    onEdit={editReviewItem}
-                    onInclude={includeAssemblyItem}
-                    onIncludeMany={includeManyAssemblyItems}
-                    onEditCustomField={editReviewCustomField}
-                    onOpenFields={() => showTab("settings", session.token)}
                   />
                 ) : (
                   <AssemblySection
@@ -1704,7 +1454,10 @@ export function OnshapePanel({
                     busy={!!pushing}
                     refreshing={!!parts.refreshing}
                     outcome={assemblyOutcome}
+                    tooLarge={assemblyTooLarge}
+                    refreshFailure={parts.refreshFailure}
                     onPush={() => planAssembly(session.token)}
+                    onPushLevel={() => planAssembly(session.token, "top")}
                     onRefresh={() => loadParts(session.token)}
                   />
                 )
@@ -1726,11 +1479,6 @@ export function OnshapePanel({
                   onApply={() => applyReview(session.token)}
                   onReplan={() => replan(session.token)}
                   replanning={!!pushing}
-                  onEdit={editReviewItem}
-                  onSelect={selectPart}
-                  onSelectMany={selectManyParts}
-                  onEditCustomField={editReviewCustomField}
-                  onOpenFields={() => showTab("settings", session.token)}
                 />
               ) : (
                 <PartsSection
@@ -1739,6 +1487,7 @@ export function OnshapePanel({
                   canPush={canPush}
                   pushing={pushing}
                   pushOutcome={pushOutcome}
+                  outcome={partsOutcome}
                   onRefresh={() => loadParts(session.token)}
                   onPush={(partIds) => planParts(session.token, partIds)}
                 />
@@ -1756,10 +1505,6 @@ export function OnshapePanel({
                 onApply={() => applyReview(session.token)}
                 onReplan={() => replan(session.token)}
                 replanning={!!pushingReleaseId}
-                onEdit={editReviewItem}
-                onChangeNotice={editChangeNotice}
-                onCreateChangeNotice={setCreateChangeNotice}
-                onMakeDefault={setMakeDefault}
               />
             ) : (
               <ReleasesSection
@@ -1773,88 +1518,7 @@ export function OnshapePanel({
             )
           ) : null}
         </TabsContent>
-
-        <TabsContent value="settings" className="w-full">
-          {session.status === "signed-in" ? (
-            /*
-             * Laid out as Carbon's own integration settings form is: flat
-             * sections under an eyebrow heading and a rule, fields at
-             * `spacing={4}`, and one Save pinned at the foot of the page.
-             * Cards were the other candidate — Carbon's full-page settings
-             * use them — but three of them stacked in a 500px panel is more
-             * chrome than content, and the drawer form is the narrow-surface
-             * precedent.
-             */
-            <VStack spacing={4} className="w-full">
-              <ConnectionSection me={session.me} onSignOut={signOut} />
-
-              <PushDefaultsSection
-                me={session.me}
-                state={pushDefaults}
-                onChange={editPushDefault}
-              />
-
-              {/* The property map is a company setting whose candidate rows
-                  happen to come from the element in view — so it lives here,
-                  and is absent on an element that has no properties. */}
-              {canLoadParts ? (
-                <PanelSettingsSection
-                  title="Custom fields"
-                  description="Onshape properties are pushed into the Carbon custom field each one is mapped to. Create the field in Carbon first, then map it here."
-                  action={
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => loadFields(session.token)}
-                      isDisabled={settingsBusy || fields.status === "loading"}
-                      isLoading={
-                        fields.status === "ready" && !!fields.refreshing
-                      }
-                      leftIcon={<LuRefreshCw />}
-                    >
-                      Refresh
-                    </Button>
-                  }
-                >
-                  {/* `closed` is the instant between selecting the tab and the
-                      fetch starting, and it reads as the same wait. */}
-                  {fields.status === "closed" ? (
-                    <VStack spacing={2} className="w-full">
-                      <FieldsColumnLabels />
-                      <PanelListSkeleton />
-                    </VStack>
-                  ) : (
-                    <FieldsSection
-                      state={fields}
-                      onMap={mapFieldsProperty}
-                      onMode={setFieldsMode}
-                    />
-                  )}
-                </PanelSettingsSection>
-              ) : null}
-            </VStack>
-          ) : null}
-        </TabsContent>
       </VStack>
-
-      {/*
-       * Settings' Save is a pinned band of the panel, the mirror of the tab
-       * strip at the top — not a sticky element inside the scrolling body.
-       * Sticky inside it pins to the body's CONTENT edge, so the body's own
-       * bottom padding left a strip of list showing beneath the bar.
-       *
-       * Outside `TabsContent` but inside the Tabs root, because it belongs to
-       * the panel's frame rather than to the pane that scrolls.
-       */}
-      {tab === "settings" && session.status === "signed-in" ? (
-        <SettingsActionBar
-          canEdit={session.me.canEditSettings}
-          dirty={pushDefaultsDirty || fieldsDirty}
-          busy={settingsBusy}
-          saving={settingsSaving}
-          onSave={() => saveSettings(session.token)}
-        />
-      ) : null}
     </Tabs>
   );
 }
@@ -1866,7 +1530,10 @@ function AssemblySection({
   refreshing,
   locked,
   outcome,
+  tooLarge,
+  refreshFailure,
   onPush,
+  onPushLevel,
   onRefresh
 }: {
   assembly: PanelAssemblyStatus;
@@ -1877,7 +1544,13 @@ function AssemblySection({
   /** A review is open elsewhere: a second push would replace it unseen. */
   locked: boolean;
   outcome: PushOutcome | null;
+  /** The whole-tree push was refused as too large: the route's message. */
+  tooLarge: string | null;
+  /** A Refresh failed; the BOM on screen is the one loaded before it. */
+  refreshFailure?: LoadFailure;
   onPush: () => void;
+  /** Plan the root's own BOM only — the way out of a too-large refusal. */
+  onPushLevel: () => void;
   onRefresh: () => void;
 }) {
   return (
@@ -1915,10 +1588,56 @@ function AssemblySection({
         </HStack>
       </HStack>
 
+      {/* Two different causes, two different fixes: one is in Onshape, the
+          other is a read that will probably succeed on Refresh. */}
       {!assembly.root.partNumber ? (
-        <Alert variant="destructive">
+        assembly.root.identityUnavailable ? (
+          <Alert variant="warning">
+            <LuTriangleAlert />
+            <AlertTitle>Couldn't read this assembly's part number</AlertTitle>
+            <AlertDescription>
+              Onshape didn't return it this time. Refresh to try again.
+            </AlertDescription>
+          </Alert>
+        ) : (
+          <Alert variant="warning">
+            <LuTriangleAlert />
+            <AlertTitle>This assembly has no part number</AlertTitle>
+            <AlertDescription>
+              Set one on the assembly in Onshape, then press Refresh.
+            </AlertDescription>
+          </Alert>
+        )
+      ) : null}
+
+      {refreshFailure ? (
+        <PanelLoadError
+          title="Couldn't refresh the BOM"
+          failure={refreshFailure}
+          stale
+          retrying={refreshing}
+          onRetry={onRefresh}
+        />
+      ) : null}
+
+      {/* A refusal, not a failure: nothing is broken, and it carries the one
+          action that gets the user past it. */}
+      {tooLarge ? (
+        <Alert variant="warning">
           <LuTriangleAlert />
-          <AlertTitle>The assembly has no part number</AlertTitle>
+          <AlertTitle>This assembly is too large for one push</AlertTitle>
+          <AlertDescription>{tooLarge}</AlertDescription>
+          <HStack className="mt-2">
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={onPushLevel}
+              isDisabled={busy || locked || refreshing}
+              isLoading={busy}
+            >
+              Push this level only
+            </Button>
+          </HStack>
         </Alert>
       ) : null}
 
@@ -1934,8 +1653,7 @@ function AssemblySection({
 }
 
 /**
- * The current assembly's BOM, structured or flat, the way Onshape's own BOM
- * table offers it.
+ * The current assembly's BOM, as Onshape's structured BOM table shows it.
  *
  * Structured opens at the top level only. The rows are the assembly's own
  * children, and a sub-assembly says how many lines it is hiding so the choice
@@ -1955,17 +1673,14 @@ function AssemblyBomList({
   lines: PanelAssemblyLine[];
   /*
    * A re-read is in flight, so the rows on screen are about to be replaced.
-   * The view controls go with them: changing how a list is grouped while it
-   * is being refetched only means doing it twice.
+   * Expanding a list while it is being refetched only means doing it twice.
    */
   disabled: boolean;
 }) {
-  const [view, setView] = useState<"structured" | "flat">("structured");
   const [open, setOpen] = useState<Set<string>>(new Set());
 
   const tree = useMemo(() => buildBomViewTree(lines), [lines]);
   const structured = useMemo(() => visibleBomRows(tree, open), [tree, open]);
-  const flat = useMemo(() => flattenBomView(lines), [lines]);
   const parents = useMemo(() => bomParentIndexes(tree), [tree]);
 
   const toggle = (index: string) =>
@@ -1979,42 +1694,8 @@ function AssemblyBomList({
 
   return (
     <VStack spacing={2} className="w-full">
-      <HStack className="w-full justify-between">
-        {/*
-         * Carbon's segmented control, as `DateSelect` renders one: a pill on
-         * `bg-muted` with the active item lifted onto `bg-active`. Not the
-         * page tabs above it — those are navigation between pages, this
-         * chooses how one list is drawn — and not the bare `toggleVariants`
-         * default, which is a filter chip rather than a segmented control.
-         */}
-        <ToggleGroup
-          type="single"
-          value={view}
-          /* Radix allows deselecting the active item, which would leave the
-             list with no view at all. An empty value keeps the current one. */
-          onValueChange={(value) =>
-            (value === "structured" || value === "flat") && setView(value)
-          }
-          disabled={disabled}
-          className="gap-0 rounded-full border border-border bg-muted p-0.5 shadow-sm"
-        >
-          {(["structured", "flat"] as const).map((value) => (
-            <ToggleGroupItem
-              key={value}
-              value={value}
-              className={cn(
-                "h-7 rounded-full px-3 text-xs font-medium capitalize",
-                "bg-transparent text-muted-foreground",
-                "hover:bg-active hover:text-active-foreground hover:data-[state=on]:bg-active",
-                "data-[state=on]:bg-active data-[state=on]:text-active-foreground data-[state=on]:shadow-sm",
-                "transition-all duration-200"
-              )}
-            >
-              {value}
-            </ToggleGroupItem>
-          ))}
-        </ToggleGroup>
-        {view === "structured" && parents.length > 0 ? (
+      {parents.length > 0 ? (
+        <HStack className="w-full justify-end">
           <Button
             variant="link"
             size="sm"
@@ -2023,77 +1704,60 @@ function AssemblyBomList({
           >
             {allOpen ? "Collapse all" : "Expand all"}
           </Button>
-        ) : null}
-      </HStack>
-
+        </HStack>
+      ) : null}
       <ul className="w-full divide-y divide-border rounded-md border border-border">
-        {view === "structured"
-          ? structured.map((row) => (
-              <li key={row.line.index} className="px-3 py-1.5">
-                <div className="flex items-center justify-between gap-2">
-                  <HStack
-                    spacing={1}
-                    className="min-w-0"
-                    style={{ paddingLeft: `${(row.level - 1) * 14}px` }}
-                  >
-                    {row.hasChildren ? (
-                      <button
-                        type="button"
-                        onClick={() => toggle(row.line.index)}
-                        disabled={disabled}
-                        aria-expanded={row.open}
-                        aria-label={`${row.open ? "Collapse" : "Expand"} ${
-                          row.line.partNumber ?? row.line.index
-                        }`}
-                        className="shrink-0 text-muted-foreground transition-transform hover:text-foreground active:scale-[0.96] active:duration-75"
-                      >
-                        <LuChevronRight
-                          className={cn(
-                            "size-3.5 transition-transform",
-                            row.open && "rotate-90"
-                          )}
-                        />
-                      </button>
-                    ) : (
-                      /* Leaves keep the chevron's width so part numbers stay
-                         on one column instead of stepping in and out. */
-                      <span className="size-3.5 shrink-0" aria-hidden />
-                    )}
-                    <BomLineText
-                      line={row.line}
-                      quantity={row.line.quantity}
-                      note={
-                        row.hasChildren && !row.open
-                          ? `${row.descendantCount} inside`
-                          : null
-                      }
-                    />
-                  </HStack>
-                  <PartStateBadge state={row.line.state} />
-                </div>
-              </li>
-            ))
-          : flat.map((row) => (
-              <li
-                key={row.line.partNumber ?? row.line.index}
-                className="flex items-center justify-between gap-2 px-3 py-1.5"
+        {structured.map((row) => (
+          <li key={row.line.index} className="px-3 py-1.5">
+            <div className="flex items-center justify-between gap-2">
+              <HStack
+                spacing={1}
+                className="min-w-0"
+                style={{ paddingLeft: `${(row.level - 1) * 14}px` }}
               >
+                {row.hasChildren ? (
+                  <button
+                    type="button"
+                    onClick={() => toggle(row.line.index)}
+                    disabled={disabled}
+                    aria-expanded={row.open}
+                    aria-label={`${row.open ? "Collapse" : "Expand"} ${
+                      row.line.partNumber ?? row.line.index
+                    }`}
+                    className="shrink-0 text-muted-foreground transition-transform hover:text-foreground active:scale-[0.96] active:duration-75"
+                  >
+                    <LuChevronRight
+                      className={cn(
+                        "size-3.5 transition-transform",
+                        row.open && "rotate-90"
+                      )}
+                    />
+                  </button>
+                ) : (
+                  /* Leaves keep the chevron's width so part numbers stay on
+                     one column instead of stepping in and out. */
+                  <span className="size-3.5 shrink-0" aria-hidden />
+                )}
                 <BomLineText
                   line={row.line}
-                  quantity={row.totalQuantity}
+                  quantity={row.line.quantity}
                   note={
-                    row.occurrences > 1 ? `${row.occurrences} places` : null
+                    row.hasChildren && !row.open
+                      ? `${row.descendantCount} inside`
+                      : null
                   }
                 />
-                <PartStateBadge state={row.line.state} />
-              </li>
-            ))}
+              </HStack>
+              <PartStateBadge state={row.line.state} />
+            </div>
+          </li>
+        ))}
       </ul>
     </VStack>
   );
 }
 
-/** A BOM line's two lines of text, shared by both views. */
+/** A BOM line's two lines of text. */
 function BomLineText({
   line,
   quantity,
@@ -2131,19 +1795,26 @@ function PartsSection({
   pushing,
   locked,
   pushOutcome,
+  outcome,
   onRefresh,
   onPush
 }: {
   parts:
     | { status: "idle" }
     | { status: "loading" }
-    | { status: "ready"; rows: PanelPartStatus[]; refreshing?: boolean }
-    | { status: "error"; message: string };
+    | {
+        status: "ready";
+        rows: PanelPartStatus[];
+        refreshing?: boolean;
+        refreshFailure?: LoadFailure;
+      }
+    | { status: "error"; message: string; forbidden?: boolean };
   canPush: boolean;
   pushing: Set<string> | null;
   /** A review is open elsewhere: a second push would replace it unseen. */
   locked: boolean;
-  pushOutcome: Record<string, string>;
+  pushOutcome: Record<string, PartRowOutcome>;
+  outcome: PushOutcome | null;
   onRefresh: () => void;
   onPush: (partIds: string[]) => void;
 }) {
@@ -2190,12 +1861,24 @@ function PartsSection({
       ) : null}
 
       {parts.status === "error" ? (
-        <Alert variant="destructive">
-          <LuTriangleAlert />
-          <AlertTitle>Couldn't load part status</AlertTitle>
-          <AlertDescription>{parts.message}</AlertDescription>
-        </Alert>
+        <PanelLoadError
+          title="Couldn't load part status"
+          failure={{ message: parts.message, forbidden: !!parts.forbidden }}
+          onRetry={onRefresh}
+        />
       ) : null}
+
+      {parts.status === "ready" && parts.refreshFailure ? (
+        <PanelLoadError
+          title="Couldn't refresh part status"
+          failure={parts.refreshFailure}
+          stale
+          retrying={!!parts.refreshing}
+          onRetry={onRefresh}
+        />
+      ) : null}
+
+      {outcome ? <PushOutcomeView outcome={outcome} /> : null}
 
       {parts.status === "ready" && rows.length === 0 ? (
         <PanelEmpty>This element has no parts</PanelEmpty>
@@ -2219,14 +1902,23 @@ function PartsSection({
                     ? ` → ${part.item.readableId}`
                     : ""}
                   {part.state === "matched" && part.item
-                    ? ` · matches ${part.item.readableId}`
+                    ? " · number already used in Carbon"
                     : ""}
                 </p>
               </div>
               <HStack spacing={2} className="shrink-0">
                 {pushOutcome[part.partId] ? (
-                  <span className="text-xs text-muted-foreground">
-                    {pushOutcome[part.partId]}
+                  <span
+                    className={cn(
+                      "text-xs",
+                      pushOutcome[part.partId]?.kind === "error"
+                        ? "font-medium text-destructive"
+                        : pushOutcome[part.partId]?.kind === "skipped"
+                          ? "text-amber-600 dark:text-amber-400"
+                          : "text-muted-foreground"
+                    )}
+                  >
+                    {pushOutcome[part.partId]?.text}
                   </span>
                 ) : null}
                 <PartStateBadge state={part.state} />
@@ -2297,11 +1989,24 @@ function ReleasesSection({
       ) : null}
 
       {releases.status === "error" ? (
-        <Alert variant="destructive">
-          <LuTriangleAlert />
-          <AlertTitle>Couldn't load releases</AlertTitle>
-          <AlertDescription>{releases.message}</AlertDescription>
-        </Alert>
+        <PanelLoadError
+          title="Couldn't load releases"
+          failure={{
+            message: releases.message,
+            forbidden: !!releases.forbidden
+          }}
+          onRetry={onRefresh}
+        />
+      ) : null}
+
+      {releases.status === "ready" && releases.refreshFailure ? (
+        <PanelLoadError
+          title="Couldn't refresh releases"
+          failure={releases.refreshFailure}
+          stale
+          retrying={!!releases.refreshing}
+          onRetry={onRefresh}
+        />
       ) : null}
 
       {releases.status === "ready" && releases.releases.length === 0 ? (
@@ -2374,523 +2079,6 @@ function ReleasesSection({
 }
 
 // ---------------------------------------------------------------------------
-// Fields (Onshape properties → Carbon custom fields)
-// ---------------------------------------------------------------------------
-
-/**
- * The company's property map, edited in place: one row per property of the
- * current element, a select of the part custom fields it can feed (or a
- * field to create), and who owns the value afterwards. Saving replaces the
- * whole map; entries mapped from other elements are preserved by the draft
- * (see PanelFieldsState.entries).
- */
-function FieldsSection({
-  state,
-  onMap,
-  onMode
-}: {
-  state: Exclude<PanelFieldsState, { status: "closed" }>;
-  onMap: (property: PanelFieldsProperty, selection: string) => void;
-  onMode: (propertyId: string, mode: "owned" | "default") => void;
-}) {
-  if (state.status === "loading") {
-    /*
-     * The column labels are static, so they render while the rows load: they
-     * are what the page IS, and holding them back only moved the list down
-     * when the read landed.
-     */
-    return (
-      <VStack spacing={2} className="w-full">
-        <FieldsColumnLabels />
-        <PanelListSkeleton />
-      </VStack>
-    );
-  }
-  if (state.status === "error") {
-    return (
-      <Alert variant="destructive">
-        <LuTriangleAlert />
-        <AlertTitle>Couldn't load properties</AlertTitle>
-        <AlertDescription>{state.message}</AlertDescription>
-      </Alert>
-    );
-  }
-  const { data } = state;
-  const entryFor = (propertyId: string) =>
-    state.entries.find((entry) => entry.onshapePropertyId === propertyId);
-  /*
-   * Only what the user can act on. A COMPUTED, CATEGORY, USER or BLOB
-   * property has no Carbon field it can coerce into, so its row was a dead
-   * "cannot be mapped" line — and on a real element those outnumbered the
-   * mappable ones.
-   *
-   * An already-mapped property stays listed even if its type is not mappable
-   * (a map written before a type changed, or by hand). The save posts the
-   * whole map, so hiding an entry would leave it riding along invisibly with
-   * no way to remove it.
-   */
-  const visibleProperties = data.properties.filter(
-    (property) => property.mappable || !!entryFor(property.propertyId)
-  );
-  // The save posts the whole map, so a 422 can name a property mapped from
-  // another element. There is no row here to pin it to, and unpinned it would
-  // be invisible — Save would just fail — so it renders on its own, named
-  // from the draft entry. Keyed on the VISIBLE rows: an error pinned to a row
-  // the filter dropped would be pinned to nothing.
-  const rendered = new Set(
-    visibleProperties.map((property) => property.propertyId)
-  );
-  const otherElementErrors = Object.entries(state.fieldErrors)
-    .filter(([propertyId]) => !rendered.has(propertyId))
-    .map(([propertyId, messages]) => ({
-      propertyId,
-      name: entryFor(propertyId)?.onshapeName || propertyId,
-      messages
-    }));
-  return (
-    <VStack spacing={2} className="w-full">
-      {state.error ? (
-        <Alert variant="destructive">
-          <LuTriangleAlert />
-          <AlertTitle>Couldn't save the map</AlertTitle>
-          <AlertDescription>{state.error}</AlertDescription>
-        </Alert>
-      ) : null}
-      {otherElementErrors.map(({ propertyId, name, messages }) =>
-        messages.map((message) => (
-          <p
-            key={`${propertyId}:${message}`}
-            className="text-xs text-destructive w-full"
-          >
-            {name}: {message}
-          </p>
-        ))
-      )}
-      {visibleProperties.length === 0 ? (
-        <PanelEmpty>No mappable properties</PanelEmpty>
-      ) : (
-        <>
-          <FieldsColumnLabels />
-          <div className="w-full rounded-lg border border-border">
-            <ul className="flex w-full flex-col divide-y divide-border">
-              {visibleProperties.map((property) => (
-                <FieldsRow
-                  key={property.propertyId}
-                  property={property}
-                  entry={entryFor(property.propertyId)}
-                  definitions={data.definitions}
-                  errors={state.fieldErrors[property.propertyId]}
-                  disabled={!data.canEdit || state.saving || !!state.refreshing}
-                  onMap={onMap}
-                  onMode={onMode}
-                />
-              ))}
-            </ul>
-          </div>
-        </>
-      )}
-    </VStack>
-  );
-}
-
-/**
- * Which side is which is not guessable from the rows: both halves are field
- * names. Naming the columns is the whole legend the editor needs — and it is
- * shown while the rows load, so the list lands in place.
- */
-/**
- * One section of the Settings page: an eyebrow heading, a sentence saying what
- * it decides, and its controls — the shape Carbon's own integration settings
- * form uses for a settings group (`SettingsGroup` in `IntegrationForm`).
- *
- * The rule above the heading is what separates the sections, so the first one
- * on the page asks for `first` and does without it.
- */
-function PanelSettingsSection({
-  title,
-  description,
-  action,
-  first,
-  children
-}: {
-  title: string;
-  description: string;
-  /** A control that belongs to the section, not to a field in it. */
-  action?: ReactNode;
-  first?: boolean;
-  children: ReactNode;
-}) {
-  return (
-    <section className={cn("w-full", !first && "border-t border-border pt-4")}>
-      <div className="flex w-full items-start justify-between gap-2 pb-3">
-        <div className="flex min-w-0 flex-col gap-1">
-          {/* The eyebrow heading this branch's settings forms use. Written
-              out rather than taken from `@carbon/react`, which has no
-              Subheading on this branch's base. */}
-          <h2 className="text-[0.6875rem] font-semibold uppercase tracking-wider text-foreground/70">
-            {title}
-          </h2>
-          <p className="text-xs leading-relaxed text-muted-foreground">
-            {description}
-          </p>
-        </div>
-        {action ? <div className="shrink-0">{action}</div> : null}
-      </div>
-      {children}
-    </section>
-  );
-}
-
-/**
- * Which Carbon this panel is writing into, and the way out.
- *
- * The company is not cosmetic: a user who belongs to more than one has no
- * other way to tell which one a push will land in, and the answer only arrives
- * with the token. Sign out lives here rather than in a header because it is
- * the rarest action in the panel and the header was costing a row of list.
- */
-function ConnectionSection({
-  me,
-  onSignOut
-}: {
-  me: OnshapePanelMe;
-  onSignOut: () => void;
-}) {
-  return (
-    <PanelSettingsSection
-      first
-      title="Connection"
-      description="The Carbon company and user every push from this panel is recorded against."
-    >
-      {/* The row reads as a setting with its control on the right, the way
-          Carbon's own settings rows do (see the Production settings page). */}
-      <HStack className="w-full items-center justify-between gap-3">
-        <div className="flex min-w-0 flex-col">
-          <HStack spacing={2} className="min-w-0">
-            <PulsingDot
-              inactive
-              variant="green"
-              aria-label="Connected to Carbon"
-              className="shrink-0"
-            />
-            <span
-              className="truncate text-sm font-medium"
-              title={me.company?.name ?? ""}
-            >
-              {me.company?.name ?? "No company"}
-            </span>
-          </HStack>
-          <span
-            className="truncate text-xs text-muted-foreground"
-            title={me.email}
-          >
-            {me.email}
-          </span>
-        </div>
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={onSignOut}
-          className="shrink-0"
-        >
-          Sign out
-        </Button>
-      </HStack>
-    </PanelSettingsSection>
-  );
-}
-
-/**
- * The five defaults a push applies to an item it creates.
- *
- * Each is a DEFAULT, not a rule: the review step still lets a person change
- * any of them per push. They used to be editable only on the integration page
- * in Carbon, which meant leaving the CAD document to change one.
- */
-function PushDefaultsSection({
-  me,
-  state,
-  onChange
-}: {
-  me: OnshapePanelMe;
-  state: PushDefaultsState;
-  onChange: <K extends keyof OnshapePushDefaults>(
-    key: K,
-    value: OnshapePushDefaults[K]
-  ) => void;
-}) {
-  if (state.status !== "editing") return null;
-  const { draft } = state;
-  const busy = state.saving;
-  return (
-    <PanelSettingsSection
-      title="Push defaults"
-      description="Applied to items a push creates. Every one can still be changed per item while reviewing a push."
-    >
-      <VStack spacing={4} className="w-full">
-        {state.error ? (
-          <Alert variant="destructive">
-            <LuTriangleAlert />
-            <AlertTitle>Couldn't save the defaults</AlertTitle>
-            <AlertDescription>{state.error}</AlertDescription>
-          </Alert>
-        ) : null}
-
-        <EditorSelect
-          label="Unit of measure"
-          value={draft.unitOfMeasureCode ?? UNIT_FROM_COMPANY}
-          options={[
-            /* Null means "decide from the company's list" at plan time, which
-               is what a company that deleted EA relies on. */
-            { value: UNIT_FROM_COMPANY, label: "First in the company's list" },
-            ...me.unitsOfMeasure.map((unit) => ({
-              value: unit.code,
-              label: `${unit.name} (${unit.code})`
-            }))
-          ]}
-          onChange={(value) =>
-            onChange(
-              "unitOfMeasureCode",
-              value === UNIT_FROM_COMPANY ? null : value
-            )
-          }
-          disabled={busy}
-        />
-        <EditorSelect
-          label="Replenishment for designed parts"
-          value={draft.replenishmentSystem}
-          options={ITEM_REPLENISHMENT_SYSTEMS.map((value) => ({
-            value,
-            label: value
-          }))}
-          onChange={(value) =>
-            onChange(
-              "replenishmentSystem",
-              value as OnshapePushDefaults["replenishmentSystem"]
-            )
-          }
-          disabled={busy}
-        />
-        <EditorSelect
-          label="Method for designed parts"
-          value={draft.methodTypeForMake}
-          options={methodTypesFor(draft).map((value) => ({
-            value,
-            label: value
-          }))}
-          onChange={(value) =>
-            onChange(
-              "methodTypeForMake",
-              value as OnshapePushDefaults["methodTypeForMake"]
-            )
-          }
-          disabled={busy}
-        />
-        <EditorSelect
-          label="Method for purchased parts"
-          value={draft.methodTypeForBuy}
-          options={methodTypesFor({ replenishmentSystem: "Buy" }).map(
-            (value) => ({ value, label: value })
-          )}
-          onChange={(value) =>
-            onChange(
-              "methodTypeForBuy",
-              value as OnshapePushDefaults["methodTypeForBuy"]
-            )
-          }
-          disabled={busy}
-        />
-        <EditorSelect
-          label="Tracking type"
-          value={draft.itemTrackingType}
-          options={ITEM_TRACKING_TYPES.map((value) => ({
-            value,
-            label: value
-          }))}
-          onChange={(value) =>
-            onChange(
-              "itemTrackingType",
-              value as OnshapePushDefaults["itemTrackingType"]
-            )
-          }
-          disabled={busy}
-        />
-      </VStack>
-    </PanelSettingsSection>
-  );
-}
-
-/**
- * The right-hand control block's width, shared by the rows and the column
- * labels above them so the two columns actually line up. Fixed rather than a
- * fraction: the select has to hold a Carbon field name, and the property
- * names on the left vary far more in length than the fields do.
- *
- * Wide enough for both controls a mapped row shows — at 220px the ownership
- * select rendered as "Own…".
- */
-const FIELDS_CONTROL_WIDTH = "w-[252px]";
-/** Fits "Default", the longer of the two ownership words, without truncating. */
-const FIELDS_MODE_WIDTH = "w-[104px]";
-
-/**
- * Which side is which is not guessable from the rows alone — both halves are
- * field names — so the columns are named, aligned over the columns they
- * describe, and each row carries an arrow in Onshape → Carbon order.
- */
-function FieldsColumnLabels() {
-  return (
-    <div className="flex w-full items-center gap-3 px-3">
-      <Label className="min-w-0 flex-1">Onshape property</Label>
-      {/* Spacer for the rows' arrow, so the labels sit over their columns. */}
-      <span aria-hidden className="size-4 shrink-0" />
-      <Label className={cn("shrink-0", FIELDS_CONTROL_WIDTH)}>
-        Carbon custom field
-      </Label>
-    </div>
-  );
-}
-
-function FieldsRow({
-  property,
-  entry,
-  definitions,
-  errors,
-  disabled,
-  onMap,
-  onMode
-}: {
-  property: PanelFieldsProperty;
-  entry: FieldsDraftEntry | undefined;
-  definitions: PlanCustomFieldDefinition[];
-  errors: string[] | undefined;
-  disabled: boolean;
-  onMap: (property: PanelFieldsProperty, selection: string) => void;
-  onMode: (propertyId: string, mode: "owned" | "default") => void;
-}) {
-  // Only fields of a type the value can coerce into are offered; an already
-  // mapped field stays listed even when its type no longer matches, so the
-  // current mapping is visible rather than a blank select.
-  const allowed = mappableTypesFor(property.valueType);
-  const options = definitions.filter(
-    (definition) =>
-      allowed.includes(definition.dataTypeId) ||
-      definition.id === entry?.carbonFieldId
-  );
-  // A mapping whose Carbon field has since been deleted has no definition to
-  // name it: with no item for the value the trigger renders blank, so the
-  // mapping shows as a disabled option the user can map away from.
-  const deletedFieldId =
-    entry?.carbonFieldId &&
-    !options.some((definition) => definition.id === entry.carbonFieldId)
-      ? entry.carbonFieldId
-      : null;
-  const selection = entry?.carbonFieldId ?? FIELDS_NOT_MAPPED;
-  /*
-   * A property whose type has no Carbon target is only listed at all because
-   * something already maps it, and the reason for listing it is that the save
-   * posts the whole map — so it has to be possible to map it away. It gets the
-   * select too; the options are just the field it already points at.
-   */
-  const editable = property.mappable || !!entry;
-  return (
-    <li className="flex w-full flex-col gap-1 px-3 py-2">
-      <div className="flex w-full items-center gap-3">
-        {/* `leading-tight` on both lines: the panel is about fifteen rows
-            tall, so the default line height cost a row of list per screen. */}
-        <div className="flex min-w-0 flex-1 flex-col leading-tight">
-          <span className="truncate text-sm font-medium" title={property.name}>
-            {property.name}
-          </span>
-          {/* The Onshape type, as provenance under the name rather than as a
-              badge beside it: it is read far less often than the name, and a
-              badge on every row read as a column of noise. */}
-          <span className="truncate text-xs text-muted-foreground">
-            {property.valueType}
-            {property.mappable ? null : " · no Carbon type to map onto"}
-          </span>
-        </div>
-        <LuArrowRight
-          aria-hidden
-          className="size-4 shrink-0 text-muted-foreground"
-        />
-        <div
-          className={cn(
-            "flex shrink-0 items-center gap-1",
-            FIELDS_CONTROL_WIDTH
-          )}
-        >
-          {editable ? (
-            <>
-              <Select
-                value={selection}
-                onValueChange={(value) => onMap(property, value)}
-                disabled={disabled}
-              >
-                <SelectTrigger
-                  size="sm"
-                  className="min-w-0 flex-1"
-                  aria-label={`Map ${property.name}`}
-                >
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={FIELDS_NOT_MAPPED}>Not mapped</SelectItem>
-                  {options.map((definition) => (
-                    <SelectItem key={definition.id} value={definition.id}>
-                      {definition.name}
-                    </SelectItem>
-                  ))}
-                  {deletedFieldId ? (
-                    <SelectItem value={deletedFieldId} disabled>
-                      Deleted field
-                    </SelectItem>
-                  ) : null}
-                </SelectContent>
-              </Select>
-              {/* Only a mapped row has an ownership to choose, and reserving
-                  the space when there is none would leave every unmapped row
-                  with a hole in it. */}
-              {entry ? (
-                <Select
-                  value={entry.mode}
-                  onValueChange={(value) =>
-                    onMode(
-                      property.propertyId,
-                      value === "default" ? "default" : "owned"
-                    )
-                  }
-                  disabled={disabled}
-                >
-                  <SelectTrigger
-                    size="sm"
-                    className={cn("shrink-0", FIELDS_MODE_WIDTH)}
-                    aria-label={`${property.name} ownership`}
-                  >
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="owned">Owned</SelectItem>
-                    <SelectItem value="default">Default</SelectItem>
-                  </SelectContent>
-                </Select>
-              ) : null}
-            </>
-          ) : (
-            <span className="text-xs text-muted-foreground">Not mappable</span>
-          )}
-        </div>
-      </div>
-      {errors?.map((message) => (
-        <p key={message} className="text-xs text-destructive">
-          {message}
-        </p>
-      ))}
-    </li>
-  );
-}
-
-// ---------------------------------------------------------------------------
 // Review (plan → apply)
 // ---------------------------------------------------------------------------
 
@@ -2901,22 +2089,16 @@ type ReviewSectionProps<R extends ReviewState> = {
   onReplan: () => void;
   /** A plan request after expiry is in flight. */
   replanning: boolean;
-  onEdit: (
-    key: string,
-    proposed: ProposedItem,
-    field: EditableItemField,
-    value: string
-  ) => void;
 };
 
-/** Header every review shares: what happens, and the two ways out of it. */
 /**
- * The push button, pinned to the bottom of the scrolling body.
+ * The push button, pinned to the bottom of the scrolling body, so the number
+ * of items about to be written stays in view however long the summary runs.
  *
- * It used to sit above the list. With eight rows that reads fine; with a
- * hundred it means scrolling back to the top to commit a decision you made at
- * the bottom, and it hides the one number that matters — how many items this
- * is about to write. Sticky keeps both in view for the whole review.
+ * `-bottom-4` cancels the body's `p-4`: sticky pins to the scrollport inset by
+ * its padding, so `bottom-0` left a 16px strip below the bar where rows
+ * scrolled past. It is the last child of every review, so nothing sits in
+ * that padding at the end of the list.
  */
 function ReviewActionBar({
   review,
@@ -2929,14 +2111,14 @@ function ReviewActionBar({
 }) {
   const count = applyCount(review);
   return (
-    <div className="sticky bottom-0 -mx-4 mt-1 w-[calc(100%+--spacing(8))] border-t border-border bg-background px-4 py-2">
+    <div className="sticky -bottom-4 -mx-4 mt-1 w-[calc(100%+--spacing(8))] border-t border-border bg-background px-4 py-2">
       <Button
         className="w-full"
         onClick={onApply}
         isDisabled={review.applying || review.expired || count === 0}
         isLoading={review.applying || replanning}
       >
-        {count === 0 ? "Nothing selected" : `Push ${count} to Carbon`}
+        {count === 0 ? "Nothing to push" : `Push ${count} to Carbon`}
       </Button>
     </div>
   );
@@ -2975,550 +2157,92 @@ function ReviewError({
   );
 }
 
-function toneClass(tone: MethodDescription["tone"]): string {
-  if (tone === "destructive") return "text-xs text-destructive";
-  if (tone === "muted") return "text-xs text-muted-foreground";
-  return "text-xs";
-}
-
-/**
- * The Settings page's one Save, pinned to the foot of the page.
- *
- * One button for the page, not one per section: both sections write the same
- * `companyIntegration` row, and two buttons visible at once read as two
- * independent saves where there is a single decision. Pinned for the same
- * reason the review's push button is — the property map runs to dozens of
- * rows, and a Save you have to scroll back up to reach is a Save that gets
- * missed.
- */
-function SettingsActionBar({
-  canEdit,
-  dirty,
+/** Title and Cancel, shared by every review. */
+function ReviewHeader({
   busy,
-  saving,
-  onSave
+  onCancel
 }: {
-  canEdit: boolean;
-  dirty: boolean;
   busy: boolean;
-  saving: boolean;
-  onSave: () => void;
+  onCancel: () => void;
 }) {
   return (
-    <div className="w-full shrink-0 border-t border-border bg-background px-4 py-2">
-      {canEdit ? (
-        <Button
-          className="w-full"
-          onClick={onSave}
-          isDisabled={!dirty || busy}
-          isLoading={saving}
-        >
-          {dirty ? "Save changes" : "No changes to save"}
-        </Button>
-      ) : (
-        // Nothing to offer rather than a button that would 403: the writes
-        // both need `settings.update`, and the page is still worth reading
-        // without it.
-        <p className="py-1 text-center text-xs text-muted-foreground">
-          Changing these needs permission to update settings in Carbon.
-        </p>
-      )}
-    </div>
-  );
-}
-
-function EditorSelect({
-  label,
-  value,
-  options,
-  disabled,
-  onChange
-}: {
-  label: string;
-  value: string;
-  options: Array<{ value: string; label: string }>;
-  disabled: boolean;
-  onChange: (value: string) => void;
-}) {
-  return (
-    /*
-     * `gap-2` and a full-width control, because `VStack` is `items-start`:
-     * left to size themselves these shrank to their content, so a stack of
-     * five selects had five different widths. Carbon's own `Select` is a
-     * `FormControl` (`gap-y-2`) around a `w-full` trigger — this is that,
-     * without the form binding the panel has no use for.
-     */
-    <div className="flex w-full min-w-0 flex-col gap-2">
-      <Label>{label}</Label>
-      <Select value={value} onValueChange={onChange} disabled={disabled}>
-        <SelectTrigger size="sm" className="w-full" aria-label={label}>
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {options.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
+    <HStack className="w-full justify-between">
+      <span className="text-sm font-medium">Review → Carbon</span>
+      <Button variant="ghost" size="sm" onClick={onCancel} isDisabled={busy}>
+        Cancel
+      </Button>
+    </HStack>
   );
 }
 
 /**
- * The create-row editor: the six fields a user may change before an item is
- * created. Identity (part number, revision) is Onshape's and is not offered.
- * Method choices follow the replenishment system as the Part form's do, and
- * a replenishment change that invalidates the method moves it (see
- * applyItemEdit). Values are the proposal with the edits laid over it, so
- * an untouched field shows what the push would write.
+ * What the push will do, in one line of counts.
+ *
+ * The review is a summary, not a form. Every value it shows comes from
+ * Onshape or from the company's push defaults, and the way to change one is
+ * to change it there and review again — the panel does not keep a second
+ * editor for data Onshape already edits.
  */
-function ItemEditor({
-  editKey,
-  proposed,
-  edit,
-  errors,
-  options,
-  disabled,
-  onEdit
-}: {
-  editKey: string;
-  proposed: ProposedItem;
-  edit: ItemEdit | undefined;
-  errors: string[] | undefined;
-  options: PlanOptions;
-  disabled: boolean;
-  onEdit: ReviewSectionProps<ReviewState>["onEdit"];
-}) {
-  const item = editedItem(proposed, edit);
-  const change = (field: EditableItemField) => (value: string) =>
-    onEdit(editKey, proposed, field, value);
+function ReviewSummary({ counts }: { counts: Array<[number, string]> }) {
+  const parts = counts
+    .filter(([n]) => n > 0)
+    .map(([n, label]) => `${n} ${label}`);
   return (
-    <VStack spacing={2} className="w-full mt-2">
-      <Input
-        size="sm"
-        value={item.name}
-        placeholder="Name"
-        aria-label="Name"
-        isDisabled={disabled}
-        isInvalid={!!errors}
-        onChange={(event) => change("name")(event.target.value)}
-      />
-      <Input
-        size="sm"
-        value={item.description ?? ""}
-        placeholder="Description"
-        aria-label="Description"
-        isDisabled={disabled}
-        onChange={(event) => change("description")(event.target.value)}
-      />
-      <div className="grid grid-cols-2 gap-2 w-full">
-        <EditorSelect
-          label="Buy/Make"
-          value={item.replenishmentSystem}
-          options={ITEM_REPLENISHMENT_SYSTEMS.map((value) => ({
-            value,
-            label: value
-          }))}
-          disabled={disabled}
-          onChange={change("replenishmentSystem")}
-        />
-        <EditorSelect
-          label="Method"
-          value={item.defaultMethodType}
-          options={methodTypesFor(item).map((value) => ({
-            value,
-            label: value
-          }))}
-          disabled={disabled}
-          onChange={change("defaultMethodType")}
-        />
-        <EditorSelect
-          label="Tracking"
-          value={item.itemTrackingType}
-          options={ITEM_TRACKING_TYPES.map((value) => ({
-            value,
-            label: value
-          }))}
-          disabled={disabled}
-          onChange={change("itemTrackingType")}
-        />
-        <EditorSelect
-          label="Unit"
-          value={item.unitOfMeasureCode}
-          options={options.unitsOfMeasure.map((unit) => ({
-            value: unit.code,
-            label: `${unit.code} · ${unit.name}`
-          }))}
-          disabled={disabled}
-          onChange={change("unitOfMeasureCode")}
-        />
-      </div>
-      {errors?.map((message) => (
-        <p key={message} className="text-xs text-destructive w-full">
-          {message}
-        </p>
-      ))}
-    </VStack>
+    <p className="w-full text-sm">
+      {parts.length > 0 ? parts.join(" · ") : "Nothing to change"}
+    </p>
   );
 }
 
-type EditCustomFieldHandler = (
-  key: string,
-  fields: PlanCustomField[],
-  fieldId: string,
-  value: string
-) => void;
+/** The settings a created item gets, as one line. */
+function proposedSummary(proposed: ProposedItem): string {
+  return [
+    proposed.replenishmentSystem,
+    proposed.defaultMethodType,
+    proposed.itemTrackingType,
+    proposed.unitOfMeasureCode
+  ].join(" · ");
+}
 
 /**
- * The mapped custom fields on a review row. A create shows every mapped
- * field — default-mode ones editable (they are Carbon's after create), owned
- * ones read-only with their Onshape provenance. Update/adopt rows list the
- * owned fields the push will write, the emptied ones included: an owned null
- * clears the Carbon value (mergeCustomFieldValues), so the review has to say
- * so. Problems and unmapped properties are review information, never
- * blockers.
+ * The mapped custom fields a row will write, read-only. An update or link
+ * lists only the owned fields, the emptied ones included: an owned null
+ * clears the Carbon value, so the review has to say so.
  */
-function RowCustomFields({
-  editKey,
+function RowFields({
   isCreate,
   fields,
-  problems,
-  unmapped,
-  edit,
-  disabled,
-  onEdit,
-  onOpenFields
+  problems
 }: {
-  editKey: string;
   isCreate: boolean;
   fields: PlanCustomField[] | undefined;
   problems: string[] | undefined;
-  unmapped: UnmappedProperty[] | undefined;
-  edit: ItemEdit | undefined;
-  disabled: boolean;
-  onEdit: EditCustomFieldHandler;
-  onOpenFields: () => void;
 }) {
-  const mapped = fields ?? [];
-  const shown = isCreate
-    ? mapped
-    : mapped.filter((field) => field.mode === "owned");
-  if (shown.length === 0 && !problems?.length && !unmapped?.length) {
-    return null;
-  }
+  const shown = (fields ?? []).filter(
+    (field) => isCreate || field.mode === "owned"
+  );
+  if (shown.length === 0 && !problems?.length) return null;
   return (
-    <VStack spacing={1} className="w-full mt-2">
-      {shown.map((field) => {
-        if (isCreate && field.mode === "default") {
-          return (
-            <CustomFieldInput
-              key={field.fieldId}
-              field={field}
-              value={customFieldEditValue(field, edit?.customFields)}
-              disabled={disabled}
-              onChange={(value) =>
-                onEdit(editKey, mapped, field.fieldId, value)
-              }
-            />
-          );
-        }
-        return (
-          <p
-            key={field.fieldId}
-            className="text-xs text-muted-foreground w-full"
-          >
-            {isCreate || field.value !== null
-              ? `${field.name}: ${customFieldDisplayValue(field)}`
-              : `${field.name}: will be cleared`}
-          </p>
-        );
-      })}
+    <div className="mt-1 w-full">
+      {shown.map((field) => (
+        <p
+          key={field.fieldId}
+          className="w-full truncate text-xs text-muted-foreground"
+        >
+          {isCreate || field.value !== null
+            ? `${field.name}: ${customFieldDisplayValue(field)}`
+            : `${field.name}: will be cleared`}
+        </p>
+      ))}
+      {/* A value that cannot coerce is reported and skipped, never written. */}
       {problems?.map((problem) => (
-        <p key={problem} className="text-xs text-destructive w-full">
+        <p
+          key={problem}
+          className="w-full text-xs text-amber-600 dark:text-amber-400"
+        >
           {problem}
         </p>
       ))}
-      {unmapped && unmapped.length > 0 ? (
-        <p className="text-xs text-muted-foreground w-full">
-          Not mapped: {unmapped.map((property) => property.name).join(", ")}{" "}
-          <Button variant="link" size="sm" onClick={onOpenFields}>
-            Fields
-          </Button>
-        </p>
-      ) : null}
-    </VStack>
-  );
-}
-
-/**
- * One editable default-mode field on a create row. The control matches the
- * Carbon type; values travel as the strings the inputs produce and the
- * server coerces them against the field's type (mergeCustomFieldEdits), so
- * what is typed is what is validated. An emptied input means "leave the
- * field unset".
- */
-function CustomFieldInput({
-  field,
-  value,
-  disabled,
-  onChange
-}: {
-  field: PlanCustomField;
-  value: string;
-  disabled: boolean;
-  onChange: (value: string) => void;
-}) {
-  // An empty edit value is what "leave it unset" travels as, and Radix
-  // refuses an empty item value, so the selects trade it for a named one.
-  const selected = value === "" ? CUSTOM_FIELD_UNSET : value;
-  const change = (next: string) =>
-    onChange(next === CUSTOM_FIELD_UNSET ? "" : next);
-  if (field.dataTypeId === CUSTOM_FIELD_DATA_TYPES.boolean) {
-    return (
-      <CustomFieldLine label={field.name}>
-        <Select value={selected} onValueChange={change} disabled={disabled}>
-          <SelectTrigger size="sm" aria-label={field.name}>
-            <SelectValue placeholder="—" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={CUSTOM_FIELD_UNSET}>—</SelectItem>
-            <SelectItem value="yes">Yes</SelectItem>
-            <SelectItem value="no">No</SelectItem>
-          </SelectContent>
-        </Select>
-      </CustomFieldLine>
-    );
-  }
-  if (field.dataTypeId === CUSTOM_FIELD_DATA_TYPES.list) {
-    // The Onshape value may not be a list option yet — apply adds missing
-    // options add-only — so it must stay selectable here.
-    const options = [...(field.listOptions ?? [])];
-    const incoming =
-      typeof field.value === "string" && field.value !== ""
-        ? field.value
-        : null;
-    if (incoming && !options.includes(incoming)) options.unshift(incoming);
-    if (value !== "" && !options.includes(value)) options.unshift(value);
-    return (
-      <CustomFieldLine label={field.name}>
-        <Select value={selected} onValueChange={change} disabled={disabled}>
-          <SelectTrigger size="sm" aria-label={field.name}>
-            <SelectValue placeholder="—" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={CUSTOM_FIELD_UNSET}>—</SelectItem>
-            {options.map((option) => (
-              <SelectItem key={option} value={option}>
-                {option}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </CustomFieldLine>
-    );
-  }
-  const type =
-    field.dataTypeId === CUSTOM_FIELD_DATA_TYPES.date
-      ? "date"
-      : field.dataTypeId === CUSTOM_FIELD_DATA_TYPES.numeric
-        ? "number"
-        : "text";
-  return (
-    <CustomFieldLine label={field.name}>
-      <Input
-        size="sm"
-        type={type}
-        value={value}
-        aria-label={field.name}
-        isDisabled={disabled}
-        onChange={(event) => onChange(event.target.value)}
-      />
-    </CustomFieldLine>
-  );
-}
-
-function CustomFieldLine({
-  label,
-  children
-}: {
-  label: string;
-  children: ReactNode;
-}) {
-  return (
-    <div className="grid grid-cols-[auto_1fr] items-center gap-2 w-full">
-      <Label>{label}</Label>
-      {children}
-    </div>
-  );
-}
-
-/**
- * The action groups a part plan falls into, ordered by how much a reviewer
- * cares. "New" first because it is the only group whose values are editable
- * and the only one that can be got wrong; "Skipped" last because it is
- * unactionable.
- */
-const PART_PLAN_GROUPS = [
-  { action: "create", label: "New" },
-  { action: "update", label: "Update" },
-  { action: "adopt", label: "Link" },
-  { action: "unchanged", label: "Up to date" },
-  { action: "skip-no-part-number", label: "Skipped" }
-] as const;
-
-type PartPlanGroupKey = (typeof PART_PLAN_GROUPS)[number]["action"];
-
-/**
- * Search + group filter + bulk selection for a list that can run to hundreds of
- * rows.
- *
- * A 100-part assembly is not reviewable by scrolling: the reviewer's real
- * question is "which of these are new, and are those right?", so the group
- * filter is the primary control and search is for finding one known part. Bulk
- * selection acts on the FILTERED set, not the whole plan — "Select all" while
- * filtered to New means "every new one", which is the thing people actually
- * want and the thing a plain select-all gets wrong.
- */
-function PlanToolbar({
-  query,
-  onQuery,
-  group,
-  onGroup,
-  counts,
-  total,
-  selectedCount,
-  onSelectAll,
-  onClearSelection,
-  disabled
-}: {
-  query: string;
-  onQuery: (value: string) => void;
-  group: PartPlanGroupKey | "all";
-  onGroup: (value: PartPlanGroupKey | "all") => void;
-  counts: Record<string, number>;
-  total: number;
-  selectedCount: number | null;
-  onSelectAll?: () => void;
-  onClearSelection?: () => void;
-  disabled: boolean;
-}) {
-  const chips: Array<{
-    key: PartPlanGroupKey | "all";
-    label: string;
-    n: number;
-  }> = [
-    { key: "all", label: "All", n: total },
-    ...PART_PLAN_GROUPS.map((g) => ({
-      key: g.action,
-      label: g.label,
-      n: counts[g.action] ?? 0
-    })).filter((chip) => chip.n > 0)
-  ];
-
-  return (
-    <VStack spacing={2} className="w-full">
-      <Input
-        value={query}
-        onChange={(event) => onQuery(event.target.value)}
-        placeholder="Search name or part number"
-        aria-label="Search parts in this plan"
-        className="h-8 w-full text-sm"
-      />
-      {/* Chips scroll sideways rather than wrap: a wrapped row of six chips
-          costs three lines of a panel that only has about twenty. */}
-      <div className="-mx-1 flex w-full gap-1 overflow-x-auto px-1 pb-0.5">
-        {chips.map((chip) => (
-          <button
-            key={chip.key}
-            type="button"
-            onClick={() => onGroup(chip.key)}
-            aria-pressed={group === chip.key}
-            className={cn(
-              "shrink-0 rounded-full border px-2 py-0.5 text-xs whitespace-nowrap transition-transform active:scale-[0.96] active:duration-75",
-              group === chip.key
-                ? "border-foreground bg-foreground text-background"
-                : "border-border text-muted-foreground hover:text-foreground"
-            )}
-          >
-            {chip.label}
-            <span className="ml-1 tabular-nums opacity-70">{chip.n}</span>
-          </button>
-        ))}
-      </div>
-      {selectedCount !== null ? (
-        <HStack className="w-full justify-between text-xs">
-          <HStack spacing={1}>
-            <Button
-              variant="link"
-              size="sm"
-              onClick={onSelectAll}
-              isDisabled={disabled}
-            >
-              Select all
-            </Button>
-            <Button
-              variant="link"
-              size="sm"
-              onClick={onClearSelection}
-              isDisabled={disabled}
-            >
-              Clear
-            </Button>
-          </HStack>
-          <span className="tabular-nums text-muted-foreground">
-            {selectedCount} selected
-          </span>
-        </HStack>
-      ) : null}
-    </VStack>
-  );
-}
-
-/**
- * Everything a reviewer can change about one create row, behind a disclosure.
- *
- * Mounting this inline for every selected row was the panel's worst scaling
- * problem: six Selects plus the custom-field inputs, times a hundred rows, is
- * several hundred Radix popovers built before the list can paint — and it
- * buries the next row's name a screen and a half down. Collapsed by default,
- * the proposed values are still visible as a summary line, so nothing is
- * hidden that a reviewer needs in order to decide whether to open it.
- */
-function RowDisclosure({
-  summary,
-  children,
-  defaultOpen
-}: {
-  summary: string;
-  children: ReactNode;
-  defaultOpen?: boolean;
-}) {
-  const [open, setOpen] = useState(!!defaultOpen);
-  return (
-    /*
-     * Deliberately NOT a <details>. That element only HIDES its children —
-     * React still mounts them, so a 150-row plan built every editor anyway
-     * (measured: 300 Radix Selects mounted with the rows "collapsed").
-     * Rendering conditionally is what actually keeps them out of the DOM.
-     */
-    <div className="mt-1 w-full">
-      <button
-        type="button"
-        onClick={() => setOpen((current) => !current)}
-        aria-expanded={open}
-        className="flex w-full items-center gap-1 text-left text-xs text-muted-foreground transition-transform hover:text-foreground active:scale-[0.96]"
-      >
-        <LuChevronRight
-          className={cn(
-            "size-3 shrink-0 transition-transform",
-            open && "rotate-90"
-          )}
-        />
-        <span className="truncate">{summary}</span>
-      </button>
-      {open ? children : null}
     </div>
   );
 }
@@ -3533,8 +2257,8 @@ function PartPlanBadge({ row }: { row: PartPlanRow }) {
       );
     case "adopt":
       return (
-        <Status color="yellow" disableTooltip>
-          Link to {row.item?.readableId ?? row.partNumber}
+        <Status color="red" disableTooltip>
+          Conflict
         </Status>
       );
     case "update":
@@ -3563,70 +2287,17 @@ function PartReviewSection({
   onCancel,
   onApply,
   onReplan,
-  replanning,
-  onEdit,
-  onSelect,
-  onSelectMany,
-  onEditCustomField,
-  onOpenFields
-}: ReviewSectionProps<PartReview> & {
-  onSelect: (partId: string, selected: boolean) => void;
-  onSelectMany: (partIds: string[], selected: boolean) => void;
-  onEditCustomField: EditCustomFieldHandler;
-  onOpenFields: () => void;
-}) {
+  replanning
+}: ReviewSectionProps<PartReview>) {
   const { plan } = review;
-  const [query, setQuery] = useState("");
-  const [group, setGroup] = useState<PartPlanGroupKey | "all">("all");
-
-  const counts = useMemo(() => {
-    const out: Record<string, number> = {};
-    for (const row of plan.rows) out[row.action] = (out[row.action] ?? 0) + 1;
-    return out;
-  }, [plan.rows]);
-
-  /** Rows surviving the group chip and the search box, in plan order. */
-  const visible = useMemo(() => {
-    const needle = query.trim().toLowerCase();
-    return plan.rows.filter((row) => {
-      if (group !== "all" && row.action !== group) return false;
-      if (!needle) return true;
-      return (
-        row.name.toLowerCase().includes(needle) ||
-        (row.partNumber ?? "").toLowerCase().includes(needle)
-      );
-    });
-  }, [plan.rows, query, group]);
-
-  const grouped = useMemo(
-    () =>
-      PART_PLAN_GROUPS.map((definition) => ({
-        ...definition,
-        rows: visible.filter((row) => row.action === definition.action)
-      })).filter((section) => section.rows.length > 0),
-    [visible]
-  );
-
-  /*
-   * Bulk selection acts on what is on screen, never on the whole plan. Filtered
-   * to New, "Select all" means every new part — which is the operation someone
-   * reviewing a hundred-part assembly actually wants.
-   */
-  const pushableVisible = visible
-    .filter((row) => row.action !== "skip-no-part-number")
-    .map((row) => row.partId);
-
   const busy = review.applying || replanning;
+  const count = (action: PartPlanRow["action"]) =>
+    plan.rows.filter((row) => row.action === action).length;
+  const conflicts = plan.rows.filter((row) => row.action === "adopt");
 
   return (
     <VStack spacing={2} className="w-full">
-      <HStack className="w-full justify-between">
-        <span className="text-sm font-medium">Review → Carbon</span>
-        <Button variant="ghost" size="sm" onClick={onCancel} isDisabled={busy}>
-          Cancel
-        </Button>
-      </HStack>
-
+      <ReviewHeader busy={busy} onCancel={onCancel} />
       <ReviewError
         review={review}
         replanning={replanning}
@@ -3637,136 +2308,91 @@ function PartReviewSection({
         <PanelEmpty>None of the selected parts are in this element</PanelEmpty>
       ) : (
         <>
-          <PlanToolbar
-            query={query}
-            onQuery={setQuery}
-            group={group}
-            onGroup={setGroup}
-            counts={counts}
-            total={plan.rows.length}
-            selectedCount={review.selected.size}
-            onSelectAll={() => onSelectMany(pushableVisible, true)}
-            onClearSelection={() => onSelectMany(pushableVisible, false)}
-            disabled={busy}
+          <ReviewSummary
+            counts={[
+              [count("create"), "created"],
+              [count("adopt"), "linked"],
+              [count("update"), "updated"],
+              [count("unchanged"), "up to date"],
+              [count("skip-no-part-number"), "skipped"]
+            ]}
           />
 
-          {visible.length === 0 ? (
-            <PanelEmpty>No parts match</PanelEmpty>
-          ) : (
-            grouped.map((section) => (
-              <VStack key={section.action} spacing={1} className="w-full">
-                <HStack className="w-full justify-between px-1">
-                  <span className="text-xs font-medium text-muted-foreground">
-                    {section.label}
-                  </span>
-                  <span className="text-xs tabular-nums text-muted-foreground">
-                    {section.rows.length}
-                  </span>
-                </HStack>
-                <ul className="w-full divide-y divide-border rounded-md border border-border">
-                  {section.rows.map((row) => {
-                    const pushable = row.action !== "skip-no-part-number";
-                    const selected = review.selected.has(row.partId);
-                    const hasEditor = row.action === "create" && !!row.proposed;
-                    const hasFields =
-                      row.action === "create" ||
-                      row.action === "update" ||
-                      row.action === "adopt";
-                    return (
-                      <li key={row.partId} className="px-3 py-2">
-                        <div className="flex items-start justify-between gap-2">
-                          <HStack spacing={2} className="min-w-0 items-start">
-                            <span className="flex h-lh items-center text-sm">
-                              <Checkbox
-                                checked={selected}
-                                disabled={!pushable || review.applying}
-                                aria-label={`Push ${row.partNumber ?? row.name}`}
-                                onCheckedChange={(checked) =>
-                                  onSelect(row.partId, checked === true)
-                                }
-                              />
-                            </span>
-                            <div className="min-w-0">
-                              <p className="truncate text-sm" title={row.name}>
-                                {row.name}
-                              </p>
-                              <p className="truncate text-xs text-muted-foreground">
-                                {row.partNumber ?? "No part number"}
-                                {row.revision ? ` · Rev ${row.revision}` : ""}
-                              </p>
-                            </div>
-                          </HStack>
-                          <div className="shrink-0">
-                            <PartPlanBadge row={row} />
-                          </div>
-                        </div>
+          {conflicts.length > 0 ? (
+            <CappedWarningList
+              variant="destructive"
+              title={(n) =>
+                n === 1
+                  ? "1 part shares a part number with an existing Carbon item"
+                  : `${n} parts share a part number with an existing Carbon item`
+              }
+              description="Pushing links them and overwrites their name, description and Onshape-owned custom fields with Onshape's. If any of them is a different part, renumber it in Onshape before pushing."
+              lines={conflicts.map(
+                (row) =>
+                  `${row.partNumber} · ${row.item?.name ?? row.name} in Carbon`
+              )}
+            />
+          ) : null}
 
-                        {(row.action === "update" || row.action === "adopt") &&
-                        row.changes.length > 0 ? (
-                          <p className="mt-1 truncate text-xs text-muted-foreground">
-                            {row.changes
-                              .map(
-                                (change) =>
-                                  `${change.field}: ${change.from ?? "—"} → ${change.to ?? "—"}`
-                              )
-                              .join(" · ")}
-                          </p>
-                        ) : null}
+          {count("skip-no-part-number") > 0 ? (
+            <Alert variant="warning">
+              <LuTriangleAlert />
+              <AlertTitle>
+                {count("skip-no-part-number") === 1
+                  ? "1 part has no part number"
+                  : `${count("skip-no-part-number")} parts have no part number`}
+              </AlertTitle>
+              <AlertDescription>
+                Set a part number in Onshape, then review again.
+              </AlertDescription>
+            </Alert>
+          ) : null}
 
-                        {/*
-                         * The editor and the custom fields only MOUNT when the
-                         * disclosure is open. That is the whole scaling fix: a
-                         * hundred selected create rows used to build six Radix
-                         * Selects each before the list could paint.
-                         */}
-                        {selected && (hasEditor || hasFields) ? (
-                          <RowDisclosure
-                            summary={
-                              hasEditor && row.proposed
-                                ? `${row.proposed.replenishmentSystem} · ${row.proposed.defaultMethodType} · ${row.proposed.itemTrackingType}`
-                                : "Fields from Onshape"
-                            }
-                            defaultOpen={
-                              !!review.fieldErrors[row.partId]?.length
-                            }
-                          >
-                            {hasEditor && row.proposed ? (
-                              <ItemEditor
-                                editKey={row.partId}
-                                proposed={row.proposed}
-                                edit={review.edits[row.partId]}
-                                errors={review.fieldErrors[row.partId]}
-                                options={plan.options}
-                                disabled={review.applying}
-                                onEdit={onEdit}
-                              />
-                            ) : null}
-                            {hasFields ? (
-                              <RowCustomFields
-                                editKey={row.partId}
-                                isCreate={row.action === "create"}
-                                fields={row.customFields}
-                                problems={row.customFieldProblems}
-                                unmapped={row.unmappedProperties}
-                                edit={
-                                  row.action === "create"
-                                    ? review.edits[row.partId]
-                                    : undefined
-                                }
-                                disabled={review.applying}
-                                onEdit={onEditCustomField}
-                                onOpenFields={onOpenFields}
-                              />
-                            ) : null}
-                          </RowDisclosure>
-                        ) : null}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </VStack>
-            ))
-          )}
+          <ul className="w-full divide-y divide-border rounded-md border border-border">
+            {plan.rows.map((row) => (
+              <li key={row.partId} className="px-3 py-2">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="truncate text-sm" title={row.name}>
+                      {row.name}
+                    </p>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {row.partNumber ?? "No part number"}
+                      {row.revision ? ` · Rev ${row.revision}` : ""}
+                    </p>
+                  </div>
+                  <div className="shrink-0">
+                    <PartPlanBadge row={row} />
+                  </div>
+                </div>
+                {row.action === "create" && row.proposed ? (
+                  <p className="mt-1 truncate text-xs text-muted-foreground">
+                    {proposedSummary(row.proposed)}
+                  </p>
+                ) : null}
+                {(row.action === "update" || row.action === "adopt") &&
+                row.changes.length > 0 ? (
+                  <p className="mt-1 truncate text-xs text-muted-foreground">
+                    {row.changes
+                      .map(
+                        (change) =>
+                          `${change.field}: ${change.from ?? "—"} → ${change.to ?? "—"}`
+                      )
+                      .join(" · ")}
+                  </p>
+                ) : null}
+                {row.action === "create" ||
+                row.action === "update" ||
+                row.action === "adopt" ? (
+                  <RowFields
+                    isCreate={row.action === "create"}
+                    fields={row.customFields}
+                    problems={row.customFieldProblems}
+                  />
+                ) : null}
+              </li>
+            ))}
+          </ul>
 
           <ReviewActionBar
             review={review}
@@ -3784,139 +2410,117 @@ function AssemblyReviewSection({
   onCancel,
   onApply,
   onReplan,
-  replanning,
-  onEdit,
-  onInclude,
-  onIncludeMany,
-  onEditCustomField,
-  onOpenFields
-}: ReviewSectionProps<AssemblyReview> & {
-  onInclude: (partNumber: string, included: boolean) => void;
-  onIncludeMany: (partNumbers: string[], included: boolean) => void;
-  onEditCustomField: EditCustomFieldHandler;
-  onOpenFields: () => void;
-}) {
+  replanning
+}: ReviewSectionProps<AssemblyReview>) {
   const { plan } = review;
-  const [query, setQuery] = useState("");
-  const [group, setGroup] = useState<PartPlanGroupKey | "all">("all");
   const busy = review.applying || replanning;
 
-  const editorFor = (key: string, proposed: ProposedItem) => (
-    <ItemEditor
-      editKey={key}
-      proposed={proposed}
-      edit={review.edits[key]}
-      errors={review.fieldErrors[key]}
-      options={plan.options}
-      disabled={review.applying}
-      onEdit={onEdit}
-    />
-  );
+  const created =
+    plan.items.filter((item) => item.action === "create").length +
+    (plan.root.action === "create" ? 1 : 0);
+  const conflicts = [
+    ...(plan.root.conflict
+      ? [`${plan.root.partNumber} · ${plan.root.name ?? "this assembly"}`]
+      : []),
+    ...plan.items
+      .filter((item) => item.conflict)
+      .map((item) =>
+        item.name ? `${item.partNumber} · ${item.name}` : item.partNumber
+      )
+  ];
+  const reused =
+    plan.items.filter((item) => item.action === "reuse" && !item.conflict)
+      .length + (plan.root.action === "reuse" && !plan.root.conflict ? 1 : 0);
 
   /*
-   * An assembly item is either created or reused, so its two groups reuse the
-   * part plan's "create"/"adopt" chips rather than inventing a second
-   * vocabulary for the same idea.
+   * What the push will NOT write, and what it writes somewhere that is not
+   * live, are both decided before Push — so they sit above it.
    */
-  const counts = useMemo(() => {
-    const out: Record<string, number> = {};
-    for (const item of plan.items) {
-      const key = item.action === "create" ? "create" : "adopt";
-      out[key] = (out[key] ?? 0) + 1;
-    }
-    return out;
-  }, [plan.items]);
-
-  const visible = useMemo(() => {
-    const needle = query.trim().toLowerCase();
-    return plan.items.filter((item) => {
-      const key = item.action === "create" ? "create" : "adopt";
-      if (group !== "all" && group !== key) return false;
-      if (!needle) return true;
-      return (
-        (item.name ?? "").toLowerCase().includes(needle) ||
-        item.partNumber.toLowerCase().includes(needle)
-      );
-    });
-  }, [plan.items, query, group]);
-
-  const creatableVisible = visible
-    .filter((item) => item.action === "create")
-    .map((item) => item.partNumber);
-
-  const includedCount = plan.items.filter(
-    (item) => item.action === "create" && !review.excluded.has(item.partNumber)
-  ).length;
+  const described = plan.methods.map((method) =>
+    describeMethod(method, review.excluded)
+  );
+  const wontWrite = [
+    ...described.filter((d) => d.tone === "warning").map((d) => d.text),
+    ...plan.skipped
+  ];
+  const drafts = described.filter((d) => d.tone === "notice");
+  // Lines someone added by hand in Carbon survive a push, so that BOM will
+  // not match Onshape afterwards. Always zero on a first push.
+  const keepsManual = plan.methods.filter(
+    (method) => method.status !== "missing" && method.keeps.length > 0
+  );
 
   return (
     <VStack spacing={2} className="w-full">
-      <HStack className="w-full justify-between">
-        <span className="text-sm font-medium">Review → Carbon</span>
-        <Button variant="ghost" size="sm" onClick={onCancel} isDisabled={busy}>
-          Cancel
-        </Button>
-      </HStack>
-
+      <ReviewHeader busy={busy} onCancel={onCancel} />
       <ReviewError
         review={review}
         replanning={replanning}
         onReplan={onReplan}
       />
 
-      {/* The root is never filtered away: it is what is being pushed. */}
-      <VStack spacing={1} className="w-full">
-        <span className="px-1 text-xs font-medium text-muted-foreground">
-          Assembly
-        </span>
-        <div className="w-full rounded-md border border-border px-3 py-2">
-          <div className="flex items-start justify-between gap-2">
-            <div className="min-w-0">
-              <p
-                className="truncate text-sm"
-                title={plan.root.name ?? plan.root.partNumber}
-              >
-                {plan.root.name ?? plan.root.partNumber}
-              </p>
-              <p className="truncate text-xs text-muted-foreground">
-                {plan.root.partNumber}
-                {plan.root.revision ? ` · Rev ${plan.root.revision}` : ""}
-              </p>
-            </div>
-            <div className="shrink-0">
-              <ItemActionBadge
-                action={plan.root.action === "create" ? "create" : "reuse"}
-              />
-            </div>
-          </div>
-          <RowDisclosure
-            summary={
-              plan.root.action === "create" && plan.root.proposed
-                ? `${plan.root.proposed.replenishmentSystem} · ${plan.root.proposed.defaultMethodType} · ${plan.root.proposed.itemTrackingType}`
-                : "Fields from Onshape"
-            }
-            defaultOpen={!!review.fieldErrors[plan.root.partNumber]?.length}
-          >
-            {plan.root.action === "create" && plan.root.proposed
-              ? editorFor(plan.root.partNumber, plan.root.proposed)
-              : null}
-            <RowCustomFields
-              editKey={plan.root.partNumber}
-              isCreate={plan.root.action === "create"}
-              fields={plan.root.customFields}
-              problems={plan.root.customFieldProblems}
-              unmapped={plan.root.unmappedProperties}
-              edit={
-                plan.root.action === "create"
-                  ? review.edits[plan.root.partNumber]
-                  : undefined
-              }
-              disabled={review.applying}
-              onEdit={onEditCustomField}
-              onOpenFields={onOpenFields}
-            />
-          </RowDisclosure>
-        </div>
-      </VStack>
+      <ReviewSummary
+        counts={[
+          [created, "created"],
+          [conflicts.length, "linked"],
+          [reused, "already in Carbon"],
+          [
+            plan.methods.length,
+            plan.methods.length === 1 ? "BOM written" : "BOMs written"
+          ]
+        ]}
+      />
+
+      {conflicts.length > 0 ? (
+        <CappedWarningList
+          variant="destructive"
+          title={(n) =>
+            n === 1
+              ? "1 part shares a part number with an existing Carbon item"
+              : `${n} parts share a part number with an existing Carbon item`
+          }
+          description={`Pushing links them to these Onshape parts and uses them in the BOM. Any that are assemblies get Onshape's BOM lines written into their make methods${plan.root.conflict ? ", and the assembly's Onshape-owned custom fields are overwritten" : ""}. If any of them is a different part, renumber it in Onshape before pushing.`}
+          lines={conflicts}
+        />
+      ) : null}
+      {wontWrite.length > 0 ? (
+        <CappedWarningList
+          title={(n) =>
+            n === 1
+              ? "1 thing won't be written"
+              : `${n} things won't be written`
+          }
+          lines={wontWrite}
+        />
+      ) : null}
+      {drafts.length > 0 ? (
+        <Alert variant="info">
+          <LuInfo />
+          <AlertTitle>
+            {drafts.length === 1
+              ? "1 released method gets a new Draft version"
+              : `${drafts.length} released methods get new Draft versions`}
+          </AlertTitle>
+          <AlertDescription>
+            Nothing live changes until someone releases them in Carbon.
+          </AlertDescription>
+        </Alert>
+      ) : null}
+
+      {keepsManual.length > 0 ? (
+        <Alert variant="warning">
+          <LuTriangleAlert />
+          <AlertTitle>
+            {keepsManual.length === 1
+              ? "1 BOM keeps lines added by hand in Carbon"
+              : `${keepsManual.length} BOMs keep lines added by hand in Carbon`}
+          </AlertTitle>
+          <AlertDescription>
+            {keepsManual.map((method) => method.parentPartNumber).join(", ")}{" "}
+            won't match Onshape after this push.
+          </AlertDescription>
+        </Alert>
+      ) : null}
 
       {plan.depth === "top" && plan.deeper ? (
         <Alert variant="info">
@@ -3934,113 +2538,73 @@ function AssemblyReviewSection({
         </Alert>
       ) : null}
 
-      {plan.items.length > 0 ? (
-        <>
-          <PlanToolbar
-            query={query}
-            onQuery={setQuery}
-            group={group}
-            onGroup={setGroup}
-            counts={counts}
-            total={plan.items.length}
-            /*
-             * Only create rows are includable, so with none there is nothing to
-             * select — and showing "0 selected" next to "Push 8 to Carbon" reads
-             * as a contradiction rather than as "every component is a reuse".
-             */
-            selectedCount={counts.create ? includedCount : null}
-            onSelectAll={() => onIncludeMany(creatableVisible, true)}
-            onClearSelection={() => onIncludeMany(creatableVisible, false)}
-            disabled={busy}
-          />
-
-          {visible.length === 0 ? (
-            <PanelEmpty>No components match</PanelEmpty>
-          ) : (
-            <ul className="w-full divide-y divide-border rounded-md border border-border">
-              {visible.map((item) => {
-                const included = !review.excluded.has(item.partNumber);
-                return (
-                  <li key={item.partNumber} className="px-3 py-2">
-                    <div className="flex items-start justify-between gap-2">
-                      <HStack spacing={2} className="min-w-0 items-start">
-                        {item.action === "create" ? (
-                          <span className="flex h-lh items-center text-sm">
-                            <Checkbox
-                              checked={included}
-                              disabled={review.applying}
-                              aria-label={`Include ${item.partNumber}`}
-                              onCheckedChange={(checked) =>
-                                onInclude(item.partNumber, checked === true)
-                              }
-                            />
-                          </span>
-                        ) : null}
-                        <div className="min-w-0">
-                          <p
-                            className="truncate text-sm"
-                            title={item.name ?? item.partNumber}
-                          >
-                            {item.name ?? item.partNumber}
-                          </p>
-                          <p className="truncate text-xs text-muted-foreground">
-                            {item.partNumber}
-                            {item.revision ? ` · Rev ${item.revision}` : ""}
-                            {item.purchased ? " · purchased" : ""}
-                            {item.isAssembly ? " · assembly" : ""}
-                          </p>
-                        </div>
-                      </HStack>
-                      <div className="shrink-0">
-                        <ItemActionBadge
-                          action={item.action === "create" ? "create" : "reuse"}
-                        />
-                      </div>
-                    </div>
-                    {item.action === "create" && item.proposed && included ? (
-                      <RowDisclosure
-                        summary={`${item.proposed.replenishmentSystem} · ${item.proposed.defaultMethodType} · ${item.proposed.itemTrackingType}`}
-                        defaultOpen={
-                          !!review.fieldErrors[item.partNumber]?.length
-                        }
-                      >
-                        {editorFor(item.partNumber, item.proposed)}
-                      </RowDisclosure>
-                    ) : null}
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </>
-      ) : null}
-
-      <details className="w-full">
-        <summary className="cursor-pointer px-1 text-xs font-medium text-muted-foreground">
-          Make methods ({plan.methods.length})
-        </summary>
-        <VStack spacing={1} className="mt-1 w-full">
-          {plan.methods.map((method) => {
-            const description = describeMethod(method, review.excluded);
-            return (
+      <ul className="w-full divide-y divide-border rounded-md border border-border">
+        {/* The root first: it is what is being pushed. */}
+        <li className="px-3 py-2">
+          <div className="flex items-start justify-between gap-2">
+            <div className="min-w-0">
               <p
-                key={method.parentPartNumber}
-                className={toneClass(description.tone)}
+                className="truncate text-sm font-medium"
+                title={plan.root.name ?? plan.root.partNumber}
               >
-                {description.text}
+                {plan.root.name ?? plan.root.partNumber}
               </p>
-            );
-          })}
-          {plan.skipped.map((line, index) => (
-            <p
-              key={`${index}-${line}`}
-              className="text-xs text-muted-foreground"
-            >
-              {line}
+              <p className="truncate text-xs text-muted-foreground">
+                {plan.root.partNumber}
+                {plan.root.revision ? ` · Rev ${plan.root.revision}` : ""}
+                {" · this assembly"}
+              </p>
+            </div>
+            <div className="shrink-0">
+              <ItemActionBadge
+                action={plan.root.action === "create" ? "create" : "reuse"}
+                conflict={plan.root.conflict}
+              />
+            </div>
+          </div>
+          {plan.root.action === "create" && plan.root.proposed ? (
+            <p className="mt-1 truncate text-xs text-muted-foreground">
+              {proposedSummary(plan.root.proposed)}
             </p>
-          ))}
-        </VStack>
-      </details>
+          ) : null}
+          <RowFields
+            isCreate={plan.root.action === "create"}
+            fields={plan.root.customFields}
+            problems={plan.root.customFieldProblems}
+          />
+        </li>
+        {plan.items.map((item) => (
+          <li key={item.partNumber} className="px-3 py-2">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <p
+                  className="truncate text-sm"
+                  title={item.name ?? item.partNumber}
+                >
+                  {item.name ?? item.partNumber}
+                </p>
+                <p className="truncate text-xs text-muted-foreground">
+                  {item.partNumber}
+                  {item.revision ? ` · Rev ${item.revision}` : ""}
+                  {item.purchased ? " · purchased" : ""}
+                  {item.isAssembly ? " · assembly" : ""}
+                </p>
+              </div>
+              <div className="shrink-0">
+                <ItemActionBadge
+                  action={item.action === "create" ? "create" : "reuse"}
+                  conflict={item.conflict}
+                />
+              </div>
+            </div>
+            {item.action === "create" && item.proposed ? (
+              <p className="mt-1 truncate text-xs text-muted-foreground">
+                {proposedSummary(item.proposed)}
+              </p>
+            ) : null}
+          </li>
+        ))}
+      </ul>
 
       <ReviewActionBar
         review={review}
@@ -4101,55 +2665,99 @@ function ReleaseReviewSection({
   onCancel,
   onApply,
   onReplan,
-  replanning,
-  onEdit,
-  onChangeNotice,
-  onCreateChangeNotice,
-  onMakeDefault
-}: ReviewSectionProps<ReleaseReview> & {
-  onChangeNotice: (field: "name" | "description", value: string) => void;
-  onCreateChangeNotice: (createChangeNotice: boolean) => void;
-  onMakeDefault: (makeDefault: boolean) => void;
-}) {
+  replanning
+}: ReviewSectionProps<ReleaseReview>) {
   const { plan } = review;
-  const editorFor = (key: string, proposed: ProposedItem) => (
-    <ItemEditor
-      editKey={key}
-      proposed={proposed}
-      edit={review.edits[key]}
-      errors={review.fieldErrors[key]}
-      options={plan.options}
-      disabled={review.applying}
-      onEdit={onEdit}
-    />
-  );
+  const busy = review.applying || replanning;
+  const count = (action: ReleasePlanItem["action"]) =>
+    plan.items.filter((item) => item.action === action).length;
+  const childrenCreated = plan.children.filter(
+    (child) => child.action === "create"
+  ).length;
+  const activeCount = plan.items.filter(
+    (item) => item.methodStatus === "active"
+  ).length;
+  /*
+   * Fixed behaviour, stated rather than chosen: a release push records a
+   * change notice when it creates revisions, and the new revisions become the
+   * default. Both follow from the release having been approved in Onshape.
+   */
+  const outcomes = [
+    review.changeNotice
+      ? `Records change notice "${review.changeNotice.name}"`
+      : null,
+    count("revision") + count("create") > 0
+      ? "New revisions become the default"
+      : null
+  ].filter((line): line is string => !!line);
+
   return (
     <VStack spacing={2} className="w-full">
-      <HStack className="w-full justify-between">
-        <span className="text-sm font-medium">Review → Carbon</span>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onCancel}
-          isDisabled={review.applying || replanning}
-        >
-          Cancel
-        </Button>
-      </HStack>
+      <ReviewHeader busy={busy} onCancel={onCancel} />
       <ReviewError
         review={review}
         replanning={replanning}
         onReplan={onReplan}
       />
 
-      <p className="text-xs text-muted-foreground w-full">
+      <p className="w-full text-xs text-muted-foreground">
         {plan.releaseName ?? "Release"}
       </p>
-      {review.warnings.map((warning) => (
-        <p key={warning} className="text-xs text-destructive w-full">
-          {warning}
+      <ReviewSummary
+        counts={[
+          [
+            count("revision"),
+            count("revision") === 1 ? "new revision" : "new revisions"
+          ],
+          [count("create") + childrenCreated, "created"],
+          [count("reuse"), "already in Carbon"]
+        ]}
+      />
+      {outcomes.length > 0 ? (
+        <p className="w-full text-xs text-muted-foreground">
+          {outcomes.join(" · ")}
         </p>
-      ))}
+      ) : null}
+
+      {/*
+       * Not a failure: the route deliberately keeps going when a BOM cannot be
+       * read, and the apply leaves that method exactly as it is.
+       */}
+      {review.warnings.length > 0 ? (
+        <Alert variant="warning">
+          <LuTriangleAlert />
+          <AlertTitle>
+            {review.warnings.length === 1
+              ? "Couldn't read 1 BOM from Onshape"
+              : `Couldn't read ${review.warnings.length} BOMs from Onshape`}
+          </AlertTitle>
+          <AlertDescription>
+            <ul className="list-disc space-y-1 pl-4">
+              {review.warnings.map((warning) => (
+                <li key={warning}>{warning}</li>
+              ))}
+            </ul>
+            <p className="mt-1">
+              Their BOM lines in Carbon will be left as they are. Cancel and
+              review again to retry.
+            </p>
+          </AlertDescription>
+        </Alert>
+      ) : null}
+      {activeCount > 0 ? (
+        <Alert variant="warning">
+          <LuTriangleAlert />
+          <AlertTitle>
+            {activeCount === 1
+              ? "1 item is released in Carbon"
+              : `${activeCount} items are released in Carbon`}
+          </AlertTitle>
+          <AlertDescription>
+            This push won't change their BOM lines. Open a change notice in
+            Carbon to modify them.
+          </AlertDescription>
+        </Alert>
+      ) : null}
 
       <ul className="w-full divide-y divide-border rounded-md border border-border">
         {plan.items.map((item) => (
@@ -4159,27 +2767,29 @@ function ReleaseReviewSection({
           >
             <div className="flex items-center justify-between gap-2">
               <div className="min-w-0">
-                <p className="text-sm truncate">
+                <p className="truncate text-sm">
                   {item.partNumber}
                   <span className="text-muted-foreground">
                     {" "}
                     Rev {item.revision}
                   </span>
                 </p>
-                <p className="text-xs text-muted-foreground truncate">
+                <p className="truncate text-xs text-muted-foreground">
                   {releaseItemLabel(item)}
                 </p>
               </div>
               <ReleasePlanBadge item={item} />
             </div>
             {item.methodStatus === "active" ? (
-              <p className="text-xs text-destructive mt-1">
-                released in Carbon — BOM lines will not be applied
+              <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">
+                Released — BOM lines won't change
               </p>
             ) : null}
-            {item.action === "create" && item.proposed
-              ? editorFor(item.partNumber, item.proposed)
-              : null}
+            {item.action === "create" && item.proposed ? (
+              <p className="mt-1 truncate text-xs text-muted-foreground">
+                {proposedSummary(item.proposed)}
+              </p>
+            ) : null}
           </li>
         ))}
       </ul>
@@ -4195,12 +2805,12 @@ function ReleaseReviewSection({
                 <div className="flex items-center justify-between gap-2">
                   <div className="min-w-0">
                     <p
-                      className="text-sm truncate"
+                      className="truncate text-sm"
                       title={child.name ?? child.partNumber}
                     >
                       {child.name ?? child.partNumber}
                     </p>
-                    <p className="text-xs text-muted-foreground truncate">
+                    <p className="truncate text-xs text-muted-foreground">
                       {child.partNumber}
                       {child.revision ? ` · Rev ${child.revision}` : ""}
                       {child.purchased ? " · purchased" : ""}
@@ -4210,78 +2820,16 @@ function ReleaseReviewSection({
                     action={child.action === "create" ? "create" : "reuse"}
                   />
                 </div>
-                {child.action === "create" && child.proposed
-                  ? editorFor(child.partNumber, child.proposed)
-                  : null}
+                {child.action === "create" && child.proposed ? (
+                  <p className="mt-1 truncate text-xs text-muted-foreground">
+                    {proposedSummary(child.proposed)}
+                  </p>
+                ) : null}
               </li>
             ))}
           </ul>
         </VStack>
       ) : null}
-
-      {plan.changeNotice && review.changeNotice ? (
-        <VStack spacing={2} className="w-full">
-          <HStack spacing={2} className="w-full">
-            <Checkbox
-              id="onshape-release-change-notice"
-              checked={review.createChangeNotice}
-              disabled={review.applying}
-              onCheckedChange={(checked) =>
-                onCreateChangeNotice(checked === true)
-              }
-            />
-            <Label
-              htmlFor="onshape-release-change-notice"
-              className="cursor-pointer"
-            >
-              Record a change notice
-            </Label>
-          </HStack>
-          {review.createChangeNotice ? (
-            <>
-              <Input
-                size="sm"
-                value={review.changeNotice.name}
-                placeholder="Name"
-                aria-label="Change notice name"
-                isDisabled={review.applying}
-                isInvalid={!!review.fieldErrors.changeNotice}
-                onChange={(event) => onChangeNotice("name", event.target.value)}
-              />
-              <Input
-                size="sm"
-                value={review.changeNotice.description ?? ""}
-                placeholder="Description"
-                aria-label="Change notice description"
-                isDisabled={review.applying}
-                onChange={(event) =>
-                  onChangeNotice("description", event.target.value)
-                }
-              />
-              {review.fieldErrors.changeNotice?.map((message) => (
-                <p key={message} className="text-xs text-destructive w-full">
-                  {message}
-                </p>
-              ))}
-            </>
-          ) : null}
-        </VStack>
-      ) : null}
-
-      <HStack spacing={2} className="w-full">
-        <Checkbox
-          id="onshape-release-make-default"
-          checked={review.makeDefault}
-          disabled={review.applying}
-          onCheckedChange={(checked) => onMakeDefault(checked === true)}
-        />
-        <Label
-          htmlFor="onshape-release-make-default"
-          className="cursor-pointer"
-        >
-          Make the new revisions the default
-        </Label>
-      </HStack>
 
       <ReviewActionBar
         review={review}
@@ -4322,28 +2870,50 @@ function ReleaseStateBadge({ state }: { state: PanelRelease["state"] }) {
   );
 }
 
+/**
+ * Linked: pushed from this Onshape part. Conflict: Carbon has an item with the
+ * same part number that was never linked to it — equal numbers are not proof
+ * of the same part, and a push would write into that item. Unlinked: Carbon
+ * has nothing for it, and a push creates it.
+ */
 function PartStateBadge({ state }: { state: PanelPartStatus["state"] }) {
   if (state === "linked")
     return (
       <Status color="green" disableTooltip>
-        In Carbon
+        Linked
       </Status>
     );
   if (state === "matched")
     return (
-      <Status color="yellow" disableTooltip>
-        Match found
+      <Status color="red" disableTooltip>
+        Conflict
       </Status>
     );
   return (
     <Status color="gray" disableTooltip>
-      Not in Carbon
+      Unlinked
     </Status>
   );
 }
 
-/** Create / Reuse, the two outcomes an assembly or release component has. */
-function ItemActionBadge({ action }: { action: "create" | "reuse" }) {
+/**
+ * Create / Reuse, the two outcomes an assembly or release component has — and
+ * Conflict, a reuse found by part number alone.
+ */
+function ItemActionBadge({
+  action,
+  conflict
+}: {
+  action: "create" | "reuse";
+  conflict?: boolean;
+}) {
+  if (action === "reuse" && conflict) {
+    return (
+      <Status color="red" disableTooltip>
+        Conflict
+      </Status>
+    );
+  }
   return action === "create" ? (
     <Status color="blue" disableTooltip>
       Create
@@ -4356,32 +2926,40 @@ function ItemActionBadge({ action }: { action: "create" | "reuse" }) {
 }
 
 /**
- * What the user is looking at: the part number, revision and configuration,
- * and only when they are set.
+ * The whole panel before sign-in: the Carbon mark and the way in, centred.
  *
- * The raw Onshape ids are deliberately absent. They are 24-character hex —
- * three wrapped rows of noise above the content someone came for — and the
- * panel is not where you debug: an id worth quoting in a bug report is in the
- * document's own URL.
+ * Nothing else belongs here. A lone button in the top-left of an otherwise
+ * blank column read as a half-loaded page rather than a deliberate state; the
+ * caller centres this in the panel.
+ *
+ * The mark, the light/dark pair and the `w-24` are lifted from Carbon's own
+ * sign-in surfaces (`_oauth+/authorize.tsx`, `_public+/invite.$code.tsx`,
+ * `_public+/verify.tsx`) so this reads as the same product asking. It is
+ * served from the app's own origin, which the panel is framed from, so the
+ * absolute path resolves without the panel bundling an asset of its own.
  */
-function ContextSummary({ context }: { context: OnshapePanelContext }) {
-  const named: Array<[string, string | null]> = [
-    ["Part number", context.partNumber],
-    ["Revision", context.revision],
-    ["Configuration", context.configuration]
-  ];
-
-  const visible = named.filter(([, value]) => value);
-  if (visible.length === 0) return null;
-
+function PanelSignIn({
+  onSignIn,
+  disabled
+}: {
+  onSignIn: () => void;
+  disabled: boolean;
+}) {
   return (
-    <dl className="grid w-full grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-xs">
-      {visible.map(([label, value]) => (
-        <div key={label} className="contents">
-          <dt className="text-muted-foreground">{label}</dt>
-          <dd className="truncate font-mono">{value}</dd>
-        </div>
-      ))}
-    </dl>
+    <div className="flex w-full max-w-[220px] flex-col items-center gap-6">
+      <img
+        src="/carbon-mark-light.svg"
+        alt="Carbon"
+        className="w-24 dark:hidden"
+      />
+      <img
+        src="/carbon-mark-dark.svg"
+        alt="Carbon"
+        className="hidden w-24 dark:block"
+      />
+      <Button className="w-full" onClick={onSignIn} isDisabled={disabled}>
+        Sign in to Carbon
+      </Button>
+    </div>
   );
 }

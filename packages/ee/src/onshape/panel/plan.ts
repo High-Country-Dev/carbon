@@ -4,7 +4,12 @@ import type { OnshapePushDefaults } from "./preferences";
 import type { PlanCustomField, UnmappedProperty } from "./properties";
 import type { PanelRelease, PanelReleaseItem } from "./releases";
 import { isModelReleaseItem } from "./releases";
-import { externalIdForPart } from "./status";
+import {
+  externalIdForAssembly,
+  externalIdForBomLine,
+  externalIdForPart,
+  normalizeConfiguration
+} from "./status";
 
 /**
  * Plan / apply for the panel's pushes.
@@ -375,6 +380,12 @@ export type PartPlan = {
   wv: "w" | "v";
   wvId: string;
   elementId: string;
+  /**
+   * The Part Studio configuration the parts were read in, null for the
+   * default. Part of every mapping key the apply writes. Optional so a plan
+   * stored before configurations were considered still applies as default.
+   */
+  configuration?: string | null;
   rows: PartPlanRow[];
   options: PlanOptions;
 };
@@ -382,6 +393,7 @@ export type PartPlan = {
 export function buildPartPlan({
   documentId,
   elementId,
+  configuration = null,
   parts,
   requestedPartIds,
   mappings,
@@ -390,6 +402,7 @@ export function buildPartPlan({
 }: {
   documentId: string;
   elementId: string;
+  configuration?: string | null;
   parts: OnshapeElementPart[];
   requestedPartIds: string[];
   mappings: PlanMappingRow[];
@@ -426,7 +439,7 @@ export function buildPartPlan({
     };
 
     const mapping = mappingByExternalId.get(
-      externalIdForPart(documentId, elementId, partId)
+      externalIdForPart(documentId, elementId, partId, configuration)
     );
     // A mapping whose item is gone is not a link (entityId has no FK).
     const linked = mapping ? itemById.get(mapping.entityId) : undefined;
@@ -524,6 +537,12 @@ export type AssemblyPlanItem = {
   revision: string | null;
   action: "create" | "reuse";
   itemId: string | null;
+  /**
+   * Reuse only, and set only when true: the Carbon item was found by part
+   * number alone, with no link to this Onshape part. Equal numbers are not
+   * proof of the same part, so the review warns before the push writes into it.
+   */
+  conflict?: boolean;
   /** Create only. */
   proposed: ProposedItem | null;
   /** Has children in the BOM: gets a make method and lines of its own. */
@@ -566,6 +585,8 @@ export type AssemblyPlanRoot = {
   revision: string | null;
   action: "create" | "reuse";
   itemId: string | null;
+  /** As on {@link AssemblyPlanItem}: reused by part number alone. */
+  conflict?: boolean;
   proposed: ProposedItem | null;
   /** Mapped custom fields for the root item (element properties). */
   customFields?: PlanCustomField[];
@@ -597,6 +618,8 @@ export type AssemblyPlan = {
   wv: "w" | "v";
   wvId: string;
   elementId: string;
+  /** The assembly configuration the BOM was read in, null for the default. */
+  configuration?: string | null;
   root: AssemblyPlanRoot;
   /** Every distinct BOM part number below the root. */
   items: AssemblyPlanItem[];
@@ -641,7 +664,9 @@ export function buildAssemblyPlan({
   mappedLinesByMethodId,
   manualLinesByMethodId,
   options,
-  depth = "all"
+  depth = "all",
+  linkedItemIdByExternalId = new Map(),
+  configuration = null
 }: {
   documentId: string;
   wv: "w" | "v";
@@ -665,6 +690,14 @@ export function buildAssemblyPlan({
   manualLinesByMethodId: Map<string, PlanLine[]>;
   options: PlanOptions;
   depth?: AssemblyPlanDepth;
+  /**
+   * The item each Onshape item mapping points at, keyed by externalId —
+   * the same join the status badges use. A reuse with no mapping to its own
+   * item is a conflict. Omitted, every reuse is one.
+   */
+  linkedItemIdByExternalId?: Map<string, string>;
+  /** The assembly configuration the BOM was read in. */
+  configuration?: string | null;
 }): AssemblyPlan {
   // One row per part number: the latest revision, whatever order the rows
   // arrived in, so the plan pins the same item the apply would pick.
@@ -691,7 +724,26 @@ export function buildAssemblyPlan({
     }
   }
 
+  // A part number is linked when any BOM row carrying it maps to the item the
+  // push would reuse. A row with no source can never be linked, as in status.
+  const linkedPartNumbers = new Set<string>();
+  for (const node of everything) {
+    if (!node.partNumber) continue;
+    const externalId = externalIdForBomLine(node.itemSource ?? null);
+    const linkedId = externalId
+      ? linkedItemIdByExternalId.get(externalId)
+      : undefined;
+    if (linkedId && linkedId === itemByReadableId.get(node.partNumber)?.id) {
+      linkedPartNumbers.add(node.partNumber);
+    }
+  }
+
   const rootItem = itemByReadableId.get(root.partNumber);
+  const rootConflict =
+    !!rootItem &&
+    linkedItemIdByExternalId.get(
+      externalIdForAssembly(documentId, elementId, configuration)
+    ) !== rootItem.id;
   const planRoot: AssemblyPlanRoot = {
     partNumber: root.partNumber,
     name: root.name,
@@ -699,6 +751,7 @@ export function buildAssemblyPlan({
     revision: root.revision,
     action: rootItem ? "reuse" : "create",
     itemId: rootItem?.id ?? null,
+    ...(rootConflict ? { conflict: true } : {}),
     proposed: rootItem
       ? null
       : proposeItem(
@@ -741,6 +794,9 @@ export function buildAssemblyPlan({
       revision: node.revision,
       action: existing ? "reuse" : "create",
       itemId: existing?.id ?? null,
+      ...(existing && !linkedPartNumbers.has(node.partNumber)
+        ? { conflict: true }
+        : {}),
       proposed: existing
         ? null
         : proposeItem(
@@ -813,6 +869,7 @@ export function buildAssemblyPlan({
       wv,
       wvId,
       elementId,
+      configuration: normalizeConfiguration(configuration),
       root: planRoot,
       items: planItems,
       methods,
@@ -840,6 +897,7 @@ export function buildAssemblyPlan({
     wv,
     wvId,
     elementId,
+    configuration: normalizeConfiguration(configuration),
     root: planRoot,
     items: planItems,
     // One method: the root's. `addMethod` recursed into the children, so drop

@@ -39,6 +39,7 @@ export interface SyncOnshapeElementInput {
   versionId: string; // the released version — or a workspace id when sourceWvm is "w"
   sourceWvm?: "w" | "v"; // path segment for export/thumbnail calls; default "v"
   partIds?: string; // export only these parts of a Part Studio (comma-separated partIds)
+  configuration?: string; // non-default configuration to export; absent = default
   modelElementId: string; // released Part Studio OR Assembly element to export
   modelElementKind: "partstudio" | "assembly"; // from the revision's elementType (0/1)
   drawingElementIds?: string[]; // optional PDF drawings (untested path — see client.ts)
@@ -125,7 +126,10 @@ async function exportRawGltfModel(
           {
             formatName: "GLTF",
             storeInDocument: false,
-            wvm: input.sourceWvm ?? "v"
+            wvm: input.sourceWvm ?? "v",
+            ...(input.configuration
+              ? { configuration: input.configuration }
+              : {})
           }
         )
       : await client.createPartStudioTranslation(
@@ -136,7 +140,10 @@ async function exportRawGltfModel(
             formatName: "GLTF",
             storeInDocument: false,
             wvm: input.sourceWvm ?? "v",
-            ...(input.partIds ? { partIds: input.partIds } : {})
+            ...(input.partIds ? { partIds: input.partIds } : {}),
+            ...(input.configuration
+              ? { configuration: input.configuration }
+              : {})
           }
         );
   const gltfDone = await waitForTranslation(client, gltfTranslation.id);

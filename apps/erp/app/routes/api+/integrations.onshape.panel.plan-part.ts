@@ -2,6 +2,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import type { PartPlan, PlanItemRow, PlanMappingRow } from "@carbon/ee";
 import {
   buildPartPlan,
+  normalizeConfiguration,
   parsePropertyMap,
   resolveMappedFields
 } from "@carbon/ee";
@@ -12,6 +13,7 @@ import {
   loadPartCustomFieldDefinitions,
   loadPlanOptions,
   OnshapeWVMType,
+  onshapeFailure,
   readPartProperties,
   selectInBatches
 } from "@carbon/ee/onshape";
@@ -29,6 +31,8 @@ const payloadSchema = z.object({
   wv: z.enum(["w", "v"]),
   wvId: z.string().min(1),
   elementId: z.string().min(1),
+  /** The Part Studio configuration the panel was opened in; absent = default. */
+  configuration: z.string().nullish(),
   partIds: z.array(z.string().min(1)).min(1).max(50)
 });
 
@@ -65,6 +69,7 @@ export async function action({ request }: ActionFunctionArgs) {
     return data({ error: "Invalid plan payload" }, { status: 400 });
   }
   const { documentId, wv, wvId, elementId } = parsed.data;
+  const configuration = normalizeConfiguration(parsed.data.configuration);
   const partIds = [...new Set(parsed.data.partIds)];
 
   const onshape = await getOnshapeClient(client, companyId, userId);
@@ -83,14 +88,14 @@ export async function action({ request }: ActionFunctionArgs) {
 
   let parts: Awaited<ReturnType<typeof onshape.client.getPartsInElement>>;
   try {
-    parts = await onshape.client.getPartsInElement(document, elementId);
-  } catch (error) {
-    return data(
-      {
-        error: error instanceof Error ? error.message : "Onshape request failed"
-      },
-      { status: 502 }
+    parts = await onshape.client.getPartsInElement(
+      document,
+      elementId,
+      configuration
     );
+  } catch (error) {
+    const failure = onshapeFailure(error);
+    return data(failure.body, { status: failure.status });
   }
   // Hidden parts are not shown in the panel, so they cannot be pushed either.
   parts = parts.filter((part) => !part.isHidden);
@@ -180,6 +185,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const rows = buildPartPlan({
     documentId,
     elementId,
+    configuration,
     parts,
     requestedPartIds: partIds,
     mappings: mappingRows,
@@ -214,20 +220,16 @@ export async function action({ request }: ActionFunctionArgs) {
           onshape.client,
           document,
           elementId,
-          resolvable.map((row) => row.partId)
+          resolvable.map((row) => row.partId),
+          configuration
         )
       ]);
     } catch (error) {
       // A property read that fails would silently break the owned-field
       // promise if the plan went out without values, so it fails the plan
       // the same way the part-list read does.
-      return data(
-        {
-          error:
-            error instanceof Error ? error.message : "Onshape request failed"
-        },
-        { status: 502 }
-      );
+      const failure = onshapeFailure(error);
+      return data(failure.body, { status: failure.status });
     }
     for (const row of resolvable) {
       const resolved = resolveMappedFields({
@@ -253,13 +255,14 @@ export async function action({ request }: ActionFunctionArgs) {
     wv,
     wvId,
     elementId,
+    configuration,
     rows,
     options
   };
   const stored = await createPanelPlan({ companyId, userId, plan });
   if (!stored) {
     return data(
-      { error: "Carbon could not store this review — try again" },
+      { error: "Carbon couldn't save this review. Try again." },
       { status: 503 }
     );
   }
