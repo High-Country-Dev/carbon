@@ -26,6 +26,7 @@ export const SECRET_KEYS: Record<string, string[]> = {
   slack: ["access_token"],
   jira: ["credentials.accessToken", "credentials.refreshToken"],
   onshape: ["credentials.accessToken", "credentials.refreshToken"],
+  "onshape-v2": ["credentials.accessToken", "credentials.refreshToken"],
   xero: ["credentials.accessToken", "credentials.refreshToken"],
   quickbooks: ["credentials.accessToken", "credentials.refreshToken"],
   rillet: ["credentials.apiKey", "credentials.providerMetadata.webhookToken"],
