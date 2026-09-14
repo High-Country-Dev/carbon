@@ -415,4 +415,7 @@ Deno.test("legacy settlements without a document principal derive it from applie
     [{ paymentId: "p", postingDate: "2026-01-01", exchangeRate: 1.1, remainingDocument: 99, remainingBase: 90 }]);
   assertThrows(() => remainingFundingSources([payment], [{ ...direct, paymentId: "q", sourcePaymentId: "p" }], decimals, true),
     Error, "missing its document principal");
+  const tiny = { ...direct, appliedAmount: 0.004 };
+  assertEquals(reduceInvoiceSettlements([tiny, tiny].map((row) => ({ ...row, discountAmount: 0, writeOffAmount: 0 })), 1.1, 2).document, 0);
+  assertEquals(remainingFundingSources([payment], [tiny, tiny], decimals, true)[0].remainingDocument, 220);
 });

@@ -324,13 +324,21 @@ export function remainingFundingSources(
   decimals: ReadonlyMap<string, number>,
   isAR: boolean
 ): FundingSource[] {
-  const consumed = new Map<string, { document: number; base: number; legacyBase: number }>();
+  const precisionFor = (payment: FundingPaymentRow): number => {
+    const precision = decimals.get(payment.currencyCode);
+    if (precision == null) throw new Error(`Currency ${payment.currencyCode} requires configured decimal places`);
+    return precision;
+  };
+  const paymentsById = new Map(payments.map((payment) => [payment.id, payment]));
+  const consumed = new Map<string, { document: number; base: number }>();
   for (const row of consumption) {
     const sourceId = row.sourcePaymentId ?? row.paymentId;
     if (!sourceId) continue;
-    const current = consumed.get(sourceId) ?? { document: 0, base: 0, legacyBase: 0 };
+    const current = consumed.get(sourceId) ?? { document: 0, base: 0 };
     if (row.sourceAmount === null && row.sourcePaymentId === null) {
-      current.legacyBase += nonnegativeAmount(Number(row.appliedAmount), "Settlement applied amount");
+      const payment = paymentsById.get(sourceId);
+      if (!payment) continue;
+      current.document += settlementPrincipal(row, Number(payment.exchangeRate), precisionFor(payment));
     } else {
       current.document += sourcePrincipal(row.sourceAmount);
     }
@@ -340,12 +348,10 @@ export function remainingFundingSources(
     consumed.set(sourceId, current);
   }
   return payments.map((payment) => {
-    const precision = decimals.get(payment.currencyCode);
-    if (precision == null) throw new Error(`Currency ${payment.currencyCode} requires configured decimal places`);
+    const precision = precisionFor(payment);
     const use = consumed.get(payment.id);
     const total = nonnegativeAmount(Number(payment.totalAmount), "Funding document total");
-    const legacyDocument = use ? toDocumentAmount(use.legacyBase, Number(payment.exchangeRate), precision) : 0;
-    const remainingDocument = toDocumentAmount(total - (use?.document ?? 0) - legacyDocument, 1, precision);
+    const remainingDocument = toDocumentAmount(total - (use?.document ?? 0), 1, precision);
     const remainingBase = round(toBaseAmount(total, Number(payment.exchangeRate)) - (use?.base ?? 0));
     if (remainingDocument < 0 || remainingBase < 0 || (remainingDocument === 0 && remainingBase !== 0)) {
       throw new Error(`Invalid remaining funding balance for payment ${payment.id}`);
