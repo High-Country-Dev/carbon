@@ -11,7 +11,10 @@ import {
   VStack
 } from "@carbon/react";
 import { Trans, useLingui } from "@lingui/react/macro";
-import type { MigrationRunReport } from "~/modules/settings";
+import type {
+  MigrationCompanyResult,
+  MigrationRunReport
+} from "~/modules/settings";
 
 /**
  * What the migration did, and what it left behind.
@@ -49,6 +52,99 @@ const SEVERITY_VARIANT = {
   low: "outline"
 } as const;
 
+/**
+ * One company's rows. A migration writes a company per source scope, so the
+ * counts only mean anything alongside the name of the company they landed in.
+ */
+function CompanySection({ result }: { result: MigrationCompanyResult }) {
+  const rows = PLAN_SECTIONS.map((section) => ({
+    section,
+    label: SECTION_LABELS[section],
+    extracted: result.extracted[section] ?? 0,
+    counts: result.counts[section] ?? { inserted: 0, updated: 0, skipped: 0 }
+  })).filter((row) => row.extracted > 0 || row.counts.inserted > 0);
+
+  return (
+    <VStack spacing={2} className="w-full border rounded-lg p-3">
+      <HStack className="w-full justify-between items-start gap-2">
+        <VStack spacing={0} className="min-w-0">
+          <span className="text-sm font-medium truncate">
+            {result.companyName}
+          </span>
+          <span className="text-xs text-muted-foreground truncate">
+            {result.scopeName}
+          </span>
+        </VStack>
+        {result.created && (
+          <Badge variant="secondary" className="shrink-0">
+            <Trans>New company</Trans>
+          </Badge>
+        )}
+      </HStack>
+
+      <div className="w-full overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="text-muted-foreground text-xs">
+              <th className="text-left font-medium py-1.5">
+                <Trans>Records</Trans>
+              </th>
+              <th className="text-right font-medium py-1.5">
+                <Trans>Found</Trans>
+              </th>
+              <th className="text-right font-medium py-1.5">
+                <Trans>Created</Trans>
+              </th>
+              <th className="text-right font-medium py-1.5">
+                <Trans>Updated</Trans>
+              </th>
+              <th className="text-right font-medium py-1.5">
+                <Trans>Already there</Trans>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row.section} className="border-t">
+                <td className="py-1.5">{row.label}</td>
+                <td className="py-1.5 text-right tabular-nums">
+                  {row.extracted.toLocaleString()}
+                </td>
+                <td className="py-1.5 text-right tabular-nums">
+                  {row.counts.inserted.toLocaleString()}
+                </td>
+                <td className="py-1.5 text-right tabular-nums">
+                  {row.counts.updated.toLocaleString()}
+                </td>
+                <td className="py-1.5 text-right tabular-nums text-muted-foreground">
+                  {row.counts.skipped.toLocaleString()}
+                </td>
+              </tr>
+            ))}
+            {rows.length === 0 && (
+              <tr className="border-t">
+                <td colSpan={5} className="py-3 text-muted-foreground">
+                  <Trans>Nothing was found to migrate for this entity.</Trans>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {result.warnings.length > 0 && (
+        <ul className="text-xs list-disc pl-5 space-y-1 w-full">
+          {result.warnings.map((warning) => (
+            <li key={warning} className="text-muted-foreground">
+              {warning}
+            </li>
+          ))}
+        </ul>
+      )}
+    </VStack>
+  );
+}
+
 export function MigrationReport({
   report,
   catalog,
@@ -61,19 +157,14 @@ export function MigrationReport({
 }) {
   const { t } = useLingui();
 
-  const rows = PLAN_SECTIONS.map((section) => ({
-    section,
-    label: SECTION_LABELS[section],
-    extracted: report.extracted[section] ?? 0,
-    counts: report.counts[section] ?? { inserted: 0, updated: 0, skipped: 0 }
-  })).filter((row) => row.extracted > 0 || row.counts.inserted > 0);
-
   const gaps = report.gaps
     .map((gap) => {
       const definition = catalog.find((entry) => entry.id === gap.id);
       return definition ? { ...definition, ...gap } : null;
     })
     .filter((gap): gap is NonNullable<typeof gap> => gap !== null);
+
+  const createdCount = report.companies.filter((c) => c.created).length;
 
   return (
     <VStack spacing={4} className="w-full">
@@ -87,89 +178,59 @@ export function MigrationReport({
             )}
           </CardTitle>
           <CardDescription>
-            <Trans>
-              Every record keeps a link back to the record it came from, so
-              running this again updates rather than duplicates.
-            </Trans>
+            {createdCount > 0 ? (
+              dryRun ? (
+                <Trans>
+                  One Carbon company per entity in the account, all in this
+                  company group. {createdCount} would be created.
+                </Trans>
+              ) : (
+                <Trans>
+                  One Carbon company per entity in the account, all in this
+                  company group. {createdCount} were created.
+                </Trans>
+              )
+            ) : (
+              <Trans>
+                Every record keeps a link back to the record it came from, so
+                running this again updates rather than duplicates.
+              </Trans>
+            )}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="w-full overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-muted-foreground text-xs">
-                  <th className="text-left font-medium py-1.5">
-                    <Trans>Records</Trans>
-                  </th>
-                  <th className="text-right font-medium py-1.5">
-                    <Trans>Found</Trans>
-                  </th>
-                  <th className="text-right font-medium py-1.5">
-                    <Trans>Created</Trans>
-                  </th>
-                  <th className="text-right font-medium py-1.5">
-                    <Trans>Updated</Trans>
-                  </th>
-                  <th className="text-right font-medium py-1.5">
-                    <Trans>Already there</Trans>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((row) => (
-                  <tr key={row.section} className="border-t">
-                    <td className="py-1.5">{row.label}</td>
-                    <td className="py-1.5 text-right tabular-nums">
-                      {row.extracted.toLocaleString()}
-                    </td>
-                    <td className="py-1.5 text-right tabular-nums">
-                      {row.counts.inserted.toLocaleString()}
-                    </td>
-                    <td className="py-1.5 text-right tabular-nums">
-                      {row.counts.updated.toLocaleString()}
-                    </td>
-                    <td className="py-1.5 text-right tabular-nums text-muted-foreground">
-                      {row.counts.skipped.toLocaleString()}
-                    </td>
-                  </tr>
-                ))}
-                {rows.length === 0 && (
-                  <tr className="border-t">
-                    <td
-                      colSpan={5}
-                      className="py-3 text-center text-muted-foreground"
-                    >
-                      <Trans>
-                        Nothing was found to migrate. Check that the role you
-                        connected can read these records.
-                      </Trans>
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+          <VStack spacing={3} className="w-full">
+            {report.companies.map((result) => (
+              <CompanySection
+                key={result.scopeId || result.companyId}
+                result={result}
+              />
+            ))}
+            {report.companies.length === 0 && (
+              <p className="text-sm text-muted-foreground">
+                <Trans>
+                  Nothing was found to migrate. Check that the role you
+                  connected can read these records.
+                </Trans>
+              </p>
+            )}
+          </VStack>
         </CardContent>
       </Card>
 
-      {report.warnings.length > 0 && (
+      {report.skippedScopes.length > 0 && (
         <Card className="w-full">
           <CardHeader>
             <CardTitle>
-              <Trans>Records that needed a decision</Trans>
+              <Trans>Entities without a company</Trans>
             </CardTitle>
-            <CardDescription>
-              <Trans>
-                These came across, but something about them did not line up
-                exactly.
-              </Trans>
-            </CardDescription>
           </CardHeader>
           <CardContent>
             <ul className="text-sm list-disc pl-5 space-y-1">
-              {report.warnings.map((warning) => (
-                <li key={warning} className="text-muted-foreground">
-                  {warning}
+              {report.skippedScopes.map((scope) => (
+                <li key={scope.scopeId} className="text-muted-foreground">
+                  <span className="text-foreground">{scope.name}</span> —{" "}
+                  {scope.reason}
                 </li>
               ))}
             </ul>

@@ -60,13 +60,39 @@ Anything a SECOND source would also need. Today that is:
   come across is a property of the system you are leaving.
 - `load/` — the whole Carbon writer.
 
-## Scopes
+## Scopes → companies
 
 A "scope" is the unit inside a source account that maps 1:1 to a Carbon company:
-a NetSuite subsidiary, an accounting tenant, a realm. When an account holds more
-than one, the source throws `ScopeChoiceRequired`, the job parks the choices on
-the marker, and the page renders a picker. Merging scopes double-counts whatever
-flows between them, so nothing guesses.
+a NetSuite subsidiary, an accounting tenant, a realm. **A source account is a
+company GROUP; each of its scopes is a company in it.** Carbon already models
+exactly that — `companyGroup` holding a tree of companies linked by
+`parentCompanyId`, with `isEliminationEntity` for consolidation shells — so the
+migration rebuilds the source's org chart rather than flattening it.
+
+- `SourceConnection.listScopes()` returns the tree (`parentScopeId` and all).
+  Empty means the account has no such concept: one account, one company.
+- The company the user pressed Migrate in takes the **root** scope. It is the one
+  they already set up, and orphaning it for a fresh company would be a surprise.
+- Every other scope is provisioned underneath it: a `company` insert plus the
+  **`seed-company` edge function** with `parentCompanyId`, which is the same path
+  Settings → Companies uses. That function inherits the group's
+  `companyGroupId`, reuses the group's chart of accounts instead of seeding a
+  second one, and creates the group's elimination entity itself.
+- `seed-company` does NOT create a location and `readCompanyConfig` refuses to
+  load into a company without one, so provisioning adds one named after the
+  scope.
+- Elimination scopes get **no** company of their own — Carbon makes its own — and
+  are reported under "Entities without a company" rather than dropped silently.
+- The group takes the source account's name, but only if it is still carrying the
+  placeholder name it was seeded with. A group the customer named is theirs.
+
+Scope→company links live in `externalIntegrationMapping` (`entityType:
+"company"`, `integration: <sourceId>`, `externalId: <scopeId>`), which is what
+makes a re-run resolve the same companies instead of creating a second set.
+
+`ScopeChoiceRequired` still exists in the harness for a source whose `read` is
+called without a scope it needs, but the job never triggers it: it gives every
+scope a company rather than asking the user to choose one.
 
 ## Writing Carbon
 
@@ -116,15 +142,29 @@ share a per-company concurrency key so they never overlap, and the marker's
 `integration` is `"migration"` for every source: one migration per company at a
 time falls out of the partial unique index rather than being enforced by hand.
 
+The marker lives on the company the run STARTED from and carries the whole run —
+`companies[]` with each company's snapshot path and whether the run created it.
+Keep drops every snapshot; Revert restores each snapshot and then deletes the
+companies the run created, in that order (a restore that failed half-way would
+otherwise leave the group short of both a company and its data). Only companies
+the marker recorded as created are ever deleted.
+
 - **Credentials are not in the event payload.** Inngest stores event bodies in
   run history. `packages/jobs/src/migration/connect.ts` resolves them from
   `companyIntegration` + Supabase Vault and hands the source resolved metadata —
   which is why the harness itself never imports Supabase.
 - **Preview runs the real code path** and throws `DryRunRollback` after the load
   succeeds. A preview that took a different path would prove nothing about the
-  migration it previews.
-- **One transaction for the whole plan.** A half-migrated company is not a state
-  anybody could reason about, let alone clean up.
+  migration it previews. The one thing it cannot do is create companies —
+  provisioning is not transactional — so a scope with no company yet is read,
+  mapped and counted, and reported as one that WOULD be created.
+- **One transaction PER COMPANY.** Companies are independent tenants with no
+  foreign keys between them, so that is the natural unit of atomicity — and a
+  single transaction spanning all of them would hold one connection open for the
+  length of the whole migration. Within a company it is still all-or-nothing.
+- **Provisioning is not transactional.** `seed-company` is an edge function, so a
+  company this run created survives a later failure; the marker records which
+  companies were created so the revert can delete exactly those.
 - **Nothing in the job is source-specific.** Adding a source adds no code to it.
 
 ## The gap register

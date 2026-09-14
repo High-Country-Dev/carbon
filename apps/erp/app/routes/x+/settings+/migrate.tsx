@@ -117,13 +117,11 @@ export async function action({ request }: ActionFunctionArgs) {
         };
       }
 
-      const scopeId = String(formData.get("scopeId") ?? "").trim();
       try {
         const startedRunId = await startMigration({
           companyId,
           userId,
           sourceId: source.id,
-          scopeId: scopeId || null,
           dryRun: intent === "preview"
         });
         return {
@@ -211,8 +209,7 @@ export default function MigrateRoute() {
           progress: null,
           dryRun: false,
           hasSnapshot: false,
-          report: null,
-          scopeChoices: null
+          report: null
         }
       : null;
 
@@ -271,11 +268,6 @@ export default function MigrateRoute() {
           key={source.id}
           source={source}
           disabled={active}
-          scopeChoices={
-            pending?.sourceId === source.id
-              ? (pending.scopeChoices ?? null)
-              : null
-          }
           onStart={setStarting}
         />
       ))}

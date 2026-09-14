@@ -227,8 +227,10 @@ export type Events = {
   };
 
   // ERP migration — read another system (see @carbon/migration's source
-  // registry) and write it into this company. Three phases in one durable step:
-  // the source reads and maps, the harness loads in one transaction.
+  // registry) and write it into this company GROUP: one Carbon company per
+  // source scope (a NetSuite subsidiary, an accounting tenant), with the company
+  // the run started from taking the root. The source reads and maps per scope;
+  // the harness loads each company in its own transaction.
   // Credentials are NOT in the payload: the job resolves them from the company's
   // integration and Supabase Vault, so a secret never lands in an Inngest event
   // body or its run history. `sourceId` is a plain string so @carbon/lib does
@@ -239,13 +241,6 @@ export type Events = {
       userId: string;
       migrationRunId: string;
       sourceId: string;
-      /**
-       * Which scope to migrate — a NetSuite subsidiary, an accounting tenant.
-       * Required when the source account holds more than one: merging them into
-       * a single company double-counts whatever flows between them, so the job
-       * refuses rather than guess.
-       */
-      scopeId?: string | null;
       /**
        * Read and map, then roll the load back and report what WOULD happen.
        * This is what the preview screen runs, and it is the same code path as

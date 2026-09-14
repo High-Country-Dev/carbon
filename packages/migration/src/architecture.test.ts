@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -7,14 +7,19 @@ import { describe, expect, it } from "vitest";
 const srcRoot = dirname(fileURLToPath(import.meta.url));
 
 function filesUnder(dir: string): string[] {
-  return readdirSync(join(srcRoot, dir), { withFileTypes: true, recursive: true })
+  return readdirSync(join(srcRoot, dir), {
+    withFileTypes: true,
+    recursive: true
+  })
     .filter((entry) => entry.isFile() && entry.name.endsWith(".ts"))
     .map((entry) => join(entry.parentPath, entry.name));
 }
 
 function importsOf(file: string): string[] {
   const source = readFileSync(file, "utf8");
-  return [...source.matchAll(/from\s+"([^"]+)"/g)].map((match) => match[1] ?? "");
+  return [...source.matchAll(/from\s+"([^"]+)"/g)].map(
+    (match) => match[1] ?? ""
+  );
 }
 
 /**

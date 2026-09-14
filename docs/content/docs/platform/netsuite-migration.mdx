@@ -74,8 +74,25 @@ A few mapping decisions are worth knowing before you look at the result.
 
 Every migrated record keeps a link back to the NetSuite record it came from. That is what lets you run the migration again — a second run updates what it created rather than duplicating it — and what lets a CSV keyed on NetSuite ids fill in anything you want to bring across by hand later.
 
-<Callout type="info" title="One subsidiary per company">
-If your NetSuite account is OneWorld with more than one subsidiary, Carbon stops and asks which one to migrate. One Carbon company holds one subsidiary; migrating them together would double-count intercompany revenue and stock. Run the migration once per subsidiary, into its own company, then link them as a company group.
+## Subsidiaries become companies
+
+If your NetSuite account is OneWorld, each subsidiary becomes its own Carbon **company**, and they all sit in one **company group** named after your NetSuite account. The parent/child structure comes across too, so the tree in **Settings → Companies** matches the one in NetSuite.
+
+The company you were in when you pressed Migrate takes your **root** subsidiary — it's the one you already set up, so Carbon doesn't leave it behind. Everything else is created underneath it, set up exactly as if you'd added it from Settings → Companies yourself: its own reference data and sequences, sharing the group's chart of accounts.
+
+Two things work differently from NetSuite:
+
+<FieldTable>
+  <Field name="Elimination subsidiaries">Carbon keeps its own elimination entity for a group, so your NetSuite elimination subsidiaries don't get companies of their own. They're listed in the report under "Entities without a company".</Field>
+  <Field name="Consolidation">The companies and the hierarchy come across; consolidated exchange rates, elimination entries and consolidated reporting do not. Set those up in Carbon after the migration.</Field>
+</FieldTable>
+
+<Callout type="note" title="Preview can't create companies">
+A preview reads and counts everything, including the data for subsidiaries that don't have a Carbon company yet — it reports those as companies it *would* create. Creating them for real only happens when you press **Migrate now**, because company setup can't be rolled back the way the data can.
+</Callout>
+
+<Callout type="tip" title="Revert cleans up after itself">
+Reverting puts back every company that already existed from its saved copy, then deletes the companies the migration created. It only ever deletes the ones it made — a company you created yourself is never touched.
 </Callout>
 
 <Callout type="info" title="Who can see this page">
@@ -90,6 +107,9 @@ The NetSuite role is missing **SuiteAnalytics Workbook**, which gates the SuiteQ
 
 ### NetSuite rejects the credentials with an unhelpful error
 Three things produce a generic `invalid_client`: the **Certificate ID** field holding the Client ID instead of the certificate id NetSuite shows after upload; an RSA key that is 2048 bits (NetSuite requires 3072 or 4096); and an account id typed with the wrong separator. Carbon accepts either `1234567_SB1` or `1234567-sb1` and normalizes it, so the separator is not the problem on the Carbon side.
+
+### A subsidiary didn't get a company
+Elimination subsidiaries don't — Carbon keeps its own elimination entity for a company group — and neither do subsidiaries marked inactive in NetSuite. Both are listed in the report under "Entities without a company" with the reason.
 
 ### The report shows far fewer records than the account has
 Check the integration role's Subsidiary Restriction and its record permissions. NetSuite returns fewer rows for a restricted role with no error at all, so a partial read looks identical to a small account.

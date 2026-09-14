@@ -67,6 +67,11 @@ export {
   planCounts
 } from "./plan.ts";
 export {
+  planScopePlacements,
+  type ScopePlacement,
+  type ScopePlan
+} from "./scopes.ts";
+export {
   type ExtractOptions,
   type ExtractProgress,
   type MigrationScope,

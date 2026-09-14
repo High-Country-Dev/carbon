@@ -3,8 +3,7 @@ import type { KyselyDatabase } from "@carbon/database/client";
 import {
   type DetectedGap,
   loadMigrationPlan,
-  planCounts,
-  ScopeChoiceRequired
+  planCounts
 } from "@carbon/migration";
 import { datetime } from "@carbon/utils";
 import { NonRetriableError } from "inngest";
@@ -12,6 +11,10 @@ import type { Transaction } from "kysely";
 
 import { applyTableRenames } from "../../../backups/renames";
 import { getJobDatabaseClient } from "../../../db";
+import {
+  nameCompanyGroup,
+  resolveMigrationTargets
+} from "../../../migration/companies";
 import { connectMigrationSource } from "../../../migration/connect";
 import { inngest } from "../../client";
 import {
@@ -29,13 +32,19 @@ import { buildCompanyBackup } from "./company-export";
 import { resolveRestoreScope, wipeAndLoad } from "./company-restore";
 
 /**
- * Migrate another ERP into this company, in one click.
+ * Migrate another ERP into this company group, in one click.
  *
- * Three phases, one durable step: the SOURCE reads its own system and returns a
- * `MigrationPlan` (extract and map, both its business), and the HARNESS writes
- * that plan into Carbon inside a single transaction. This job owns neither —
- * it owns the lifecycle: the guard against a second run, the snapshot, the
- * progress the page reads, and the keep/revert decision at the end.
+ * A source account is a group of legal entities — NetSuite subsidiaries, an
+ * accounting org's tenants — and Carbon models that as a `companyGroup` holding
+ * a tree of companies. So a run is one company PER SCOPE: the company the user
+ * pressed Migrate in takes the root, the rest are provisioned underneath it, and
+ * the group takes the source account's name.
+ *
+ * Per scope the SOURCE reads its own system and returns a `MigrationPlan`
+ * (extract and map, both its business), and the HARNESS writes that plan into
+ * that scope's company. This job owns neither — it owns the lifecycle: the guard
+ * against a second run, the snapshots, the progress the page reads, and the
+ * keep/revert decision at the end.
  *
  * Nothing here is specific to any one source. Adding a second source adds no
  * code to this file.
@@ -65,11 +74,14 @@ type MigrationGapSummary = {
   examples: string[];
 };
 
-type MigrationReport = {
-  sourceId: string;
-  accountId: string;
-  scopeId: string | null;
-  sandbox: boolean;
+/** What one scope's company ended up with. */
+type MigrationCompanyResult = {
+  companyId: string;
+  companyName: string;
+  scopeId: string;
+  scopeName: string;
+  /** True when THIS run created the company — the only ones a revert deletes. */
+  created: boolean;
   /** Rows written per plan section. */
   counts: Record<
     string,
@@ -79,6 +91,17 @@ type MigrationReport = {
   extracted: Record<string, number>;
   linked: number;
   warnings: string[];
+};
+
+type MigrationReport = {
+  sourceId: string;
+  accountId: string;
+  /** What the source account calls itself — it names the company group. */
+  accountName: string;
+  sandbox: boolean;
+  companies: MigrationCompanyResult[];
+  /** Scopes that got no company of their own, and why. */
+  skippedScopes: { scopeId: string; name: string; reason: string }[];
   notes: string[];
   gaps: MigrationGapSummary[];
 };
@@ -89,19 +112,22 @@ type MigrationMeta = {
   status: MigrationStatus;
   startedAt?: string;
   error?: string | null;
-  /** Folder name of the pre-migration snapshot in this company's bucket. */
-  snapshotPath?: string;
-  /** Scope the forward migration covered, so a revert undoes exactly that. */
-  includeGroup?: boolean;
+  /**
+   * The companies this run touched, and how to undo each: a snapshot for the
+   * ones that already existed, a delete for the ones it created.
+   */
+  companies?: {
+    companyId: string;
+    companyName: string;
+    created: boolean;
+    snapshotPath?: string;
+    includeGroup?: boolean;
+  }[];
   /** Live phase progress, so a run that takes minutes doesn't look hung. */
   progress?: JobProgress | null;
   /** True when the run only previewed — nothing was written. */
   dryRun?: boolean;
   report?: MigrationReport | null;
-  /** Set when the source account holds several scopes and one must be chosen. */
-  scopeChoices?:
-    | { id: string; name: string; currencyCode: string | null }[]
-    | null;
 };
 
 /**
@@ -263,7 +289,6 @@ export const migrationFunction = inngest.createFunction(
       userId,
       migrationRunId,
       sourceId,
-      scopeId = null,
       dryRun = false
     } = event.data;
 
@@ -294,7 +319,7 @@ export const migrationFunction = inngest.createFunction(
           error: null,
           dryRun,
           report: null,
-          scopeChoices: null,
+          companies: [],
           progress: null
         }
       });
@@ -314,93 +339,213 @@ export const migrationFunction = inngest.createFunction(
           companyId,
           sourceId
         });
+
+        // ── Map the source's entities onto Carbon companies ──────────────────
+        const scopes = await connection.listScopes();
+        const { targets, companyGroupId, skipped } =
+          await resolveMigrationTargets({
+            homeCompanyId: companyId,
+            userId,
+            sourceId,
+            scopes,
+            // Preview names the companies it WOULD create without creating
+            // them: provisioning runs through an edge function, which is not in
+            // any transaction and so cannot be rolled back with the data.
+            provision: !dryRun
+          });
+
+        if (!dryRun) {
+          await nameCompanyGroup({
+            companyGroupId,
+            accountName: connection.accountName,
+            homeCompanyName:
+              targets.find((target) => target.companyId === companyId)
+                ?.companyName ?? ""
+          });
+        }
+
         await report({ phase: "connect", done: 1, total: 1 });
 
-        // ── Read (the source's extract + map) ────────────────────────────────
-        const { plan, gaps, notes } = await connection.read({
-          scopeId,
-          onProgress: (progress) => report(progress),
-          log: (message) =>
-            logger.info(message, { companyId, migrationRunId, sourceId })
-        });
-
-        // ── Snapshot ─────────────────────────────────────────────────────────
-        // Reused, never retaken: an attempt that ran after the load committed
-        // would capture the MIGRATED state and destroy the pre-migration copy.
-        let snapshotPath = existing?.metadata.snapshotPath ?? undefined;
-        let includeGroup = existing?.metadata.includeGroup ?? false;
-
-        if (!dryRun && !snapshotPath) {
-          const scope = await resolveRestoreScope(client, companyId);
-          includeGroup = scope.includeGroup;
-          snapshotPath = `_pre-migration-${migrationRunId}`;
-
-          const snap = await buildCompanyBackup(client, db, {
-            companyId,
-            userId,
-            label: `Before ${source.name} migration ${migrationRunId}`,
-            includeStorage: "all",
-            name: snapshotPath,
-            onProgress: (progress) => report({ ...progress, phase: "snapshot" })
-          });
-          await writeBackupManifest(
-            client,
-            companyId,
-            snapshotPath,
-            snap.manifest
-          );
+        // Record what a revert has to undo BEFORE any data is written: a run
+        // that dies mid-way still has to be reversible, and a company created
+        // without a marker entry is one nothing would ever clean up.
+        const undo = targets
+          .filter((target) => target.companyId !== "")
+          .map((target) => ({
+            companyId: target.companyId,
+            companyName: target.companyName,
+            created: target.created
+          }));
+        if (!dryRun) {
           await writeMigrationMarker(client, {
             companyId,
             userId,
             migrationRunId,
             sourceId,
-            patch: { snapshotPath, includeGroup }
+            patch: { companies: undo }
           });
         }
 
-        // ── Load ─────────────────────────────────────────────────────────────
-        // One transaction for the whole plan: a failure in the last section
-        // rolls back the first. A half-migrated company — customers but no
-        // items, orders pointing at items that do not exist — is not a state
-        // anybody could reason about, let alone clean up.
-        let loadResult: Awaited<ReturnType<typeof loadMigrationPlan>>;
-        try {
-          loadResult = await db.transaction().execute(async (trx) => {
-            const result = await loadMigrationPlan(
-              trx as Transaction<KyselyDatabase>,
-              {
-                companyId,
-                userId,
-                sourceId,
-                plan,
-                onProgress: (progress) =>
-                  report({ ...progress, phase: "load" }),
-                log: (message) =>
-                  logger.info(message, { companyId, migrationRunId })
-              }
-            );
-            // A dry run takes the SAME path and then refuses to commit. A
-            // preview that ran different code would prove nothing about the
-            // migration it is previewing.
-            if (dryRun) throw new DryRunRollback(result);
-            return result;
+        // ── One company at a time ────────────────────────────────────────────
+        const results: MigrationCompanyResult[] = [];
+        const allNotes: string[] = [];
+        let allGaps: ReturnType<typeof summarizeGaps> = [];
+        const snapshotPaths = new Map<string, string>();
+
+        for (let i = 0; i < targets.length; i += 1) {
+          const target = targets[i];
+          if (!target) continue;
+          await report({ phase: "company", done: i, total: targets.length });
+
+          // A company this run would have created does not exist during a
+          // preview, so there is nowhere to load it. Its plan is still read and
+          // reported, which is what makes the preview worth reading.
+          const canLoad = target.companyId !== "";
+
+          const { plan, gaps, notes } = await connection.read({
+            scopeId: target.scope.id || null,
+            onProgress: (progress) => report(progress),
+            log: (message) =>
+              logger.info(message, {
+                companyId: target.companyId,
+                migrationRunId,
+                sourceId
+              })
           });
-        } catch (error) {
-          if (!(error instanceof DryRunRollback)) throw error;
-          loadResult = error.result;
+          allNotes.push(...notes);
+          // Every scope reads the same account, so the gaps are the account's,
+          // not the scope's — the last read wins rather than N duplicates.
+          allGaps = summarizeGaps(gaps);
+
+          if (!canLoad) {
+            results.push({
+              companyId: "",
+              companyName: target.companyName,
+              scopeId: target.scope.id,
+              scopeName: target.scope.name,
+              created: true,
+              counts: {},
+              extracted: planCounts(plan),
+              linked: 0,
+              warnings: []
+            });
+            continue;
+          }
+
+          // ── Snapshot ───────────────────────────────────────────────────────
+          // Only a company that already held data needs one; a company this run
+          // created is undone by deleting it. Reused, never retaken: an attempt
+          // that ran after the load committed would capture the MIGRATED state
+          // and destroy the pre-migration copy.
+          let snapshotPath = existing?.metadata.companies?.find(
+            (entry) => entry.companyId === target.companyId
+          )?.snapshotPath;
+
+          if (!dryRun && !target.created && !snapshotPath) {
+            const restoreScope = await resolveRestoreScope(
+              client,
+              target.companyId
+            );
+            snapshotPath = `_pre-migration-${migrationRunId}`;
+
+            const snap = await buildCompanyBackup(client, db, {
+              companyId: target.companyId,
+              userId,
+              label: `Before ${source.name} migration ${migrationRunId}`,
+              includeStorage: "all",
+              name: snapshotPath,
+              onProgress: (progress) =>
+                report({ ...progress, phase: "snapshot" })
+            });
+            await writeBackupManifest(
+              client,
+              target.companyId,
+              snapshotPath,
+              snap.manifest
+            );
+            snapshotPaths.set(target.companyId, snapshotPath);
+            await writeMigrationMarker(client, {
+              companyId,
+              userId,
+              migrationRunId,
+              sourceId,
+              patch: {
+                companies: undo.map((entry) =>
+                  entry.companyId === target.companyId
+                    ? {
+                        ...entry,
+                        snapshotPath,
+                        includeGroup: restoreScope.includeGroup
+                      }
+                    : entry
+                )
+              }
+            });
+          }
+
+          // ── Load ───────────────────────────────────────────────────────────
+          // One transaction PER COMPANY. Companies are independent tenants with
+          // no foreign keys between them, so that is the natural unit of
+          // atomicity — and a single transaction spanning all of them would hold
+          // one connection open for the length of the whole migration.
+          let loadResult: Awaited<ReturnType<typeof loadMigrationPlan>>;
+          try {
+            loadResult = await db.transaction().execute(async (trx) => {
+              const result = await loadMigrationPlan(
+                trx as Transaction<KyselyDatabase>,
+                {
+                  companyId: target.companyId,
+                  userId,
+                  sourceId,
+                  plan,
+                  onProgress: (progress) =>
+                    report({ ...progress, phase: "load" }),
+                  log: (message) =>
+                    logger.info(message, {
+                      companyId: target.companyId,
+                      migrationRunId
+                    })
+                }
+              );
+              // A dry run takes the SAME path and then refuses to commit. A
+              // preview that ran different code would prove nothing about the
+              // migration it is previewing.
+              if (dryRun) throw new DryRunRollback(result);
+              return result;
+            });
+          } catch (error) {
+            if (!(error instanceof DryRunRollback)) throw error;
+            loadResult = error.result;
+          }
+
+          results.push({
+            companyId: target.companyId,
+            companyName: target.companyName,
+            scopeId: target.scope.id,
+            scopeName: target.scope.name,
+            created: target.created,
+            counts: loadResult.counts,
+            extracted: planCounts(plan),
+            linked: loadResult.linked,
+            warnings: loadResult.warnings
+          });
         }
+
+        await report({
+          phase: "company",
+          done: targets.length,
+          total: targets.length
+        });
 
         const runReport: MigrationReport = {
           sourceId: source.id,
           accountId: connection.accountId,
-          scopeId,
+          accountName: connection.accountName,
           sandbox: connection.sandbox,
-          counts: loadResult.counts,
-          extracted: planCounts(plan),
-          linked: loadResult.linked,
-          warnings: loadResult.warnings,
-          notes,
-          gaps: summarizeGaps(gaps)
+          companies: results,
+          skippedScopes: skipped,
+          notes: [...new Set(allNotes)],
+          gaps: allGaps
         };
 
         await writeMigrationMarker(client, {
@@ -416,26 +561,8 @@ export const migrationFunction = inngest.createFunction(
           }
         });
 
-        return { migrationRunId, sourceId, dryRun, counts: loadResult.counts };
+        return { migrationRunId, sourceId, dryRun, companies: results.length };
       } catch (error) {
-        // An account with several scopes needs a DECISION, not a retry: the
-        // choices go on the marker so the page can render them.
-        if (error instanceof ScopeChoiceRequired) {
-          await writeMigrationMarker(client, {
-            companyId,
-            userId,
-            migrationRunId,
-            sourceId,
-            patch: {
-              status: "failed",
-              progress: null,
-              error: error.message,
-              scopeChoices: error.scopes
-            }
-          });
-          throw new NonRetriableError(error.message);
-        }
-
         await writeMigrationMarker(client, {
           companyId,
           userId,
@@ -474,27 +601,39 @@ export const migrationFinalizeFunction = inngest.createFunction(
       const marker = await readMigrationMarker(client, companyId);
       if (!marker) return { migrationRunId, resolved: false };
 
-      const { status, snapshotPath } = marker.metadata;
+      const { status, companies = [] } = marker.metadata;
       if (status !== "ready" && status !== "failed") {
         throw new NonRetriableError(
           `Cannot resolve a migration that is ${status}`
         );
       }
 
-      if (snapshotPath) {
-        await removeStoragePrefix(client, companyId, backupDir(snapshotPath));
+      // Every company's snapshot, not just the one the run was started from.
+      for (const entry of companies) {
+        if (!entry.snapshotPath) continue;
+        await removeStoragePrefix(
+          client,
+          entry.companyId,
+          backupDir(entry.snapshotPath)
+        );
       }
       await clearMigrationMarker(client, companyId);
 
-      return { migrationRunId, resolved: true };
+      return { migrationRunId, resolved: true, companies: companies.length };
     });
   }
 );
 
 /**
- * Undo a migration by reloading the pre-migration snapshot.
+ * Undo a migration.
  *
- * On failure the snapshot stays on the marker so the revert can be retried — a
+ * Two different undos, because the run did two different things. A company that
+ * already existed is put back from its snapshot; a company this run CREATED is
+ * deleted, because there is no earlier state to restore it to. Only companies
+ * the marker recorded as created are ever deleted — anything else would be this
+ * feature destroying a company somebody set up themselves.
+ *
+ * On failure the marker keeps its snapshots so the revert can be retried — a
  * bare row-delete from app code would strand the only copy of the company's
  * pre-migration data in the bucket with nothing pointing at it.
  */
@@ -507,13 +646,19 @@ export const migrationRevertFunction = inngest.createFunction(
     return await step.run("revert-migration", async () => {
       const client = getCarbonServiceRole();
       const marker = await readMigrationMarker(client, companyId);
-      const snapshotPath = marker?.metadata.snapshotPath;
+      const companies = marker?.metadata.companies ?? [];
       const sourceId = marker?.metadata.sourceId ?? "";
+      const hasSomethingToUndo = companies.some(
+        (entry) => entry.snapshotPath || entry.created
+      );
 
-      if (!snapshotPath) {
+      if (!hasSomethingToUndo) {
         // Deliberately not a silent no-op: the user pressed Revert and is owed
         // an answer about why nothing happened.
-        logger.error("No snapshot to revert to", { companyId, migrationRunId });
+        logger.error("Nothing recorded to revert", {
+          companyId,
+          migrationRunId
+        });
         await writeMigrationMarker(client, {
           companyId,
           userId,
@@ -523,7 +668,7 @@ export const migrationRevertFunction = inngest.createFunction(
             status: "failed",
             progress: null,
             error:
-              "No snapshot was recorded for this run, so it cannot be reverted."
+              "Nothing was recorded for this run, so there is nothing to put back."
           }
         });
         return { migrationRunId, reverted: false };
@@ -550,35 +695,79 @@ export const migrationRevertFunction = inngest.createFunction(
       });
 
       try {
-        const rawSnapshot = await readBackup(client, companyId, snapshotPath);
-        const { targetGroupId } = await resolveRestoreScope(client, companyId);
         const catalog = await getCompanyTableCatalog(db);
-        // The snapshot predates any database migration that has run since it was taken.
-        const snapshot = applyTableRenames(catalog, rawSnapshot);
+        let rows = 0;
 
-        const { rows, idRewrite } = await wipeAndLoad(db, catalog, snapshot, {
-          companyId,
-          userId: "",
-          remap: false,
-          includeGroup: marker?.metadata.includeGroup ?? false,
-          targetGroupId,
-          onProgress: report
-        });
+        // Restore first, delete second. A created company holds nothing worth
+        // keeping, but a restore that failed half-way would leave the group
+        // short of a company AND short of its data.
+        for (const entry of companies) {
+          if (!entry.snapshotPath) continue;
 
-        await report({ phase: "files", done: 0, total: 1 });
-        await restoreAssetsFromBackup(client, {
-          files: snapshot.manifest.storage,
-          srcBucket: companyId,
-          srcPrefix: backupAssetsDir(snapshotPath),
-          sourceCompanyId: companyId,
-          companyId,
-          idRewrite
-        });
+          const rawSnapshot = await readBackup(
+            client,
+            entry.companyId,
+            entry.snapshotPath
+          );
+          const { targetGroupId } = await resolveRestoreScope(
+            client,
+            entry.companyId
+          );
+          // The snapshot predates any database migration that has run since it
+          // was taken.
+          const snapshot = applyTableRenames(catalog, rawSnapshot);
 
-        await removeStoragePrefix(client, companyId, backupDir(snapshotPath));
+          const loaded = await wipeAndLoad(db, catalog, snapshot, {
+            companyId: entry.companyId,
+            userId: "",
+            remap: false,
+            includeGroup: entry.includeGroup ?? false,
+            targetGroupId,
+            onProgress: report
+          });
+          rows += loaded.rows;
+
+          await report({ phase: "files", done: 0, total: 1 });
+          await restoreAssetsFromBackup(client, {
+            files: snapshot.manifest.storage,
+            srcBucket: entry.companyId,
+            srcPrefix: backupAssetsDir(entry.snapshotPath),
+            sourceCompanyId: entry.companyId,
+            companyId: entry.companyId,
+            idRewrite: loaded.idRewrite
+          });
+
+          await removeStoragePrefix(
+            client,
+            entry.companyId,
+            backupDir(entry.snapshotPath)
+          );
+        }
+
+        const created = companies.filter((entry) => entry.created);
+        for (const entry of created) {
+          await report({ phase: "companies", done: 0, total: created.length });
+          // A plain delete: every company-scoped table cascades from
+          // `company.id`, which is the same thing Settings → Companies does.
+          const deleted = await client
+            .from("company")
+            .delete()
+            .eq("id", entry.companyId);
+          if (deleted.error) {
+            throw new Error(
+              `Could not remove the company created for "${entry.companyName}": ${deleted.error.message}`
+            );
+          }
+        }
+
         await clearMigrationMarker(client, companyId);
 
-        return { migrationRunId, reverted: true, rows };
+        return {
+          migrationRunId,
+          reverted: true,
+          rows,
+          deletedCompanies: created.length
+        };
       } catch (error) {
         await writeMigrationMarker(client, {
           companyId,

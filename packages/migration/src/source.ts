@@ -24,13 +24,32 @@ export type MigrationSourceId = "netsuite";
  * The unit inside a source account that maps 1:1 to a Carbon company — a
  * NetSuite subsidiary, an accounting tenant, a realm.
  *
- * A source with no such concept reports none, and the migration never asks.
+ * A source with no such concept reports none, and the migration treats the whole
+ * account as one company.
+ *
+ * Carbon models exactly this shape already: a `companyGroup` holding a tree of
+ * companies linked by `parentCompanyId`, with `isEliminationEntity` for the ones
+ * that exist only to cancel intercompany balances. So a scope carries the
+ * hierarchy rather than flattening it — the migration rebuilds the source's own
+ * org chart instead of inventing one.
  */
 export type MigrationScope = {
   id: string;
   name: string;
+  /** The registered legal name, when the source keeps one separately. */
+  legalName: string | null;
   /** The scope's own base currency, when the source exposes one. */
   currencyCode: string | null;
+  /** ISO-3166 alpha-2, when the source exposes one. */
+  countryCode: string | null;
+  /** The scope this one sits under. Null for the root — there is exactly one. */
+  parentScopeId: string | null;
+  /**
+   * True for a consolidation-only entity. It becomes a Carbon company flagged
+   * `isEliminationEntity`, but carries no business data worth migrating.
+   */
+  isElimination: boolean;
+  inactive: boolean;
 };
 
 export type ExtractProgress = { phase: string; done: number; total: number };
@@ -68,7 +87,19 @@ export type SourceConnection = {
   accountId: string;
   /** True for a sandbox or test account, so nobody migrates test data by accident. */
   sandbox: boolean;
-  /** Throws `ScopeChoiceRequired` when the account holds several and none was chosen. */
+  /**
+   * What the account calls itself as a whole — a NetSuite account's root
+   * subsidiary, an accounting org's name. It names the Carbon company group.
+   */
+  accountName: string;
+  /**
+   * The scopes this account holds, as a tree.
+   *
+   * Empty for a source (or an account) with no such concept: one account, one
+   * company. Otherwise one Carbon company per scope, all in one group.
+   */
+  listScopes(): Promise<MigrationScope[]>;
+  /** Read and map ONE scope. `scopeId` is required when `listScopes` returns any. */
   read(options: ExtractOptions): Promise<SourceReadResult>;
 };
 

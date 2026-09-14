@@ -434,12 +434,15 @@ export async function getCompanyTemplateRun(
   };
 }
 
-export type MigrationRunReport = {
-  /** Which system the data came from — the id of a registered migration source. */
-  sourceId: string;
-  accountId: string;
-  scopeId: string | null;
-  sandbox: boolean;
+/** One company's share of a migration — a source scope landed in a Carbon company. */
+export type MigrationCompanyResult = {
+  /** Empty on a preview for a company that would be created but does not exist yet. */
+  companyId: string;
+  companyName: string;
+  scopeId: string;
+  scopeName: string;
+  /** True when the run created this company rather than writing into an existing one. */
+  created: boolean;
   /** Rows written per plan section. */
   counts: Record<
     string,
@@ -449,6 +452,19 @@ export type MigrationRunReport = {
   extracted: Record<string, number>;
   linked: number;
   warnings: string[];
+};
+
+export type MigrationRunReport = {
+  /** Which system the data came from — the id of a registered migration source. */
+  sourceId: string;
+  accountId: string;
+  /** What the source account calls itself; it names the company group. */
+  accountName: string;
+  sandbox: boolean;
+  /** One entry per source scope that got a company. */
+  companies: MigrationCompanyResult[];
+  /** Scopes that got no company of their own, and why. */
+  skippedScopes: { scopeId: string; name: string; reason: string }[];
   notes: string[];
   /** Gap ids plus what they cost THIS account. The prose lives in the source's catalog. */
   gaps: { id: string; count: number | null; examples: string[] }[];
@@ -464,14 +480,10 @@ export type MigrationRun = {
   progress: { phase: string; done: number; total: number } | null;
   /** True when the run only previewed — nothing was written. */
   dryRun: boolean;
-  /** Whether a pre-migration snapshot exists yet, so Revert is only offered when
-   *  there is actually something to put back. */
+  /** Whether there is anything to put back — a snapshot, or a company the run
+   *  created. Revert is only offered when there is. */
   hasSnapshot: boolean;
   report: MigrationRunReport | null;
-  /** Set when the source account holds several scopes and one must be picked. */
-  scopeChoices:
-    | { id: string; name: string; currencyCode: string | null }[]
-    | null;
 };
 
 /**
@@ -499,16 +511,16 @@ export async function getMigrationRun(
     startedAt?: string;
     error?: string;
     progress?: { phase: string; done: number; total: number } | null;
-    snapshotPath?: string;
+    companies?: {
+      companyId: string;
+      companyName: string;
+      created: boolean;
+      snapshotPath?: string;
+    }[];
     dryRun?: boolean;
     report?: MigrationRunReport | null;
-    scopeChoices?:
-      | { id: string; name: string; currencyCode: string | null }[]
-      | null;
   };
 
-  // Only whether a snapshot EXISTS is projected, never where — the job owns its
-  // lifecycle end to end, and the client has no use for the location.
   return {
     data: {
       migrationRunId: meta.migrationRunId ?? "",
@@ -518,9 +530,12 @@ export async function getMigrationRun(
       error: meta.error ?? null,
       progress: meta.progress ?? null,
       dryRun: Boolean(meta.dryRun),
-      hasSnapshot: Boolean(meta.snapshotPath),
-      report: meta.report ?? null,
-      scopeChoices: meta.scopeChoices ?? null
+      // Only WHETHER there is something to undo is projected, never where — the
+      // job owns the snapshots end to end, and the client has no use for a path.
+      hasSnapshot: (meta.companies ?? []).some(
+        (entry) => Boolean(entry.snapshotPath) || entry.created
+      ),
+      report: meta.report ?? null
     },
     error: null
   };

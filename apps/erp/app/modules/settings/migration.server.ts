@@ -16,7 +16,6 @@ export async function startMigration(args: {
   companyId: string;
   userId: string;
   sourceId: string;
-  scopeId?: string | null;
   dryRun?: boolean;
 }): Promise<string> {
   const migrationRunId = nanoid();
@@ -25,7 +24,6 @@ export async function startMigration(args: {
     userId: args.userId,
     migrationRunId,
     sourceId: args.sourceId,
-    scopeId: args.scopeId ?? null,
     dryRun: args.dryRun ?? false
   });
   return migrationRunId;

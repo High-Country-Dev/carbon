@@ -44,7 +44,7 @@ without a source account or a database:
 | **Source** | `@carbon/migration` `src/sources/<id>/` | one system only: auth, how to read it without tripping its governance, what its records mean |
 | **Plan** | `@carbon/migration` `src/plan.ts` | Carbon's schema — the contract between the two halves |
 | **Load** | `@carbon/migration` `src/load/` | Carbon only. Kysely against the generated types, one transaction. |
-| **Lifecycle** | `@carbon/jobs` `.../tasks/migration.ts` | neither: the guard, the snapshot, progress, keep/revert |
+| **Lifecycle** | `@carbon/jobs` `.../tasks/migration.ts` | neither: the guard, the company mapping, the snapshots, progress, keep/revert |
 
 Nothing downstream of a source's `map/` sees a source field name; nothing in `load/`
 imports from `sources/`. Every product decision — which source item type becomes which
@@ -94,12 +94,14 @@ into one company cannot collide on the same record id. The one thing with no nat
 opening stock — carries a deterministic `itemLedger.externalDocumentId` marker instead,
 namespaced the same way.
 
-**D6 — One transaction for the whole plan.** A half-migrated company (customers but no
+**D6 — One transaction per company's plan.** A half-migrated company (customers but no
 items, orders pointing at items that do not exist) is not a state anybody can reason about.
+Across companies, see D11a.
 
 **D7 — Preview runs the real code path.** The dry run loads the plan for real and then
 throws to roll the transaction back. A preview that took a different path would prove
-nothing about the migration it previews.
+nothing about the migration it previews. Its one honest limit is company provisioning
+(D11b).
 
 **D8 — Credentials never enter the event payload.** Inngest stores event bodies in run
 history. The job resolves them from `companyIntegration` + Supabase Vault instead.
@@ -112,11 +114,35 @@ already shipped.
 number a customer service rep knows still finds the order; `advanceDocumentSequences`
 moves Carbon's own numbering forward so the next order does not collide.
 
-**D11 — One scope per company, and the job refuses to choose.** A "scope" is whatever a
-source calls the unit that maps 1:1 to a Carbon company — a NetSuite subsidiary, an
-accounting tenant. An account holding several stops with a structured choice on the
-marker, which the page renders as a picker. Merging them would double-count whatever
-flows between them.
+**D11 — A source account is a company GROUP; each of its scopes is a company.** A "scope"
+is whatever a source calls a legal entity — a NetSuite subsidiary, an accounting tenant.
+Carbon already models the target shape: a `companyGroup` holding a tree of companies
+linked by `parentCompanyId`, with `isEliminationEntity` for consolidation shells. So a run
+rebuilds the source's org chart: the company the user pressed Migrate in takes the ROOT
+scope (it is the one they already set up), every other scope is provisioned underneath it,
+and the group takes the account's name if it is still carrying its seeded placeholder.
+
+Provisioning goes through the path Settings → Companies uses — a `company` insert plus the
+`seed-company` edge function with `parentCompanyId` — so a migrated company is
+indistinguishable from a hand-made one. That function already inherits the group's
+`companyGroupId`, reuses the group's chart of accounts rather than seeding a second, and
+creates the group's elimination entity itself; which is why a source's own elimination
+scopes get no company (that would leave two) and are reported instead.
+
+Scope→company links live in `externalIntegrationMapping` (`entityType: "company"`), so a
+re-run resolves the same companies rather than creating a second set.
+
+**D11a — One transaction per company, not one per run.** Companies are independent tenants
+with no foreign keys between them, so that is the natural unit of atomicity; a single
+transaction spanning all of them would hold one connection for the whole migration. Within
+a company the load is still all-or-nothing.
+
+**D11b — Provisioning is not transactional, and the revert knows it.** `seed-company` is an
+edge function, so a company created by a run that later fails stays created. The marker
+records which companies the run created; Revert restores every snapshot first and then
+deletes exactly those companies — never one somebody made themselves. It also means
+Preview cannot create companies: a scope with no company yet is read, mapped and counted,
+and reported as one that WOULD be created.
 
 **D12 — The gap register is code, not prose.** Each source's `gaps.ts` is the source of
 truth; `gaps/<id>.md` is generated from it and a test fails when the two drift. The

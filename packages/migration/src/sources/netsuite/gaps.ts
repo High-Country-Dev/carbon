@@ -95,13 +95,14 @@ export const NETSUITE_GAPS: MigrationGapDefinition[] = [
   {
     id: "NS-PLT-001",
     area: "platform",
-    severity: "high",
+    severity: "medium",
     status: "transformed",
-    title: "One NetSuite subsidiary becomes one Carbon company",
+    title:
+      "Each subsidiary becomes a company; consolidation itself does not come across",
     detail:
-      "A OneWorld account holds many subsidiaries in one database. A migration run targets the single Carbon company you start it from, and pulls the records belonging to the subsidiary you pick. Consolidation, intercompany eliminations and subsidiary-level charts of accounts are not reproduced by the run.",
+      "A OneWorld account's subsidiaries each become a Carbon company inside one company group, with NetSuite's parent/child hierarchy rebuilt and the group named after the account. What does NOT come across is the consolidation machinery on top: consolidated exchange rates, elimination entries, and any consolidated reporting you had configured. Carbon keeps its own elimination entity for the group rather than copying NetSuite's.",
     workaround:
-      "Run the migration once per subsidiary, into its own Carbon company, then link them as a company group in Settings → Companies."
+      "Check the company tree in Settings → Companies after the migration, and set up Carbon's own intercompany and elimination configuration for the group."
   },
   {
     id: "NS-PLT-002",

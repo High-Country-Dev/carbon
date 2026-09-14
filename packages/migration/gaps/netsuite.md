@@ -11,7 +11,7 @@ This file is the complete list of what it does **not** bring, and what to do
 instead. Each entry has a stable id that the in-app migration report, the docs
 site and support all use.
 
-**31 known gaps** — 6 high, 15 medium, 10 low.
+**31 known gaps** — 5 high, 16 medium, 10 low.
 
 Only the gaps that actually cost a given account something are shown in that
 account's migration report: the read counts the affected source records, and a
@@ -21,13 +21,13 @@ the same to somebody deciding whether to cut over.
 
 ## Platform
 
-#### NS-PLT-001 — One NetSuite subsidiary becomes one Carbon company
+#### NS-PLT-001 — Each subsidiary becomes a company; consolidation itself does not come across
 
-**Severity:** high · **Status:** Transformed
+**Severity:** medium · **Status:** Transformed
 
-A OneWorld account holds many subsidiaries in one database. A migration run targets the single Carbon company you start it from, and pulls the records belonging to the subsidiary you pick. Consolidation, intercompany eliminations and subsidiary-level charts of accounts are not reproduced by the run.
+A OneWorld account's subsidiaries each become a Carbon company inside one company group, with NetSuite's parent/child hierarchy rebuilt and the group named after the account. What does NOT come across is the consolidation machinery on top: consolidated exchange rates, elimination entries, and any consolidated reporting you had configured. Carbon keeps its own elimination entity for the group rather than copying NetSuite's.
 
-*What to do instead:* Run the migration once per subsidiary, into its own Carbon company, then link them as a company group in Settings → Companies.
+*What to do instead:* Check the company tree in Settings → Companies after the migration, and set up Carbon's own intercompany and elimination configuration for the group.
 
 #### NS-PLT-002 — Custom fields are not mapped onto Carbon custom fields
 

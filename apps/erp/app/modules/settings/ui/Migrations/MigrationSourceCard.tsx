@@ -1,21 +1,14 @@
 import {
   Button,
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-  HStack,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  VStack
+  HStack
 } from "@carbon/react";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, useFetcher } from "react-router";
 import { path } from "~/utils/path";
 
@@ -33,30 +26,27 @@ export type MigrationSourceCardData = {
  * One card per system Carbon can migrate from.
  *
  * Two buttons, not one: **Preview** runs the identical code path and rolls the
- * write back, so somebody can see exactly what a migration would do to their
- * company before it does it. Preview is the primary action deliberately —
- * migrating first and reading the report afterwards is the same information in
- * the wrong order.
+ * write back, so somebody can see exactly what a migration would do — including
+ * which companies it would create — before it does it. Preview is the primary
+ * action deliberately: migrating first and reading the report afterwards is the
+ * same information in the wrong order.
+ *
+ * There is no picker here. A source account's entities each get their own Carbon
+ * company, so there is nothing for the user to choose between.
  */
 export function MigrationSourceCard({
   source,
   disabled,
-  scopeChoices,
   onStart
 }: {
   source: MigrationSourceCardData;
   disabled: boolean;
-  /** Offered when a previous run stopped to ask which scope to migrate. */
-  scopeChoices:
-    | { id: string; name: string; currencyCode: string | null }[]
-    | null;
   /** Fired on click so the page can show the run before the job writes its
    *  marker. Called with false if the action refused, so the row doesn't spin forever. */
   onStart: (started: boolean) => void;
 }) {
   const { t } = useLingui();
   const fetcher = useFetcher<{ success: boolean }>();
-  const [scopeId, setScopeId] = useState<string>("");
 
   const refused = fetcher.state === "idle" && fetcher.data?.success === false;
   useEffect(() => {
@@ -66,11 +56,7 @@ export function MigrationSourceCard({
   const start = (dryRun: boolean) => {
     onStart(true);
     fetcher.submit(
-      {
-        intent: dryRun ? "preview" : "migrate",
-        sourceId: source.id,
-        scopeId: scopeId || ""
-      },
+      { intent: dryRun ? "preview" : "migrate", sourceId: source.id },
       { method: "post", action: path.to.migrate }
     );
   };
@@ -105,38 +91,6 @@ export function MigrationSourceCard({
         <CardTitle>{t`Bring your ${source.name} data into Carbon`}</CardTitle>
         <CardDescription>{source.description}</CardDescription>
       </CardHeader>
-
-      {scopeChoices && scopeChoices.length > 0 && (
-        <CardContent>
-          <VStack spacing={1} className="w-full max-w-sm">
-            <span className="text-sm font-medium">
-              <Trans>Which one?</Trans>
-            </span>
-            <p className="text-xs text-muted-foreground">
-              <Trans>
-                This account holds several. One Carbon company holds one of them
-                — migrating them together would double-count whatever moves
-                between them.
-              </Trans>
-            </p>
-            <Select value={scopeId} onValueChange={setScopeId}>
-              <SelectTrigger id="scopeId">
-                <SelectValue placeholder={t`Select one`} />
-              </SelectTrigger>
-              <SelectContent>
-                {scopeChoices.map((scope) => (
-                  <SelectItem key={scope.id} value={scope.id}>
-                    {scope.currencyCode
-                      ? `${scope.name} (${scope.currencyCode})`
-                      : scope.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </VStack>
-        </CardContent>
-      )}
-
       <CardFooter>
         <HStack spacing={2}>
           <Button

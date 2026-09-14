@@ -12,6 +12,13 @@ import { NetSuiteError } from "../client/errors.ts";
  * migration whose message is a SQL error about a table they have never heard of.
  */
 
+/** NetSuite country values are ISO alpha-2 already, but display values leak in. */
+function normalizeCountry(value: unknown): string | null {
+  if (value === null || value === undefined) return null;
+  const text = String(value).trim();
+  return /^[A-Za-z]{2}$/.test(text) ? text.toUpperCase() : null;
+}
+
 export type TableProbe = {
   /** The table name that resolved, or null when none of the candidates did. */
   resolved: string | null;
@@ -61,7 +68,11 @@ export async function probeTable(
 export type Subsidiary = {
   id: string;
   name: string;
+  legalName: string | null;
   currencyCode: string | null;
+  countryCode: string | null;
+  /** Null for the root subsidiary — a OneWorld account has exactly one. */
+  parentId: string | null;
   isElimination: boolean;
   isInactive: boolean;
 };
@@ -99,8 +110,12 @@ export async function probeAccount(
   let subsidiaries: Subsidiary[] = [];
 
   if (oneWorld) {
+    // `parent` is what makes the org chart rebuildable: Carbon models a company
+    // group as a TREE (`company.parentCompanyId`), which is the same shape, so
+    // the hierarchy is carried rather than flattened.
     const rows = await client.suiteQLRows<Record<string, unknown>>(
-      `SELECT s.id, s.name, BUILTIN.DF(s.currency) AS currency_code,
+      `SELECT s.id, s.name, s.legalname, s.parent, s.country,
+              BUILTIN.DF(s.currency) AS currency_code,
               s.iselimination, s.isinactive
        FROM subsidiary s
        ORDER BY s.id`
@@ -108,7 +123,10 @@ export async function probeAccount(
     subsidiaries = rows.map((row) => ({
       id: String(row.id),
       name: String(row.name ?? ""),
+      legalName: row.legalname ? String(row.legalname) : null,
       currencyCode: row.currency_code ? String(row.currency_code) : null,
+      countryCode: normalizeCountry(row.country),
+      parentId: row.parent ? String(row.parent) : null,
       isElimination: String(row.iselimination ?? "F").toUpperCase() === "T",
       isInactive: String(row.isinactive ?? "F").toUpperCase() === "T"
     }));
@@ -182,11 +200,17 @@ export async function probeAccount(
 }
 
 /**
- * The subsidiaries a migration could target: real, active, non-elimination.
+ * The subsidiaries whose DATA is worth reading: real, active, non-elimination.
  *
- * Elimination subsidiaries exist only to cancel intercompany balances during
- * consolidation, so their data is meaningless in a single-company target.
+ * Elimination subsidiaries still become Carbon companies — the org chart would
+ * be wrong without them, and Carbon has `isEliminationEntity` for exactly this —
+ * but they hold only consolidation entries, which a migration does not carry.
  */
 export function migratableSubsidiaries(probe: AccountProbe): Subsidiary[] {
   return probe.subsidiaries.filter((s) => !s.isElimination && !s.isInactive);
+}
+
+/** The root of the subsidiary tree — the account's own top-level entity. */
+export function rootSubsidiary(probe: AccountProbe): Subsidiary | null {
+  return probe.subsidiaries.find((s) => s.parentId === null) ?? null;
 }

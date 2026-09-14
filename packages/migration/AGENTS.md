@@ -20,9 +20,13 @@ src/
 
 ## Always
 
-- Keep the seam at `MigrationPlan`. A source produces one; the loader consumes
-  one. Nothing downstream of a source's `map/` sees a source field name, and
-  nothing in `load/` may import from `sources/`.
+- Keep the seam at `MigrationPlan`. A source produces one PER SCOPE; the loader
+  consumes one per company. Nothing downstream of a source's `map/` sees a source
+  field name, and nothing in `load/` may import from `sources/`.
+- Report a source's legal entities through `listScopes()`, hierarchy included. A
+  source account is a Carbon company GROUP and each scope is a company in it, so
+  `parentScopeId` is what lets the migration rebuild the org chart instead of
+  flattening it.
 - Keep a source's `map/` **pure** — no network, no clock, no database. It is
   where every product decision lives (which source item type becomes which
   Carbon type, which orders are in scope), and its testability is the reason
@@ -82,6 +86,10 @@ pnpm --filter @carbon/migration generate:gaps   # after editing a gap catalog
 | `./gaps` | the gap framework and its types | Yes |
 | `./plan` | `MigrationPlan`, `PLAN_SECTIONS`, `planCounts` | Yes |
 | `./sources` | the registry | **No** — it imports every source |
+
+Company provisioning is NOT in this package: it needs Carbon's integration
+storage and the `seed-company` edge function, so it lives in
+`packages/jobs/src/migration/companies.ts` alongside credential resolution.
 
 The ERP's report imports `./gaps` and `./plan` specifically so signing code never
 reaches the browser; the route reads `./sources` in its server-only loader.

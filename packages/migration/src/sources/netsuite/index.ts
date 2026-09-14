@@ -6,7 +6,11 @@ import {
   type NetSuiteMetadata,
   readAccountId
 } from "./credentials.ts";
-import { migratableSubsidiaries, probeAccount } from "./extract/probe.ts";
+import {
+  migratableSubsidiaries,
+  probeAccount,
+  rootSubsidiary
+} from "./extract/probe.ts";
 import { extractNetSuite } from "./extract/run.ts";
 import { NETSUITE_GAPS } from "./gaps.ts";
 import { mapSnapshotToPlan } from "./map/index.ts";
@@ -33,10 +37,49 @@ export const netsuiteSource: MigrationSource = {
     const accountId = readAccountId(netsuiteMetadata);
     const auth = await buildNetSuiteAuth(accountId, netsuiteMetadata);
     const client = new NetSuiteClient({ auth });
+    let accountLabel: string | null = null;
+
+    // Probed once per connection: `listScopes` and `read` both need it, and it
+    // costs a handful of round trips against an account whose whole concurrency
+    // allotment is five.
+    let probe: Awaited<ReturnType<typeof probeAccount>> | null = null;
+    const getProbe = async () => {
+      probe ??= await probeAccount(client);
+      return probe;
+    };
 
     return {
       accountId,
       sandbox: isSandboxAccount(accountId),
+
+      get accountName() {
+        // Filled in by listScopes; until then the account id is the only name
+        // we have, and it is the one the customer typed.
+        return accountLabel ?? accountId;
+      },
+
+      async listScopes() {
+        const account = await getProbe();
+        // A non-OneWorld account has no subsidiary table at all: one account,
+        // one company, and the migration never asks which.
+        if (!account.oneWorld) return [];
+
+        accountLabel = rootSubsidiary(account)?.name ?? accountId;
+
+        return account.subsidiaries
+          .filter((subsidiary) => !subsidiary.isInactive)
+          .map((subsidiary) => ({
+            id: subsidiary.id,
+            name: subsidiary.name,
+            legalName: subsidiary.legalName,
+            currencyCode: subsidiary.currencyCode,
+            countryCode: subsidiary.countryCode,
+            parentScopeId: subsidiary.parentId,
+            isElimination: subsidiary.isElimination,
+            inactive: subsidiary.isInactive
+          }));
+      },
+
       async read(options) {
         const snapshot = await extractNetSuite(client, accountId, {
           subsidiaryId: options.scopeId ?? null,
@@ -50,7 +93,7 @@ export const netsuiteSource: MigrationSource = {
   }
 };
 
-export { migratableSubsidiaries, probeAccount };
+export { migratableSubsidiaries, probeAccount, rootSubsidiary };
 export {
   accountHostLabel,
   accountRealm,
