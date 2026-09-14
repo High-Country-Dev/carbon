@@ -2218,7 +2218,13 @@
       "name": "slackDocumentThread",
       "rows": 0,
       "columns": [
-        "createdAt",
+        "updatedAt",
+        "id",
+        "threadTs",
+        "companyId",
+        "createdBy",
+        "updatedBy",
+        "channelId",
         "documentType",
         "documentId",
         "channelId",
@@ -3452,19 +3458,19 @@
       "name": "jobOperationBatch",
       "rows": 0,
       "columns": [
+        "status",
         "processId",
         "companyId",
-        "status",
-        "workCenterId",
         "updatedBy",
-        "updatedAt",
-        "readableId",
-        "createdBy",
+        "workCenterId",
         "notes",
-        "createdAt",
+        "createdBy",
+        "readableId",
+        "updatedAt",
+        "locationId",
         "id",
         "customFields",
-        "locationId"
+        "createdAt"
       ]
     },
     {
