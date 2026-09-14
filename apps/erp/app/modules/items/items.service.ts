@@ -87,7 +87,7 @@ import {
 import type { InventoryItemType } from "./types";
 
 const PARTS_LIST_COLUMNS =
-  "active,defaultMethodType,description,itemTrackingType,name,replenishmentSystem,revision,readableIdWithRevision,id,companyId,thumbnailPath,supplierIds,revisions,customFields,tags,itemPostingGroupId,createdBy,createdAt,updatedBy,updatedAt,supersessionMode,mpn,suppliers" as const;
+  "active,defaultMethodType,description,itemTrackingType,name,replenishmentSystem,unitOfMeasureCode,revision,readableId,readableIdWithRevision,id,companyId,thumbnailPath,supplierIds,revisions,customFields,tags,itemPostingGroupId,createdBy,createdAt,updatedBy,updatedAt,supersessionMode,mpn,suppliers" as const;
 
 const MATERIALS_LIST_COLUMNS =
   "active,defaultMethodType,description,itemTrackingType,name,unitOfMeasureCode,revision,readableId,readableIdWithRevision,id,companyId,thumbnailPath,supplierIds,unitOfMeasure,revisions,materialForm,materialSubstance,dimensions,finish,grade,materialType,materialSubstanceId,materialFormId,customFields,tags,itemPostingGroupId,createdBy,createdAt,updatedBy,updatedAt,supersessionMode,mpn,suppliers" as const;
@@ -1700,6 +1700,67 @@ function getMethodTreeArrayToTree(items: Method[]): MethodTreeItem[] {
   }
 
   return rootItems.map((item) => traverseAndRenameIds(item));
+}
+
+export type BomItemAttributes = {
+  readableId: string;
+  revision: string;
+  itemTrackingType: Database["public"]["Enums"]["itemTrackingType"];
+  replenishmentSystem: Database["public"]["Enums"]["itemReplenishmentSystem"];
+  itemPostingGroup: string | null;
+  lotSize: number | null;
+  leadTime: number | null;
+};
+
+export async function getBomItemAttributes(
+  client: SupabaseClient<Database>,
+  companyId: string,
+  itemIds: string[]
+) {
+  const [items, costs, replenishments] = await Promise.all([
+    client
+      .from("item")
+      .select("id, readableId, revision, itemTrackingType, replenishmentSystem")
+      .in("id", itemIds)
+      .eq("companyId", companyId),
+    client
+      .from("itemCost")
+      .select("itemId, ...itemPostingGroup(itemPostingGroup:name)")
+      .in("itemId", itemIds)
+      .eq("companyId", companyId),
+    client
+      .from("itemReplenishment")
+      .select("itemId, lotSize, leadTime")
+      .in("itemId", itemIds)
+      .eq("companyId", companyId)
+  ]);
+
+  const error = items.error ?? costs.error ?? replenishments.error;
+  if (error) return { data: null, error };
+
+  const postingGroupByItemId = new Map(
+    (costs.data ?? []).map((c) => [c.itemId, c.itemPostingGroup])
+  );
+  const replenishmentByItemId = new Map(
+    (replenishments.data ?? []).map((r) => [r.itemId, r])
+  );
+
+  const data = new Map<string, BomItemAttributes>(
+    (items.data ?? []).map((item) => [
+      item.id,
+      {
+        readableId: item.readableId,
+        revision: item.revision ?? "",
+        itemTrackingType: item.itemTrackingType,
+        replenishmentSystem: item.replenishmentSystem,
+        itemPostingGroup: postingGroupByItemId.get(item.id) ?? null,
+        lotSize: replenishmentByItemId.get(item.id)?.lotSize ?? null,
+        leadTime: replenishmentByItemId.get(item.id)?.leadTime ?? null
+      }
+    ])
+  );
+
+  return { data, error: null };
 }
 
 export async function getOpenJobMaterials(
@@ -3698,13 +3759,41 @@ export async function upsertItemPlanning(
 export async function upsertItemPurchasing(
   client: SupabaseClient<Database>,
   itemPurchasing: z.infer<typeof itemPurchasingValidator> & {
+    companyId: string;
     updatedBy: string;
   }
 ) {
+  const { companyId, ...update } = itemPurchasing;
+
+  // `purchasingUnitOfMeasureCode` and `conversionFactor` are a property of the
+  // preferred supplier's supplierPart, not free-form input — the form submits
+  // them only as (client-derived) hidden fields. Re-derive them server-side so
+  // a forged submission can't persist a conversion factor that disagrees with
+  // the supplier part (which drives PO quantities and costs). The
+  // ("itemId","supplierId","companyId") unique constraint makes the lookup
+  // single; `.single()` rejects a preferred supplier with no matching part.
+  if (update.preferredSupplierId) {
+    const supplierPart = await client
+      .from("supplierPart")
+      .select("supplierUnitOfMeasureCode, conversionFactor")
+      .eq("companyId", companyId)
+      .eq("itemId", update.itemId)
+      .eq("supplierId", update.preferredSupplierId)
+      .single();
+    if (supplierPart.error) return supplierPart;
+    update.purchasingUnitOfMeasureCode =
+      supplierPart.data.supplierUnitOfMeasureCode ?? undefined;
+    update.conversionFactor = supplierPart.data.conversionFactor ?? 1;
+  } else {
+    // No preferred supplier → identity conversion, no purchasing UoM override.
+    update.purchasingUnitOfMeasureCode = undefined;
+    update.conversionFactor = 1;
+  }
+
   return client
     .from("itemReplenishment")
-    .update(sanitize(itemPurchasing))
-    .eq("itemId", itemPurchasing.itemId);
+    .update(sanitize(update))
+    .eq("itemId", update.itemId);
 }
 
 export async function upsertItemSupersession(
@@ -3936,6 +4025,42 @@ export async function upsertMakeMethodVersion(
  * where an item can be stocked across multiple locations, each with its
  * own preferred bin.
  */
+/**
+ * Coerce whatever a caller supplied for `storageUnitIds` into the
+ * location → storageUnitId map the column stores. The web form pre-parses its
+ * JSON string through `methodMaterialValidator`, but the MCP/API dispatch path
+ * bypasses that validator and hands the service the raw value, so normalize
+ * defensively here too: an object map is kept (string values only), a JSON
+ * string is parsed, and null/undefined/anything-else collapses to `{}`. A bare
+ * string used to be spread character-by-character into the JSONB column
+ * (`"false"` → `{"0":"f","1":"a",…}`) — this is where that is stopped.
+ */
+function normalizeStorageUnitIds(value: unknown): Record<string, string> {
+  const fromObject = (obj: Record<string, unknown>): Record<string, string> => {
+    const out: Record<string, string> = {};
+    for (const [key, v] of Object.entries(obj)) {
+      if (typeof v === "string") out[key] = v;
+    }
+    return out;
+  };
+
+  if (value == null) return {};
+  if (typeof value === "string") {
+    try {
+      const parsed = JSON.parse(value);
+      return parsed && typeof parsed === "object" && !Array.isArray(parsed)
+        ? fromObject(parsed as Record<string, unknown>)
+        : {};
+    } catch {
+      return {};
+    }
+  }
+  if (typeof value === "object" && !Array.isArray(value)) {
+    return fromObject(value as Record<string, unknown>);
+  }
+  return {};
+}
+
 async function resolveMethodMaterialStorageUnitIds(
   client: SupabaseClient<Database>,
   args: {
@@ -4009,16 +4134,14 @@ export async function upsertMethodMaterial(
   }
 
   if ("createdBy" in methodMaterial) {
-    // Seed storageUnitIds from the child item's default location/storage-unit
-    // if the caller didn't already provide one for that location. Respects
-    // the form value when supplied, adds a sensible default otherwise.
+    // On create, an omitted / null storageUnitIds normalizes to `{}`, then the
+    // child item's default location/storage-unit picks seed any locations the
+    // caller didn't specify. Respects supplied values; adds sensible defaults.
     const seededStorageUnitIds = await resolveMethodMaterialStorageUnitIds(
       client,
       {
         itemId: methodMaterial.itemId,
-        current: methodMaterial.storageUnitIds as
-          | Record<string, string>
-          | undefined
+        current: normalizeStorageUnitIds(methodMaterial.storageUnitIds)
       }
     );
     return client
@@ -4034,9 +4157,28 @@ export async function upsertMethodMaterial(
       .select("id")
       .single();
   }
+  // On update, an OMITTED storageUnitIds preserves the stored value (drop the key
+  // so `sanitize` can't null it), while an explicit null / {} / map is written —
+  // null and {} both clear it. The web form always submits the field, so its
+  // behavior is unchanged; only the MCP/API caller can omit it.
+  if (methodMaterial.storageUnitIds === undefined) {
+    const { storageUnitIds: _omitted, ...preserved } = methodMaterial;
+    return client
+      .from("methodMaterial")
+      .update(sanitize({ ...preserved, materialMakeMethodId }))
+      .eq("id", methodMaterial.id)
+      .select("id")
+      .single();
+  }
   return client
     .from("methodMaterial")
-    .update(sanitize({ ...methodMaterial, materialMakeMethodId }))
+    .update(
+      sanitize({
+        ...methodMaterial,
+        materialMakeMethodId,
+        storageUnitIds: normalizeStorageUnitIds(methodMaterial.storageUnitIds)
+      })
+    )
     .eq("id", methodMaterial.id)
     .select("id")
     .single();
@@ -4248,11 +4390,23 @@ export async function duplicateMethodOperationStep(
 export async function upsertMethodOperationStepSlide(
   client: SupabaseClient<Database>,
   slide:
-    | (Omit<z.infer<typeof operationStepSlideValidator>, "id"> & {
+    | (Omit<
+        z.infer<typeof operationStepSlideValidator>,
+        "id" | "annotations"
+      > & {
+        annotations?: z.infer<
+          typeof operationStepSlideValidator
+        >["annotations"];
         companyId: string;
         createdBy: string;
       })
-    | (Omit<z.infer<typeof operationStepSlideValidator>, "id"> & {
+    | (Omit<
+        z.infer<typeof operationStepSlideValidator>,
+        "id" | "annotations"
+      > & {
+        annotations?: z.infer<
+          typeof operationStepSlideValidator
+        >["annotations"];
         id: string;
         updatedBy: string;
         updatedAt: string;
