@@ -43,13 +43,16 @@ describe("toTiptapDoc", () => {
     }
   });
 
-  it("keeps text that merely looks like JSON", () => {
-    // `123` parses as a number and `[1,2]` as an array — neither is a doc, so
-    // the original text is what gets stored, not a mangled value.
-    expect(toTiptapDoc("123")).toEqual({
-      type: "doc",
-      content: [{ type: "paragraph", content: [{ type: "text", text: "123" }] }]
-    });
+  it("keeps text that merely looks like JSON, characters intact", () => {
+    // `123` parses as a number, `[1,2]` as an array and `"quoted"` as a bare
+    // string — none is a doc, so the ORIGINAL text is stored verbatim; the
+    // parse must not strip the quote characters the user typed.
+    for (const text of ["123", "[1,2]", '"quoted"']) {
+      expect(toTiptapDoc(text)).toEqual({
+        type: "doc",
+        content: [{ type: "paragraph", content: [{ type: "text", text }] }]
+      });
+    }
   });
 });
 

@@ -316,7 +316,10 @@ export function toTiptapDoc(value: unknown): any {
     if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
       return parsed;
     }
-    return textToTiptap(typeof parsed === "string" ? parsed : value);
+    // Anything else the caller typed is literal text — including text that
+    // happens to parse as JSON (`"quoted"`, `123`, `[1,2]`). Wrap the ORIGINAL
+    // value so no characters are lost to the parse.
+    return textToTiptap(value);
   }
   if (value && typeof value === "object" && !Array.isArray(value)) return value;
   return textToTiptap(String(value));
