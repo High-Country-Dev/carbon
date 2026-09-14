@@ -433,10 +433,17 @@ export async function attachOnshapeAssetsToItem(
       // document before repointing, so nothing is destroyed. The item's Documents
       // tab lists objects under {companyId}/parts/{itemId} (items.service.ts), so
       // copy the file there. Preserve failures are logged, never fatal.
-      // A same-filename refresh may correct a legacy whole-studio export. Keep
-      // its old model record for existing references, but do not manufacture a
-      // misleading extra attachment from that superseded generation.
-      if (priorModel?.modelPath && priorModel.name !== input.model.fileName) {
+      // Filename equality is NOT provenance — a manual upload can share the
+      // released export's filename, and keying preservation off it silently
+      // dropped that manual model. Preserve unless the prior model is itself a
+      // prior Onshape immutable generation (its id carries the "onshape-" source
+      // prefix minted by ensureImmutableModel): those are superseded
+      // auto-generated artifacts, kept as a record for existing references but
+      // never re-attached as a misleading duplicate document.
+      const priorIsOnshapeGeneration = (priorModel?.id ?? "").startsWith(
+        "onshape-"
+      );
+      if (priorModel?.modelPath && !priorIsOnshapeGeneration) {
         const preservedName = stripSpecialCharacters(
           priorModel.name ?? `prior-model-${priorModel.id}`
         );

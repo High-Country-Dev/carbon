@@ -22,20 +22,22 @@ function database() {
       {
         id: "item",
         companyId: "company",
-        modelUploadId: "legacy",
+        modelUploadId: "onshape-legacy",
         thumbnailPath: null
       }
     ],
+    // A fully-optimized prior Onshape generation: its "onshape-" id is what marks
+    // it as a superseded auto-generated artifact rather than user data.
     modelUpload: [
       {
-        id: "legacy",
+        id: "onshape-legacy",
         companyId: "company",
         name: "SADDLE.A.gltf",
-        modelPath: "company/models/legacy.gltf.zst",
+        modelPath: "company/models/onshape-legacy.gltf.zst",
         size: 12880000,
-        optimizedModelPath: "company/models/legacy/optimized.glb",
+        optimizedModelPath: "company/models/onshape-legacy/optimized.glb",
         optimizeStatus: "Success",
-        thumbnailPath: "company/thumbnails/legacy.png"
+        thumbnailPath: "company/thumbnails/onshape-legacy.png"
       }
     ],
     document: []
@@ -236,12 +238,31 @@ describe("immutable released-part attachments", () => {
     expect(db.objects.size).toBe(1);
   });
 
+  // A non-"onshape-" id marks a manually uploaded model, which must be preserved.
+  function withManualPriorModel(db: ReturnType<typeof database>, name: string) {
+    db.tables.modelUpload[0]!.id = "manual-model";
+    db.tables.modelUpload[0]!.name = name;
+    db.tables.item[0]!.modelUploadId = "manual-model";
+  }
+
   it("preserves a genuinely different manual model as a document", async () => {
     const db = database();
-    db.tables.modelUpload[0]!.name = "manual-prototype.glb";
+    withManualPriorModel(db, "manual-prototype.glb");
     const result = await attachOnshapeAssetsToItem(db.client, input);
     expect(result.preservedPriorModelAsDocument).toBe(true);
     expect(db.copies).toEqual(["company/parts/item/manual-prototype.glb"]);
+    expect(db.tables.document).toHaveLength(1);
+  });
+
+  it("preserves a manual model sharing the released export's filename", async () => {
+    const db = database();
+    // Same filename as the incoming release — filename is not provenance, so the
+    // manual model must still be preserved rather than silently relinked away.
+    withManualPriorModel(db, input.model.fileName);
+    const result = await attachOnshapeAssetsToItem(db.client, input);
+    expect(result.modelUploadId).toBe(input.model.sourceId);
+    expect(result.preservedPriorModelAsDocument).toBe(true);
+    expect(db.copies).toEqual(["company/parts/item/SADDLE.A.gltf"]);
     expect(db.tables.document).toHaveLength(1);
   });
 
@@ -255,7 +276,7 @@ describe("immutable released-part attachments", () => {
     await expect(attachOnshapeAssetsToItem(db.client, input)).rejects.toThrow(
       /lookup/i
     );
-    expect(db.tables.item[0]!.modelUploadId).toBe("legacy");
+    expect(db.tables.item[0]!.modelUploadId).toBe("onshape-legacy");
     expect(db.uploads).toEqual([]);
   });
 
@@ -268,7 +289,7 @@ describe("immutable released-part attachments", () => {
       modelPath: "foreign.gltf"
     });
     await expect(attachOnshapeAssetsToItem(db.client, input)).rejects.toThrow();
-    expect(db.tables.item[0]!.modelUploadId).toBe("legacy");
+    expect(db.tables.item[0]!.modelUploadId).toBe("onshape-legacy");
     expect(db.tables.modelUpload[1]!.modelPath).toBe("foreign.gltf");
   });
 
@@ -282,7 +303,7 @@ describe("immutable released-part attachments", () => {
     await expect(attachOnshapeAssetsToItem(db.client, input)).rejects.toThrow(
       /insert/
     );
-    expect(db.tables.item[0]!.modelUploadId).toBe("legacy");
+    expect(db.tables.item[0]!.modelUploadId).toBe("onshape-legacy");
     const uploaded = db.objects.get(
       "temp-staging/company/models/onshape-part-v2.gltf"
     );
@@ -329,7 +350,7 @@ describe("immutable released-part attachments", () => {
       /identity/
     );
     expect(db.uploads).toEqual([]);
-    expect(db.tables.item[0]!.modelUploadId).toBe("legacy");
+    expect(db.tables.item[0]!.modelUploadId).toBe("onshape-legacy");
   });
 
   it("retains the existing no-source-ID attachment behavior", async () => {
@@ -339,9 +360,11 @@ describe("immutable released-part attachments", () => {
       ...input,
       model
     });
-    expect(result.modelUploadId).toBe("legacy");
+    expect(result.modelUploadId).toBe("onshape-legacy");
     expect(db.tables.modelUpload).toHaveLength(1);
-    expect(db.uploads).toEqual(["temp-staging/company/models/legacy.gltf"]);
+    expect(db.uploads).toEqual([
+      "temp-staging/company/models/onshape-legacy.gltf"
+    ]);
   });
 
   it("keeps every item/model read and update company-scoped", async () => {
