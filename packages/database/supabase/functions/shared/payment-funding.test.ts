@@ -399,8 +399,6 @@ Deno.test("source reduction preserves principal, final carry and AP FX direction
   assertThrows(() => remainingFundingSources([payment], [{ ...use, sourceAmount: 161 }], decimals, true), Error, "Invalid remaining");
 });
 Deno.test("legacy settlements without a document principal derive it from applied base", () => {
-  // Rows written before `sourceAmount` existed (migration 20260908021155) keep
-  // a NULL principal by design; they must stay readable, not throw.
   const legacy = { sourceAmount: null, appliedAmount: 110, discountAmount: 0, writeOffAmount: 0 };
   assertEquals(reduceInvoiceSettlements([legacy], 1.1, 2), { document: 121, base: 110 });
   assertEquals(reduceInvoiceSettlements([legacy, { ...legacy, sourceAmount: 121 }], 1.1, 2), { document: 242, base: 220 });
@@ -415,7 +413,6 @@ Deno.test("legacy settlements without a document principal derive it from applie
   const direct = { paymentId: "p", sourcePaymentId: null, sourceAmount: null, appliedAmount: 110, fxGainLossAmount: null };
   assertEquals(remainingFundingSources([payment], [direct], decimals, true),
     [{ paymentId: "p", postingDate: "2026-01-01", exchangeRate: 1.1, remainingDocument: 99, remainingBase: 90 }]);
-  // A source-linked row must carry its principal (DB constraint); keep that loud.
   assertThrows(() => remainingFundingSources([payment], [{ ...direct, paymentId: "q", sourcePaymentId: "p" }], decimals, true),
     Error, "missing its document principal");
 });

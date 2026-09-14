@@ -1172,8 +1172,6 @@ it.each([
 });
 
 it("reads a legacy settlement with no document principal from its applied base", async () => {
-  // Rows written before `sourceAmount` existed keep NULL by design; the open
-  // balance is derived from appliedAmount at the invoice rate instead of throwing.
   const { client } = clientFor({
     ...config,
     salesInvoices: [{ ...invoice, totalAmount: 90, exchangeRate: 1 }],

@@ -246,14 +246,6 @@ function sourcePrincipal(value: number | null): number {
   return nonnegativeAmount(Number(value), "Settlement document principal");
 }
 
-/**
- * Settlements written before `sourceAmount` existed (migration
- * 20260908021155) keep a NULL principal by design and the schema treats them
- * as valid. Derive it the way those rows were originally relieved: the applied
- * base converted at the caller's document rate. Rows that MUST carry a
- * principal (source-linked funding) are enforced by a DB constraint, so a NULL
- * here can only be a legacy row.
- */
 function settlementPrincipal(
   row: { sourceAmount: number | null; appliedAmount: number },
   exchangeRate: number,
@@ -332,8 +324,6 @@ export function remainingFundingSources(
   decimals: ReadonlyMap<string, number>,
   isAR: boolean
 ): FundingSource[] {
-  // `legacyBase` holds direct applications recorded before `sourceAmount`
-  // existed; it is converted at the source's own rate once that is known below.
   const consumed = new Map<string, { document: number; base: number; legacyBase: number }>();
   for (const row of consumption) {
     const sourceId = row.sourcePaymentId ?? row.paymentId;
