@@ -19,6 +19,7 @@ import type { Json } from "../lib/types.ts";
 import { TrackedEntityAttributes, credit, debit, journalReference } from "../lib/utils.ts";
 
 import { buildBatchSplitRecords } from "../shared/batch-split.ts";
+import { buildBatchMergeRecords } from "../shared/batch-merge.ts";
 import { splitPickAcrossMembers } from "../shared/batch-pick-split.ts";
 import { getCurrentAccountingPeriod } from "../shared/get-accounting-period.ts";
 import { bookAdjustment } from "../shared/post-adjustment.ts";
@@ -904,6 +905,13 @@ const payloadValidator = z.discriminatedUnion("type", [
     parentTrackedEntityId: z.string(),
     scrapReasonId: z.string(),
     makeReplacement: z.boolean().optional(),
+    companyId: z.string(),
+    userId: z.string(),
+  }),
+  z.object({
+    type: z.literal("mergeTrackedEntities"),
+    trackedEntityIds: z.array(z.string()).min(2),
+    readableId: z.string().optional().nullable(),
     companyId: z.string(),
     userId: z.string(),
   }),
@@ -3514,6 +3522,139 @@ serve(async (req: Request) => {
         return jsonResponse({
           success: true,
           ...batchResult,
+        });
+      }
+      case "mergeTrackedEntities": {
+        const { trackedEntityIds, readableId, companyId, userId } =
+          validatedPayload;
+
+        const client = await requirePermissions(req, companyId, userId, { update: "inventory" });
+        const companyToday = datetime.today(await getCompanyTimeZone(client, companyId));
+
+        const mergeResult = await db.transaction().execute(async (trx) => {
+          const parents = await trx
+            .selectFrom("trackedEntity")
+            .selectAll()
+            .where("id", "in", trackedEntityIds)
+            .where("companyId", "=", companyId)
+            .forUpdate()
+            .execute();
+
+          if (parents.length !== trackedEntityIds.length) {
+            throw new Error("Tracked entities not found");
+          }
+
+          const parentLedgers = await trx
+            .selectFrom("itemLedger")
+            .select([
+              "trackedEntityId",
+              "storageUnitId",
+              "locationId",
+              "quantity",
+              "createdAt",
+            ])
+            .where("trackedEntityId", "in", trackedEntityIds)
+            .orderBy("createdAt", "desc")
+            .execute();
+
+          const locationOf = (entityId: string) =>
+            // deno-lint-ignore no-explicit-any
+            (parentLedgers as any[]).find(
+              (l) => l.trackedEntityId === entityId && l.locationId
+            )?.locationId ?? null;
+
+          const mergedId = nanoid();
+          const mergeActivityId = nanoid();
+
+          const records = buildBatchMergeRecords({
+            parents: parents.map((p) => ({
+              id: p.id,
+              readableId: p.readableId,
+              quantity: Number(p.quantity),
+              status: p.status as string,
+              sourceDocument: p.sourceDocument,
+              sourceDocumentId: p.sourceDocumentId,
+              sourceDocumentReadableId: p.sourceDocumentReadableId,
+              itemId: p.itemId ?? null,
+              expirationDate: (p.expirationDate as string | null) ?? null,
+              attributes: p.attributes as Record<string, unknown> | null,
+              bin: {
+                storageUnitId: resolveTrackedEntityBin(
+                  // deno-lint-ignore no-explicit-any
+                  parentLedgers as any[],
+                  p.id
+                ),
+                locationId: locationOf(p.id),
+              },
+            })),
+            mergedId,
+            mergeActivityId,
+            readableId: readableId ?? null,
+            activitySourceDocument: "Tracked Entity",
+            activitySourceDocumentId: mergedId,
+            companyId,
+            userId,
+            postingDate: companyToday.toString(),
+          });
+
+          await trx
+            .insertInto("trackedEntity")
+            .values({
+              ...records.mergedEntityInsert,
+              // TEXT NOT NULL columns; the builder sources them from the first
+              // parent, which the schema guarantees is non-null.
+              sourceDocument: records.mergedEntityInsert.sourceDocument as string,
+              sourceDocumentId: records.mergedEntityInsert.sourceDocumentId as string,
+              attributes: records.mergedEntityInsert.attributes as Json,
+            })
+            .execute();
+
+          await trx
+            .insertInto("trackedActivity")
+            .values({
+              ...records.activityInsert,
+              attributes: records.activityInsert.attributes as Json,
+            })
+            .execute();
+
+          await trx
+            .insertInto("trackedActivityInput")
+            .values(records.activityInputInserts)
+            .execute();
+
+          await trx
+            .insertInto("trackedActivityOutput")
+            .values(records.activityOutputInsert)
+            .execute();
+
+          await trx
+            .insertInto("itemLedger")
+            .values(
+              records.ledgerInserts.map((l) => ({
+                ...l,
+                itemId: l.itemId as string,
+              }))
+            )
+            .execute();
+
+          for (const update of records.parentUpdates) {
+            await trx
+              .updateTable("trackedEntity")
+              .set({ status: update.status })
+              .where("id", "=", update.id)
+              .execute();
+          }
+
+          return {
+            trackedEntityId: mergedId,
+            readableId: records.mergedEntityInsert.readableId,
+            quantity: records.mergedEntityInsert.quantity,
+          };
+        });
+
+        return jsonResponse({
+          success: true,
+          ...mergeResult,
         });
       }
       case "unconsumeTrackedEntities": {
