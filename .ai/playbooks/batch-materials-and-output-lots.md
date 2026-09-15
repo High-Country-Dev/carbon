@@ -1,6 +1,6 @@
 # Batch Materials & Output Lots
 
-Last tested: 2026-09-16 (feat/batch-materials-and-output-lots)
+Last tested: 2026-09-16 (feat/batch-materials-and-output-lots — re-verified on a clean `crbn up` stack)
 Routes: ERP `/x/resources/processes/$processId` (Produced item rule), `/x/production/batches/$batchId` (Merge output lots); MES `/x/operation/$operationId` (batch materials annotation + Batch Number column)
 Edge fns: `issue` (`trackedEntitiesToBatch`, `jobOperationBatchOutput`, `mergeTrackedEntities`), `batch-operations` (`complete` with `trackedEntityId`/`batchNumber` member fields)
 
@@ -84,10 +84,30 @@ On top of the batching playbook's seeding gotchas:
 - Login `Continue` is overlay-blocked for `agent-browser click` — use
   `form.requestSubmit(button)` via eval.
 
+## Stack setup (crbn)
+
+```bash
+pnpm exec crbn status            # port assignment + container health
+pnpm exec crbn up --all          # compose services + both dev servers
+pnpm exec crbn reload edge-runtime   # REQUIRED after editing functions/** — see below
+```
+
+`crbn up` rewrites `.env.local` with this worktree's own slug URLs
+(`https://{erp,mes,api}.<branch-slug>.dev`) — never reuse another worktree's URLs.
+
+**The edge runtime caches compiled isolates.** The functions tree is live-mounted,
+so `docker exec <edge> grep …` shows your edit, but the running isolate still
+serves the OLD module — a fix appears not to work while the file is provably
+correct. `crbn reload edge-runtime` is the fix; allow ~30-60s before the first
+call succeeds (an early call returns "An invalid response was received from the
+upstream server").
+
 ## Common Failures
 - `{"message":"no result"}` on the pick → missing `itemCost` row (accounting on).
 - `duplicate key … accountingPeriod` on the FIRST pick of a month →
   fixed in code (period pre-resolved before the batch transaction); if seen,
-  the edge isolate is stale — re-hit once after saving the file.
+  the edge isolate is stale — `crbn reload edge-runtime`.
+- Merged lot comes back with `readableId: null` → stale isolate (the builder
+  inherits the first parent's number). Reload and retry.
 - `{}` empty response with 200 → look at
   `docker logs carbon-carbon-edge-runtime-1` — the error is server-side.
