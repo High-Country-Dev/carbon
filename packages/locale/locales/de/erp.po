@@ -1156,7 +1156,6 @@ msgid "Accumulation Period:"
 msgstr "Akkumulationszeitraum:"
 
 msgid "Acknowledge & finish"
-msgstr "Bestätigen und beenden"
 msgstr "Bestätigen & beenden"
 
 msgid "Acknowledged itar"
@@ -7614,7 +7613,6 @@ msgid "Finish To"
 msgstr "Fertigstellen zu"
 
 msgid "Finish with material unpicked?"
-msgstr "Material nicht entnommen beenden?"
 msgstr "Mit nicht gepicktem Material beenden?"
 
 msgid "Finished goods"
@@ -9169,7 +9167,6 @@ msgid "Keep Open"
 msgstr "Offen halten"
 
 msgid "Keep picking"
-msgstr "Weiter entnehmen"
 msgstr "Weiter kommissionieren"
 
 msgid "Keeps orders, quotes, and settings behind a second check"
@@ -17457,7 +17454,6 @@ msgid "These email addresses will be automatically CC'd on all quote emails sent
 msgstr "Diese E-Mail-Adressen werden automatisch in CC auf alle Angebots-E-Mails kopiert, die an Kunden versendet werden."
 
 msgid "These items still have material to pick. Finishing now marks the list Partial."
-msgstr "Diese Artikel haben noch Material zum Entnehmen. Das Beenden markiert die Liste jetzt als Teilweise."
 msgstr "Diese Artikel enthalten noch Material zum Kommissionieren. Das Beenden markiert die Liste als Teilweise."
 
 msgid "These jobs have operations assigned to this work center:"

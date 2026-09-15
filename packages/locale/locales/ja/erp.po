@@ -1156,7 +1156,6 @@ msgid "Accumulation Period:"
 msgstr "蓄積期間:"
 
 msgid "Acknowledge & finish"
-msgstr "確認して完了"
 msgstr "認めて完了"
 
 msgid "Acknowledged itar"
@@ -7614,7 +7613,6 @@ msgid "Finish To"
 msgstr "完成先"
 
 msgid "Finish with material unpicked?"
-msgstr "材料がピックされていない状態で完了しますか？"
 msgstr "ピッキングされていない材料のまま完了しますか？"
 
 msgid "Finished goods"
@@ -15515,7 +15513,6 @@ msgid "Shop-floor configuration."
 msgstr "生産現場の構成。"
 
 msgid "short"
-msgstr "不足"
 msgstr "短い"
 
 msgid "Short"
@@ -17457,7 +17454,6 @@ msgid "These email addresses will be automatically CC'd on all quote emails sent
 msgstr "これらのメールアドレスは、得意先に送信されたすべての見積メールに自動的に CC 付けされます。"
 
 msgid "These items still have material to pick. Finishing now marks the list Partial."
-msgstr "これらの品目にはまだピックされていない材料があります。今完了するとリストが部分的とマークされます。"
 msgstr "これらの品目にはまだピッキングする材料があります。今完成にマークすると、リストを「一部」に設定します。"
 
 msgid "These jobs have operations assigned to this work center:"

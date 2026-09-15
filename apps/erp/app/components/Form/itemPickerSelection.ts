@@ -33,9 +33,9 @@ export type ItemPickerCriteria = {
 export type ItemPickerEntry = {
   item: Item;
   ineligibility: ItemIneligibility | null;
-  // True for the row injected purely because it is the field's current value.
-  // It stays selectable — it is already the saved value — and is labelled
-  // rather than greyed out.
+  // True for the field's current value, whether the filters kept it or it was
+  // injected back. It stays selectable — it is already the saved value — and
+  // is labelled rather than greyed out.
   isCurrentValue?: boolean;
 };
 
@@ -97,16 +97,21 @@ export function getItemPickerEntries(
   }
 
   if (whitelist) {
-    filtered = filtered.filter((item) => whitelist.includes(item.id));
+    const allowed = new Set(whitelist);
+    filtered = filtered.filter((item) => allowed.has(item.id));
   }
 
+  const denied = new Set(blacklist);
   if (blacklist) {
-    filtered = filtered.filter((item) => !blacklist.includes(item.id));
+    filtered = filtered.filter((item) => !denied.has(item.id));
   }
 
+  // `showIneligible` keeps an ineligible current value in `filtered`, so it
+  // has to be flagged here too — not only when it is injected back below.
   let entries: ItemPickerEntry[] = filtered.map((item) => ({
     item,
-    ineligibility: getItemIneligibility(item, criteria)
+    ineligibility: getItemIneligibility(item, criteria),
+    isCurrentValue: item.id === selectedId
   }));
 
   // A record can legitimately point at an item the filters exclude — it was
@@ -117,7 +122,7 @@ export function getItemPickerEntries(
   if (
     selectedId &&
     !entries.some((entry) => entry.item.id === selectedId) &&
-    !blacklist?.includes(selectedId)
+    !denied.has(selectedId)
   ) {
     const selected = items.find((item) => item.id === selectedId);
     if (selected) {

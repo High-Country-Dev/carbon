@@ -341,9 +341,20 @@ function VirtualizedCommand({
               const isCreateOption = item.value === "create";
               const isDisabled = !isCreateOption && !!item.disabled;
 
-              // cmdk's own `disabled` sets `pointer-events-none`, which would
-              // swallow the hover that reveals the reason — so the row is made
-              // inert here instead of there.
+              const rowStyle = {
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: `${itemHeight}px`,
+                transform: `translateY(${virtualRow.start}px)`
+              } as const;
+
+              // cmdk's `disabled` is what takes the row out of arrow-key
+              // navigation and selection. A disabled row can also be styled
+              // `pointer-events-none`, which would swallow the hover that
+              // reveals the reason, so the tooltip hangs off a wrapper below
+              // rather than the item itself.
               const row = (
                 <CommandItem
                   key={item.value}
@@ -352,7 +363,7 @@ function VirtualizedCommand({
                       ? CSS.escape(item.label) + CSS.escape(item.helper ?? "")
                       : undefined
                   }
-                  aria-disabled={isDisabled || undefined}
+                  disabled={isDisabled}
                   onSelect={() => {
                     if (isDisabled) return;
                     if (isCreateOption) {
@@ -363,14 +374,7 @@ function VirtualizedCommand({
                     }
                     setOpen(false);
                   }}
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: `${itemHeight}px`,
-                    transform: `translateY(${virtualRow.start}px)`
-                  }}
+                  style={isDisabled ? { height: "100%" } : rowStyle}
                   className={cn(
                     "flex items-center justify-between min-w-0",
                     isDisabled &&
@@ -438,7 +442,9 @@ function VirtualizedCommand({
 
               return (
                 <Tooltip key={item.value}>
-                  <TooltipTrigger asChild>{row}</TooltipTrigger>
+                  <TooltipTrigger asChild>
+                    <div style={rowStyle}>{row}</div>
+                  </TooltipTrigger>
                   <TooltipContent
                     side="top"
                     align="start"

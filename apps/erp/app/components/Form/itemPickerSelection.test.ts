@@ -73,4 +73,38 @@ describe("getItemPickerEntries", () => {
     expect(ids(entries)).toEqual([INACTIVE.id, ACTIVE.id]);
     expect(entries[0]?.isCurrentValue).toBe(true);
   });
+
+  // Here the filters keep the row rather than it being injected back, so it
+  // would otherwise render greyed out and unselectable with no badge.
+  it("marks an ineligible current value the filters kept as current", () => {
+    const entries = getItemPickerEntries([ACTIVE, INACTIVE], {
+      type: "Part",
+      showIneligible: true,
+      selectedId: INACTIVE.id
+    });
+
+    expect(ids(entries)).toEqual([ACTIVE.id, INACTIVE.id]);
+    expect(entries.map((e) => e.isCurrentValue)).toEqual([false, true]);
+    expect(entries[1]?.ineligibility).toBe("inactive");
+  });
+
+  it("keeps an inactive item selectable when includeInactive is set", () => {
+    const entries = getItemPickerEntries([ACTIVE, INACTIVE], {
+      type: "Part",
+      includeInactive: true
+    });
+
+    expect(ids(entries)).toEqual([ACTIVE.id, INACTIVE.id]);
+    expect(entries.map((e) => e.ineligibility)).toEqual([null, null]);
+  });
+
+  it("drops the current value when the caller blacklisted it", () => {
+    const entries = getItemPickerEntries([ACTIVE, INACTIVE], {
+      type: "Part",
+      selectedId: INACTIVE.id,
+      blacklist: [INACTIVE.id]
+    });
+
+    expect(ids(entries)).toEqual([ACTIVE.id]);
+  });
 });

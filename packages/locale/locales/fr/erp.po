@@ -1156,7 +1156,6 @@ msgid "Accumulation Period:"
 msgstr "Période d'accumulation :"
 
 msgid "Acknowledge & finish"
-msgstr "Reconnaître et terminer"
 msgstr "Confirmer et terminer"
 
 msgid "Acknowledged itar"
@@ -7614,7 +7613,6 @@ msgid "Finish To"
 msgstr "Terminer vers"
 
 msgid "Finish with material unpicked?"
-msgstr "Terminer avec du matériel non prélevé?"
 msgstr "Terminer avec du matériel non prélevé ?"
 
 msgid "Finished goods"

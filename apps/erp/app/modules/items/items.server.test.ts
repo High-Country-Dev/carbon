@@ -338,6 +338,20 @@ describe("getItemOrderabilityIssue", () => {
     );
   });
 
+  it("falls back to a generic name when the item has no readable id", async () => {
+    const client = fakeClient({
+      item: {
+        readableIdWithRevision: null,
+        active: false,
+        changeOrderId: null
+      }
+    });
+
+    expect(await getItemOrderabilityIssue(client, args)).toBe(
+      "This item is inactive."
+    );
+  });
+
   // `active` alone cannot catch this: a draft revision can be switched Active
   // by hand before its change order ships.
   it("rejects an active item whose change order is unreleased", async () => {
