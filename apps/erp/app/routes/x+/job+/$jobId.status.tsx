@@ -6,9 +6,11 @@ import { runLocationSchedule } from "@carbon/ee/planning";
 import { getLogger } from "@carbon/logger";
 import type { ActionFunctionArgs } from "react-router";
 import { redirect } from "react-router";
+import { cancelOpenPickingListsForJob } from "~/modules/inventory";
 import {
   jobStatus,
   recalculateJobRequirements,
+  returnPickedRemaindersForJob,
   runMRP,
   updateJobStatus
 } from "~/modules/production";
@@ -93,6 +95,40 @@ export async function action({ request, params }: ActionFunctionArgs) {
       requestReferrer(request) ?? path.to.job(id),
       await flash(request, error(update.error, "Failed to update job status"))
     );
+  }
+
+  if (status === "Cancelled") {
+    const sweep = await returnPickedRemaindersForJob(getCarbonServiceRole(), {
+      jobId: id,
+      userId,
+      companyId
+    });
+    if (sweep.error) {
+      throw redirect(
+        requestReferrer(request) ?? path.to.job(id),
+        await flash(
+          request,
+          error(
+            sweep.error,
+            "Job cancelled, but returning picked material failed"
+          )
+        )
+      );
+    }
+    const picks = await cancelOpenPickingListsForJob(getCarbonServiceRole(), {
+      jobId: id,
+      companyId,
+      userId
+    });
+    if (picks.error) {
+      throw redirect(
+        requestReferrer(request) ?? path.to.job(id),
+        await flash(
+          request,
+          error(picks.error, "Job cancelled, but its picking lists stayed open")
+        )
+      );
+    }
   }
 
   if (["Ready", "Planned"].includes(status) && shouldSchedule) {

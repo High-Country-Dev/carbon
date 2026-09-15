@@ -29203,6 +29203,9 @@ export default {
             $ref: "#/parameters/rowFilter.openJobMaterialLines.dueDate"
           },
           {
+            $ref: "#/parameters/rowFilter.openJobMaterialLines.quantityPerParent"
+          },
+          {
             $ref: "#/parameters/select"
           },
           {
@@ -114816,6 +114819,10 @@ export default {
         dueDate: {
           format: "date",
           type: "string"
+        },
+        quantityPerParent: {
+          format: "numeric",
+          type: "number"
         }
       },
       type: "object"
@@ -158935,6 +158942,12 @@ export default {
     },
     "rowFilter.openJobMaterialLines.dueDate": {
       name: "dueDate",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.openJobMaterialLines.quantityPerParent": {
+      name: "quantityPerParent",
       required: false,
       in: "query",
       type: "string"

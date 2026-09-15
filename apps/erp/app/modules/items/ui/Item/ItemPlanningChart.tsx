@@ -1243,6 +1243,7 @@ interface PlanningItem {
   jobId?: string | null;
   jobMakeMethodId?: string | null;
   existingOrderReadableId?: string | null;
+  redirectedFromReadableId?: string | null;
   forecastMethod?: string | null;
   forecastSources?: DemandForecastSourceRow[];
   // Planned-row metadata (only set on rows with sourceType === "Planned").
@@ -1344,6 +1345,11 @@ function SupplyDemandPlanningItem({
               >
                 {item.documentReadableId}
               </Hyperlink>
+            )}
+            {item.redirectedFromReadableId && (
+              <span className="text-xs text-blue-700 dark:text-blue-300">
+                <Trans>via</Trans> {item.redirectedFromReadableId}
+              </span>
             )}
             <span className="text-xs text-muted-foreground">
               {item.dueDate ? (
