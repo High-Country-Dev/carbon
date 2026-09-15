@@ -50,7 +50,14 @@ permissions, or moving them between roles, silently stops a workflow they wrote 
 ALTER TABLE "user" ADD COLUMN "isServiceAccount" BOOLEAN NOT NULL DEFAULT FALSE;
 ALTER TABLE "workflow" ADD COLUMN "ownerKind" TEXT NOT NULL DEFAULT 'user'
   CHECK ("ownerKind" IN ('user', 'company'));
+ALTER TABLE "workflow" ADD CONSTRAINT "workflow_companyOwner_check"
+  CHECK ("ownerKind" <> 'company' OR "ownerId" = ('wfsvc_' || "companyId"));
 ```
+
+`workflow_companyOwner_check` binds a company-owned workflow to its own company's identity. The
+workflow INSERT/UPDATE policies gate on `companyId` alone, so without it a `workflows_update`
+holder could store `ownerKind = 'company'` beside any `ownerId` through PostgREST, and the test-run
+gate (§4.6) would then run as that user.
 
 `ownerId` keeps pointing at a real `user` row in both cases. That is the load-bearing choice:
 the engine resolves an owner id and mints a client for it, so `ownerKind` changes nothing below
@@ -123,11 +130,13 @@ true`, both of which `get_user_select_groups` already excludes.
 - `deactivateUser` refuses a service account. Deactivating one would strip the permissions every
   workflow it owns runs with — precisely the failure this feature exists to prevent — and nothing
   could restore it. The `deactivateEmployee` call sites inside `createEmployeeAccount` are invite
-  rollback paths that can only ever see a real invited employee, so they need no guard.
+  rollback paths that can only ever see a real invited employee, so they need no guard. A failed
+  service-account lookup is returned as an error rather than read as "not a service account".
 - `deleteSubsidiary` deletes the identity after the company. The company cascade reaches everything
   scoped by `companyId`, but `user` has no such column, so the row would otherwise be orphaned.
   Order matters: `workflow.ownerId` references it with no `ON DELETE`, so the workflows must go
-  first.
+  first. A failed identity delete is returned as the result's error, so the orphan is reported
+  instead of hidden behind the company delete's success.
 
 ### 4.6 Test runs
 
@@ -189,7 +198,8 @@ the company-owned test exercise the permissions production will use.
 | A standing principal with company-wide read access | Medium | Read-only grants; no auth account, so it cannot be logged into; provisioning revoked from `anon`/`authenticated` |
 | The identity leaks into a people surface not covered by the sweep | Low | No `employee` row makes the `employees` view the chokepoint; the four direct `user`/`userToCompany` readers are patched individually |
 | `GET /rest/v1/user` with a company API key still returns the row | Low | Not fixed here: narrowing the `user` SELECT policy is an RBAC change and out of scope for this PR. The row exposes a synthetic name and a synthetic email and nothing else |
-| A company-owned workflow restored into a **different** company points at the source company's identity, and runs with no permissions | Medium | Not reachable yet — nothing creates a company-owned workflow. Company restore must re-point `ownerKind = 'company'` workflows at the target company's identity, and that lands with the first consumer |
+| A company-owned workflow restored into a **different** company points at the source company's identity, and runs with no permissions | Medium | Not reachable yet — nothing creates a company-owned workflow. Company restore must re-point `ownerKind = 'company'` workflows at the target company's identity, and that lands with the first consumer. Until it does, `workflow_companyOwner_check` rejects such a row instead of loading it |
+| `ownerId` / `ownerKind` are writable through PostgREST by a `workflows_create`/`workflows_update` holder | Medium | Pre-existing for `ownerId`. `workflow_companyOwner_check` closes the company-owned variant this PR adds; making the ownership columns immutable is an RLS change on `workflow` and out of scope here |
 
 ## 9. Open questions — resolved before writing
 

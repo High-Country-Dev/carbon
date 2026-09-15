@@ -57190,6 +57190,7 @@ export type Database = {
           fullName: string | null
           id: string
           isConsoleOperator: boolean
+          isServiceAccount: boolean
           lastName: string
           phone: string | null
           updatedAt: string | null
@@ -57208,6 +57209,7 @@ export type Database = {
           fullName?: string | null
           id: string
           isConsoleOperator?: boolean
+          isServiceAccount?: boolean
           lastName?: string
           phone?: string | null
           updatedAt?: string | null
@@ -57226,6 +57228,7 @@ export type Database = {
           fullName?: string | null
           id?: string
           isConsoleOperator?: boolean
+          isServiceAccount?: boolean
           lastName?: string
           phone?: string | null
           updatedAt?: string | null
@@ -59186,6 +59189,7 @@ export type Database = {
           name: string
           nextRunAt: string | null
           ownerId: string
+          ownerKind: string
           publishedVersionId: string | null
           updatedAt: string | null
           updatedBy: string | null
@@ -59200,6 +59204,7 @@ export type Database = {
           name: string
           nextRunAt?: string | null
           ownerId: string
+          ownerKind?: string
           publishedVersionId?: string | null
           updatedAt?: string | null
           updatedBy?: string | null
@@ -59214,6 +59219,7 @@ export type Database = {
           name?: string
           nextRunAt?: string | null
           ownerId?: string
+          ownerKind?: string
           publishedVersionId?: string | null
           updatedAt?: string | null
           updatedBy?: string | null
@@ -78061,6 +78067,10 @@ export type Database = {
         Args: { p_new: Json; p_old: Json; p_operation: string; p_table: string }
         Returns: undefined
       }
+      provision_workflow_service_user: {
+        Args: { company_id: string }
+        Returns: string
+      }
       purchaseLineDimensionPivot: {
         Args: {
           p_column_field?: string
@@ -78528,6 +78538,10 @@ export type Database = {
           p_values: Json
         }
         Returns: undefined
+      }
+      workflow_service_user_permissions: {
+        Args: { company_id: string }
+        Returns: Json
       }
       xid: { Args: { _at?: string }; Returns: unknown }
       xid_counter: { Args: { _xid: unknown }; Returns: number }

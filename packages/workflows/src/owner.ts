@@ -21,7 +21,8 @@ export const WORKFLOW_OWNER_KINDS: WorkflowOwnerKind[] = ["user", "company"];
 /**
  * Prefix for the per-company workflow service identity. Kept in step with
  * `provision_workflow_service_user` in
- * `20260828103412_workflow-company-ownership.sql`, which is the only writer.
+ * `20260828103412_workflow-company-ownership.sql`, which is the only writer, and
+ * with the `workflow_companyOwner_check` constraint in the same migration.
  */
 export const WORKFLOW_SERVICE_USER_PREFIX = "wfsvc_";
 

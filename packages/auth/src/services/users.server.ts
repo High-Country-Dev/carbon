@@ -310,6 +310,11 @@ export async function deactivateUser(
     .eq("id", userId)
     .maybeSingle();
 
+  // Fail closed: a failed lookup must not read as "not a service account".
+  if (serviceAccount.error) {
+    return error(serviceAccount.error, "Failed to get user");
+  }
+
   if (serviceAccount.data?.isServiceAccount) {
     return error(null, "Cannot deactivate a service account");
   }

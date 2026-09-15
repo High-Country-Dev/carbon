@@ -113,10 +113,13 @@ export async function deleteSubsidiary(
   // no companyId column, so the company's workflow service identity would be
   // left behind. It is deleted after the company, never before: workflow.ownerId
   // references it with no ON DELETE, so the workflows must go first.
-  await client
+  // A failure here is returned rather than swallowed: the company is already
+  // gone, and reporting success would hide the orphaned identity.
+  const serviceUserDeleted = await client
     .from("user")
     .delete()
     .eq("id", getWorkflowServiceUserId(companyId));
+  if (serviceUserDeleted.error) return serviceUserDeleted;
 
   return deleted;
 }

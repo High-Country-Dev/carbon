@@ -33,9 +33,21 @@ COMMENT ON COLUMN "user"."isServiceAccount" IS
 --
 -- DEFAULT is mandatory: `assertBackupImportable` rejects a backup that is missing a
 -- NOT NULL column with no default, which would make every existing backup unimportable.
+--
+-- The second CHECK binds a company-owned workflow to its own company's service identity.
+-- The workflow UPDATE/INSERT policies gate on `companyId` alone, so without it anyone
+-- holding `workflows_update` could store `ownerKind = 'company'` beside an arbitrary
+-- `ownerId` through PostgREST, and the test-run gate -- which lets any editor run a
+-- company-owned workflow, as its stored owner -- would then act as that other user.
+-- A company restore that re-stamps `companyId` must re-point `ownerId` in step, or this
+-- rejects the row rather than leaving it owned by another company's identity.
 ALTER TABLE "workflow"
   ADD COLUMN "ownerKind" TEXT NOT NULL DEFAULT 'user'
   CHECK ("ownerKind" IN ('user', 'company'));
+
+ALTER TABLE "workflow"
+  ADD CONSTRAINT "workflow_companyOwner_check"
+  CHECK ("ownerKind" <> 'company' OR "ownerId" = ('wfsvc_' || "companyId"));
 
 COMMENT ON COLUMN "workflow"."ownerKind" IS
   'user = owned by the employee who created it, runs with their permissions. company = owned by the company service identity, survives any employee leaving.';
