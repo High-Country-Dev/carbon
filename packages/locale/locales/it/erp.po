@@ -7278,7 +7278,7 @@ msgid "Format"
 msgstr "Formato"
 
 msgid "Format can't be displayed — re-upload as JPEG or PNG"
-msgstr ""
+msgstr "Formato non visualizzabile — ricarica come JPEG o PNG"
 
 msgid "Forward deployed engineer"
 msgstr "Ingegnere dispiegato in prima linea"
@@ -7695,7 +7695,7 @@ msgid "Headers"
 msgstr "Intestazioni"
 
 msgid "HEIC photos can't be displayed in a browser. On iPhone, Settings → Camera → Formats → Most Compatible saves photos as JPEG."
-msgstr ""
+msgstr "Le foto HEIC non possono essere visualizzate in un browser. Su iPhone, Impostazioni → Fotocamera → Formati → Più compatibile salva le foto in JPEG."
 
 msgid "Help"
 msgstr "Aiuto"
@@ -15594,7 +15594,7 @@ msgid "Text size"
 msgstr "Dimensione testo"
 
 msgid "That file isn't an image browsers can display. Use JPEG, PNG, WebP, AVIF or GIF."
-msgstr ""
+msgstr "Questo file non è un'immagine che i browser possono visualizzare. Usa JPEG, PNG, WebP, AVIF o GIF."
 
 msgid "That name is already used by another step."
 msgstr "Quel nome è già utilizzato da un altro passaggio."

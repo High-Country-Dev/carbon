@@ -64,7 +64,7 @@ msgid "+{overflow} more"
 msgstr "+{overflow} ещё"
 
 msgid "3D model"
-msgstr ""
+msgstr "3D модель"
 
 msgid "About"
 msgstr "О системе"
@@ -293,7 +293,7 @@ msgid "Continue"
 msgstr "Продолжить"
 
 msgid "Converting…"
-msgstr ""
+msgstr "Преобразование…"
 
 #. placeholder {0}: board.unplannedCost.days
 msgid "Cost of unplanned maintenance, last {0} days"
@@ -567,7 +567,7 @@ msgid "Idle for"
 msgstr "Простой в течение"
 
 msgid "Image format not supported"
-msgstr ""
+msgstr "Формат изображения не поддерживается"
 
 msgid "Impact"
 msgstr "Влияние"
@@ -1096,6 +1096,12 @@ msgstr "Только записать"
 
 msgid "Record Partial"
 msgstr "Записать частичный результат"
+
+msgid "Reference image {position}"
+msgstr "Справочное изображение {position}"
+
+msgid "Reference model {position}"
+msgstr "Справочная модель {position}"
 
 msgid "Reject"
 msgstr "Отклонить"

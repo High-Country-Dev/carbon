@@ -75,9 +75,16 @@ export async function uploadStepSlideImage(
     };
   }
 
+  // storage-js sends a File as a multipart part, so the stored Content-Type is
+  // the part's own `file.type` (derived from the picked filename) and the
+  // `contentType` option is ignored. Re-wrap the same bytes under the sniffed
+  // type so a renamed or extension-less image isn't stored as something else.
+  const typed = new File([file], file.name, {
+    type: `image/${ext === "jpg" ? "jpeg" : ext}`
+  });
   const upload = await carbon.storage
     .from("private")
-    .upload(`${companyId}/${folder}/${nanoid()}.${ext}`, file);
+    .upload(`${companyId}/${folder}/${nanoid()}.${ext}`, typed);
   if (upload.error || !upload.data) {
     return { error: msg`Failed to upload image` };
   }

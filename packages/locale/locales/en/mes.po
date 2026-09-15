@@ -1097,6 +1097,12 @@ msgstr "Record only"
 msgid "Record Partial"
 msgstr "Record Partial"
 
+msgid "Reference image {position}"
+msgstr "Reference image {position}"
+
+msgid "Reference model {position}"
+msgstr "Reference model {position}"
+
 msgid "Reject"
 msgstr "Reject"
 

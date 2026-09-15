@@ -64,7 +64,7 @@ msgid "+{overflow} more"
 msgstr "还有 +{overflow} 个"
 
 msgid "3D model"
-msgstr ""
+msgstr "3D 模型"
 
 msgid "About"
 msgstr "关于"
@@ -293,7 +293,7 @@ msgid "Continue"
 msgstr "继续"
 
 msgid "Converting…"
-msgstr ""
+msgstr "转换中…"
 
 #. placeholder {0}: board.unplannedCost.days
 msgid "Cost of unplanned maintenance, last {0} days"
@@ -567,7 +567,7 @@ msgid "Idle for"
 msgstr "闲置时间"
 
 msgid "Image format not supported"
-msgstr ""
+msgstr "不支持的图像格式"
 
 msgid "Impact"
 msgstr "影响"
@@ -1096,6 +1096,12 @@ msgstr "仅记录"
 
 msgid "Record Partial"
 msgstr "记录部分"
+
+msgid "Reference image {position}"
+msgstr "参考图像 {position}"
+
+msgid "Reference model {position}"
+msgstr "参考模型 {position}"
 
 msgid "Reject"
 msgstr "拒绝"

@@ -64,7 +64,7 @@ msgid "+{overflow} more"
 msgstr "+{overflow} weitere"
 
 msgid "3D model"
-msgstr ""
+msgstr "3D-Modell"
 
 msgid "About"
 msgstr "Über"
@@ -293,7 +293,7 @@ msgid "Continue"
 msgstr "Weiter"
 
 msgid "Converting…"
-msgstr ""
+msgstr "Wird konvertiert…"
 
 #. placeholder {0}: board.unplannedCost.days
 msgid "Cost of unplanned maintenance, last {0} days"
@@ -567,7 +567,7 @@ msgid "Idle for"
 msgstr "Untätig seit"
 
 msgid "Image format not supported"
-msgstr ""
+msgstr "Bildformat wird nicht unterstützt"
 
 msgid "Impact"
 msgstr "Auswirkung"
@@ -1096,6 +1096,12 @@ msgstr "Nur aufzeichnen"
 
 msgid "Record Partial"
 msgstr "Teilweise aufzeichnen"
+
+msgid "Reference image {position}"
+msgstr "Referenzbild {position}"
+
+msgid "Reference model {position}"
+msgstr "Referenzmodell {position}"
 
 msgid "Reject"
 msgstr "Ablehnen"

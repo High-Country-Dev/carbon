@@ -351,6 +351,7 @@ export function StepsListItem({
       {slideTiles.length > 0 && (
         <div className="mt-4 flex flex-wrap gap-2">
           {slideTiles.map((slide, i) => {
+            const position = i + 1;
             const tileClass = cn(
               "relative flex h-24 w-32 shrink-0 items-center justify-center overflow-hidden rounded-lg border bg-muted/40",
               slide.kind !== "unsupported" &&
@@ -376,7 +377,9 @@ export function StepsListItem({
                   key={slide.id}
                   type="button"
                   aria-label={
-                    slide.caption || slide.name || `Reference model ${i + 1}`
+                    slide.caption ||
+                    slide.name ||
+                    t`Reference model ${position}`
                   }
                   title={slide.caption ?? slide.name ?? undefined}
                   onClick={() => setModelSlideId(slide.id)}
@@ -407,7 +410,7 @@ export function StepsListItem({
               <button
                 key={slide.id}
                 type="button"
-                aria-label={slide.caption || `Reference image ${i + 1}`}
+                aria-label={slide.caption || t`Reference image ${position}`}
                 title={slide.caption ?? undefined}
                 onClick={() => setViewerSlideId(slide.id)}
                 className={tileClass}

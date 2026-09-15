@@ -7278,7 +7278,7 @@ msgid "Format"
 msgstr "Biçim"
 
 msgid "Format can't be displayed — re-upload as JPEG or PNG"
-msgstr ""
+msgstr "Biçim görüntülenemiyor — JPEG veya PNG olarak yeniden yükleyin"
 
 msgid "Forward deployed engineer"
 msgstr "Sahadaki mühendis"
@@ -7695,7 +7695,7 @@ msgid "Headers"
 msgstr "Başlıklar"
 
 msgid "HEIC photos can't be displayed in a browser. On iPhone, Settings → Camera → Formats → Most Compatible saves photos as JPEG."
-msgstr ""
+msgstr "HEIC fotoğraflar tarayıcıda görüntülenemez. iPhone'da Ayarlar → Kamera → Biçimler → En Uyumlu seçeneği fotoğrafları JPEG olarak kaydeder."
 
 msgid "Help"
 msgstr "Yardım"
@@ -15594,7 +15594,7 @@ msgid "Text size"
 msgstr "Metin boyutu"
 
 msgid "That file isn't an image browsers can display. Use JPEG, PNG, WebP, AVIF or GIF."
-msgstr ""
+msgstr "Bu dosya, tarayıcıların görüntüleyebileceği bir görsel değil. JPEG, PNG, WebP, AVIF veya GIF kullanın."
 
 msgid "That name is already used by another step."
 msgstr "Bu ad başka bir adım tarafından zaten kullanılıyor."

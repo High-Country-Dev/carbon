@@ -64,7 +64,7 @@ msgid "+{overflow} more"
 msgstr "+{overflow} daha fazla"
 
 msgid "3D model"
-msgstr ""
+msgstr "3B model"
 
 msgid "About"
 msgstr "Hakkında"
@@ -293,7 +293,7 @@ msgid "Continue"
 msgstr "Devam Et"
 
 msgid "Converting…"
-msgstr ""
+msgstr "Dönüştürülüyor…"
 
 #. placeholder {0}: board.unplannedCost.days
 msgid "Cost of unplanned maintenance, last {0} days"
@@ -567,7 +567,7 @@ msgid "Idle for"
 msgstr "Boş olma süresi"
 
 msgid "Image format not supported"
-msgstr ""
+msgstr "Görsel biçimi desteklenmiyor"
 
 msgid "Impact"
 msgstr "Etki"
@@ -1096,6 +1096,12 @@ msgstr "Yalnızca kaydet"
 
 msgid "Record Partial"
 msgstr "Kısmi Kaydı"
+
+msgid "Reference image {position}"
+msgstr "Referans görseli {position}"
+
+msgid "Reference model {position}"
+msgstr "Referans modeli {position}"
 
 msgid "Reject"
 msgstr "Reddet"

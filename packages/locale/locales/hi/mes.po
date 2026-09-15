@@ -64,7 +64,7 @@ msgid "+{overflow} more"
 msgstr "+{overflow} अधिक"
 
 msgid "3D model"
-msgstr ""
+msgstr "3D मॉडल"
 
 msgid "About"
 msgstr "के बारे में"
@@ -293,7 +293,7 @@ msgid "Continue"
 msgstr "जारी रखें"
 
 msgid "Converting…"
-msgstr ""
+msgstr "परिवर्तित हो रहा है…"
 
 #. placeholder {0}: board.unplannedCost.days
 msgid "Cost of unplanned maintenance, last {0} days"
@@ -567,7 +567,7 @@ msgid "Idle for"
 msgstr "के लिए निष्क्रिय"
 
 msgid "Image format not supported"
-msgstr ""
+msgstr "छवि फ़ॉर्मैट समर्थित नहीं है"
 
 msgid "Impact"
 msgstr "प्रभाव"
@@ -1096,6 +1096,12 @@ msgstr "केवल रिकॉर्ड करें"
 
 msgid "Record Partial"
 msgstr "आंशिक रिकॉर्ड करें"
+
+msgid "Reference image {position}"
+msgstr "संदर्भ छवि {position}"
+
+msgid "Reference model {position}"
+msgstr "संदर्भ मॉडल {position}"
 
 msgid "Reject"
 msgstr "अस्वीकार करें"
