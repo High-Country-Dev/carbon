@@ -1036,7 +1036,8 @@ export const WORKFLOW_ENTITIES: Record<string, Record<string, ValueType>> = {
     assemblyInstructionId: { kind: "primitive", of: "string" },
     readyAt: { kind: "primitive", of: "date" },
     inspectionDocumentId: { kind: "primitive", of: "string" },
-    projectedCompletionAt: { kind: "primitive", of: "date" }
+    projectedCompletionAt: { kind: "primitive", of: "date" },
+    jobOperationBatchId: { kind: "primitive", of: "string" }
   },
   location: {
     id: { kind: "primitive", of: "string" },
