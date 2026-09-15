@@ -1,4 +1,3 @@
-import { requirePermissions } from "@carbon/auth/auth.server";
 import type { OnshapeBomNode, PlanItemRow } from "@carbon/ee";
 import {
   buildReleasePlan,
@@ -16,6 +15,7 @@ import {
   onshapeFailure,
   selectInBatches
 } from "@carbon/ee/onshape";
+import { requireOnshapePanelPermissions } from "@carbon/ee/onshape/panel-session.server";
 import type { ActionFunctionArgs } from "react-router";
 import { data } from "react-router";
 import { z } from "zod";
@@ -47,10 +47,13 @@ const payloadSchema = z.object({
  * before editing a review, not after.
  */
 export async function action({ request }: ActionFunctionArgs) {
-  const { client, companyId, userId } = await requirePermissions(request, {
-    create: "parts",
-    update: "parts"
-  });
+  const { client, companyId, userId } = await requireOnshapePanelPermissions(
+    request,
+    {
+      create: "parts",
+      update: "parts"
+    }
+  );
 
   const parsed = payloadSchema.safeParse(
     await request.json().catch(() => null)
@@ -108,7 +111,7 @@ export async function action({ request }: ActionFunctionArgs) {
     client
       .from("item")
       .select(
-        "id, readableId, revision, name, type, defaultMethodType, unitOfMeasureCode"
+        "id, readableId, revision, name, type, replenishmentSystem, defaultMethodType, itemTrackingType, unitOfMeasureCode"
       )
       .eq("companyId", companyId)
       .in("readableId", batch)
@@ -203,7 +206,7 @@ export async function action({ request }: ActionFunctionArgs) {
     client
       .from("item")
       .select(
-        "id, readableId, revision, name, type, defaultMethodType, unitOfMeasureCode"
+        "id, readableId, revision, name, type, replenishmentSystem, defaultMethodType, itemTrackingType, unitOfMeasureCode"
       )
       .eq("companyId", companyId)
       .in("readableId", batch)

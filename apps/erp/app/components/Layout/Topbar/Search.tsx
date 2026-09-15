@@ -40,7 +40,7 @@ import { getEntityTypeConfig } from "~/components/Layout/Topbar/Search/config";
 import { SearchEmptyState } from "~/components/Layout/Topbar/Search/SearchEmptyState";
 import { SearchFilterChips } from "~/components/Layout/Topbar/Search/SearchFilterChips";
 import type { EntityTypeFilter } from "~/components/Layout/Topbar/Search/types";
-import { useModules, useUser } from "~/hooks";
+import { useModules, useSettingsModule, useUser } from "~/hooks";
 import useAccountSubmodules from "~/modules/account/ui/useAccountSubmodules";
 import useAccountingSubmodules from "~/modules/accounting/ui/useAccountingSubmodules";
 import useDocumentsSubmodules from "~/modules/documents/ui/useDocumentsSubmodules";
@@ -532,6 +532,11 @@ function ResultIcon({ entityType }: { entityType: string }) {
 
 function useGroupedSubmodules() {
   const modules = useModules();
+  // `useModules()` pins Settings out of the main module list (it renders in its
+  // own menu), so add it back here — otherwise its submodules never reach the
+  // Navigation results. `useSettingsModule()` is null when the user can't view
+  // settings, which keeps the reduce below permission-aware.
+  const settingsModule = useSettingsModule();
   const items = useItemsSubmodules();
   const production = useProductionSubmodules();
   const inventory = useInventorySubmodules();
@@ -577,7 +582,11 @@ function useGroupedSubmodules() {
     documents
   };
 
-  const shortcuts = modules.reduce<
+  const modulesWithSettings = settingsModule
+    ? [...modules, settingsModule]
+    : modules;
+
+  const shortcuts = modulesWithSettings.reduce<
     Record<string, (Route & { iconElement?: React.ReactNode })[]>
   >((acc, module) => {
     const moduleName = module.name.toLowerCase();
