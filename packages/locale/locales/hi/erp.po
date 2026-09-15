@@ -10104,6 +10104,9 @@ msgstr "मेमो तारीख"
 msgid "Memo ID"
 msgstr "मेमो आईडी"
 
+msgid "Merge output lots"
+msgstr ""
+
 msgid "MES"
 msgstr "MES"
 

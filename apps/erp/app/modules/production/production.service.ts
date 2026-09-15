@@ -6005,6 +6005,36 @@ export async function getJobOperationBatchMembers(
   return { data: members, error: null };
 }
 
+// The output lots a completed batch's members produced: each member's WIP
+// tracked entity (tagged with its jobMakeMethod). Drives the drawer's
+// "Merge output lots" action — >=2 Available same-item lots are mergeable.
+export async function getBatchOutputLots(
+  client: SupabaseClient<Database>,
+  batchId: string,
+  companyId: string
+) {
+  const members = await client
+    .from("jobOperation")
+    .select("id, jobMakeMethodId")
+    .eq("jobOperationBatchId", batchId)
+    .eq("companyId", companyId);
+  const makeMethodIds = [
+    ...new Set(
+      (members.data ?? [])
+        .map((m) => m.jobMakeMethodId)
+        .filter(Boolean) as string[]
+    )
+  ];
+  if (makeMethodIds.length === 0) {
+    return { data: [], error: members.error };
+  }
+  return client
+    .from("trackedEntity")
+    .select("id, readableId, status, itemId, quantity")
+    .in("attributes->>Job Make Method", makeMethodIds)
+    .eq("companyId", companyId);
+}
+
 export async function getJobOperationBatchWithMembers(
   client: SupabaseClient<Database>,
   batchId: string,

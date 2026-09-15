@@ -10104,6 +10104,9 @@ msgstr "메모 날짜"
 msgid "Memo ID"
 msgstr "메모 ID"
 
+msgid "Merge output lots"
+msgstr ""
+
 msgid "MES"
 msgstr "MES"
 

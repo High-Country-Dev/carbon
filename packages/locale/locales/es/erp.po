@@ -10104,6 +10104,9 @@ msgstr "Fecha del Memorándum"
 msgid "Memo ID"
 msgstr "ID de Memorándum"
 
+msgid "Merge output lots"
+msgstr ""
+
 msgid "MES"
 msgstr "MES"
 

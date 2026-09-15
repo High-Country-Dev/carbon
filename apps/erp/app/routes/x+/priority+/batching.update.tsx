@@ -5,9 +5,11 @@ import type { Database } from "@carbon/database";
 import { validationError, validator } from "@carbon/form";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { ActionFunctionArgs } from "react-router";
+import { mergeTrackedEntities } from "~/modules/inventory";
 import {
   createJobOperationBatch,
   createJobOperationBatchValidator,
+  getBatchOutputLots,
   notifyScheduleInputsChanged,
   recalculateJobRequirements,
   releaseJobOperationBatch,
@@ -112,6 +114,56 @@ export async function action({ request }: ActionFunctionArgs) {
     }
 
     return { success: true };
+  }
+
+  // Merge a Completed batch's same-item output lots into one lot. The batch
+  // completion prompt covers the common case in MES; this is the ERP catch-up
+  // for batches whose prompt was skipped. Outputs are re-derived server-side —
+  // client-supplied entity ids are never trusted.
+  if (intent === "mergeOutputs") {
+    const batchId = String(formData.get("batchId") ?? "");
+    if (!batchId) {
+      return { success: false, message: "Invalid merge request" };
+    }
+    const batch = await client
+      .from("jobOperationBatch")
+      .select("id, status")
+      .eq("id", batchId)
+      .eq("companyId", companyId)
+      .maybeSingle();
+    if (batch.error || batch.data?.status !== "Completed") {
+      return {
+        success: false,
+        message: "Only a completed batch's output lots can be merged"
+      };
+    }
+    const outputs = await getBatchOutputLots(client, batchId, companyId);
+    const available = (outputs.data ?? []).filter(
+      (e) => e.status === "Available" && Number(e.quantity) > 0
+    );
+    const items = new Set(available.map((e) => e.itemId));
+    if (available.length < 2 || items.size !== 1) {
+      return { success: false, message: "No mergeable output lots" };
+    }
+    const serviceRole = await getCarbonServiceRole();
+    const merge = await mergeTrackedEntities(serviceRole, {
+      trackedEntityIds: available.map((e) => e.id),
+      companyId,
+      userId
+    });
+    if (merge.error || merge.data?.error) {
+      return {
+        success: false,
+        message:
+          (merge.data?.error as string | undefined) ?? "Failed to merge lots"
+      };
+    }
+    return {
+      success: true,
+      message: merge.data?.readableId
+        ? `Lots merged into ${merge.data.readableId}`
+        : "Lots merged"
+    };
   }
 
   if (intent === "create") {

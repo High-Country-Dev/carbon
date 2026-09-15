@@ -10104,6 +10104,9 @@ msgstr "Дата меморандума"
 msgid "Memo ID"
 msgstr "ID Памятки"
 
+msgid "Merge output lots"
+msgstr ""
+
 msgid "MES"
 msgstr "MES"
 

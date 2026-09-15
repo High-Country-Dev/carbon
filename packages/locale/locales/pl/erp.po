@@ -10104,6 +10104,9 @@ msgstr "Data memorandum"
 msgid "Memo ID"
 msgstr "ID Notatki"
 
+msgid "Merge output lots"
+msgstr ""
+
 msgid "MES"
 msgstr "MES"
 

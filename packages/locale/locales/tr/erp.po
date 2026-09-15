@@ -10104,6 +10104,9 @@ msgstr "Muhasebe Tarihi"
 msgid "Memo ID"
 msgstr "Muhasebe Belgesi Kimliği"
 
+msgid "Merge output lots"
+msgstr ""
+
 msgid "MES"
 msgstr "MES"
 

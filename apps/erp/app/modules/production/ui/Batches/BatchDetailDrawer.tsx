@@ -34,6 +34,7 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import { useEffect, useMemo, useRef } from "react";
 import {
   LuCirclePlay,
+  LuCombine,
   LuCopy,
   LuEllipsisVertical,
   LuHammer,
@@ -79,10 +80,20 @@ const EVENT_ICONS: Record<
 export function BatchDetailDrawer({
   batch,
   events,
+  outputLots = [],
   onClose
 }: {
   batch: JobOperationBatchDetail;
   events: JobOperationBatchEvent[];
+  // The members' output tracked entities (batch-tracked produced lots) — >=2
+  // Available same-item lots make a Completed batch mergeable.
+  outputLots?: {
+    id: string;
+    readableId: string | null;
+    status: string;
+    itemId: string | null;
+    quantity: number | null;
+  }[];
   onClose: () => void;
 }) {
   const { t } = useLingui();
@@ -99,6 +110,38 @@ export function BatchDetailDrawer({
   // Planned and Active batches stay composable/dissolvable; the edge fn's
   // production-event guard is what actually freezes a started batch.
   const isPreStart = batch.status === "Planned" || batch.status === "Active";
+
+  // A Completed batch whose members produced >=2 Available lots of ONE item
+  // can merge them into a single lot (the MES completion prompt's ERP
+  // catch-up). After the merge the outputs are Consumed, so the button
+  // disappears on revalidation.
+  const mergeableOutputs = useMemo(() => {
+    if (batch.status !== "Completed") return [];
+    const available = outputLots.filter(
+      (e) => e.status === "Available" && Number(e.quantity ?? 0) > 0
+    );
+    const items = new Set(available.map((e) => e.itemId));
+    return available.length >= 2 && items.size === 1 ? available : [];
+  }, [batch.status, outputLots]);
+
+  const mergeFetcher = useFetcher<{ success?: boolean; message?: string }>();
+  const wasMerging = useRef(false);
+  useEffect(() => {
+    if (mergeFetcher.state !== "idle") {
+      wasMerging.current = true;
+      return;
+    }
+    if (!wasMerging.current) return;
+    wasMerging.current = false;
+    const d = mergeFetcher.data;
+    if (d?.message) {
+      if (d.success === false) {
+        toast.error(d.message);
+      } else {
+        toast.success(d.message);
+      }
+    }
+  }, [mergeFetcher.state, mergeFetcher.data]);
 
   // Release (Planned → Active) / Unrelease (Active → Planned). The server's
   // refusal (no work center, production already recorded) comes back as
@@ -595,6 +638,22 @@ export function BatchDetailDrawer({
                 <Link to={`${path.to.newOperationBatch}?batchId=${batch.id}`}>
                   {t`Add operations`}
                 </Link>
+              </Button>
+            )}
+            {mergeableOutputs.length >= 2 && (
+              <Button
+                variant="primary"
+                leftIcon={<LuCombine />}
+                isLoading={mergeFetcher.state !== "idle"}
+                isDisabled={mergeFetcher.state !== "idle"}
+                onClick={() =>
+                  mergeFetcher.submit(
+                    { intent: "mergeOutputs", batchId: batch.id },
+                    { method: "post", action: path.to.priorityBatchingUpdate }
+                  )
+                }
+              >
+                {t`Merge output lots`}
               </Button>
             )}
             {batch.status === "Planned" && (

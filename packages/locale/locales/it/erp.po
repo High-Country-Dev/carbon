@@ -10104,6 +10104,9 @@ msgstr "Data Memo"
 msgid "Memo ID"
 msgstr "ID Memo"
 
+msgid "Merge output lots"
+msgstr ""
+
 msgid "MES"
 msgstr "MES"
 
