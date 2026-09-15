@@ -3487,6 +3487,21 @@ serve(async (req: Request) => {
         const companyToday = datetime.today(await getCompanyTimeZone(client, companyId));
         const accounting = await loadConsumeAccountingContext(client, companyId);
 
+        // Resolve (and lazily create) the accounting period BEFORE the member
+        // transaction opens. getCurrentAccountingPeriod reads over HTTP but
+        // writes in-transaction, so two members inside ONE transaction would
+        // each try to create a missing period — the second cannot see the
+        // first's uncommitted insert and the unique index rolls the whole pick
+        // back. Committed here, every member's read finds it.
+        if (accounting.accountingEnabled) {
+          await getCurrentAccountingPeriod(
+            client,
+            companyId,
+            db,
+            companyToday.toString()
+          );
+        }
+
         const batchResult = await db.transaction().execute(async (trx) => {
           const batch = await trx
             .selectFrom("jobOperationBatch")
