@@ -855,6 +855,15 @@ const payloadValidator = z.discriminatedUnion("type", [
     inspectionSampleId: z.string().optional(),
   }),
   z.object({
+    type: z.literal("jobOperationBatchOutput"),
+    jobOperationId: z.string(),
+    trackedEntityId: z.string(),
+    quantity: z.number(),
+    readableId: z.string().optional().nullable(),
+    companyId: z.string(),
+    userId: z.string(),
+  }),
+  z.object({
     type: z.literal("jobOperationSerialComplete"),
     trackedEntityId: z.string(),
     companyId: z.string(),
@@ -1608,6 +1617,82 @@ async function consumeTrackedEntitiesIntoOperation(
   return { splitEntities, warning: expiredWarning };
 }
 
+
+// The Produce half of a batch-tracked operation completion — the activity +
+// entity flip EXTRACTED from jobOperationBatchComplete, so the batch-operations
+// Phase 2 (jobOperationBatchOutput) can finalize a member's output WITHOUT that
+// case's productionQuantity insert (batch Phase 1 already recorded it) and
+// WITHOUT its backflush (the batch's own issue step already ran).
+async function produceBatchOutput(
+  trx: Transaction<DB>,
+  {
+    jobOperationId,
+    trackedEntityId,
+    producedQuantity,
+    totalQuantity,
+    companyId,
+    userId,
+  }: {
+    jobOperationId: string;
+    trackedEntityId: string;
+    producedQuantity: number;
+    totalQuantity: number;
+    companyId: string;
+    userId: string;
+  }
+) {
+  const trackedEntity = await trx
+    .selectFrom("trackedEntity")
+    .where("id", "=", trackedEntityId)
+    .selectAll()
+    .executeTakeFirst();
+
+  if (!trackedEntity) {
+    throw new Error("Tracked entity not found");
+  }
+
+  if (trackedEntity.status !== "Consumed") {
+    const activityId = nanoid();
+    await trx
+      .insertInto("trackedActivity")
+      .values({
+        id: activityId,
+        type: "Produce",
+        sourceDocument: "Job Operation",
+        sourceDocumentId: jobOperationId,
+        attributes: {
+          "Job Operation": jobOperationId,
+          Employee: userId,
+          Quantity: producedQuantity,
+        },
+        companyId,
+        createdBy: userId,
+      })
+      .execute();
+
+    await trx
+      .insertInto("trackedActivityOutput")
+      .values({
+        trackedActivityId: activityId,
+        trackedEntityId: trackedEntityId,
+        quantity: producedQuantity,
+        companyId,
+        createdBy: userId,
+      })
+      .execute();
+
+    // Update the current trackedEntity to Complete
+    await trx
+      .updateTable("trackedEntity")
+      .set({
+        status: "Available",
+        quantity: totalQuantity,
+      })
+      .where("id", "=", trackedEntityId)
+      .execute();
+  }
+}
+
 serve(async (req: Request) => {
   const preflight = corsPreflight(req);
   if (preflight) return preflight;
@@ -1744,62 +1829,20 @@ serve(async (req: Request) => {
             })
             .executeTakeFirst();
 
-          const trackedEntity = await trx
-            .selectFrom("trackedEntity")
-            .where("id", "=", trackedEntityId)
-            .selectAll()
-            .executeTakeFirst();
+          const previousProductionQuantities =
+            productionQuantities?.data?.reduce((acc, curr) => {
+              const quantity = Number(curr.quantity);
+              return acc + quantity;
+            }, 0) ?? 0;
 
-          if (!trackedEntity) {
-            throw new Error("Tracked entity not found");
-          }
-
-          if (trackedEntity.status !== "Consumed") {
-            const activityId = nanoid();
-            await trx
-              .insertInto("trackedActivity")
-              .values({
-                id: activityId,
-                type: "Produce",
-                sourceDocument: "Job Operation",
-                sourceDocumentId: row.jobOperationId,
-                attributes: {
-                  "Job Operation": row.jobOperationId,
-                  Employee: userId,
-                  Quantity: row.quantity,
-                },
-                companyId,
-                createdBy: userId,
-              })
-              .execute();
-
-            await trx
-              .insertInto("trackedActivityOutput")
-              .values({
-                trackedActivityId: activityId,
-                trackedEntityId: trackedEntityId,
-                quantity: row.quantity,
-                companyId,
-                createdBy: userId,
-              })
-              .execute();
-
-            const previousProductionQuantities =
-              productionQuantities?.data?.reduce((acc, curr) => {
-                const quantity = Number(curr.quantity);
-                return acc + quantity;
-              }, 0) ?? 0;
-
-            // Update the current trackedEntity to Complete
-            await trx
-              .updateTable("trackedEntity")
-              .set({
-                status: "Available",
-                quantity: previousProductionQuantities + row.quantity,
-              })
-              .where("id", "=", trackedEntityId)
-              .execute();
-          }
+          await produceBatchOutput(trx, {
+            jobOperationId: row.jobOperationId,
+            trackedEntityId,
+            producedQuantity: row.quantity,
+            totalQuantity: previousProductionQuantities + row.quantity,
+            companyId,
+            userId,
+          });
 
           await issueJobOperationMaterials(trx, {
             jobOperationId: row.jobOperationId,
@@ -1817,6 +1860,66 @@ serve(async (req: Request) => {
         return jsonResponse({
           success: true,
         });
+      }
+      case "jobOperationBatchOutput": {
+        const { jobOperationId, trackedEntityId, quantity, readableId, companyId, userId } =
+          validatedPayload;
+        const client = await requirePermissions(req, companyId, userId, { update: "production" });
+
+        const [entity, productionQuantities] = await Promise.all([
+          client
+            .from("trackedEntity")
+            .select("id, status")
+            .eq("id", trackedEntityId)
+            .eq("companyId", companyId)
+            .single(),
+          client
+            .from("productionQuantity")
+            .select("quantity")
+            .eq("jobOperationId", jobOperationId)
+            .eq("type", "Production"),
+        ]);
+        if (entity.error || !entity.data) {
+          throw new Error("Tracked entity not found");
+        }
+
+        // Resume no-op: a prior attempt already produced this member's output.
+        if (entity.data.status === "Available") {
+          return jsonResponse({ success: true, created: false });
+        }
+
+        const totalQuantity =
+          productionQuantities.data?.reduce(
+            (acc: number, curr: { quantity: number | string | null }) =>
+              acc + Number(curr.quantity),
+            0
+          ) ?? 0;
+        if (totalQuantity <= 0) {
+          throw new Error(
+            "No recorded production quantity for this operation — complete the batch first"
+          );
+        }
+
+        await db.transaction().execute(async (trx) => {
+          if (readableId) {
+            await trx
+              .updateTable("trackedEntity")
+              .set({ readableId })
+              .where("id", "=", trackedEntityId)
+              .where("companyId", "=", companyId)
+              .execute();
+          }
+          await produceBatchOutput(trx, {
+            jobOperationId,
+            trackedEntityId,
+            producedQuantity: quantity,
+            totalQuantity,
+            companyId,
+            userId,
+          });
+        });
+
+        return jsonResponse({ success: true, created: true });
       }
       case "jobOperationSerialComplete": {
         const { trackedEntityId, companyId, userId, ...row } = validatedPayload;
