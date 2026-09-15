@@ -114057,7 +114057,8 @@ export default {
             "Inbound Inspection",
             "Inventory Count",
             "Scrap",
-            "Sales Return Shipment"
+            "Sales Return Shipment",
+            "Batch Merge"
           ],
           format: 'public."itemLedgerDocumentType"',
           type: "string"
@@ -119042,7 +119043,8 @@ export default {
             "Inbound Inspection",
             "Inventory Count",
             "Scrap",
-            "Sales Return Shipment"
+            "Sales Return Shipment",
+            "Batch Merge"
           ],
           format: 'public."itemLedgerDocumentType"',
           type: "string"
@@ -119619,7 +119621,8 @@ export default {
             "Inventory Count",
             "Non-Conformance",
             "Inbound Inspection",
-            "Scrap"
+            "Scrap",
+            "Batch Merge"
           ],
           format: 'public."journalLineDocumentType"',
           type: "string"
@@ -132700,7 +132703,8 @@ export default {
             "Inbound Inspection",
             "Inventory Count",
             "Scrap",
-            "Sales Return Shipment"
+            "Sales Return Shipment",
+            "Batch Merge"
           ],
           format: 'public."itemLedgerDocumentType"',
           type: "string"
@@ -132909,7 +132913,8 @@ export default {
             "Inventory Count",
             "Non-Conformance",
             "Inbound Inspection",
-            "Scrap"
+            "Scrap",
+            "Batch Merge"
           ],
           format: 'public."journalLineDocumentType"',
           type: "string"
@@ -133093,7 +133098,8 @@ export default {
             "Inventory Count",
             "Non-Conformance",
             "Inbound Inspection",
-            "Scrap"
+            "Scrap",
+            "Batch Merge"
           ],
           format: 'public."journalLineDocumentType"',
           type: "string"

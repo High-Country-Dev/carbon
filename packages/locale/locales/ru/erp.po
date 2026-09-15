@@ -7613,7 +7613,6 @@ msgid "Finish To"
 msgstr "Завершить в"
 
 msgid "Finish with material unpicked?"
-msgstr "Завершить с неподобранным материалом?"
 msgstr "Завершить с непобранным материалом?"
 
 msgid "Finished goods"
@@ -9168,7 +9167,6 @@ msgid "Keep Open"
 msgstr "Оставить открытым"
 
 msgid "Keep picking"
-msgstr "Продолжить подбор"
 msgstr "Сохранить отбор"
 
 msgid "Keeps orders, quotes, and settings behind a second check"
@@ -15515,7 +15513,6 @@ msgid "Shop-floor configuration."
 msgstr "Конфигурация цеха."
 
 msgid "short"
-msgstr "Краткий"
 msgstr "короткий"
 
 msgid "Short"
@@ -17457,7 +17454,6 @@ msgid "These email addresses will be automatically CC'd on all quote emails sent
 msgstr "Эти адреса электронной почты будут автоматически скопированы во все письма коммерческих предложений, отправляемые покупателям."
 
 msgid "These items still have material to pick. Finishing now marks the list Partial."
-msgstr "Эти позиции все еще содержат материал для подбора. Завершение сейчас отметит список как Неполный."
 msgstr "У этих товаров все еще есть материал для комплектации. Завершение сейчас отметит список как Частичный."
 
 msgid "These jobs have operations assigned to this work center:"
