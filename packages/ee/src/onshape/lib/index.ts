@@ -7,4 +7,3 @@ export * from "./integration-id";
 export * from "./onshape-failure";
 export * from "./panel-plan-data";
 export * from "./panel-plan-store";
-export * from "./panel-properties.server";
