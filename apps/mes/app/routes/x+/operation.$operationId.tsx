@@ -8,6 +8,7 @@ import { redirect, useLoaderData, useParams } from "react-router";
 import { JobOperation } from "~/components/JobOperation";
 import { getCompanySettings } from "~/services/inventory.service";
 import {
+  getBatchMaterialTotals,
   getJobByOperationId,
   getJobFiles,
   getJobMakeMethod,
@@ -239,6 +240,14 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     jobMakeMethod: jobMakeMethod.data,
     kanban: kanban.data,
     files: getJobFiles(serviceRole, companyId, job.data, operation.data),
+    // Batch mode: the combined per-item requirement across every member, so
+    // the materials panel can show the one shared pick.
+    batchMaterialTotals: batch
+      ? await getBatchMaterialTotals(serviceRole, {
+          batchId: batch.id as string,
+          companyId
+        })
+      : null,
     materials: getJobMaterialsByOperationId(serviceRole, {
       operation: operation.data?.[0],
       trackedEntityId:
@@ -281,6 +290,7 @@ export default function OperationRoute() {
 
   const {
     batch,
+    batchMaterialTotals,
     events,
     expiredEntityPolicy,
     autoSelectMaterialWithoutPickingList,
@@ -302,6 +312,7 @@ export default function OperationRoute() {
     <JobOperation
       key={`job-operation-${operationId}`}
       batch={batch}
+      batchMaterialTotals={batchMaterialTotals}
       events={events}
       expiredEntityPolicy={expiredEntityPolicy}
       autoSelectMaterialWithoutPickingList={

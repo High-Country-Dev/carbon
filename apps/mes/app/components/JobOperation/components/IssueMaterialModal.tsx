@@ -88,6 +88,7 @@ export function IssueMaterialModal({
   locationId,
   workCenterId,
   material,
+  batchId,
   parentId,
   parentIdIsSerialized,
   jobOperationStepId,
@@ -117,6 +118,10 @@ export function IssueMaterialModal({
   locationId?: string;
   workCenterId?: string;
   material?: JobMaterial;
+  // Batch mode: the pick covers every member of this operation batch. The
+  // edge fn splits the picked lots pro-rata by remaining requirement and
+  // records per-member consumption, so no parent entity is sent.
+  batchId?: string;
   parentId?: string;
   parentIdIsSerialized?: boolean;
   // Assembly view only: the step + 1-based unit the operator is on, stamped onto the
@@ -950,7 +955,7 @@ export function IssueMaterialModal({
   ]);
 
   const handleSubmitBatch = useCallback(() => {
-    if (!parentId) {
+    if (!batchId && !parentId) {
       toast.error("Parent tracking ID is required for batch tracked items.");
       return;
     }
@@ -987,28 +992,38 @@ export function IssueMaterialModal({
         ...(jobOperationStepId ? { jobOperationStepId } : {}),
         ...(unitNumber !== undefined ? { unitNumber } : {})
       };
-      const payload = material?.id
+      const payload = batchId
         ? {
-            materialId: material.id,
-            parentTrackedEntityId: parentId,
+            batchId,
+            itemId: material?.itemId ?? selectedItemId,
             children: selectedBatchNumbers.map((bn) => ({
               trackedEntityId: bn.id,
               quantity: bn.quantity
             })),
-            ...contextFields,
             ...overrideFields
           }
-        : {
-            jobOperationId: operationId,
-            itemId: selectedItemId,
-            parentTrackedEntityId: parentId,
-            children: selectedBatchNumbers.map((bn) => ({
-              trackedEntityId: bn.id,
-              quantity: bn.quantity
-            })),
-            ...contextFields,
-            ...overrideFields
-          };
+        : material?.id
+          ? {
+              materialId: material.id,
+              parentTrackedEntityId: parentId,
+              children: selectedBatchNumbers.map((bn) => ({
+                trackedEntityId: bn.id,
+                quantity: bn.quantity
+              })),
+              ...contextFields,
+              ...overrideFields
+            }
+          : {
+              jobOperationId: operationId,
+              itemId: selectedItemId,
+              parentTrackedEntityId: parentId,
+              children: selectedBatchNumbers.map((bn) => ({
+                trackedEntityId: bn.id,
+                quantity: bn.quantity
+              })),
+              ...contextFields,
+              ...overrideFields
+            };
 
       fetcher.submit(JSON.stringify(payload), {
         method: "post",
@@ -1019,8 +1034,10 @@ export function IssueMaterialModal({
   }, [
     selectedBatchNumbers,
     validateBatchNumber,
+    batchId,
     parentId,
     material?.id,
+    material?.itemId,
     operationId,
     selectedItemId,
     fetcher,

@@ -162,6 +162,12 @@ type JobOperationProps = {
   // resolves it and swaps in the batch's events. In batch mode the timers and
   // completion act on the whole batch.
   batch: JobOperationBatch | null;
+  // Batch mode: the combined per-item requirement/issued across every member,
+  // so the materials panel shows the one shared pick (e.g. 6,500 seeds).
+  batchMaterialTotals?: Record<
+    string,
+    { required: number; issued: number }
+  > | null;
   events: ProductionEvent[];
   expiredEntityPolicy?: "Warn" | "Block" | "BlockWithOverride";
   autoSelectMaterialWithoutPickingList?: boolean;
@@ -231,6 +237,7 @@ function PickedBadge({
 
 export const JobOperation = ({
   batch,
+  batchMaterialTotals,
   events,
   expiredEntityPolicy = "Block",
   autoSelectMaterialWithoutPickingList = false,
@@ -1457,6 +1464,20 @@ export const JobOperation = ({
                                               }`
                                             : (material.estimatedQuantity ??
                                               material.quantity)}
+                                          {isBatched &&
+                                            material.itemId &&
+                                            batchMaterialTotals?.[
+                                              material.itemId
+                                            ] && (
+                                              <div className="text-xs text-muted-foreground whitespace-nowrap">
+                                                <Trans>Batch</Trans>:{" "}
+                                                {
+                                                  batchMaterialTotals[
+                                                    material.itemId
+                                                  ].required
+                                                }
+                                              </div>
+                                            )}
                                         </Td>
                                         <Td>
                                           {material.methodType ===
@@ -1479,6 +1500,20 @@ export const JobOperation = ({
                                           ) : (
                                             material.quantityIssued
                                           )}
+                                          {isBatched &&
+                                            material.itemId &&
+                                            batchMaterialTotals?.[
+                                              material.itemId
+                                            ] && (
+                                              <div className="text-xs text-muted-foreground whitespace-nowrap">
+                                                <Trans>Batch</Trans>:{" "}
+                                                {
+                                                  batchMaterialTotals[
+                                                    material.itemId
+                                                  ].issued
+                                                }
+                                              </div>
+                                            )}
                                         </Td>
                                         <Td className="text-right">
                                           {material.methodType !==
@@ -1728,6 +1763,7 @@ export const JobOperation = ({
                               locationId={locationId}
                               workCenterId={operation.workCenterId ?? undefined}
                               material={selectedMaterial ?? undefined}
+                              batchId={batch?.id ?? undefined}
                               parentId={trackedEntityId ?? ""}
                               parentIdIsSerialized={
                                 method?.requiresSerialTracking ?? false

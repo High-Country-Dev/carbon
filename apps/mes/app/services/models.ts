@@ -177,7 +177,11 @@ export const issueTrackedEntityValidator = z.object({
   materialId: z.string().optional(),
   jobOperationId: z.string().optional(),
   itemId: z.string().optional(),
-  parentTrackedEntityId: z.string(),
+  // Batch mode: the pick covers every member of this operation batch — the
+  // edge fn splits it pro-rata and resolves each member's own parent entity,
+  // so parentTrackedEntityId is not sent.
+  batchId: z.string().optional(),
+  parentTrackedEntityId: z.string().optional(),
   children: z.array(
     z.object({
       trackedEntityId: z.string(),

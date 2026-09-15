@@ -674,6 +674,38 @@ export async function getJobMakeMethod(
   return client.from("jobMakeMethod").select("*").eq("id", id).single();
 }
 
+// Batch-wide material requirement per item: summed estimated vs issued across
+// every member operation's BOM lines. Feeds the batch-mode materials panel so
+// the operator sees the combined pick (e.g. 6,500 seeds); recording still
+// happens per member via the issue fn's trackedEntitiesToBatch case.
+export async function getBatchMaterialTotals(
+  client: SupabaseClient<Database>,
+  args: { batchId: string; companyId: string }
+): Promise<Record<string, { required: number; issued: number }>> {
+  const members = await client
+    .from("jobOperation")
+    .select("id")
+    .eq("jobOperationBatchId", args.batchId)
+    .eq("companyId", args.companyId);
+  if (members.error || !members.data?.length) return {};
+  const rows = await client
+    .from("jobMaterial")
+    .select("itemId, estimatedQuantity, quantityIssued")
+    .in(
+      "jobOperationId",
+      members.data.map((m) => m.id)
+    )
+    .eq("companyId", args.companyId);
+  const totals: Record<string, { required: number; issued: number }> = {};
+  for (const r of rows.data ?? []) {
+    if (!r.itemId) continue;
+    const t = (totals[r.itemId] ??= { required: 0, issued: 0 });
+    t.required += Number(r.estimatedQuantity ?? 0);
+    t.issued += Number(r.quantityIssued ?? 0);
+  }
+  return totals;
+}
+
 export async function getJobMaterialsByOperationId(
   client: SupabaseClient<Database>,
   args: {
