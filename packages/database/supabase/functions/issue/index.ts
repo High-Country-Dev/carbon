@@ -3662,6 +3662,16 @@ serve(async (req: Request) => {
             throw new Error("Tracked entities not found");
           }
 
+          // Order by the caller's list, not the DB's row order: the builder
+          // reads the FIRST parent for the merged lot's number, bin, and
+          // attribute base, so an unordered read makes those non-deterministic.
+          const parentById = new Map(parents.map((p) => [p.id, p]));
+          const orderedParents = trackedEntityIds.map((id) => {
+            const row = parentById.get(id);
+            if (!row) throw new Error("Tracked entities not found");
+            return row;
+          });
+
           const parentLedgers = await trx
             .selectFrom("itemLedger")
             .select([
@@ -3685,7 +3695,7 @@ serve(async (req: Request) => {
           const mergeActivityId = nanoid();
 
           const records = buildBatchMergeRecords({
-            parents: parents.map((p) => ({
+            parents: orderedParents.map((p) => ({
               id: p.id,
               readableId: p.readableId,
               quantity: Number(p.quantity),

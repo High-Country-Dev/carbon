@@ -57,8 +57,10 @@ export function buildBatchMergeRecords(input: {
   mergedId: string;
   /** caller-supplied nanoid for the Merge activity */
   mergeActivityId: string;
-  /** the merged lot's batch number — caller-supplied, like every batch-entity creation path */
-  readableId: string | null;
+  /** the merged lot's batch number. Omitted/null inherits the FIRST parent's,
+   *  matching buildBatchSplitRecords (a split child keeps parent.readableId).
+   *  An Available lot with no number is unidentifiable on the floor. */
+  readableId?: string | null;
   activitySourceDocument?: string;
   activitySourceDocumentId?: string;
   companyId: string;
@@ -158,7 +160,7 @@ export function buildBatchMergeRecords(input: {
   return {
     mergedEntityInsert: {
       id: mergedId,
-      readableId,
+      readableId: readableId ?? first.readableId,
       sourceDocument: first.sourceDocument,
       sourceDocumentId: first.sourceDocumentId,
       sourceDocumentReadableId: first.sourceDocumentReadableId,

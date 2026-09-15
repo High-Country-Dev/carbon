@@ -80,6 +80,20 @@ Deno.test("ledger rows are net-zero: −q per parent, +Σq for the merged lot", 
   }
 });
 
+Deno.test("merged lot inherits the first parent's number when none is given", () => {
+  const { readableId, ...rest } = base;
+  const records = buildBatchMergeRecords({
+    ...rest,
+    parents: [
+      parent({ id: "p1", readableId: "LOT-A" }),
+      parent({ id: "p2", readableId: "LOT-B" })
+    ]
+  });
+  // An Available lot with a null number is unidentifiable on the floor; the
+  // split builder's child inherits parent.readableId for the same reason.
+  assertEquals(records.mergedEntityInsert.readableId, "LOT-A");
+});
+
 Deno.test("earliest parent expiry wins", () => {
   const records = buildBatchMergeRecords({
     ...base,
