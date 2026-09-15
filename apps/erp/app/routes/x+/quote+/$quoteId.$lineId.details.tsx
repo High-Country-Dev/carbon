@@ -214,7 +214,17 @@ export async function action({ request, params }: ActionFunctionArgs) {
     });
   }
 
-  if (!existingLine.data || existingLine.data.itemId !== d.itemId) {
+  // The writes below go through Kysely by line id alone, with no RLS behind
+  // them, so this company-scoped read is the only thing tying `lineId` to the
+  // caller's company. No row means no write.
+  if (!existingLine.data) {
+    throw redirect(
+      path.to.quote(quoteId),
+      await flash(request, error(null, "Failed to find quote line"))
+    );
+  }
+
+  if (existingLine.data.itemId !== d.itemId) {
     // Exempt an item this quote already uses — an RFQ-converted quote's
     // placeholder parts are inactive by design until the quote is ordered.
     const alreadyOnQuote = await serviceRole
