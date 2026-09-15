@@ -76,7 +76,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     : await importCsv(serviceRole, {
         table,
         filePath: filePath as string,
-        columnMappings,
+        columnMappings: columnMappings as Record<string, string>,
         // The edge-fn wrapper types enumMappings loosely (Record<string,
         // string[]>); the real payload is field → { value → mapped }.
         enumMappings: parsedEnumMappings as unknown as Record<string, string[]>,
