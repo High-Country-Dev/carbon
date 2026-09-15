@@ -29,6 +29,10 @@ msgstr "{0} fa"
 msgid "{0} jobs"
 msgstr "{0} lavori"
 
+#. placeholder {0}: mergeIds.length
+msgid "{0} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
+msgstr ""
+
 #. placeholder {0}: operation.quantityComplete
 #. placeholder {0}: serialIndex + 1
 #. placeholder {1}: operation.operationQuantity
@@ -169,8 +173,14 @@ msgstr "Disponibile"
 msgid "Batch"
 msgstr "Lotto"
 
+msgid "Batch completed"
+msgstr ""
+
 msgid "Batch is not available"
 msgstr "Lotto non disponibile"
+
+msgid "Batch Number"
+msgstr ""
 
 #. placeholder {0}: index + 1
 msgid "Batch Number {0}"
@@ -655,6 +665,9 @@ msgstr "Ordini di produzione"
 msgid "Keep picking"
 msgstr "Continua il prelievo"
 
+msgid "Keep separate"
+msgstr ""
+
 msgid "Keyboard shortcuts"
 msgstr "Scorciatoie da tastiera"
 
@@ -762,6 +775,9 @@ msgstr "Materiali"
 
 msgid "Maximum number of records reached"
 msgstr "Numero massimo di registrazioni raggiunto"
+
+msgid "Merge into one lot"
+msgstr ""
 
 msgid "Metric"
 msgstr "Metrico"

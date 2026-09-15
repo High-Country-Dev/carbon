@@ -95,14 +95,63 @@ export async function getJobOperationBatch(
   const operations = await client
     .from("jobOperation")
     .select(
-      "id, description, operationQuantity, quantityComplete, setupTime, setupUnit, laborTime, laborUnit, machineTime, machineUnit, job(jobId)"
+      "id, description, operationQuantity, quantityComplete, setupTime, setupUnit, laborTime, laborUnit, machineTime, machineUnit, jobMakeMethodId, jobMakeMethod(requiresBatchTracking), job(jobId)"
     )
     .eq("jobOperationBatchId", batchId)
     .eq("companyId", companyId);
+
+  // Batch-tracked outputs: each member's WIP entity (finalized as the produced
+  // lot at completion) and its current batch number, for the completion form's
+  // per-member batch-number field.
+  const makeMethodIds = [
+    ...new Set(
+      (operations.data ?? [])
+        .map((o) => o.jobMakeMethodId)
+        .filter(Boolean) as string[]
+    )
+  ];
+  const entities = makeMethodIds.length
+    ? await client
+        .from("trackedEntity")
+        .select("id, readableId, attributes, createdAt")
+        .in("attributes->>Job Make Method", makeMethodIds)
+        .eq("companyId", companyId)
+        .order("createdAt", { ascending: true })
+    : { data: [], error: null };
+  const entityByMakeMethod = new Map<
+    string,
+    { id: string; readableId: string | null }
+  >();
+  for (const e of entities.data ?? []) {
+    const makeMethodId =
+      e.attributes !== null &&
+      typeof e.attributes === "object" &&
+      "Job Make Method" in e.attributes
+        ? (e.attributes["Job Make Method"] as string)
+        : null;
+    if (makeMethodId && !entityByMakeMethod.has(makeMethodId)) {
+      entityByMakeMethod.set(makeMethodId, {
+        id: e.id,
+        readableId: e.readableId
+      });
+    }
+  }
+
   return {
     data: {
       ...batch.data,
-      operations: operations.data ?? []
+      operations: (operations.data ?? []).map((o) => {
+        const entity = o.jobMakeMethodId
+          ? entityByMakeMethod.get(o.jobMakeMethodId)
+          : undefined;
+        return {
+          ...o,
+          requiresBatchTracking:
+            o.jobMakeMethod?.requiresBatchTracking ?? false,
+          trackedEntityId: entity?.id ?? null,
+          batchNumber: entity?.readableId ?? null
+        };
+      })
     },
     error: operations.error
   };

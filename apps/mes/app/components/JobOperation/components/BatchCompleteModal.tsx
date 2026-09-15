@@ -1,5 +1,6 @@
 import { Hidden, Submit, ValidatedForm } from "@carbon/form";
 import {
+  Button,
   cn,
   Modal,
   ModalBody,
@@ -11,6 +12,7 @@ import {
 } from "@carbon/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useState } from "react";
+import { useFetcher, useNavigate } from "react-router";
 import type { z } from "zod";
 import { completeJobOperationBatchValidator } from "~/services/models";
 import type { JobOperationBatch } from "~/services/operations.service";
@@ -40,7 +42,12 @@ export function BatchCompleteModal({
   onClose: () => void;
 }) {
   const { t } = useLingui();
+  const navigate = useNavigate();
+  const fetcher = useFetcher<{ merge?: { trackedEntityIds: string[] } }>();
   const members = batch.operations ?? [];
+  // Any member producing a batch-tracked item gets a batch-number column; its
+  // WIP entity is finalized as the produced lot at completion.
+  const anyTracked = members.some((m) => m.requiresBatchTracking);
 
   const initialValues = {
     batchId: batch.id as string,
@@ -54,6 +61,13 @@ export function BatchCompleteModal({
       scrapQuantity: 0
     }))
   } satisfies z.infer<typeof completeJobOperationBatchValidator>;
+
+  // Operator-editable batch numbers, pre-filled from each member's WIP entity.
+  const [batchNumbers, setBatchNumbers] = useState(
+    members.map((m) => m.batchNumber ?? "")
+  );
+
+  const mergeIds = fetcher.data?.merge?.trackedEntityIds ?? [];
 
   // Controlled per-member quantities as strings (empty while typing): react-aria
   // would add stepper chrome, so the grid uses bare inputs and drives them here.
@@ -78,6 +92,56 @@ export function BatchCompleteModal({
     (r) => toNumber(r.quantity) === 0 && toNumber(r.scrapQuantity) === 0
   );
 
+  if (mergeIds.length >= 2) {
+    // The completion landed and every member produced the same item — offer
+    // the one-click merge into a single lot (genealogy keeps every source job).
+    return (
+      <Modal open onOpenChange={() => {}}>
+        <ModalContent size="small" withCloseButton={false}>
+          <ModalHeader>
+            <ModalTitle>
+              <Trans>Batch completed</Trans>
+            </ModalTitle>
+            <ModalDescription>
+              <Trans>
+                {mergeIds.length} lots of the same item were produced. Merge
+                them into one lot? The merged lot traces back to every job.
+              </Trans>
+            </ModalDescription>
+          </ModalHeader>
+          <ModalFooter>
+            <Button
+              variant="secondary"
+              size="lg"
+              onClick={() => navigate(path.to.operations)}
+            >
+              <Trans>Keep separate</Trans>
+            </Button>
+            <Button
+              size="lg"
+              isLoading={fetcher.state !== "idle"}
+              isDisabled={fetcher.state !== "idle"}
+              onClick={() => {
+                fetcher.submit(
+                  {
+                    intent: "merge",
+                    trackedEntityIds: mergeIds.join(",")
+                  },
+                  {
+                    method: "post",
+                    action: path.to.batchComplete(batch.id as string)
+                  }
+                );
+              }}
+            >
+              <Trans>Merge into one lot</Trans>
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    );
+  }
+
   return (
     <Modal
       open
@@ -101,6 +165,7 @@ export function BatchCompleteModal({
           action={path.to.batchComplete(batch.id as string)}
           validator={completeJobOperationBatchValidator}
           defaultValues={initialValues}
+          fetcher={fetcher}
         >
           <ModalBody>
             <Hidden name="batchId" value={batch.id as string} />
@@ -114,9 +179,19 @@ export function BatchCompleteModal({
                     <th className="w-[140px] border-b border-r border-border px-3 py-2 text-right font-medium text-muted-foreground">
                       <Trans>Quantity</Trans>
                     </th>
-                    <th className="w-[140px] border-b border-border px-3 py-2 text-right font-medium text-muted-foreground">
+                    <th
+                      className={cn(
+                        "w-[140px] border-b border-border px-3 py-2 text-right font-medium text-muted-foreground",
+                        anyTracked && "border-r"
+                      )}
+                    >
                       <Trans>Scrap</Trans>
                     </th>
+                    {anyTracked && (
+                      <th className="w-[180px] border-b border-border px-3 py-2 text-left font-medium text-muted-foreground">
+                        <Trans>Batch Number</Trans>
+                      </th>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
@@ -140,6 +215,12 @@ export function BatchCompleteModal({
                             name={`members[${i}].excluded`}
                             value={isExcluded ? "true" : ""}
                           />
+                          {m.requiresBatchTracking && m.trackedEntityId && (
+                            <Hidden
+                              name={`members[${i}].trackedEntityId`}
+                              value={m.trackedEntityId}
+                            />
+                          )}
                         </td>
                         <td
                           className={cn(
@@ -163,6 +244,7 @@ export function BatchCompleteModal({
                         <td
                           className={cn(
                             "border-border p-0 align-middle",
+                            anyTracked && "border-r",
                             !isLast && "border-b"
                           )}
                         >
@@ -179,6 +261,35 @@ export function BatchCompleteModal({
                             className={cellInputClass}
                           />
                         </td>
+                        {anyTracked && (
+                          <td
+                            className={cn(
+                              "border-border p-0 align-middle",
+                              !isLast && "border-b"
+                            )}
+                          >
+                            {m.requiresBatchTracking && m.trackedEntityId ? (
+                              <input
+                                type="text"
+                                name={`members[${i}].batchNumber`}
+                                aria-label={t`Batch Number`}
+                                value={batchNumbers[i] ?? ""}
+                                onFocus={(e) => e.currentTarget.select()}
+                                onChange={(e) =>
+                                  setBatchNumbers((prev) =>
+                                    prev.map((v, idx) =>
+                                      idx === i ? e.target.value : v
+                                    )
+                                  )
+                                }
+                                className={cn(
+                                  cellInputClass,
+                                  "text-left font-mono"
+                                )}
+                              />
+                            ) : null}
+                          </td>
+                        )}
                       </tr>
                     );
                   })}
