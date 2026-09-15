@@ -1,0 +1,93 @@
+# Batch Materials & Output Lots
+
+Last tested: 2026-09-16 (feat/batch-materials-and-output-lots)
+Routes: ERP `/x/resources/processes/$processId` (Produced item rule), `/x/production/batches/$batchId` (Merge output lots); MES `/x/operation/$operationId` (batch materials annotation + Batch Number column)
+Edge fns: `issue` (`trackedEntitiesToBatch`, `jobOperationBatchOutput`, `mergeTrackedEntities`), `batch-operations` (`complete` with `trackedEntityId`/`batchNumber` member fields)
+
+## Strategy
+
+Same split as `job-operation-batching.md`: UI (agent-browser) for the process
+rule row, the MES annotation, and the completion modal; edge fn `curl` +
+SQL for every mutation proof. All logic proofs are DB-level.
+
+## Prerequisites / seeding
+
+On top of the batching playbook's seeding gotchas:
+- Produced items and the input item need `itemTrackingType='Batch'`;
+  `jobMakeMethod.requiresBatchTracking=true` per member.
+- Each member needs a WIP `trackedEntity` (`status='Reserved'`, quantity 0,
+  `attributes: {"Job Make Method": <jmmId>, "Job": <jobId>}`) — outputs finalize
+  into it, and the shared pick books consumption against it.
+- The input lot needs an `itemLedger` `Positive Adjmt.` row (bin resolution).
+- **`itemCost` rows are mandatory** for every seeded item when
+  `companySettings.accountingEnabled` — `calculateCOGS` throws "no result"
+  without them (first observed failure mode).
+- enum values: `methodType='Pull from Inventory'`, `operationType='Process'`,
+  `processType='Process'`.
+
+## Steps
+
+### 1. producedItem compatibility rule
+- SQL: `update process set "batchRules"='{"producedItem":"must"}'`.
+- Edge fn `batch-operations` `create` with ops producing DIFFERENT items →
+  `These operations can't share a batch — the producedItem must match…`.
+- Same produced item → `{success, readableId: BAT…}`.
+- UI: `/x/resources/processes/$id` → Compatibility rules card shows a
+  "Produced item" row; a stored `must` renders as "Require Match".
+
+### 2. Shared pick (trackedEntitiesToBatch)
+- `POST /functions/v1/issue` `{type:"trackedEntitiesToBatch", batchId, itemId,
+  children:[{trackedEntityId: <lot>, quantity: <sum>}]}`.
+- Verify: `jobMaterial.quantityIssued` per member = its OWN estimated quantity
+  (4000/2500 from a 6500 pick); a partial draw creates a split child
+  (`Split` activity) consumed by member 1, the remainder consumed whole by
+  member 2; each `Consume` activity outputs that member's WIP entity;
+  `itemLedger` nets to zero for the lot moves + per-member `Job Consumption`.
+- Over-pick → `Pick of N exceeds the batch's remaining requirement of M`.
+
+### 3. Completion with output lots
+- Seed a batch-tagged `productionEvent`, then `batch-operations` `complete`
+  with member rows carrying `trackedEntityId` (the WIP entity) + `batchNumber`.
+- Verify: WIP entities → `Available` with the entered readableId + produced
+  quantity; sliced events ∝ operationQuantity; ops Done; batch Completed;
+  response carries `outputTrackedEntityIds`.
+
+### 4. Output idempotency
+- Re-invoke `issue` `jobOperationBatchOutput` on an Available entity →
+  `{success:true, created:false}`, still exactly ONE `Produce` activity.
+
+### 5. Lot merge
+- `issue` `{type:"mergeTrackedEntities", trackedEntityIds:[A,B], readableId}` →
+  ONE new entity (Σ quantity, given batch number, earliest parent expiry),
+  `Merge` activity (inputs = parents at their quantities, output = merged),
+  net-zero `Batch Merge` ledger rows, parents `Consumed`.
+- MES prompt: completing via `/x/batch/$batchId/complete` with ≥2 same-item
+  outputs returns `{merge:{trackedEntityIds}}` instead of redirecting; the
+  modal swaps to "Merge into one lot" / "Keep separate".
+- ERP drawer shows "Merge output lots" only for a Completed batch with ≥2
+  Available same-item outputs (absent once merged).
+
+### 6. MES batch materials UI
+- `/x/operation/$memberOpId` in batch mode: the materials row shows
+  `Batch: <summed required>` under required and `Batch: <summed issued>` under
+  issued (from `getBatchMaterialTotals`).
+- Complete modal (icon button with the package-check icon in Controls — click
+  via `document.querySelectorAll('button')` index hunting, aria-labels are
+  empty on the icon buttons): table columns Job / Quantity / Scrap /
+  **Batch Number** (batch-number inputs pre-filled from each member's WIP
+  entity readableId).
+
+## Selector Notes
+- MES Controls icon buttons have NO aria-labels; the big start/stop is the
+  `size-24` button, the complete/ellipsis buttons flank it. Click by index via
+  eval, never by ref.
+- Login `Continue` is overlay-blocked for `agent-browser click` — use
+  `form.requestSubmit(button)` via eval.
+
+## Common Failures
+- `{"message":"no result"}` on the pick → missing `itemCost` row (accounting on).
+- `duplicate key … accountingPeriod` on the FIRST pick of a month →
+  fixed in code (period pre-resolved before the batch transaction); if seen,
+  the edge isolate is stale — re-hit once after saving the file.
+- `{}` empty response with 200 → look at
+  `docker logs carbon-carbon-edge-runtime-1` — the error is server-side.

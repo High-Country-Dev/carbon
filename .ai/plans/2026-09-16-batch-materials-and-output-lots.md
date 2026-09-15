@@ -5,18 +5,18 @@
 **Branch:** feat/batch-materials-and-output-lots (cut from `main`)
 
 ## Progress
-- [ ] Task 1: Migration — `Batch Merge` ledger enum values + generate types
-- [ ] Task 2: `producedItem` compatibility dimension
-- [ ] Task 3: Pro-rata pick splitter (shared pure util + test)
-- [ ] Task 4: `issue` case `trackedEntitiesToBatch`
-- [ ] Task 5: `issue` case `mergeTrackedEntities` (+ shared/batch-merge.ts)
-- [ ] Task 6: `issue` case `jobOperationBatchOutput` (extraction)
-- [ ] Task 7: `batch-operations` complete — batch numbers in, output step, entity ids out
-- [ ] Task 8: MES batch materials panel + shared pick
-- [ ] Task 9: BatchCompleteModal — batch-number fields + merge prompt
-- [ ] Task 10: ERP batch detail drawer merge action + service wrappers
-- [ ] Task 11: i18n + full scoped validation
-- [ ] Task 12: Browser verification (/test)
+- [x] Task 1: Migration — `Batch Merge` ledger enum values + generate types
+- [x] Task 2: `producedItem` compatibility dimension
+- [x] Task 3: Pro-rata pick splitter (shared pure util + test)
+- [x] Task 4: `issue` case `trackedEntitiesToBatch`
+- [x] Task 5: `issue` case `mergeTrackedEntities` (+ shared/batch-merge.ts)
+- [x] Task 6: `issue` case `jobOperationBatchOutput` (extraction)
+- [x] Task 7: `batch-operations` complete — batch numbers in, output step, entity ids out
+- [x] Task 8: MES batch materials panel + shared pick
+- [x] Task 9: BatchCompleteModal — batch-number fields + merge prompt
+- [x] Task 10: ERP batch detail drawer merge action + service wrappers
+- [x] Task 11: i18n + full scoped validation
+- [x] Task 12: Browser verification (/test)
 
 ## Dependencies
 - Task 1 first (enum + types) — Tasks 5/10 reference `Batch Merge`.
