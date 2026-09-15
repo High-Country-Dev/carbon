@@ -12791,6 +12791,12 @@ msgstr "공정"
 msgid "Procurement status — needs ordering, planned, on order, or received. The same indicator shown in the BoM tree."
 msgstr "조달 상태 — 주문 필요, 계획됨, 주문됨, 입고됨 중 하나입니다. BOM 트리에 표시되는 것과 동일한 지표입니다."
 
+msgid "produced item"
+msgstr ""
+
+msgid "Produced item"
+msgstr ""
+
 msgid "Product issues during hypercare"
 msgstr "하이퍼케어 기간 중 발생한 제품 이슈"
 
@@ -16948,6 +16954,9 @@ msgstr "출하가 전기될 때 인식되는 재고 원가로, 품목의 원가 
 
 msgid "The IRS recovery-period class for this asset under MACRS (3, 5, 7, 10, 15, 20, 27.5, 39-year)."
 msgstr "MACRS(수정가속상각법)에 따른 이 자산의 IRS 내용연수 등급(3, 5, 7, 10, 15, 20, 27.5, 39년)입니다."
+
+msgid "The item each job produces — require it to match to merge output lots"
+msgstr ""
 
 msgid "the job hours due that day (a due-date basis, not the day the work runs), with overdue work in Past due."
 msgstr "해당 날짜에 기한이 있는 작업 시간(작업이 실행되는 날이 아닌 기한일 기준), 연체 작업은 \"기한 경과\"에 표시됨."

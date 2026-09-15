@@ -195,13 +195,33 @@ async function assertMaterialCompatible(
   // (jobOperationId IS NULL). The gate must judge the same materials the
   // builder shows, or a visible "must" match could still be refused (and vice
   // versa).
+  // Produced item mirrors the builder's candidate `itemReadableId` (the JOB's
+  // item — get_batchable_operations joins item on job.itemId), so the gate and
+  // the builder judge the producedItem dimension by the same value.
   const memberOps = await trx
     .selectFrom("jobOperation")
-    .select(["id", "jobId"])
-    .where("id", "in", jobOperationIds)
-    .where("companyId", "=", companyId)
+    .innerJoin("job", (join: any) =>
+      join
+        .onRef("job.id", "=", "jobOperation.jobId")
+        .onRef("job.companyId", "=", "jobOperation.companyId")
+    )
+    .leftJoin("item as pi", (join: any) =>
+      join
+        .onRef("pi.id", "=", "job.itemId")
+        .onRef("pi.companyId", "=", "job.companyId")
+    )
+    .select([
+      "jobOperation.id as id",
+      "jobOperation.jobId as jobId",
+      "pi.readableId as producedItemReadableId"
+    ])
+    .where("jobOperation.id", "in", jobOperationIds)
+    .where("jobOperation.companyId", "=", companyId)
     .execute();
   const jobIdByOp = new Map(memberOps.map((o) => [o.id, o.jobId]));
+  const producedByOp = new Map(
+    memberOps.map((o) => [o.id, o.producedItemReadableId])
+  );
   const memberJobIds = [...new Set(memberOps.map((o) => o.jobId))];
 
   const rows = await trx
@@ -250,13 +270,15 @@ async function assertMaterialCompatible(
 
   const byOp = new Map<string, MemberValueSets>();
   for (const id of jobOperationIds) {
+    const produced = producedByOp.get(id);
     byOp.set(id, {
       item: [],
       substance: [],
       grade: [],
       dimension: [],
       form: [],
-      finish: []
+      finish: [],
+      producedItem: produced ? [produced] : []
     });
   }
   const opsWithLinkedRows = new Set(

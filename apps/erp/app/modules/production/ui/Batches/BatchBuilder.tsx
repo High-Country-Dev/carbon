@@ -479,7 +479,8 @@ export function BatchBuilder({
       grade: t`grade`,
       dimension: t`dimension`,
       form: t`form`,
-      finish: t`finish`
+      finish: t`finish`,
+      producedItem: t`produced item`
     }),
     [t]
   );

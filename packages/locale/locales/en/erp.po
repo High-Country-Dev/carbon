@@ -12791,6 +12791,12 @@ msgstr "Processes"
 msgid "Procurement status — needs ordering, planned, on order, or received. The same indicator shown in the BoM tree."
 msgstr "Procurement status — needs ordering, planned, on order, or received. The same indicator shown in the BoM tree."
 
+msgid "produced item"
+msgstr "produced item"
+
+msgid "Produced item"
+msgstr "Produced item"
+
 msgid "Product issues during hypercare"
 msgstr "Product issues during hypercare"
 
@@ -16948,6 +16954,9 @@ msgstr "The inventory cost recognized when a shipment posts, valued by the item'
 
 msgid "The IRS recovery-period class for this asset under MACRS (3, 5, 7, 10, 15, 20, 27.5, 39-year)."
 msgstr "The IRS recovery-period class for this asset under MACRS (3, 5, 7, 10, 15, 20, 27.5, 39-year)."
+
+msgid "The item each job produces — require it to match to merge output lots"
+msgstr "The item each job produces — require it to match to merge output lots"
 
 msgid "the job hours due that day (a due-date basis, not the day the work runs), with overdue work in Past due."
 msgstr "the job hours due that day (a due-date basis, not the day the work runs), with overdue work in Past due."

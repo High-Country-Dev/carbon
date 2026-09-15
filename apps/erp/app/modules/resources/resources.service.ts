@@ -1773,6 +1773,7 @@ function extractBatchRules<
     batchRuleDimension?: BatchRules["dimension"];
     batchRuleForm?: BatchRules["form"];
     batchRuleFinish?: BatchRules["finish"];
+    batchRuleProducedItem?: BatchRules["producedItem"];
   }
 >(source: T) {
   const {
@@ -1782,6 +1783,7 @@ function extractBatchRules<
     batchRuleDimension,
     batchRuleForm,
     batchRuleFinish,
+    batchRuleProducedItem,
     ...rest
   } = source;
   const batchRules = compactBatchRules(
@@ -1791,7 +1793,8 @@ function extractBatchRules<
       grade: batchRuleGrade,
       dimension: batchRuleDimension,
       form: batchRuleForm,
-      finish: batchRuleFinish
+      finish: batchRuleFinish,
+      producedItem: batchRuleProducedItem
     })
   ) as Json;
   return { batchRules, rest };

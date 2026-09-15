@@ -12791,6 +12791,12 @@ msgstr "Procesos"
 msgid "Procurement status — needs ordering, planned, on order, or received. The same indicator shown in the BoM tree."
 msgstr "Estado de aprovisionamiento: requiere pedido, planificado, en pedido o recibido. El mismo indicador que se muestra en el árbol de la BoM."
 
+msgid "produced item"
+msgstr ""
+
+msgid "Produced item"
+msgstr ""
+
 msgid "Product issues during hypercare"
 msgstr "Problemas de producto durante hipercare"
 
@@ -16948,6 +16954,9 @@ msgstr "El costo de inventario reconocido cuando se registra un envío, valorado
 
 msgid "The IRS recovery-period class for this asset under MACRS (3, 5, 7, 10, 15, 20, 27.5, 39-year)."
 msgstr "La clase de período de recuperación del IRS para este activo bajo MACRS (3, 5, 7, 10, 15, 20, 27.5, 39 años)."
+
+msgid "The item each job produces — require it to match to merge output lots"
+msgstr ""
 
 msgid "the job hours due that day (a due-date basis, not the day the work runs), with overdue work in Past due."
 msgstr "las horas de trabajo vencidas ese día (en base a la fecha de vencimiento, no el día que se ejecuta el trabajo), con trabajo vencido en Vencido."
