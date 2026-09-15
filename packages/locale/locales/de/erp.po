@@ -336,7 +336,7 @@ msgid "{scopeCount} permissions"
 msgstr "{scopeCount} Berechtigungen"
 
 msgid "{selectedCount} selected"
-msgstr ""
+msgstr "{selectedCount} ausgewählt"
 
 msgid "{total} phases to get your company live on Carbon. Each one ends at a checkpoint."
 msgstr "{total} Phasen, um Ihr Unternehmen auf Carbon live zu schalten. Jede endet an einem Checkpoint."
@@ -345,7 +345,7 @@ msgid "{total} phases to go live"
 msgstr "{total} Phasen bis zur Live-Schaltung"
 
 msgid "{totalCount} results"
-msgstr ""
+msgstr "{totalCount} Ergebnisse"
 
 msgid "{totalQuantity, plural, one {# unit} other {# units}}"
 msgstr "{totalQuantity, plural, one {# Einheit} other {# Einheiten}}"
@@ -1340,10 +1340,10 @@ msgid "Add from library…"
 msgstr "Aus Bibliothek hinzufügen…"
 
 msgid "Add from receipt"
-msgstr ""
+msgstr "Aus Wareneingang hinzufügen"
 
 msgid "Add from shipment"
-msgstr ""
+msgstr "Aus Lieferung hinzufügen"
 
 msgid "Add Group"
 msgstr "Gruppe hinzufügen"
@@ -1367,7 +1367,7 @@ msgid "Add lines from document"
 msgstr "Linien aus Dokument hinzufügen"
 
 msgid "Add manually"
-msgstr ""
+msgstr "Manuell hinzufügen"
 
 msgid "Add match"
 msgstr "Übereinstimmung hinzufügen"
@@ -1620,7 +1620,7 @@ msgid "All members of selected groups and selected individuals will be able to a
 msgstr "Alle Mitglieder der ausgewählten Gruppen und ausgewählten Personen können Anfragen genehmigen"
 
 msgid "All returnable lines"
-msgstr ""
+msgstr "Alle rückgabefähigen Positionen"
 
 msgid "All rows imported — {inserted} inserted, {updated} updated."
 msgstr "Alle Zeilen importiert — {inserted} eingefügt, {updated} aktualisiert."
@@ -2875,7 +2875,7 @@ msgid "Batches"
 msgstr "Batches"
 
 msgid "Batches to return"
-msgstr ""
+msgstr "Rückgabefähige Lose"
 
 msgid "Batching"
 msgstr "Losbildung"
@@ -3495,7 +3495,7 @@ msgid "Choose another file"
 msgstr "Wählen Sie eine andere Datei"
 
 msgid "Choose how to add lines to this return."
-msgstr ""
+msgstr "Wählen Sie, wie Sie Positionen zu dieser Rückgabe hinzufügen möchten."
 
 msgid "Choose what appears on the printed job traveler."
 msgstr "Wählen Sie, was auf der gedruckten Laufkarte erscheint."
@@ -6690,7 +6690,7 @@ msgid "Enter a quantity between 1 and {0}."
 msgstr "Geben Sie eine Menge zwischen 1 und {0} ein."
 
 msgid "Enter an item and quantity yourself."
-msgstr ""
+msgstr "Geben Sie einen Artikel und eine Menge selbst ein."
 
 msgid "Enter and approve vendor bills against a PO (three-way match)"
 msgstr "Erfassen und genehmigen Sie Lieferantenrechnungen gegen eine Bestellung (Dreiwege-Abgleich)"
@@ -9442,10 +9442,10 @@ msgid "Lines"
 msgstr "Zeilen"
 
 msgid "Lines appear here once a purchase order receipt has been posted, and only for quantities not already authorized on another supplier return. Use Add Line Item for a blind return."
-msgstr ""
+msgstr "Positionen erscheinen hier, nachdem ein Wareneingang aus einer Bestellung gebucht wurde, und nur für Mengen, die nicht bereits für eine andere Lieferantenrückgabe genehmigt wurden. Verwenden Sie Hinzufügen für eine blinde Rückgabe."
 
 msgid "Lines appear here once a sales order shipment has been posted, and only for quantities not already authorized on another RMA. Use Add Line Item for a blind return."
-msgstr ""
+msgstr "Positionen erscheinen hier, nachdem eine Lieferung aus einem Kundenauftrag gebucht wurde, und nur für Mengen, die nicht bereits für eine andere RMA genehmigt wurden. Verwenden Sie Hinzufügen für eine blinde Rückgabe."
 
 msgid "Lines need internal part numbers"
 msgstr "Zeilen benötigen interne Teilenummern"
@@ -10105,7 +10105,7 @@ msgid "Memo ID"
 msgstr "Memo-ID"
 
 msgid "Merge output lots"
-msgstr ""
+msgstr "Ausgangschargen zusammenführen"
 
 msgid "MES"
 msgstr "MES"
@@ -10302,7 +10302,7 @@ msgid "Morning, {name}."
 msgstr "Morgen, {name}."
 
 msgid "Most recent — search to find more"
-msgstr ""
+msgstr "Zuletzt verwendet – Suchen, um weitere zu finden"
 
 msgid "Most things get caught and resolved here. Name it plainly."
 msgstr "Die meisten Dinge werden hier erkannt und gelöst. Benennen Sie es deutlich."
@@ -10872,7 +10872,7 @@ msgid "No batches"
 msgstr "Keine Lose"
 
 msgid "No batches selected yet."
-msgstr ""
+msgstr "Noch keine Lose ausgewählt."
 
 msgid "No BOM input has a shelf-life policy"
 msgstr "Keine BOM-Eingabe hat eine Shelf-Life-Richtlinie"
@@ -11205,13 +11205,13 @@ msgid "No results found"
 msgstr "Keine Ergebnisse gefunden"
 
 msgid "No returnable lines for this customer"
-msgstr ""
+msgstr "Keine rückgabefähigen Positionen für diesen Kunden"
 
 msgid "No returnable lines for this supplier"
-msgstr ""
+msgstr "Keine rückgabefähigen Positionen für diesen Lieferant"
 
 msgid "No returnable lines match your search"
-msgstr ""
+msgstr "Keine rückgabefähigen Positionen entsprechen Ihrer Suche"
 
 msgid "No rows here."
 msgstr "Hier sind keine Zeilen."
@@ -11223,7 +11223,7 @@ msgid "No scheduled work in this window"
 msgstr "Keine eingeplante Arbeit in diesem Zeitfenster"
 
 msgid "No serial numbers selected yet."
-msgstr ""
+msgstr "Noch keine Seriennummern ausgewählt."
 
 msgid "No shifts configured — assuming Mon–Fri, 8h days"
 msgstr "Keine Schichten konfiguriert — angenommen Mo–Fr, 8h Tage"
@@ -12379,13 +12379,13 @@ msgid "Pick serials/batches to return"
 msgstr "Seriennummern/Chargen zur Rückgabe auswählen"
 
 msgid "Pick the batches on hand that were received from this supplier."
-msgstr ""
+msgstr "Wählen Sie die verfügbaren Lose aus, die von diesem Lieferant erhalten wurden."
 
 msgid "Pick the bin that needs stock, then pick the bins to pull it from."
 msgstr "Wählen Sie den Lagerplatz mit Bestandsbedarf aus, dann die Lagerplätze, von denen Sie ihn entnehmen möchten."
 
 msgid "Pick the serial numbers on hand that were received from this supplier."
-msgstr ""
+msgstr "Wählen Sie die verfügbaren Seriennummern aus, die von diesem Lieferant erhalten wurden."
 
 msgid "Pick tracked item"
 msgstr "Verfolgtes Element auswählen"
@@ -12795,10 +12795,10 @@ msgid "Procurement status — needs ordering, planned, on order, or received. Th
 msgstr "Beschaffungsstatus – Bestellung erforderlich, geplant, bestellt oder erhalten. Derselbe Indikator, der im BoM-Baum angezeigt wird."
 
 msgid "produced item"
-msgstr ""
+msgstr "erzeugter Artikel"
 
 msgid "Produced item"
-msgstr ""
+msgstr "Erzeugter Artikel"
 
 msgid "Product issues during hypercare"
 msgstr "Produktprobleme während der Hypercare"
@@ -13070,7 +13070,7 @@ msgid "Purchase Qty"
 msgstr "Kaufmenge"
 
 msgid "Purchase Return"
-msgstr ""
+msgstr "Lieferantenrückgabe"
 
 msgid "Purchase Tax Payable"
 msgstr "Umsatzsteuer Verbindlichkeiten (Standard)"
@@ -14562,7 +14562,7 @@ msgid "Sales Person"
 msgstr "Verkäufer"
 
 msgid "Sales Return"
-msgstr ""
+msgstr "Kundenrückgabe"
 
 msgid "Sales Revenue"
 msgstr "Umsatzerlöse"
@@ -14809,10 +14809,10 @@ msgid "Search by linear issue title..."
 msgstr "Nach Linear-Issue-Titel suchen..."
 
 msgid "Search by receipt, PO, or item"
-msgstr ""
+msgstr "Suchen nach Wareneingang, Bestellung oder Artikel"
 
 msgid "Search by shipment, sales order, or item"
-msgstr ""
+msgstr "Suchen nach Lieferung, Kundenauftrag oder Artikel"
 
 msgid "Search customers and types..."
 msgstr "Kunden und Typen durchsuchen..."
@@ -15059,10 +15059,10 @@ msgid "Select operations"
 msgstr "Operationen auswählen"
 
 msgid "Select posted receipt lines from this supplier to return."
-msgstr ""
+msgstr "Wählen Sie gebuchte Wareneingangspositionen von diesem Lieferant aus, um sie zurückzusenden."
 
 msgid "Select posted shipment lines to this customer to return."
-msgstr ""
+msgstr "Wählen Sie gebuchte Lieferpositionen für diesen Kunden aus, um sie zurückzusenden."
 
 msgid "Select Printer"
 msgstr "Drucker auswählen"
@@ -15198,7 +15198,7 @@ msgid "Serial numbers are only generated for serial- or batch-tracked items."
 msgstr "Seriennummern werden nur für Artikel mit Serien- oder Chargenverfolgung generiert."
 
 msgid "Serial numbers to return"
-msgstr ""
+msgstr "Zurückzugebende Seriennummern"
 
 msgid "Serial or Batch Tracking Required"
 msgstr "Serien- oder Chargenverfolgung erforderlich"
@@ -15252,10 +15252,10 @@ msgid "Session locked"
 msgstr "Sitzung gesperrt"
 
 msgid "Set a customer on this return to add from a shipment."
-msgstr ""
+msgstr "Legen Sie einen Kunden für diese Rückgabe fest, um aus einer Lieferung hinzuzufügen."
 
 msgid "Set a supplier on this return to add from a receipt."
-msgstr ""
+msgstr "Legen Sie einen Lieferant für diese Rückgabe fest, um aus einem Wareneingang hinzuzufügen."
 
 msgid "Set a target"
 msgstr "Ziel festlegen"
@@ -15546,10 +15546,10 @@ msgid "Show a readable Supplier ID column on the supplier list, supplier forms, 
 msgstr "Zeigen Sie eine lesbare Lieferanten-ID-Spalte in der Lieferantenliste, Lieferantenformularen und Dropdowns an. Lieferanten werden intern in jedem Fall identifiziert."
 
 msgid "Show available batch numbers"
-msgstr ""
+msgstr "Verfügbare Losnummern anzeigen"
 
 msgid "Show available tracking numbers"
-msgstr ""
+msgstr "Verfügbare Verfolgungsnummern anzeigen"
 
 msgid "Show Customer IDs"
 msgstr "Kundenkennung anzeigen"
@@ -15558,7 +15558,7 @@ msgid "Show Durations"
 msgstr "Dauern anzeigen"
 
 msgid "Show more"
-msgstr ""
+msgstr "Mehr anzeigen"
 
 msgid "Show one inventory number the floor and office both trust"
 msgstr "Zeige eine Bestandsnummer an, der Werkstatt und Büro beide vertrauen"
@@ -16959,7 +16959,7 @@ msgid "The IRS recovery-period class for this asset under MACRS (3, 5, 7, 10, 15
 msgstr "Die IRS-Wiederherstellungsperiode-Klasse für diesen Gegenstand nach MACRS (3, 5, 7, 10, 15, 20, 27,5, 39 Jahre)."
 
 msgid "The item each job produces — require it to match to merge output lots"
-msgstr ""
+msgstr "Der Artikel, den jeder Fertigungsauftrag produziert – erforderlich, um Ausgangschargen zusammenzuführen"
 
 msgid "the job hours due that day (a due-date basis, not the day the work runs), with overdue work in Past due."
 msgstr "die Arbeitsstunden fällig an diesem Tag (basierend auf dem Fälligkeitsdatum, nicht dem Tag der Ausführung), mit überfälligen Arbeiten unter Überfällig."

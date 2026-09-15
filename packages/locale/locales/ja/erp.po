@@ -336,7 +336,7 @@ msgid "{scopeCount} permissions"
 msgstr "{scopeCount} 個の権限"
 
 msgid "{selectedCount} selected"
-msgstr ""
+msgstr "{selectedCount} 件選択済み"
 
 msgid "{total} phases to get your company live on Carbon. Each one ends at a checkpoint."
 msgstr "{total}つのフェーズでご利用開始までご案内します。各フェーズはチェックポイントで終了します。"
@@ -345,7 +345,7 @@ msgid "{total} phases to go live"
 msgstr "{total}個のフェーズをライブにする"
 
 msgid "{totalCount} results"
-msgstr ""
+msgstr "{totalCount} 件"
 
 msgid "{totalQuantity, plural, one {# unit} other {# units}}"
 msgstr "{totalQuantity, plural, one {# 個} other {# 個}}"
@@ -1340,10 +1340,10 @@ msgid "Add from library…"
 msgstr "ライブラリから追加…"
 
 msgid "Add from receipt"
-msgstr ""
+msgstr "入荷から追加"
 
 msgid "Add from shipment"
-msgstr ""
+msgstr "出荷から追加"
 
 msgid "Add Group"
 msgstr "グループを追加"
@@ -1367,7 +1367,7 @@ msgid "Add lines from document"
 msgstr "ドキュメントから行を追加"
 
 msgid "Add manually"
-msgstr ""
+msgstr "手動で追加"
 
 msgid "Add match"
 msgstr "マッチを追加"
@@ -1620,7 +1620,7 @@ msgid "All members of selected groups and selected individuals will be able to a
 msgstr "選択されたグループのすべてのメンバーと選択された個人が承認リクエストを承認できます"
 
 msgid "All returnable lines"
-msgstr ""
+msgstr "すべての返品対象明細"
 
 msgid "All rows imported — {inserted} inserted, {updated} updated."
 msgstr "すべての行をインポート—{inserted}行挿入、{updated}行更新。"
@@ -2875,7 +2875,7 @@ msgid "Batches"
 msgstr "バッチ"
 
 msgid "Batches to return"
-msgstr ""
+msgstr "返品対象バッチ"
 
 msgid "Batching"
 msgstr "バッチ処理"
@@ -3495,7 +3495,7 @@ msgid "Choose another file"
 msgstr "別のファイルを選択"
 
 msgid "Choose how to add lines to this return."
-msgstr ""
+msgstr "この返品に明細を追加する方法を選択してください。"
 
 msgid "Choose what appears on the printed job traveler."
 msgstr "印刷された製造指図現品票に表示される内容を選択します。"
@@ -6690,7 +6690,7 @@ msgid "Enter a quantity between 1 and {0}."
 msgstr "1～{0}の数量を入力してください。"
 
 msgid "Enter an item and quantity yourself."
-msgstr ""
+msgstr "品目と数量を手動で入力してください。"
 
 msgid "Enter and approve vendor bills against a PO (three-way match)"
 msgstr "発注書に対する仕入先請求書を入力して承認します（三点照合）"
@@ -9442,10 +9442,10 @@ msgid "Lines"
 msgstr "行"
 
 msgid "Lines appear here once a purchase order receipt has been posted, and only for quantities not already authorized on another supplier return. Use Add Line Item for a blind return."
-msgstr ""
+msgstr "発注書の入荷が転記済になると、ここに明細が表示されます。ただし、他の仕入先返品で既に承認されていない数量のみです。その他の返品の場合は「明細を追加」を使用してください。"
 
 msgid "Lines appear here once a sales order shipment has been posted, and only for quantities not already authorized on another RMA. Use Add Line Item for a blind return."
-msgstr ""
+msgstr "受注の出荷が転記済になると、ここに明細が表示されます。ただし、他のRMAで既に承認されていない数量のみです。その他の返品の場合は「明細を追加」を使用してください。"
 
 msgid "Lines need internal part numbers"
 msgstr "明細には社内部品番号が必要です"
@@ -10105,7 +10105,7 @@ msgid "Memo ID"
 msgstr "メモID"
 
 msgid "Merge output lots"
-msgstr ""
+msgstr "出力ロットをマージ"
 
 msgid "MES"
 msgstr "MES"
@@ -10302,7 +10302,7 @@ msgid "Morning, {name}."
 msgstr "朝、{name}さん。"
 
 msgid "Most recent — search to find more"
-msgstr ""
+msgstr "最新 — 検索してその他を見つける"
 
 msgid "Most things get caught and resolved here. Name it plainly."
 msgstr "ほとんどのことはここで発見され、解決されます。明確に名前を付けてください。"
@@ -10872,7 +10872,7 @@ msgid "No batches"
 msgstr "バッチなし"
 
 msgid "No batches selected yet."
-msgstr ""
+msgstr "バッチが未選択です。"
 
 msgid "No BOM input has a shelf-life policy"
 msgstr "BOMインプットに棚卸資産有効期限ポリシーがありません"
@@ -11205,13 +11205,13 @@ msgid "No results found"
 msgstr "検索結果が見つかりません"
 
 msgid "No returnable lines for this customer"
-msgstr ""
+msgstr "この得意先の返品対象明細がありません"
 
 msgid "No returnable lines for this supplier"
-msgstr ""
+msgstr "この仕入先の返品対象明細がありません"
 
 msgid "No returnable lines match your search"
-msgstr ""
+msgstr "検索条件に一致する返品対象明細がありません"
 
 msgid "No rows here."
 msgstr "ここに行はありません。"
@@ -11223,7 +11223,7 @@ msgid "No scheduled work in this window"
 msgstr "このウィンドウにはスケジュール済みの作業がありません"
 
 msgid "No serial numbers selected yet."
-msgstr ""
+msgstr "シリアル番号が未選択です。"
 
 msgid "No shifts configured — assuming Mon–Fri, 8h days"
 msgstr "シフトが構成されていません — 月～金、8時間営業を想定"
@@ -12379,13 +12379,13 @@ msgid "Pick serials/batches to return"
 msgstr "返品するシリアル/バッチを選択"
 
 msgid "Pick the batches on hand that were received from this supplier."
-msgstr ""
+msgstr "この仕入先から入荷したバッチを選択してください。"
 
 msgid "Pick the bin that needs stock, then pick the bins to pull it from."
 msgstr "在庫が必要なビンを選択してから、引き出すビンを選択します。"
 
 msgid "Pick the serial numbers on hand that were received from this supplier."
-msgstr ""
+msgstr "この仕入先から入荷したシリアル番号を選択してください。"
 
 msgid "Pick tracked item"
 msgstr "追跡品目をピック"
@@ -12795,10 +12795,10 @@ msgid "Procurement status — needs ordering, planned, on order, or received. Th
 msgstr "調達ステータス — 発注が必要、計画済み、発注済み、または入荷済み。BoM ツリーに表示されるものと同じインジケーター。"
 
 msgid "produced item"
-msgstr ""
+msgstr "製造品目"
 
 msgid "Produced item"
-msgstr ""
+msgstr "製造品目"
 
 msgid "Product issues during hypercare"
 msgstr "ハイパーケア中の製品の問題"
@@ -13070,7 +13070,7 @@ msgid "Purchase Qty"
 msgstr "購入数量"
 
 msgid "Purchase Return"
-msgstr ""
+msgstr "仕入返品"
 
 msgid "Purchase Tax Payable"
 msgstr "仕入税金支払い（デフォルト）"
@@ -14562,7 +14562,7 @@ msgid "Sales Person"
 msgstr "営業担当者"
 
 msgid "Sales Return"
-msgstr ""
+msgstr "販売返品"
 
 msgid "Sales Revenue"
 msgstr "販売売上高"
@@ -14809,10 +14809,10 @@ msgid "Search by linear issue title..."
 msgstr "Linear イシュータイトルで検索..."
 
 msgid "Search by receipt, PO, or item"
-msgstr ""
+msgstr "入荷、発注書、または品目で検索"
 
 msgid "Search by shipment, sales order, or item"
-msgstr ""
+msgstr "出荷、受注、または品目で検索"
 
 msgid "Search customers and types..."
 msgstr "得意先とタイプを検索..."
@@ -15059,10 +15059,10 @@ msgid "Select operations"
 msgstr "作業を選択"
 
 msgid "Select posted receipt lines from this supplier to return."
-msgstr ""
+msgstr "この仕入先からの転記済入荷明細を返品するために選択してください。"
 
 msgid "Select posted shipment lines to this customer to return."
-msgstr ""
+msgstr "この得意先への転記済出荷明細を返品するために選択してください。"
 
 msgid "Select Printer"
 msgstr "プリンターを選択"
@@ -15198,7 +15198,7 @@ msgid "Serial numbers are only generated for serial- or batch-tracked items."
 msgstr "シリアル番号は、シリアルまたはバッチ追跡アイテムに対してのみ生成されます。"
 
 msgid "Serial numbers to return"
-msgstr ""
+msgstr "返品対象シリアル番号"
 
 msgid "Serial or Batch Tracking Required"
 msgstr "シリアルまたはバッチ追跡が必要です"
@@ -15252,10 +15252,10 @@ msgid "Session locked"
 msgstr "セッションがロック中"
 
 msgid "Set a customer on this return to add from a shipment."
-msgstr ""
+msgstr "この返品に得意先を設定して出荷から追加してください。"
 
 msgid "Set a supplier on this return to add from a receipt."
-msgstr ""
+msgstr "この返品に仕入先を設定して入荷から追加してください。"
 
 msgid "Set a target"
 msgstr "ターゲットを設定"
@@ -15546,10 +15546,10 @@ msgid "Show a readable Supplier ID column on the supplier list, supplier forms, 
 msgstr "仕入先リスト、仕入先フォーム、ドロップダウンで読みやすい仕入先IDカラムを表示します。仕入先はどちらの方法でも内部的に識別されます。"
 
 msgid "Show available batch numbers"
-msgstr ""
+msgstr "利用可能なバッチ番号を表示"
 
 msgid "Show available tracking numbers"
-msgstr ""
+msgstr "利用可能な追跡番号を表示"
 
 msgid "Show Customer IDs"
 msgstr "得意先IDを表示"
@@ -15558,7 +15558,7 @@ msgid "Show Durations"
 msgstr "期間を表示"
 
 msgid "Show more"
-msgstr ""
+msgstr "もっと表示"
 
 msgid "Show one inventory number the floor and office both trust"
 msgstr "床と事務所の両方が信頼できる1つの在庫番号を表示する"
@@ -16959,7 +16959,7 @@ msgid "The IRS recovery-period class for this asset under MACRS (3, 5, 7, 10, 15
 msgstr "MACRS（3、5、7、10、15、20、27.5、39年）に基づくこのアセットのIRS回収期間クラス。"
 
 msgid "The item each job produces — require it to match to merge output lots"
-msgstr ""
+msgstr "各製造指図が生産する品目 — 出力ロットをマージするには一致する必要があります"
 
 msgid "the job hours due that day (a due-date basis, not the day the work runs), with overdue work in Past due."
 msgstr "その日に期限切れになるジョブの時間（作業が実行される日ではなく、期限日ベース）、期限超過の作業は「期限超過」に表示されます。"

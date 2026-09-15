@@ -31,7 +31,7 @@ msgstr "{0} Aufträge"
 
 #. placeholder {0}: mergeIds.length
 msgid "{0} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
-msgstr ""
+msgstr "{0} Chargen desselben Artikels wurden hergestellt. In eine Charge zusammenführen? Die zusammengeführte Charge wird auf jeden Fertigungsauftrag zurückverfolgt."
 
 #. placeholder {0}: operation.quantityComplete
 #. placeholder {0}: serialIndex + 1
@@ -174,13 +174,13 @@ msgid "Batch"
 msgstr "Charge"
 
 msgid "Batch completed"
-msgstr ""
+msgstr "Los fertiggestellt"
 
 msgid "Batch is not available"
 msgstr "Charge ist nicht verfügbar"
 
 msgid "Batch Number"
-msgstr ""
+msgstr "Los-Nummer"
 
 #. placeholder {0}: index + 1
 msgid "Batch Number {0}"
@@ -666,7 +666,7 @@ msgid "Keep picking"
 msgstr "Kommissionierung fortsetzen"
 
 msgid "Keep separate"
-msgstr ""
+msgstr "Getrennt halten"
 
 msgid "Keyboard shortcuts"
 msgstr "Tastaturkürzel"
@@ -777,7 +777,7 @@ msgid "Maximum number of records reached"
 msgstr "Maximale Anzahl an Datensätzen erreicht"
 
 msgid "Merge into one lot"
-msgstr ""
+msgstr "In eine Charge zusammenführen"
 
 msgid "Metric"
 msgstr "Metrisch"

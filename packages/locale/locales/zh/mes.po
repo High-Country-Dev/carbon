@@ -31,7 +31,7 @@ msgstr "{0} 个工作"
 
 #. placeholder {0}: mergeIds.length
 msgid "{0} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
-msgstr ""
+msgstr "{0}个相同物料的批次已生产。要将其合并为一个批次吗?合并后的批次可追溯至每个工单。"
 
 #. placeholder {0}: operation.quantityComplete
 #. placeholder {0}: serialIndex + 1
@@ -174,13 +174,13 @@ msgid "Batch"
 msgstr "批次"
 
 msgid "Batch completed"
-msgstr ""
+msgstr "生产批次已完成"
 
 msgid "Batch is not available"
 msgstr "批次不可用"
 
 msgid "Batch Number"
-msgstr ""
+msgstr "生产批次号"
 
 #. placeholder {0}: index + 1
 msgid "Batch Number {0}"
@@ -666,7 +666,7 @@ msgid "Keep picking"
 msgstr "继续拣货"
 
 msgid "Keep separate"
-msgstr ""
+msgstr "保持分开"
 
 msgid "Keyboard shortcuts"
 msgstr "键盘快捷键"
@@ -777,7 +777,7 @@ msgid "Maximum number of records reached"
 msgstr "已达到最大记录数"
 
 msgid "Merge into one lot"
-msgstr ""
+msgstr "合并为一个批次"
 
 msgid "Metric"
 msgstr "公制"

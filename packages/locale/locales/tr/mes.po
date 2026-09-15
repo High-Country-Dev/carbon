@@ -31,7 +31,7 @@ msgstr "{0} iş"
 
 #. placeholder {0}: mergeIds.length
 msgid "{0} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
-msgstr ""
+msgstr "{0} Lot aynı stok kartısından üretildi. Bunları tek bir Lot'a birleştirelim mi? Birleştirilmiş Lot tüm İş emirlerine geri izlenebilir."
 
 #. placeholder {0}: operation.quantityComplete
 #. placeholder {0}: serialIndex + 1
@@ -174,13 +174,13 @@ msgid "Batch"
 msgstr "Parti"
 
 msgid "Batch completed"
-msgstr ""
+msgstr "Parti Tamamlandı"
 
 msgid "Batch is not available"
 msgstr "Parti kullanılabilir değil"
 
 msgid "Batch Number"
-msgstr ""
+msgstr "Parti Numarası"
 
 #. placeholder {0}: index + 1
 msgid "Batch Number {0}"
@@ -666,7 +666,7 @@ msgid "Keep picking"
 msgstr "Toplamaya devam et"
 
 msgid "Keep separate"
-msgstr ""
+msgstr "Ayrı Tut"
 
 msgid "Keyboard shortcuts"
 msgstr "Klavye kısayolları"
@@ -777,7 +777,7 @@ msgid "Maximum number of records reached"
 msgstr "Maksimum kayıt sayısına ulaşıldı"
 
 msgid "Merge into one lot"
-msgstr ""
+msgstr "Tek Bir Lot'a Birleştir"
 
 msgid "Metric"
 msgstr "Metrik"

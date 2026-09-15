@@ -31,7 +31,7 @@ msgstr "{0} नौकरियां"
 
 #. placeholder {0}: mergeIds.length
 msgid "{0} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
-msgstr ""
+msgstr "{0} एक ही आइटम के लॉट्स तैयार किए गए। उन्हें एक लॉट में विलय करें? विलय की गई लॉट प्रत्येक जॉब से संबंधित होगी।"
 
 #. placeholder {0}: operation.quantityComplete
 #. placeholder {0}: serialIndex + 1
@@ -174,13 +174,13 @@ msgid "Batch"
 msgstr "बैच"
 
 msgid "Batch completed"
-msgstr ""
+msgstr "बैच पूर्ण"
 
 msgid "Batch is not available"
 msgstr "बैच उपलब्ध नहीं है"
 
 msgid "Batch Number"
-msgstr ""
+msgstr "बैच संख्या"
 
 #. placeholder {0}: index + 1
 msgid "Batch Number {0}"
@@ -666,7 +666,7 @@ msgid "Keep picking"
 msgstr "पिकिंग जारी रखें"
 
 msgid "Keep separate"
-msgstr ""
+msgstr "अलग रखें"
 
 msgid "Keyboard shortcuts"
 msgstr "कीबोर्ड शॉर्टकट"
@@ -777,7 +777,7 @@ msgid "Maximum number of records reached"
 msgstr "रिकॉर्ड की अधिकतम संख्या तक पहुंच गई"
 
 msgid "Merge into one lot"
-msgstr ""
+msgstr "एक लॉट में विलय करें"
 
 msgid "Metric"
 msgstr "मीट्रिक"

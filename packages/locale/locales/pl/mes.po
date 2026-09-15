@@ -31,7 +31,7 @@ msgstr "{0} zadań"
 
 #. placeholder {0}: mergeIds.length
 msgid "{0} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
-msgstr ""
+msgstr "{0} partie tego samego artykułu zostały wyprodukowane. Czy scalić je w jedną partię? Scalone partie można śledzić do każdego zlecenia produkcyjnego."
 
 #. placeholder {0}: operation.quantityComplete
 #. placeholder {0}: serialIndex + 1
@@ -174,13 +174,13 @@ msgid "Batch"
 msgstr "Partia"
 
 msgid "Batch completed"
-msgstr ""
+msgstr "Partia produkcyjna zakończona"
 
 msgid "Batch is not available"
 msgstr "Partia jest niedostępna"
 
 msgid "Batch Number"
-msgstr ""
+msgstr "Numer partii produkcyjnej"
 
 #. placeholder {0}: index + 1
 msgid "Batch Number {0}"
@@ -666,7 +666,7 @@ msgid "Keep picking"
 msgstr "Kontynuuj kompletację"
 
 msgid "Keep separate"
-msgstr ""
+msgstr "Zachowaj oddzielnie"
 
 msgid "Keyboard shortcuts"
 msgstr "Skróty klawiaturowe"
@@ -777,7 +777,7 @@ msgid "Maximum number of records reached"
 msgstr "Osiągnięto maksymalną liczbę rekordów"
 
 msgid "Merge into one lot"
-msgstr ""
+msgstr "Scal w jedną partię"
 
 msgid "Metric"
 msgstr "Metryczny"

@@ -31,7 +31,7 @@ msgstr "{0}개 작업"
 
 #. placeholder {0}: mergeIds.length
 msgid "{0} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
-msgstr ""
+msgstr "동일한 품목으로부터 {0}개의 로트가 생산되었습니다. 하나의 로트로 병합하시겠습니까? 병합된 로트는 모든 작업 지시로 추적됩니다."
 
 #. placeholder {0}: operation.quantityComplete
 #. placeholder {0}: serialIndex + 1
@@ -174,13 +174,13 @@ msgid "Batch"
 msgstr "배치"
 
 msgid "Batch completed"
-msgstr ""
+msgstr "배치 완료됨"
 
 msgid "Batch is not available"
 msgstr "배치는 가용하지 않습니다"
 
 msgid "Batch Number"
-msgstr ""
+msgstr "배치 번호"
 
 #. placeholder {0}: index + 1
 msgid "Batch Number {0}"
@@ -666,7 +666,7 @@ msgid "Keep picking"
 msgstr "피킹을 계속하세요"
 
 msgid "Keep separate"
-msgstr ""
+msgstr "분리 상태로 유지"
 
 msgid "Keyboard shortcuts"
 msgstr "키보드 단축키"
@@ -777,7 +777,7 @@ msgid "Maximum number of records reached"
 msgstr "최대 레코드 수에 도달했습니다"
 
 msgid "Merge into one lot"
-msgstr ""
+msgstr "하나의 로트로 병합"
 
 msgid "Metric"
 msgstr "미터법"

@@ -336,7 +336,7 @@ msgid "{scopeCount} permissions"
 msgstr "{scopeCount} izinleri"
 
 msgid "{selectedCount} selected"
-msgstr ""
+msgstr "{selectedCount} seçildi"
 
 msgid "{total} phases to get your company live on Carbon. Each one ends at a checkpoint."
 msgstr "{total} aşama şirketinizi Carbon'da canlı hale getirmek için. Her biri bir kontrol noktasında sona erer."
@@ -345,7 +345,7 @@ msgid "{total} phases to go live"
 msgstr "{total} aşama canlı yayına alınacak"
 
 msgid "{totalCount} results"
-msgstr ""
+msgstr "{totalCount} sonuç"
 
 msgid "{totalQuantity, plural, one {# unit} other {# units}}"
 msgstr "{totalQuantity, plural, one {# birim} other {# birimler}}"
@@ -1340,10 +1340,10 @@ msgid "Add from library…"
 msgstr "Kütüphaneden ekle…"
 
 msgid "Add from receipt"
-msgstr ""
+msgstr "Mal kabul'dan ekle"
 
 msgid "Add from shipment"
-msgstr ""
+msgstr "Sevkiyat'dan ekle"
 
 msgid "Add Group"
 msgstr "Grup Ekle"
@@ -1367,7 +1367,7 @@ msgid "Add lines from document"
 msgstr "Belgeden satır ekle"
 
 msgid "Add manually"
-msgstr ""
+msgstr "Manuel olarak ekle"
 
 msgid "Add match"
 msgstr "Eşleştirme ekle"
@@ -1620,7 +1620,7 @@ msgid "All members of selected groups and selected individuals will be able to a
 msgstr "Seçilen gruplardaki ve bireylerdeki tüm üyeler talepleri onaylayabilecektir"
 
 msgid "All returnable lines"
-msgstr ""
+msgstr "Tüm iade edilebilir satırlar"
 
 msgid "All rows imported — {inserted} inserted, {updated} updated."
 msgstr "{inserted} eklendi, {updated} güncellendi — tüm satırlar içe aktarıldı."
@@ -2875,7 +2875,7 @@ msgid "Batches"
 msgstr "Partiler"
 
 msgid "Batches to return"
-msgstr ""
+msgstr "İade edilecek partiler"
 
 msgid "Batching"
 msgstr "Partileme"
@@ -3495,7 +3495,7 @@ msgid "Choose another file"
 msgstr "Başka bir dosya seç"
 
 msgid "Choose how to add lines to this return."
-msgstr ""
+msgstr "Bu iade'ye satırları ekleme şeklini seçin."
 
 msgid "Choose what appears on the printed job traveler."
 msgstr "Yazdırılan İş takip kartında neyin görüneceğini seçin."
@@ -6690,7 +6690,7 @@ msgid "Enter a quantity between 1 and {0}."
 msgstr "1 ile {0} arasında bir miktar girin."
 
 msgid "Enter an item and quantity yourself."
-msgstr ""
+msgstr "Stok kartı ve miktarı kendiniz girin."
 
 msgid "Enter and approve vendor bills against a PO (three-way match)"
 msgstr "Bir satın alma siparişine (PO) karşı satıcı faturalarını girin ve onaylayın (üçlü eşleştirme)"
@@ -9442,10 +9442,10 @@ msgid "Lines"
 msgstr "Satırlar"
 
 msgid "Lines appear here once a purchase order receipt has been posted, and only for quantities not already authorized on another supplier return. Use Add Line Item for a blind return."
-msgstr ""
+msgstr "Satın alma siparişi mal kabulu muhasebeleştirildiğinde satırlar burada görüntülenir ve yalnızca başka bir tedarikçi iadesi üzerinde henüz yetkilendirilmemiş miktarlar için. Kör iade için Satır Ekle'yi kullanın."
 
 msgid "Lines appear here once a sales order shipment has been posted, and only for quantities not already authorized on another RMA. Use Add Line Item for a blind return."
-msgstr ""
+msgstr "Satış siparişi sevkiyatı muhasebeleştirildiğinde satırlar burada görüntülenir ve yalnızca başka bir RMA üzerinde henüz yetkilendirilmemiş miktarlar için. Kör iade için Satır Ekle'yi kullanın."
 
 msgid "Lines need internal part numbers"
 msgstr "Satırlar dahili parça numaralarına ihtiyaç duyuyor"
@@ -10105,7 +10105,7 @@ msgid "Memo ID"
 msgstr "Muhasebe Belgesi Kimliği"
 
 msgid "Merge output lots"
-msgstr ""
+msgstr "Çıkış lotlarını birleştir"
 
 msgid "MES"
 msgstr "MES"
@@ -10302,7 +10302,7 @@ msgid "Morning, {name}."
 msgstr "Sabah, {name}."
 
 msgid "Most recent — search to find more"
-msgstr ""
+msgstr "En son — daha fazla bulmak için ara"
 
 msgid "Most things get caught and resolved here. Name it plainly."
 msgstr "Çoğu şey burada yakalanır ve çözülür. Açıkça adlandırın."
@@ -10872,7 +10872,7 @@ msgid "No batches"
 msgstr "Parti yok"
 
 msgid "No batches selected yet."
-msgstr ""
+msgstr "Henüz hiçbir parti seçilmemiş."
 
 msgid "No BOM input has a shelf-life policy"
 msgstr "Hiçbir BOM girdisi raf ömrü politikasına sahip değil"
@@ -11205,13 +11205,13 @@ msgid "No results found"
 msgstr "Sonuç bulunamadı"
 
 msgid "No returnable lines for this customer"
-msgstr ""
+msgstr "Bu müşteri için iade edilebilir satır yok"
 
 msgid "No returnable lines for this supplier"
-msgstr ""
+msgstr "Bu tedarikçi için iade edilebilir satır yok"
 
 msgid "No returnable lines match your search"
-msgstr ""
+msgstr "Aramanızla eşleşen iade edilebilir satır yok"
 
 msgid "No rows here."
 msgstr "Burada satır yok."
@@ -11223,7 +11223,7 @@ msgid "No scheduled work in this window"
 msgstr "Bu zaman penceresinde planlanmış iş yok"
 
 msgid "No serial numbers selected yet."
-msgstr ""
+msgstr "Henüz hiçbir seri numarası seçilmemiş."
 
 msgid "No shifts configured — assuming Mon–Fri, 8h days"
 msgstr "Vardiya yapılandırılmadı — Pzt–Cum, 8s günler varsayılıyor"
@@ -12379,13 +12379,13 @@ msgid "Pick serials/batches to return"
 msgstr "İade edilecek seri numaraları/partileri seç"
 
 msgid "Pick the batches on hand that were received from this supplier."
-msgstr ""
+msgstr "Bu tedarikçiden alınan eldeki partileri toplayın."
 
 msgid "Pick the bin that needs stock, then pick the bins to pull it from."
 msgstr "Stok ihtiyacı olan gözü seçin, ardından stoku çekeceğiniz gözleri seçin."
 
 msgid "Pick the serial numbers on hand that were received from this supplier."
-msgstr ""
+msgstr "Bu tedarikçiden alınan eldeki seri numaralarını toplayın."
 
 msgid "Pick tracked item"
 msgstr "Takip edilen öğeyi seç"
@@ -12795,10 +12795,10 @@ msgid "Procurement status — needs ordering, planned, on order, or received. Th
 msgstr "Tedarik durumu — sipariş gerekli, planlandı, siparişte veya teslim alındı. BoM ağacında gösterilen göstergeyle aynı."
 
 msgid "produced item"
-msgstr ""
+msgstr "üretilen stok kartı"
 
 msgid "Produced item"
-msgstr ""
+msgstr "Üretilen stok kartı"
 
 msgid "Product issues during hypercare"
 msgstr "Hypercare sırasında ürün sorunları"
@@ -13070,7 +13070,7 @@ msgid "Purchase Qty"
 msgstr "Satın Alma Miktarı"
 
 msgid "Purchase Return"
-msgstr ""
+msgstr "Satın alma iadesi"
 
 msgid "Purchase Tax Payable"
 msgstr "Satın Alma Vergisi Ödenecek (varsayılan)"
@@ -14562,7 +14562,7 @@ msgid "Sales Person"
 msgstr "Satış Temsilcisi"
 
 msgid "Sales Return"
-msgstr ""
+msgstr "Satış iadesi"
 
 msgid "Sales Revenue"
 msgstr "Satış Hasılat"
@@ -14809,10 +14809,10 @@ msgid "Search by linear issue title..."
 msgstr "Linear sorunu başlığı ile ara..."
 
 msgid "Search by receipt, PO, or item"
-msgstr ""
+msgstr "Mal kabul, Satın alma siparişi veya stok kartı ile ara"
 
 msgid "Search by shipment, sales order, or item"
-msgstr ""
+msgstr "Sevkiyat, satış siparişi veya stok kartı ile ara"
 
 msgid "Search customers and types..."
 msgstr "Müşterileri ve türleri ara..."
@@ -15059,10 +15059,10 @@ msgid "Select operations"
 msgstr "Operasyon seç"
 
 msgid "Select posted receipt lines from this supplier to return."
-msgstr ""
+msgstr "Bu tedarikçiden muhasebeleştirilmiş mal kabul satırlarını iade etmek üzere seçin."
 
 msgid "Select posted shipment lines to this customer to return."
-msgstr ""
+msgstr "Bu müşteriye muhasebeleştirilmiş sevkiyat satırlarını iade etmek üzere seçin."
 
 msgid "Select Printer"
 msgstr "Yazıcı Seçin"
@@ -15198,7 +15198,7 @@ msgid "Serial numbers are only generated for serial- or batch-tracked items."
 msgstr "Seri numaraları yalnızca seri- veya batch-izlenen öğeler için oluşturulur."
 
 msgid "Serial numbers to return"
-msgstr ""
+msgstr "İade edilecek seri numaralar"
 
 msgid "Serial or Batch Tracking Required"
 msgstr "Seri veya Parti Takibi Gerekli"
@@ -15252,10 +15252,10 @@ msgid "Session locked"
 msgstr "Oturum Kilitli"
 
 msgid "Set a customer on this return to add from a shipment."
-msgstr ""
+msgstr "Sevkiyat'dan eklemek için bu iade'de bir müşteri ayarlayın."
 
 msgid "Set a supplier on this return to add from a receipt."
-msgstr ""
+msgstr "Mal kabul'dan eklemek için bu iade'de bir tedarikçi ayarlayın."
 
 msgid "Set a target"
 msgstr "Hedef belirle"
@@ -15546,10 +15546,10 @@ msgid "Show a readable Supplier ID column on the supplier list, supplier forms, 
 msgstr "Tedarikçi listesinde, tedarikçi formlarında ve açılır menülerde okunabilir bir Tedarikçi Kimliği sütunu gösterir. Tedarikçiler her iki durumda da dahili olarak tanımlanmaya devam eder."
 
 msgid "Show available batch numbers"
-msgstr ""
+msgstr "Kullanılabilir parti numaralarını göster"
 
 msgid "Show available tracking numbers"
-msgstr ""
+msgstr "Kullanılabilir izleme numaralarını göster"
 
 msgid "Show Customer IDs"
 msgstr "Müşteri Kimliklerini Göster"
@@ -15558,7 +15558,7 @@ msgid "Show Durations"
 msgstr "Süreleri Göster"
 
 msgid "Show more"
-msgstr ""
+msgstr "Daha fazla göster"
 
 msgid "Show one inventory number the floor and office both trust"
 msgstr "Tüm tarafların güvendiği tek bir envanter numarası göster"
@@ -16959,7 +16959,7 @@ msgid "The IRS recovery-period class for this asset under MACRS (3, 5, 7, 10, 15
 msgstr "Bu varlık için MACRS kapsamında IRS kurtarma süresi sınıfı (3, 5, 7, 10, 15, 20, 27.5, 39 yıl)."
 
 msgid "The item each job produces — require it to match to merge output lots"
-msgstr ""
+msgstr "Her iş emrinin ürettiği stok kartı — çıkış lotlarını birleştirmek için eşleşmesi gerekir"
 
 msgid "the job hours due that day (a due-date basis, not the day the work runs), with overdue work in Past due."
 msgstr "o gün vadesi olan iş saatleri (çalışmanın çalıştığı günü değil, vade tarihine göre), gecikmiş iş Gecikmede."

@@ -31,7 +31,7 @@ msgstr "{0} работ"
 
 #. placeholder {0}: mergeIds.length
 msgid "{0} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
-msgstr ""
+msgstr "{0} партий одной номенклатуры было произведено. Объединить их в одну партию? Объединённая партия восходит к каждому производственному заказу."
 
 #. placeholder {0}: operation.quantityComplete
 #. placeholder {0}: serialIndex + 1
@@ -174,13 +174,13 @@ msgid "Batch"
 msgstr "Партия"
 
 msgid "Batch completed"
-msgstr ""
+msgstr "Серия завершена"
 
 msgid "Batch is not available"
 msgstr "Партия недоступна"
 
 msgid "Batch Number"
-msgstr ""
+msgstr "Номер серии"
 
 #. placeholder {0}: index + 1
 msgid "Batch Number {0}"
@@ -666,7 +666,7 @@ msgid "Keep picking"
 msgstr "Продолжить отбор"
 
 msgid "Keep separate"
-msgstr ""
+msgstr "Оставить отдельно"
 
 msgid "Keyboard shortcuts"
 msgstr "Клавиатурные сокращения"
@@ -777,7 +777,7 @@ msgid "Maximum number of records reached"
 msgstr "Достигнуто максимальное количество записей"
 
 msgid "Merge into one lot"
-msgstr ""
+msgstr "Объединить в одну партию"
 
 msgid "Metric"
 msgstr "Метрическая"
