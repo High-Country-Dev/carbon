@@ -271,5 +271,5 @@ Saving Settings needs the **settings: update** permission in Carbon.
 
   - Items The part records CAD data attaches to.
   - Methods & sourcing How a part's bill of materials is built up.
-  - Revisions What a revision is and how the default revision works.
+  - Revisions Why each revision of a part is its own item record.
   - Environment variables The Onshape variables a deployment needs.
