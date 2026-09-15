@@ -1561,3 +1561,13 @@ full-screen ERP route.
 **Rule:** Two layers, both required. (1) Any `json`/`jsonb` value written through Kysely in an edge function goes through `lib/json.ts` `toJson()`, which pre-serialises every non-null shape so the wire value is valid JSON text. (2) A validator for a rich-text column is never `z.any()`; use the shared `optionalTiptapDoc` / `toTiptapDoc` in `shared.models.ts`, which turns text, a JSON-encoded doc, or a doc object into a tiptap document and rejects the rest. Put `.optional()` AFTER the transform or zod infers a required key. When an edge function fails opaquely, read the function's own log (Supabase management API `function_logs`), not the caller's.
 
 **Applies to:** `packages/database/supabase/functions/**` Kysely inserts of `internalNotes`, `externalNotes`, `customFields`, `priceTrace`, `configuration`, `additionalCharges`; every `*.models.ts` field that feeds a rich-text column (the purchasing `notes: z.any()` fields still need this).
+
+## An unchecked supabase-js insert turns a NOT NULL violation into silence
+
+**Context:** Inspection rejects were supposed to seed `nonConformanceItemTrackedEntity` links on the NCR's default Scrap row so the MRB could split or reassign specific entities. Nothing ever appeared. Both writers — `x+/inspection+/$id.reject.tsx` and `x+/issue+/new.tsx`'s job-operation auto-link — built their rows without `nonConformanceId`, which is `NOT NULL` on that table (`20260421130000_nc-item-tracked-entity.sql`).
+
+**Problem:** Every such insert returned a 23502, and nobody read it. The reject route did `await (serviceRole as any).from(...).insert(rows)` and discarded the result entirely, so the feature had never worked in production and no error surfaced anywhere. supabase-js does not throw — it resolves to `{ data, error }` — so an unchecked insert is indistinguishable from a successful one, and the `as any` cast additionally hid that the row type was missing a required column. A Kysely insert in the same place would have thrown.
+
+**Rule:** Never discard a supabase-js write result — bind it and check `.error`, even for a fire-and-forget link write. Treat `as any` on a `.from(...).insert(...)` as a defect in review: the cast exists precisely because the row object does not satisfy the generated type, which is the compiler telling you a required column is missing. When a "seeded" side table is mysteriously empty, check the writer's error handling before suspecting the read.
+
+**Applies to:** every `.from(...).insert(...)` / `.update(...)` whose result is not bound, especially in post-commit "also link X" tails; fixed for both writers in PR #1612 by moving them into a Kysely transaction under `lockIssueDispositions`.
