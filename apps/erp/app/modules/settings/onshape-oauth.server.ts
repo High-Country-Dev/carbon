@@ -6,6 +6,7 @@ import {
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { getCarbonServiceRole } from "@carbon/auth/client.server";
 import type { OnshapeIntegrationId } from "@carbon/ee/onshape";
+import { redis } from "@carbon/kv";
 import { getLogger } from "@carbon/logger";
 import type { IntegrationErrorCode } from "~/modules/settings/integration-errors";
 import { integrationErrorSearch } from "~/modules/settings/integration-errors";
@@ -121,6 +122,23 @@ export async function handleOnshapeOAuthCallback({
     return connectionFailed(request, integrationId, "invalid-response");
   }
 
+  // The state must be one this user minted for this company and integration,
+  // and it is spent here whether or not the rest succeeds. Without the check a
+  // callback URL carrying someone else's authorization code, opened by a
+  // signed-in admin, would connect the admin's company to that Onshape account.
+  if (
+    !(await consumeOnshapeOAuthState(params.state, {
+      integrationId,
+      userId,
+      companyId
+    }))
+  ) {
+    logger.error("Onshape OAuth state did not match a pending install", {
+      integrationId
+    });
+    return connectionFailed(request, integrationId, "invalid-response");
+  }
+
   if (!ONSHAPE_CLIENT_ID || !ONSHAPE_CLIENT_SECRET || !redirectUrl) {
     return connectionFailed(request, integrationId, "not-configured");
   }
@@ -223,6 +241,74 @@ export async function handleOnshapeOAuthCallback({
 }
 
 /**
+ * How long a started connection stays completable. Generous for a user who
+ * signs in to Onshape inside the popup; short enough that a leaked callback
+ * URL is soon worthless.
+ */
+const OAUTH_STATE_TTL_SECONDS = 15 * 60;
+
+type OnshapeOAuthStateBinding = {
+  integrationId: OnshapeIntegrationId;
+  userId: string;
+  companyId: string;
+};
+
+function oauthStateKey(state: string) {
+  return `onshape-oauth-state:${state}`;
+}
+
+/**
+ * Spend a callback's state: true only when it was minted by
+ * `createOnshapeAuthorizeUrl` for exactly this integration, user and company,
+ * and has not expired or been used. GETDEL makes it single-use — a replayed
+ * callback finds nothing.
+ */
+async function consumeOnshapeOAuthState(
+  state: string,
+  expected: OnshapeOAuthStateBinding
+): Promise<boolean> {
+  // crypto.randomUUID() is 36 characters; anything else was never minted.
+  if (state.length !== 36) return false;
+  const raw = await redis.getdel(oauthStateKey(state));
+  if (!raw) return false;
+  try {
+    const bound = JSON.parse(raw) as Partial<OnshapeOAuthStateBinding>;
+    return (
+      bound.integrationId === expected.integrationId &&
+      bound.userId === expected.userId &&
+      bound.companyId === expected.companyId
+    );
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Start a connection: mint a state bound to the installing user, their
+ * company and the integration, and return the authorize URL carrying it.
+ * Null when the state could not be stored — a connection that cannot be
+ * verified at the callback is not started.
+ */
+export async function createOnshapeAuthorizeUrl({
+  clientId,
+  redirectUrl,
+  ...binding
+}: OnshapeOAuthStateBinding & {
+  clientId: string;
+  redirectUrl: string;
+}): Promise<string | null> {
+  const state = crypto.randomUUID();
+  const stored = await redis.set(
+    oauthStateKey(state),
+    JSON.stringify(binding),
+    "EX",
+    OAUTH_STATE_TTL_SECONDS
+  );
+  if (stored !== "OK") return null;
+  return buildOnshapeAuthorizeUrl(clientId, redirectUrl, state);
+}
+
+/**
  * The Onshape authorize URL for an integration's redirect URI.
  *
  * Read for models/revisions/documents; Write to create translation (GLTF/PDF
@@ -235,15 +321,16 @@ export async function handleOnshapeOAuthCallback({
  * which only means "space" under form-encoding rules a query string doesn't
  * guarantee.
  */
-export function buildOnshapeAuthorizeUrl(
+function buildOnshapeAuthorizeUrl(
   clientId: string,
-  redirectUrl: string
+  redirectUrl: string,
+  state: string
 ) {
   const params = new URLSearchParams({
     client_id: clientId,
     redirect_uri: redirectUrl,
     response_type: "code",
-    state: crypto.randomUUID()
+    state
   });
   const scope = ["OAuth2Read", "OAuth2Write"].join("%20");
   return `https://oauth.onshape.com/oauth/authorize?${params}&scope=${scope}`;
