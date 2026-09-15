@@ -86,6 +86,10 @@ const payloadValidator = z.discriminatedUnion("type", [
           jobOperationId: z.string(),
           quantity: z.number().int().min(0),
           scrapQuantity: z.number().int().min(0).optional(),
+          // Batch-tracked output: the member's WIP entity to finalize as the
+          // produced lot, and the batch number to stamp on it.
+          trackedEntityId: z.string().optional().nullable(),
+          batchNumber: z.string().optional().nullable(),
           // "Not in this run": detach the member back to the schedule instead
           // of completing it. Its quantities must be 0.
           excluded: z.boolean().optional()
@@ -341,6 +345,8 @@ async function completeBatch(
       jobOperationId: string;
       quantity: number;
       scrapQuantity?: number;
+      trackedEntityId?: string | null;
+      batchNumber?: string | null;
       excluded?: boolean;
     }[];
   }
@@ -636,6 +642,80 @@ async function completeBatch(
     }
   }
 
+  // Finalize batch-tracked outputs: for each member producing a batch-tracked
+  // item, flip its WIP entity to an Available lot via the lean
+  // jobOperationBatchOutput case (Produce activity + entity flip only — the
+  // productionQuantity rows were written in Phase 1 and the member's materials
+  // were issued above). Idempotent: an already-Available entity is a no-op, so
+  // a resume fast-forwards. Runs BEFORE the Done flip so a failure here leaves
+  // the batch resumable with no member stranded Done without its output lot.
+  const memberOpRows = await client
+    .from("jobOperation")
+    .select("id, jobMakeMethodId")
+    .in("id", memberIds)
+    .eq("companyId", companyId);
+  if (memberOpRows.error) {
+    throw new Error(`Failed to load member operations: ${memberOpRows.error.message}`);
+  }
+  const makeMethodIds = [
+    ...new Set(
+      (memberOpRows.data ?? [])
+        // deno-lint-ignore no-explicit-any
+        .map((o: any) => o.jobMakeMethodId)
+        .filter(Boolean) as string[]
+    )
+  ];
+  const makeMethods = makeMethodIds.length
+    ? await client
+        .from("jobMakeMethod")
+        .select("id, requiresBatchTracking")
+        .in("id", makeMethodIds)
+        .eq("companyId", companyId)
+    : { data: [], error: null };
+  if (makeMethods.error) {
+    throw new Error(`Failed to load make methods: ${makeMethods.error.message}`);
+  }
+  const requiresBatchByMakeMethod = new Map(
+    // deno-lint-ignore no-explicit-any
+    (makeMethods.data ?? []).map((m: any) => [m.id, m.requiresBatchTracking])
+  );
+  const makeMethodByOp = new Map(
+    // deno-lint-ignore no-explicit-any
+    (memberOpRows.data ?? []).map((o: any) => [o.id, o.jobMakeMethodId])
+  );
+
+  const outputTrackedEntityIds: string[] = [];
+  for (const m of members) {
+    const makeMethodId = makeMethodByOp.get(m.jobOperationId);
+    const requiresBatch = makeMethodId
+      ? (requiresBatchByMakeMethod.get(makeMethodId) ?? false)
+      : false;
+    if (!requiresBatch) continue;
+    if (m.quantity <= 0) continue;
+    if (!m.trackedEntityId) {
+      throw new Error(
+        `Operation ${m.jobOperationId} produces a batch-tracked item — its output lot is required`
+      );
+    }
+    const output = await client.functions.invoke("issue", {
+      body: {
+        type: "jobOperationBatchOutput",
+        jobOperationId: m.jobOperationId,
+        trackedEntityId: m.trackedEntityId,
+        quantity: m.quantity,
+        readableId: m.batchNumber ?? null,
+        companyId,
+        userId
+      }
+    });
+    if (output.error) {
+      throw new Error(
+        `Failed to create the output lot for operation ${m.jobOperationId}: ${output.error.message}`
+      );
+    }
+    outputTrackedEntityIds.push(m.trackedEntityId);
+  }
+
   // Flip members Done — sync_finish_job_operation readies each member job's next
   // operation and completes the job independently. Skip already-Done so a resume
   // does not re-fire the trigger.
@@ -680,7 +760,8 @@ async function completeBatch(
     completed: members.length,
     excluded: excludedIds.length,
     memberIds,
-    eventIds: glEvents.map((e) => e.id)
+    eventIds: glEvents.map((e) => e.id),
+    outputTrackedEntityIds
   };
 }
 
@@ -1112,6 +1193,8 @@ serve(async (req: Request) => {
             jobOperationId: string;
             quantity: number;
             scrapQuantity?: number;
+            trackedEntityId?: string | null;
+            batchNumber?: string | null;
           }[]
         });
         break;
