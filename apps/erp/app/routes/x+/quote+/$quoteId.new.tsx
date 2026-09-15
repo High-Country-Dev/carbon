@@ -6,7 +6,6 @@ import { validationError, validator } from "@carbon/form";
 import { getLogger } from "@carbon/logger";
 import type { ActionFunctionArgs } from "react-router";
 import { redirect } from "react-router";
-import { getItemOrderabilityIssue } from "~/modules/items/items.server";
 import {
   getQuote,
   isQuoteLocked,
@@ -17,6 +16,7 @@ import {
   upsertQuoteLine,
   upsertQuoteLineMethod
 } from "~/modules/sales";
+import { getQuoteLineItemIssue } from "~/modules/sales/sales.server";
 import { setCustomFields } from "~/utils/form";
 import { requireUnlocked } from "~/utils/lockedGuard.server";
 import { path } from "~/utils/path";
@@ -63,32 +63,20 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const serviceRole = getCarbonServiceRole();
 
-  // The picker greys these out, but that is only a client-side rule — this
-  // action is also reached by the API and the MCP tools. Read the item's real
-  // state before it lands on the quote.
-  //
-  // An item this quote already uses is exempt: a quote converted from a sales
-  // RFQ references placeholder parts that stay inactive until the quote is
-  // ordered, and a second line for one of them is legitimate.
-  const alreadyOnQuote = await serviceRole
-    .from("quoteLine")
-    .select("id")
-    .eq("quoteId", quoteId)
-    .eq("itemId", d.itemId)
-    .eq("companyId", companyId)
-    .limit(1)
-    .maybeSingle();
-
-  const orderabilityIssue = alreadyOnQuote.data
-    ? null
-    : await getItemOrderabilityIssue(serviceRole, {
-        itemId: d.itemId,
-        companyId
-      });
-  if (orderabilityIssue) {
+  // The picker greys these out, but that is only a client-side rule. Read the
+  // item's real state before it lands on the quote. The API, MCP and CSV import
+  // paths apply the same rule through the checked `upsertQuoteLine`; this route
+  // runs it itself so a refusal is a field error on the form, and then writes
+  // with the bare service rather than checking twice.
+  const itemIssue = await getQuoteLineItemIssue(serviceRole, {
+    companyId,
+    quoteId,
+    itemId: d.itemId
+  });
+  if (itemIssue) {
     return validationError({
       fieldErrors: {
-        itemId: `${orderabilityIssue} It cannot be quoted.`
+        itemId: itemIssue
       }
     });
   }

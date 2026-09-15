@@ -59,9 +59,6 @@ vi.mock("@carbon/react", () => ({ VStack: () => null }));
 vi.mock("@lingui/react/macro", () => ({ useLingui: vi.fn() }));
 vi.mock("~/components", () => ({ CadModel: vi.fn(), DeferredFiles: vi.fn() }));
 vi.mock("~/hooks", () => ({}));
-vi.mock("~/modules/items/items.server", () => ({
-  getItemOrderabilityIssue: vi.fn(async () => null)
-}));
 vi.mock("~/modules/sales", () => ({
   getQuote: vi.fn(async () => ({ data: { status: "Draft" }, error: null })),
   isQuoteLocked: () => false,
@@ -69,6 +66,7 @@ vi.mock("~/modules/sales", () => ({
   reconcileQuantityBreaks: () => ({ added: [], removed: [] })
 }));
 vi.mock("~/modules/sales/sales.server", () => ({
+  getQuoteLineItemIssue: vi.fn(async () => null),
   saveQuoteLineWithPrices: mocks.saveQuoteLineWithPrices
 }));
 vi.mock("~/modules/sales/ui/Opportunity", () => ({}));

@@ -18,7 +18,6 @@ import {
 import { CadModel, DeferredFiles } from "~/components";
 import type { Tree } from "~/components/TreeView";
 import { usePermissions, useRealtime, useRouteData, useUser } from "~/hooks";
-import { getItemOrderabilityIssue } from "~/modules/items/items.server";
 import type {
   Quotation,
   QuotationOperation,
@@ -45,7 +44,10 @@ import {
   quoteLineValidator,
   reconcileQuantityBreaks
 } from "~/modules/sales";
-import { saveQuoteLineWithPrices } from "~/modules/sales/sales.server";
+import {
+  getQuoteLineItemIssue,
+  saveQuoteLineWithPrices
+} from "~/modules/sales/sales.server";
 import {
   OpportunityLineDocuments,
   OpportunityLineNotes
@@ -193,10 +195,10 @@ export async function action({ request, params }: ActionFunctionArgs) {
   // resolver failure left it saved with its new breaks unpriced.
   const serviceRole = getCarbonServiceRole();
 
-  // Only when the line is being pointed at a DIFFERENT item: an existing line
-  // whose item was deactivated later still has to be editable (quantities,
-  // prices), and blocking that would strand the quote. Mirrors the picker,
-  // which keeps the current value selectable but offers nothing new.
+  // The line's current item is exempt from the item rule: an existing line whose
+  // item was deactivated later still has to be editable (quantities, prices),
+  // and blocking that would strand the quote. Mirrors the picker, which keeps
+  // the current value selectable but offers nothing new.
   const existingLine = await serviceRole
     .from("quoteLine")
     .select("itemId")
@@ -224,31 +226,18 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  if (existingLine.data.itemId !== d.itemId) {
-    // Exempt an item this quote already uses — an RFQ-converted quote's
-    // placeholder parts are inactive by design until the quote is ordered.
-    const alreadyOnQuote = await serviceRole
-      .from("quoteLine")
-      .select("id")
-      .eq("quoteId", quoteId)
-      .eq("itemId", d.itemId)
-      .eq("companyId", companyId)
-      .limit(1)
-      .maybeSingle();
-
-    const orderabilityIssue = alreadyOnQuote.data
-      ? null
-      : await getItemOrderabilityIssue(serviceRole, {
-          itemId: d.itemId,
-          companyId
-        });
-    if (orderabilityIssue) {
-      return validationError({
-        fieldErrors: {
-          itemId: `${orderabilityIssue} It cannot be quoted.`
-        }
-      });
-    }
+  const itemIssue = await getQuoteLineItemIssue(serviceRole, {
+    companyId,
+    quoteId,
+    itemId: d.itemId,
+    currentItemId: existingLine.data.itemId
+  });
+  if (itemIssue) {
+    return validationError({
+      fieldErrors: {
+        itemId: itemIssue
+      }
+    });
   }
 
   const existingPrices = await serviceRole
