@@ -342,3 +342,36 @@ export function resolveMadeLinePull(
   }
   return null;
 }
+
+export function reserveConsumeFirstStock(
+  line: {
+    itemId: string;
+    quantity: number | string | null;
+    estimatedQuantity: number | string | null;
+    scrapQuantity: number | string | null;
+  },
+  settlement: ConsumeFirstSettlement | null,
+  rules: ConsumeFirstRules,
+  onHandByItem: Map<string, number>
+): void {
+  const target = Math.max(
+    0,
+    Number(line.estimatedQuantity ?? 0) - Number(line.scrapQuantity ?? 0)
+  );
+  let itemId = line.itemId;
+  let factor = 1;
+  if (settlement) {
+    if (settlement.kind === "push") return;
+    itemId = settlement.toItemId;
+    factor = settlement.factor;
+  } else if (!rules.successorByPredecessor.has(line.itemId)) {
+    return;
+  }
+  if (!onHandByItem.has(itemId)) return;
+  const perAssembly = Number(line.quantity ?? 0) * factor;
+  const reserved = Math.min(
+    target * factor,
+    consumableInWholeAssemblies(onHandByItem.get(itemId) ?? 0, perAssembly)
+  );
+  onHandByItem.set(itemId, Math.max(0, (onHandByItem.get(itemId) ?? 0) - reserved));
+}

@@ -13,6 +13,7 @@ import {
   firstStockedInConsumeFirstChain,
   resolveMadeLinePull,
   type SupersessionMode,
+  reserveConsumeFirstStock,
 } from "./supersession-pick.ts";
 
 // `buildSupersessionRedirectMap` is the single source of truth for "should this
@@ -502,4 +503,31 @@ Deno.test("resolveMadeLinePull: stocked chain first, then a bought successor, el
     { itemId: "new", factor: 1 }
   );
   assertEquals(resolveMadeLinePull("other", 1, { ...ctx, boughtSuccessors: new Set(["new"]) }), null);
+});
+
+Deno.test("reserveConsumeFirstStock: a settled line draws its whole assemblies down for the next line", () => {
+  const rules = buildConsumeFirstRules([cfRow("old", "new")], "2026-09-16");
+  const onHand = new Map([["old", 6]]);
+  const first = { itemId: "old", quantity: 4, estimatedQuantity: 4, scrapQuantity: 0, substitutedFromItemId: null };
+  const second = { ...first };
+  const s1 = settleConsumeFirstLine(first, rules, onHand);
+  reserveConsumeFirstStock(first, s1, rules, onHand);
+  assertEquals(s1, null);
+  assertEquals(onHand.get("old"), 2);
+  assertEquals(settleConsumeFirstLine(second, rules, onHand), { kind: "push", toItemId: "new", factor: 1 });
+});
+
+Deno.test("reserveConsumeFirstStock: a revert reserves in the predecessor's units and a push reserves nothing", () => {
+  const rules = buildConsumeFirstRules([cfRow("old", "new", "Consume First", 2)], "2026-09-16");
+  const onHand = new Map([["old", 3]]);
+  const swapped = { itemId: "new", quantity: 2, estimatedQuantity: 8, scrapQuantity: 0, substitutedFromItemId: "old" };
+  const s = settleConsumeFirstLine(swapped, rules, onHand);
+  assertEquals(s, { kind: "revert", toItemId: "old", factor: 0.5 });
+  reserveConsumeFirstStock(swapped, s, rules, onHand);
+  assertEquals(onHand.get("old"), 0);
+  const kept = { itemId: "old", quantity: 1, estimatedQuantity: 2, scrapQuantity: 0, substitutedFromItemId: null };
+  const s3 = settleConsumeFirstLine(kept, rules, onHand);
+  assertEquals(s3, { kind: "push", toItemId: "new", factor: 2 });
+  reserveConsumeFirstStock(kept, s3, rules, onHand);
+  assertEquals(onHand.get("old"), 0);
 });

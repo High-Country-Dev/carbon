@@ -77,6 +77,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
+  if (picks.error) {
+    throw redirect(
+      path.to.production,
+      await flash(request, error(picks.error, "Failed to fetch picks"))
+    );
+  }
+
   const rows = materials.data ?? [];
   const nearExpiryWarningDays =
     (
@@ -117,6 +124,15 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       ),
       getItemSupersessionsForItems(client, materialItemIds, companyId)
     ]);
+  if (supersessions.error) {
+    throw redirect(
+      path.to.production,
+      await flash(
+        request,
+        error(supersessions.error, "Failed to fetch supersessions")
+      )
+    );
+  }
   const consumeFirstByItemId: Record<string, ConsumeFirstRule> = {};
   for (const rule of supersessions.data ?? []) {
     if (rule.supersessionMode !== "Consume First") continue;

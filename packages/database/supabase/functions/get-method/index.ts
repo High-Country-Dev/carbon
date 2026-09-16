@@ -40,6 +40,7 @@ import {
   buildConsumeFirstHops,
   buildConsumeFirstRules,
   consumeFirstStockItems,
+  reserveConsumeFirstStock,
   resolveMadeLinePull,
   settleConsumeFirstLine,
   type SupersessionContext,
@@ -1544,7 +1545,7 @@ serve(async (req: Request) => {
             let materialsWithConfiguredFields = jobMaterialResults.filter(
               (m): m is NonNullable<typeof m> => m !== null
             );
-            const configuredChildren = validJobMaterialIndices.map(i => node.children[i]);
+            let configuredChildren = validJobMaterialIndices.map(i => node.children[i]);
 
             const bomConfigurationKey = `billOfMaterial:${nodeLevelConfigurationKey}`;
             let bomConfiguration: string[] | null = null;
@@ -1557,20 +1558,31 @@ serve(async (req: Request) => {
             }
 
             if (bomConfiguration) {
-              // @ts-expect-error - we can't assign undefined to materialsWithConfiguredFields but we filter them in the next step
-              materialsWithConfiguredFields = bomConfiguration
-                .map((readableIdWithRevision, index) => {
-                  const material = materialsWithConfiguredFields.find(
-                    (material) => material.itemId === itemId
-                  );
-                  if (material) {
-                    return {
-                      ...material,
-                      order: index + 1,
-                    };
+              const pairByReadableId = new Map<
+                string,
+                { material: (typeof materialsWithConfiguredFields)[number]; child: MethodTreeItem }
+              >();
+              configuredChildren.forEach((child, i) => {
+                const material = materialsWithConfiguredFields[i];
+                if (!material) return;
+                const data = child.data as {
+                  itemReadableId?: string | null;
+                  readableIdWithRevision?: string | null;
+                };
+                for (const key of [data.readableIdWithRevision, data.itemReadableId]) {
+                  if (key && !pairByReadableId.has(key)) {
+                    pairByReadableId.set(key, { material, child });
                   }
-                })
-                .filter(Boolean);
+                }
+              });
+              const pairs = bomConfiguration.flatMap((readableId, index) => {
+                const pair = pairByReadableId.get(readableId);
+                return pair
+                  ? [{ material: { ...pair.material, order: index + 1 }, child: pair.child }]
+                  : [];
+              });
+              materialsWithConfiguredFields = pairs.map((pair) => pair.material);
+              configuredChildren = pairs.map((pair) => pair.child);
             }
 
             const madeMaterials = materialsWithConfiguredFields.filter(
@@ -7559,17 +7571,23 @@ async function loadSupersessionRedirect(
   const consumeFirstOnHand = new Map<string, number>();
   if (consumeFirstItemIds.length > 0 && job?.locationId) {
     const [stock, items] = await Promise.all([
-      client
-        .from("itemStockQuantities")
-        .select("itemId, quantityOnHand")
-        .eq("companyId", companyId)
-        .eq("locationId", job.locationId)
-        .in("itemId", consumeFirstItemIds),
-      client
-        .from("item")
-        .select("id, replenishmentSystem")
-        .eq("companyId", companyId)
-        .in("id", consumeFirstItemIds),
+      fetchAll<{ itemId: string; quantityOnHand: number | string | null }>(() =>
+        client
+          .from("itemStockQuantities")
+          .select("itemId, quantityOnHand")
+          .eq("companyId", companyId)
+          .eq("locationId", job.locationId!)
+          .in("itemId", consumeFirstItemIds)
+          .order("itemId")
+      ),
+      fetchAll<{ id: string; replenishmentSystem: string | null }>(() =>
+        client
+          .from("item")
+          .select("id, replenishmentSystem")
+          .eq("companyId", companyId)
+          .in("id", consumeFirstItemIds)
+          .order("id")
+      ),
     ]);
     if (stock.error) {
       throw new Error(
@@ -7614,11 +7632,15 @@ async function loadSupersessionRedirect(
   const boughtSuccessors = new Set<string>();
   const successorIds = [...new Set([...redirect.values()].map((r) => r.to))];
   if (successorIds.length > 0) {
-    const successors = await client
-      .from("item")
-      .select("id, replenishmentSystem")
-      .eq("companyId", companyId)
-      .in("id", successorIds);
+    const successors = await fetchAll<{ id: string; replenishmentSystem: string | null }>(
+      () =>
+        client
+          .from("item")
+          .select("id, replenishmentSystem")
+          .eq("companyId", companyId)
+          .in("id", successorIds)
+          .order("id")
+    );
     if (successors.error) {
       throw new Error(
         `Failed to load successor replenishment: ${successors.error.message}`
@@ -7909,8 +7931,10 @@ async function settleConsumeFirstLines(opts: {
       .execute();
   };
 
+  materials.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
   for (const m of materials) {
     const settlement = settleConsumeFirstLine(m, consumeFirstRules, onHandByItem);
+    reserveConsumeFirstStock(m, settlement, consumeFirstRules, onHandByItem);
     if (!settlement) continue;
     await swapLine(
       m,
