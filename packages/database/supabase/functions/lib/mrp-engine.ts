@@ -4,6 +4,7 @@ import {
   consumableInWholeAssemblies,
   type Redirect,
 } from "./supersession-pick.ts";
+import { round, RoundingMode } from "../shared/precision.ts";
 
 export type MethodType =
   | "Make to Order"
@@ -274,7 +275,7 @@ export function explodeBom(input: BomExplosionInput): BomExplosionOutput {
         const redirect = consumeFirstRedirect.get(itemId);
         if (redirect) {
           const weeks = (id: string) =>
-            Math.ceil((leadTimeByItem.get(id) ?? 7) / 7);
+            round((leadTimeByItem.get(id) ?? 7) / 7, 0, RoundingMode.Up);
           const currentPeriodIndex = periodIndexById.get(period.id) ?? 0;
           const successorPeriodIndex = Math.max(
             0,
