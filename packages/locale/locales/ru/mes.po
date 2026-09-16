@@ -493,6 +493,9 @@ msgstr "Неудачные функции"
 msgid "Failed to complete inventory adjustment"
 msgstr "Не удалось выполнить корректировку запасов"
 
+msgid "Failed to convert image"
+msgstr "Не удалось преобразовать изображение"
+
 msgid "Failed to end operations"
 msgstr "Не удалось завершить операции"
 

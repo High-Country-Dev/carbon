@@ -7104,7 +7104,7 @@ export async function getShippedTrackedEntitiesForCustomer(
       (entities.data ?? [])
         .map(
           (entity) =>
-            (entity.attributes as Record<string, unknown> | null)?.["Shipment"]
+            (entity.attributes as Record<string, unknown> | null)?.Shipment
         )
         .filter((value): value is string => typeof value === "string")
     )
@@ -7130,9 +7130,8 @@ export async function getShippedTrackedEntitiesForCustomer(
 
   return {
     data: (entities.data ?? []).filter((entity) => {
-      const shipmentId = (
-        entity.attributes as Record<string, unknown> | null
-      )?.["Shipment"];
+      const shipmentId = (entity.attributes as Record<string, unknown> | null)
+        ?.Shipment;
       return (
         typeof shipmentId === "string" && customerShipmentIds.has(shipmentId)
       );

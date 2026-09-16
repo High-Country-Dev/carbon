@@ -493,6 +493,9 @@ msgstr "失敗した機能"
 msgid "Failed to complete inventory adjustment"
 msgstr "在庫調整の完了に失敗しました"
 
+msgid "Failed to convert image"
+msgstr "画像の変換に失敗しました"
+
 msgid "Failed to end operations"
 msgstr "工程の終了に失敗しました"
 

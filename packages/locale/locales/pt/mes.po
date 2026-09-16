@@ -493,6 +493,9 @@ msgstr "Recursos com falha"
 msgid "Failed to complete inventory adjustment"
 msgstr "Falha ao concluir ajuste de estoque"
 
+msgid "Failed to convert image"
+msgstr "Falha ao converter imagem"
+
 msgid "Failed to end operations"
 msgstr "Falha ao encerrar operações"
 

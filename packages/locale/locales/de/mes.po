@@ -493,6 +493,9 @@ msgstr "Fehlgeschlagene Funktionen"
 msgid "Failed to complete inventory adjustment"
 msgstr "Bestandskorrektur konnte nicht abgeschlossen werden"
 
+msgid "Failed to convert image"
+msgstr "Fehler beim Umwandeln des Bildes"
+
 msgid "Failed to end operations"
 msgstr "Arbeitsgänge konnten nicht beendet werden"
 

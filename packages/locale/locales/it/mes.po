@@ -493,6 +493,9 @@ msgstr "Funzionalità non riuscite"
 msgid "Failed to complete inventory adjustment"
 msgstr "Impossibile completare la rettifica di magazzino"
 
+msgid "Failed to convert image"
+msgstr "Impossibile convertire l'immagine"
+
 msgid "Failed to end operations"
 msgstr "Impossibile terminare le operazioni"
 

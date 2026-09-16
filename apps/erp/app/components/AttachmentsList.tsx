@@ -1,4 +1,6 @@
 import { useCarbon } from "@carbon/auth";
+import { convertKbToString } from "@carbon/files";
+import { convertHeicFiles } from "@carbon/files/media";
 import {
   Badge,
   HStack,
@@ -9,7 +11,6 @@ import {
   VStack
 } from "@carbon/react";
 import {
-  convertKbToString,
   PO_EMAIL_ATTACHMENT_LIMIT_MB,
   PO_EMAIL_ATTACHMENT_WARN_MB
 } from "@carbon/utils";
@@ -86,7 +87,13 @@ export default function AttachmentsList({
       }
       setUploading(true);
       try {
-        for (const file of acceptedFiles) {
+        // HEIC is never stored — convert to JPEG first.
+        const files = await convertHeicFiles(
+          carbon,
+          { bucket: "private", directory: `${company.id}/tmp` },
+          acceptedFiles
+        );
+        for (const file of files) {
           const safeName = stripSpecialCharacters(file.name);
           const storagePath = `${company.id}/supplier-interaction/${supplierInteractionId}/${safeName}`;
           const upload = await carbon.storage
@@ -100,6 +107,8 @@ export default function AttachmentsList({
           }
         }
         revalidator.revalidate();
+      } catch {
+        toast.error(t`Failed to convert image`);
       } finally {
         setUploading(false);
       }

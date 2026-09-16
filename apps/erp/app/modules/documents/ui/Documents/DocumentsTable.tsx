@@ -1,4 +1,5 @@
 import { getBrowserEnv } from "@carbon/auth";
+import { convertKbToString } from "@carbon/files";
 import {
   Badge,
   BadgeCloseButton,
@@ -15,7 +16,7 @@ import {
   PopoverTrigger,
   useDisclosure
 } from "@carbon/react";
-import { convertKbToString, filterEmpty } from "@carbon/utils";
+import { filterEmpty } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";

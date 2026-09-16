@@ -493,6 +493,9 @@ msgstr "Características fallidas"
 msgid "Failed to complete inventory adjustment"
 msgstr "Error al completar el ajuste de inventario"
 
+msgid "Failed to convert image"
+msgstr "No se pudo convertir la imagen"
+
 msgid "Failed to end operations"
 msgstr "Error al finalizar las operaciones"
 

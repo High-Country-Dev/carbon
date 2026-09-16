@@ -493,6 +493,9 @@ msgstr "Başarısız özellikler"
 msgid "Failed to complete inventory adjustment"
 msgstr "Stok düzeltme tamamlanamadı"
 
+msgid "Failed to convert image"
+msgstr "Resim dönüştürülemedi"
+
 msgid "Failed to end operations"
 msgstr "Operasyonlar sonlandırılamadı"
 

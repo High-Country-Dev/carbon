@@ -361,6 +361,20 @@ export async function requirePermissions(
       throw new Error("Insufficient permissions");
     }
 
+    // With no specific permission required, checkPermissions passes for ANY
+    // authenticated user — still require membership of the claimed company
+    // (some permission array naming it) before handing back the service role.
+    if (Object.keys(permissions).length === 0) {
+      const isMember = Object.values(parsed.permissions).some((permission) =>
+        (["view", "create", "update", "delete"] as const).some((action) =>
+          permission[action].includes(companyId)
+        )
+      );
+      if (!isMember) {
+        throw new Error("Insufficient permissions");
+      }
+    }
+
     return serviceRole;
   }
 

@@ -16,7 +16,6 @@ export * from "./date";
 export * from "./datetime";
 export * from "./duration";
 export * from "./field-registry";
-export * from "./file";
 export * from "./format";
 export * from "./geo";
 export * from "./hash";

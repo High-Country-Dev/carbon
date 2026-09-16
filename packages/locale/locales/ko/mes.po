@@ -493,6 +493,9 @@ msgstr "실패한 기능"
 msgid "Failed to complete inventory adjustment"
 msgstr "재고 조정을 완료하지 못했습니다"
 
+msgid "Failed to convert image"
+msgstr "이미지 전환 실패"
+
 msgid "Failed to end operations"
 msgstr "공정작업을 종료하지 못했습니다"
 

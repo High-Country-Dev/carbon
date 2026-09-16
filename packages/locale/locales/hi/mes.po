@@ -493,6 +493,9 @@ msgstr "विफल सुविधाएँ"
 msgid "Failed to complete inventory adjustment"
 msgstr "इन्वेंटरी समायोजन पूरा करने में विफल"
 
+msgid "Failed to convert image"
+msgstr "छवि परिवर्तित करने में विफल"
+
 msgid "Failed to end operations"
 msgstr "ऑपरेशन समाप्त करने में विफल"
 
