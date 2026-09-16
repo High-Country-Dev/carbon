@@ -45,6 +45,7 @@ import {
   LuStickyNote,
   LuTimer,
   LuTrash,
+  LuTriangleAlert,
   LuUndo2
 } from "react-icons/lu";
 import { Link, useFetcher } from "react-router";
@@ -62,6 +63,7 @@ import type {
   JobOperationBatchDetail,
   JobOperationBatchEvent
 } from "../../types";
+import JobStatus from "../Jobs/JobStatus";
 import { BatchStatus } from "./BatchesTable";
 import { batchPlanBreakdown } from "./batch-builder-logic";
 
@@ -212,6 +214,9 @@ export function BatchDetailDrawer({
   );
 
   const memberCount = batch.members.length;
+  const pendingJobs = batch.members.filter(
+    (m) => m.job?.status && !["Completed", "Cancelled"].includes(m.job.status)
+  );
   const totalQuantity = batch.members.reduce(
     (sum, m) => sum + (m.operationQuantity ?? 0),
     0
@@ -314,6 +319,23 @@ export function BatchDetailDrawer({
           <div className="grid h-full min-h-0 w-full grid-cols-1 lg:grid-cols-3">
             {/* Operations — the batch's contents */}
             <section className="flex min-h-0 flex-col lg:col-span-2">
+              {/* Stock only enters through each member job's receipt: a
+                  completed batch of un-completed (e.g. Draft) jobs has made
+                  its lots but put nothing on hand yet. Deliberately a nudge,
+                  not an auto-transition — completing the job stays a person's
+                  call. */}
+              {batch.status === "Completed" && pendingJobs.length > 0 && (
+                <div className="mx-6 mt-5 flex items-start gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-700 dark:text-amber-400">
+                  <LuTriangleAlert className="mt-0.5 size-3.5 shrink-0" />
+                  <span>
+                    <Trans>
+                      {pendingJobs.length} of {memberCount} member jobs are not
+                      completed yet — their output stays out of stock until each
+                      job is completed.
+                    </Trans>
+                  </span>
+                </div>
+              )}
               <div className="flex items-center gap-2 px-6 pt-5 pb-3">
                 <h2 className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                   <Trans>Operations</Trans>
@@ -353,16 +375,23 @@ export function BatchDetailDrawer({
                       return (
                         <Tr key={member.id}>
                           <Td className="font-medium">
-                            {member.job?.id ? (
-                              <Link
-                                to={path.to.jobDetails(member.job.id)}
-                                className="hover:underline"
-                              >
-                                {member.job.jobId}
-                              </Link>
-                            ) : (
-                              member.job?.jobId
-                            )}
+                            <HStack spacing={2}>
+                              {member.job?.id ? (
+                                <Link
+                                  to={path.to.jobDetails(member.job.id)}
+                                  className="hover:underline"
+                                >
+                                  {member.job.jobId}
+                                </Link>
+                              ) : (
+                                member.job?.jobId
+                              )}
+                              {batch.status === "Completed" &&
+                                member.job?.status &&
+                                member.job.status !== "Completed" && (
+                                  <JobStatus status={member.job.status} />
+                                )}
+                            </HStack>
                           </Td>
                           <Td>
                             <HStack spacing={2}>

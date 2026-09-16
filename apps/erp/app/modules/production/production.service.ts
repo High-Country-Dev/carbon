@@ -6087,7 +6087,7 @@ export async function getJobOperationBatchWithMembers(
   const members = await client
     .from("jobOperation")
     .select(
-      "id, description, operationQuantity, quantityComplete, quantityScrapped, status, setupTime, setupUnit, laborTime, laborUnit, machineTime, machineUnit, workCenter(name), job(id, jobId, customerId, salesOrderId), jobMakeMethod(item(readableIdWithRevision, name, thumbnailPath))"
+      "id, description, operationQuantity, quantityComplete, quantityScrapped, status, setupTime, setupUnit, laborTime, laborUnit, machineTime, machineUnit, workCenter(name), job(id, jobId, customerId, salesOrderId, status), jobMakeMethod(item(readableIdWithRevision, name, thumbnailPath))"
     )
     .eq("jobOperationBatchId", batchId)
     .eq("companyId", companyId);
