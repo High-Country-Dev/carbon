@@ -10,6 +10,7 @@ import { removeWorktreeCmd } from "./commands/remove.js";
 import { reset } from "./commands/reset.js";
 import { type RestoreMode, restore } from "./commands/restore.js";
 import { status } from "./commands/status.js";
+import { transcripts } from "./commands/transcripts.js";
 import { up } from "./commands/up.js";
 
 const main = defineCommand({
@@ -349,6 +350,51 @@ const main = defineCommand({
           },
           run: () => envSync()
         })
+      }
+    }),
+    transcripts: defineCommand({
+      meta: {
+        description:
+          "Attach the Claude Code session transcripts behind this branch to its PR (only what you typed — no assistant replies or tool output)"
+      },
+      args: {
+        branch: {
+          type: "string",
+          description: "Branch to collect transcripts for (default: current)"
+        },
+        pr: {
+          type: "string",
+          description: "PR number to post to (default: the PR for the branch)"
+        },
+        post: {
+          type: "boolean",
+          default: false,
+          description:
+            "Actually post to the PR (default: print a preview — posting is public and cannot be un-sent)"
+        },
+        out: {
+          type: "string",
+          description: "Write the markdown to this file instead of stdout"
+        },
+        yes: {
+          type: "boolean",
+          default: false,
+          description: "Skip the confirmation prompt when posting"
+        }
+      },
+      run: ({ args }) => {
+        const pr = args.pr === undefined ? undefined : Number(args.pr);
+        if (pr !== undefined && (!Number.isInteger(pr) || pr < 1)) {
+          console.error(`--pr must be a positive integer (got '${args.pr}')`);
+          process.exit(1);
+        }
+        return transcripts({
+          branch: typeof args.branch === "string" ? args.branch : undefined,
+          pr,
+          post: args.post === true,
+          out: typeof args.out === "string" ? args.out : undefined,
+          yes: args.yes === true
+        });
       }
     }),
     // Stubs so shell completion lists these — the bash router (`bin/crbn`)
