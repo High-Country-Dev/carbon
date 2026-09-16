@@ -65,6 +65,7 @@ import {
 } from "react-icons/lu";
 import { useFetcher, useNavigate } from "react-router";
 import { Enumerable, ItemThumbnail, Table } from "~/components";
+import { EnumerableGroup } from "~/components/EnumerableGroup";
 import { path } from "~/utils/path";
 import type { jobStatus } from "../../production.models";
 import type { BatchCandidate } from "../../types";
@@ -194,7 +195,11 @@ function CandidateJobStatus({ status }: { status: string | null }) {
 // The material chips shown on a candidate row: one per distinct BOM line —
 // property string when present, else the material item's readable id.
 function materialChips(candidate: BatchCandidate): string[] {
-  const chips = new Set<string>();
+  // Property signatures first, bare readable-id fallbacks last: compatibility
+  // is judged on the signatures, so they are the chips worth showing inline
+  // when the list is collapsed behind a +N.
+  const signatures = new Set<string>();
+  const fallbacks = new Set<string>();
   for (const m of candidate.materials ?? []) {
     const parts = [
       m.substanceName,
@@ -203,10 +208,13 @@ function materialChips(candidate: BatchCandidate): string[] {
       m.formName,
       m.finishName
     ].filter(Boolean);
-    const chip = parts.length ? parts.join(" ") : m.itemReadableId;
-    if (chip) chips.add(chip);
+    if (parts.length) {
+      signatures.add(parts.join(" "));
+    } else if (m.itemReadableId) {
+      fallbacks.add(m.itemReadableId);
+    }
   }
-  return [...chips];
+  return [...signatures, ...fallbacks];
 }
 
 // Numbered wizard step marker (StockTransferWizard precedent).
@@ -1793,16 +1801,11 @@ function CandidateTable({
                   {t`No materials`}
                 </span>
               ) : (
-                chips.map((chip) => (
-                  <Badge
-                    key={chip}
-                    variant="outline"
-                    className="max-w-[200px] font-normal text-muted-foreground"
-                    title={chip}
-                  >
-                    <span className="truncate">{chip}</span>
-                  </Badge>
-                ))
+                <EnumerableGroup
+                  chip="outline"
+                  chipClassName="max-w-[200px] font-normal text-muted-foreground"
+                  items={chips.map((chip) => ({ label: chip }))}
+                />
               )}
               <CompatBadge candidateId={row.original.id} compat={compat} />
             </HStack>

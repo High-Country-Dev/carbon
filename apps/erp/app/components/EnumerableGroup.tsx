@@ -1,5 +1,6 @@
 import {
   Badge,
+  cn,
   HoverCard,
   HoverCardContent,
   HoverCardTrigger
@@ -17,6 +18,7 @@ type EnumerableGroupProps = {
   // "enumerable" = colored entity chips; "outline" = readable-id badges,
   // matching how item ids render across the app.
   chip?: "enumerable" | "outline";
+  chipClassName?: string;
 };
 
 // Single-line sibling of AvatarGroup for Enumerable chips: the first `limit`
@@ -25,7 +27,8 @@ type EnumerableGroupProps = {
 const EnumerableGroup = ({
   items,
   limit = 2,
-  chip = "enumerable"
+  chip = "enumerable",
+  chipClassName
 }: EnumerableGroupProps) => {
   if (items.length === 0) return null;
   const visible = items.slice(0, limit);
@@ -37,7 +40,8 @@ const EnumerableGroup = ({
         key={item.label}
         variant="outline"
         onClick={item.onClick}
-        className={item.onClick ? "cursor-pointer" : undefined}
+        title={item.label}
+        className={cn(item.onClick && "cursor-pointer", chipClassName)}
       >
         {item.label}
       </Badge>
@@ -46,7 +50,7 @@ const EnumerableGroup = ({
         key={item.label}
         value={item.label}
         onClick={item.onClick}
-        className={item.onClick ? "cursor-pointer" : undefined}
+        className={cn(item.onClick && "cursor-pointer", chipClassName)}
       />
     );
 
