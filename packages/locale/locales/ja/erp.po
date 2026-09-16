@@ -1065,6 +1065,9 @@ msgstr "固定資産を除却する際の原価を会計処理する"
 msgid "Account for the purchase cost of fixed assets"
 msgstr "固定資産の購入原価を会計処理する"
 
+msgid "Account Holder"
+msgstr ""
+
 msgid "Account manager"
 msgstr "アカウント マネージャー"
 
@@ -2021,6 +2024,9 @@ msgstr "アーカイブ"
 msgid "Archive all"
 msgstr "すべてアーカイブ"
 
+msgid "Archive instead of deleting when an account is closed — payment history keeps pointing at it"
+msgstr ""
+
 msgid "Archived"
 msgstr "アーカイブ済み"
 
@@ -2338,6 +2344,9 @@ msgstr "Webhook: {0} を削除してもよろしいですか?これは元に戻�
 msgid "Are you sure you want to delete this approval rule? This cannot be undone."
 msgstr "このアプリケーション承認ルールを削除してもよろしいですか？この操作は取り消せません。"
 
+msgid "Are you sure you want to delete this bank account?"
+msgstr ""
+
 msgid "Are you sure you want to delete this change notice?"
 msgstr "この変更通知を削除してもよろしいですか？"
 
@@ -2412,6 +2421,9 @@ msgstr "{0}を完全に削除してもよろしいですか？"
 
 msgid "Are you sure you want to permanently delete the supplier process?"
 msgstr "仕入先工法を完全に削除してもよろしいですか？"
+
+msgid "Are you sure you want to permanently delete this bank account?"
+msgstr ""
 
 msgid "Are you sure you want to post this receipt?"
 msgstr "このレシートを転記してもよろしいですか？"
@@ -2808,8 +2820,20 @@ msgstr "外国通貨で表示される銀行口座"
 msgid "Bank account denominated in the local currency"
 msgstr "地元通貨で示された銀行口座。"
 
+msgid "Bank Accounts"
+msgstr ""
+
+msgid "Bank Address"
+msgstr ""
+
 msgid "Bank and financial service charge expenses"
 msgstr "銀行およびサービス料費用"
+
+msgid "Bank Code"
+msgstr ""
+
+msgid "Bank Name"
+msgstr ""
 
 msgid "Bars show each week's flow: <0>supply</0> pushes inventory up, <1>demand</1> pulls it down. The <2>line</2> is your projected on-hand inventory — when it dips below <3>safety stock</3> you're at risk, and below zero is a <4>stockout</4>."
 msgstr "棒グラフは毎週の流れを表示します：<0>供給</0>は在庫を増加させ、<1>所要量</1>は減少させます。<2>線</2>は予測在庫です。<3>安全在庫</3>を下回る場合はリスク状態であり、ゼロを下回る場合は<4>欠品</4>です。"
@@ -3019,6 +3043,9 @@ msgstr "ライブラリを参照"
 
 msgid "Browse the published version read-only. You can still rearrange steps to tidy the layout."
 msgstr "公開済バージョンを読み取り専用で閲覧できます。レイアウトを整理するためにステップを並び替えることもできます。"
+
+msgid "BSB"
+msgstr ""
 
 msgid "Bucket"
 msgstr "バケット"
@@ -6228,6 +6255,9 @@ msgstr "属性を編集"
 msgid "Edit Attribute Category"
 msgstr "属性カテゴリを編集"
 
+msgid "Edit Bank Account"
+msgstr ""
+
 msgid "Edit Category"
 msgstr "カテゴリを編集"
 
@@ -8153,6 +8183,9 @@ msgstr "ヘルプ"
 msgid "Hide"
 msgstr "非表示"
 
+msgid "Hide account number"
+msgstr ""
+
 msgid "Hide raw"
 msgstr "生データを非表示"
 
@@ -8375,6 +8408,9 @@ msgstr "この個人は22 CFR 120.62で定義されている米国人である�
 msgid "I'm Still Working"
 msgstr "まだ働いています"
 
+msgid "IBAN"
+msgstr ""
+
 msgid "Id"
 msgstr "ID"
 
@@ -8425,6 +8461,9 @@ msgstr "何か問題が生じた場合"
 
 msgid "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
 msgstr "部品番号を変更したい場合は、[キャンセル]をクリックして、変換する前に各行アイテムの部品を手動で割り当ててください。"
+
+msgid "IFSC Code"
+msgstr ""
 
 msgid "Ignore"
 msgstr "無視"
@@ -10465,6 +10504,9 @@ msgstr "新しい属性"
 msgid "New Attribute Category"
 msgstr "新しい属性カテゴリ"
 
+msgid "New Bank Account"
+msgstr ""
+
 msgid "New Batch"
 msgstr "新規バッチ"
 
@@ -10865,6 +10907,9 @@ msgstr "利用可能な絞り込みはありません"
 msgid "No available tracked entities found"
 msgstr "利用可能な追跡対象エンティティが見つかりません"
 
+msgid "No bank accounts have been added yet."
+msgstr ""
+
 msgid "No batches"
 msgstr "バッチなし"
 
@@ -10927,6 +10972,9 @@ msgstr "ディメンションスロットが構成されていません"
 
 msgid "No dimension values mapped yet"
 msgstr "まだディメンション値がマップされていません"
+
+msgid "No documents"
+msgstr ""
 
 msgid "No draft make method for this item yet."
 msgstr "この品目の下書き製造方法はまだありません。"
@@ -11606,6 +11654,12 @@ msgstr "下書きの手順書のみが編集可能です。有効またはアー
 
 msgid "Only empty, open periods can be deleted."
 msgstr "空のオープン期間のみ削除できます。"
+
+msgid "Only if it differs from the customer name"
+msgstr ""
+
+msgid "Only if it differs from the supplier name"
+msgstr ""
 
 msgid "Only qualified employees can be scheduled for and run this process"
 msgstr "資格のある従業員のみがこのプロセスをスケジュールして実行できます"
@@ -12710,6 +12764,12 @@ msgstr "価格設定ルール"
 
 msgid "Pricing Trace"
 msgstr "価格設定トレース"
+
+msgid "Primary"
+msgstr ""
+
+msgid "Primary Account"
+msgstr ""
 
 msgid "Primary cash account for bank transactions"
 msgstr "銀行取引の主要な現金勘定"
@@ -14153,6 +14213,9 @@ msgstr "返す:"
 msgid "Rev {revision}"
 msgstr "Rev {revision}"
 
+msgid "Reveal account number"
+msgstr ""
+
 msgid "Revenue"
 msgstr "売上高"
 
@@ -14340,6 +14403,9 @@ msgstr "すべての売掛金請求書を、個別の拠点の代わりに、1�
 
 msgid "Routing"
 msgstr "工順"
+
+msgid "Routing Number (ABA)"
+msgstr ""
 
 msgid "rows"
 msgstr "行"
@@ -15733,6 +15799,9 @@ msgstr "昇順でソート"
 msgid "Sort by"
 msgstr "並べ替え"
 
+msgid "Sort Code"
+msgstr ""
+
 msgid "Sort Descending"
 msgstr "降順でソート"
 
@@ -16374,6 +16443,9 @@ msgstr "サーフェス"
 
 msgid "Suspected Failure Mode"
 msgstr "疑わしい故障モード"
+
+msgid "SWIFT / BIC"
+msgstr ""
 
 msgid "Switch"
 msgstr "切り替え"
@@ -18109,6 +18181,9 @@ msgstr "この会社の所有権を別のユーザーに転送します。"
 msgid "Transfer To"
 msgstr "転送先"
 
+msgid "Transit & Institution"
+msgstr ""
+
 msgid "Trash"
 msgstr "ゴミ箱"
 
@@ -18568,6 +18643,12 @@ msgstr "別のメールアドレスを使用"
 
 msgid "Use metric system for default material dimensions."
 msgstr "デフォルト材料ディメンションにメートル法を使用してください。"
+
+msgid "Use this account by default when paying this supplier"
+msgstr ""
+
+msgid "Use this account by default when refunding this customer"
+msgstr ""
 
 msgid "Used In"
 msgstr "使用されている"

@@ -1065,6 +1065,9 @@ msgstr "Учесть себестоимость основного средст�
 msgid "Account for the purchase cost of fixed assets"
 msgstr "Учесть себестоимость приобретения основного средства"
 
+msgid "Account Holder"
+msgstr ""
+
 msgid "Account manager"
 msgstr "Менеджер счета"
 
@@ -2021,6 +2024,9 @@ msgstr "Архив"
 msgid "Archive all"
 msgstr "Архивировать все"
 
+msgid "Archive instead of deleting when an account is closed — payment history keeps pointing at it"
+msgstr ""
+
 msgid "Archived"
 msgstr "Архивировано"
 
@@ -2338,6 +2344,9 @@ msgstr "Вы уверены, что хотите удалить вебхук: {0
 msgid "Are you sure you want to delete this approval rule? This cannot be undone."
 msgstr "Вы уверены, что хотите удалить это правило утверждения? Это действие невозможно отменить."
 
+msgid "Are you sure you want to delete this bank account?"
+msgstr ""
+
 msgid "Are you sure you want to delete this change notice?"
 msgstr "Вы уверены, что хотите удалить это извещение об изменении?"
 
@@ -2412,6 +2421,9 @@ msgstr "Вы уверены, что хотите окончательно уда
 
 msgid "Are you sure you want to permanently delete the supplier process?"
 msgstr "Вы уверены, что хотите окончательно удалить процесс поставщика?"
+
+msgid "Are you sure you want to permanently delete this bank account?"
+msgstr ""
 
 msgid "Are you sure you want to post this receipt?"
 msgstr "Вы уверены, что хотите провести этот приходный ордер?"
@@ -2808,8 +2820,20 @@ msgstr "Банковский счет в иностранной валюте."
 msgid "Bank account denominated in the local currency"
 msgstr "Банковский счет в местной валюте."
 
+msgid "Bank Accounts"
+msgstr ""
+
+msgid "Bank Address"
+msgstr ""
+
 msgid "Bank and financial service charge expenses"
 msgstr "Расходы банка и сервисного сбора финансовых услуг"
+
+msgid "Bank Code"
+msgstr ""
+
+msgid "Bank Name"
+msgstr ""
 
 msgid "Bars show each week's flow: <0>supply</0> pushes inventory up, <1>demand</1> pulls it down. The <2>line</2> is your projected on-hand inventory — when it dips below <3>safety stock</3> you're at risk, and below zero is a <4>stockout</4>."
 msgstr "Столбцы показывают поток каждой недели: <0>обеспечение</0> увеличивает запасы, <1>потребность</1> снижает их. <2>Строка</2> — это ваши прогнозируемые запасы на складе — когда она падает ниже <3>страхового запаса</3>, вы в зоне риска, а ниже нуля — <4>дефицит</4>."
@@ -3019,6 +3043,9 @@ msgstr "Обзор библиотеки"
 
 msgid "Browse the published version read-only. You can still rearrange steps to tidy the layout."
 msgstr "Просмотрите опубликованную версию в режиме только для чтения. Вы все еще можете переставлять шаги для очистки макета."
+
+msgid "BSB"
+msgstr ""
 
 msgid "Bucket"
 msgstr "Хранилище"
@@ -6228,6 +6255,9 @@ msgstr "Изменить атрибут"
 msgid "Edit Attribute Category"
 msgstr "Изменить категорию атрибутов"
 
+msgid "Edit Bank Account"
+msgstr ""
+
 msgid "Edit Category"
 msgstr "Изменить категорию"
 
@@ -8153,6 +8183,9 @@ msgstr "Справка"
 msgid "Hide"
 msgstr "Скрыть"
 
+msgid "Hide account number"
+msgstr ""
+
 msgid "Hide raw"
 msgstr "Скрыть исходное"
 
@@ -8375,6 +8408,9 @@ msgstr "У меня есть разумные основания полагат�
 msgid "I'm Still Working"
 msgstr "Я всё ещё работаю"
 
+msgid "IBAN"
+msgstr ""
+
 msgid "Id"
 msgstr "ID"
 
@@ -8425,6 +8461,9 @@ msgstr "Если что-то идет не по плану"
 
 msgid "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
 msgstr "Если вы хотите изменить номера деталей, нажмите Отмена и вручную назначьте детали для каждого элемента строки перед преобразованием."
+
+msgid "IFSC Code"
+msgstr ""
 
 msgid "Ignore"
 msgstr "Игнорировать"
@@ -10465,6 +10504,9 @@ msgstr "Новый атрибут"
 msgid "New Attribute Category"
 msgstr "Новая категория атрибутов"
 
+msgid "New Bank Account"
+msgstr ""
+
 msgid "New Batch"
 msgstr "Новый пакет"
 
@@ -10865,6 +10907,9 @@ msgstr "Нет доступных фильтров"
 msgid "No available tracked entities found"
 msgstr "Не найдено доступных отслеживаемых объектов"
 
+msgid "No bank accounts have been added yet."
+msgstr ""
+
 msgid "No batches"
 msgstr "Нет серий"
 
@@ -10927,6 +10972,9 @@ msgstr "Слоты измерений не настроены"
 
 msgid "No dimension values mapped yet"
 msgstr "Значения измерений еще не сопоставлены"
+
+msgid "No documents"
+msgstr ""
 
 msgid "No draft make method for this item yet."
 msgstr "Пока нет чернового метода производства для этого элемента."
@@ -11606,6 +11654,12 @@ msgstr "Редактировать можно только процедуры в
 
 msgid "Only empty, open periods can be deleted."
 msgstr "Удалять можно только пустые открытые периоды."
+
+msgid "Only if it differs from the customer name"
+msgstr ""
+
+msgid "Only if it differs from the supplier name"
+msgstr ""
 
 msgid "Only qualified employees can be scheduled for and run this process"
 msgstr "Только квалифицированные сотрудники могут быть запланированы и выполнить этот процесс"
@@ -12710,6 +12764,12 @@ msgstr "Правила ценообразования"
 
 msgid "Pricing Trace"
 msgstr "Трассировка ценообразования"
+
+msgid "Primary"
+msgstr ""
+
+msgid "Primary Account"
+msgstr ""
 
 msgid "Primary cash account for bank transactions"
 msgstr "Основной счет денежных средств для банковских операций"
@@ -14153,6 +14213,9 @@ msgstr "Возвращает:"
 msgid "Rev {revision}"
 msgstr "Ред. {revision}"
 
+msgid "Reveal account number"
+msgstr ""
+
 msgid "Revenue"
 msgstr "Выручка"
 
@@ -14340,6 +14403,9 @@ msgstr "Маршрутизируйте все счета-фактуры деби
 
 msgid "Routing"
 msgstr "Маршрут операций"
+
+msgid "Routing Number (ABA)"
+msgstr ""
 
 msgid "rows"
 msgstr "строк"
@@ -15733,6 +15799,9 @@ msgstr "Сортировать по возрастанию"
 msgid "Sort by"
 msgstr "Сортировать по"
 
+msgid "Sort Code"
+msgstr ""
+
 msgid "Sort Descending"
 msgstr "Сортировка по убыванию"
 
@@ -16374,6 +16443,9 @@ msgstr "Поверхности"
 
 msgid "Suspected Failure Mode"
 msgstr "Предполагаемый режим отказа"
+
+msgid "SWIFT / BIC"
+msgstr ""
 
 msgid "Switch"
 msgstr "Переключить"
@@ -18109,6 +18181,9 @@ msgstr "Передайте право собственности на эту о�
 msgid "Transfer To"
 msgstr "Передать в"
 
+msgid "Transit & Institution"
+msgstr ""
+
 msgid "Trash"
 msgstr "Корзина"
 
@@ -18568,6 +18643,12 @@ msgstr "Использовать другой адрес электронной 
 
 msgid "Use metric system for default material dimensions."
 msgstr "Используйте метрическую систему для измерений материала по умолчанию."
+
+msgid "Use this account by default when paying this supplier"
+msgstr ""
+
+msgid "Use this account by default when refunding this customer"
+msgstr ""
 
 msgid "Used In"
 msgstr "Используется в"

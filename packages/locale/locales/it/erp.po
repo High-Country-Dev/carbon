@@ -1065,6 +1065,9 @@ msgstr "Contabilizzate il costo dei cespiti quando ceduti."
 msgid "Account for the purchase cost of fixed assets"
 msgstr "Contabilizzate il costo di acquisizione dei cespiti."
 
+msgid "Account Holder"
+msgstr ""
+
 msgid "Account manager"
 msgstr "Responsabile account"
 
@@ -2021,6 +2024,9 @@ msgstr "Archivio"
 msgid "Archive all"
 msgstr "Archivia tutto"
 
+msgid "Archive instead of deleting when an account is closed — payment history keeps pointing at it"
+msgstr ""
+
 msgid "Archived"
 msgstr "Archiviato"
 
@@ -2338,6 +2344,9 @@ msgstr "Sei sicuro di voler eliminare il webhook: {0}? Questa azione non può es
 msgid "Are you sure you want to delete this approval rule? This cannot be undone."
 msgstr "Sei sicuro di voler eliminare questa regola di approvazione? Questa azione non può essere annullata."
 
+msgid "Are you sure you want to delete this bank account?"
+msgstr ""
+
 msgid "Are you sure you want to delete this change notice?"
 msgstr "Sei sicuro di voler eliminare questo avviso di modifica?"
 
@@ -2412,6 +2421,9 @@ msgstr "Sei sicuro di voler eliminare permanentemente {0}?"
 
 msgid "Are you sure you want to permanently delete the supplier process?"
 msgstr "Sei sicuro di voler eliminare permanentemente il processo del fornitore?"
+
+msgid "Are you sure you want to permanently delete this bank account?"
+msgstr ""
 
 msgid "Are you sure you want to post this receipt?"
 msgstr "Sei sicuro di voler registrare questa ricevuta?"
@@ -2808,8 +2820,20 @@ msgstr "Conto bancario denominato in una valuta estera."
 msgid "Bank account denominated in the local currency"
 msgstr "Conto bancario denominato nella valuta locale."
 
+msgid "Bank Accounts"
+msgstr ""
+
+msgid "Bank Address"
+msgstr ""
+
 msgid "Bank and financial service charge expenses"
 msgstr "Spese per commissioni di servizi bancari e finanziari."
+
+msgid "Bank Code"
+msgstr ""
+
+msgid "Bank Name"
+msgstr ""
 
 msgid "Bars show each week's flow: <0>supply</0> pushes inventory up, <1>demand</1> pulls it down. The <2>line</2> is your projected on-hand inventory — when it dips below <3>safety stock</3> you're at risk, and below zero is a <4>stockout</4>."
 msgstr "I grafici mostrano il flusso di ogni settimana: <0>copertura</0> spinge il magazzino verso l'alto, <1>fabbisogno</1> lo tira verso il basso. La <2>riga</2> è il tuo magazzino disponibile previsto — quando scende al di sotto della <3>scorta di sicurezza</3> sei a rischio, e al di sotto di zero è una <4>rottura di stock</4>."
@@ -3019,6 +3043,9 @@ msgstr "Sfoglia libreria"
 
 msgid "Browse the published version read-only. You can still rearrange steps to tidy the layout."
 msgstr "Visualizza la versione pubblicata in sola lettura. Puoi comunque riorganizzare i passi per ordinare il layout."
+
+msgid "BSB"
+msgstr ""
 
 msgid "Bucket"
 msgstr "Bucket"
@@ -6228,6 +6255,9 @@ msgstr "Modifica Attributo"
 msgid "Edit Attribute Category"
 msgstr "Modifica Categoria Attributo"
 
+msgid "Edit Bank Account"
+msgstr ""
+
 msgid "Edit Category"
 msgstr "Modifica Categoria"
 
@@ -8153,6 +8183,9 @@ msgstr "Aiuto"
 msgid "Hide"
 msgstr "Nascondi"
 
+msgid "Hide account number"
+msgstr ""
+
 msgid "Hide raw"
 msgstr "Nascondi raw"
 
@@ -8375,6 +8408,9 @@ msgstr "Ho una ragionevole base per credere che questo individuo sia una persona
 msgid "I'm Still Working"
 msgstr "Sto ancora lavorando"
 
+msgid "IBAN"
+msgstr ""
+
 msgid "Id"
 msgstr "ID"
 
@@ -8425,6 +8461,9 @@ msgstr "Se qualcosa non è in linea"
 
 msgid "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
 msgstr "Se desideri modificare i numeri dei componenti, fai clic su Annulla e assegna manualmente i componenti per ogni riga prima della conversione."
+
+msgid "IFSC Code"
+msgstr ""
 
 msgid "Ignore"
 msgstr "Ignora"
@@ -10465,6 +10504,9 @@ msgstr "Nuovo Attributo"
 msgid "New Attribute Category"
 msgstr "Nuova Categoria Attributo"
 
+msgid "New Bank Account"
+msgstr ""
+
 msgid "New Batch"
 msgstr "Nuovo Batch"
 
@@ -10865,6 +10907,9 @@ msgstr "Nessun filtro disponibile"
 msgid "No available tracked entities found"
 msgstr "Nessuna entità tracciata disponibile trovata"
 
+msgid "No bank accounts have been added yet."
+msgstr ""
+
 msgid "No batches"
 msgstr "Nessun lotto di produzione"
 
@@ -10927,6 +10972,9 @@ msgstr "Nessuno slot dimensionale configurato"
 
 msgid "No dimension values mapped yet"
 msgstr "Nessun valore di dimensione mappato ancora"
+
+msgid "No documents"
+msgstr ""
 
 msgid "No draft make method for this item yet."
 msgstr "Ancora nessun metodo di produzione in bozza per questo articolo."
@@ -11606,6 +11654,12 @@ msgstr "Solo le procedure in bozza sono modificabili. Crea una nuova versione pe
 
 msgid "Only empty, open periods can be deleted."
 msgstr "Solo i periodi aperti e vuoti possono essere eliminati."
+
+msgid "Only if it differs from the customer name"
+msgstr ""
+
+msgid "Only if it differs from the supplier name"
+msgstr ""
 
 msgid "Only qualified employees can be scheduled for and run this process"
 msgstr "Solo i dipendenti qualificati possono essere programmati e eseguire questo processo"
@@ -12710,6 +12764,12 @@ msgstr "Regole di Prezzo"
 
 msgid "Pricing Trace"
 msgstr "Traccia della determinazione dei prezzi"
+
+msgid "Primary"
+msgstr ""
+
+msgid "Primary Account"
+msgstr ""
 
 msgid "Primary cash account for bank transactions"
 msgstr "Conto cassa primario per le transazioni bancarie"
@@ -14153,6 +14213,9 @@ msgstr "Restituisce:"
 msgid "Rev {revision}"
 msgstr "Rev {revision}"
 
+msgid "Reveal account number"
+msgstr ""
+
 msgid "Revenue"
 msgstr "Ricavi"
 
@@ -14340,6 +14403,9 @@ msgstr "Instrada tutte le fatture di vendita a un indirizzo (ad es. sede central
 
 msgid "Routing"
 msgstr "Ciclo di lavorazione"
+
+msgid "Routing Number (ABA)"
+msgstr ""
 
 msgid "rows"
 msgstr "righe"
@@ -15733,6 +15799,9 @@ msgstr "Ordina crescente"
 msgid "Sort by"
 msgstr "Ordina per"
 
+msgid "Sort Code"
+msgstr ""
+
 msgid "Sort Descending"
 msgstr "Ordina decrescente"
 
@@ -16374,6 +16443,9 @@ msgstr "Superfici"
 
 msgid "Suspected Failure Mode"
 msgstr "Modalità di guasto sospetta"
+
+msgid "SWIFT / BIC"
+msgstr ""
 
 msgid "Switch"
 msgstr "Cambia"
@@ -18109,6 +18181,9 @@ msgstr "Trasferisci la proprietà di questa azienda a un altro utente"
 msgid "Transfer To"
 msgstr "Trasferisci A"
 
+msgid "Transit & Institution"
+msgstr ""
+
 msgid "Trash"
 msgstr "Cestino"
 
@@ -18568,6 +18643,12 @@ msgstr "Usa un'email diversa"
 
 msgid "Use metric system for default material dimensions."
 msgstr "Utilizza il sistema metrico per le dimensioni predefinite dei materiali."
+
+msgid "Use this account by default when paying this supplier"
+msgstr ""
+
+msgid "Use this account by default when refunding this customer"
+msgstr ""
 
 msgid "Used In"
 msgstr "Utilizzato in"

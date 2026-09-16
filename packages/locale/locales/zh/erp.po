@@ -1065,6 +1065,9 @@ msgstr "处置固定资产时计入其成本"
 msgid "Account for the purchase cost of fixed assets"
 msgstr "固定资产的收购成本计账。"
 
+msgid "Account Holder"
+msgstr ""
+
 msgid "Account manager"
 msgstr "账户经理"
 
@@ -2021,6 +2024,9 @@ msgstr "存档"
 msgid "Archive all"
 msgstr "全部存档"
 
+msgid "Archive instead of deleting when an account is closed — payment history keeps pointing at it"
+msgstr ""
+
 msgid "Archived"
 msgstr "已归档"
 
@@ -2338,6 +2344,9 @@ msgstr "您确定要删除webhook: {0}吗？此操作无法撤销。"
 msgid "Are you sure you want to delete this approval rule? This cannot be undone."
 msgstr "你确定要删除此审批规则吗？此操作无法撤销。"
 
+msgid "Are you sure you want to delete this bank account?"
+msgstr ""
+
 msgid "Are you sure you want to delete this change notice?"
 msgstr "确定要删除此变更通知吗？"
 
@@ -2412,6 +2421,9 @@ msgstr "您确定要永久删除 {0} 吗？"
 
 msgid "Are you sure you want to permanently delete the supplier process?"
 msgstr "确定要永久删除供应商工艺吗？"
+
+msgid "Are you sure you want to permanently delete this bank account?"
+msgstr ""
 
 msgid "Are you sure you want to post this receipt?"
 msgstr "你确定要过账此收据吗？"
@@ -2808,8 +2820,20 @@ msgstr "以外币计价的银行账户"
 msgid "Bank account denominated in the local currency"
 msgstr "以本地货币计价的银行账户。"
 
+msgid "Bank Accounts"
+msgstr ""
+
+msgid "Bank Address"
+msgstr ""
+
 msgid "Bank and financial service charge expenses"
 msgstr "银行和金融服务费用。"
+
+msgid "Bank Code"
+msgstr ""
+
+msgid "Bank Name"
+msgstr ""
 
 msgid "Bars show each week's flow: <0>supply</0> pushes inventory up, <1>demand</1> pulls it down. The <2>line</2> is your projected on-hand inventory — when it dips below <3>safety stock</3> you're at risk, and below zero is a <4>stockout</4>."
 msgstr "柱状图显示每周的流向：<0>供应</0>推高库存，<1>需求</1>拉低库存。<2>线</2>表示您的预计现有库存 — 当它跌破<3>安全库存</3>时，您面临风险；跌破零则是<4>缺货</4>。"
@@ -3019,6 +3043,9 @@ msgstr "浏览库"
 
 msgid "Browse the published version read-only. You can still rearrange steps to tidy the layout."
 msgstr "浏览已发布版本（只读）。您仍然可以重新排列步骤来整理布局。"
+
+msgid "BSB"
+msgstr ""
 
 msgid "Bucket"
 msgstr "存储桶"
@@ -6228,6 +6255,9 @@ msgstr "编辑属性"
 msgid "Edit Attribute Category"
 msgstr "编辑属性类别"
 
+msgid "Edit Bank Account"
+msgstr ""
+
 msgid "Edit Category"
 msgstr "编辑分类"
 
@@ -8153,6 +8183,9 @@ msgstr "帮助"
 msgid "Hide"
 msgstr "隐藏"
 
+msgid "Hide account number"
+msgstr ""
+
 msgid "Hide raw"
 msgstr "隐藏原始内容"
 
@@ -8375,6 +8408,9 @@ msgstr "我有合理的理由相信该个人是根据 22 CFR 120.62 定义的美
 msgid "I'm Still Working"
 msgstr "我仍在工作"
 
+msgid "IBAN"
+msgstr ""
+
 msgid "Id"
 msgstr "ID"
 
@@ -8425,6 +8461,9 @@ msgstr "如果有什么偏离轨道"
 
 msgid "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
 msgstr "如果您希望更改零件号，请点击\"取消\"并在转换前为每个行项目手动分配零件。"
+
+msgid "IFSC Code"
+msgstr ""
 
 msgid "Ignore"
 msgstr "忽略"
@@ -10465,6 +10504,9 @@ msgstr "新属性"
 msgid "New Attribute Category"
 msgstr "新属性类别"
 
+msgid "New Bank Account"
+msgstr ""
+
 msgid "New Batch"
 msgstr "新批次"
 
@@ -10865,6 +10907,9 @@ msgstr "没有可用的筛选器"
 msgid "No available tracked entities found"
 msgstr "未找到可用的追踪实体"
 
+msgid "No bank accounts have been added yet."
+msgstr ""
+
 msgid "No batches"
 msgstr "无生产批次"
 
@@ -10927,6 +10972,9 @@ msgstr "未配置维度插槽"
 
 msgid "No dimension values mapped yet"
 msgstr "尚未映射维度值"
+
+msgid "No documents"
+msgstr ""
 
 msgid "No draft make method for this item yet."
 msgstr "此项目还没有草稿制造方法。"
@@ -11606,6 +11654,12 @@ msgstr "仅草稿程序文件可编辑。创建新版本以更改启用或已归
 
 msgid "Only empty, open periods can be deleted."
 msgstr "仅可删除空的、未结会计期间。"
+
+msgid "Only if it differs from the customer name"
+msgstr ""
+
+msgid "Only if it differs from the supplier name"
+msgstr ""
 
 msgid "Only qualified employees can be scheduled for and run this process"
 msgstr "只有合格的员工才能被安排和运行此流程"
@@ -12710,6 +12764,12 @@ msgstr "定价规则"
 
 msgid "Pricing Trace"
 msgstr "定价追踪"
+
+msgid "Primary"
+msgstr ""
+
+msgid "Primary Account"
+msgstr ""
 
 msgid "Primary cash account for bank transactions"
 msgstr "银行交易的主要现金账户"
@@ -14153,6 +14213,9 @@ msgstr "返回："
 msgid "Rev {revision}"
 msgstr "修订版 {revision}"
 
+msgid "Reveal account number"
+msgstr ""
+
 msgid "Revenue"
 msgstr "收入"
 
@@ -14340,6 +14403,9 @@ msgstr "将所有应收账款发票路由到一个地址（例如公司总部）
 
 msgid "Routing"
 msgstr "工艺路线"
+
+msgid "Routing Number (ABA)"
+msgstr ""
 
 msgid "rows"
 msgstr "行"
@@ -15733,6 +15799,9 @@ msgstr "升序排列"
 msgid "Sort by"
 msgstr "按排序"
 
+msgid "Sort Code"
+msgstr ""
+
 msgid "Sort Descending"
 msgstr "按降序排序"
 
@@ -16374,6 +16443,9 @@ msgstr "表面"
 
 msgid "Suspected Failure Mode"
 msgstr "疑似故障模式"
+
+msgid "SWIFT / BIC"
+msgstr ""
 
 msgid "Switch"
 msgstr "切换"
@@ -18109,6 +18181,9 @@ msgstr "将此公司的所有权转移给另一个用户"
 msgid "Transfer To"
 msgstr "转移至"
 
+msgid "Transit & Institution"
+msgstr ""
+
 msgid "Trash"
 msgstr "垃圾桶"
 
@@ -18568,6 +18643,12 @@ msgstr "使用不同的电子邮件"
 
 msgid "Use metric system for default material dimensions."
 msgstr "使用公制作为默认原材料尺寸。"
+
+msgid "Use this account by default when paying this supplier"
+msgstr ""
+
+msgid "Use this account by default when refunding this customer"
+msgstr ""
 
 msgid "Used In"
 msgstr "用于"

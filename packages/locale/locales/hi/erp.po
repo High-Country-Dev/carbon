@@ -1065,6 +1065,9 @@ msgstr "निपटान के समय अचल संपत्तिय�
 msgid "Account for the purchase cost of fixed assets"
 msgstr "अचल संपत्तियों की अधिग्रहण लागत के लिए खाता।"
 
+msgid "Account Holder"
+msgstr ""
+
 msgid "Account manager"
 msgstr "खाता प्रबंधक"
 
@@ -2021,6 +2024,9 @@ msgstr "संग्रह"
 msgid "Archive all"
 msgstr "सभी को संग्रहित करें"
 
+msgid "Archive instead of deleting when an account is closed — payment history keeps pointing at it"
+msgstr ""
+
 msgid "Archived"
 msgstr "संग्रहीत"
 
@@ -2338,6 +2344,9 @@ msgstr "क्या आप वेबहुक {0} को हटाना चा
 msgid "Are you sure you want to delete this approval rule? This cannot be undone."
 msgstr "क्या आप इस अनुमोदन नियम को हटाना चाहते हैं? यह वापस नहीं किया जा सकता।"
 
+msgid "Are you sure you want to delete this bank account?"
+msgstr ""
+
 msgid "Are you sure you want to delete this change notice?"
 msgstr "क्या आप इस परिवर्तन सूचना को हटाना चाहते हैं?"
 
@@ -2412,6 +2421,9 @@ msgstr "क्या आप {0} को स्थायी रूप से ह�
 
 msgid "Are you sure you want to permanently delete the supplier process?"
 msgstr "क्या आप आपूर्तिकर्ता प्रक्रिया को स्थायी रूप से हटाना चाहते हैं?"
+
+msgid "Are you sure you want to permanently delete this bank account?"
+msgstr ""
 
 msgid "Are you sure you want to post this receipt?"
 msgstr "क्या आप सुनिश्चित हैं कि आप इस रसीद को पोस्ट करना चाहते हैं?"
@@ -2808,8 +2820,20 @@ msgstr "बैंक खाता एक विदेशी मुद्रा �
 msgid "Bank account denominated in the local currency"
 msgstr "बैंक खाता स्थानीय मुद्रा में मूल्यवर्गित।"
 
+msgid "Bank Accounts"
+msgstr ""
+
+msgid "Bank Address"
+msgstr ""
+
 msgid "Bank and financial service charge expenses"
 msgstr "बैंक और वित्तीय सेवा शुल्क व्यय।"
+
+msgid "Bank Code"
+msgstr ""
+
+msgid "Bank Name"
+msgstr ""
 
 msgid "Bars show each week's flow: <0>supply</0> pushes inventory up, <1>demand</1> pulls it down. The <2>line</2> is your projected on-hand inventory — when it dips below <3>safety stock</3> you're at risk, and below zero is a <4>stockout</4>."
 msgstr "बार प्रत्येक सप्ताह के प्रवाह को दिखाते हैं: &lt;0&gt;आपूर्ति&lt;/0&gt; इन्वेंटरी को ऊपर धकेलती है, &lt;1&gt;मांग&lt;/1&gt; इसे नीचे खींचती है। &lt;2&gt;लाइन&lt;/2&gt; आपकी अनुमानित उपलब्ध इन्वेंटरी है — जब यह &lt;3&gt;सुरक्षा स्टॉक&lt;/3&gt; के नीचे गिरती है तो आप जोखिम में हैं, और शून्य से नीचे एक &lt;4&gt;स्टॉकआउट&lt;/4&gt; है।"
@@ -3019,6 +3043,9 @@ msgstr "लाइब्रेरी ब्राउज़ करें"
 
 msgid "Browse the published version read-only. You can still rearrange steps to tidy the layout."
 msgstr "प्रकाशित संस्करण को केवल पढ़ने के लिए ब्राउज़ करें। आप अभी भी लेआउट को साफ करने के लिए चरणों को पुनर्व्यवस्थित कर सकते हैं।"
+
+msgid "BSB"
+msgstr ""
 
 msgid "Bucket"
 msgstr "बकेट"
@@ -6228,6 +6255,9 @@ msgstr "विशेषता संपादित करें"
 msgid "Edit Attribute Category"
 msgstr "विशेषता श्रेणी संपादित करें"
 
+msgid "Edit Bank Account"
+msgstr ""
+
 msgid "Edit Category"
 msgstr "श्रेणी संपादित करें"
 
@@ -8153,6 +8183,9 @@ msgstr "मदद"
 msgid "Hide"
 msgstr "छिपाएं"
 
+msgid "Hide account number"
+msgstr ""
+
 msgid "Hide raw"
 msgstr "कच्चे को छुपाएं"
 
@@ -8375,6 +8408,9 @@ msgstr "मेरे पास यह मानने का उचित आध
 msgid "I'm Still Working"
 msgstr "मैं अभी भी काम कर रहा हूँ"
 
+msgid "IBAN"
+msgstr ""
+
 msgid "Id"
 msgstr "आईडी"
 
@@ -8425,6 +8461,9 @@ msgstr "अगर कुछ गलत रास्ते पर है"
 
 msgid "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
 msgstr "यदि आप पार्ट नंबर बदलना चाहते हैं, तो कृपया रद्द करें पर क्लिक करें और परिवर्तित करने से पहले प्रत्येक पंक्ति आइटम के लिए पार्ट्स को मैन्युअल रूप से असाइन करें।"
+
+msgid "IFSC Code"
+msgstr ""
 
 msgid "Ignore"
 msgstr "अनदेखा करें"
@@ -10465,6 +10504,9 @@ msgstr "नई विशेषता"
 msgid "New Attribute Category"
 msgstr "नई विशेषता श्रेणी"
 
+msgid "New Bank Account"
+msgstr ""
+
 msgid "New Batch"
 msgstr "नया बैच"
 
@@ -10865,6 +10907,9 @@ msgstr "कोई उपलब्ध फ़िल्टर नहीं"
 msgid "No available tracked entities found"
 msgstr "कोई उपलब्ध ट्रैक किए गए इकाइयां नहीं मिलीं"
 
+msgid "No bank accounts have been added yet."
+msgstr ""
+
 msgid "No batches"
 msgstr "कोई बैच नहीं"
 
@@ -10927,6 +10972,9 @@ msgstr "कोई आयाम स्लॉट कॉन्फ़िगर न�
 
 msgid "No dimension values mapped yet"
 msgstr "अभी तक कोई आयाम मान मैप नहीं किया गया"
+
+msgid "No documents"
+msgstr ""
 
 msgid "No draft make method for this item yet."
 msgstr "इस आइटम के लिए अभी तक कोई ड्राफ्ट निर्माण विधि नहीं है।"
@@ -11606,6 +11654,12 @@ msgstr "केवल ड्राफ्ट कार्यविधियाँ 
 
 msgid "Only empty, open periods can be deleted."
 msgstr "केवल खाली, खुली अवधियों को हटाया जा सकता है।"
+
+msgid "Only if it differs from the customer name"
+msgstr ""
+
+msgid "Only if it differs from the supplier name"
+msgstr ""
 
 msgid "Only qualified employees can be scheduled for and run this process"
 msgstr "केवल योग्य कर्मचारी ही इस प्रक्रिया के लिए अनुसूचित और चलाए जा सकते हैं"
@@ -12710,6 +12764,12 @@ msgstr "मूल्य निर्धारण नियम"
 
 msgid "Pricing Trace"
 msgstr "मूल्य निर्धारण ट्रेस"
+
+msgid "Primary"
+msgstr ""
+
+msgid "Primary Account"
+msgstr ""
 
 msgid "Primary cash account for bank transactions"
 msgstr "बैंक लेनदेन के लिए प्राथमिक नकद खाता"
@@ -14153,6 +14213,9 @@ msgstr "रिटर्न:"
 msgid "Rev {revision}"
 msgstr "Rev {revision}"
 
+msgid "Reveal account number"
+msgstr ""
+
 msgid "Revenue"
 msgstr "राजस्व"
 
@@ -14340,6 +14403,9 @@ msgstr "सभी प्राप्य खाते चालानों क�
 
 msgid "Routing"
 msgstr "रूटिंग"
+
+msgid "Routing Number (ABA)"
+msgstr ""
 
 msgid "rows"
 msgstr "पंक्तियाँ"
@@ -15733,6 +15799,9 @@ msgstr "आरोही क्रम में सॉर्ट करें"
 msgid "Sort by"
 msgstr "द्वारा क्रमबद्ध करें"
 
+msgid "Sort Code"
+msgstr ""
+
 msgid "Sort Descending"
 msgstr "अवरोही क्रम में सॉर्ट करें"
 
@@ -16374,6 +16443,9 @@ msgstr "सतहें"
 
 msgid "Suspected Failure Mode"
 msgstr "संदिग्ध विफलता मोड"
+
+msgid "SWIFT / BIC"
+msgstr ""
 
 msgid "Switch"
 msgstr "स्विच करें"
@@ -18109,6 +18181,9 @@ msgstr "इस कंपनी की स्वामित्व किसी �
 msgid "Transfer To"
 msgstr "को स्थानांतरित करें"
 
+msgid "Transit & Institution"
+msgstr ""
+
 msgid "Trash"
 msgstr "ट्रैश"
 
@@ -18568,6 +18643,12 @@ msgstr "एक अलग ईमेल का उपयोग करें"
 
 msgid "Use metric system for default material dimensions."
 msgstr "डिफ़ॉल्ट सामग्री आयामों के लिए मीट्रिक सिस्टम का उपयोग करें।"
+
+msgid "Use this account by default when paying this supplier"
+msgstr ""
+
+msgid "Use this account by default when refunding this customer"
+msgstr ""
 
 msgid "Used In"
 msgstr "में उपयोग किया गया"

@@ -1,3 +1,4 @@
+import { getBankFieldConfig, isValidSwiftBic } from "@carbon/utils";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
@@ -402,6 +403,122 @@ export const supplierLocationValidator = z.object({
   name: zfd.text(z.string()),
   ...address
 });
+
+export const supplierBankAccountValidator = z
+  .object({
+    id: zfd.text(z.string().optional()),
+    supplierId: z.string().min(1, { message: "Supplier is required" }),
+    name: zfd.text(z.string().min(1, { message: "Name is required" })),
+    accountHolderName: zfd.text(z.string().optional()),
+    bankName: zfd.text(z.string().optional()),
+    bankAddress: zfd.text(z.string().optional()),
+    countryCode: zfd.text(z.string().optional()),
+    currencyCode: zfd.text(z.string().optional()),
+    // Generic by design: `accountNumber` holds an IBAN in SEPA and a plain
+    // account number elsewhere; `bankCode` holds an ABA / sort code / BSB /
+    // IFSC / transit. countryCode decides which validator applies, so a new
+    // country is an entry in getBankFieldConfig, not a migration.
+    accountNumber: zfd.text(z.string().optional()),
+    bankCode: zfd.text(z.string().optional()),
+    swiftBic: zfd.text(z.string().optional()),
+    // Parsed, not just validated: the column is JSONB, so a raw string would be
+    // stored as a JSON string rather than an object.
+    bankDetails: zfd
+      .text(
+        z
+          .string()
+          .optional()
+          .transform((value, ctx) => {
+            if (!value) return undefined;
+            try {
+              const parsed = JSON.parse(value);
+              if (
+                parsed === null ||
+                typeof parsed !== "object" ||
+                Array.isArray(parsed)
+              ) {
+                throw new Error("not an object");
+              }
+              return parsed as Record<string, unknown>;
+            } catch {
+              ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "Additional details must be a JSON object"
+              });
+              return z.NEVER;
+            }
+          })
+      )
+      .optional(),
+    isPrimary: zfd.checkbox(),
+    // Archive rather than delete: a closed account still has payment history
+    // pointing at it. Requires a control on every form — an unchecked box
+    // submits nothing, so a field with no control would archive every save.
+    active: zfd.checkbox(),
+    notes: zfd.text(z.string().optional())
+  })
+  .superRefine((data, ctx) => {
+    const config = getBankFieldConfig(data.countryCode);
+
+    if (!data.accountNumber) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "An account number is required",
+        path: ["accountNumber"]
+      });
+    } else if (
+      config.validateAccount &&
+      !config.validateAccount(data.accountNumber)
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Invalid account number for the selected country",
+        path: ["accountNumber"]
+      });
+    }
+
+    if (
+      config.bankCodeLabel !== null &&
+      data.bankCode &&
+      config.validateBankCode &&
+      !config.validateBankCode(data.bankCode)
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Invalid bank code for the selected country",
+        path: ["bankCode"]
+      });
+    }
+
+    // Cross-border payments will not route without a BIC, so where the country
+    // config demands one, absence is an error rather than a blank field.
+    if (!data.swiftBic) {
+      if (config.requiresSwift) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "A SWIFT/BIC code is required for this country",
+          path: ["swiftBic"]
+        });
+      }
+    } else if (!isValidSwiftBic(data.swiftBic)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Invalid SWIFT/BIC code",
+        path: ["swiftBic"]
+      });
+    }
+  })
+  // Countries with no routing identifier (SEPA: the IBAN carries it) unmount the
+  // input, so nothing is submitted. Left undefined, an update would skip the
+  // column entirely and strand the previous country's code on the row — so it is
+  // explicitly nulled rather than merely absent.
+  .transform((data) => ({
+    ...data,
+    bankCode:
+      getBankFieldConfig(data.countryCode).bankCodeLabel === null
+        ? null
+        : (data.bankCode ?? null)
+  }));
 
 export const supplierPaymentValidator = z.object({
   supplierId: z.string().min(1, { message: "Supplier is required" }),

@@ -667,6 +667,10 @@ function getDocumentLocation(
       return path.to.salesInvoice(sourceDocumentId);
     case "Supplier Quote":
       return path.to.supplierQuote(sourceDocumentId);
+    case "Supplier":
+      return path.to.supplierDetails(sourceDocumentId);
+    case "Customer":
+      return path.to.customerDetails(sourceDocumentId);
     default:
       return "#";
   }

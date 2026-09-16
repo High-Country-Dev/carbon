@@ -1065,6 +1065,9 @@ msgstr "고정자산 처분 시 원가 계정"
 msgid "Account for the purchase cost of fixed assets"
 msgstr "고정자산 구매 원가 계정"
 
+msgid "Account Holder"
+msgstr ""
+
 msgid "Account manager"
 msgstr "계정 관리자"
 
@@ -2021,6 +2024,9 @@ msgstr "보관"
 msgid "Archive all"
 msgstr "전체 보관"
 
+msgid "Archive instead of deleting when an account is closed — payment history keeps pointing at it"
+msgstr ""
+
 msgid "Archived"
 msgstr "보관됨"
 
@@ -2338,6 +2344,9 @@ msgstr "웹훅 {0}을(를) 삭제하시겠습니까? 이 작업은 되돌릴 수
 msgid "Are you sure you want to delete this approval rule? This cannot be undone."
 msgstr "이 승인 규칙을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."
 
+msgid "Are you sure you want to delete this bank account?"
+msgstr ""
+
 msgid "Are you sure you want to delete this change notice?"
 msgstr "이 변경 통지를 삭제하시겠습니까?"
 
@@ -2412,6 +2421,9 @@ msgstr "{0}을(를) 영구적으로 삭제하시겠습니까?"
 
 msgid "Are you sure you want to permanently delete the supplier process?"
 msgstr "공급업체 공법을 영구적으로 삭제하시겠습니까?"
+
+msgid "Are you sure you want to permanently delete this bank account?"
+msgstr ""
 
 msgid "Are you sure you want to post this receipt?"
 msgstr "이 입고를 전기하시겠습니까?"
@@ -2808,8 +2820,20 @@ msgstr "외화로 표시된 은행 계좌"
 msgid "Bank account denominated in the local currency"
 msgstr "자국통화로 표시된 은행 계좌"
 
+msgid "Bank Accounts"
+msgstr ""
+
+msgid "Bank Address"
+msgstr ""
+
 msgid "Bank and financial service charge expenses"
 msgstr "은행 및 금융 서비스 요금 비용"
+
+msgid "Bank Code"
+msgstr ""
+
+msgid "Bank Name"
+msgstr ""
 
 msgid "Bars show each week's flow: <0>supply</0> pushes inventory up, <1>demand</1> pulls it down. The <2>line</2> is your projected on-hand inventory — when it dips below <3>safety stock</3> you're at risk, and below zero is a <4>stockout</4>."
 msgstr "막대는 매주의 흐름을 보여줍니다: <0>공급</0>은 재고를 올리고, <1>소요량</1>은 내립니다. <2>라인</2>은 예상 현재고 — <3>안전 재고</3> 아래로 떨어지면 위험에 처해 있고, 0 아래는 <4>재고 부족</4>입니다."
@@ -3019,6 +3043,9 @@ msgstr "라이브러리 둘러보기"
 
 msgid "Browse the published version read-only. You can still rearrange steps to tidy the layout."
 msgstr "게시된 버전을 읽기 전용으로 찾아봅니다. 여전히 단계를 재정렬하여 레이아웃을 정돈할 수 있습니다."
+
+msgid "BSB"
+msgstr ""
 
 msgid "Bucket"
 msgstr "버킷"
@@ -6228,6 +6255,9 @@ msgstr "속성 편집"
 msgid "Edit Attribute Category"
 msgstr "속성 카테고리 편집"
 
+msgid "Edit Bank Account"
+msgstr ""
+
 msgid "Edit Category"
 msgstr "카테고리 편집"
 
@@ -8153,6 +8183,9 @@ msgstr "도움말"
 msgid "Hide"
 msgstr "숨기기"
 
+msgid "Hide account number"
+msgstr ""
+
 msgid "Hide raw"
 msgstr "원본 숨기기"
 
@@ -8375,6 +8408,9 @@ msgstr "나는 이 개인이 22 CFR 120.62에서 정의한 미국인이라고 �
 msgid "I'm Still Working"
 msgstr "아직 작업 중입니다"
 
+msgid "IBAN"
+msgstr ""
+
 msgid "Id"
 msgstr "Id"
 
@@ -8425,6 +8461,9 @@ msgstr "일정에서 벗어난 경우"
 
 msgid "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
 msgstr "부품 번호를 변경하려면 취소를 클릭하고 변환 전에 각 라인의 부품을 수동으로 할당하세요."
+
+msgid "IFSC Code"
+msgstr ""
 
 msgid "Ignore"
 msgstr "무시"
@@ -10465,6 +10504,9 @@ msgstr "신규 속성"
 msgid "New Attribute Category"
 msgstr "신규 속성 카테고리"
 
+msgid "New Bank Account"
+msgstr ""
+
 msgid "New Batch"
 msgstr "새 배치"
 
@@ -10865,6 +10907,9 @@ msgstr "사용 가능한 필터가 없습니다."
 msgid "No available tracked entities found"
 msgstr "추적 가능한 항목을 찾을 수 없습니다."
 
+msgid "No bank accounts have been added yet."
+msgstr ""
+
 msgid "No batches"
 msgstr "배치 없음"
 
@@ -10927,6 +10972,9 @@ msgstr "구성된 차원 슬롯이 없습니다"
 
 msgid "No dimension values mapped yet"
 msgstr "아직 매핑된 차원 값이 없습니다"
+
+msgid "No documents"
+msgstr ""
 
 msgid "No draft make method for this item yet."
 msgstr "이 품목에 대한 초안 생산 방법이 아직 없습니다."
@@ -11606,6 +11654,12 @@ msgstr "초안 절차서만 편집 가능합니다. 활성 또는 보관됨 절�
 
 msgid "Only empty, open periods can be deleted."
 msgstr "비어있는 열린 기간만 삭제할 수 있습니다."
+
+msgid "Only if it differs from the customer name"
+msgstr ""
+
+msgid "Only if it differs from the supplier name"
+msgstr ""
 
 msgid "Only qualified employees can be scheduled for and run this process"
 msgstr "자격이 있는 직원만 이 프로세스를 예약하고 실행할 수 있습니다."
@@ -12710,6 +12764,12 @@ msgstr "가격 규칙"
 
 msgid "Pricing Trace"
 msgstr "가격 책정 추적"
+
+msgid "Primary"
+msgstr ""
+
+msgid "Primary Account"
+msgstr ""
 
 msgid "Primary cash account for bank transactions"
 msgstr "은행 거래를 위한 기본 현금 계정"
@@ -14153,6 +14213,9 @@ msgstr "반환 값:"
 msgid "Rev {revision}"
 msgstr "Rev {revision}"
 
+msgid "Reveal account number"
+msgstr ""
+
 msgid "Revenue"
 msgstr "매출"
 
@@ -14340,6 +14403,9 @@ msgstr "모든 매출채권 송장을 개별 사업장 대신 한 주소(예: �
 
 msgid "Routing"
 msgstr "라우팅"
+
+msgid "Routing Number (ABA)"
+msgstr ""
 
 msgid "rows"
 msgstr "행"
@@ -15733,6 +15799,9 @@ msgstr "오름차순 정렬"
 msgid "Sort by"
 msgstr "정렬 기준"
 
+msgid "Sort Code"
+msgstr ""
+
 msgid "Sort Descending"
 msgstr "내림차순 정렬"
 
@@ -16374,6 +16443,9 @@ msgstr "표면"
 
 msgid "Suspected Failure Mode"
 msgstr "의심되는 고장 모드"
+
+msgid "SWIFT / BIC"
+msgstr ""
 
 msgid "Switch"
 msgstr "전환"
@@ -18109,6 +18181,9 @@ msgstr "이 회사의 소유권을 다른 사용자에게 이전"
 msgid "Transfer To"
 msgstr "이동 도착지"
 
+msgid "Transit & Institution"
+msgstr ""
+
 msgid "Trash"
 msgstr "휴지통"
 
@@ -18568,6 +18643,12 @@ msgstr "다른 이메일 사용"
 
 msgid "Use metric system for default material dimensions."
 msgstr "기본 자재 치수에 미터법을 사용합니다."
+
+msgid "Use this account by default when paying this supplier"
+msgstr ""
+
+msgid "Use this account by default when refunding this customer"
+msgstr ""
 
 msgid "Used In"
 msgstr "사용처"
