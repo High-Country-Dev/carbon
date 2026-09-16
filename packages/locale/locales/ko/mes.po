@@ -65,7 +65,7 @@ msgid "{fails} sampled failure(s) are recorded and will NOT be completed — res
 msgstr "{fails}개의 샘플 불량이 기록되었으며 완료되지 않습니다 — 작업 메뉴에서 해결하세요."
 
 msgid "{lotCount} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
-msgstr ""
+msgstr "동일한 품목의 {lotCount}개 로트가 생산되었습니다. 하나의 로트로 병합할까요? 병합된 로트는 각 작업 지시로 거슬러 올라갑니다."
 
 msgid "+{overflow} more"
 msgstr "+{overflow} 더 보기"

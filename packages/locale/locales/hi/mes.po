@@ -65,7 +65,7 @@ msgid "{fails} sampled failure(s) are recorded and will NOT be completed — res
 msgstr "{fails} नमूना विफलता(एं) दर्ज की गई है और पूर्ण नहीं की जाएगी — उन्हें क्रियाएं मेनू से हल करें।"
 
 msgid "{lotCount} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
-msgstr ""
+msgstr "एक ही आइटम के {lotCount} लॉट का उत्पादन किया गया। क्या उन्हें एक लॉट में मर्ज करें? मर्ज किया गया लॉट हर जॉब को वापस ट्रेस करता है।"
 
 msgid "+{overflow} more"
 msgstr "+{overflow} अधिक"

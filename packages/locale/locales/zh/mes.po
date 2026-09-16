@@ -65,7 +65,7 @@ msgid "{fails} sampled failure(s) are recorded and will NOT be completed — res
 msgstr "{fails} 个抽样不合格已被记录，将不会被完成 — 从操作菜单解决它们。"
 
 msgid "{lotCount} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
-msgstr ""
+msgstr "{lotCount}个相同物料的批次已生产。将它们合并为一个批次？合并的批次可追溯到每个工单。"
 
 msgid "+{overflow} more"
 msgstr "还有 +{overflow} 个"

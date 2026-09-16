@@ -65,7 +65,7 @@ msgid "{fails} sampled failure(s) are recorded and will NOT be completed — res
 msgstr "{fails} örnek hata(ları) kaydedildi ve tamamlanmayacak — bunları işlemler menüsünden çözün."
 
 msgid "{lotCount} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
-msgstr ""
+msgstr "Aynı Stok kartı için {lotCount} Lot üretildi. Bunları bir Lot'ta birleştirelim mi? Birleştirilen Lot, her İş emri'ne kadar izlenebilir."
 
 msgid "+{overflow} more"
 msgstr "+{overflow} daha fazla"

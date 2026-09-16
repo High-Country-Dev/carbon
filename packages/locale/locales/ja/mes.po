@@ -65,7 +65,7 @@ msgid "{fails} sampled failure(s) are recorded and will NOT be completed — res
 msgstr "{fails}件のサンプル不良が記録されており、完了されません — アクションメニューから対応してください。"
 
 msgid "{lotCount} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
-msgstr ""
+msgstr "{lotCount}個の同じ品目のロットが生産されました。1つのロットに統合しますか？統合されたロットはすべての製造指図に遡ります。"
 
 msgid "+{overflow} more"
 msgstr "+{overflow} その他"

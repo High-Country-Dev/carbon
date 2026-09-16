@@ -65,7 +65,7 @@ msgid "{fails} sampled failure(s) are recorded and will NOT be completed — res
 msgstr "{fails} записанных отказов будут НЕ завершены — разрешите их из меню действий."
 
 msgid "{lotCount} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
-msgstr ""
+msgstr "{lotCount} Партий одной Номенклатуры было произведено. Объединить их в одну Партию? Объединённая Партия отслеживает каждый Производственный заказ."
 
 msgid "+{overflow} more"
 msgstr "+{overflow} ещё"

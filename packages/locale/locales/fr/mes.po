@@ -65,7 +65,7 @@ msgid "{fails} sampled failure(s) are recorded and will NOT be completed — res
 msgstr "{fails} défaut(s) échantillonné(s) enregistré(s) et ne seront PAS complété(s) — résolvez-les à partir du menu des actions."
 
 msgid "{lotCount} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
-msgstr ""
+msgstr "{lotCount} lots du même article ont été produits. Les fusionner en un seul lot ? Le lot fusionné remonte à chaque ordre de fabrication."
 
 msgid "+{overflow} more"
 msgstr "+{overflow} autres"
