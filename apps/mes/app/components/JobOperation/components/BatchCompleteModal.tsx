@@ -93,6 +93,22 @@ export function BatchCompleteModal({
     (r) => toNumber(r.quantity) === 0 && toNumber(r.scrapQuantity) === 0
   );
 
+  // A member that will produce a lot (batch-tracked, quantity > 0) must carry
+  // a batch number: completing without one mints an Available lot with no
+  // readable number. Pre-filled when the job's batch number property (the WIP
+  // entity's readableId, editable in the job detail sidebar) was set.
+  const requiresNumber = (i: number) => {
+    const m = members[i];
+    return Boolean(
+      m?.requiresBatchTracking &&
+        m?.trackedEntityId &&
+        toNumber(rows[i]?.quantity ?? "0") > 0
+    );
+  };
+  const missingBatchNumbers = members.some(
+    (_, i) => requiresNumber(i) && !(batchNumbers[i] ?? "").trim()
+  );
+
   return (
     <Modal
       open
@@ -233,9 +249,17 @@ export function BatchCompleteModal({
                                     )
                                   )
                                 }
+                                placeholder={t`Required`}
+                                aria-invalid={
+                                  requiresNumber(i) &&
+                                  !(batchNumbers[i] ?? "").trim()
+                                }
                                 className={cn(
                                   cellInputClass,
-                                  "text-left font-mono"
+                                  "text-left font-mono placeholder:text-muted-foreground/50",
+                                  requiresNumber(i) &&
+                                    !(batchNumbers[i] ?? "").trim() &&
+                                    "ring-1 ring-inset ring-destructive/40"
                                 )}
                               />
                             ) : null}
@@ -255,7 +279,7 @@ export function BatchCompleteModal({
             </p>
           </ModalBody>
           <ModalFooter>
-            <Submit size="lg" isDisabled={allExcluded}>
+            <Submit size="lg" isDisabled={allExcluded || missingBatchNumbers}>
               {isCompleting ? t`Retry Completion` : t`Complete Batch`}
             </Submit>
           </ModalFooter>

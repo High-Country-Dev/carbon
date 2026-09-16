@@ -1842,7 +1842,7 @@ serve(async (req: Request) => {
         const [entity, productionQuantities] = await Promise.all([
           client
             .from("trackedEntity")
-            .select("id, status")
+            .select("id, status, readableId")
             .eq("id", trackedEntityId)
             .eq("companyId", companyId)
             .single(),
@@ -1859,6 +1859,15 @@ serve(async (req: Request) => {
         // Resume no-op: a prior attempt already produced this member's output.
         if (entity.data.status === "Available") {
           return jsonResponse({ success: true, created: false });
+        }
+
+        // An Available lot must carry a number. The modal enforces this; the
+        // check here is the backstop for direct calls. A resume passes because
+        // the prior attempt already wrote the entity's readableId.
+        if (!readableId && !entity.data.readableId) {
+          throw new Error(
+            `Operation ${jobOperationId} produces a batch-tracked item — its batch number is required`
+          );
         }
 
         const totalQuantity =
