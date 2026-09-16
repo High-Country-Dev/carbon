@@ -2254,6 +2254,18 @@ export async function getUnitOfMeasure(
     .single();
 }
 
+/**
+ * Which tables still reference a unit of measure, and how many rows each;
+ * empty means safe to delete (or id not visible to the caller). RPC-backed so
+ * the answer doesn't depend on the caller's module permissions.
+ */
+export async function getUnitOfMeasureUsage(
+  client: SupabaseClient<Database>,
+  id: string
+) {
+  return client.rpc("get_unit_of_measure_usage", { p_id: id });
+}
+
 export async function getUnitOfMeasures(
   client: SupabaseClient<Database>,
   companyId: string,

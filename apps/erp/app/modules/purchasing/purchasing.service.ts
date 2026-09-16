@@ -898,6 +898,47 @@ export async function getSupplierShipping(
     .single();
 }
 
+// Batched report data for the Suppliers CSV export: the Purchasing/Invoice/Shipping
+// contact + address, one query per role. Queries supplierPayment/supplierShipping as
+// the FROM table (forward FK to supplierContact/supplierLocation) rather than
+// embedding them into `suppliers` — their FK back to supplier is composite
+// (supplierId, companyId), which supabase-js's type generator marks `isOneToOne:
+// false` even though supplierId alone is the real PK, so a reverse embed would type
+// (and risk behaving) as an array instead of a single object.
+export async function getSupplierReportContacts(
+  client: SupabaseClient<Database>,
+  companyId: string,
+  supplierIds: string[]
+) {
+  return Promise.all([
+    client
+      .from("supplier")
+      .select(
+        `id, purchasingContact:supplierContact!supplier_purchasingContactId_fkey(contact(fullName, email, workPhone))`
+      )
+      .eq("companyId", companyId)
+      .in("id", supplierIds),
+    client
+      .from("supplierPayment")
+      .select(
+        `supplierId,
+         invoiceContact:supplierContact!supplierPayment_invoiceSupplierContactId_fkey(contact(fullName, email, workPhone)),
+         invoiceLocation:supplierLocation!supplierPayment_invoiceSupplierLocationId_fkey(address(addressLine1, addressLine2, city, stateProvince, postalCode, country(name)))`
+      )
+      .eq("companyId", companyId)
+      .in("supplierId", supplierIds),
+    client
+      .from("supplierShipping")
+      .select(
+        `supplierId,
+         shippingContact:supplierContact!supplierShipping_shippingSupplierContactId_fkey(contact(fullName, email, workPhone)),
+         shippingLocation:supplierLocation!supplierShipping_shippingSupplierLocationId_fkey(address(addressLine1, addressLine2, city, stateProvince, postalCode, country(name)))`
+      )
+      .eq("companyId", companyId)
+      .in("supplierId", supplierIds)
+  ]);
+}
+
 export async function getSuppliers(
   client: SupabaseClient<Database>,
   companyId: string,
