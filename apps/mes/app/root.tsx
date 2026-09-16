@@ -42,6 +42,7 @@ import {
 } from "react-router";
 import { loadLinguiCatalogForRequest } from "~/services/lingui.server";
 import { getMode, setMode } from "~/services/mode.server";
+import SonnerStyle from "sonner/dist/styles.css?url";
 import Background from "~/styles/background.css?url";
 import NProgress from "~/styles/nprogress.css?url";
 import Tailwind from "~/styles/tailwind.css?url";
@@ -59,6 +60,7 @@ export const clientMiddleware = [flashClientMiddleware];
 
 export const links: Route.LinksFunction = () => [
   { rel: "stylesheet", href: Tailwind },
+  { rel: "stylesheet", href: SonnerStyle },
   { rel: "stylesheet", href: Background },
   { rel: "stylesheet", href: NProgress },
   ...faviconLinks
