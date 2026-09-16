@@ -1,5 +1,5 @@
 {
-  "totalTools": 1553,
+  "totalTools": 1554,
   "modules": 15,
   "tools": [
     {"name":"account_deleteUserAttributeValue","classification":"DESTRUCTIVE","paramCount":2,"schema":"0d38e12233b4","response":"bcde375ebd4c","injectAuth":"companyId","permission":"none","paginates":false},
@@ -936,6 +936,7 @@
     {"name":"purchasing_getSupplierQuotes","classification":"READ","paramCount":3,"schema":"04eded31eebb","response":"9e311e59b82e","injectAuth":"companyId","permission":"purchasing:view","paginates":true},
     {"name":"purchasing_getSupplierQuotesForComparison","classification":"READ","paramCount":1,"schema":"4e16cef99961","response":"540207b2c74e","injectAuth":"companyId","permission":"purchasing:view","paginates":false},
     {"name":"purchasing_getSupplierQuotesList","classification":"READ","paramCount":0,"schema":"efddc7bd8bbc","response":"967dcad15168","injectAuth":"companyId","permission":"purchasing:view","paginates":false},
+    {"name":"purchasing_getSupplierReportContacts","classification":"READ","paramCount":1,"schema":"f6d6276b4996","response":"3a10d699a924","injectAuth":"companyId","permission":"purchasing:view","paginates":false},
     {"name":"purchasing_getSuppliers","classification":"READ","paramCount":5,"schema":"3fbb04d0ef7e","response":"947b627d845e","injectAuth":"companyId","permission":"purchasing:view","paginates":true},
     {"name":"purchasing_getSupplierShipping","classification":"READ","paramCount":1,"schema":"67043a31b1b5","response":"17117a952d24","injectAuth":"companyId","permission":"purchasing:view","paginates":false},
     {"name":"purchasing_getSuppliersList","classification":"READ","paramCount":0,"schema":"efddc7bd8bbc","response":"ce08332e0ce6","injectAuth":"companyId","permission":"purchasing:view","paginates":false},

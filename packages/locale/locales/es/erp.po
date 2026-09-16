@@ -1156,7 +1156,6 @@ msgid "Accumulation Period:"
 msgstr "Período de Acumulación:"
 
 msgid "Acknowledge & finish"
-msgstr "Reconocer y finalizar"
 msgstr "Confirmar y finalizar"
 
 msgid "Acknowledged itar"
@@ -7614,7 +7613,6 @@ msgid "Finish To"
 msgstr "Terminar En"
 
 msgid "Finish with material unpicked?"
-msgstr "¿Finalizar con material sin recoger?"
 msgstr "¿Finalizar sin recoger el material?"
 
 msgid "Finished goods"
@@ -8804,8 +8802,20 @@ msgstr "Invitado"
 msgid "Invoice"
 msgstr "Factura"
 
+msgid "Invoice Address"
+msgstr ""
+
 msgid "Invoice Contact"
 msgstr "Contacto de Factura"
+
+msgid "Invoice Contact Email"
+msgstr ""
+
+msgid "Invoice Contact Name"
+msgstr ""
+
+msgid "Invoice Contact Phone"
+msgstr ""
 
 msgid "Invoice customer"
 msgstr "Cliente de factura"
@@ -9169,7 +9179,6 @@ msgid "Keep Open"
 msgstr "Mantener Abierto"
 
 msgid "Keep picking"
-msgstr "Continuar recogiendo"
 msgstr "Continuar picking"
 
 msgid "Keeps orders, quotes, and settings behind a second check"
@@ -13105,6 +13114,15 @@ msgstr "Contacto de compras"
 msgid "Purchasing Contact"
 msgstr "Contacto de Compras"
 
+msgid "Purchasing Contact Email"
+msgstr ""
+
+msgid "Purchasing Contact Name"
+msgstr ""
+
+msgid "Purchasing Contact Phone"
+msgstr ""
+
 msgid "Purchasing Invoices"
 msgstr "Facturas de Compra"
 
@@ -15458,8 +15476,20 @@ msgstr "Cantidad Enviada"
 msgid "Shipping"
 msgstr "Envío"
 
+msgid "Shipping Address"
+msgstr ""
+
 msgid "Shipping Contact"
 msgstr "Contacto de Envío"
+
+msgid "Shipping Contact Email"
+msgstr ""
+
+msgid "Shipping Contact Name"
+msgstr ""
+
+msgid "Shipping Contact Phone"
+msgstr ""
 
 msgid "Shipping Cost"
 msgstr "Costo de Envío"
@@ -17457,7 +17487,6 @@ msgid "These email addresses will be automatically CC'd on all quote emails sent
 msgstr "Estas direcciones de correo electrónico se copiarán automáticamente en todos los correos electrónicos de presupuestos enviados a los clientes."
 
 msgid "These items still have material to pick. Finishing now marks the list Partial."
-msgstr "Estos elementos todavía tienen material para recoger. Finalizar ahora marca la lista como Parcial."
 msgstr "Estos elementos aún tienen material para recoger. Finalizar ahora marca la lista como Parcial."
 
 msgid "These jobs have operations assigned to this work center:"

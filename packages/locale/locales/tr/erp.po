@@ -1156,7 +1156,6 @@ msgid "Accumulation Period:"
 msgstr "Biriktirme Dönemi:"
 
 msgid "Acknowledge & finish"
-msgstr "Kabul Et ve Bitir"
 msgstr "Onayla ve Bitir"
 
 msgid "Acknowledged itar"
@@ -7614,7 +7613,6 @@ msgid "Finish To"
 msgstr "Bitirmek İçin"
 
 msgid "Finish with material unpicked?"
-msgstr "Malzeme seçilmeden bitir mi?"
 msgstr "Seçilmemiş malzeme ile Bitir?"
 
 msgid "Finished goods"
@@ -8804,8 +8802,20 @@ msgstr "Davetli"
 msgid "Invoice"
 msgstr "Fatura"
 
+msgid "Invoice Address"
+msgstr ""
+
 msgid "Invoice Contact"
 msgstr "Fatura İlgili Kişisi"
+
+msgid "Invoice Contact Email"
+msgstr ""
+
+msgid "Invoice Contact Name"
+msgstr ""
+
+msgid "Invoice Contact Phone"
+msgstr ""
 
 msgid "Invoice customer"
 msgstr "Fatura müşterisi"
@@ -9169,7 +9179,6 @@ msgid "Keep Open"
 msgstr "Açık Tut"
 
 msgid "Keep picking"
-msgstr "Seçmeye devam et"
 msgstr "Toplamaya devam et"
 
 msgid "Keeps orders, quotes, and settings behind a second check"
@@ -13105,6 +13114,15 @@ msgstr "Satın alma ilgili kişi"
 msgid "Purchasing Contact"
 msgstr "Satın alma ilgili kişi"
 
+msgid "Purchasing Contact Email"
+msgstr ""
+
+msgid "Purchasing Contact Name"
+msgstr ""
+
+msgid "Purchasing Contact Phone"
+msgstr ""
+
 msgid "Purchasing Invoices"
 msgstr "Satın Alma Faturaları"
 
@@ -15458,8 +15476,20 @@ msgstr "Sevk Edilen Miktar"
 msgid "Shipping"
 msgstr "Nakliye"
 
+msgid "Shipping Address"
+msgstr ""
+
 msgid "Shipping Contact"
 msgstr "Sevkiyat İlgili kişi"
+
+msgid "Shipping Contact Email"
+msgstr ""
+
+msgid "Shipping Contact Name"
+msgstr ""
+
+msgid "Shipping Contact Phone"
+msgstr ""
 
 msgid "Shipping Cost"
 msgstr "Nakliye bedeli"
@@ -15516,7 +15546,6 @@ msgid "Shop-floor configuration."
 msgstr "Üretim katı yapılandırması."
 
 msgid "short"
-msgstr "kısa"
 msgstr "Kısa"
 
 msgid "Short"
@@ -17458,7 +17487,6 @@ msgid "These email addresses will be automatically CC'd on all quote emails sent
 msgstr "Bu e-posta adresleri, müşterilere gönderilen tüm teklif e-postalarına otomatik olarak CC'lenecektir."
 
 msgid "These items still have material to pick. Finishing now marks the list Partial."
-msgstr "Bu öğelerin seçmesi gereken malzeme var. Şimdi bitirmek listeyi Kısmi olarak işaretler."
 msgstr "Bu maddeler için hala seçilecek malzeme var. Şimdi bitirmek listeyi Kısmi olarak işaretler."
 
 msgid "These jobs have operations assigned to this work center:"

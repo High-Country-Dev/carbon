@@ -5,7 +5,8 @@ import { VStack } from "@carbon/react";
 import { msg } from "@lingui/core/macro";
 import type { LoaderFunctionArgs } from "react-router";
 import { Outlet, redirect, useLoaderData } from "react-router";
-import { getSuppliers } from "~/modules/purchasing";
+import type { SupplierReportContactsBySupplierId } from "~/modules/purchasing";
+import { getSupplierReportContacts, getSuppliers } from "~/modules/purchasing";
 import { SuppliersTable } from "~/modules/purchasing/ui/Supplier";
 import { getTagsList } from "~/modules/shared";
 import type { Handle } from "~/utils/handle";
@@ -52,19 +53,55 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
+  const supplierIds = (suppliers.data ?? [])
+    .map((s) => s.id)
+    .filter((id): id is string => !!id);
+
+  const [purchasingRes, paymentRes, shippingRes] =
+    await getSupplierReportContacts(client, companyId, supplierIds);
+
+  const purchasingBySupplierId = new Map(
+    (purchasingRes.data ?? []).map((r) => [r.id, r.purchasingContact])
+  );
+  const paymentBySupplierId = new Map(
+    (paymentRes.data ?? []).map((r) => [r.supplierId, r])
+  );
+  const shippingBySupplierId = new Map(
+    (shippingRes.data ?? []).map((r) => [r.supplierId, r])
+  );
+
+  const supplierReportContacts: SupplierReportContactsBySupplierId =
+    Object.fromEntries(
+      supplierIds.map((id) => [
+        id,
+        {
+          purchasingContact: purchasingBySupplierId.get(id) ?? null,
+          payment: paymentBySupplierId.get(id) ?? null,
+          shipping: shippingBySupplierId.get(id) ?? null
+        }
+      ])
+    );
+
   return {
     count: suppliers.count ?? 0,
     suppliers: suppliers.data ?? [],
-    tags: tags.data ?? []
+    tags: tags.data ?? [],
+    supplierReportContacts
   };
 }
 
 export default function PurchasingSuppliersRoute() {
-  const { count, suppliers, tags } = useLoaderData<typeof loader>();
+  const { count, suppliers, tags, supplierReportContacts } =
+    useLoaderData<typeof loader>();
 
   return (
     <VStack spacing={0} className="h-full">
-      <SuppliersTable data={suppliers} count={count} tags={tags} />
+      <SuppliersTable
+        data={suppliers}
+        count={count}
+        tags={tags}
+        supplierReportContacts={supplierReportContacts}
+      />
       <Outlet />
     </VStack>
   );

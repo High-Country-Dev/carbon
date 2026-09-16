@@ -1156,7 +1156,6 @@ msgid "Accumulation Period:"
 msgstr "Okres akumulacji:"
 
 msgid "Acknowledge & finish"
-msgstr "Potwierdź i dokończ"
 msgstr "Potwierdź i zakończ"
 
 msgid "Acknowledged itar"
@@ -7614,7 +7613,6 @@ msgid "Finish To"
 msgstr "Zakończyć do"
 
 msgid "Finish with material unpicked?"
-msgstr "Dokończyć bez zebranego materiału?"
 msgstr "Zakończyć bez rozliczenia materiału?"
 
 msgid "Finished goods"
@@ -8804,8 +8802,20 @@ msgstr "Zaproszony"
 msgid "Invoice"
 msgstr "Faktura"
 
+msgid "Invoice Address"
+msgstr ""
+
 msgid "Invoice Contact"
 msgstr "Kontakt do faktury"
+
+msgid "Invoice Contact Email"
+msgstr ""
+
+msgid "Invoice Contact Name"
+msgstr ""
+
+msgid "Invoice Contact Phone"
+msgstr ""
 
 msgid "Invoice customer"
 msgstr "Klient faktury"
@@ -9169,7 +9179,6 @@ msgid "Keep Open"
 msgstr "Utrzymaj otwarte"
 
 msgid "Keep picking"
-msgstr "Kontynuuj zbieranie"
 msgstr "Zachowaj kompletację"
 
 msgid "Keeps orders, quotes, and settings behind a second check"
@@ -13105,6 +13114,15 @@ msgstr "Kontakt ds. zakupów"
 msgid "Purchasing Contact"
 msgstr "Kontakt ds. Zakupów"
 
+msgid "Purchasing Contact Email"
+msgstr ""
+
+msgid "Purchasing Contact Name"
+msgstr ""
+
+msgid "Purchasing Contact Phone"
+msgstr ""
+
 msgid "Purchasing Invoices"
 msgstr "Faktury zakupu"
 
@@ -15458,8 +15476,20 @@ msgstr "Wysłana Ilość"
 msgid "Shipping"
 msgstr "Wysyłka"
 
+msgid "Shipping Address"
+msgstr ""
+
 msgid "Shipping Contact"
 msgstr "Kontakt wysyłki"
+
+msgid "Shipping Contact Email"
+msgstr ""
+
+msgid "Shipping Contact Name"
+msgstr ""
+
+msgid "Shipping Contact Phone"
+msgstr ""
 
 msgid "Shipping Cost"
 msgstr "Koszt wysyłki"
@@ -15516,7 +15546,6 @@ msgid "Shop-floor configuration."
 msgstr "Konfiguracja hali produkcyjnej."
 
 msgid "short"
-msgstr "skrót"
 msgstr "krótko"
 
 msgid "Short"
@@ -17458,7 +17487,6 @@ msgid "These email addresses will be automatically CC'd on all quote emails sent
 msgstr "Te adresy e-mail będą automatycznie dodawane w polu DW do wszystkich wiadomości e-mail z ofertami wysyłanych do klientów."
 
 msgid "These items still have material to pick. Finishing now marks the list Partial."
-msgstr "Te pozycje wciąż mają materiał do zebrania. Zakończenie teraz oznacza listę jako Niepełna."
 msgstr "Te elementy mają jeszcze materiał do pobrania. Zakończenie teraz oznaczy listę jako Częściowa."
 
 msgid "These jobs have operations assigned to this work center:"

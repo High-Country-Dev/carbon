@@ -7613,7 +7613,6 @@ msgid "Finish To"
 msgstr "Завершить в"
 
 msgid "Finish with material unpicked?"
-msgstr "Завершить с неподобранным материалом?"
 msgstr "Завершить с непобранным материалом?"
 
 msgid "Finished goods"
@@ -8803,8 +8802,20 @@ msgstr "Приглашено"
 msgid "Invoice"
 msgstr "Счет-фактура"
 
+msgid "Invoice Address"
+msgstr ""
+
 msgid "Invoice Contact"
 msgstr "Контактное лицо счета-фактуры"
+
+msgid "Invoice Contact Email"
+msgstr ""
+
+msgid "Invoice Contact Name"
+msgstr ""
+
+msgid "Invoice Contact Phone"
+msgstr ""
 
 msgid "Invoice customer"
 msgstr "Покупатель счета-фактуры"
@@ -9168,7 +9179,6 @@ msgid "Keep Open"
 msgstr "Оставить открытым"
 
 msgid "Keep picking"
-msgstr "Продолжить подбор"
 msgstr "Сохранить отбор"
 
 msgid "Keeps orders, quotes, and settings behind a second check"
@@ -13104,6 +13114,15 @@ msgstr "контактное лицо закупок"
 msgid "Purchasing Contact"
 msgstr "Контактное лицо закупок"
 
+msgid "Purchasing Contact Email"
+msgstr ""
+
+msgid "Purchasing Contact Name"
+msgstr ""
+
+msgid "Purchasing Contact Phone"
+msgstr ""
+
 msgid "Purchasing Invoices"
 msgstr "Счета-фактуры закупок"
 
@@ -15457,8 +15476,20 @@ msgstr "Отправленное кол-во"
 msgid "Shipping"
 msgstr "Доставка"
 
+msgid "Shipping Address"
+msgstr ""
+
 msgid "Shipping Contact"
 msgstr "Контактное лицо отгрузки"
+
+msgid "Shipping Contact Email"
+msgstr ""
+
+msgid "Shipping Contact Name"
+msgstr ""
+
+msgid "Shipping Contact Phone"
+msgstr ""
 
 msgid "Shipping Cost"
 msgstr "Стоимость доставки"
@@ -15515,7 +15546,6 @@ msgid "Shop-floor configuration."
 msgstr "Конфигурация цеха."
 
 msgid "short"
-msgstr "Краткий"
 msgstr "короткий"
 
 msgid "Short"
@@ -17457,7 +17487,6 @@ msgid "These email addresses will be automatically CC'd on all quote emails sent
 msgstr "Эти адреса электронной почты будут автоматически скопированы во все письма коммерческих предложений, отправляемые покупателям."
 
 msgid "These items still have material to pick. Finishing now marks the list Partial."
-msgstr "Эти позиции все еще содержат материал для подбора. Завершение сейчас отметит список как Неполный."
 msgstr "У этих товаров все еще есть материал для комплектации. Завершение сейчас отметит список как Частичный."
 
 msgid "These jobs have operations assigned to this work center:"

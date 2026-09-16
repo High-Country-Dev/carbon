@@ -1156,7 +1156,6 @@ msgid "Accumulation Period:"
 msgstr "蓄積期間:"
 
 msgid "Acknowledge & finish"
-msgstr "確認して完了"
 msgstr "認めて完了"
 
 msgid "Acknowledged itar"
@@ -7614,7 +7613,6 @@ msgid "Finish To"
 msgstr "完成先"
 
 msgid "Finish with material unpicked?"
-msgstr "材料がピックされていない状態で完了しますか？"
 msgstr "ピッキングされていない材料のまま完了しますか？"
 
 msgid "Finished goods"
@@ -8804,8 +8802,20 @@ msgstr "招待済み"
 msgid "Invoice"
 msgstr "請求書"
 
+msgid "Invoice Address"
+msgstr ""
+
 msgid "Invoice Contact"
 msgstr "請求書担当者"
+
+msgid "Invoice Contact Email"
+msgstr ""
+
+msgid "Invoice Contact Name"
+msgstr ""
+
+msgid "Invoice Contact Phone"
+msgstr ""
 
 msgid "Invoice customer"
 msgstr "請求書得意先"
@@ -13104,6 +13114,15 @@ msgstr "購買担当者"
 msgid "Purchasing Contact"
 msgstr "購買担当者"
 
+msgid "Purchasing Contact Email"
+msgstr ""
+
+msgid "Purchasing Contact Name"
+msgstr ""
+
+msgid "Purchasing Contact Phone"
+msgstr ""
+
 msgid "Purchasing Invoices"
 msgstr "購買請求書"
 
@@ -15457,8 +15476,20 @@ msgstr "出荷数量"
 msgid "Shipping"
 msgstr "配送"
 
+msgid "Shipping Address"
+msgstr ""
+
 msgid "Shipping Contact"
 msgstr "出荷担当者"
+
+msgid "Shipping Contact Email"
+msgstr ""
+
+msgid "Shipping Contact Name"
+msgstr ""
+
+msgid "Shipping Contact Phone"
+msgstr ""
 
 msgid "Shipping Cost"
 msgstr "配送料金"
@@ -15515,7 +15546,6 @@ msgid "Shop-floor configuration."
 msgstr "生産現場の構成。"
 
 msgid "short"
-msgstr "不足"
 msgstr "短い"
 
 msgid "Short"
@@ -17457,7 +17487,6 @@ msgid "These email addresses will be automatically CC'd on all quote emails sent
 msgstr "これらのメールアドレスは、得意先に送信されたすべての見積メールに自動的に CC 付けされます。"
 
 msgid "These items still have material to pick. Finishing now marks the list Partial."
-msgstr "これらの品目にはまだピックされていない材料があります。今完了するとリストが部分的とマークされます。"
 msgstr "これらの品目にはまだピッキングする材料があります。今完成にマークすると、リストを「一部」に設定します。"
 
 msgid "These jobs have operations assigned to this work center:"
