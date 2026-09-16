@@ -1644,6 +1644,7 @@ async function produceBatchOutput(
   const trackedEntity = await trx
     .selectFrom("trackedEntity")
     .where("id", "=", trackedEntityId)
+    .where("companyId", "=", companyId)
     .selectAll()
     .executeTakeFirst();
 
@@ -1689,6 +1690,7 @@ async function produceBatchOutput(
         quantity: totalQuantity,
       })
       .where("id", "=", trackedEntityId)
+      .where("companyId", "=", companyId)
       .execute();
   }
 }
