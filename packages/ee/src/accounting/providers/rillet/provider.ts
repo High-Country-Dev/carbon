@@ -730,20 +730,40 @@ export class RilletProvider extends BaseProvider {
     });
   }
 
-  /** All Rillet customers (cursor-drained). Throws on API failure. */
+  // Memoized per provider INSTANCE. The contact import lists the full set
+  // once (to enqueue ids) and then each drained batch re-reads it through the
+  // customer/vendor syncer's fetchRemoteBatch — Rillet has no get-many
+  // endpoint, so without this a 10k-record import re-scans /customers once per
+  // 50-id batch (~200 full cursor drains). Reusing ONE provider across the
+  // whole import collapses that to a single drain per entity type. Not shared
+  // across provider instances, so an unrelated caller that wants fresh data
+  // constructs its own provider (as every sweep/webhook already does).
+  private listedCustomers?: Promise<Rillet.Customer[]>;
+  private listedVendors?: Promise<Rillet.Vendor[]>;
+
+  /** All Rillet customers (cursor-drained, memoized). Throws on API failure. */
   async listCustomers(): Promise<Rillet.Customer[]> {
-    return this.listPaginated<Rillet.Customer>(
+    this.listedCustomers ??= this.listPaginated<Rillet.Customer>(
       "/customers",
       (data) => data.customers as Rillet.Customer[] | undefined
-    );
+    ).catch((err) => {
+      // Don't cache a rejection — a retried batch must be able to list again.
+      this.listedCustomers = undefined;
+      throw err;
+    });
+    return this.listedCustomers;
   }
 
-  /** All Rillet vendors (cursor-drained). Throws on API failure. */
+  /** All Rillet vendors (cursor-drained, memoized). Throws on API failure. */
   async listVendors(): Promise<Rillet.Vendor[]> {
-    return this.listPaginated<Rillet.Vendor>(
+    this.listedVendors ??= this.listPaginated<Rillet.Vendor>(
       "/vendors",
       (data) => data.vendors as Rillet.Vendor[] | undefined
-    );
+    ).catch((err) => {
+      this.listedVendors = undefined;
+      throw err;
+    });
+    return this.listedVendors;
   }
 
   // =================================================================

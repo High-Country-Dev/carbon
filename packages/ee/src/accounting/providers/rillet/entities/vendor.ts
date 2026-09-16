@@ -470,6 +470,18 @@ export class RilletVendorSyncer extends RilletEntitySyncer<
   ): Promise<void> {
     if (!data.email) return;
 
+    // See RilletCustomerSyncer.upsertContactAndLink — the partial unique index
+    // (email, companyId, isCustomer) rejects both the fill-missing UPDATE and a
+    // fresh INSERT on a collision, and that rollback would take the mapping
+    // with it. Checked up front, honoured in both branches.
+    const emailTaken = await tx
+      .selectFrom("contact")
+      .select("id")
+      .where("email", "=", data.email)
+      .where("companyId", "=", this.companyId)
+      .where("isCustomer", "=", false)
+      .executeTakeFirst();
+
     const existingJunction = await tx
       .selectFrom("supplierContact")
       .select("contactId")
@@ -478,7 +490,8 @@ export class RilletVendorSyncer extends RilletEntitySyncer<
       .executeTakeFirst();
 
     if (existingJunction) {
-      // Only fill a MISSING email: an existing contact is Carbon's.
+      // Only fill a MISSING email, and only when nothing else owns it.
+      if (emailTaken) return;
       await tx
         .updateTable("contact")
         .set({ email: data.email })
@@ -489,13 +502,6 @@ export class RilletVendorSyncer extends RilletEntitySyncer<
       return;
     }
 
-    const emailTaken = await tx
-      .selectFrom("contact")
-      .select("id")
-      .where("email", "=", data.email)
-      .where("companyId", "=", this.companyId)
-      .where("isCustomer", "=", false)
-      .executeTakeFirst();
     if (emailTaken) return;
 
     const contact = await tx

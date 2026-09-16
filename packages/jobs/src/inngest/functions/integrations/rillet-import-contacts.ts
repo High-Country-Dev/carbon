@@ -31,10 +31,12 @@ import {
 } from "@carbon/database/client";
 import {
   type AccountingEntityType,
+  type AccountingProvider,
   getAccountingIntegration,
   getProviderIntegration,
   ProviderID,
-  type RilletProvider
+  type RilletProvider,
+  type SyncContext
 } from "@carbon/ee/accounting";
 import { getLogger } from "@carbon/logger";
 import { chunkArray } from "@carbon/utils";
@@ -99,13 +101,36 @@ export const rilletImportContactsFunction = inngest.createFunction(
       vendors: emptyCounts()
     };
 
-    // List both families up front, in ONE step, so the expensive cursor
-    // drain is not repeated by every batch step's retry. Rillet cursors
-    // expire after 2 hours and are never resumed across runs, so the list
-    // is always a single pass (`RilletProvider.listPaginated`).
-    const listed = await step.run("list-rillet-contacts", async () => {
-      const provider = await getRilletProvider(payload.companyId);
+    // ONE client / integration / provider for the whole import, reused across
+    // the id-listing step and every batch. The provider memoizes
+    // listCustomers/listVendors, and Rillet has no get-many endpoint, so
+    // sharing the instance means the full cursor drain per entity type runs
+    // ONCE (in the list step) and every batch's fetchRemoteBatch reads that
+    // cached list — instead of re-scanning /customers per 50-id batch. On an
+    // Inngest replay the list step is skipped and this provider is fresh, so
+    // the first re-executing batch re-lists once; still bounded, never
+    // per-batch. (Created outside step.run because provider construction is a
+    // cheap local + one companyIntegration read, safe to repeat on replay.)
+    const client = getCarbonServiceRole();
+    const integration = await getAccountingIntegration(
+      client,
+      payload.companyId,
+      ProviderID.RILLET
+    );
+    const provider = getProviderIntegration(
+      client,
+      payload.companyId,
+      integration.id,
+      integration.metadata
+    ) as RilletProvider;
+    const database = getPostgresClient(
+      getPostgresConnectionPool(5),
+      PostgresDriver
+    );
 
+    // List both families up front, in ONE step. Rillet cursors expire after
+    // 2 hours and are never resumed across runs, so the list is a single pass.
+    const listed = await step.run("list-rillet-contacts", async () => {
       const customers = payload.entityTypes.customers
         ? (await provider.listCustomers()).map((customer) => customer.id)
         : [];
@@ -127,6 +152,10 @@ export const rilletImportContactsFunction = inngest.createFunction(
           `import-${entityType}-batch-${index}`,
           () =>
             importBatch({
+              client,
+              integration,
+              provider,
+              database,
               companyId: payload.companyId,
               entityType,
               remoteIds: batch,
@@ -152,55 +181,37 @@ export const rilletImportContactsFunction = inngest.createFunction(
   }
 );
 
-async function getRilletProvider(companyId: string): Promise<RilletProvider> {
-  const client = getCarbonServiceRole();
-  const integration = await getAccountingIntegration(
-    client,
-    companyId,
-    ProviderID.RILLET
-  );
-
-  return getProviderIntegration(
-    client,
-    companyId,
-    integration.id,
-    integration.metadata
-  ) as RilletProvider;
-}
-
 /**
  * Enqueue one batch of remote ids as `pull-from-accounting` operations and
- * drain them. A drain failure lands Failed ledger rows (visible and
- * retryable in Sync Activity) rather than throwing, so one unmappable
- * Rillet record cannot abandon the rest of the import — except a
- * RatelimitError, which propagates so Inngest retries the step and the
- * idempotency keys absorb the re-enqueue.
+ * drain them, using the import's shared client / integration / provider / db
+ * (see the function body for why they are shared). A drain failure lands
+ * Failed ledger rows (visible and retryable in Sync Activity) rather than
+ * throwing, so one unmappable Rillet record cannot abandon the rest of the
+ * import — except a RatelimitError, which propagates so Inngest retries the
+ * step and the idempotency keys absorb the re-enqueue.
  */
 async function importBatch(args: {
+  client: ReturnType<typeof getCarbonServiceRole>;
+  integration: Awaited<ReturnType<typeof getAccountingIntegration>>;
+  provider: AccountingProvider;
+  database: SyncContext["database"];
   companyId: string;
   entityType: AccountingEntityType;
   remoteIds: string[];
   scope: string;
 }): Promise<ImportedCounts> {
-  const { companyId, entityType, remoteIds, scope } = args;
+  const {
+    client,
+    integration,
+    provider,
+    database,
+    companyId,
+    entityType,
+    remoteIds,
+    scope
+  } = args;
   const counts = emptyCounts();
   if (remoteIds.length === 0) return counts;
-
-  const client = getCarbonServiceRole();
-  const integration = await getAccountingIntegration(
-    client,
-    companyId,
-    ProviderID.RILLET
-  );
-  const provider = getProviderIntegration(
-    client,
-    companyId,
-    integration.id,
-    integration.metadata
-  );
-
-  const pool = getPostgresConnectionPool(5);
-  const database = getPostgresClient(pool, PostgresDriver);
 
   // enqueueSyncOperations derives the idempotency key from
   // (entityType, entityId, direction, scope) itself.

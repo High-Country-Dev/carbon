@@ -564,6 +564,52 @@ describe("RilletCustomerSyncer.upsertLocal match ladder", () => {
     expect(rows.customerContact).toBeUndefined();
   });
 
+  it("does not fill an existing contact's null email when another contact owns it", async () => {
+    // The fill-missing UPDATE would violate the same partial unique index and
+    // roll back the mapping, so the collision check gates it too.
+    const syncer = customerSyncerFor("cus-linked");
+    const { tx, rows } = makeTx({
+      customer: [
+        { id: "cus-linked", name: "Acme Manufacturing", companyId: COMPANY_ID }
+      ],
+      customerContact: [
+        {
+          id: "cc-1",
+          customerId: "cus-linked",
+          contactId: "con-self",
+          companyId: COMPANY_ID
+        }
+      ],
+      contact: [
+        {
+          id: "con-self",
+          email: null,
+          companyId: COMPANY_ID,
+          isCustomer: true
+        },
+        {
+          id: "con-other",
+          email: "ar@acme.example",
+          companyId: COMPANY_ID,
+          isCustomer: true
+        }
+      ]
+    });
+
+    await (syncer as any).upsertLocal(
+      tx,
+      mapRilletCustomerToLocal(
+        customer({
+          emails: [{ email: "ar@acme.example", type: "MAIN_SENDER" }]
+        }),
+        { companyId: COMPANY_ID }
+      ),
+      "ril-cus-1"
+    );
+
+    expect(rows.contact?.find((c) => c.id === "con-self")?.email).toBeNull();
+  });
+
   it("refuses to steal a Carbon customer already linked to another Rillet customer", async () => {
     // Rillet is not known to enforce unique customer names. Re-pointing the
     // mapping would silently unlink the first Rillet customer, and inserting

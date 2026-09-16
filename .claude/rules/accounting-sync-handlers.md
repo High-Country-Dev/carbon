@@ -354,9 +354,22 @@ second one. Same for vendors and bills.
   `RilletPushOnlyEntitySyncer`, which `RilletItemSyncer` and `RilletTransactionSyncer`
   extend. Customer and vendor extend `RilletEntitySyncer` and implement
   `mapToLocal`/`upsertLocal`.
-- `fetchRemoteBatch` on both syncers reads ONE cursor-drained list for a batch (memoized
-  per syncer instance, which the drain builds fresh per batch) and keeps the direct GET
-  for a single id — Rillet has no get-many endpoint, so the alternative is N GETs.
+- `fetchRemoteBatch` on both syncers reads ONE cursor-drained list for a multi-id batch
+  and keeps the direct GET for a single id — Rillet has no get-many endpoint, so the
+  alternative is N GETs. The list is memoized on the **provider** (`listCustomers`/
+  `listVendors` in `provider.ts`), and the import builds ONE provider and reuses it for
+  the id-listing step and every batch, so the full drain per entity type runs once for
+  the whole import instead of once per 50-id batch (the drain builds a fresh syncer per
+  batch, so per-syncer memoization alone would rescan). A failed list is not cached, so a
+  retried batch can list again. On an Inngest replay the list step is skipped and the
+  provider is fresh, so the first re-executing batch re-lists once — bounded, never
+  per-batch.
+- A Rillet contact email that collides with an existing same-class contact
+  (`contact_email_companyId_unique (email, companyId, isCustomer)`, and `contact.email`
+  is nullable) is **skipped**, not created/filled — the insert or fill-missing UPDATE
+  would throw inside the shared pull transaction and roll back the mapping the import
+  exists to write. The contact is secondary; the checked-up-front guard covers both the
+  insert and the fill branches.
 - **Not imported:** addresses (`address.countryCode` is an FK to `country.alpha2`, and a
   free-text Rillet country would fail the whole row) and payment terms (Carbon's is an FK
   to `paymentTerm`, and the outbound mapper does not read it either). A contact person is

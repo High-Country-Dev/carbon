@@ -479,6 +479,23 @@ export class RilletCustomerSyncer extends RilletEntitySyncer<
   ): Promise<void> {
     if (!data.email) return;
 
+    // Is this email already held by a DIFFERENT same-class contact? The
+    // partial unique index (email, companyId, isCustomer) rejects BOTH the
+    // fill-missing UPDATE below (contact.email is nullable) and a fresh
+    // INSERT — and this runs in the same transaction as linkEntities, so
+    // either rejection rolls back the mapping the import exists to write.
+    // Checked up front and honoured in both branches. (concurrency:1 on the
+    // job serialises the import, so a pre-check is sufficient here; a
+    // concurrent writer racing the same email would need savepoint-scoped
+    // conflict handling, which the shared pull transaction does not offer.)
+    const emailTaken = await tx
+      .selectFrom("contact")
+      .select("id")
+      .where("email", "=", data.email)
+      .where("companyId", "=", this.companyId)
+      .where("isCustomer", "=", true)
+      .executeTakeFirst();
+
     const existingJunction = await tx
       .selectFrom("customerContact")
       .select("contactId")
@@ -487,7 +504,8 @@ export class RilletCustomerSyncer extends RilletEntitySyncer<
       .executeTakeFirst();
 
     if (existingJunction) {
-      // Only fill a MISSING email: an existing contact is Carbon's.
+      // Only fill a MISSING email, and only when nothing else owns it.
+      if (emailTaken) return;
       await tx
         .updateTable("contact")
         .set({ email: data.email })
@@ -498,13 +516,6 @@ export class RilletCustomerSyncer extends RilletEntitySyncer<
       return;
     }
 
-    const emailTaken = await tx
-      .selectFrom("contact")
-      .select("id")
-      .where("email", "=", data.email)
-      .where("companyId", "=", this.companyId)
-      .where("isCustomer", "=", true)
-      .executeTakeFirst();
     if (emailTaken) return;
 
     const contact = await tx
