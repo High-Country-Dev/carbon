@@ -2,6 +2,7 @@ import { useCarbon } from "@carbon/auth";
 import {
   convertHeicFiles,
   convertHeicToJpeg,
+  findDuplicateFileName,
   isHeic
 } from "@carbon/files/media";
 import { toast } from "@carbon/react";
@@ -28,11 +29,16 @@ export function useHeicConversion() {
         return files;
       }
       try {
-        return await convertHeicFiles(
+        const converted = await convertHeicFiles(
           carbon,
           { bucket: "private", directory: `${company.id}/tmp` },
           files
         );
+        if (findDuplicateFileName(converted)) {
+          toast.error(t`Duplicate file names after image conversion`);
+          return null;
+        }
+        return converted;
       } catch {
         toast.error(t`Failed to convert image`);
         return null;

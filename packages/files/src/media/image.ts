@@ -208,3 +208,18 @@ export async function convertHeicFiles(
   }
   return out;
 }
+
+/**
+ * First filename appearing twice, or null. Conversion renames `photo.heic`
+ * to `photo.jpg`, so a selection holding both collapses to one name — the
+ * panels derive storage paths from `file.name` with `upsert: true`, and the
+ * second upload would silently replace the first. Callers reject on non-null.
+ */
+export function findDuplicateFileName(files: File[]): string | null {
+  const seen = new Set<string>();
+  for (const file of files) {
+    if (seen.has(file.name)) return file.name;
+    seen.add(file.name);
+  }
+  return null;
+}

@@ -6097,6 +6097,9 @@ msgstr "के भीतर देय"
 msgid "Duplicate"
 msgstr "डुप्लिकेट करें"
 
+msgid "Duplicate file names after image conversion"
+msgstr "छवि रूपांतरण के बाद डुप्लिकेट फ़ाइल नाम"
+
 msgid "Duplicate Item"
 msgstr "आइटम डुप्लिकेट करें"
 

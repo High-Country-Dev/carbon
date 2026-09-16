@@ -6097,6 +6097,9 @@ msgstr "Échéance dans"
 msgid "Duplicate"
 msgstr "Dupliquer"
 
+msgid "Duplicate file names after image conversion"
+msgstr "Noms de fichiers en double après la conversion d'image"
+
 msgid "Duplicate Item"
 msgstr "Dupliquer l'article"
 

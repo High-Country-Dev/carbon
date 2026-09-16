@@ -6097,6 +6097,9 @@ msgstr "Scadenza entro"
 msgid "Duplicate"
 msgstr "Duplica"
 
+msgid "Duplicate file names after image conversion"
+msgstr "Nomi file duplicati dopo la conversione dell'immagine"
+
 msgid "Duplicate Item"
 msgstr "Duplica Articolo"
 

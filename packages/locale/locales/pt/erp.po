@@ -6097,6 +6097,9 @@ msgstr "Vencimento em"
 msgid "Duplicate"
 msgstr "Duplicar"
 
+msgid "Duplicate file names after image conversion"
+msgstr "Nomes de arquivo duplicados após conversão de imagem"
+
 msgid "Duplicate Item"
 msgstr "Duplicar Item"
 

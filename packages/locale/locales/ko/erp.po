@@ -6097,6 +6097,9 @@ msgstr "다음 기간 이내"
 msgid "Duplicate"
 msgstr "복제"
 
+msgid "Duplicate file names after image conversion"
+msgstr "이미지 변환 후 중복된 파일 이름"
+
 msgid "Duplicate Item"
 msgstr "품목 복제"
 

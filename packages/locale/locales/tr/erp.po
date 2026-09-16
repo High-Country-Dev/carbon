@@ -6097,6 +6097,9 @@ msgstr "Süresi içinde"
 msgid "Duplicate"
 msgstr "Çoğalt"
 
+msgid "Duplicate file names after image conversion"
+msgstr "Görüntü dönüştürmeden sonra yinelenen dosya adları"
+
 msgid "Duplicate Item"
 msgstr "Stok Kartını Çoğalt"
 

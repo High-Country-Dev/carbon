@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { findDuplicateFileName } from "./image";
 import { effectiveExtension, getDocumentType, isHeic } from "./media";
 
 describe("effectiveExtension", () => {
@@ -29,5 +30,14 @@ describe("getDocumentType", () => {
   });
   it("resolves model formats through supportedModelTypes", () => {
     expect(getDocumentType("a.step")).toBe("Model");
+  });
+});
+
+describe("findDuplicateFileName", () => {
+  it("catches the photo.heic + photo.jpg post-conversion collision", () => {
+    const jpg = new File([], "photo.jpg");
+    const converted = new File([], "photo.jpg");
+    expect(findDuplicateFileName([jpg, converted])).toBe("photo.jpg");
+    expect(findDuplicateFileName([jpg, new File([], "other.jpg")])).toBeNull();
   });
 });

@@ -6097,6 +6097,9 @@ msgstr "Vence en"
 msgid "Duplicate"
 msgstr "Duplicar"
 
+msgid "Duplicate file names after image conversion"
+msgstr "Nombres de archivo duplicados después de la conversión de imagen"
+
 msgid "Duplicate Item"
 msgstr "Duplicar Elemento"
 

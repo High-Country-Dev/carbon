@@ -6097,6 +6097,9 @@ msgstr "Срок в пределах"
 msgid "Duplicate"
 msgstr "Дублировать"
 
+msgid "Duplicate file names after image conversion"
+msgstr "Дублирующиеся имена файлов после преобразования изображения"
+
 msgid "Duplicate Item"
 msgstr "Дублировать элемент"
 

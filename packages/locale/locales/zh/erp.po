@@ -6097,6 +6097,9 @@ msgstr "应收期限"
 msgid "Duplicate"
 msgstr "复制"
 
+msgid "Duplicate file names after image conversion"
+msgstr "图像转换后文件名重复"
+
 msgid "Duplicate Item"
 msgstr "复制项目"
 

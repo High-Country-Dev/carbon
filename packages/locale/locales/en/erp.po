@@ -6097,6 +6097,9 @@ msgstr "Due within"
 msgid "Duplicate"
 msgstr "Duplicate"
 
+msgid "Duplicate file names after image conversion"
+msgstr "Duplicate file names after image conversion"
+
 msgid "Duplicate Item"
 msgstr "Duplicate Item"
 

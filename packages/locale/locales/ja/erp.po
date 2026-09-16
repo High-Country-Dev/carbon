@@ -6097,6 +6097,9 @@ msgstr "期限内"
 msgid "Duplicate"
 msgstr "複製"
 
+msgid "Duplicate file names after image conversion"
+msgstr "画像変換後のファイル名の重複"
+
 msgid "Duplicate Item"
 msgstr "アイテムを複製"
 

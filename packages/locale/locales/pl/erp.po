@@ -6097,6 +6097,9 @@ msgstr "Termin w ciągu"
 msgid "Duplicate"
 msgstr "Duplikuj"
 
+msgid "Duplicate file names after image conversion"
+msgstr "Zduplikowane nazwy plików po konwersji obrazu"
+
 msgid "Duplicate Item"
 msgstr "Duplikuj element"
 

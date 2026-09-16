@@ -1,5 +1,9 @@
 import { useCarbon } from "@carbon/auth";
-import { convertHeicFiles, isHeic } from "@carbon/files/media";
+import {
+  convertHeicFiles,
+  findDuplicateFileName,
+  isHeic
+} from "@carbon/files/media";
 import { cn, toast } from "@carbon/react";
 import { useLingui } from "@lingui/react/macro";
 import type React from "react";
@@ -46,6 +50,10 @@ const FileDropzone: React.FC<FileDropzoneProps> = ({
         return;
       } finally {
         setIsConverting(false);
+      }
+      if (findDuplicateFileName(files)) {
+        toast.error(t`Duplicate file names after image conversion`);
+        return;
       }
     }
     onDrop(files);

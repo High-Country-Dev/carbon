@@ -6097,6 +6097,9 @@ msgstr "Fällig innerhalb"
 msgid "Duplicate"
 msgstr "Duplizieren"
 
+msgid "Duplicate file names after image conversion"
+msgstr "Doppelte Dateinamen nach der Bildkonvertierung"
+
 msgid "Duplicate Item"
 msgstr "Artikel duplizieren"
 
