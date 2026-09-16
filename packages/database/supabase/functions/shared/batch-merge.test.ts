@@ -9,6 +9,7 @@ function parent(overrides: Partial<BatchMergeParent> = {}): BatchMergeParent {
     id: "p1",
     readableId: "LOT-A",
     quantity: 10,
+    receivedQuantity: 10,
     status: "Available",
     sourceDocument: "Job",
     sourceDocumentId: "item-1",
@@ -62,8 +63,8 @@ Deno.test("ledger rows are net-zero: −q per parent, +Σq for the merged lot", 
   const records = buildBatchMergeRecords({
     ...base,
     parents: [
-      parent({ id: "p1", quantity: 45, bin: { storageUnitId: "bin-1", locationId: "loc-1" } }),
-      parent({ id: "p2", quantity: 44, bin: { storageUnitId: "bin-2", locationId: "loc-1" } })
+      parent({ id: "p1", quantity: 45, receivedQuantity: 45, bin: { storageUnitId: "bin-1", locationId: "loc-1" } }),
+      parent({ id: "p2", quantity: 44, receivedQuantity: 44, bin: { storageUnitId: "bin-2", locationId: "loc-1" } })
     ]
   });
 
@@ -191,4 +192,40 @@ Deno.test("ledger books the FK-enforced itemId, not the polymorphic sourceDocume
   for (const row of records.ledgerInserts) {
     assertEquals(row.itemId, "item-1");
   }
+});
+
+Deno.test("unreceived parents contribute no ledger rows; receipts stay per job", () => {
+  // Lots straight off a completed batch: nothing received yet. The merge is
+  // identity-only — no stock exists to move, so no ledger rows at all.
+  const records = buildBatchMergeRecords({
+    ...base,
+    parents: [
+      parent({ id: "p1", quantity: 2, receivedQuantity: 0 }),
+      parent({ id: "p2", quantity: 2, receivedQuantity: 0 }),
+      parent({ id: "p3", quantity: 2, receivedQuantity: 0 })
+    ]
+  });
+  assertEquals(records.ledgerInserts.length, 0);
+  // identity level is untouched: the merged lot still carries all six units
+  assertEquals(records.mergedEntityInsert.quantity, 6);
+});
+
+Deno.test("partially received merge moves exactly the received balance", () => {
+  const records = buildBatchMergeRecords({
+    ...base,
+    parents: [
+      parent({ id: "p1", quantity: 2, receivedQuantity: 2 }),
+      parent({ id: "p2", quantity: 2, receivedQuantity: 0 })
+    ]
+  });
+  const rows = records.ledgerInserts;
+  assertEquals(rows.length, 2);
+  assertEquals(rows[0].trackedEntityId, "p1");
+  assertEquals(rows[0].quantity, -2);
+  assertEquals(rows[1].trackedEntityId, "merged-1");
+  assertEquals(rows[1].quantity, 2);
+  assertEquals(
+    rows.reduce((acc, r) => acc + r.quantity, 0),
+    0
+  );
 });

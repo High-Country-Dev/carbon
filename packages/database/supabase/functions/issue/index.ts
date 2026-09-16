@@ -3671,6 +3671,15 @@ serve(async (req: Request) => {
             .orderBy("createdAt", "desc")
             .execute();
 
+          // The parent's on-ledger balance: what its job receipt has put into
+          // stock so far. The merge only moves this — unreceived quantity
+          // reaches inventory later, through the member job's own receipt.
+          const receivedOf = (entityId: string) =>
+            // deno-lint-ignore no-explicit-any
+            (parentLedgers as any[])
+              .filter((l) => l.trackedEntityId === entityId)
+              .reduce((acc, l) => acc + Number(l.quantity), 0);
+
           const locationOf = (entityId: string) =>
             // deno-lint-ignore no-explicit-any
             (parentLedgers as any[]).find(
@@ -3685,6 +3694,7 @@ serve(async (req: Request) => {
               id: p.id,
               readableId: p.readableId,
               quantity: Number(p.quantity),
+              receivedQuantity: receivedOf(p.id),
               status: p.status as string,
               sourceDocument: p.sourceDocument,
               sourceDocumentId: p.sourceDocumentId,

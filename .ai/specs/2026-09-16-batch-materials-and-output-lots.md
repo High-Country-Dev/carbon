@@ -265,6 +265,16 @@ All new strings via lingui (`<Trans>`/`t`) in both apps; `/translate` after.
 
 ## Changelog
 
+- 2026-09-16 (post-ship, user-found): the merge's net-zero ledger rows assumed
+  every parent was already received into stock. Merging at batch completion
+  (before member job receipts) subtracted unreceived quantity and stranded the
+  remaining jobs' receipts ("Tracked entity not found" — the job's lot was
+  Consumed). Redesigned identity-only: merge ledger rows are sized by each
+  parent's on-ledger balance (none when unreceived), and
+  complete_job_to_inventory resolves through Merge activities so each member
+  job's receipt posts against the merged lot
+  (20260916131445_merge-aware-job-receipt.sql).
+
 - 2026-09-16: Created, all questions resolved pre-writing (Sid + customer answers).
 - 2026-09-16: Implemented on `feat/batch-materials-and-output-lots`. Five changes
   the design did not anticipate, all found by end-to-end testing rather than by

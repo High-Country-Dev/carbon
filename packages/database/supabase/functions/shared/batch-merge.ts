@@ -14,6 +14,10 @@ export type BatchMergeParent = {
   id: string;
   readableId: string | null;
   quantity: number;
+  /** the parent's on-ledger balance (Σ itemLedger.quantity). A lot straight
+   *  off a completed batch has 0 until its job is received — the merge is an
+   *  identity operation and must only move stock that actually exists. */
+  receivedQuantity: number;
   status: string;
   sourceDocument: string | null;
   sourceDocumentId: string | null;
@@ -123,6 +127,11 @@ export function buildBatchMergeRecords(input: {
         `Lot ${parent.readableId ?? parent.id} has no quantity to merge`
       );
     }
+    if (parent.receivedQuantity < 0) {
+      throw new Error(
+        `Lot ${parent.readableId ?? parent.id} has a negative ledger balance`
+      );
+    }
   }
   const itemOf = (p: BatchMergeParent) => p.itemId ?? p.sourceDocumentId;
   const firstItem = itemOf(parents[0]!);
@@ -131,6 +140,10 @@ export function buildBatchMergeRecords(input: {
   }
 
   const totalQuantity = parents.reduce((sum, p) => sum + p.quantity, 0);
+  const receivedTotal = parents.reduce(
+    (acc, p) => acc + p.receivedQuantity,
+    0
+  );
 
   // Earliest parent expiry wins — the conservative policy for a blended lot.
   let expirationDate: string | null = null;
@@ -207,12 +220,18 @@ export function buildBatchMergeRecords(input: {
       companyId,
       createdBy: userId
     },
+    // Ledger rows move only stock the parents actually had: each job's
+    // receipt is still what brings its quantity into inventory (and lands on
+    // the merged lot once the parent is consumed). A parent received in full
+    // makes these net to zero, which is the old behaviour.
     ledgerInserts: [
-      ...parents.map(
+      ...parents
+        .filter((p) => p.receivedQuantity > 0)
+        .map(
         (p): MergeLedgerRecord => ({
           postingDate,
           itemId: p.itemId ?? p.sourceDocumentId,
-          quantity: -p.quantity,
+          quantity: -p.receivedQuantity,
           locationId: p.bin.locationId,
           storageUnitId: p.bin.storageUnitId,
           entryType: "Negative Adjmt.",
@@ -223,10 +242,12 @@ export function buildBatchMergeRecords(input: {
           companyId
         })
       ),
+      ...(receivedTotal > 0
+        ? [
       {
         postingDate,
         itemId: first.itemId ?? first.sourceDocumentId,
-        quantity: totalQuantity,
+        quantity: receivedTotal,
         // The merged lot sits where the first parent sat; a later physical
         // move is an ordinary stock transfer.
         locationId: first.bin.locationId,
@@ -237,7 +258,9 @@ export function buildBatchMergeRecords(input: {
         trackedEntityId: mergedId,
         createdBy: userId,
         companyId
-      }
+      } satisfies MergeLedgerRecord
+          ]
+        : [])
     ]
   };
 }
