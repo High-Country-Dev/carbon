@@ -225,6 +225,7 @@ async function issueJobOperationMaterials(
     jobOperationId,
     companyId,
   });
+  const takenSoFar = new Map<string, number>();
   for await (const material of materialsToIssue) {
     // Cap the backflush at the material's remaining unissued requirement,
     // mirroring backflush_job_materials. Without this, materials already
@@ -247,6 +248,7 @@ async function issueJobOperationMaterials(
         locationId: job.locationId,
         companyId,
         opStorageUnitId,
+        takenSoFar,
       }),
       material.itemId
     );
@@ -256,6 +258,10 @@ async function issueJobOperationMaterials(
       Number(material.quantity ?? 0)
     );
     for (const take of takes) {
+      takenSoFar.set(
+        take.budget.itemId,
+        (takenSoFar.get(take.budget.itemId) ?? 0) + take.quantity
+      );
       if (!take.budget.isInventory) continue;
       itemLedgerInserts.push({
         entryType: "Consumption",

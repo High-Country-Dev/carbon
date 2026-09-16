@@ -184,6 +184,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
     if (!predecessor.data) {
       return fieldError("Part not found");
     }
+    if (existing.error) {
+      return fieldError("Failed to read the part's supersession");
+    }
     if (
       existing.data?.successorItemId &&
       existing.data.successorItemId !== itemId

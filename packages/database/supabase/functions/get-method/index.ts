@@ -7806,12 +7806,22 @@ async function settleConsumeFirstLines(opts: {
     opts;
   if (!locationId || jobMaterialIds.length === 0) return;
 
-  const rules = await client
-    .from("itemSupersession")
-    .select("itemId, successorItemId, successorEffectivityDate, conversionFactor")
-    .eq("companyId", companyId)
-    .eq("supersessionMode", "Consume First")
-    .not("successorItemId", "is", null);
+  const rules = await fetchAll<{
+    itemId: string;
+    successorItemId: string | null;
+    successorEffectivityDate: string | null;
+    conversionFactor: number | string | null;
+  }>(() =>
+    client
+      .from("itemSupersession")
+      .select(
+        "itemId, successorItemId, successorEffectivityDate, conversionFactor"
+      )
+      .eq("companyId", companyId)
+      .eq("supersessionMode", "Consume First")
+      .not("successorItemId", "is", null)
+      .order("itemId")
+  );
   if (rules.error) {
     throw new Error(`Failed to load supersessions: ${rules.error.message}`);
   }

@@ -177,6 +177,7 @@ async function getLinesideCredits(
       ])
       .where("companyId", "=", companyId)
       .where("locationId", "=", locationId)
+      .where("storageUnitId", "=", storageUnitId)
       .where("documentType", "=", "Job Consumption")
       .where("itemId", "in", itemIds)
       .groupBy(["itemId", "documentId"])
@@ -225,9 +226,10 @@ export async function getPickedBudgets(
     locationId: string;
     companyId: string;
     opStorageUnitId?: string | null;
+    takenSoFar?: Map<string, number>;
   }
 ): Promise<PickedBudget[]> {
-  const { material, locationId, companyId, opStorageUnitId } = args;
+  const { material, locationId, companyId, opStorageUnitId, takenSoFar } = args;
 
   const lines: {
     itemId: string;
@@ -365,7 +367,10 @@ export async function getPickedBudgets(
       itemId,
       factor: pickFactor(material, itemId, ruleByItem),
       storageUnitId,
-      available: own + (credits.get(itemId)?.unclaimed ?? 0),
+      available: Math.max(
+        0,
+        own + (credits.get(itemId)?.unclaimed ?? 0) - (takenSoFar?.get(itemId) ?? 0)
+      ),
       isInventory: trackingByItem.get(itemId) === "Inventory",
       isPredecessor: !!successor && successor !== itemId && involvedSet.has(successor),
     };

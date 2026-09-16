@@ -36,6 +36,7 @@ AS $$
     FROM "itemLedger" il
     WHERE il."companyId" = p_company_id
       AND il."locationId" = p_location_id
+      AND il."storageUnitId" = p_storage_unit_id
       AND il."itemId" = p_item_id
       AND il."documentType" = 'Job Consumption'
     GROUP BY il."documentId"

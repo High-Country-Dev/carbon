@@ -110,6 +110,9 @@ async function getRedirectedOpenJobMaterials(
       .eq("companyId", companyId)
   ]);
 
+  if (own.error) throw new Error(own.error.message);
+  if (incoming.error) throw new Error(incoming.error.message);
+
   let lines = args.lines;
   if (own.data && effective(own.data)) {
     lines = redirectJobMaterialLines(
@@ -129,6 +132,10 @@ async function getRedirectedOpenJobMaterials(
       }),
       getItemQuantities(client, rule.itemId, companyId, locationId)
     ]);
+    if (predecessorLines.error) {
+      throw new Error(predecessorLines.error.message);
+    }
+    if (quantities.error) throw new Error(quantities.error.message);
     const factor = Number(rule.conversionFactor ?? 1) || 1;
     const { moved } = redirectJobMaterialLines(
       predecessorLines.data ?? [],

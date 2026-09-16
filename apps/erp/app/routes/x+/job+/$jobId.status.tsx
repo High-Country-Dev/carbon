@@ -83,6 +83,40 @@ export async function action({ request, params }: ActionFunctionArgs) {
   // (no inventory receipt, no backflush) and therefore also skips the
   // picked-material return sweep. The UI never sends Completed to this route —
   // the Complete button uses $jobId.complete.tsx, which runs both.
+  if (status === "Cancelled") {
+    const sweep = await returnPickedRemaindersForJob(getCarbonServiceRole(), {
+      jobId: id,
+      userId,
+      companyId
+    });
+    if (sweep.error) {
+      throw redirect(
+        requestReferrer(request) ?? path.to.job(id),
+        await flash(
+          request,
+          error(sweep.error, "Cancel aborted: returning picked material failed")
+        )
+      );
+    }
+    const picks = await cancelOpenPickingListsForJob(getDatabaseClient(), {
+      jobId: id,
+      companyId,
+      userId
+    });
+    if (picks.error) {
+      throw redirect(
+        requestReferrer(request) ?? path.to.job(id),
+        await flash(
+          request,
+          error(
+            picks.error,
+            "Cancel aborted: its picking lists could not be closed"
+          )
+        )
+      );
+    }
+  }
+
   const update = await updateJobStatus(client, {
     id,
     companyId,
@@ -95,40 +129,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
       requestReferrer(request) ?? path.to.job(id),
       await flash(request, error(update.error, "Failed to update job status"))
     );
-  }
-
-  if (status === "Cancelled") {
-    const sweep = await returnPickedRemaindersForJob(getCarbonServiceRole(), {
-      jobId: id,
-      userId,
-      companyId
-    });
-    if (sweep.error) {
-      throw redirect(
-        requestReferrer(request) ?? path.to.job(id),
-        await flash(
-          request,
-          error(
-            sweep.error,
-            "Job cancelled, but returning picked material failed"
-          )
-        )
-      );
-    }
-    const picks = await cancelOpenPickingListsForJob(getCarbonServiceRole(), {
-      jobId: id,
-      companyId,
-      userId
-    });
-    if (picks.error) {
-      throw redirect(
-        requestReferrer(request) ?? path.to.job(id),
-        await flash(
-          request,
-          error(picks.error, "Job cancelled, but its picking lists stayed open")
-        )
-      );
-    }
   }
 
   if (["Ready", "Planned"].includes(status) && shouldSchedule) {

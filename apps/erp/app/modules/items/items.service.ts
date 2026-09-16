@@ -3797,44 +3797,53 @@ export async function upsertItemPurchasing(
 
 export const SUPERSESSION_CYCLE_CODE = "SUPERSESSION_CYCLE";
 
+const SUPERSESSION_CHAIN_LIMIT = 10;
+
 async function findSupersessionCycle(
   client: SupabaseClient<Database>,
   itemId: string,
   successorItemId: string,
   companyId: string
-): Promise<string[] | null> {
+): Promise<
+  | { kind: "ok" }
+  | { kind: "cycle"; path: string[] }
+  | { kind: "tooLong" }
+  | { kind: "error"; error: PostgrestError }
+> {
   const path = [itemId, successorItemId];
   const visited = new Set(path);
   let currentId = successorItemId;
-  for (let hop = 0; hop < 10; hop++) {
+  let closed = false;
+  for (let hop = 0; hop < SUPERSESSION_CHAIN_LIMIT; hop++) {
     const link = await client
       .from("itemSupersession")
       .select("successorItemId")
       .eq("itemId", currentId)
       .eq("companyId", companyId)
       .maybeSingle();
+    if (link.error) return { kind: "error", error: link.error };
     const next = link.data?.successorItemId;
-    if (!next) return null;
-    if (next === itemId) {
-      path.push(itemId);
+    if (!next) return { kind: "ok" };
+    path.push(next);
+    if (visited.has(next)) {
+      closed = true;
       break;
     }
-    if (visited.has(next)) return null;
     visited.add(next);
-    path.push(next);
     currentId = next;
   }
-  if (path[path.length - 1] !== itemId || path.length < 3) return null;
+  if (!closed) return { kind: "tooLong" };
 
   const items = await client
     .from("item")
     .select("id, readableIdWithRevision")
     .in("id", Array.from(new Set(path)))
     .eq("companyId", companyId);
+  if (items.error) return { kind: "error", error: items.error };
   const readable = new Map(
     (items.data ?? []).map((i) => [i.id, i.readableIdWithRevision ?? i.id])
   );
-  return path.map((id) => readable.get(id) ?? id);
+  return { kind: "cycle", path: path.map((id) => readable.get(id) ?? id) };
 }
 
 export async function upsertItemSupersession(
@@ -3883,18 +3892,28 @@ export async function upsertItemSupersession(
   const isNoStock = supersessionMode === "No Stock";
 
   if (!isNoStock && successorItemId) {
-    const cycle = await findSupersessionCycle(
+    const check = await findSupersessionCycle(
       client,
       itemId,
       successorItemId,
       companyId
     );
-    if (cycle) {
+    if (check.kind === "error") return { data: null, error: check.error };
+    if (check.kind === "tooLong") {
       return {
         data: null,
         error: {
           code: SUPERSESSION_CYCLE_CODE,
-          message: `This would create a supersession loop: ${cycle.join(" → ")}`
+          message: `Supersession chains longer than ${SUPERSESSION_CHAIN_LIMIT} hops are not allowed`
+        }
+      };
+    }
+    if (check.kind === "cycle") {
+      return {
+        data: null,
+        error: {
+          code: SUPERSESSION_CYCLE_CODE,
+          message: `This would create a supersession loop: ${check.path.join(" → ")}`
         }
       };
     }

@@ -620,6 +620,10 @@ export async function runMrp(
           grossDemand.delete(oldKey);
 
           const keptShare = demand > 0 ? consumed / demand : 1;
+          const sumByType = (list: DemandContributor[], type: string) =>
+            list
+              .filter((c) => c.sourceType === type)
+              .reduce((sum, c) => sum + c.quantity, 0);
           for (const [actuals, sourceType] of [
             [jobMaterialDemandByKey, "Job Material"],
             [salesDemandByKey, "Sales Order"]
@@ -632,10 +636,17 @@ export async function runMrp(
             );
             const actual = actuals.get(actualKey);
             if (!actual) continue;
-            const kept = actual * keptShare;
+            const attributed = contributors.some(
+              (c) => c.sourceType === sourceType
+            );
+            const kept = attributed
+              ? Math.min(actual, sumByType(netted.kept, sourceType))
+              : actual * keptShare;
             if (kept > 0) actuals.set(actualKey, kept);
             else actuals.delete(actualKey);
-            const moved = (actual - kept) * factor;
+            const moved = attributed
+              ? sumByType(movedContributors, sourceType)
+              : (actual - kept) * factor;
             if (moved > 0) {
               const newActualKey = makeActualKey(
                 successorId,
