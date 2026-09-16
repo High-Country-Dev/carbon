@@ -6,7 +6,41 @@ import { validationError, validator } from "@carbon/form";
 import type { ActionFunctionArgs } from "react-router";
 import { data, redirect } from "react-router";
 import { completeJobOperationBatchValidator } from "~/services/models";
+import { getJobOperationBatch } from "~/services/operations.service";
 import { path } from "~/utils/path";
+
+// The batch's mergeable output lots, derived SERVER-SIDE from its membership.
+// Ids are never taken from the form: this route invokes `issue` with the
+// SERVICE ROLE, so the edge fn's own `inventory` permission check validates the
+// service role rather than the operator — a posted id list would let a
+// production-only user merge any two same-item lots in the company. Returns []
+// unless the batch is Completed and >=2 of its members' output lots are still
+// Available and share one item (so a second merge finds nothing to do).
+async function getMergeableOutputLots(
+  serviceRole: Awaited<ReturnType<typeof getCarbonServiceRole>>,
+  batchId: string,
+  companyId: string
+): Promise<string[]> {
+  const batch = await getJobOperationBatch(serviceRole, batchId, companyId);
+  if (batch.error || batch.data?.status !== "Completed") return [];
+
+  const entityIds = (batch.data.operations ?? [])
+    .map((operation) => operation.trackedEntityId)
+    .filter(Boolean) as string[];
+  if (entityIds.length < 2) return [];
+
+  const outputs = await serviceRole
+    .from("trackedEntity")
+    .select("id, itemId")
+    .in("id", entityIds)
+    .eq("companyId", companyId)
+    .eq("status", "Available")
+    .gt("quantity", 0);
+
+  const lots = outputs.data ?? [];
+  const items = new Set(lots.map((lot) => lot.itemId));
+  return lots.length >= 2 && items.size === 1 ? lots.map((lot) => lot.id) : [];
+}
 
 export async function action({ request, params }: ActionFunctionArgs) {
   assertIsPost(request);
@@ -22,16 +56,18 @@ export async function action({ request, params }: ActionFunctionArgs) {
   // One click combines the per-member output lots into a single lot with
   // genealogy back to every member job.
   if (formData.get("intent") === "merge") {
-    const trackedEntityIds = String(formData.get("trackedEntityIds") ?? "")
-      .split(",")
-      .filter(Boolean);
+    const serviceRoleForMerge = await getCarbonServiceRole();
+    const trackedEntityIds = await getMergeableOutputLots(
+      serviceRoleForMerge,
+      batchId,
+      companyId
+    );
     if (trackedEntityIds.length < 2) {
       return data(
         {},
-        await flash(request, error(null, "At least two lots are required"))
+        await flash(request, error(null, "No mergeable output lots"))
       );
     }
-    const serviceRoleForMerge = await getCarbonServiceRole();
     const mergeResult = await serviceRoleForMerge.functions.invoke<{
       readableId?: string | null;
       error?: string;
@@ -83,7 +119,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
   // operator re-submitting this form re-invokes and resumes without double effects.
   const completeResult = await serviceRole.functions.invoke<{
     memberIds?: string[];
-    outputTrackedEntityIds?: string[];
     error?: string;
   }>("batch-operations", {
     body: {
@@ -124,23 +159,16 @@ export async function action({ request, params }: ActionFunctionArgs) {
   // Same-item output lots can be merged into one — offer it while the operator
   // is still here rather than redirecting away. Different-item batches (or a
   // single lot) go straight back to the floor.
-  const outputIds = completeResult.data?.outputTrackedEntityIds ?? [];
-  if (outputIds.length >= 2) {
-    const outputs = await serviceRole
-      .from("trackedEntity")
-      .select("id, itemId, status")
-      .in("id", outputIds)
-      .eq("companyId", companyId);
-    const mergeable = (outputs.data ?? []).filter(
-      (e) => e.status === "Available"
+  const mergeableLots = await getMergeableOutputLots(
+    serviceRole,
+    batchId,
+    companyId
+  );
+  if (mergeableLots.length >= 2) {
+    return data(
+      { merge: { count: mergeableLots.length } },
+      await flash(request, success("Batch completed"))
     );
-    const items = new Set(mergeable.map((e) => e.itemId));
-    if (mergeable.length >= 2 && items.size === 1) {
-      return data(
-        { merge: { trackedEntityIds: mergeable.map((e) => e.id) } },
-        await flash(request, success("Batch completed"))
-      );
-    }
   }
 
   return redirect(

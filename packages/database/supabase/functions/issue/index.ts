@@ -1784,39 +1784,10 @@ serve(async (req: Request) => {
           throw new Error("Job operation not found");
         }
 
-        const [accountingSettingsBatch, companyRecordBatch] = await Promise.all([
-          client
-            .from("companySettings")
-            .select("accountingEnabled")
-            .eq("id", companyId)
-            .single(),
-          client.from("company").select("companyGroupId").eq("id", companyId).single(),
-        ]);
-        if (companyRecordBatch.error) throw new Error("Failed to fetch company");
-        const accountingEnabledBatch = accountingSettingsBatch.data?.accountingEnabled ?? false;
-
-        const accountDefaultsBatch = accountingEnabledBatch
-          ? await getDefaultPostingGroup(client, companyId)
-          : null;
-        if (accountingEnabledBatch && (accountDefaultsBatch?.error || !accountDefaultsBatch?.data)) {
-          throw new Error("Error getting account defaults");
-        }
-
-        const dimensionsBatch = accountingEnabledBatch
-          ? await client
-              .from("dimension")
-              .select("id, entityType")
-              .eq("companyGroupId", companyRecordBatch.data.companyGroupId)
-              .eq("active", true)
-              .in("entityType", ["ItemPostingGroup", "Item", "Location"])
-          : null;
-
-        const dimensionMapBatch = new Map<string, string>();
-        if (dimensionsBatch?.data) {
-          for (const dim of dimensionsBatch.data) {
-            if (dim.entityType) dimensionMapBatch.set(dim.entityType, dim.id);
-          }
-        }
+        const accountingBatch = await loadConsumeAccountingContext(
+          client,
+          companyId
+        );
 
         await db.transaction().execute(async (trx) => {
           await trx
@@ -1849,9 +1820,11 @@ serve(async (req: Request) => {
             quantity: row.quantity,
             companyId,
             userId,
-            accountingEnabled: accountingEnabledBatch,
-            accountDefaults: accountDefaultsBatch?.data ? accountDefaultsBatch : null,
-            dimensionMap: dimensionMapBatch,
+            accountingEnabled: accountingBatch.accountingEnabled,
+            accountDefaults: accountingBatch.accountDefaults?.data
+              ? accountingBatch.accountDefaults
+              : null,
+            dimensionMap: accountingBatch.dimensionMap,
             client,
             db,
           });
@@ -3539,7 +3512,7 @@ serve(async (req: Request) => {
             .forUpdate()
             .execute();
 
-          const rowByOp = new Map<string, { id: string; remaining: number }>();
+          const rowByOp = new Map<string, string>();
           const remainingByOp = new Map<string, number>();
           for (const row of materialRows) {
             const opId = row.jobOperationId as string;
@@ -3548,10 +3521,10 @@ serve(async (req: Request) => {
               Number(row.estimatedQuantity ?? 0) - Number(row.quantityIssued ?? 0)
             );
             remainingByOp.set(opId, (remainingByOp.get(opId) ?? 0) + remaining);
-            // The write target: the member's first open row for the item.
-            const existing = rowByOp.get(opId);
-            if (!existing || (existing.remaining <= 0 && remaining > 0)) {
-              rowByOp.set(opId, { id: row.id as string, remaining });
+            // The write target: an OPEN row for this member/item when one
+            // exists, else any row (which one is arbitrary either way).
+            if (!rowByOp.has(opId) || remaining > 0) {
+              rowByOp.set(opId, row.id as string);
             }
           }
 
@@ -3615,9 +3588,8 @@ serve(async (req: Request) => {
               );
             }
 
-            const memberRow = rowByOp.get(member.id);
             const memberResult = await consumeTrackedEntitiesIntoOperation(trx, {
-              materialId: memberRow?.id,
+              materialId: rowByOp.get(member.id),
               jobOperationId: member.id,
               itemId,
               parentTrackedEntityId: parent.id as string,
@@ -3682,6 +3654,7 @@ serve(async (req: Request) => {
               "createdAt",
             ])
             .where("trackedEntityId", "in", trackedEntityIds)
+            .where("companyId", "=", companyId)
             .orderBy("createdAt", "desc")
             .execute();
 

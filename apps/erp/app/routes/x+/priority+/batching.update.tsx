@@ -138,16 +138,14 @@ export async function action({ request }: ActionFunctionArgs) {
       };
     }
     const outputs = await getBatchOutputLots(client, batchId, companyId);
-    const available = (outputs.data ?? []).filter(
-      (e) => e.status === "Available" && Number(e.quantity) > 0
-    );
-    const items = new Set(available.map((e) => e.itemId));
-    if (available.length < 2 || items.size !== 1) {
+    const lots = outputs.data ?? [];
+    const items = new Set(lots.map((lot) => lot.itemId));
+    if (lots.length < 2 || items.size !== 1) {
       return { success: false, message: "No mergeable output lots" };
     }
     const serviceRole = await getCarbonServiceRole();
     const merge = await mergeTrackedEntities(serviceRole, {
-      trackedEntityIds: available.map((e) => e.id),
+      trackedEntityIds: lots.map((lot) => lot.id),
       companyId,
       userId
     });

@@ -85,14 +85,12 @@ export function BatchDetailDrawer({
 }: {
   batch: JobOperationBatchDetail;
   events: JobOperationBatchEvent[];
-  // The members' output tracked entities (batch-tracked produced lots) — >=2
-  // Available same-item lots make a Completed batch mergeable.
+  // The members' MERGEABLE output lots (the service filters to Available with
+  // stock) — >=2 of one item make a Completed batch mergeable.
   outputLots?: {
     id: string;
     readableId: string | null;
-    status: string;
     itemId: string | null;
-    quantity: number | null;
   }[];
   onClose: () => void;
 }) {
@@ -117,11 +115,8 @@ export function BatchDetailDrawer({
   // disappears on revalidation.
   const mergeableOutputs = useMemo(() => {
     if (batch.status !== "Completed") return [];
-    const available = outputLots.filter(
-      (e) => e.status === "Available" && Number(e.quantity ?? 0) > 0
-    );
-    const items = new Set(available.map((e) => e.itemId));
-    return available.length >= 2 && items.size === 1 ? available : [];
+    const items = new Set(outputLots.map((lot) => lot.itemId));
+    return outputLots.length >= 2 && items.size === 1 ? outputLots : [];
   }, [batch.status, outputLots]);
 
   const mergeFetcher = useFetcher<{ success?: boolean; message?: string }>();

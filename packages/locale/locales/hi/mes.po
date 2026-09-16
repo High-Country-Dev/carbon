@@ -29,10 +29,6 @@ msgstr "{0} पहले"
 msgid "{0} jobs"
 msgstr "{0} नौकरियां"
 
-#. placeholder {0}: trackedEntityIds.length
-msgid "{0} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
-msgstr "{0} एक ही आइटम के लॉट्स तैयार किए गए। उन्हें एक लॉट में विलय करें? विलय की गई लॉट प्रत्येक जॉब से संबंधित होगी।"
-
 #. placeholder {0}: operation.quantityComplete
 #. placeholder {0}: serialIndex + 1
 #. placeholder {1}: operation.operationQuantity
@@ -67,6 +63,9 @@ msgstr "{completions} उत्तीर्ण इकाई(यों) को �
 
 msgid "{fails} sampled failure(s) are recorded and will NOT be completed — resolve them from the actions menu."
 msgstr "{fails} नमूना विफलता(एं) दर्ज की गई है और पूर्ण नहीं की जाएगी — उन्हें क्रियाएं मेनू से हल करें।"
+
+msgid "{lotCount} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
+msgstr ""
 
 msgid "+{overflow} more"
 msgstr "+{overflow} अधिक"

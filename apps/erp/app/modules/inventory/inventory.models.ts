@@ -639,10 +639,3 @@ export const pickQuantityValidator = z.object({
   quantity: zfd.numeric(z.number().min(0)),
   markShort: zfd.text(z.string().optional())
 });
-
-export const mergeTrackedEntitiesValidator = z.object({
-  trackedEntityIds: z.array(z.string().min(1)).min(2, {
-    message: "At least two lots are required to merge"
-  }),
-  readableId: zfd.text(z.string().optional())
-});

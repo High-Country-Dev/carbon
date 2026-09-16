@@ -43,9 +43,7 @@ export function BatchCompleteModal({
   // batch out of Active/Completing, so the loader stops passing `batch` and this
   // component unmounts. A fetcher declared here would die with it, taking the
   // merge prompt's data with it — the prompt could never render.
-  fetcher: ReturnType<
-    typeof useFetcher<{ merge?: { trackedEntityIds: string[] } }>
-  >;
+  fetcher: ReturnType<typeof useFetcher<{ merge?: { count: number } }>>;
   onClose: () => void;
 }) {
   const { t } = useLingui();

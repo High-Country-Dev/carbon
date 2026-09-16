@@ -29,10 +29,6 @@ msgstr "il y a {0}"
 msgid "{0} jobs"
 msgstr "{0} emplois"
 
-#. placeholder {0}: trackedEntityIds.length
-msgid "{0} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
-msgstr "{0} lots du même article ont été produits. Les fusionner en un seul lot ? Le lot fusionné remonte à chaque ordre de fabrication."
-
 #. placeholder {0}: operation.quantityComplete
 #. placeholder {0}: serialIndex + 1
 #. placeholder {1}: operation.operationQuantity
@@ -67,6 +63,9 @@ msgstr "{completions} unité(s) conforme(s) vont être terminées."
 
 msgid "{fails} sampled failure(s) are recorded and will NOT be completed — resolve them from the actions menu."
 msgstr "{fails} défaut(s) échantillonné(s) enregistré(s) et ne seront PAS complété(s) — résolvez-les à partir du menu des actions."
+
+msgid "{lotCount} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
+msgstr ""
 
 msgid "+{overflow} more"
 msgstr "+{overflow} autres"

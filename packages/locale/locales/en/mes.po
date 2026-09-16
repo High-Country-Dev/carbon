@@ -29,10 +29,6 @@ msgstr "{0} ago"
 msgid "{0} jobs"
 msgstr "{0} jobs"
 
-#. placeholder {0}: trackedEntityIds.length
-msgid "{0} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
-msgstr "{0} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
-
 #. placeholder {0}: operation.quantityComplete
 #. placeholder {0}: serialIndex + 1
 #. placeholder {1}: operation.operationQuantity
@@ -67,6 +63,9 @@ msgstr "{completions} passed unit(s) will be completed."
 
 msgid "{fails} sampled failure(s) are recorded and will NOT be completed — resolve them from the actions menu."
 msgstr "{fails} sampled failure(s) are recorded and will NOT be completed — resolve them from the actions menu."
+
+msgid "{lotCount} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
+msgstr "{lotCount} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
 
 msgid "+{overflow} more"
 msgstr "+{overflow} more"

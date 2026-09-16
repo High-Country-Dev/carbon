@@ -29,10 +29,6 @@ msgstr "{0} 전"
 msgid "{0} jobs"
 msgstr "{0}개 작업"
 
-#. placeholder {0}: trackedEntityIds.length
-msgid "{0} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
-msgstr "동일한 품목으로부터 {0}개의 로트가 생산되었습니다. 하나의 로트로 병합하시겠습니까? 병합된 로트는 모든 작업 지시로 추적됩니다."
-
 #. placeholder {0}: operation.quantityComplete
 #. placeholder {0}: serialIndex + 1
 #. placeholder {1}: operation.operationQuantity
@@ -67,6 +63,9 @@ msgstr "{completions}개의 통과 단위가 완료 처리될 예정입니다."
 
 msgid "{fails} sampled failure(s) are recorded and will NOT be completed — resolve them from the actions menu."
 msgstr "{fails}개의 샘플 불량이 기록되었으며 완료되지 않습니다 — 작업 메뉴에서 해결하세요."
+
+msgid "{lotCount} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
+msgstr ""
 
 msgid "+{overflow} more"
 msgstr "+{overflow} 더 보기"

@@ -21,11 +21,13 @@ import { path } from "~/utils/path";
 // The fetcher is owned upstream for the same reason.
 export function BatchMergePrompt({
   batchId,
-  trackedEntityIds,
+  lotCount,
   fetcher
 }: {
   batchId: string;
-  trackedEntityIds: string[];
+  lotCount: number;
+  // Display only — the route re-derives which lots to merge from the batch's
+  // own membership, so no id ever travels through the form.
   fetcher: ReturnType<typeof useFetcher>;
 }) {
   const navigate = useNavigate();
@@ -40,8 +42,8 @@ export function BatchMergePrompt({
           </ModalTitle>
           <ModalDescription>
             <Trans>
-              {trackedEntityIds.length} lots of the same item were produced.
-              Merge them into one lot? The merged lot traces back to every job.
+              {lotCount} lots of the same item were produced. Merge them into
+              one lot? The merged lot traces back to every job.
             </Trans>
           </ModalDescription>
         </ModalHeader>
@@ -60,10 +62,7 @@ export function BatchMergePrompt({
             isDisabled={isMerging}
             onClick={() => {
               fetcher.submit(
-                {
-                  intent: "merge",
-                  trackedEntityIds: trackedEntityIds.join(",")
-                },
+                { intent: "merge" },
                 { method: "post", action: path.to.batchComplete(batchId) }
               );
             }}

@@ -29,10 +29,6 @@ msgstr "{0} 前"
 msgid "{0} jobs"
 msgstr "{0} 个工作"
 
-#. placeholder {0}: trackedEntityIds.length
-msgid "{0} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
-msgstr "{0}个相同物料的批次已生产。要将其合并为一个批次吗?合并后的批次可追溯至每个工单。"
-
 #. placeholder {0}: operation.quantityComplete
 #. placeholder {0}: serialIndex + 1
 #. placeholder {1}: operation.operationQuantity
@@ -67,6 +63,9 @@ msgstr "{completions} 个已通过的件将被完成。"
 
 msgid "{fails} sampled failure(s) are recorded and will NOT be completed — resolve them from the actions menu."
 msgstr "{fails} 个抽样不合格已被记录，将不会被完成 — 从操作菜单解决它们。"
+
+msgid "{lotCount} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
+msgstr ""
 
 msgid "+{overflow} more"
 msgstr "还有 +{overflow} 个"

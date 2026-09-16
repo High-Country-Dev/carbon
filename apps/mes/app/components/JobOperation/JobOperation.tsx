@@ -277,11 +277,9 @@ export const JobOperation = ({
   // passing `batch`, and the modal unmounts. Its own fetcher would take the
   // merge prompt's payload with it. JobOperation never unmounts, so the prompt
   // survives the very transition that triggers it.
-  const batchCompleteFetcher = useFetcher<{
-    merge?: { trackedEntityIds: string[] };
-  }>();
+  const batchCompleteFetcher = useFetcher<{ merge?: { count: number } }>();
   const [completedBatchId, setCompletedBatchId] = useState<string | null>(null);
-  const mergeIds = batchCompleteFetcher.data?.merge?.trackedEntityIds ?? [];
+  const mergeableLotCount = batchCompleteFetcher.data?.merge?.count ?? 0;
 
   const serialIndex =
     trackedEntities.findIndex((entity) => entity.id === trackedEntityId) ?? 0;
@@ -354,6 +352,14 @@ export const JobOperation = ({
       setParams({ trackedEntityId: entity.id });
     }
   });
+  // Batch mode: the selected material's outstanding requirement ACROSS the
+  // batch — the shared pick is split pro-rata over every member, so defaulting
+  // to one member's share would under-serve all of them.
+  const selectedBatchRemaining = (() => {
+    if (!isBatched || !selectedMaterial?.itemId) return undefined;
+    const totals = batchMaterialTotals?.[selectedMaterial.itemId];
+    return totals ? Math.max(0, totals.required - totals.issued) : undefined;
+  })();
 
   // In batch mode the shared timer is judged against the batch's TOTAL plan:
   // ONE shared setup (the largest member's — that is the point of batching), the
@@ -1775,19 +1781,7 @@ export const JobOperation = ({
                               workCenterId={operation.workCenterId ?? undefined}
                               material={selectedMaterial ?? undefined}
                               batchId={batch?.id ?? undefined}
-                              batchRemainingQuantity={
-                                isBatched && selectedMaterial?.itemId
-                                  ? Math.max(
-                                      0,
-                                      (batchMaterialTotals?.[
-                                        selectedMaterial.itemId
-                                      ]?.required ?? 0) -
-                                        (batchMaterialTotals?.[
-                                          selectedMaterial.itemId
-                                        ]?.issued ?? 0)
-                                    )
-                                  : undefined
-                              }
+                              batchRemainingQuantity={selectedBatchRemaining}
                               parentId={trackedEntityId ?? ""}
                               parentIdIsSerialized={
                                 method?.requiresSerialTracking ?? false
@@ -2956,10 +2950,10 @@ export const JobOperation = ({
       {/* Offered after a completion whose members produced >=2 same-item lots.
           Deliberately NOT gated on `batch` — by the time this renders the batch
           is Completed and the loader no longer passes it. */}
-      {mergeIds.length >= 2 && completedBatchId && (
+      {mergeableLotCount >= 2 && completedBatchId && (
         <BatchMergePrompt
           batchId={completedBatchId}
-          trackedEntityIds={mergeIds}
+          lotCount={mergeableLotCount}
           fetcher={batchCompleteFetcher}
         />
       )}

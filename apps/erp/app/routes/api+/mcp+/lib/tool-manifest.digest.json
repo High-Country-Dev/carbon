@@ -673,7 +673,7 @@
     {"name":"production_getBalloons","classification":"READ","paramCount":1,"schema":"c25fe011e891","response":"3fec0abbc97d","injectAuth":"companyId","permission":"production:view","paginates":false},
     {"name":"production_getBatchableOperations","classification":"READ","paramCount":2,"schema":"4cebb10b56d4","response":"55b8408b15c3","injectAuth":"companyId","permission":"production:view","paginates":false},
     {"name":"production_getBatchableProcesses","classification":"READ","paramCount":0,"schema":"efddc7bd8bbc","response":"b0ab8957f96e","injectAuth":"companyId","permission":"production:view","paginates":false},
-    {"name":"production_getBatchOutputLots","classification":"READ","paramCount":1,"schema":"979f64cb9229","response":"0d29849ded1c","injectAuth":"companyId","permission":"production:view","paginates":false},
+    {"name":"production_getBatchOutputLots","classification":"READ","paramCount":1,"schema":"979f64cb9229","response":"7783e113d7a1","injectAuth":"companyId","permission":"production:view","paginates":false},
     {"name":"production_getCapacityReservationsByJob","classification":"READ","paramCount":1,"schema":"4999bd4be598","response":"8ea855e0971b","injectAuth":"companyId","permission":"production:view","paginates":false},
     {"name":"production_getCapacityReservationsForResources","classification":"READ","paramCount":2,"schema":"c0f9784197a0","response":"8761b0d72ab9","injectAuth":"companyId","permission":"production:view","paginates":false},
     {"name":"production_getDemandForecasts","classification":"READ","paramCount":3,"schema":"c24ad31f1eaa","response":"21892ee9e3b8","injectAuth":"companyId","permission":"production:view","paginates":false},
