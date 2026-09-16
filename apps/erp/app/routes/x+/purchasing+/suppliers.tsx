@@ -2,6 +2,7 @@ import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { VStack } from "@carbon/react";
+import { indexBy, indexByMapped, pluckUnique } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
 import type { LoaderFunctionArgs } from "react-router";
 import { Outlet, redirect, useLoaderData } from "react-router";
@@ -53,22 +54,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
   }
 
-  const supplierIds = (suppliers.data ?? [])
-    .map((s) => s.id)
-    .filter((id): id is string => !!id);
+  const supplierIds = pluckUnique(suppliers.data, (s) => s.id);
 
   const [purchasingRes, paymentRes, shippingRes] =
     await getSupplierReportContacts(client, companyId, supplierIds);
 
-  const purchasingBySupplierId = new Map(
-    (purchasingRes.data ?? []).map((r) => [r.id, r.purchasingContact])
+  const purchasingBySupplierId = indexByMapped(
+    purchasingRes.data,
+    (r) => r.id,
+    (r) => r.purchasingContact
   );
-  const paymentBySupplierId = new Map(
-    (paymentRes.data ?? []).map((r) => [r.supplierId, r])
-  );
-  const shippingBySupplierId = new Map(
-    (shippingRes.data ?? []).map((r) => [r.supplierId, r])
-  );
+  const paymentBySupplierId = indexBy(paymentRes.data, (r) => r.supplierId);
+  const shippingBySupplierId = indexBy(shippingRes.data, (r) => r.supplierId);
 
   const supplierReportContacts: SupplierReportContactsBySupplierId =
     Object.fromEntries(
