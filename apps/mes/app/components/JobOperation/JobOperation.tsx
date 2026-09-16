@@ -131,6 +131,7 @@ import { makeDurations } from "~/utils/durations";
 import { getPrivateUrl, getRawModelUrl, path } from "~/utils/path";
 import ItemThumbnail from "../ItemThumbnail";
 import { BatchCompleteModal } from "./components/BatchCompleteModal";
+import { BatchMergePrompt } from "./components/BatchMergePrompt";
 import { OperationChat } from "./components/Chat";
 import {
   Controls,
@@ -271,6 +272,16 @@ export const JobOperation = ({
   const isBatched = !!batch;
   const isCompleting = batch?.status === "Completing";
   const batchCompleteModal = useDisclosure();
+  // The completion fetcher lives HERE, not in BatchCompleteModal: a successful
+  // completion flips the batch out of Active/Completing, the loader stops
+  // passing `batch`, and the modal unmounts. Its own fetcher would take the
+  // merge prompt's payload with it. JobOperation never unmounts, so the prompt
+  // survives the very transition that triggers it.
+  const batchCompleteFetcher = useFetcher<{
+    merge?: { trackedEntityIds: string[] };
+  }>();
+  const [completedBatchId, setCompletedBatchId] = useState<string | null>(null);
+  const mergeIds = batchCompleteFetcher.data?.merge?.trackedEntityIds ?? [];
 
   const serialIndex =
     trackedEntities.findIndex((entity) => entity.id === trackedEntityId) ?? 0;
@@ -1764,6 +1775,19 @@ export const JobOperation = ({
                               workCenterId={operation.workCenterId ?? undefined}
                               material={selectedMaterial ?? undefined}
                               batchId={batch?.id ?? undefined}
+                              batchRemainingQuantity={
+                                isBatched && selectedMaterial?.itemId
+                                  ? Math.max(
+                                      0,
+                                      (batchMaterialTotals?.[
+                                        selectedMaterial.itemId
+                                      ]?.required ?? 0) -
+                                        (batchMaterialTotals?.[
+                                          selectedMaterial.itemId
+                                        ]?.issued ?? 0)
+                                    )
+                                  : undefined
+                              }
                               parentId={trackedEntityId ?? ""}
                               parentIdIsSerialized={
                                 method?.requiresSerialTracking ?? false
@@ -2563,7 +2587,12 @@ export const JobOperation = ({
                   }
                   tooltip={isBatched ? t`Complete Batch` : t`Log Completed`}
                   onClick={
-                    isBatched ? batchCompleteModal.onOpen : completeModal.onOpen
+                    isBatched
+                      ? () => {
+                          setCompletedBatchId(batch?.id ?? null);
+                          batchCompleteModal.onOpen();
+                        }
+                      : completeModal.onOpen
                   }
                 />
                 <IconButtonWithTooltip
@@ -2744,6 +2773,7 @@ export const JobOperation = ({
                   className="flex items-center gap-3 rounded-lg bg-accent px-4 py-4 text-accent-foreground ring-1 ring-black/5 active:scale-[0.98] transition-transform"
                   onClick={() => {
                     actionsSheet.onClose();
+                    setCompletedBatchId(batch?.id ?? null);
                     batchCompleteModal.onOpen();
                   }}
                 >
@@ -2918,7 +2948,19 @@ export const JobOperation = ({
         <BatchCompleteModal
           batch={batch}
           isCompleting={isCompleting}
+          fetcher={batchCompleteFetcher}
           onClose={batchCompleteModal.onClose}
+        />
+      )}
+
+      {/* Offered after a completion whose members produced >=2 same-item lots.
+          Deliberately NOT gated on `batch` — by the time this renders the batch
+          is Completed and the loader no longer passes it. */}
+      {mergeIds.length >= 2 && completedBatchId && (
+        <BatchMergePrompt
+          batchId={completedBatchId}
+          trackedEntityIds={mergeIds}
+          fetcher={batchCompleteFetcher}
         />
       )}
 

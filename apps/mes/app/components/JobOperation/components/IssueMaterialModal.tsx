@@ -89,6 +89,7 @@ export function IssueMaterialModal({
   workCenterId,
   material,
   batchId,
+  batchRemainingQuantity,
   parentId,
   parentIdIsSerialized,
   jobOperationStepId,
@@ -122,6 +123,11 @@ export function IssueMaterialModal({
   // edge fn splits the picked lots pro-rata by remaining requirement and
   // records per-member consumption, so no parent entity is sent.
   batchId?: string;
+  // Batch mode: the WHOLE batch's outstanding requirement for this item. The
+  // default pick must be this, not the member's share — the pick is split
+  // pro-rata across every member, so defaulting to one member's quantity
+  // under-serves all of them (4,000 of a 6,500 batch became 2461/1538).
+  batchRemainingQuantity?: number;
   parentId?: string;
   parentIdIsSerialized?: boolean;
   // Assembly view only: the step + 1-based unit the operator is on, stamped onto the
@@ -332,6 +338,12 @@ export function IssueMaterialModal({
   // total for the operation.
   const initialQuantity = useMemo(() => {
     if (!material) return 1;
+    // Batch mode: one pick covers every member, so the default is the batch's
+    // outstanding requirement — the member's own share would be split again
+    // across all members and satisfy none of them.
+    if (batchId && batchRemainingQuantity !== undefined) {
+      return Math.max(1, batchRemainingQuantity);
+    }
     const perUnit = material.quantity ?? material.estimatedQuantity ?? 1;
     if (parentIdIsSerialized) {
       return Math.max(1, perUnit - (material.quantityIssued ?? 0));
@@ -341,7 +353,13 @@ export function IssueMaterialModal({
     }
     const total = material.estimatedQuantity ?? material.quantity ?? 1;
     return Math.max(1, total - (material.quantityIssued ?? 0));
-  }, [material, parentIdIsSerialized, issuePerUnit]);
+  }, [
+    material,
+    parentIdIsSerialized,
+    issuePerUnit,
+    batchId,
+    batchRemainingQuantity
+  ]);
 
   // Serial numbers selection state
   const [selectedSerialNumbers, setSelectedSerialNumbers] = useState<

@@ -1,6 +1,5 @@
 import { Hidden, Submit, ValidatedForm } from "@carbon/form";
 import {
-  Button,
   cn,
   Modal,
   ModalBody,
@@ -12,7 +11,7 @@ import {
 } from "@carbon/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useState } from "react";
-import { useFetcher, useNavigate } from "react-router";
+import type { useFetcher } from "react-router";
 import type { z } from "zod";
 import { completeJobOperationBatchValidator } from "~/services/models";
 import type { JobOperationBatch } from "~/services/operations.service";
@@ -35,15 +34,21 @@ const toNumber = (value: string) => Number(value) || 0;
 export function BatchCompleteModal({
   batch,
   isCompleting,
+  fetcher,
   onClose
 }: {
   batch: JobOperationBatch;
   isCompleting: boolean;
+  // Owned by JobOperation, NOT by this modal: a successful completion flips the
+  // batch out of Active/Completing, so the loader stops passing `batch` and this
+  // component unmounts. A fetcher declared here would die with it, taking the
+  // merge prompt's data with it — the prompt could never render.
+  fetcher: ReturnType<
+    typeof useFetcher<{ merge?: { trackedEntityIds: string[] } }>
+  >;
   onClose: () => void;
 }) {
   const { t } = useLingui();
-  const navigate = useNavigate();
-  const fetcher = useFetcher<{ merge?: { trackedEntityIds: string[] } }>();
   const members = batch.operations ?? [];
   // Any member producing a batch-tracked item gets a batch-number column; its
   // WIP entity is finalized as the produced lot at completion.
@@ -67,8 +72,6 @@ export function BatchCompleteModal({
     members.map((m) => m.batchNumber ?? "")
   );
 
-  const mergeIds = fetcher.data?.merge?.trackedEntityIds ?? [];
-
   // Controlled per-member quantities as strings (empty while typing): react-aria
   // would add stepper chrome, so the grid uses bare inputs and drives them here.
   // A member left at 0 quantity AND 0 scrap is "not in this run" — it detaches
@@ -91,56 +94,6 @@ export function BatchCompleteModal({
   const allExcluded = rows.every(
     (r) => toNumber(r.quantity) === 0 && toNumber(r.scrapQuantity) === 0
   );
-
-  if (mergeIds.length >= 2) {
-    // The completion landed and every member produced the same item — offer
-    // the one-click merge into a single lot (genealogy keeps every source job).
-    return (
-      <Modal open onOpenChange={() => {}}>
-        <ModalContent size="small" withCloseButton={false}>
-          <ModalHeader>
-            <ModalTitle>
-              <Trans>Batch completed</Trans>
-            </ModalTitle>
-            <ModalDescription>
-              <Trans>
-                {mergeIds.length} lots of the same item were produced. Merge
-                them into one lot? The merged lot traces back to every job.
-              </Trans>
-            </ModalDescription>
-          </ModalHeader>
-          <ModalFooter>
-            <Button
-              variant="secondary"
-              size="lg"
-              onClick={() => navigate(path.to.operations)}
-            >
-              <Trans>Keep separate</Trans>
-            </Button>
-            <Button
-              size="lg"
-              isLoading={fetcher.state !== "idle"}
-              isDisabled={fetcher.state !== "idle"}
-              onClick={() => {
-                fetcher.submit(
-                  {
-                    intent: "merge",
-                    trackedEntityIds: mergeIds.join(",")
-                  },
-                  {
-                    method: "post",
-                    action: path.to.batchComplete(batch.id as string)
-                  }
-                );
-              }}
-            >
-              <Trans>Merge into one lot</Trans>
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    );
-  }
 
   return (
     <Modal

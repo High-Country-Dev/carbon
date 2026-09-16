@@ -29,7 +29,7 @@ msgstr "{0} 전"
 msgid "{0} jobs"
 msgstr "{0}개 작업"
 
-#. placeholder {0}: mergeIds.length
+#. placeholder {0}: trackedEntityIds.length
 msgid "{0} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
 msgstr "동일한 품목으로부터 {0}개의 로트가 생산되었습니다. 하나의 로트로 병합하시겠습니까? 병합된 로트는 모든 작업 지시로 추적됩니다."
 

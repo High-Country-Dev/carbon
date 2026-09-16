@@ -29,7 +29,7 @@ msgstr "{0} önce"
 msgid "{0} jobs"
 msgstr "{0} iş"
 
-#. placeholder {0}: mergeIds.length
+#. placeholder {0}: trackedEntityIds.length
 msgid "{0} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
 msgstr "{0} Lot aynı stok kartısından üretildi. Bunları tek bir Lot'a birleştirelim mi? Birleştirilmiş Lot tüm İş emirlerine geri izlenebilir."
 

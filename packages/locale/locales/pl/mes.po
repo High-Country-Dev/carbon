@@ -29,7 +29,7 @@ msgstr "{0} temu"
 msgid "{0} jobs"
 msgstr "{0} zadań"
 
-#. placeholder {0}: mergeIds.length
+#. placeholder {0}: trackedEntityIds.length
 msgid "{0} lots of the same item were produced. Merge them into one lot? The merged lot traces back to every job."
 msgstr "{0} partie tego samego artykułu zostały wyprodukowane. Czy scalić je w jedną partię? Scalone partie można śledzić do każdego zlecenia produkcyjnego."
 
