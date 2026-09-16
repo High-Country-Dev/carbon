@@ -14,8 +14,8 @@ CREATE OR REPLACE VIEW "salesInvoices" WITH(SECURITY_INVOKER=true) AS
   WITH settled AS (
     SELECT s."targetSalesInvoiceId", s."companyId",
       SUM(COALESCE(s."sourceAmount", s."appliedAmount", 0) + round(
-        (s."discountAmount" + s."writeOffAmount") * target."exchangeRate",
-        target_currency."decimalPlaces")) AS amount_document,
+        (COALESCE(s."discountAmount", 0) + COALESCE(s."writeOffAmount", 0)) * target."exchangeRate",
+        COALESCE(target_currency."decimalPlaces", 2))) AS amount_document,
       MAX(s."appliedDate") AS "lastSettlementDate"
     FROM "invoiceSettlement" s
     JOIN "salesInvoice" target ON target."id" = s."targetSalesInvoiceId"
@@ -134,7 +134,7 @@ CREATE OR REPLACE VIEW "salesInvoices" WITH(SECURITY_INVOKER=true) AS
   LEFT JOIN "currency" invoice_currency ON invoice_currency."code" = si."currencyCode"
     AND invoice_currency."companyGroupId" = invoice_company."companyGroupId"
   CROSS JOIN LATERAL (
-    SELECT round((COALESCE(sil."subtotal", 0) + COALESCE(sil."totalTax", 0) + COALESCE(ss."shippingCost", 0)) * si."exchangeRate", invoice_currency."decimalPlaces") AS total_document
+    SELECT round((COALESCE(sil."subtotal", 0) + COALESCE(sil."totalTax", 0) + COALESCE(ss."shippingCost", 0)) * si."exchangeRate", COALESCE(invoice_currency."decimalPlaces", 2)) AS total_document
   ) amounts
   CROSS JOIN LATERAL (
     SELECT amounts.total_document - COALESCE(s.amount_document, 0) AS amount_document
@@ -145,8 +145,8 @@ CREATE OR REPLACE VIEW "purchaseInvoices" WITH(SECURITY_INVOKER=true) AS
   WITH settled AS (
     SELECT s."targetPurchaseInvoiceId", s."companyId",
       SUM(COALESCE(s."sourceAmount", s."appliedAmount", 0) + round(
-        (s."discountAmount" + s."writeOffAmount") * target."exchangeRate",
-        target_currency."decimalPlaces")) AS amount_document,
+        (COALESCE(s."discountAmount", 0) + COALESCE(s."writeOffAmount", 0)) * target."exchangeRate",
+        COALESCE(target_currency."decimalPlaces", 2))) AS amount_document,
       MAX(s."appliedDate") AS "lastSettlementDate"
     FROM "invoiceSettlement" s
     JOIN "purchaseInvoice" target ON target."id" = s."targetPurchaseInvoiceId"
@@ -246,7 +246,7 @@ CREATE OR REPLACE VIEW "purchaseInvoices" WITH(SECURITY_INVOKER=true) AS
   LEFT JOIN "currency" invoice_currency ON invoice_currency."code" = pi."currencyCode"
     AND invoice_currency."companyGroupId" = invoice_company."companyGroupId"
   CROSS JOIN LATERAL (
-    SELECT round((COALESCE(pl."orderTotal", 0) + COALESCE(pid."supplierShippingCost", 0) / CASE WHEN pi."exchangeRate" = 0 THEN 1 ELSE pi."exchangeRate" END) * pi."exchangeRate", invoice_currency."decimalPlaces") AS total_document
+    SELECT round((COALESCE(pl."orderTotal", 0) + COALESCE(pid."supplierShippingCost", 0) / CASE WHEN pi."exchangeRate" = 0 THEN 1 ELSE pi."exchangeRate" END) * pi."exchangeRate", COALESCE(invoice_currency."decimalPlaces", 2)) AS total_document
   ) amounts
   CROSS JOIN LATERAL (
     SELECT amounts.total_document - COALESCE(s.amount_document, 0) AS amount_document
