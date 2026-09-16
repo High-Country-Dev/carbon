@@ -34,7 +34,7 @@ export function BatchMergePrompt({
   const isMerging = fetcher.state !== "idle";
 
   return (
-    <Modal open onOpenChange={() => {}}>
+    <Modal open>
       <ModalContent size="small" withCloseButton={false}>
         <ModalHeader>
           <ModalTitle>

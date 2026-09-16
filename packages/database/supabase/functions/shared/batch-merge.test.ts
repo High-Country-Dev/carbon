@@ -124,7 +124,7 @@ Deno.test("attributes kept only where every parent agrees; pointer keys dropped"
       })
     ]
   });
-  assertEquals(records.mergedEntityInsert.attributes["Supplier"], "Acme");
+  assertEquals(records.mergedEntityInsert.attributes.Supplier, "Acme");
   assertEquals(records.mergedEntityInsert.attributes["Grow Room"], undefined);
   assertEquals(
     records.mergedEntityInsert.attributes["Split From Entity ID"],
