@@ -148,19 +148,21 @@ In batch mode `JobOperation` derives `isBatched = !!batch`,
   row 0/0) disables submit. Scrap / Rework /
   Finish are hidden in the actions sheet (per-op writes would double-count a
   member); Maintenance + Quality Issue stay.
-- **Merge prompt** — when a completion produced ≥2 still-Available lots of ONE
-  item, the route answers with `{ merge: { count } }` instead of redirecting and
-  `BatchMergePrompt` offers "Merge into one lot" / "Keep separate". Two
-  structural rules, both load-bearing: the completion **fetcher is owned by
-  `JobOperation`**, not by `BatchCompleteModal` — completing flips the batch out
-  of `Active`/`Completing`, the loader stops passing `batch`, and the modal
-  (rendered `{batch && …}`) unmounts, so a fetcher declared there would take the
-  prompt's payload with it; and the merge action carries **no entity ids** —
-  `batch.$batchId.complete.tsx`'s `getMergeableOutputLots` re-derives them from
-  the batch's own membership, because that route invokes `issue` with the
-  SERVICE ROLE (the edge fn's `inventory` permission check then validates the
-  service role, not the operator, so a posted id list would let a
-  production-only user merge any two same-item lots in the company). The batch
+- **Merge by batch number** — there is no post-completion prompt: the batch
+  number IS the merge intent. Producing rows that share a number (same item)
+  get an inline "complete as one merged lot" confirmation in
+  `BatchCompleteModal`; one number across DIFFERENT items blocks submit
+  (and the route re-checks server-side against jobMakeMethod itemIds before
+  invoking completion — two same-named lots of different items must never
+  mint). After completion succeeds, the route's `getOutputLotMergeGroups`
+  groups the PERSISTED output lots by itemId + readableId and invokes
+  `mergeTrackedEntities` per group. The merge carries **no entity ids from
+  the form** — that route invokes `issue` with the SERVICE ROLE (the edge
+  fn's `inventory` permission check then validates the service role, not the
+  operator, so a posted id list would let a production-only user merge any
+  two same-item lots in the company). A merge failure leaves the batch
+  completed with per-member lots; the ERP batch drawer's "Merge output lots"
+  is the recovery path. The batch
   chip menu also offers
   "Print batch list" (`path.to.file.batchLoadList` → the ERP
   `/file/batch/:id.pdf` route, `BatchListPDF`). The kanban keyboard wedge is

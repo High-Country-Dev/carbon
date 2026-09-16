@@ -131,7 +131,6 @@ import { makeDurations } from "~/utils/durations";
 import { getPrivateUrl, getRawModelUrl, path } from "~/utils/path";
 import ItemThumbnail from "../ItemThumbnail";
 import { BatchCompleteModal } from "./components/BatchCompleteModal";
-import { BatchMergePrompt } from "./components/BatchMergePrompt";
 import { OperationChat } from "./components/Chat";
 import {
   Controls,
@@ -277,9 +276,7 @@ export const JobOperation = ({
   // passing `batch`, and the modal unmounts. Its own fetcher would take the
   // merge prompt's payload with it. JobOperation never unmounts, so the prompt
   // survives the very transition that triggers it.
-  const batchCompleteFetcher = useFetcher<{ merge?: { count: number } }>();
-  const [completedBatchId, setCompletedBatchId] = useState<string | null>(null);
-  const mergeableLotCount = batchCompleteFetcher.data?.merge?.count ?? 0;
+  const batchCompleteFetcher = useFetcher();
 
   const serialIndex =
     trackedEntities.findIndex((entity) => entity.id === trackedEntityId) ?? 0;
@@ -2581,12 +2578,7 @@ export const JobOperation = ({
                   }
                   tooltip={isBatched ? t`Complete Batch` : t`Log Completed`}
                   onClick={
-                    isBatched
-                      ? () => {
-                          setCompletedBatchId(batch?.id ?? null);
-                          batchCompleteModal.onOpen();
-                        }
-                      : completeModal.onOpen
+                    isBatched ? batchCompleteModal.onOpen : completeModal.onOpen
                   }
                 />
                 <IconButtonWithTooltip
@@ -2767,7 +2759,6 @@ export const JobOperation = ({
                   className="flex items-center gap-3 rounded-lg bg-accent px-4 py-4 text-accent-foreground ring-1 ring-black/5 active:scale-[0.98] transition-transform"
                   onClick={() => {
                     actionsSheet.onClose();
-                    setCompletedBatchId(batch?.id ?? null);
                     batchCompleteModal.onOpen();
                   }}
                 >
@@ -2944,17 +2935,6 @@ export const JobOperation = ({
           isCompleting={isCompleting}
           fetcher={batchCompleteFetcher}
           onClose={batchCompleteModal.onClose}
-        />
-      )}
-
-      {/* Offered after a completion whose members produced >=2 same-item lots.
-          Deliberately NOT gated on `batch` — by the time this renders the batch
-          is Completed and the loader no longer passes it. */}
-      {mergeableLotCount >= 2 && completedBatchId && (
-        <BatchMergePrompt
-          batchId={completedBatchId}
-          lotCount={mergeableLotCount}
-          fetcher={batchCompleteFetcher}
         />
       )}
 

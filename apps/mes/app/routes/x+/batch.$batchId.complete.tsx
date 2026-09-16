@@ -9,18 +9,18 @@ import { completeJobOperationBatchValidator } from "~/services/models";
 import { getJobOperationBatch } from "~/services/operations.service";
 import { path } from "~/utils/path";
 
-// The batch's mergeable output lots, derived SERVER-SIDE from its membership.
-// Ids are never taken from the form: this route invokes `issue` with the
-// SERVICE ROLE, so the edge fn's own `inventory` permission check validates the
-// service role rather than the operator — a posted id list would let a
-// production-only user merge any two same-item lots in the company. Returns []
-// unless the batch is Completed and >=2 of its members' output lots are still
-// Available and share one item (so a second merge finds nothing to do).
-async function getMergeableOutputLots(
+// The batch's output-lot merge groups, derived SERVER-SIDE from its
+// membership and the batch numbers completion just persisted. Ids are never
+// taken from the form: this route invokes `issue` with the SERVICE ROLE, so
+// the edge fn's own `inventory` permission check validates the service role
+// rather than the operator. Members completed under one batch number form one
+// group — the number IS the merge intent. A second call finds nothing (the
+// parents are Consumed), so a resume never double-merges.
+async function getOutputLotMergeGroups(
   serviceRole: Awaited<ReturnType<typeof getCarbonServiceRole>>,
   batchId: string,
   companyId: string
-): Promise<string[]> {
+): Promise<Array<{ readableId: string; ids: string[] }>> {
   const batch = await getJobOperationBatch(serviceRole, batchId, companyId);
   if (batch.error || batch.data?.status !== "Completed") return [];
 
@@ -31,15 +31,25 @@ async function getMergeableOutputLots(
 
   const outputs = await serviceRole
     .from("trackedEntity")
-    .select("id, itemId")
+    .select("id, itemId, readableId")
     .in("id", entityIds)
     .eq("companyId", companyId)
     .eq("status", "Available")
     .gt("quantity", 0);
 
-  const lots = outputs.data ?? [];
-  const items = new Set(lots.map((lot) => lot.itemId));
-  return lots.length >= 2 && items.size === 1 ? lots.map((lot) => lot.id) : [];
+  const groups = new Map<string, { readableId: string; ids: string[] }>();
+  for (const lot of outputs.data ?? []) {
+    const number = (lot.readableId ?? "").trim();
+    if (!number) continue;
+    // grouped per item as well: one number across items never merges (the
+    // completion form refuses it, and a pre-existing collision must not
+    // swallow an unrelated item's lot)
+    const key = `${lot.itemId}::${number}`;
+    const group = groups.get(key) ?? { readableId: number, ids: [] };
+    group.ids.push(lot.id);
+    groups.set(key, group);
+  }
+  return [...groups.values()].filter((g) => g.ids.length > 1);
 }
 
 export async function action({ request, params }: ActionFunctionArgs) {
@@ -52,58 +62,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
 
   const formData = await request.formData();
 
-  // Post-completion lot merge ("N lots of the same item — merge into one?").
-  // One click combines the per-member output lots into a single lot with
-  // genealogy back to every member job.
-  if (formData.get("intent") === "merge") {
-    const serviceRoleForMerge = await getCarbonServiceRole();
-    const trackedEntityIds = await getMergeableOutputLots(
-      serviceRoleForMerge,
-      batchId,
-      companyId
-    );
-    if (trackedEntityIds.length < 2) {
-      return data(
-        {},
-        await flash(request, error(null, "No mergeable output lots"))
-      );
-    }
-    const mergeResult = await serviceRoleForMerge.functions.invoke<{
-      readableId?: string | null;
-      error?: string;
-    }>("issue", {
-      body: {
-        type: "mergeTrackedEntities",
-        trackedEntityIds,
-        companyId,
-        userId
-      }
-    });
-    if (mergeResult.error || mergeResult.data?.error) {
-      return data(
-        {},
-        await flash(
-          request,
-          error(
-            mergeResult.error ?? mergeResult.data?.error,
-            "Failed to merge lots"
-          )
-        )
-      );
-    }
-    return redirect(
-      path.to.operations,
-      await flash(
-        request,
-        success(
-          mergeResult.data?.readableId
-            ? `Lots merged into ${mergeResult.data.readableId}`
-            : "Lots merged"
-        )
-      )
-    );
-  }
-
   const validation = await validator(
     completeJobOperationBatchValidator
   ).validate(formData);
@@ -112,6 +70,52 @@ export async function action({ request, params }: ActionFunctionArgs) {
   }
 
   const serviceRole = await getCarbonServiceRole();
+
+  // One batch number across DIFFERENT items can never merge and must not
+  // complete into two same-named lots: refuse before anything happens, so the
+  // operator edits the numbers. Item identity comes from the server, not the
+  // form.
+  const producing = validation.data.members.filter(
+    (m) => m.excluded !== "true" && (m.quantity ?? 0) > 0 && m.batchNumber
+  );
+  if (producing.length > 1) {
+    const memberOps = await serviceRole
+      .from("jobOperation")
+      .select("id, jobMakeMethod(itemId)")
+      .in(
+        "id",
+        producing.map((m) => m.jobOperationId)
+      )
+      .eq("jobOperationBatchId", batchId)
+      .eq("companyId", companyId);
+    const itemByOp = new Map(
+      (memberOps.data ?? []).map((o) => [o.id, o.jobMakeMethod?.itemId ?? null])
+    );
+    const itemsByNumber = new Map<string, Set<string>>();
+    for (const m of producing) {
+      const number = (m.batchNumber ?? "").trim();
+      const itemId = itemByOp.get(m.jobOperationId);
+      if (!number || !itemId) continue;
+      const set = itemsByNumber.get(number) ?? new Set<string>();
+      set.add(itemId);
+      itemsByNumber.set(number, set);
+    }
+    const conflict = [...itemsByNumber.entries()].find(
+      ([, items]) => items.size > 1
+    );
+    if (conflict) {
+      return data(
+        {},
+        await flash(
+          request,
+          error(
+            null,
+            `Batch number ${conflict[0]} is used for different items — edit the numbers and complete again`
+          )
+        )
+      );
+    }
+  }
 
   // The edge function owns the whole completion: slice events + record quantities
   // (phase 1, one txn), then issue each member's BOM + flip members Done + post GL
@@ -156,23 +160,52 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  // Same-item output lots can be merged into one — offer it while the operator
-  // is still here rather than redirecting away. Different-item batches (or a
-  // single lot) go straight back to the floor.
-  const mergeableLots = await getMergeableOutputLots(
+  // Members completed under one batch number merge into one lot right now —
+  // the number was the merge intent, confirmed in the form. A failure here
+  // leaves the batch completed with its per-member lots intact; the batch
+  // drawer's "Merge output lots" is the recovery path.
+  const mergeGroups = await getOutputLotMergeGroups(
     serviceRole,
     batchId,
     companyId
   );
-  if (mergeableLots.length >= 2) {
-    return data(
-      { merge: { count: mergeableLots.length } },
-      await flash(request, success("Batch completed"))
-    );
+  for (const group of mergeGroups) {
+    const mergeResult = await serviceRole.functions.invoke<{
+      error?: string;
+    }>("issue", {
+      body: {
+        type: "mergeTrackedEntities",
+        trackedEntityIds: group.ids,
+        readableId: group.readableId,
+        companyId,
+        userId
+      }
+    });
+    if (mergeResult.error || mergeResult.data?.error) {
+      return redirect(
+        path.to.operations,
+        await flash(
+          request,
+          error(
+            mergeResult.error ?? mergeResult.data?.error,
+            `Batch completed, but merging lots into ${group.readableId} failed — use "Merge output lots" on the batch`
+          )
+        )
+      );
+    }
   }
 
   return redirect(
     path.to.operations,
-    await flash(request, success("Batch completed"))
+    await flash(
+      request,
+      success(
+        mergeGroups.length > 0
+          ? `Batch completed — ${mergeGroups
+              .map((g) => `${g.ids.length} lots merged into ${g.readableId}`)
+              .join(", ")}`
+          : "Batch completed"
+      )
+    )
   );
 }

@@ -95,7 +95,7 @@ export async function getJobOperationBatch(
   const operations = await client
     .from("jobOperation")
     .select(
-      "id, description, operationQuantity, quantityComplete, setupTime, setupUnit, laborTime, laborUnit, machineTime, machineUnit, jobMakeMethodId, jobMakeMethod(requiresBatchTracking), job(jobId)"
+      "id, description, operationQuantity, quantityComplete, setupTime, setupUnit, laborTime, laborUnit, machineTime, machineUnit, jobMakeMethodId, jobMakeMethod(requiresBatchTracking, itemId), job(jobId)"
     )
     .eq("jobOperationBatchId", batchId)
     .eq("companyId", companyId);
@@ -148,6 +148,7 @@ export async function getJobOperationBatch(
           ...o,
           requiresBatchTracking:
             o.jobMakeMethod?.requiresBatchTracking ?? false,
+          itemId: o.jobMakeMethod?.itemId ?? null,
           trackedEntityId: entity?.id ?? null,
           batchNumber: entity?.readableId ?? null
         };

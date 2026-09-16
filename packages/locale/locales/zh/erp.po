@@ -157,6 +157,11 @@ msgstr "{0} / {1} 个过账科目已映射"
 msgid "{0} of {maxSlots} provider slots used"
 msgstr "{0} / {maxSlots} 个提供商插槽已使用"
 
+#. placeholder {0}: pendingJobs.length
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:331
+msgid "{0} of {memberCount} member jobs are not completed yet — their output stays out of stock until each job is completed."
+msgstr "{memberCount}个工单中{0}个尚未完成——其产出将一直缺货，直到每个工单都完成。"
+
 #. placeholder {0}: selected.length
 #: apps/erp/app/modules/production/ui/Batches/BatchBuilder.tsx:2285
 msgid "{0} operations · {totalQuantity} parts"
@@ -211,7 +216,7 @@ msgid "{0} rows"
 msgstr "{0} 行"
 
 #. placeholder {0}: member.quantityScrapped
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:416
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:445
 #: apps/erp/app/modules/production/ui/Batches/BatchesTable.tsx:422
 msgid "{0} scrapped"
 msgstr "{0} 报废"
@@ -2045,7 +2050,7 @@ msgstr "添加备注"
 msgid "Add Operation"
 msgstr "添加操作"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:634
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:663
 msgid "Add operations"
 msgstr "添加操作"
 
@@ -4021,7 +4026,7 @@ msgstr "必须启用自动下达才能自动启动工单"
 msgid "Auto Start Job"
 msgstr "自动启动作业"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:742
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:771
 msgid "Auto-assigned on release"
 msgstr "下达时自动分配"
 
@@ -6585,8 +6590,8 @@ msgstr "将所有物料和定价复制到另一个客户或类型。"
 msgid "Copy API Key"
 msgstr "复制API密钥"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:247
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:254
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:252
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:259
 msgid "Copy batch number"
 msgstr "复制生产批次号"
 
@@ -7231,7 +7236,7 @@ msgstr "创建工作中心"
 #: apps/erp/app/modules/inventory/ui/WarehouseTransfers/WarehouseTransferLines.tsx:177
 #: apps/erp/app/modules/items/ui/Item/ItemDocuments.tsx:135
 #: apps/erp/app/modules/items/ui/Parts/ConfigurationParameters.tsx:989
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:499
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:528
 #: apps/erp/app/modules/quality/ui/Actions/ActionsTable.tsx:204
 #: apps/erp/app/modules/quality/ui/Gauge/GaugeForm.tsx:250
 #: apps/erp/app/modules/sales/ui/Opportunity/OpportunityDocuments.tsx:126
@@ -7309,7 +7314,7 @@ msgstr "创建于"
 msgid "Created At"
 msgstr "创建于"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:493
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:522
 #: packages/workflows/src/catalog/labels.generated.ts:93
 #: packages/workflows/src/catalog/labels.generated.ts:124
 #: packages/workflows/src/catalog/labels.generated.ts:149
@@ -7787,7 +7792,7 @@ msgstr "客户"
 #: apps/erp/app/modules/invoicing/ui/Workbench/ARAPWorkbench.tsx:268
 #: apps/erp/app/modules/items/ui/Item/CustomerPartForm.tsx:67
 #: apps/erp/app/modules/items/ui/Item/CustomerParts/CustomerParts.tsx:41
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:339
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:361
 #: apps/erp/app/modules/production/ui/Jobs/JobForm.tsx:375
 #: apps/erp/app/modules/production/ui/Jobs/JobsTable.tsx:359
 #: apps/erp/app/modules/purchasing/ui/PurchaseOrder/PurchaseOrderDeliveryForm.tsx:178
@@ -9395,7 +9400,7 @@ msgstr "详情"
 #: apps/erp/app/modules/items/ui/Parts/usePartNavigation.tsx:37
 #: apps/erp/app/modules/items/ui/Services/useServiceNavigation.tsx:32
 #: apps/erp/app/modules/items/ui/Tools/useToolNavigation.tsx:36
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:435
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:464
 #: apps/erp/app/modules/production/ui/Jobs/JobBillOfProcess.tsx:883
 #: apps/erp/app/modules/purchasing/ui/Supplier/SupplierSidebar/useSupplierSidebar.tsx:34
 #: apps/erp/app/modules/quality/ui/Gauge/GaugeForm.tsx:140
@@ -9647,7 +9652,7 @@ msgstr "处置"
 msgid "Dispositions"
 msgstr "处置"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:291
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:296
 #: apps/erp/app/routes/x+/production+/batches.delete.$batchId.tsx:91
 msgid "Dissolve"
 msgstr "解散"
@@ -14761,7 +14766,7 @@ msgstr "项"
 #: apps/erp/app/modules/invoicing/ui/SalesInvoice/SalesInvoiceLineForm.tsx:483
 #: apps/erp/app/modules/invoicing/ui/SalesInvoice/SalesInvoicePostModal.tsx:188
 #: apps/erp/app/modules/production/ui/Batches/BatchBuilder.tsx:1752
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:336
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:358
 #: apps/erp/app/modules/production/ui/DemandProjection/DemandProjectionForm.tsx:208
 #: apps/erp/app/modules/production/ui/Jobs/JobMakeMethodTools.tsx:670
 #: apps/erp/app/modules/production/ui/Jobs/JobMaterialsTable.tsx:136
@@ -15000,7 +15005,7 @@ msgstr "在变更通知下达前，其设计可能会改变。"
 #: apps/erp/app/modules/people/ui/Person/PersonJob.tsx:37
 #: apps/erp/app/modules/people/ui/Person/PersonSidebar/usePersonSidebar.tsx:24
 #: apps/erp/app/modules/production/ui/Batches/BatchBuilder.tsx:1738
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:333
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:355
 #: apps/erp/app/modules/production/ui/Jobs/JobHeader.tsx:116
 #: apps/erp/app/modules/production/ui/Jobs/JobMakeMethodTools.tsx:417
 #: apps/erp/app/modules/production/ui/Jobs/JobsTable.tsx:753
@@ -15265,7 +15270,7 @@ msgstr "标签"
 
 #: apps/erp/app/modules/items/ui/Item/BillOfProcess.tsx:1441
 #: apps/erp/app/modules/items/ui/Item/BillOfProcess.tsx:1475
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:525
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:554
 #: apps/erp/app/modules/production/ui/Jobs/JobBillOfProcess.tsx:3287
 #: apps/erp/app/modules/production/ui/Jobs/JobBillOfProcess.tsx:3321
 #: apps/erp/app/modules/production/ui/Jobs/ProductionEventForm.tsx:53
@@ -15867,7 +15872,7 @@ msgstr "位置"
 #: apps/erp/app/modules/people/ui/Shifts/ShiftsTable.tsx:132
 #: apps/erp/app/modules/people/ui/Timecards/TimecardsTable.tsx:184
 #: apps/erp/app/modules/production/ui/Batches/BatchBuilder.tsx:1155
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:464
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:493
 #: apps/erp/app/modules/production/ui/DemandProjection/DemandProjectionForm.tsx:216
 #: apps/erp/app/modules/production/ui/Jobs/JobForm.tsx:345
 #: apps/erp/app/modules/production/ui/Jobs/JobForm.tsx:522
@@ -16073,7 +16078,7 @@ msgstr "允许使用小写物料编号"
 
 #: apps/erp/app/modules/items/ui/Item/BillOfProcess.tsx:1556
 #: apps/erp/app/modules/items/ui/Item/BillOfProcess.tsx:1592
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:527
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:556
 #: apps/erp/app/modules/production/ui/Jobs/JobBillOfProcess.tsx:3370
 #: apps/erp/app/modules/production/ui/Jobs/JobBillOfProcess.tsx:3406
 #: apps/erp/app/modules/production/ui/Jobs/ProductionEventForm.tsx:54
@@ -16805,7 +16810,7 @@ msgstr "备忘录日期"
 msgid "Memo ID"
 msgstr "备忘录 ID"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:651
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:680
 msgid "Merge output lots"
 msgstr "合并输出批次"
 
@@ -17150,7 +17155,7 @@ msgstr "更多信息"
 #: apps/erp/app/modules/items/ui/Parts/PartHeader.tsx:85
 #: apps/erp/app/modules/items/ui/Services/ServiceHeader.tsx:80
 #: apps/erp/app/modules/items/ui/Tools/ToolHeader.tsx:85
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:260
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:265
 #: apps/erp/app/modules/production/ui/Jobs/JobHeader.tsx:218
 #: apps/erp/app/modules/production/ui/Procedures/ProcedureHeader.tsx:77
 #: apps/erp/app/modules/production/ui/Schedule/Kanban/components/BatchItemCard.tsx:200
@@ -18499,7 +18504,7 @@ msgstr "没有应付款项"
 msgid "No payments yet."
 msgstr "还没有付款。"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:509
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:538
 msgid "No planned or recorded time."
 msgstr "没有计划或记录的时间。"
 
@@ -18537,7 +18542,7 @@ msgstr "未选择工艺"
 msgid "No production events recorded for this operation yet"
 msgstr "此操作尚未记录任何生产事件"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:561
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:590
 msgid "No production recorded yet."
 msgstr "还没有生产记录。"
 
@@ -19617,8 +19622,8 @@ msgstr "操作类型"
 msgid "Operation unit cost"
 msgstr "操作单位成本"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:319
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:475
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:341
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:504
 #: apps/erp/app/modules/production/ui/Jobs/JobHeader.tsx:106
 #: apps/erp/app/modules/production/ui/Jobs/JobOperationsTable.tsx:270
 #: apps/erp/app/modules/production/ui/Schedule/Kanban/ScheuleNavigation.tsx:104
@@ -20741,7 +20746,7 @@ msgstr "计划开始"
 msgid "Planned Start Time"
 msgstr "计划开始时间"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:483
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:512
 msgid "Planned time"
 msgstr "已计划时间"
 
@@ -21141,7 +21146,7 @@ msgstr "打印"
 msgid "Print {0} Labels"
 msgstr "打印 {0} 个标签"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:274
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:279
 #: apps/erp/app/modules/production/ui/Schedule/Kanban/components/BatchItemCard.tsx:219
 msgid "Print batch list"
 msgstr "打印生产批次列表"
@@ -21257,7 +21262,7 @@ msgstr "流程"
 
 #: apps/erp/app/modules/items/ui/Item/BillOfProcess.tsx:1108
 #: apps/erp/app/modules/items/ui/Item/BillOfProcess.tsx:1114
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:452
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:481
 #: apps/erp/app/modules/production/ui/Batches/BatchesTable.tsx:303
 #: apps/erp/app/modules/production/ui/Batches/BatchesTable.tsx:309
 #: apps/erp/app/modules/production/ui/Jobs/JobBillOfProcess.tsx:3056
@@ -21355,7 +21360,7 @@ msgstr "生产事件"
 msgid "Production Event"
 msgstr "生产事件"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:557
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:586
 msgid "Production events"
 msgstr "生产事件"
 
@@ -21955,7 +21960,7 @@ msgstr "二维码用于启动此看板的下一个操作"
 #: apps/erp/app/modules/items/ui/Item/DemandForecastSourcesPopover.tsx:141
 #: apps/erp/app/modules/items/ui/Item/ItemPlanningChart.tsx:581
 #: apps/erp/app/modules/production/ui/Batches/BatchBuilder.tsx:1773
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:342
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:364
 #: apps/erp/app/modules/sales/ui/SalesRFQ/MapExtractedLinesModal.tsx:36
 msgid "Qty"
 msgstr "数量"
@@ -22903,7 +22908,7 @@ msgstr "相对时间表·待确认的日期"
 #: apps/erp/app/modules/inventory/ui/Kanbans/KanbansTable.tsx:454
 #: apps/erp/app/modules/inventory/ui/StockTransfers/StockTransferHeader.tsx:212
 #: apps/erp/app/modules/items/ui/ChangeNotice/ChangeNoticeHeader.tsx:208
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:666
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:695
 msgid "Release"
 msgstr "下达"
 
@@ -24131,7 +24136,7 @@ msgstr "在平板电脑上运行车间：计时人工、报告进度、查看说
 msgid "Run this workflow now?"
 msgstr "立即运行此工作流？"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:598
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:627
 #: apps/erp/app/modules/workflows/ui/Runs/RunStatus.tsx:41
 #: apps/erp/app/modules/workflows/ui/Runs/RunStatus.tsx:48
 msgid "Running"
@@ -25782,7 +25787,7 @@ msgstr "设置"
 
 #: apps/erp/app/modules/items/ui/Item/BillOfProcess.tsx:1326
 #: apps/erp/app/modules/items/ui/Item/BillOfProcess.tsx:1360
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:523
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:552
 #: apps/erp/app/modules/production/ui/Jobs/JobBillOfProcess.tsx:3205
 #: apps/erp/app/modules/production/ui/Jobs/JobBillOfProcess.tsx:3239
 #: apps/erp/app/modules/production/ui/Jobs/ProductionEventForm.tsx:55
@@ -29918,7 +29923,7 @@ msgstr "工时记录已禁用"
 msgid "Timecards are enabled"
 msgstr "工时记录已启用"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:443
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:472
 msgid "Timer running"
 msgstr "计时器运行中"
 
@@ -30217,7 +30222,7 @@ msgstr "总计分钟"
 msgid "Total Price"
 msgstr "总价格"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:479
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:508
 msgid "Total quantity"
 msgstr "总计数量"
 
@@ -30984,7 +30989,7 @@ msgstr "取消发布 {name}？"
 msgid "Unreceived POs"
 msgstr "未收到的采购订单"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:628
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:657
 msgid "Unrelease"
 msgstr "取消下达"
 
@@ -31790,7 +31795,7 @@ msgstr "查看缺失值"
 msgid "View notes"
 msgstr "查看备注"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:281
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:286
 msgid "View on schedule board"
 msgstr "在排程看板中查看"
 
@@ -32738,8 +32743,8 @@ msgstr "工作"
 msgid "work center"
 msgstr "工作中心"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:719
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:735
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:748
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:764
 #: packages/glossary/src/terms.ts:152
 #: packages/workflows/src/catalog/labels.generated.ts:226
 msgid "Work center"

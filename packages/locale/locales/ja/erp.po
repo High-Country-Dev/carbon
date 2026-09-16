@@ -157,6 +157,11 @@ msgstr "{0} 件/{1} 件の転記勘定がマップされました"
 msgid "{0} of {maxSlots} provider slots used"
 msgstr "{0}個の{maxSlots}プロバイダースロットが使用されています"
 
+#. placeholder {0}: pendingJobs.length
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:331
+msgid "{0} of {memberCount} member jobs are not completed yet — their output stays out of stock until each job is completed."
+msgstr "{memberCount}個の製造指図のうち{0}件がまだ完了していません。各製造指図が完了するまで、それらの出力は在庫に入りません。"
+
 #. placeholder {0}: selected.length
 #: apps/erp/app/modules/production/ui/Batches/BatchBuilder.tsx:2285
 msgid "{0} operations · {totalQuantity} parts"
@@ -211,7 +216,7 @@ msgid "{0} rows"
 msgstr "{0} 行"
 
 #. placeholder {0}: member.quantityScrapped
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:416
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:445
 #: apps/erp/app/modules/production/ui/Batches/BatchesTable.tsx:422
 msgid "{0} scrapped"
 msgstr "{0}廃棄"
@@ -2045,7 +2050,7 @@ msgstr "メモを追加"
 msgid "Add Operation"
 msgstr "操作を追加"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:634
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:663
 msgid "Add operations"
 msgstr "作業を追加"
 
@@ -4021,7 +4026,7 @@ msgstr "ジョブを自動的に開始するには、自動リリースを有効
 msgid "Auto Start Job"
 msgstr "自動ジョブ開始"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:742
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:771
 msgid "Auto-assigned on release"
 msgstr "リリース時に自動割り当て"
 
@@ -6585,8 +6590,8 @@ msgstr "すべての品目と価格設定を別の得意先またはタイプに
 msgid "Copy API Key"
 msgstr "APIキーをコピー"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:247
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:254
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:252
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:259
 msgid "Copy batch number"
 msgstr "バッチ番号をコピー"
 
@@ -7231,7 +7236,7 @@ msgstr "作業区を作成"
 #: apps/erp/app/modules/inventory/ui/WarehouseTransfers/WarehouseTransferLines.tsx:177
 #: apps/erp/app/modules/items/ui/Item/ItemDocuments.tsx:135
 #: apps/erp/app/modules/items/ui/Parts/ConfigurationParameters.tsx:989
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:499
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:528
 #: apps/erp/app/modules/quality/ui/Actions/ActionsTable.tsx:204
 #: apps/erp/app/modules/quality/ui/Gauge/GaugeForm.tsx:250
 #: apps/erp/app/modules/sales/ui/Opportunity/OpportunityDocuments.tsx:126
@@ -7309,7 +7314,7 @@ msgstr "作成日時"
 msgid "Created At"
 msgstr "作成日時"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:493
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:522
 #: packages/workflows/src/catalog/labels.generated.ts:93
 #: packages/workflows/src/catalog/labels.generated.ts:124
 #: packages/workflows/src/catalog/labels.generated.ts:149
@@ -7787,7 +7792,7 @@ msgstr "得意先"
 #: apps/erp/app/modules/invoicing/ui/Workbench/ARAPWorkbench.tsx:268
 #: apps/erp/app/modules/items/ui/Item/CustomerPartForm.tsx:67
 #: apps/erp/app/modules/items/ui/Item/CustomerParts/CustomerParts.tsx:41
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:339
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:361
 #: apps/erp/app/modules/production/ui/Jobs/JobForm.tsx:375
 #: apps/erp/app/modules/production/ui/Jobs/JobsTable.tsx:359
 #: apps/erp/app/modules/purchasing/ui/PurchaseOrder/PurchaseOrderDeliveryForm.tsx:178
@@ -9395,7 +9400,7 @@ msgstr "詳細"
 #: apps/erp/app/modules/items/ui/Parts/usePartNavigation.tsx:37
 #: apps/erp/app/modules/items/ui/Services/useServiceNavigation.tsx:32
 #: apps/erp/app/modules/items/ui/Tools/useToolNavigation.tsx:36
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:435
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:464
 #: apps/erp/app/modules/production/ui/Jobs/JobBillOfProcess.tsx:883
 #: apps/erp/app/modules/purchasing/ui/Supplier/SupplierSidebar/useSupplierSidebar.tsx:34
 #: apps/erp/app/modules/quality/ui/Gauge/GaugeForm.tsx:140
@@ -9647,7 +9652,7 @@ msgstr "処置"
 msgid "Dispositions"
 msgstr "処置"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:291
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:296
 #: apps/erp/app/routes/x+/production+/batches.delete.$batchId.tsx:91
 msgid "Dissolve"
 msgstr "解散"
@@ -14761,7 +14766,7 @@ msgstr "アイテム"
 #: apps/erp/app/modules/invoicing/ui/SalesInvoice/SalesInvoiceLineForm.tsx:483
 #: apps/erp/app/modules/invoicing/ui/SalesInvoice/SalesInvoicePostModal.tsx:188
 #: apps/erp/app/modules/production/ui/Batches/BatchBuilder.tsx:1752
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:336
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:358
 #: apps/erp/app/modules/production/ui/DemandProjection/DemandProjectionForm.tsx:208
 #: apps/erp/app/modules/production/ui/Jobs/JobMakeMethodTools.tsx:670
 #: apps/erp/app/modules/production/ui/Jobs/JobMaterialsTable.tsx:136
@@ -15000,7 +15005,7 @@ msgstr "変更通知のリリース前に、そのデザインが変わる可能
 #: apps/erp/app/modules/people/ui/Person/PersonJob.tsx:37
 #: apps/erp/app/modules/people/ui/Person/PersonSidebar/usePersonSidebar.tsx:24
 #: apps/erp/app/modules/production/ui/Batches/BatchBuilder.tsx:1738
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:333
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:355
 #: apps/erp/app/modules/production/ui/Jobs/JobHeader.tsx:116
 #: apps/erp/app/modules/production/ui/Jobs/JobMakeMethodTools.tsx:417
 #: apps/erp/app/modules/production/ui/Jobs/JobsTable.tsx:753
@@ -15265,7 +15270,7 @@ msgstr "ラベル"
 
 #: apps/erp/app/modules/items/ui/Item/BillOfProcess.tsx:1441
 #: apps/erp/app/modules/items/ui/Item/BillOfProcess.tsx:1475
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:525
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:554
 #: apps/erp/app/modules/production/ui/Jobs/JobBillOfProcess.tsx:3287
 #: apps/erp/app/modules/production/ui/Jobs/JobBillOfProcess.tsx:3321
 #: apps/erp/app/modules/production/ui/Jobs/ProductionEventForm.tsx:53
@@ -15867,7 +15872,7 @@ msgstr "場所"
 #: apps/erp/app/modules/people/ui/Shifts/ShiftsTable.tsx:132
 #: apps/erp/app/modules/people/ui/Timecards/TimecardsTable.tsx:184
 #: apps/erp/app/modules/production/ui/Batches/BatchBuilder.tsx:1155
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:464
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:493
 #: apps/erp/app/modules/production/ui/DemandProjection/DemandProjectionForm.tsx:216
 #: apps/erp/app/modules/production/ui/Jobs/JobForm.tsx:345
 #: apps/erp/app/modules/production/ui/Jobs/JobForm.tsx:522
@@ -16073,7 +16078,7 @@ msgstr "小文字のアイテムIDが許可されます"
 
 #: apps/erp/app/modules/items/ui/Item/BillOfProcess.tsx:1556
 #: apps/erp/app/modules/items/ui/Item/BillOfProcess.tsx:1592
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:527
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:556
 #: apps/erp/app/modules/production/ui/Jobs/JobBillOfProcess.tsx:3370
 #: apps/erp/app/modules/production/ui/Jobs/JobBillOfProcess.tsx:3406
 #: apps/erp/app/modules/production/ui/Jobs/ProductionEventForm.tsx:54
@@ -16805,7 +16810,7 @@ msgstr "メモ日付"
 msgid "Memo ID"
 msgstr "メモID"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:651
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:680
 msgid "Merge output lots"
 msgstr "出力ロットをマージ"
 
@@ -17150,7 +17155,7 @@ msgstr "詳細情報"
 #: apps/erp/app/modules/items/ui/Parts/PartHeader.tsx:85
 #: apps/erp/app/modules/items/ui/Services/ServiceHeader.tsx:80
 #: apps/erp/app/modules/items/ui/Tools/ToolHeader.tsx:85
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:260
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:265
 #: apps/erp/app/modules/production/ui/Jobs/JobHeader.tsx:218
 #: apps/erp/app/modules/production/ui/Procedures/ProcedureHeader.tsx:77
 #: apps/erp/app/modules/production/ui/Schedule/Kanban/components/BatchItemCard.tsx:200
@@ -18499,7 +18504,7 @@ msgstr "買掛金がありません"
 msgid "No payments yet."
 msgstr "まだ支払いはありません。"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:509
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:538
 msgid "No planned or recorded time."
 msgstr "計画時間または記録時間がありません。"
 
@@ -18537,7 +18542,7 @@ msgstr "プロセスが選択されていません"
 msgid "No production events recorded for this operation yet"
 msgstr "この操作で記録された生産イベントはまだありません"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:561
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:590
 msgid "No production recorded yet."
 msgstr "生産がまだ記録されていません。"
 
@@ -19617,8 +19622,8 @@ msgstr "操作タイプ"
 msgid "Operation unit cost"
 msgstr "工程単位原価"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:319
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:475
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:341
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:504
 #: apps/erp/app/modules/production/ui/Jobs/JobHeader.tsx:106
 #: apps/erp/app/modules/production/ui/Jobs/JobOperationsTable.tsx:270
 #: apps/erp/app/modules/production/ui/Schedule/Kanban/ScheuleNavigation.tsx:104
@@ -20741,7 +20746,7 @@ msgstr "計画開始"
 msgid "Planned Start Time"
 msgstr "計画開始時刻"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:483
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:512
 msgid "Planned time"
 msgstr "予定時間"
 
@@ -21141,7 +21146,7 @@ msgstr "印刷"
 msgid "Print {0} Labels"
 msgstr "{0}個のラベルを印刷"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:274
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:279
 #: apps/erp/app/modules/production/ui/Schedule/Kanban/components/BatchItemCard.tsx:219
 msgid "Print batch list"
 msgstr "バッチリストを印刷"
@@ -21257,7 +21262,7 @@ msgstr "プロセス"
 
 #: apps/erp/app/modules/items/ui/Item/BillOfProcess.tsx:1108
 #: apps/erp/app/modules/items/ui/Item/BillOfProcess.tsx:1114
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:452
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:481
 #: apps/erp/app/modules/production/ui/Batches/BatchesTable.tsx:303
 #: apps/erp/app/modules/production/ui/Batches/BatchesTable.tsx:309
 #: apps/erp/app/modules/production/ui/Jobs/JobBillOfProcess.tsx:3056
@@ -21355,7 +21360,7 @@ msgstr "生産イベント"
 msgid "Production Event"
 msgstr "生産イベント"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:557
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:586
 msgid "Production events"
 msgstr "生産イベント"
 
@@ -21955,7 +21960,7 @@ msgstr "このかんばんの次の工程を開始するためのQR Code"
 #: apps/erp/app/modules/items/ui/Item/DemandForecastSourcesPopover.tsx:141
 #: apps/erp/app/modules/items/ui/Item/ItemPlanningChart.tsx:581
 #: apps/erp/app/modules/production/ui/Batches/BatchBuilder.tsx:1773
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:342
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:364
 #: apps/erp/app/modules/sales/ui/SalesRFQ/MapExtractedLinesModal.tsx:36
 msgid "Qty"
 msgstr "数量"
@@ -22903,7 +22908,7 @@ msgstr "相対的なタイムライン · 確認待ちの日付"
 #: apps/erp/app/modules/inventory/ui/Kanbans/KanbansTable.tsx:454
 #: apps/erp/app/modules/inventory/ui/StockTransfers/StockTransferHeader.tsx:212
 #: apps/erp/app/modules/items/ui/ChangeNotice/ChangeNoticeHeader.tsx:208
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:666
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:695
 msgid "Release"
 msgstr "リリース"
 
@@ -24131,7 +24136,7 @@ msgstr "タブレットでショップフロアを実行：労務を記録、進
 msgid "Run this workflow now?"
 msgstr "このワークフローを今すぐ実行しますか？"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:598
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:627
 #: apps/erp/app/modules/workflows/ui/Runs/RunStatus.tsx:41
 #: apps/erp/app/modules/workflows/ui/Runs/RunStatus.tsx:48
 msgid "Running"
@@ -25782,7 +25787,7 @@ msgstr "設定"
 
 #: apps/erp/app/modules/items/ui/Item/BillOfProcess.tsx:1326
 #: apps/erp/app/modules/items/ui/Item/BillOfProcess.tsx:1360
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:523
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:552
 #: apps/erp/app/modules/production/ui/Jobs/JobBillOfProcess.tsx:3205
 #: apps/erp/app/modules/production/ui/Jobs/JobBillOfProcess.tsx:3239
 #: apps/erp/app/modules/production/ui/Jobs/ProductionEventForm.tsx:55
@@ -29918,7 +29923,7 @@ msgstr "タイムカードは無効です"
 msgid "Timecards are enabled"
 msgstr "タイムカードが有効です"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:443
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:472
 msgid "Timer running"
 msgstr "タイマー実行中"
 
@@ -30217,7 +30222,7 @@ msgstr "合計分"
 msgid "Total Price"
 msgstr "合計価格"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:479
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:508
 msgid "Total quantity"
 msgstr "合計数量"
 
@@ -30984,7 +30989,7 @@ msgstr "{name}の公開を取り消しますか?"
 msgid "Unreceived POs"
 msgstr "未受領PO"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:628
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:657
 msgid "Unrelease"
 msgstr "リリース解除"
 
@@ -31790,7 +31795,7 @@ msgstr "欠落値を表示"
 msgid "View notes"
 msgstr "メモを表示"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:281
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:286
 msgid "View on schedule board"
 msgstr "スケジュールボードで表示"
 
@@ -32738,8 +32743,8 @@ msgstr "作業"
 msgid "work center"
 msgstr "作業区"
 
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:719
-#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:735
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:748
+#: apps/erp/app/modules/production/ui/Batches/BatchDetailDrawer.tsx:764
 #: packages/glossary/src/terms.ts:152
 #: packages/workflows/src/catalog/labels.generated.ts:226
 msgid "Work center"

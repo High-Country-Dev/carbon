@@ -39,11 +39,7 @@ export function BatchCompleteModal({
 }: {
   batch: JobOperationBatch;
   isCompleting: boolean;
-  // Owned by JobOperation, NOT by this modal: a successful completion flips the
-  // batch out of Active/Completing, so the loader stops passing `batch` and this
-  // component unmounts. A fetcher declared here would die with it, taking the
-  // merge prompt's data with it — the prompt could never render.
-  fetcher: ReturnType<typeof useFetcher<{ merge?: { count: number } }>>;
+  fetcher: ReturnType<typeof useFetcher>;
   onClose: () => void;
 }) {
   const { t } = useLingui();
@@ -108,6 +104,35 @@ export function BatchCompleteModal({
   const missingBatchNumbers = members.some(
     (_, i) => requiresNumber(i) && !(batchNumbers[i] ?? "").trim()
   );
+
+  // Rows sharing a batch number complete into ONE merged lot — the number IS
+  // the merge intent, confirmed inline instead of a second prompt after
+  // completion. The same number across DIFFERENT items can never merge, and
+  // two separate lots with one number is worse than either: block submit so
+  // the operator edits the numbers instead.
+  const numberGroups = new Map<
+    string,
+    { indexes: number[]; items: Set<string> }
+  >();
+  members.forEach((m, i) => {
+    if (!requiresNumber(i)) return;
+    const number = (batchNumbers[i] ?? "").trim();
+    if (!number) return;
+    const group = numberGroups.get(number) ?? {
+      indexes: [],
+      items: new Set<string>()
+    };
+    group.indexes.push(i);
+    if (m.itemId) group.items.add(m.itemId);
+    numberGroups.set(number, group);
+  });
+  const mergeGroups = [...numberGroups.entries()].filter(
+    ([, g]) => g.indexes.length > 1 && g.items.size <= 1
+  );
+  const conflictGroups = [...numberGroups.entries()].filter(
+    ([, g]) => g.indexes.length > 1 && g.items.size > 1
+  );
+  const conflictIndexes = new Set(conflictGroups.flatMap(([, g]) => g.indexes));
 
   return (
     <Modal
@@ -251,14 +276,16 @@ export function BatchCompleteModal({
                                 }
                                 placeholder={t`Required`}
                                 aria-invalid={
-                                  requiresNumber(i) &&
-                                  !(batchNumbers[i] ?? "").trim()
+                                  (requiresNumber(i) &&
+                                    !(batchNumbers[i] ?? "").trim()) ||
+                                  conflictIndexes.has(i)
                                 }
                                 className={cn(
                                   cellInputClass,
                                   "text-left font-mono placeholder:text-muted-foreground/50",
-                                  requiresNumber(i) &&
-                                    !(batchNumbers[i] ?? "").trim() &&
+                                  ((requiresNumber(i) &&
+                                    !(batchNumbers[i] ?? "").trim()) ||
+                                    conflictIndexes.has(i)) &&
                                     "ring-1 ring-inset ring-destructive/40"
                                 )}
                               />
@@ -271,6 +298,29 @@ export function BatchCompleteModal({
                 </tbody>
               </table>
             </div>
+            {conflictGroups.map(([number]) => (
+              <p
+                key={number}
+                className="mt-3 text-pretty text-xs text-destructive"
+              >
+                <Trans>
+                  Batch number {number} is used for different items — lots of
+                  different items can't merge. Edit the numbers.
+                </Trans>
+              </p>
+            ))}
+            {conflictGroups.length === 0 &&
+              mergeGroups.map(([number, group]) => (
+                <p
+                  key={number}
+                  className="mt-3 text-pretty text-xs text-muted-foreground"
+                >
+                  <Trans>
+                    {group.indexes.length} operations share batch number{" "}
+                    {number} — their output completes as one merged lot.
+                  </Trans>
+                </p>
+              ))}
             <p className="mt-3 text-pretty text-xs text-muted-foreground">
               <Trans>
                 Leave an operation at 0 to skip it — it returns to the schedule
@@ -279,7 +329,12 @@ export function BatchCompleteModal({
             </p>
           </ModalBody>
           <ModalFooter>
-            <Submit size="lg" isDisabled={allExcluded || missingBatchNumbers}>
+            <Submit
+              size="lg"
+              isDisabled={
+                allExcluded || missingBatchNumbers || conflictGroups.length > 0
+              }
+            >
               {isCompleting ? t`Retry Completion` : t`Complete Batch`}
             </Submit>
           </ModalFooter>

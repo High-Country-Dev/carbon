@@ -265,6 +265,14 @@ All new strings via lingui (`<Trans>`/`t`) in both apps; `/translate` after.
 
 ## Changelog
 
+- 2026-09-16 (UX simplification, Sid): the post-completion merge prompt is
+  gone. The batch number is the merge intent — members completed under one
+  number (same item) merge at completion, confirmed inline in the Complete
+  Batch form; one number across different items is refused (client block +
+  server pre-check) so duplicate lot numbers are never minted. BatchMergePrompt
+  deleted; route merges via getOutputLotMergeGroups after completion; the
+  drawer's "Merge output lots" remains for lots kept separate.
+
 - 2026-09-16 (post-ship, user-found): the merge's net-zero ledger rows assumed
   every parent was already received into stock. Merging at batch completion
   (before member job receipts) subtracted unreceived quantity and stranded the
