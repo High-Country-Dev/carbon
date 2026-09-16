@@ -50,6 +50,14 @@ describe("extractJsdocSummary", () => {
 });
 
 describe("generated manifest", () => {
+  test("marks paginating vs fetchAll list services", () => {
+    const byName = new Map(toolMetadata.tools.map((t) => [t.name, t]));
+    // getJobs pages via setGenericQueryFilters; getJobsList is a fetchAll read
+    // whose limit/offset are inert — the MCP layer pages its response instead.
+    expect(byName.get("production_getJobs")?.paginates).toBe(true);
+    expect(byName.get("production_getJobsList")?.paginates).toBe(false);
+  });
+
   test("carries JSDoc-derived descriptions, not only name-derived ones", () => {
     const informative = toolMetadata.tools.filter(
       (tool) => tool.description !== nameDerived(tool.name)

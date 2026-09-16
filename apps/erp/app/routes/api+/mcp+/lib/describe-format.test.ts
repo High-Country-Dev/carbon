@@ -3,7 +3,8 @@ import { describe, expect, test } from "vitest";
 import {
   deriveNameDescription,
   formatParamSummary,
-  formatToolDescription
+  formatToolDescription,
+  paginatingSibling
 } from "./describe-format";
 import { MCP_DEFAULT_LIMIT } from "./format-result";
 import { getServerInstructions } from "./instructions";
@@ -18,6 +19,7 @@ const baseTool: ManifestEntry = {
   serviceParams: ["client", "id"],
   injectAuth: ["companyId"],
   permission: { module: "sales", actions: ["view"] },
+  paginates: true,
   schema: {
     type: "object",
     properties: {
@@ -69,11 +71,30 @@ describe("formatToolDescription", () => {
     expect(text).not.toContain("List operation:");
   });
 
-  test("marks list operations with the default page size", () => {
+  test("marks paginating list operations with the default page size", () => {
     const text = formatToolDescription(baseTool, { isList: true });
     expect(text).toContain(
       `List operation: pages with limit/offset (default limit ${MCP_DEFAULT_LIMIT})`
     );
+  });
+
+  test("is honest about fetchAll list operations and steers to the sibling", () => {
+    const text = formatToolDescription(
+      { ...baseTool, name: "sales_getCustomersList", paginates: false },
+      { isList: true, sibling: "sales_getCustomers" }
+    );
+    expect(text).toContain(
+      `List operation: full-set read; the response is paged with limit/offset (default limit ${MCP_DEFAULT_LIMIT}) — for database-side paging use sales_getCustomers`
+    );
+  });
+
+  test("omits the steer when no paginating sibling exists", () => {
+    const text = formatToolDescription(
+      { ...baseTool, paginates: false },
+      { isList: true, sibling: null }
+    );
+    expect(text).toContain("full-set read");
+    expect(text).not.toContain("database-side paging use");
   });
 
   test("omits the permission line for key-only operations", () => {
@@ -90,6 +111,25 @@ describe("formatToolDescription", () => {
       { isList: false }
     );
     expect(text).not.toContain("Response Schema");
+  });
+});
+
+describe("paginatingSibling", () => {
+  const catalog = new Map([
+    ["sales_getCustomers", { name: "sales_getCustomers", paginates: true }],
+    ["items_getPartsList", { name: "items_getPartsList", paginates: false }]
+  ]);
+  const resolve = (n: string) => catalog.get(n);
+
+  test("resolves getXList to a paginating getX", () => {
+    expect(paginatingSibling("sales_getCustomersList", resolve)).toBe(
+      "sales_getCustomers"
+    );
+  });
+
+  test("returns null when the sibling is missing or does not paginate", () => {
+    expect(paginatingSibling("items_getWidgetsList", resolve)).toBe(null);
+    expect(paginatingSibling("sales_getCustomers", resolve)).toBe(null);
   });
 });
 

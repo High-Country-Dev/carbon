@@ -39,10 +39,26 @@ export function formatParamSummary(tool: ManifestEntry): string {
   return `(${parts.join(", ")})`;
 }
 
+/**
+ * The DB-side paginating sibling of a fetchAll list read, when the catalog has
+ * one — `getJobsList` → `getJobs`. Only returned when the sibling exists AND
+ * actually pages, so the steer is never a guess.
+ */
+export function paginatingSibling(
+  name: string,
+  resolve: (
+    name: string
+  ) => Pick<ManifestEntry, "name" | "paginates"> | undefined
+): string | null {
+  if (!name.endsWith("List")) return null;
+  const sibling = resolve(name.slice(0, -"List".length));
+  return sibling?.paginates ? sibling.name : null;
+}
+
 /** Full describe_tool text for one tool. */
 export function formatToolDescription(
   tool: ManifestEntry,
-  options: { isList: boolean }
+  options: { isList: boolean; sibling?: string | null }
 ): string {
   let output = `Tool: ${tool.name}\n`;
   output += `Module: ${tool.module}\n`;
@@ -55,7 +71,17 @@ export function formatToolDescription(
     output += `Permission: ${scopes} (required for API-key callers)\n`;
   }
   if (options.isList) {
-    output += `List operation: pages with limit/offset (default limit ${MCP_DEFAULT_LIMIT})\n`;
+    if (tool.paginates) {
+      output += `List operation: pages with limit/offset (default limit ${MCP_DEFAULT_LIMIT})\n`;
+    } else {
+      // Honest about the mechanics: the service reads the full set (it feeds
+      // UI dropdowns); the MCP layer pages the response.
+      output += `List operation: full-set read; the response is paged with limit/offset (default limit ${MCP_DEFAULT_LIMIT})`;
+      if (options.sibling) {
+        output += ` — for database-side paging use ${options.sibling}`;
+      }
+      output += "\n";
+    }
   }
   output += `\nInput Schema:\n${JSON.stringify(tool.schema ?? {})}`;
   if (tool.responseSchema) {

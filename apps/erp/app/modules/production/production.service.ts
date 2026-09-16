@@ -1115,7 +1115,7 @@ export async function getCapacityReservationsForResources(
     .select(
       `id, operationId, jobId, resourceKind, resourceId, startAt, endAt, scheduleNote, workHours, isPlaceholder, jobOperationBatchId,
        job!inner(jobId, status, dueDate, locationId),
-       jobOperation(description, hasConflict, conflictReason),
+       jobOperation(description, hasConflict, conflictReason, jobMakeMethod(item(readableIdWithRevision, name, thumbnailPath, type))),
        jobOperationBatch(readableId)`
     )
     .eq("companyId", companyId)
@@ -2506,6 +2506,40 @@ export async function getTrackedEntitiesByJobId(
     .eq("companyId", jobMakeMethod.data.companyId)
     .is("attributes ->> Split Entity ID", null)
     .is("attributes ->> Split From Entity ID", null);
+}
+
+/**
+ * What a job has already received to inventory: its received quantity and the
+ * tracked entities its receipts posted. One statement, so both come from the
+ * same snapshot and a receipt committing mid-read cannot pair a new quantity
+ * with old units. Kysely because itemLedger is readable only with inventory or
+ * accounting view, and production users need the answer; the route authorizes.
+ */
+export async function getJobReceiptSnapshot(
+  db: Kysely<KyselyDatabase>,
+  jobId: string,
+  companyId: string
+) {
+  return db
+    .selectFrom("job")
+    .leftJoin("itemLedger", (join) =>
+      join
+        .onRef("itemLedger.documentId", "=", "job.id")
+        .onRef("itemLedger.companyId", "=", "job.companyId")
+        .on("itemLedger.documentType", "=", "Job Receipt")
+    )
+    .select([
+      "job.quantityReceivedToInventory",
+      sql<
+        string[]
+      >`COALESCE(array_agg("itemLedger"."trackedEntityId") FILTER (WHERE "itemLedger"."trackedEntityId" IS NOT NULL), '{}')`.as(
+        "trackedEntityIds"
+      )
+    ])
+    .where("job.id", "=", jobId)
+    .where("job.companyId", "=", companyId)
+    .groupBy(["job.id", "job.companyId"])
+    .executeTakeFirst();
 }
 
 /**

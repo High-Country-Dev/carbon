@@ -132,13 +132,26 @@ HTTP/agent/workflow callers of `callOperation` are untouched:
   "… N more rows omitted" marker — the backstop for the unpaginated `get*List`
   (fetchAll) operations. A paginated read short of its total appends
   `(showing R of C rows)` from the envelope's `count`.
-- `call_tool` INJECTS the pagination PAIR — `limit: MCP_DEFAULT_LIMIT` (25) AND
-  `offset: 0` — into a **list operation's** args for whichever of the two the
-  caller omits (`isListOperation` on the manifest entry; both the flat body and
-  the `{ args: {...} }` wrapper, and the argless call). The pair matters:
-  `setGenericQueryFilters` applies its `.range()` only when BOTH are integers,
-  so a bare `limit` (injected or caller-supplied) silently paginated nothing
-  and an argless list read returned up to PostgREST's 1000-row cap.
+- **List paging splits on the manifest's `paginates` flag** (generator body
+  scan for `setGenericQueryFilters(`/`.range(`, same mechanism as
+  `functionBodyDeletes`; in `ManifestEntry` AND the committed digest, so a flip
+  is review-visible). Of ~536 list-shaped ops, only ~127 page natively.
+  - `paginates: true` (search-style `get*`): `call_tool` INJECTS the pagination
+    PAIR — `limit: MCP_DEFAULT_LIMIT` (25) AND `offset: 0` — for whichever of
+    the two the caller omits (flat body, `{ args: {...} }` wrapper, and the
+    argless call). The pair matters: `setGenericQueryFilters` applies its
+    `.range()` only when BOTH are integers, so a bare `limit` silently
+    paginated nothing and an argless read returned up to PostgREST's 1000-row
+    cap.
+  - `paginates: false` (fetchAll `get*List`): limit/offset are INERT in the
+    service — it always reads the full set (it feeds UI dropdowns). The caller's
+    paging used to be silently ignored (`limit: 1` returned every row); now
+    `call_tool` captures it (defaults 25/0) and pages the RESPONSE via
+    `pageMcpListResult` (`format-result.ts`), with the full total in the
+    "(showing R of C rows)" line. `describe_tool` says so explicitly and steers
+    to the DB-side paginating sibling when one exists (`paginatingSibling`:
+    `getJobsList` → `getJobs`). The full read is the service's design, not a
+    regression — the DB cost is identical to every dropdown load.
 - `describe_tool` prints the schema compactly, and the generator strips
   `pattern` wherever a sibling `format` exists (`stripRedundantPatterns` —
   zod's email conversion emits a ~200-char regex next to `format: "email"`).

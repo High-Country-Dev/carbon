@@ -11,12 +11,17 @@ import {
   isListOperation,
   operationsByName
 } from "../../v1+/lib/operations.server";
-import { formatMcpResult, MCP_DEFAULT_LIMIT } from "./format-result";
+import {
+  formatMcpResult,
+  MCP_DEFAULT_LIMIT,
+  pageMcpListResult
+} from "./format-result";
 import { createCatalogSearch } from "./catalog-search";
 import {
   deriveNameDescription,
   formatParamSummary,
-  formatToolDescription
+  formatToolDescription,
+  paginatingSibling
 } from "./describe-format";
 import { getServerInstructions } from "./instructions";
 
@@ -77,7 +82,12 @@ export function createMcpServer(ctx: McpContext, today: string): McpServer {
           continue;
         }
         sections.push(
-          formatToolDescription(meta, { isList: isListOperation(meta) })
+          formatToolDescription(meta, {
+            isList: isListOperation(meta),
+            sibling: meta.paginates
+              ? null
+              : paginatingSibling(meta.name, (n) => operationsByName.get(n))
+          })
         );
       }
 
@@ -137,34 +147,51 @@ export function createMcpServer(ctx: McpContext, today: string): McpServer {
       
       // List reads apply no limit unless the caller passes one (the schema's
       // `default: 100` is documentation, not enforcement — an argless call
-      // returned up to PostgREST's 1000-row cap). Inject a modest default so
-      // agents page deliberately; MCP-only, the other callOperation callers
-      // (HTTP, agent, workflows) are untouched. Unknown keys are inert for
-      // list-shaped ops that don't page, so injecting unconditionally is safe.
-      // setGenericQueryFilters applies its `.range()` only when BOTH limit and
-      // offset are integers, so the pair is always filled together — a bare
-      // `limit` (injected OR caller-supplied) would silently paginate nothing.
+      // returned up to PostgREST's 1000-row cap). MCP-only; the other
+      // callOperation callers (HTTP, agent, workflows) are untouched.
+      // Two kinds of list service (manifest `paginates`):
+      // - paginating (setGenericQueryFilters/.range): inject the PAIR — its
+      //   `.range()` applies only when BOTH limit and offset are integers, so
+      //   a bare `limit` silently paginated nothing.
+      // - fetchAll (`get*List`): limit/offset are inert in the service, so the
+      //   caller's paging is captured here and applied to the RESPONSE below —
+      //   without this, `limit: 1` returned every row.
       const fillPagination = (target: Record<string, unknown>) => {
         if (target.limit === undefined) target.limit = MCP_DEFAULT_LIMIT;
         if (target.offset === undefined) target.offset = 0;
       };
       const meta = operationsByName.get(name);
+      let mcpPaging: { limit: number; offset: number } | null = null;
       if (meta && isListOperation(meta)) {
-        if (args === undefined || args === null) {
-          // The argless call is the worst offender — no limit at all.
-          args = { limit: MCP_DEFAULT_LIMIT, offset: 0 };
-        } else if (typeof args === "object" && !Array.isArray(args)) {
-          const body = args as Record<string, unknown>;
-          const wrapped = body.args;
-          if (
-            wrapped &&
-            typeof wrapped === "object" &&
-            !Array.isArray(wrapped)
-          ) {
-            fillPagination(wrapped as Record<string, unknown>);
+        const body =
+          args && typeof args === "object" && !Array.isArray(args)
+            ? (args as Record<string, unknown>)
+            : null;
+        const wrapped =
+          body?.args && typeof body.args === "object" && !Array.isArray(body.args)
+            ? (body.args as Record<string, unknown>)
+            : null;
+        if (meta.paginates) {
+          if (!body) {
+            // The argless call is the worst offender — no limit at all.
+            args = { limit: MCP_DEFAULT_LIMIT, offset: 0 };
           } else {
-            fillPagination(body);
+            fillPagination(wrapped ?? body);
           }
+        } else {
+          const source = wrapped ?? body ?? {};
+          const limit = source.limit;
+          const offset = source.offset;
+          mcpPaging = {
+            limit:
+              Number.isInteger(limit) && (limit as number) > 0
+                ? (limit as number)
+                : MCP_DEFAULT_LIMIT,
+            offset:
+              Number.isInteger(offset) && (offset as number) >= 0
+                ? (offset as number)
+                : 0
+          };
         }
       }
 
@@ -181,10 +208,15 @@ export function createMcpServer(ctx: McpContext, today: string): McpServer {
           hasData: result.data !== undefined,
           responseTime
         });
-        const output =
-          result.data === undefined
-            ? "Operation completed successfully"
-            : formatMcpResult(result.data, result.count);
+        let output: string;
+        if (result.data === undefined) {
+          output = "Operation completed successfully";
+        } else if (mcpPaging) {
+          const { rows, total } = pageMcpListResult(result.data, mcpPaging);
+          output = formatMcpResult(rows, total);
+        } else {
+          output = formatMcpResult(result.data, result.count);
+        }
         return { content: [{ type: "text" as const, text: output }] };
       }
       logger.error("Tool execution failed", {

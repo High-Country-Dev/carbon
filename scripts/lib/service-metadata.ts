@@ -1128,6 +1128,22 @@ function functionBodyDeletes(content: string, funcName: string): boolean {
   return /\.delete\s*\(/.test(stripped) || /\.deleteFrom\s*\(/.test(stripped);
 }
 
+/**
+ * Whether the service itself applies limit/offset — `setGenericQueryFilters`
+ * (the canonical pager) or a direct `.range(`. A list operation without either
+ * ignores pagination args entirely (the fetchAll `get*List` reads), so the MCP
+ * layer pages the response instead. Same body-scan mechanism (and shadowed-
+ * wrapper first-match caveat) as `functionBodyDeletes`.
+ */
+function functionBodyPaginates(content: string, funcName: string): boolean {
+  const body = extractFunctionBody(content, funcName);
+  if (body === null) return false;
+  const stripped = stripComments(body);
+  return (
+    /setGenericQueryFilters\s*\(/.test(stripped) || /\.range\s*\(/.test(stripped)
+  );
+}
+
 function extractFunctionBody(content: string, funcName: string): string | null {
   const regex = new RegExp(
     `export\\s+(?:async\\s+)?function\\s+${funcName}\\s*\\(`
@@ -1638,6 +1654,7 @@ export function buildAllToolMetadata(opts: BuildOptions = {}): ManifestEntry[] {
       }
 
       const responseSchema = opts.responses?.get(mod, func.name) ?? undefined;
+      const paginates = functionBodyPaginates(content, func.name);
 
       allTools.push({
         name: toolName,
@@ -1648,6 +1665,7 @@ export function buildAllToolMetadata(opts: BuildOptions = {}): ManifestEntry[] {
         serviceParams,
         injectAuth,
         permission,
+        paginates,
         schema,
         ...(responseSchema ? { responseSchema } : {}),
       });
