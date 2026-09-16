@@ -8809,8 +8809,20 @@ msgstr "Davetli"
 msgid "Invoice"
 msgstr "Fatura"
 
+msgid "Invoice Address"
+msgstr ""
+
 msgid "Invoice Contact"
 msgstr "Fatura İlgili Kişisi"
+
+msgid "Invoice Contact Email"
+msgstr ""
+
+msgid "Invoice Contact Name"
+msgstr ""
+
+msgid "Invoice Contact Phone"
+msgstr ""
 
 msgid "Invoice customer"
 msgstr "Fatura müşterisi"
@@ -13112,6 +13124,15 @@ msgstr "Satın alma ilgili kişi"
 msgid "Purchasing Contact"
 msgstr "Satın alma ilgili kişi"
 
+msgid "Purchasing Contact Email"
+msgstr ""
+
+msgid "Purchasing Contact Name"
+msgstr ""
+
+msgid "Purchasing Contact Phone"
+msgstr ""
+
 msgid "Purchasing Invoices"
 msgstr "Satın Alma Faturaları"
 
@@ -15471,8 +15492,20 @@ msgstr "Sevk Edilen Miktar"
 msgid "Shipping"
 msgstr "Nakliye"
 
+msgid "Shipping Address"
+msgstr ""
+
 msgid "Shipping Contact"
 msgstr "Sevkiyat İlgili kişi"
+
+msgid "Shipping Contact Email"
+msgstr ""
+
+msgid "Shipping Contact Name"
+msgstr ""
+
+msgid "Shipping Contact Phone"
+msgstr ""
 
 msgid "Shipping Cost"
 msgstr "Nakliye bedeli"

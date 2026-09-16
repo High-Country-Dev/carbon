@@ -8809,8 +8809,20 @@ msgstr "已邀请"
 msgid "Invoice"
 msgstr "发票"
 
+msgid "Invoice Address"
+msgstr ""
+
 msgid "Invoice Contact"
 msgstr "发票联系人"
+
+msgid "Invoice Contact Email"
+msgstr ""
+
+msgid "Invoice Contact Name"
+msgstr ""
+
+msgid "Invoice Contact Phone"
+msgstr ""
 
 msgid "Invoice customer"
 msgstr "发票客户"
@@ -13112,6 +13124,15 @@ msgstr "采购联系人"
 msgid "Purchasing Contact"
 msgstr "采购联系人"
 
+msgid "Purchasing Contact Email"
+msgstr ""
+
+msgid "Purchasing Contact Name"
+msgstr ""
+
+msgid "Purchasing Contact Phone"
+msgstr ""
+
 msgid "Purchasing Invoices"
 msgstr "采购发票"
 
@@ -15471,8 +15492,20 @@ msgstr "已发货数量"
 msgid "Shipping"
 msgstr "运输"
 
+msgid "Shipping Address"
+msgstr ""
+
 msgid "Shipping Contact"
 msgstr "配送联系人"
+
+msgid "Shipping Contact Email"
+msgstr ""
+
+msgid "Shipping Contact Name"
+msgstr ""
+
+msgid "Shipping Contact Phone"
+msgstr ""
 
 msgid "Shipping Cost"
 msgstr "运费"
