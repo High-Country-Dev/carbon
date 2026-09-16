@@ -54,7 +54,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       offset,
       sorts,
       // orderStatus is filtered client-side — not a column the RPC can filter on.
-      filters: (filters ?? []).filter((f) => f.column !== "orderStatus")
+      // readableIdWithRevision was the Item filter's column before it moved to
+      // jobMaterialItemId; saved views and bookmarks from then still replay it,
+      // and the RPC has no such column (42703).
+      filters: (filters ?? []).filter(
+        (f) =>
+          f.column !== "orderStatus" && f.column !== "readableIdWithRevision"
+      )
     }),
     getCompanySettings(client, companyId),
     getJobMaterialItemIds(client, jobId, companyId),
@@ -62,7 +68,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   ]);
 
   if (materials.error) {
-    redirect(
+    throw redirect(
       path.to.production,
       await flash(
         request,

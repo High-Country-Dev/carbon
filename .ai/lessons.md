@@ -6,6 +6,26 @@ Format: `Context → Problem → Rule → Applies to`
 
 ---
 
+## Onshape individual release assets need the complete source identity
+
+**Context:** Syncing a released part from a multi-part Part Studio to an existing Carbon item.
+
+**Problem:** Omitting `partIds` and `configuration` exports the whole studio; `getElementThumbnail` also depicts the entire element. Refreshing raw data under the same model ID leaves successful optimized artifacts in place and allows old background jobs to overwrite repaired assets.
+
+**Rule:** Resolve one exact released document/version/element/revision and propagate its part ID and configuration. Never fall back to a version-only match or unselected Part Studio export. Render the selected model's thumbnail after optimization. Give corrected individual-part sources deterministic immutable model generations, preserving item IDs and manufacturing records; repeat repairs reuse that generation. Repair existing items with explicit per-release events, not a company-wide backfill or new CAD releases.
+
+**Applies to:** Onshape revision sync, backfill, model export and attachment helpers in `packages/jobs/src/inngest/functions/integrations/`.
+
+## Sales-order Paid Amount uses invoice-target principal
+
+**Context:** Summarizing linked sales-invoice payments on a sales order.
+
+**Problem:** `invoiceSettlement.sourceAmount` is principal in the payment funding source's currency, so it does not represent the amount applied to the invoice. Using it for the order's Paid Amount disagrees with the invoice Payments panel and can mix currency semantics.
+
+**Rule:** Sales-order Paid Amount sums posted payment `appliedAmount` (company base) per invoice, then converts it with that invoice's exchange rate into the matching order currency. Do not use `sourceAmount` for this summary. There is no legacy `baseStatus === "Paid"` fallback that counts the full invoice total — every payment flows through `invoiceSettlement`, so a fully-paid invoice's settlements already sum to its total.
+
+**Applies to:** `getSalesOrderInvoicePaymentsByIds`, the sales-order loader's `invoiceSummary`, and any UI summarizing cash applied to invoice targets.
+
 ## ioredis retryStrategy returning null kills auto-recovery
 
 **Context:** Making the Redis client (`@carbon/kv`) resilient to outages (issue #1076).
@@ -1172,6 +1192,52 @@ canvas hosting Radix popovers/selects.
 
 **Applies to:** `packages/database/supabase/functions/get-method/index.ts` (`quoteToQuote`), `apps/erp/app/modules/sales/sales.service.ts` (`deleteQuote`), any insert into `externalLink`.
 
+## A memo's `direction` means OPPOSITE things on AR and AP
+
+**Context:** Supplier returns settle through an AP `memo`. The RMA spec and
+`createPurchaseReturnOrderCredit` both used `direction: "Credit"` — the same
+value the (correct) customer-side credit uses.
+
+**Problem:** `direction` alone decides the CONTROL side for both parties
+(`buildMemoJournal`): a Credit memo CREDITS the control account, a Debit memo
+DEBITS it. On AR (an asset) a credit REDUCES the balance — right for a customer
+refund. On AP (a liability) a credit INCREASES it — so returning goods made
+Carbon show we owed the supplier MORE, and the reason leg re-debited GR/IR
+instead of clearing what the return shipment had debited, leaving a permanent
+2x residual in a suspense account. Every entry still BALANCED, so no guard
+fired, and it survived four review rounds. The rest of invoicing already
+assumed the opposite (`getAvailableCredits` selects supplier memos with
+`direction = 'Debit'`), so the memos were also invisible to "Apply Credit".
+
+**Rule:** A vendor return is a **Debit** memo (`debitMemo` `DR-` sequence); a
+customer return is a **Credit** memo. Never reason about `direction` without
+naming the party — write out which way the control account moves and whether
+that account is an asset or a liability. Balanced ≠ correct: when a posting has
+a suspense account (GR/IR), assert the CYCLE nets to zero, not just that each
+entry balances.
+
+**Applies to:** `apps/erp/app/modules/purchasing/purchasing.service.ts`
+(`createPurchaseReturnOrderCredit`), `apps/erp/app/modules/sales/sales.service.ts`
+(`createSalesReturnOrderCredit`), `packages/database/supabase/functions/post-memo/*`,
+any new `memo` writer.
+
+## A bare FormLabel outside FormControl 500s the whole route
+
+**Context:** The returns-module line forms (`SalesReturnOrderLineForm`, `PurchaseReturnOrderLineForm`) used `<FormLabel>` as a standalone section heading for the tracked-entity picker area.
+
+**Problem:** `FormLabel` (`packages/react/src/Form/FormLabel.tsx`) calls `useFormControlContext()`, which **throws** outside a `<FormControl>`. The throw happens at render, so the route's error boundary replaces the page — the user sees "Error 500. Something broke on our end." on an otherwise-valid URL. Subtler: when the crash is below a `ValidatedForm`, the form unmounts, so a page can LOOK fine in a stale snapshot while its Save button is dead. The error is only visible in the browser console (`useFormControlContext() must be used inside of a FormControl`); the server log shows nothing useful.
+
+**Rule:** `FormLabel`/`FormError` are only valid inside a `<FormControl>`. For a standalone section heading in a form, use a plain `<label>`/heading element. When a page 500s with no server error, check the browser console for context-hook throws before suspecting the loader — and treat "form renders but Save does nothing" as a possible sibling-render crash, not a submit bug.
+
+**Applies to:** any usage of `packages/react/src/Form/{FormLabel,FormError}.tsx`; form components under `apps/erp/app/modules/*/ui/`.
+
+## Demo-seeded attributes can make a dead query look alive
+
+- **Context:** The supplier-return entity picker filtered `trackedEntity` on `attributes ->> Supplier`. Browser verification on the local DB showed results, so the query looked correct.
+- **Problem:** No production code ever writes a `Supplier` attribute — the 49 local entities carrying it came from MCP demo seeding (Axiom/Northspoke programs). In production the picker would always be empty. Verification against hand-seeded data validated the seed, not the code.
+- **Rule:** Before anchoring a query on a `trackedEntity.attributes` key, grep for the WRITER of that key in app + edge-function code (receipt tracking writes `Receipt`/`Receipt Line`/`Receipt Line Index`; shipment tracking writes `Shipment`/`Shipment Line`). If the only writers are tests or seeds, the key does not exist in production. Local rows proving a filter matches prove nothing about who writes the attribute.
+- **Applies to:** any `attributes ->> X` filter on trackedEntity/trackedActivity; browser verification on a DB that has been demo-seeded.
+
 ## `crbn reload` must load root `.env` — compose-substituted secrets silently reset
 
 **Context:** Enabling GoTrue SAML via `${SAML_ENABLED:-false}` / `${SAML_PRIVATE_KEY:-}` in docker-compose.dev.yml, values kept in root `.env`.
@@ -1181,6 +1247,7 @@ canvas hosting Radix popovers/selects.
 **Rule:** Any crbn command that invokes docker compose must preload BOTH env files into process.env the way `up.ts` does (`loadDotenv(.env.local)` then `loadDotenv(.env)`, both `override: false`). `reload.ts` now does this. After any reload, still verify the dependent feature's health endpoint (e.g. `curl .../sso/saml/metadata` → 200), not just container status.
 
 **Applies to:** packages/dev reload/compose commands; any GoTrue/Kong/storage env sourced from root `.env`.
+
 ## An incremental pull-sweep cursor must advance on the SAME field the query filters on
 
 **Context:** The Stripe Connect payment pull sweep (`stripe-connect-pull-sweep.ts`) queried Stripe with `invoices.list({ status: "paid", created: { gte: since } })` but advanced the cursor to `latest status_transitions.paid_at + 1`. An invoice created before the cursor but paid after it (a normal case — invoices are created, then paid later) would never be returned by a future `created`-filtered query once the cursor passed its `paid_at`, so it was permanently skipped with no error, no log, and no retry.
@@ -1547,3 +1614,99 @@ full-screen ERP route.
   definition before calling the feature done.
 - **Applies to:** `generatePickingList`, `get_picking_schedule`,
   `getPickedBudgets` / `issue`, `post-picking`.
+## Resolve adoption assumptions before designing accounting migration machinery
+
+**Context:** The accounting posting-corrections spec raised legacy open-balance migration concerns; the user clarified that accounting can be assumed unused.
+
+**Problem:** Designing calculation versions, correction journals, and cutover tooling before resolving adoption added unnecessary scope to a correctness fix.
+
+**Rule:** Use the user's explicit adoption premise to size compatibility work. For this spec, correct the monetary contract directly; do not add legacy-accounting machinery. An unused accounting module does not imply permission to delete operational records or reset a database.
+
+**Applies to:** `.ai/specs/2026-09-07-accounting-posting-corrections.md` and its implementation; other modules require their own adoption evidence.
+
+
+## Accounting review: carrying balances and source principal
+
+- **Context:** Mixed positive and negative invoice lines, high FX rates, and changes to account defaults during settlement and provider replay.
+- **Problem:** Summing control magnitudes invented FX; recovering document units from rounded base lost valid minor-unit balances; current defaults rewrote original account provenance.
+- **Rule:** Sum signed original control amounts, preserve exact document principal independently of carrying base, and identify original journal roles through the shared exhaustive vocabulary (including intercompany roles). Reject unknown effective principal rather than infer it; retain Draft reservation policy separately from Posted effectiveness.
+- **Applies to:** Invoice/payment/memo posting, open-balance readers, and accounting provider replay.
+
+## Apportion a document total, never concentrate its rounding residual
+
+**Context:** Sales invoices push to QuickBooks/Xero/Rillet as components (merchandise, add-ons, line shipping, header shipping), each rounded at the document currency's precision, and the sum must equal the authoritative document total.
+
+**Problem:** Rounding N components independently leaves a residual of up to N/2 minor units. Assigning that whole residual to one component broke that component's own percent/amount pair — a 20 x $1.99 @ 8.25% invoice gave one line $0.24 tax on $1.99 net (12.06% against a stated 8.25%). QuickBooks re-derives `round(net x percent)` within one minor unit and refused the invoice with `UNMAPPED_TAX_CODES`, a message blaming the customer's QuickBooks configuration, which they cannot act on. A randomised sweep put this at 1.6% of invoices; some cases produced a negative tax on positive revenue, which Xero accepts and posts.
+
+**Rule:** Use `distributeRoundingResidual` (`@carbon/utils`) whenever a total is apportioned across parts — largest remainder, at most one minor unit moved per part. Never hand-roll "assign the difference to the biggest line". Order the parts by a stable business key (component id) before distributing, because the distributor's own tie-break is positional and the same invoice must allocate identically whatever order its lines arrive in. Where a derived value must reproduce the reconciled amount (a unit price times its quantity), derive it and then VERIFY — refuse when no representable value works, rather than emitting an inconsistent one.
+
+**Applies to:** `packages/ee/src/accounting/core/sales-document-components.ts`, `packages/database/supabase/functions/shared/sales-posting-amounts.ts`, `packages/ee/src/accounting/core/document-costing.ts`, and any future provider document mapper.
+
+## Two halves of an intercompany trade must round at the same scale
+
+**Context:** `post-sales-invoice` and `post-purchase-invoice` each write an `intercompanyTransaction` row, and `generate_intercompany_matches` pairs them with `src."amount" = tgt."amount"` — exact NUMERIC equality, no tolerance.
+
+**Problem:** The seller began rounding its half at the document currency's settlement precision (2dp) while the buyer kept internal `SCALE` (5dp). A trade of 3 x 100.005 stored 300.02 against 300.015, so the pair sat `Unmatched` forever and eliminations silently never ran — consolidated income kept the intragroup profit, with no error anywhere.
+
+**Rule:** An amount used as a MATCHING KEY is not a settlement amount. Round both halves at internal `SCALE`. Before changing rounding anywhere, check whether the value is compared for equality by something else — a matcher, a tie-out, or a reconciliation — and change both sides together.
+
+**Applies to:** `calculateSalesIntercompanyAmount`, `post-purchase-invoice`'s IC amount, `generate_intercompany_matches`.
+
+## Prove provider accounting against its independent journal
+
+**Context:** The live Rillet E2E run accepted invoice payloads while ignoring their FX override and crediting deferred revenue.
+
+**Problem:** Request shape and HTTP success did not prove economic parity. AR_ONLY used provider FX; the supported REVENUE_RECOGNITION_ONLY scope accepted fixed document-to-base rates and same-day recognition.
+
+**Rule:** Verify returned account effects in the provider's independent GL, including recognition and voids. Treat Carbon's rate as document units per base unit, invert it for Rillet, and align recognition and FX dates with Carbon's posting date. Check voided mappings before create-idempotency shortcuts and retain durable deletion markers.
+
+**Applies to:** Rillet invoice/bill/payment adapters, native-void reconciliation, and future provider acceptance tests.
+
+## Seed UI-only controlled fields through the form defaults
+
+**Context:** Payment type choices combine counterparty and cash direction while the persisted paymentType remains Receipt or Disbursement.
+
+**Problem:** Passing only SelectControlled.value left the initial registered paymentKind empty in the real browser; unit mocks did not model form initialization. A composer also retained old targets after a saved header identity changed.
+
+**Rule:** Include a UI-only field's initial value in ValidatedForm defaults, and key stateful composers by the document/party/currency/direction identity whose data they hold. Verify the initial label and actual submitted fields in the browser.
+
+**Applies to:** PaymentForm, PaymentApplyTable, and other forms using derived presentation choices.
+
+## A RAISE in a completion RPC aborts the UPDATE that triggered it
+
+**Context:** `complete_job_to_inventory` gained guards refusing a completion it could not satisfy (zero quantity, a fractional serial quantity, fewer receivable units than completed).
+
+**Problem:** That function is not only called from the ERP complete route — `sync_finish_job_operation` calls it from a BEFORE trigger interceptor, and `dispatch_event_interceptors` has no `EXCEPTION` block. So a serial item with no serial sequence (whose job keeps one whole-quantity seed entity, because `assign-serial-numbers` returns early with no sequence) made the raise propagate out and abort the `jobOperation` UPDATE itself: the operator could not mark the operation Done at all.
+
+**Rule:** Before adding a `RAISE` to a SQL function, grep for trigger interceptors that call it. A refusal that is a useful error on a request path is a hard block on a trigger path. Either handle the case rather than refusing it, or make the trigger caller skip the call.
+
+**Applies to:** `complete_job_to_inventory`, `sync_finish_job_operation`, and any function registered through `attach_event_trigger`.
+## A nullable column added by migration needs a reader that tolerates NULL
+
+**Context:** The accounting corrections release added `invoiceSettlement.sourceAmount` (document-currency principal) without backfilling rows written before it, and the migration comment explicitly declared legacy NULLs valid.
+
+**Problem:** The shared TypeScript reducer that computes an invoice's remaining balance and a payment's remaining funding threw "Settlement is missing its document principal" on any NULL. Every invoice with a pre-release partial payment or credit became unpayable: the New Payment loader seeded from such an invoice returned a 500, and posting a payment for that party would have failed the same way. The schema and the code disagreed about what a valid row is.
+
+**Rule:** When a migration adds a nullable column and leaves existing rows NULL, every reader added in the same change must define what NULL means and handle it, or the migration must backfill. Keep the throw only where a DB constraint already guarantees the value (source-linked rows). Derive legacy values from the columns that did exist (`appliedAmount` at the applicable exchange rate) and cover the NULL case in the pure-function tests.
+
+**Applies to:** `payment-funding.ts` reducers, any future column added to `invoiceSettlement`, `journalLine`, or other high-volume tables where a backfill is skipped.
+
+## A JSON column copied through Kysely on deno-postgres only survives as an object
+
+**Context:** Quote → sales order conversion (`convert` edge function) reads the quote with supabase-js and re-inserts its `internalNotes` / `externalNotes` into `salesOrder` through Kysely inside the transaction. One quote had `internalNotes` stored as a JSON string scalar rather than a tiptap document, written through an API path whose validator typed `notes` as `z.any()`.
+
+**Problem:** deno-postgres encodes query parameters by JS type, not by column type: an object is `JSON.stringify`ed, but a string is sent as raw text and an array as a Postgres array literal. A JSON string scalar therefore round-trips as unquoted text and Postgres rejects the insert with `invalid input syntax for type json`. The route sanitised the body, so Vercel only showed "Edge Function returned a non-2xx status code"; the real line was only in the Supabase function log. Every retry failed identically, and the same latent fault sat in RFQ → quote, supplier quote → PO, and quote revision copies.
+
+**Rule:** Two layers, both required. (1) Any `json`/`jsonb` value written through Kysely in an edge function goes through `lib/json.ts` `toJson()`, which pre-serialises every non-null shape so the wire value is valid JSON text. (2) A validator for a rich-text column is never `z.any()`; use the shared `optionalTiptapDoc` / `toTiptapDoc` in `shared.models.ts`, which turns text, a JSON-encoded doc, or a doc object into a tiptap document and rejects the rest. Put `.optional()` AFTER the transform or zod infers a required key. When an edge function fails opaquely, read the function's own log (Supabase management API `function_logs`), not the caller's.
+
+**Applies to:** `packages/database/supabase/functions/**` Kysely inserts of `internalNotes`, `externalNotes`, `customFields`, `priceTrace`, `configuration`, `additionalCharges`; every `*.models.ts` field that feeds a rich-text column (the purchasing `notes: z.any()` fields still need this).
+
+## An unchecked supabase-js insert turns a NOT NULL violation into silence
+
+**Context:** Inspection rejects were supposed to seed `nonConformanceItemTrackedEntity` links on the NCR's default Scrap row so the MRB could split or reassign specific entities. Nothing ever appeared. Both writers — `x+/inspection+/$id.reject.tsx` and `x+/issue+/new.tsx`'s job-operation auto-link — built their rows without `nonConformanceId`, which is `NOT NULL` on that table (`20260421130000_nc-item-tracked-entity.sql`).
+
+**Problem:** Every such insert returned a 23502, and nobody read it. The reject route did `await (serviceRole as any).from(...).insert(rows)` and discarded the result entirely, so the feature had never worked in production and no error surfaced anywhere. supabase-js does not throw — it resolves to `{ data, error }` — so an unchecked insert is indistinguishable from a successful one, and the `as any` cast additionally hid that the row type was missing a required column. A Kysely insert in the same place would have thrown.
+
+**Rule:** Never discard a supabase-js write result — bind it and check `.error`, even for a fire-and-forget link write. Treat `as any` on a `.from(...).insert(...)` as a defect in review: the cast exists precisely because the row object does not satisfy the generated type, which is the compiler telling you a required column is missing. When a "seeded" side table is mysteriously empty, check the writer's error handling before suspecting the read.
+
+**Applies to:** every `.from(...).insert(...)` / `.update(...)` whose result is not bound, especially in post-commit "also link X" tails; fixed for both writers in PR #1612 by moving them into a Kysely transaction under `lockIssueDispositions`.

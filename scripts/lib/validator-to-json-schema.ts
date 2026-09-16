@@ -29,7 +29,79 @@ const CONVERT_OPTIONS = {
 /** Convert a zod validator, then normalize. Throws if zod cannot represent it. */
 export function validatorToJsonSchema(validator: z.ZodType): JsonSchema {
   const raw = z.toJSONSchema(validator, CONVERT_OPTIONS) as JsonSchema;
-  return normalizeJsonSchema(raw);
+  const normalized = normalizeJsonSchema(raw);
+  annotateStringEncodedBooleans(validator, normalized);
+  return normalized;
+}
+
+/**
+ * `zfd.text(z.string().transform((v) => v === "true"))` — the form-post
+ * boolean — converts to a bare `{type: "string"}`, which invites a JSON caller
+ * to send a real boolean the validator then rejects with no hint why
+ * (production_upsertJobMaterial's requiresBatchTracking/requiresSerialTracking
+ * did exactly that to an MCP agent). The transform is unrepresentable in JSON
+ * Schema but PROBEABLE: a field that parses the string "true" to boolean
+ * `true` and "false" to boolean `false` is a string-encoded boolean, and no
+ * other field shape in the codebase does that (`z.coerce.boolean()` maps
+ * "false" to `true`; `z.enum(["true","false"])` keeps strings). Publish the
+ * two legal values so a schema-reading client cannot guess wrong.
+ */
+function annotateStringEncodedBooleans(
+  validator: unknown,
+  json: JsonSchema
+): void {
+  // An array validator (rows payload): annotate its element against `items`.
+  const element = (validator as { element?: unknown } | null)?.element;
+  if (element && json.items && typeof json.items === "object") {
+    annotateStringEncodedBooleans(element, json.items as JsonSchema);
+    return;
+  }
+
+  const shape = (validator as { shape?: Record<string, unknown> } | null)
+    ?.shape;
+  const props = json.properties as Record<string, JsonSchema> | undefined;
+  if (!shape || typeof shape !== "object" || !props) return;
+
+  for (const [key, field] of Object.entries(shape)) {
+    const prop = props[key];
+    if (!prop || typeof prop !== "object") continue;
+    if (isStringEncodedBoolean(field)) {
+      if (prop.type === "string" && prop.enum === undefined) {
+        prop.enum = ["true", "false"];
+      }
+      continue;
+    }
+    annotateStringEncodedBooleans(field, prop);
+  }
+}
+
+function isStringEncodedBoolean(field: unknown): boolean {
+  const f = field as {
+    safeParse?: (value: unknown) => { success: boolean; data?: unknown };
+  } | null;
+  if (typeof f?.safeParse !== "function") return false;
+  try {
+    const asTrue = f.safeParse("true");
+    const asFalse = f.safeParse("false");
+    // A JSON-parsing transform ALSO maps "true"/"false" to the booleans —
+    // `JSON.parse("true") === true` — so those two probes alone false-positive on
+    // fields whose string is a JSON payload (methodMaterial.storageUnitIds's
+    // location→bin map, the issue-workflow `content`, gauge/risk `notes`), which
+    // then published a bogus `enum: ["true","false"]` and rejected any real value.
+    // A genuine string-encoded boolean maps EVERY string to a boolean; a JSON
+    // parser maps an arbitrary non-JSON string to a non-boolean (its object/array
+    // fallback) or rejects it. One extra probe tells the two apart.
+    const asOther = f.safeParse("__carbon_not_a_boolean__");
+    return (
+      asTrue.success &&
+      asTrue.data === true &&
+      asFalse.success &&
+      asFalse.data === false &&
+      (!asOther.success || typeof asOther.data === "boolean")
+    );
+  } catch {
+    return false;
+  }
 }
 
 /**

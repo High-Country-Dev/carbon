@@ -1,5 +1,7 @@
+import { error, success } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { getCarbonServiceRole } from "@carbon/auth/client.server";
+import { runLocationSchedule } from "@carbon/ee/planning";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@carbon/auth", () => ({
@@ -54,7 +56,6 @@ vi.mock("~/modules/production", () => ({
   updateJobStatus: vi.fn()
 }));
 
-import { runLocationSchedule } from "@carbon/ee/planning";
 import { cancelOpenPickingListsForJob } from "~/modules/inventory";
 import {
   returnPickedRemaindersForJob,
@@ -169,6 +170,12 @@ describe("Job release status action", () => {
   it("commits the Ready status before invoking the scheduler", async () => {
     // On success the action ends by throwing a redirect Response.
     await expect(runRelease()).rejects.toBeInstanceOf(Response);
+
+    // The redirect must be the SUCCESS one. Without this, a scheduler that
+    // throws still redirects (the catch flashes "Failed to schedule job"), and
+    // the ordering assertion below would pass on the failure path.
+    expect(success).toHaveBeenCalledWith("Updated job status");
+    expect(error).not.toHaveBeenCalled();
 
     expect(updateJobStatus).toHaveBeenCalledOnce();
     expect(events).toContain("updateJobStatus");

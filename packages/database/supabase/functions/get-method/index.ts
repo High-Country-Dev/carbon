@@ -28,6 +28,7 @@ import {
     traverseQuoteMethod,
 } from "../lib/methods.ts";
 import { getFunctionLogger } from "../lib/logging.ts";
+import { toJson } from "../lib/json.ts";
 import { KyselyDatabase } from "../lib/postgres/index.ts";
 import { importTypeScript } from "../lib/sandbox.ee.ts";
 import { getStorageUnitId } from "../lib/storage-units.ts";
@@ -7047,8 +7048,8 @@ serve(async (req: Request) => {
                 ).add({ days: 30 }).toString(),
                 salesPersonId: sourceQuote.data?.salesPersonId ?? userId,
                 status: "Draft",
-                externalNotes: sourceQuote.data?.externalNotes,
-                internalNotes: sourceQuote.data?.internalNotes,
+                externalNotes: toJson(sourceQuote.data?.externalNotes),
+                internalNotes: toJson(sourceQuote.data?.internalNotes),
                 currencyCode: sourceQuote.data?.currencyCode,
                 exchangeRate: sourceQuote.data?.exchangeRate,
                 exchangeRateUpdatedAt: new Date().toISOString(),
