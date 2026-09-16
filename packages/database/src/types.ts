@@ -76358,7 +76358,6 @@ export type Database = {
           {
             foreignKeyName: "address_countryCode_fkey"
             columns: ["invoiceCountryCode"]
-            columns: ["invoiceCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
