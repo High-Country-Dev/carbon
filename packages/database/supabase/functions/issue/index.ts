@@ -3580,6 +3580,10 @@ serve(async (req: Request) => {
               .select(["id"])
               .where(sql`"attributes"->>'Job Make Method'`, "=", member.jobMakeMethodId)
               .where("companyId", "=", companyId)
+              // Scrap and split children inherit the attribute, so an earlier
+              // run's dead entity can be the oldest match — it must not absorb
+              // this member's consumption.
+              .where("status", "not in", ["Consumed", "Scrapped", "Rejected"])
               .orderBy("createdAt", "asc")
               .executeTakeFirst();
             if (!parent) {

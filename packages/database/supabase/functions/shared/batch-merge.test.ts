@@ -175,3 +175,20 @@ Deno.test("rejects unavailable or empty parents", () => {
     "no quantity"
   );
 });
+
+Deno.test("ledger books the FK-enforced itemId, not the polymorphic sourceDocumentId", () => {
+  // sourceDocumentId is legacy and polymorphic — on a WIP output entity it can
+  // point at a jobMakeMethod, or be "". The ledger must book the same item the
+  // same-item check validated.
+  const records = buildBatchMergeRecords({
+    ...base,
+    parents: [
+      parent({ id: "p1", itemId: "item-1", sourceDocumentId: "jmm-1" }),
+      parent({ id: "p2", itemId: "item-1", sourceDocumentId: "" })
+    ]
+  });
+
+  for (const row of records.ledgerInserts) {
+    assertEquals(row.itemId, "item-1");
+  }
+});

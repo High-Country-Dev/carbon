@@ -211,7 +211,7 @@ export function buildBatchMergeRecords(input: {
       ...parents.map(
         (p): MergeLedgerRecord => ({
           postingDate,
-          itemId: p.sourceDocumentId ?? p.itemId,
+          itemId: p.itemId ?? p.sourceDocumentId,
           quantity: -p.quantity,
           locationId: p.bin.locationId,
           storageUnitId: p.bin.storageUnitId,
@@ -225,7 +225,7 @@ export function buildBatchMergeRecords(input: {
       ),
       {
         postingDate,
-        itemId: first.sourceDocumentId ?? first.itemId,
+        itemId: first.itemId ?? first.sourceDocumentId,
         quantity: totalQuantity,
         // The merged lot sits where the first parent sat; a later physical
         // move is an ordinary stock transfer.
