@@ -460,6 +460,17 @@ export class RilletCustomerSyncer extends RilletEntitySyncer<
    * is nothing to record that the customer row does not already say, so no
    * contact is created — an empty contact person is noise on a screen, not
    * data.
+   *
+   * The contact is SECONDARY to the mapping row this whole import exists to
+   * write. `contact_email_companyId_unique (email, companyId, isCustomer)`
+   * means a second contact with the same email throws, and this runs in the
+   * same transaction as `linkEntities` — so a blind insert would roll the
+   * mapping back on any email collision (two Rillet customers sharing an
+   * address, or an email that already belongs to another Carbon contact).
+   * When a same-email contact already exists we therefore skip creating one
+   * rather than fail the link; it belongs to another customer (this one has
+   * no junction, or the branch above would have caught it), so stealing it
+   * would be wrong anyway.
    */
   private async upsertContactAndLink(
     tx: KyselyTx,
@@ -486,6 +497,15 @@ export class RilletCustomerSyncer extends RilletEntitySyncer<
         .execute();
       return;
     }
+
+    const emailTaken = await tx
+      .selectFrom("contact")
+      .select("id")
+      .where("email", "=", data.email)
+      .where("companyId", "=", this.companyId)
+      .where("isCustomer", "=", true)
+      .executeTakeFirst();
+    if (emailTaken) return;
 
     const contact = await tx
       .insertInto("contact")

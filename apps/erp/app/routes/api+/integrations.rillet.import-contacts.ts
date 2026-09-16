@@ -1,3 +1,4 @@
+import { assertIsPost } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { ProviderID } from "@carbon/ee/accounting";
 import { trigger } from "@carbon/jobs";
@@ -18,6 +19,7 @@ export const config = {
  * the ledger, visible in Sync Activity.
  */
 export async function action({ request }: ActionFunctionArgs) {
+  assertIsPost(request);
   const { client, companyId } = await requirePermissions(request, {
     update: "settings"
   });

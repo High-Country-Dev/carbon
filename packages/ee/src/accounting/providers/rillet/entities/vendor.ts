@@ -432,7 +432,7 @@ export class RilletVendorSyncer extends RilletEntitySyncer<
   ): Promise<void> {
     if (!taxId) return;
 
-    await (tx as any)
+    await tx
       .insertInto("supplierTax")
       .values({
         supplierId,
@@ -440,7 +440,7 @@ export class RilletVendorSyncer extends RilletEntitySyncer<
         companyId: this.companyId,
         updatedAt: new Date().toISOString()
       })
-      .onConflict((oc: any) =>
+      .onConflict((oc) =>
         oc
           .column("supplierId")
           .doUpdateSet({ taxId, updatedAt: new Date().toISOString() })
@@ -454,6 +454,14 @@ export class RilletVendorSyncer extends RilletEntitySyncer<
    * the vendor itself — name split off the vendor name, email as given.
    * With NO email there is nothing to record that the supplier row does not
    * already say, so no contact is created.
+   *
+   * The contact is SECONDARY to the mapping row this import exists to write.
+   * `contact_email_companyId_unique (email, companyId, isCustomer)` means a
+   * second contact with the same email throws, and this runs in the same
+   * transaction as `linkEntities` — so a blind insert would roll the mapping
+   * back on any email collision. When a same-email contact already exists we
+   * skip creating one rather than fail the link (see RilletCustomerSyncer for
+   * the full rationale — the two are symmetric).
    */
   private async upsertContactAndLink(
     tx: KyselyTx,
@@ -480,6 +488,15 @@ export class RilletVendorSyncer extends RilletEntitySyncer<
         .execute();
       return;
     }
+
+    const emailTaken = await tx
+      .selectFrom("contact")
+      .select("id")
+      .where("email", "=", data.email)
+      .where("companyId", "=", this.companyId)
+      .where("isCustomer", "=", false)
+      .executeTakeFirst();
+    if (emailTaken) return;
 
     const contact = await tx
       .insertInto("contact")

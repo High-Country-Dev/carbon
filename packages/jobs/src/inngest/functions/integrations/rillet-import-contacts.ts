@@ -240,6 +240,13 @@ async function importBatch(args: {
     integrationMetadata: integration.metadata
   });
 
+  // A drain processes every claimable op for the company, not just this
+  // batch's. Attributing its result to THIS batch is correct only because
+  // `concurrency: { limit: 1 }` + the sequential batch loop mean earlier
+  // batches are already Completed (never re-claimed) and later ones are not
+  // enqueued yet — so the only pull-from-accounting/`entityType` ops in flight
+  // are the ones this batch just enqueued. The filters guard against unrelated
+  // push ops the drain also picks up. Revisit if either invariant changes.
   for (const group of drained.groups) {
     if (group.direction !== "pull-from-accounting") continue;
     if (group.entityType !== entityType) continue;

@@ -524,6 +524,46 @@ describe("RilletCustomerSyncer.upsertLocal match ladder", () => {
     expect(rows.customerContact).toBeUndefined();
   });
 
+  it("skips the contact rather than failing the link when the email is already taken", async () => {
+    // contact_email_companyId_unique (email, companyId, isCustomer) would make
+    // a second contact with this email throw, and upsertLocal runs in the same
+    // transaction as linkEntities — so failing here would roll back the mapping
+    // the whole import exists to write. The customer must still resolve.
+    const syncer = customerSyncerFor(null, { "cus-existing": "ril-cus-1" });
+    const { tx, rows } = makeTx({
+      customer: [
+        {
+          id: "cus-existing",
+          name: "Acme Manufacturing",
+          companyId: COMPANY_ID
+        }
+      ],
+      contact: [
+        {
+          id: "con-other",
+          email: "ar@acme.example",
+          companyId: COMPANY_ID,
+          isCustomer: true
+        }
+      ]
+    });
+
+    const id = await (syncer as any).upsertLocal(
+      tx,
+      mapRilletCustomerToLocal(
+        customer({
+          emails: [{ email: "ar@acme.example", type: "MAIN_SENDER" }]
+        }),
+        { companyId: COMPANY_ID }
+      ),
+      "ril-cus-1"
+    );
+
+    expect(id).toBe("cus-existing");
+    expect(rows.contact).toHaveLength(1);
+    expect(rows.customerContact).toBeUndefined();
+  });
+
   it("refuses to steal a Carbon customer already linked to another Rillet customer", async () => {
     // Rillet is not known to enforce unique customer names. Re-pointing the
     // mapping would silently unlink the first Rillet customer, and inserting
@@ -635,6 +675,35 @@ describe("RilletVendorSyncer.upsertLocal", () => {
       isCustomer: false
     });
     expect(rows.supplierContact?.[0]).toMatchObject({ supplierId: id });
+  });
+
+  it("skips the contact rather than failing the link when the email is already taken", async () => {
+    const syncer = vendorSyncerFor(null);
+    const { tx, rows } = makeTx({
+      supplier: [
+        { id: "sup-existing", name: "Bolt Supply Co", companyId: COMPANY_ID }
+      ],
+      contact: [
+        {
+          id: "con-other",
+          email: "ap@bolt.example",
+          companyId: COMPANY_ID,
+          isCustomer: false
+        }
+      ]
+    });
+
+    const id = await (syncer as any).upsertLocal(
+      tx,
+      mapRilletVendorToLocal(vendor({ email: "ap@bolt.example" }), {
+        companyId: COMPANY_ID
+      }),
+      "ril-ven-1"
+    );
+
+    expect(id).toBe("sup-existing");
+    expect(rows.contact).toHaveLength(1);
+    expect(rows.supplierContact).toBeUndefined();
   });
 
   it("writes no supplierTax row when Rillet carries no tax id", async () => {
