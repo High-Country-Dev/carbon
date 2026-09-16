@@ -9939,6 +9939,12 @@ msgstr "Kurs rynkowy (za USD)"
 msgid "Market Rate History (per USD)"
 msgstr "Historia kursu rynkowego (za USD)"
 
+msgid "Marks the account to use when paying this supplier. Only one can be primary."
+msgstr ""
+
+msgid "Marks the account to use when refunding this customer. Only one can be primary."
+msgstr ""
+
 msgid "Marks the person off for every day in the range. They won't be scheduled while they're away."
 msgstr "Oznacza osobę jako nieobecną na każdy dzień z zakresu. Nie będą zaplanowani, gdy są nieobecni."
 
@@ -18643,12 +18649,6 @@ msgstr "Użyj innego adresu e-mail"
 
 msgid "Use metric system for default material dimensions."
 msgstr "Użyj systemu metrycznego dla domyślnych wymiarów materiału."
-
-msgid "Use this account by default when paying this supplier"
-msgstr ""
-
-msgid "Use this account by default when refunding this customer"
-msgstr ""
 
 msgid "Used In"
 msgstr "Używane w"

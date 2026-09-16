@@ -1,4 +1,8 @@
-import { getBankFieldConfig, isValidSwiftBic } from "@carbon/utils";
+import {
+  bicMatchesCountry,
+  getBankFieldConfig,
+  isValidSwiftBic
+} from "@carbon/utils";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
@@ -410,9 +414,16 @@ export const supplierBankAccountValidator = z
     supplierId: z.string().min(1, { message: "Supplier is required" }),
     name: zfd.text(z.string().min(1, { message: "Name is required" })),
     accountHolderName: zfd.text(z.string().optional()),
-    bankName: zfd.text(z.string().optional()),
-    bankAddress: zfd.text(z.string().optional()),
-    countryCode: zfd.text(z.string().optional()),
+    bankName: zfd.text(z.string().min(1, { message: "Bank name is required" })),
+    // Correspondent banks route international wires on this.
+    bankAddress: zfd.text(
+      z.string().min(1, { message: "Bank address is required" })
+    ),
+    // Required because it SELECTS the validation rules below — left blank, the
+    // permissive default applies and nothing is really checked.
+    countryCode: zfd.text(
+      z.string().min(1, { message: "Country is required" })
+    ),
     currencyCode: zfd.text(z.string().optional()),
     // Generic by design: `accountNumber` holds an IBAN in SEPA and a plain
     // account number elsewhere; `bankCode` holds an ABA / sort code / BSB /
@@ -504,6 +515,12 @@ export const supplierBankAccountValidator = z
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Invalid SWIFT/BIC code",
+        path: ["swiftBic"]
+      });
+    } else if (!bicMatchesCountry(data.swiftBic, data.countryCode)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "This SWIFT/BIC belongs to a different country",
         path: ["swiftBic"]
       });
     }

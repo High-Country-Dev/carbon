@@ -9939,6 +9939,12 @@ msgstr "시장 환율 (USD당)"
 msgid "Market Rate History (per USD)"
 msgstr "시장 환율 기록 (USD당)"
 
+msgid "Marks the account to use when paying this supplier. Only one can be primary."
+msgstr ""
+
+msgid "Marks the account to use when refunding this customer. Only one can be primary."
+msgstr ""
+
 msgid "Marks the person off for every day in the range. They won't be scheduled while they're away."
 msgstr "범위 내의 모든 날짜에 대해 해당 사람을 표시합니다. 그들은 휴무 중에 스케줄되지 않습니다."
 
@@ -18643,12 +18649,6 @@ msgstr "다른 이메일 사용"
 
 msgid "Use metric system for default material dimensions."
 msgstr "기본 자재 치수에 미터법을 사용합니다."
-
-msgid "Use this account by default when paying this supplier"
-msgstr ""
-
-msgid "Use this account by default when refunding this customer"
-msgstr ""
 
 msgid "Used In"
 msgstr "사용처"

@@ -1,13 +1,17 @@
 import { describe, expect, it } from "vitest";
 import {
+  bicMatchesCountry,
   getBankFieldConfig,
   isValidAbaRouting,
   isValidBsb,
   isValidCanadianRouting,
   isValidIban,
   isValidIfsc,
+  isValidInAccountNumber,
   isValidSortCode,
   isValidSwiftBic,
+  isValidUkAccountNumber,
+  isValidUsAccountNumber,
   maskAccountNumber
 } from "./bank";
 
@@ -187,5 +191,55 @@ describe("real-world French bank account", () => {
 
   it("masks the IBAN down to its last four digits", () => {
     expect(maskAccountNumber(iban)).toBe("••••6437");
+  });
+});
+
+describe("country-specific account number validators", () => {
+  it("rejects letters in a US account number", () => {
+    // The gap this closes: any string used to pass for the US.
+    expect(isValidUsAccountNumber("HELLO WORLD")).toBe(false);
+    expect(isValidUsAccountNumber("1234567890")).toBe(true);
+  });
+
+  it("enforces US length bounds", () => {
+    expect(isValidUsAccountNumber("123")).toBe(false);
+    expect(isValidUsAccountNumber("1".repeat(18))).toBe(false);
+    expect(isValidUsAccountNumber("1234")).toBe(true);
+  });
+
+  it("requires exactly 8 digits in the UK", () => {
+    expect(isValidUkAccountNumber("12345678")).toBe(true);
+    expect(isValidUkAccountNumber("1234567")).toBe(false);
+  });
+
+  it("allows letters in Indian account numbers but not punctuation", () => {
+    // Some Indian banks genuinely issue alphanumeric account numbers.
+    expect(isValidInAccountNumber("50100ABC12345")).toBe(true);
+    expect(isValidInAccountNumber("5010!1234567")).toBe(false);
+  });
+
+  it("wires the validators into the country config", () => {
+    expect(getBankFieldConfig("US").validateAccount?.("NOTANUMBER")).toBe(
+      false
+    );
+    expect(getBankFieldConfig("GB").validateAccount?.("12345678")).toBe(true);
+  });
+});
+
+describe("bicMatchesCountry", () => {
+  it("accepts a BIC whose country matches the account", () => {
+    expect(bicMatchesCountry("AGRIFRPP882", "FR")).toBe(true);
+    expect(bicMatchesCountry("agrifrpp882", "fr")).toBe(true);
+  });
+
+  it("rejects a BIC from a different country", () => {
+    // A German BIC on a French account — invisible to a format check.
+    expect(bicMatchesCountry("DEUTDEFF", "FR")).toBe(false);
+  });
+
+  it("defers to the other validators when a value is absent or malformed", () => {
+    expect(bicMatchesCountry(null, "FR")).toBe(true);
+    expect(bicMatchesCountry("AGRIFRPP882", null)).toBe(true);
+    expect(bicMatchesCountry("GARBAGE!", "FR")).toBe(true);
   });
 });

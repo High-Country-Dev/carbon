@@ -9939,6 +9939,12 @@ msgstr "Piyasa kuru (USD başına)"
 msgid "Market Rate History (per USD)"
 msgstr "Piyasa kuru geçmişi (USD başına)"
 
+msgid "Marks the account to use when paying this supplier. Only one can be primary."
+msgstr ""
+
+msgid "Marks the account to use when refunding this customer. Only one can be primary."
+msgstr ""
+
 msgid "Marks the person off for every day in the range. They won't be scheduled while they're away."
 msgstr "Kişiyi aralıktaki her gün için işaretler. Uzakta iken çizelgelenmazlar."
 
@@ -18643,12 +18649,6 @@ msgstr "Farklı bir e-posta kullan"
 
 msgid "Use metric system for default material dimensions."
 msgstr "Varsayılan malzeme boyutları için metrik sistemi kullanın."
-
-msgid "Use this account by default when paying this supplier"
-msgstr ""
-
-msgid "Use this account by default when refunding this customer"
-msgstr ""
 
 msgid "Used In"
 msgstr "Kullanıldığı Yer"

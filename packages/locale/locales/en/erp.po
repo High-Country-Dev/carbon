@@ -9939,6 +9939,12 @@ msgstr "Market rate (per USD)"
 msgid "Market Rate History (per USD)"
 msgstr "Market Rate History (per USD)"
 
+msgid "Marks the account to use when paying this supplier. Only one can be primary."
+msgstr "Marks the account to use when paying this supplier. Only one can be primary."
+
+msgid "Marks the account to use when refunding this customer. Only one can be primary."
+msgstr "Marks the account to use when refunding this customer. Only one can be primary."
+
 msgid "Marks the person off for every day in the range. They won't be scheduled while they're away."
 msgstr "Marks the person off for every day in the range. They won't be scheduled while they're away."
 
@@ -18643,12 +18649,6 @@ msgstr "Use a different email"
 
 msgid "Use metric system for default material dimensions."
 msgstr "Use metric system for default material dimensions."
-
-msgid "Use this account by default when paying this supplier"
-msgstr "Use this account by default when paying this supplier"
-
-msgid "Use this account by default when refunding this customer"
-msgstr "Use this account by default when refunding this customer"
 
 msgid "Used In"
 msgstr "Used In"

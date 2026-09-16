@@ -52,6 +52,25 @@ export function isValidSwiftBic(raw: string): boolean {
 }
 
 /**
+ * Characters 5-6 of a BIC are its ISO 3166 country code, so a BIC can be checked
+ * against the account's own country: a German BIC on a French account is a
+ * mistake the format check alone cannot see.
+ *
+ * Returns true when either value is absent or the BIC is malformed — this
+ * answers only "do these disagree?", leaving presence and format to their own
+ * validators so one bad field raises one error.
+ */
+export function bicMatchesCountry(
+  bic: string | null | undefined,
+  countryCode: string | null | undefined
+): boolean {
+  if (!bic || !countryCode) return true;
+  const normalized = bic.replace(/\s+/g, "").toUpperCase();
+  if (!isValidSwiftBic(normalized)) return true;
+  return normalized.slice(4, 6) === countryCode.toUpperCase();
+}
+
+/**
  * Last four characters of an account identifier, for display.
  * Returns "••••" when the value is too short to partially mask.
  */
@@ -122,6 +141,45 @@ export function isValidCanadianRouting(raw: string): boolean {
   return /^[0-9]{8}$/.test(raw.replace(/[\s-]/g, ""));
 }
 
+function stripSeparators(raw: string): string {
+  return raw.replace(/[\s-]/g, "");
+}
+
+/**
+ * US account number: 4-17 digits. Domestic account numbers carry no checksum —
+ * unlike an IBAN or an ABA there is no offline way to prove one is real, so
+ * these validators check only the alphabet and length the scheme allows. That
+ * still catches the common case: a letter in a US account number is a typo.
+ * There is no ACH-wide length standard; this range is the practical one.
+ */
+export function isValidUsAccountNumber(raw: string): boolean {
+  return /^[0-9]{4,17}$/.test(stripSeparators(raw));
+}
+
+/** UK: exactly 8 digits. */
+export function isValidUkAccountNumber(raw: string): boolean {
+  return /^[0-9]{8}$/.test(stripSeparators(raw));
+}
+
+/** Australia: 5-10 digits. */
+export function isValidAuAccountNumber(raw: string): boolean {
+  return /^[0-9]{5,10}$/.test(stripSeparators(raw));
+}
+
+/** Canada: 7-12 digits. */
+export function isValidCaAccountNumber(raw: string): boolean {
+  return /^[0-9]{7,12}$/.test(stripSeparators(raw));
+}
+
+/**
+ * India: 9-18 characters. Alphanumeric on purpose — a few Indian banks really
+ * do issue account numbers containing letters, so this checks length and
+ * rejects punctuation rather than forcing digits.
+ */
+export function isValidInAccountNumber(raw: string): boolean {
+  return /^[A-Z0-9]{9,18}$/.test(stripSeparators(raw).toUpperCase());
+}
+
 const IBAN_COUNTRY: BankFieldConfig = {
   accountLabel: "iban",
   bankCodeLabel: null,
@@ -132,26 +190,31 @@ const IBAN_COUNTRY: BankFieldConfig = {
 const BANK_FIELDS: Record<string, BankFieldConfig> = {
   US: {
     accountLabel: "accountNumber",
+    validateAccount: isValidUsAccountNumber,
     bankCodeLabel: "aba",
     validateBankCode: isValidAbaRouting
   },
   GB: {
     accountLabel: "accountNumber",
+    validateAccount: isValidUkAccountNumber,
     bankCodeLabel: "sortCode",
     validateBankCode: isValidSortCode
   },
   AU: {
     accountLabel: "accountNumber",
+    validateAccount: isValidAuAccountNumber,
     bankCodeLabel: "bsb",
     validateBankCode: isValidBsb
   },
   IN: {
     accountLabel: "accountNumber",
+    validateAccount: isValidInAccountNumber,
     bankCodeLabel: "ifsc",
     validateBankCode: isValidIfsc
   },
   CA: {
     accountLabel: "accountNumber",
+    validateAccount: isValidCaAccountNumber,
     bankCodeLabel: "transit",
     validateBankCode: isValidCanadianRouting
   },

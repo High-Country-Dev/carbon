@@ -122,30 +122,39 @@ const CustomerBankAccountForm = ({
               <Hidden name="type" value={type} />
               <Hidden name="customerId" value={customerId} />
               <VStack spacing={4}>
-                <Input name="name" label={t`Name`} />
+                <Input name="name" label={t`Name`} isRequired />
                 <Input
                   name="accountHolderName"
                   label={t`Account Holder`}
                   helperText={t`Only if it differs from the customer name`}
                 />
-                <Input name="bankName" label={t`Bank Name`} />
+                <Input name="bankName" label={t`Bank Name`} isRequired />
                 {/* Correspondent banks route international wires on this. */}
-                <TextArea name="bankAddress" label={t`Bank Address`} />
+                <TextArea
+                  name="bankAddress"
+                  label={t`Bank Address`}
+                  isRequired
+                />
                 <Country
                   name="countryCode"
                   label={t`Country`}
+                  isRequired
                   onChange={(value) => setCountryCode(value?.value ?? "")}
                 />
                 <Currency name="currencyCode" label={t`Currency`} />
-                <Input name="accountNumber" label={accountLabel} />
+                <Input name="accountNumber" label={accountLabel} isRequired />
                 {bankCodeLabel && (
                   <Input name="bankCode" label={bankCodeLabel} />
                 )}
-                <Input name="swiftBic" label={t`SWIFT / BIC`} />
+                <Input
+                  name="swiftBic"
+                  label={t`SWIFT / BIC`}
+                  isRequired={bankFields.requiresSwift}
+                />
                 <Boolean
                   name="isPrimary"
                   label={t`Primary Account`}
-                  description={t`Use this account by default when refunding this customer`}
+                  description={t`Marks the account to use when refunding this customer. Only one can be primary.`}
                 />
                 <Boolean
                   name="active"
