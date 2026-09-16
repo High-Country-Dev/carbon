@@ -4,6 +4,7 @@ import {
   CONTROLLED_ENVIRONMENT,
   carbonClient,
   error,
+  getMESUrl,
   isAuthProviderEnabled,
   magicLinkValidator,
   RATE_LIMIT
@@ -188,7 +189,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const user = await getUserByEmail(email);
 
   if (user.data && user.data.active) {
-    const magicLink = await sendMagicLink(email, turnstileToken);
+    const magicLink = await sendMagicLink(email, turnstileToken, getMESUrl());
 
     if (magicLink.error) {
       logAuthEvent("login_failed", {
