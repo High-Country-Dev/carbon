@@ -129,8 +129,11 @@ In batch mode `JobOperation` derives `isBatched = !!batch`,
 - **Completion** — the "Log Completed" button becomes "Complete Batch" and opens
   `BatchCompleteModal`, a **spreadsheet-style grid** (bare `<input inputMode="numeric">`
   cells in a bordered `border-separate` table — no react-aria stepper arrows, no
-  close-X via `withCloseButton={false}`, Job / Quantity / Scrap columns only —
-  the per-member Operation is redundant in a batch). Rows are pre-filled
+  close-X via `withCloseButton={false}`, Job / Quantity / Scrap columns —
+  the per-member Operation is redundant in a batch; a fourth **Batch Number**
+  column appears when any member's produced item is batch-tracked, pre-filled
+  from that member's WIP `trackedEntity` and editable, submitted alongside a
+  hidden `trackedEntityId`). Rows are pre-filled
   `operationQuantity − quantityComplete`, controlled as strings in local state.
   Completing a batch **auto-stops** any still-running shared timer: the Phase-1
   txn closes open `jobOperationBatchId`-tagged `productionEvent`s with
@@ -144,7 +147,21 @@ In batch mode `JobOperation` derives `isBatched = !!batch`,
   "completed with 0" warning: 0 simply means not-in-this-run. All-excluded (every
   row 0/0) disables submit. Scrap / Rework /
   Finish are hidden in the actions sheet (per-op writes would double-count a
-  member); Maintenance + Quality Issue stay. The batch chip menu also offers
+  member); Maintenance + Quality Issue stay.
+- **Merge prompt** — when a completion produced ≥2 still-Available lots of ONE
+  item, the route answers with `{ merge: { count } }` instead of redirecting and
+  `BatchMergePrompt` offers "Merge into one lot" / "Keep separate". Two
+  structural rules, both load-bearing: the completion **fetcher is owned by
+  `JobOperation`**, not by `BatchCompleteModal` — completing flips the batch out
+  of `Active`/`Completing`, the loader stops passing `batch`, and the modal
+  (rendered `{batch && …}`) unmounts, so a fetcher declared there would take the
+  prompt's payload with it; and the merge action carries **no entity ids** —
+  `batch.$batchId.complete.tsx`'s `getMergeableOutputLots` re-derives them from
+  the batch's own membership, because that route invokes `issue` with the
+  SERVICE ROLE (the edge fn's `inventory` permission check then validates the
+  service role, not the operator, so a posted id list would let a
+  production-only user merge any two same-item lots in the company). The batch
+  chip menu also offers
   "Print batch list" (`path.to.file.batchLoadList` → the ERP
   `/file/batch/:id.pdf` route, `BatchListPDF`). The kanban keyboard wedge is
   disabled (`active: !!kanban?.id && !isBatched`) — it completes a single op,

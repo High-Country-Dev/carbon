@@ -1561,3 +1561,34 @@ full-screen ERP route.
 **Rule:** Two layers, both required. (1) Any `json`/`jsonb` value written through Kysely in an edge function goes through `lib/json.ts` `toJson()`, which pre-serialises every non-null shape so the wire value is valid JSON text. (2) A validator for a rich-text column is never `z.any()`; use the shared `optionalTiptapDoc` / `toTiptapDoc` in `shared.models.ts`, which turns text, a JSON-encoded doc, or a doc object into a tiptap document and rejects the rest. Put `.optional()` AFTER the transform or zod infers a required key. When an edge function fails opaquely, read the function's own log (Supabase management API `function_logs`), not the caller's.
 
 **Applies to:** `packages/database/supabase/functions/**` Kysely inserts of `internalNotes`, `externalNotes`, `customFields`, `priceTrace`, `configuration`, `additionalCharges`; every `*.models.ts` field that feeds a rich-text column (the purchasing `notes: z.any()` fields still need this).
+
+## Resolve the accounting period BEFORE a transaction that writes for N records
+
+**Context:** The batch material pick (`issue` case `trackedEntitiesToBatch`) runs one Kysely transaction and calls the per-member consumption writer once per batch member. Each member's write path reaches `createMaterialWipEntries` → `getCurrentAccountingPeriod`.
+
+**Problem:** `getCurrentAccountingPeriod` READS the period over HTTP (supabase-js) but CREATES a missing one through the transaction handle. Inside one transaction, member 2's read cannot see member 1's uncommitted insert, so both try to create the same month and the `accountingPeriod_company_fy_period_idx` unique index aborts the whole pick. It only fires on the first posting of a month into a fresh database, so it passes every test run but the first — and the rollback makes it look like the pick silently did nothing (HTTP 200, empty body; the real error is only in the edge-runtime log).
+
+**Rule:** Any lazily-created singleton that reads outside the transaction and writes inside it must be resolved BEFORE the transaction opens, once, when a flow writes for N records in one transaction. For the accounting period that is `await getCurrentAccountingPeriod(client, companyId, db, companyToday.toString())` ahead of `db.transaction()`, guarded on `accountingEnabled`.
+
+**Applies to:** `getCurrentAccountingPeriod` / `getAccountingPeriodForDate` in any multi-record edge-function transaction; the same shape applies to `getNextSequence` and any other get-or-create helper straddling the transaction boundary.
+
+## A post-success prompt must not live in the component the success unmounts
+
+**Context:** MES batch completion. `BatchCompleteModal` submitted the completion and was meant to swap itself for a "merge these lots?" prompt when the action returned one.
+
+**Problem:** The modal is rendered `{batch && batchCompleteModal.isOpen && …}`, and `batch` is only passed by the loader while the batch is `Active`/`Completing`. Completing it — the very thing that produces the prompt — revalidates the loader, `batch` becomes null, and the modal unmounts with its `useFetcher` still holding the response. The prompt could never render, and the symptom was indistinguishable from the server never sending it (the page just sat there, because a `data()` reply does not navigate).
+
+**Rule:** When an action's response drives UI that appears AFTER success, own the fetcher in a component that outlives the state change — here `JobOperation`, passing the fetcher down into the modal and rendering the prompt itself, ungated by `batch`. Before wiring a post-success view, ask which component the success unmounts.
+
+**Applies to:** MES `JobOperation` + `BatchCompleteModal`/`BatchMergePrompt`; any modal gated on loader data that its own submit invalidates.
+
+## Vite caches a module-resolution MISS for the whole dev session
+
+**Context:** Added a `BatchMergePrompt` component: edited the importing file first, created the new file a moment later.
+
+**Problem:** The SSR module graph cached the failed resolution, so every request 500'd with `Failed to load url ./components/BatchMergePrompt … Does the file exist?` even though it did. `docker exec … grep` and `ls` both confirmed the file, which sends you hunting a phantom bug in the import path.
+
+**Rule:** Create the new module BEFORE the code that imports it. If the overlay already says "Does the file exist?" and it does, `touch` the new file and its importer to force re-resolution — the file's presence alone will not invalidate the cached miss.
+
+**Applies to:** any new file under `apps/{erp,mes}/app` added after its importer during a running `crbn up`; the sibling failure mode for edge functions is the cached compiled isolate (`crbn reload edge-runtime`).
+

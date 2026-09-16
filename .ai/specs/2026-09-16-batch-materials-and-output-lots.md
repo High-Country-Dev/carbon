@@ -1,6 +1,6 @@
 # Batch Materials & Output Lots
 
-> Status: draft
+> Status: implemented
 > Author: Claude (with Sid)
 > Date: 2026-09-16
 > Research: `.ai/research/batch-aggregated-material-consumption.md` (2026-09-15, input side) +
@@ -266,3 +266,30 @@ All new strings via lingui (`<Trans>`/`t`) in both apps; `/translate` after.
 ## Changelog
 
 - 2026-09-16: Created, all questions resolved pre-writing (Sid + customer answers).
+- 2026-09-16: Implemented on `feat/batch-materials-and-output-lots`. Five changes
+  the design did not anticipate, all found by end-to-end testing rather than by
+  typecheck or unit tests:
+  - **Accounting period pre-resolution.** `getCurrentAccountingPeriod` reads over
+    HTTP but writes in-transaction, so N members in ONE pick transaction each
+    tried to create the same missing month and the unique index rolled the whole
+    pick back. Resolved before the transaction opens.
+  - **Merge-prompt fetcher ownership.** Completing the batch is exactly what makes
+    the loader stop passing `batch`, unmounting `BatchCompleteModal` — so a
+    fetcher owned there took the prompt's payload with it and the prompt could
+    never render. `JobOperation` owns the fetcher and renders `BatchMergePrompt`.
+  - **Merged lot identity.** Neither caller passed a `readableId`, so every merged
+    lot landed `Available` with a NULL batch number (unidentifiable on the floor;
+    in real data every `Available` lot has one). It now inherits the FIRST
+    parent's, matching the split child's inheritance, and the edge fn orders
+    parents by the caller's list so "first" is deterministic rather than DB row
+    order.
+  - **Shared-pick default quantity.** The pick modal defaulted to the member's own
+    share, which the pro-rata split then divided again across all members (a 6,500
+    batch requirement picked as 4,000 became 2461.54/1538.46, satisfying neither).
+    Batch mode defaults to the batch's outstanding requirement.
+  - **Merge authorization.** The MES merge action took `trackedEntityIds` from the
+    form and invoked `issue` with the SERVICE ROLE, so the edge fn's `inventory`
+    check validated the service role rather than the operator — a
+    production-only user could merge any two same-item lots in the company. Both
+    entry points now derive the parent ids server-side from the batch's
+    membership (`getMergeableOutputLots`), mirroring the ERP route.

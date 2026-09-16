@@ -57,13 +57,19 @@ On top of the batching playbook's seeding gotchas:
   `{success:true, created:false}`, still exactly ONE `Produce` activity.
 
 ### 5. Lot merge
-- `issue` `{type:"mergeTrackedEntities", trackedEntityIds:[A,B], readableId}` →
-  ONE new entity (Σ quantity, given batch number, earliest parent expiry),
+- `issue` `{type:"mergeTrackedEntities", trackedEntityIds:[A,B], readableId?}` →
+  ONE new entity (Σ quantity, earliest parent expiry; `readableId` inherits the
+  FIRST parent's when omitted — the edge fn orders parents by the CALLER's list,
+  so `[WIP1,WIP2]` yields WIP1's number and the reverse yields WIP2's),
   `Merge` activity (inputs = parents at their quantities, output = merged),
   net-zero `Batch Merge` ledger rows, parents `Consumed`.
 - MES prompt: completing via `/x/batch/$batchId/complete` with ≥2 same-item
-  outputs returns `{merge:{trackedEntityIds}}` instead of redirecting; the
-  modal swaps to "Merge into one lot" / "Keep separate".
+  outputs returns `{merge:{count}}` instead of redirecting; the prompt renders
+  from `JobOperation` (NOT the completion modal — completing unmounts it).
+- The merge action posts `intent=merge` and **no ids**; the route re-derives
+  them from the batch's membership. Negative test: post
+  `trackedEntityIds=<two unrelated Available same-item lots>` and confirm those
+  lots are untouched (before the fix they would have been merged).
 - ERP drawer shows "Merge output lots" only for a Completed batch with ≥2
   Available same-item outputs (absent once merged).
 
@@ -76,6 +82,10 @@ On top of the batching playbook's seeding gotchas:
   empty on the icon buttons): table columns Job / Quantity / Scrap /
   **Batch Number** (batch-number inputs pre-filled from each member's WIP
   entity readableId).
+- The pick modal's quantity in batch mode defaults to the BATCH remaining
+  (6,500), not the member's share — if it shows the member's number the
+  `batchRemainingQuantity` wiring has regressed and the pro-rata split will
+  under-serve every member.
 
 ## Selector Notes
 - MES Controls icon buttons have NO aria-labels; the big start/stop is the
@@ -101,6 +111,19 @@ serves the OLD module — a fix appears not to work while the file is provably
 correct. `crbn reload edge-runtime` is the fix; allow ~30-60s before the first
 call succeeds (an early call returns "An invalid response was received from the
 upstream server").
+
+## Seeding gotchas found the hard way
+
+- Seed the jobs at a location that HAS `storageUnit` rows (all bins live at
+  Manufacturing Plant `loc_GYZ…`, none at Headquarters) and give the input lot's
+  `itemLedger` row a `storageUnitId` — otherwise `get_available_tracked_entities`
+  returns nothing and the pick modal says "Batch number is not available".
+- That RPC's argument order is `(item, company, location)` — easy to transpose.
+- The Scan field takes the entity **id** (what a barcode encodes), not the human
+  `readableId`; a valid scan auto-submits the pick.
+- Resetting a batch for a re-run must also zero `jobOperation.quantityComplete`,
+  or the completion modal pre-fills 0, reads every row as "not in this run", and
+  disables submit.
 
 ## Common Failures
 - `{"message":"no result"}` on the pick → missing `itemCost` row (accounting on).
