@@ -1,6 +1,7 @@
 import { useCarbon } from "@carbon/auth";
 import { convertHeicToJpeg, isHeic } from "@carbon/files/media";
 import { toast } from "@carbon/react";
+import { useLingui } from "@lingui/react/macro";
 import { nanoid } from "nanoid";
 import { useCallback } from "react";
 import { getPrivateUrl } from "~/utils/path";
@@ -15,6 +16,7 @@ import { useUser } from "./useUser";
 export function useImageUpload(directory: string) {
   const { carbon } = useCarbon();
   const { company } = useUser();
+  const { t } = useLingui();
 
   return useCallback(
     async (file: File) => {
@@ -29,7 +31,7 @@ export function useImageUpload(directory: string) {
             file
           });
         } catch (error) {
-          toast.error("Failed to convert image");
+          toast.error(t`Failed to convert image`);
           throw error;
         }
       }
@@ -42,7 +44,7 @@ export function useImageUpload(directory: string) {
         .upload(fileName, upload);
 
       if (result.error) {
-        toast.error("Failed to upload image");
+        toast.error(t`Failed to upload image`);
         throw new Error(result.error.message);
       }
 
@@ -52,6 +54,6 @@ export function useImageUpload(directory: string) {
 
       return getPrivateUrl(result.data.path);
     },
-    [carbon, company.id, directory]
+    [carbon, company.id, directory, t]
   );
 }

@@ -37,7 +37,7 @@ import {
   ModelOptimizedIndicator
 } from "~/components";
 import DocumentIcon from "~/components/DocumentIcon";
-import { usePermissions, useUser } from "~/hooks";
+import { useHeicConversion, usePermissions, useUser } from "~/hooks";
 import type { ItemType, OptimisticFileObject } from "~/modules/shared";
 import { getDocumentType } from "~/modules/shared";
 import type { ModelUpload } from "~/types";
@@ -409,6 +409,7 @@ export const useItemDocuments = ({ itemId, type }: Props) => {
     return path.to.file.cadModel(model.modelId);
   }, []);
 
+  const ensureNoHeic = useHeicConversion();
   const upload = useCallback(
     async (files: File[]) => {
       if (!carbon) {
@@ -416,7 +417,10 @@ export const useItemDocuments = ({ itemId, type }: Props) => {
         return;
       }
 
-      for (const file of files) {
+      const uploadable = await ensureNoHeic(files);
+      if (!uploadable) return;
+
+      for (const file of uploadable) {
         toast.info(t`Uploading ${file.name}`);
         const fileName = getPath(file);
 
@@ -448,7 +452,7 @@ export const useItemDocuments = ({ itemId, type }: Props) => {
       }
       revalidator.revalidate();
     },
-    [getPath, carbon, revalidator, submit, type, itemId, t]
+    [ensureNoHeic, getPath, carbon, revalidator, submit, type, itemId, t]
   );
 
   return {

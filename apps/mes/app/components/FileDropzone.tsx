@@ -1,7 +1,7 @@
 import { useCarbon } from "@carbon/auth";
 import { convertHeicFiles, isHeic } from "@carbon/files/media";
 import { cn, toast } from "@carbon/react";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import type React from "react";
 import { useState } from "react";
 import { useDropzone } from "react-dropzone";
@@ -13,6 +13,7 @@ interface FileDropzoneProps {
 }
 
 const FileDropzone: React.FC<FileDropzoneProps> = ({ onDrop }) => {
+  const { t } = useLingui();
   const { carbon } = useCarbon();
   const { company } = useUser();
   const [isConverting, setIsConverting] = useState(false);
@@ -29,7 +30,7 @@ const FileDropzone: React.FC<FileDropzoneProps> = ({ onDrop }) => {
           files
         );
       } catch {
-        toast.error("Failed to convert image");
+        toast.error(t`Failed to convert image`);
         return;
       } finally {
         setIsConverting(false);

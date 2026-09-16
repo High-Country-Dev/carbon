@@ -35,7 +35,7 @@ import {
   ModelOptimizedIndicator
 } from "~/components";
 import DocumentIcon from "~/components/DocumentIcon";
-import { usePermissions, useUser } from "~/hooks";
+import { useHeicConversion, usePermissions, useUser } from "~/hooks";
 import type { OptimisticFileObject } from "~/modules/shared";
 import { getDocumentType } from "~/modules/shared";
 import type { ModelUpload, StorageItem } from "~/types";
@@ -175,6 +175,7 @@ const Documents = ({
     [getReadPath, t]
   );
 
+  const ensureNoHeic = useHeicConversion();
   const upload = useCallback(
     async (files: File[]) => {
       if (!carbon) {
@@ -182,7 +183,10 @@ const Documents = ({
         return;
       }
 
-      for (const file of files) {
+      const uploadable = await ensureNoHeic(files);
+      if (!uploadable) return;
+
+      for (const file of uploadable) {
         const fileName = getWritePath({ name: file.name });
         toast.info(t`Uploading ${file.name}`);
         const fileUpload = await carbon.storage
@@ -218,6 +222,7 @@ const Documents = ({
       revalidator.revalidate();
     },
     [
+      ensureNoHeic,
       getWritePath,
       carbon,
       revalidator,

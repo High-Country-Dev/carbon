@@ -1958,7 +1958,11 @@ async function downloadAndUploadThumbnail(
 
     const imageBuffer = await response.arrayBuffer();
     const sourceType = response.headers.get("Content-Type") ?? "image/png";
-    const sourceExtension = sourceType.includes("jpeg") ? "jpg" : "png";
+    const sourceExtension = sourceType.includes("jpeg")
+      ? "jpg"
+      : sourceType.includes("webp")
+        ? "webp"
+        : "png";
 
     await initNodeImageCodecs();
     const processed = await processImage(

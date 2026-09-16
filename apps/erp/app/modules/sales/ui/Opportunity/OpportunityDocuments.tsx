@@ -38,7 +38,7 @@ import {
 import { Outlet, useFetchers, useRevalidator, useSubmit } from "react-router";
 import { DateTime, DocumentPreview, FileDropzone } from "~/components";
 import DocumentIcon from "~/components/DocumentIcon";
-import { usePermissions, useUser } from "~/hooks";
+import { useHeicConversion, usePermissions, useUser } from "~/hooks";
 import { getDocumentType } from "~/modules/shared";
 import { path } from "~/utils/path";
 import { stripSpecialCharacters } from "~/utils/string";
@@ -382,6 +382,7 @@ export const useOpportunityDocuments = ({
     [id, submit, type]
   );
 
+  const ensureNoHeic = useHeicConversion();
   const upload = useCallback(
     async (files: File[]) => {
       if (!carbon) {
@@ -389,7 +390,10 @@ export const useOpportunityDocuments = ({
         return;
       }
 
-      for (const file of files) {
+      const uploadable = await ensureNoHeic(files);
+      if (!uploadable) return;
+
+      for (const file of uploadable) {
         const fileName = getPath(file);
         toast.info(t`Uploading ${file.name}`);
 
@@ -413,7 +417,7 @@ export const useOpportunityDocuments = ({
       }
       revalidator.revalidate();
     },
-    [getPath, createDocumentRecord, carbon, revalidator, t]
+    [ensureNoHeic, getPath, createDocumentRecord, carbon, revalidator, t]
   );
 
   return {

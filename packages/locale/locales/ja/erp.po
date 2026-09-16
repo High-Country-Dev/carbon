@@ -8813,19 +8813,19 @@ msgid "Invoice"
 msgstr "請求書"
 
 msgid "Invoice Address"
-msgstr ""
+msgstr "請求先住所"
 
 msgid "Invoice Contact"
 msgstr "請求書担当者"
 
 msgid "Invoice Contact Email"
-msgstr ""
+msgstr "請求先担当者メール"
 
 msgid "Invoice Contact Name"
-msgstr ""
+msgstr "請求先担当者名"
 
 msgid "Invoice Contact Phone"
-msgstr ""
+msgstr "請求先電話番号"
 
 msgid "Invoice customer"
 msgstr "請求書得意先"
@@ -13128,13 +13128,13 @@ msgid "Purchasing Contact"
 msgstr "購買担当者"
 
 msgid "Purchasing Contact Email"
-msgstr ""
+msgstr "購買先担当者メール"
 
 msgid "Purchasing Contact Name"
-msgstr ""
+msgstr "購買先担当者名"
 
 msgid "Purchasing Contact Phone"
-msgstr ""
+msgstr "購買先電話番号"
 
 msgid "Purchasing Invoices"
 msgstr "購買請求書"
@@ -15496,19 +15496,19 @@ msgid "Shipping"
 msgstr "配送"
 
 msgid "Shipping Address"
-msgstr ""
+msgstr "配送先住所"
 
 msgid "Shipping Contact"
 msgstr "出荷担当者"
 
 msgid "Shipping Contact Email"
-msgstr ""
+msgstr "配送先担当者メール"
 
 msgid "Shipping Contact Name"
-msgstr ""
+msgstr "配送先担当者名"
 
 msgid "Shipping Contact Phone"
-msgstr ""
+msgstr "配送先電話番号"
 
 msgid "Shipping Cost"
 msgstr "配送料金"

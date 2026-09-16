@@ -44,7 +44,7 @@ import {
 } from "~/components";
 import DocumentIcon from "~/components/DocumentIcon";
 import { Enumerable } from "~/components/Enumerable";
-import { usePermissions, useUser } from "~/hooks";
+import { useHeicConversion, usePermissions, useUser } from "~/hooks";
 import type { OptimisticFileObject } from "~/modules/shared";
 import { getDocumentType } from "~/modules/shared";
 import type { ModelUpload } from "~/types";
@@ -240,6 +240,7 @@ const useOpportunityLineDocuments = ({
     [id, submit, type]
   );
 
+  const ensureNoHeic = useHeicConversion();
   const upload = useCallback(
     async (
       files: File[],
@@ -255,7 +256,10 @@ const useOpportunityLineDocuments = ({
         return;
       }
 
-      for (const file of files) {
+      const uploadable = await ensureNoHeic(files);
+      if (!uploadable) return;
+
+      for (const file of uploadable) {
         const fileName = getPath(file, bucket);
 
         const fileUpload = await carbon.storage
@@ -278,7 +282,15 @@ const useOpportunityLineDocuments = ({
       }
       revalidator.revalidate();
     },
-    [getPath, createDocumentRecord, carbon, revalidator, itemId, t]
+    [
+      ensureNoHeic,
+      getPath,
+      createDocumentRecord,
+      carbon,
+      revalidator,
+      itemId,
+      t
+    ]
   );
 
   const moveFile = useCallback(

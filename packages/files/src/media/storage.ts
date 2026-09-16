@@ -5,8 +5,15 @@ import { getDatasetAssetUrl } from "@carbon/database/dataset-assets";
  * with the app, so it never goes through the storage proxy; anything else is
  * a real tenant file served by the apps' /file/preview route.
  */
+// A `#` or `?` in a stored filename would otherwise truncate the request path.
+const encodeStoragePath = (path: string) =>
+  path.split("/").map(encodeURIComponent).join("/");
+
 export const getPrivateUrl = (path: string) => {
-  return getDatasetAssetUrl(path) ?? `/file/preview/private/${path}`;
+  return (
+    getDatasetAssetUrl(path) ??
+    `/file/preview/private/${encodeStoragePath(path)}`
+  );
 };
 
 /**
@@ -14,7 +21,7 @@ export const getPrivateUrl = (path: string) => {
  * era (current uploads: temp-staging; pre-assembler rows: private).
  */
 export const getRawModelUrl = (bucket: string, path: string) => {
-  return `/file/preview/${bucket}/${path}`;
+  return `/file/preview/${encodeURIComponent(bucket)}/${encodeStoragePath(path)}`;
 };
 
 /**

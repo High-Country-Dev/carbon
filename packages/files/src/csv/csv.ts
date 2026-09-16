@@ -52,13 +52,14 @@ export function encodeCsv(
       return value == null ? empty : sanitizeCell(value);
     })
   );
-  return Papa.unparse({ fields, data });
+  // Headers are cells too — import-error re-exports echo uploaded headers.
+  return Papa.unparse({ fields: fields.map(stripCsvFormulaPrefix), data });
 }
 
 /** Header row + tabular cells → CSV text (for templates and error re-exports). */
 export function encodeCsvTable(fields: string[], data: unknown[][]): string {
   return Papa.unparse({
-    fields,
+    fields: fields.map(stripCsvFormulaPrefix),
     data: data.map((row) => row.map(sanitizeCell))
   });
 }

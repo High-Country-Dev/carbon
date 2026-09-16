@@ -54,7 +54,8 @@ export let loader = async ({ request, params }: LoaderFunctionArgs) => {
         .from(bucket!)
         .download(path, { transform: { quality: 85 } });
       if (!transformed.error) {
-        contentType = "image/jpeg";
+        // imgproxy may negotiate webp via Accept — trust the blob, not the path
+        contentType = transformed.data.type || "image/jpeg";
         return transformed.data;
       }
       // No imgproxy (stale self-host stack) — fall through to the raw bytes;

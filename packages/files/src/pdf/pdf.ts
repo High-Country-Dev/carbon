@@ -87,7 +87,7 @@ export async function getPdfPageCount(data: PdfBytes): Promise<number> {
 
 /**
  * Open a document for page-level work (rendering with overlays, custom
- * iteration). Caller owns it: `await pdf.cleanup()` when done.
+ * iteration). Caller owns it: `await closePdf(pdf)` when done.
  */
 export async function openPdf(data: PdfBytes) {
   await configured();

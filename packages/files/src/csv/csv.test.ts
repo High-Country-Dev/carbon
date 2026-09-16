@@ -9,6 +9,10 @@ describe("encodeCsv", () => {
     const csv = encodeCsv([{ x: "=HYPERLINK()", y: { nested: true } }]);
     expect(csv).toBe('x,y\r\nHYPERLINK(),"{""nested"":true}"');
   });
+  it("strips formula prefixes from headers too (import-error re-exports echo uploaded headers)", () => {
+    const csv = encodeCsv([{ "=cmd|calc": "safe" }]);
+    expect(csv).toBe("cmd|calc\r\nsafe");
+  });
   it("respects an explicit field order and empty value", () => {
     const csv = encodeCsv([{ b: 1, a: 2 }], {
       fields: ["a", "b", "c"],

@@ -1,11 +1,46 @@
 import { useCarbon } from "@carbon/auth";
-import { convertHeicToJpeg, isHeic } from "@carbon/files/media";
+import {
+  convertHeicFiles,
+  convertHeicToJpeg,
+  isHeic
+} from "@carbon/files/media";
 import { toast } from "@carbon/react";
 import { useLingui } from "@lingui/react/macro";
 import { nanoid } from "nanoid";
 import { useCallback } from "react";
 import { getPrivateUrl } from "~/utils/path";
 import { useUser } from "./useUser";
+
+/**
+ * HEIC guard for upload handlers fed by a raw `<input type="file">` (the
+ * FileDropzone converts on its own). Returns the list with any HEIC files
+ * converted to JPEG, or null after showing a toast when conversion fails —
+ * callers must bail on null so a .heic is never stored.
+ */
+export function useHeicConversion() {
+  const { carbon } = useCarbon();
+  const { company } = useUser();
+  const { t } = useLingui();
+
+  return useCallback(
+    async (files: File[]): Promise<File[] | null> => {
+      if (!carbon || !files.some((file) => isHeic(file.name, file.type))) {
+        return files;
+      }
+      try {
+        return await convertHeicFiles(
+          carbon,
+          { bucket: "private", directory: `${company.id}/tmp` },
+          files
+        );
+      } catch {
+        toast.error(t`Failed to convert image`);
+        return null;
+      }
+    },
+    [carbon, company.id, t]
+  );
+}
 
 /**
  * Shared editor/notes image-upload handler. HEIC is converted to JPEG before

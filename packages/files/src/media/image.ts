@@ -188,17 +188,23 @@ export async function convertHeicToJpeg(
   return prepareImageUpload(client, { bucket, directory, file, convert: true });
 }
 
-/** Convert any HEIC files in a picked-file list; other files pass through. */
+/**
+ * Convert any HEIC files in a picked-file list; other files pass through.
+ * Sequential on purpose — each decode materializes a full RGBA frame, and a
+ * handful of 48MP photos decoded at once can exhaust browser memory.
+ */
 export async function convertHeicFiles(
   client: StorageClient,
   { bucket, directory }: { bucket: string; directory: string },
   files: File[]
 ): Promise<File[]> {
-  return Promise.all(
-    files.map((file) =>
+  const out: File[] = [];
+  for (const file of files) {
+    out.push(
       isHeic(file.name, file.type)
-        ? convertHeicToJpeg(client, { bucket, directory, file })
+        ? await convertHeicToJpeg(client, { bucket, directory, file })
         : file
-    )
-  );
+    );
+  }
+  return out;
 }

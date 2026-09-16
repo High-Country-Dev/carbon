@@ -8813,19 +8813,19 @@ msgid "Invoice"
 msgstr "Fatura"
 
 msgid "Invoice Address"
-msgstr ""
+msgstr "Fatura Adresi"
 
 msgid "Invoice Contact"
 msgstr "Fatura İlgili Kişisi"
 
 msgid "Invoice Contact Email"
-msgstr ""
+msgstr "Fatura İlgili Kişi E-Postası"
 
 msgid "Invoice Contact Name"
-msgstr ""
+msgstr "Fatura İlgili Kişi Adı"
 
 msgid "Invoice Contact Phone"
-msgstr ""
+msgstr "Fatura İlgili Kişi Telefonu"
 
 msgid "Invoice customer"
 msgstr "Fatura müşterisi"
@@ -13128,13 +13128,13 @@ msgid "Purchasing Contact"
 msgstr "Satın alma ilgili kişi"
 
 msgid "Purchasing Contact Email"
-msgstr ""
+msgstr "Satın Alma İlgili Kişi E-Postası"
 
 msgid "Purchasing Contact Name"
-msgstr ""
+msgstr "Satın Alma İlgili Kişi Adı"
 
 msgid "Purchasing Contact Phone"
-msgstr ""
+msgstr "Satın Alma İlgili Kişi Telefonu"
 
 msgid "Purchasing Invoices"
 msgstr "Satın Alma Faturaları"
@@ -15496,19 +15496,19 @@ msgid "Shipping"
 msgstr "Nakliye"
 
 msgid "Shipping Address"
-msgstr ""
+msgstr "Sevkiyat Adresi"
 
 msgid "Shipping Contact"
 msgstr "Sevkiyat İlgili kişi"
 
 msgid "Shipping Contact Email"
-msgstr ""
+msgstr "Sevkiyat İlgili Kişi E-Postası"
 
 msgid "Shipping Contact Name"
-msgstr ""
+msgstr "Sevkiyat İlgili Kişi Adı"
 
 msgid "Shipping Contact Phone"
-msgstr ""
+msgstr "Sevkiyat İlgili Kişi Telefonu"
 
 msgid "Shipping Cost"
 msgstr "Nakliye bedeli"

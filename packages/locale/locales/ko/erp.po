@@ -8813,19 +8813,19 @@ msgid "Invoice"
 msgstr "송장"
 
 msgid "Invoice Address"
-msgstr ""
+msgstr "송장 주소"
 
 msgid "Invoice Contact"
 msgstr "송장 담당자"
 
 msgid "Invoice Contact Email"
-msgstr ""
+msgstr "송장 담당자 이메일"
 
 msgid "Invoice Contact Name"
-msgstr ""
+msgstr "송장 담당자 성명"
 
 msgid "Invoice Contact Phone"
-msgstr ""
+msgstr "송장 담당자 전화번호"
 
 msgid "Invoice customer"
 msgstr "송장 고객"
@@ -13128,13 +13128,13 @@ msgid "Purchasing Contact"
 msgstr "구매 담당자"
 
 msgid "Purchasing Contact Email"
-msgstr ""
+msgstr "구매 담당자 이메일"
 
 msgid "Purchasing Contact Name"
-msgstr ""
+msgstr "구매 담당자 성명"
 
 msgid "Purchasing Contact Phone"
-msgstr ""
+msgstr "구매 담당자 전화번호"
 
 msgid "Purchasing Invoices"
 msgstr "구매 송장"
@@ -15496,19 +15496,19 @@ msgid "Shipping"
 msgstr "배송"
 
 msgid "Shipping Address"
-msgstr ""
+msgstr "배송 주소"
 
 msgid "Shipping Contact"
 msgstr "배송 담당자"
 
 msgid "Shipping Contact Email"
-msgstr ""
+msgstr "배송 담당자 이메일"
 
 msgid "Shipping Contact Name"
-msgstr ""
+msgstr "배송 담당자 성명"
 
 msgid "Shipping Contact Phone"
-msgstr ""
+msgstr "배송 담당자 전화번호"
 
 msgid "Shipping Cost"
 msgstr "운송비"

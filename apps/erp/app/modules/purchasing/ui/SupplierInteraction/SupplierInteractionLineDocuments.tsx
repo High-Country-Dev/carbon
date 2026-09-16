@@ -30,7 +30,7 @@ import { LuEllipsisVertical, LuUpload } from "react-icons/lu";
 import { useFetchers, useRevalidator, useSubmit } from "react-router";
 import { DateTime, DocumentPreview, FileDropzone } from "~/components";
 import DocumentIcon from "~/components/DocumentIcon";
-import { usePermissions, useUser } from "~/hooks";
+import { useHeicConversion, usePermissions, useUser } from "~/hooks";
 import type { ItemFile } from "~/modules/items";
 import type { OptimisticFileObject } from "~/modules/shared";
 import { getDocumentType } from "~/modules/shared";
@@ -141,6 +141,7 @@ const useSupplierInteractionLineDocuments = ({
     [id, submit, type]
   );
 
+  const ensureNoHeic = useHeicConversion();
   const upload = useCallback(
     async (files: File[]) => {
       if (!carbon) {
@@ -148,7 +149,10 @@ const useSupplierInteractionLineDocuments = ({
         return;
       }
 
-      for (const file of files) {
+      const uploadable = await ensureNoHeic(files);
+      if (!uploadable) return;
+
+      for (const file of uploadable) {
         const fileName = getPath(file);
 
         const fileUpload = await carbon.storage
@@ -170,7 +174,7 @@ const useSupplierInteractionLineDocuments = ({
       }
       revalidator.revalidate();
     },
-    [getPath, createDocumentRecord, carbon, revalidator, t]
+    [ensureNoHeic, getPath, createDocumentRecord, carbon, revalidator, t]
   );
 
   return {

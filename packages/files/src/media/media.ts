@@ -97,7 +97,8 @@ export function isHeic(fileName: string, mimeType?: string | null): boolean {
     extension === "heif" ||
     mimeType === "image/heic" ||
     mimeType === "image/heif" ||
-    mimeType === "image/heic-sequence"
+    mimeType === "image/heic-sequence" ||
+    mimeType === "image/heif-sequence"
   );
 }
 

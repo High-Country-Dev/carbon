@@ -8813,19 +8813,19 @@ msgid "Invoice"
 msgstr "Faktura"
 
 msgid "Invoice Address"
-msgstr ""
+msgstr "Adres Faktury"
 
 msgid "Invoice Contact"
 msgstr "Kontakt do faktury"
 
 msgid "Invoice Contact Email"
-msgstr ""
+msgstr "Email Kontaktu Faktury"
 
 msgid "Invoice Contact Name"
-msgstr ""
+msgstr "Nazwa Kontaktu Faktury"
 
 msgid "Invoice Contact Phone"
-msgstr ""
+msgstr "Telefon Kontaktu Faktury"
 
 msgid "Invoice customer"
 msgstr "Klient faktury"
@@ -13128,13 +13128,13 @@ msgid "Purchasing Contact"
 msgstr "Kontakt ds. Zakupów"
 
 msgid "Purchasing Contact Email"
-msgstr ""
+msgstr "Email Kontaktu Zakupów"
 
 msgid "Purchasing Contact Name"
-msgstr ""
+msgstr "Nazwa Kontaktu Zakupów"
 
 msgid "Purchasing Contact Phone"
-msgstr ""
+msgstr "Telefon Kontaktu Zakupów"
 
 msgid "Purchasing Invoices"
 msgstr "Faktury zakupu"
@@ -15496,19 +15496,19 @@ msgid "Shipping"
 msgstr "Wysyłka"
 
 msgid "Shipping Address"
-msgstr ""
+msgstr "Adres Dostawy"
 
 msgid "Shipping Contact"
 msgstr "Kontakt wysyłki"
 
 msgid "Shipping Contact Email"
-msgstr ""
+msgstr "Email Kontaktu Dostawy"
 
 msgid "Shipping Contact Name"
-msgstr ""
+msgstr "Nazwa Kontaktu Dostawy"
 
 msgid "Shipping Contact Phone"
-msgstr ""
+msgstr "Telefon Kontaktu Dostawy"
 
 msgid "Shipping Cost"
 msgstr "Koszt wysyłki"

@@ -7,5 +7,8 @@ export function downloadCsv(
   filename: string,
   options?: EncodeCsvOptions
 ): void {
+  // No rows and no explicit fields would produce a headerless empty file —
+  // never useful. Explicit fields still download (template/header-only export).
+  if (rows.length === 0 && !options?.fields) return;
   downloadText(encodeCsv(rows, options), filename, CSV_CONTENT_TYPE);
 }

@@ -8813,19 +8813,19 @@ msgid "Invoice"
 msgstr "Счет-фактура"
 
 msgid "Invoice Address"
-msgstr ""
+msgstr "Адрес счета-фактуры"
 
 msgid "Invoice Contact"
 msgstr "Контактное лицо счета-фактуры"
 
 msgid "Invoice Contact Email"
-msgstr ""
+msgstr "Email контактного лица счета-фактуры"
 
 msgid "Invoice Contact Name"
-msgstr ""
+msgstr "Имя контактного лица счета-фактуры"
 
 msgid "Invoice Contact Phone"
-msgstr ""
+msgstr "Телефон контактного лица счета-фактуры"
 
 msgid "Invoice customer"
 msgstr "Покупатель счета-фактуры"
@@ -13128,13 +13128,13 @@ msgid "Purchasing Contact"
 msgstr "Контактное лицо закупок"
 
 msgid "Purchasing Contact Email"
-msgstr ""
+msgstr "Email контактного лица закупок"
 
 msgid "Purchasing Contact Name"
-msgstr ""
+msgstr "Имя контактного лица закупок"
 
 msgid "Purchasing Contact Phone"
-msgstr ""
+msgstr "Телефон контактного лица закупок"
 
 msgid "Purchasing Invoices"
 msgstr "Счета-фактуры закупок"
@@ -15496,19 +15496,19 @@ msgid "Shipping"
 msgstr "Доставка"
 
 msgid "Shipping Address"
-msgstr ""
+msgstr "Адрес доставки"
 
 msgid "Shipping Contact"
 msgstr "Контактное лицо отгрузки"
 
 msgid "Shipping Contact Email"
-msgstr ""
+msgstr "Email контактного лица доставки"
 
 msgid "Shipping Contact Name"
-msgstr ""
+msgstr "Имя контактного лица доставки"
 
 msgid "Shipping Contact Phone"
-msgstr ""
+msgstr "Телефон контактного лица доставки"
 
 msgid "Shipping Cost"
 msgstr "Стоимость доставки"

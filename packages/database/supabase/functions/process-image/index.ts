@@ -29,18 +29,27 @@ serve(async (req: Request) => {
     const companyId = formData.get("companyId") as string | null;
     const userId = formData.get("userId") as string | null;
     const targetHeight = formData.get("height") as string | null;
-    const contained = !!formData.get("contained");
-    const convert = !!formData.get("convert");
+    // Explicit truthy set — !!formData.get() would read "false"/"0" as true
+    const asFlag = (name: string) =>
+      ["true", "1"].includes(String(formData.get(name) ?? "").toLowerCase());
 
     if (!file) throw new Error("No file provided");
     if (!companyId || !userId) throw new Error("companyId and userId required");
 
+    let height: number | undefined;
+    if (targetHeight) {
+      height = Number(targetHeight);
+      if (!Number.isInteger(height) || height <= 0 || height > 10_000) {
+        throw new Error("height must be a positive integer");
+      }
+    }
+
     const client = await requirePermissions(req, companyId, userId, {});
 
     const options = {
-      height: targetHeight ? parseInt(targetHeight, 10) : undefined,
-      contained,
-      convert
+      height,
+      contained: asFlag("contained"),
+      convert: asFlag("convert")
     };
 
     const extension = file.name.split(".").pop()?.toLowerCase() ?? "";

@@ -85,11 +85,84 @@ async function decodeHeic(
   return { data, width, height };
 }
 
+/**
+ * Read dimensions from the container header WITHOUT decoding pixel data, so
+ * the pixel limit can run before the full RGBA allocation (a compact file can
+ * declare enormous dimensions). Returns null when the header is unrecognized —
+ * the decoder will reject malformed input itself; every VALID jpeg/png/webp
+ * has a parseable header, so fail-open here cannot bypass the guard.
+ */
+export function readImageDimensions(
+  bytes: Uint8Array,
+  extension: string
+): { width: number; height: number } | null {
+  const u16be = (i: number) => (bytes[i]! << 8) | bytes[i + 1]!;
+  const u32be = (i: number) =>
+    ((bytes[i]! << 24) | (bytes[i + 1]! << 16) | (bytes[i + 2]! << 8) | bytes[i + 3]!) >>> 0;
+  switch (extension.toLowerCase()) {
+    case "png": {
+      // signature (8) + IHDR length/type (8), then width/height as u32be
+      if (bytes.length < 24 || bytes[0] !== 0x89 || bytes[1] !== 0x50) return null;
+      return { width: u32be(16), height: u32be(20) };
+    }
+    case "jpg":
+    case "jpeg": {
+      if (bytes.length < 4 || bytes[0] !== 0xff || bytes[1] !== 0xd8) return null;
+      let i = 2;
+      while (i + 9 < bytes.length) {
+        if (bytes[i] !== 0xff) return null;
+        const marker = bytes[i + 1]!;
+        // SOF0–SOF15 carry the frame dimensions (C4/C8/CC are not SOFs)
+        if (marker >= 0xc0 && marker <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(marker)) {
+          return { width: u16be(i + 7), height: u16be(i + 5) };
+        }
+        if (marker === 0xd8 || (marker >= 0xd0 && marker <= 0xd9)) i += 2;
+        else i += 2 + u16be(i + 2);
+      }
+      return null;
+    }
+    case "webp": {
+      if (bytes.length < 30) return null;
+      const fourCC = String.fromCharCode(bytes[12]!, bytes[13]!, bytes[14]!, bytes[15]!);
+      if (fourCC === "VP8 ") {
+        // lossy: 3-byte frame tag + 9D 01 2A, then 14-bit width/height (LE)
+        return {
+          width: (bytes[26]! | (bytes[27]! << 8)) & 0x3fff,
+          height: (bytes[28]! | (bytes[29]! << 8)) & 0x3fff
+        };
+      }
+      if (fourCC === "VP8L") {
+        // lossless: 0x2F then width-1 (14 bits) and height-1 (14 bits), bitpacked LE
+        if (bytes[20] !== 0x2f) return null;
+        const b = (i: number) => bytes[21 + i]!;
+        const width = 1 + (((b(1) & 0x3f) << 8) | b(0));
+        const height = 1 + (((b(3) & 0x0f) << 10) | (b(2) << 2) | (b(1) >> 6));
+        return { width, height };
+      }
+      if (fourCC === "VP8X") {
+        // extended: canvas width-1 / height-1 as 24-bit LE
+        const width = 1 + (bytes[24]! | (bytes[25]! << 8) | (bytes[26]! << 16));
+        const height = 1 + (bytes[27]! | (bytes[28]! << 8) | (bytes[29]! << 16));
+        return { width, height };
+      }
+      return null;
+    }
+    default:
+      return null;
+  }
+}
+
 export async function decodeImage(
   bytes: Uint8Array,
   extension: string,
   maxPixels?: number
 ): Promise<RawImage> {
+  // HEIC guards inside decodeHeic (dims come from the decoder handle); the
+  // container formats guard here, before the decoder allocates the frame.
+  if (maxPixels) {
+    const dims = readImageDimensions(bytes, extension);
+    if (dims) assertPixelLimit(dims, maxPixels);
+  }
   switch (extension.toLowerCase()) {
     case "heic":
     case "heif":

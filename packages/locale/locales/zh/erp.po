@@ -8813,19 +8813,19 @@ msgid "Invoice"
 msgstr "发票"
 
 msgid "Invoice Address"
-msgstr ""
+msgstr "发票地址"
 
 msgid "Invoice Contact"
 msgstr "发票联系人"
 
 msgid "Invoice Contact Email"
-msgstr ""
+msgstr "发票联系人电子邮箱"
 
 msgid "Invoice Contact Name"
-msgstr ""
+msgstr "发票联系人姓名"
 
 msgid "Invoice Contact Phone"
-msgstr ""
+msgstr "发票联系人电话"
 
 msgid "Invoice customer"
 msgstr "发票客户"
@@ -13128,13 +13128,13 @@ msgid "Purchasing Contact"
 msgstr "采购联系人"
 
 msgid "Purchasing Contact Email"
-msgstr ""
+msgstr "采购联系人电子邮箱"
 
 msgid "Purchasing Contact Name"
-msgstr ""
+msgstr "采购联系人姓名"
 
 msgid "Purchasing Contact Phone"
-msgstr ""
+msgstr "采购联系人电话"
 
 msgid "Purchasing Invoices"
 msgstr "采购发票"
@@ -15496,19 +15496,19 @@ msgid "Shipping"
 msgstr "运输"
 
 msgid "Shipping Address"
-msgstr ""
+msgstr "收货地址"
 
 msgid "Shipping Contact"
 msgstr "配送联系人"
 
 msgid "Shipping Contact Email"
-msgstr ""
+msgstr "收货联系人电子邮箱"
 
 msgid "Shipping Contact Name"
-msgstr ""
+msgstr "收货联系人姓名"
 
 msgid "Shipping Contact Phone"
-msgstr ""
+msgstr "收货联系人电话"
 
 msgid "Shipping Cost"
 msgstr "运费"

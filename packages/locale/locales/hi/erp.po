@@ -8813,19 +8813,19 @@ msgid "Invoice"
 msgstr "चालान"
 
 msgid "Invoice Address"
-msgstr ""
+msgstr "चालान पता"
 
 msgid "Invoice Contact"
 msgstr "चालान संपर्क"
 
 msgid "Invoice Contact Email"
-msgstr ""
+msgstr "चालान संपर्क ईमेल"
 
 msgid "Invoice Contact Name"
-msgstr ""
+msgstr "चालान संपर्क नाम"
 
 msgid "Invoice Contact Phone"
-msgstr ""
+msgstr "चालान संपर्क फोन"
 
 msgid "Invoice customer"
 msgstr "चालान ग्राहक"
@@ -13128,13 +13128,13 @@ msgid "Purchasing Contact"
 msgstr "क्रय संपर्क"
 
 msgid "Purchasing Contact Email"
-msgstr ""
+msgstr "क्रय संपर्क ईमेल"
 
 msgid "Purchasing Contact Name"
-msgstr ""
+msgstr "क्रय संपर्क नाम"
 
 msgid "Purchasing Contact Phone"
-msgstr ""
+msgstr "क्रय संपर्क फोन"
 
 msgid "Purchasing Invoices"
 msgstr "क्रय चालान"
@@ -15496,19 +15496,19 @@ msgid "Shipping"
 msgstr "शिपिंग"
 
 msgid "Shipping Address"
-msgstr ""
+msgstr "डिलीवरी पता"
 
 msgid "Shipping Contact"
 msgstr "शिपिंग संपर्क"
 
 msgid "Shipping Contact Email"
-msgstr ""
+msgstr "डिलीवरी संपर्क ईमेल"
 
 msgid "Shipping Contact Name"
-msgstr ""
+msgstr "डिलीवरी संपर्क नाम"
 
 msgid "Shipping Contact Phone"
-msgstr ""
+msgstr "डिलीवरी संपर्क फोन"
 
 msgid "Shipping Cost"
 msgstr "शिपिंग लागत"

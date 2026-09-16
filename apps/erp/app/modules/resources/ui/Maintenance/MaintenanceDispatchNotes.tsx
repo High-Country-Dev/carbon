@@ -38,7 +38,12 @@ import { LuEllipsisVertical, LuUpload } from "react-icons/lu";
 import { Await, useRevalidator } from "react-router";
 import { DocumentPreview, FileDropzone } from "~/components";
 import DocumentIcon from "~/components/DocumentIcon";
-import { useImageUpload, usePermissions, useUser } from "~/hooks";
+import {
+  useHeicConversion,
+  useImageUpload,
+  usePermissions,
+  useUser
+} from "~/hooks";
 import { getDocumentType } from "~/modules/shared";
 import type { StorageItem } from "~/types";
 import { path } from "~/utils/path";
@@ -187,6 +192,7 @@ function MaintenanceFilesContent({
     [company.id, dispatchId]
   );
 
+  const ensureNoHeic = useHeicConversion();
   const upload = useCallback(
     async (filesToUpload: File[]) => {
       if (!carbon) {
@@ -194,7 +200,10 @@ function MaintenanceFilesContent({
         return;
       }
 
-      for (const file of filesToUpload) {
+      const uploadable = await ensureNoHeic(filesToUpload);
+      if (!uploadable) return;
+
+      for (const file of uploadable) {
         const filePath = getFilePath(file.name);
 
         const result = await carbon.storage
@@ -212,7 +221,7 @@ function MaintenanceFilesContent({
       }
       revalidator.revalidate();
     },
-    [carbon, getFilePath, revalidator, t]
+    [ensureNoHeic, carbon, getFilePath, revalidator, t]
   );
 
   const download = useCallback(
