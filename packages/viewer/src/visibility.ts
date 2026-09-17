@@ -12,9 +12,9 @@ export type ComponentVisual = "solid" | "active" | "hidden" | "ghost";
  * The two modes above are independent axes, which is the right model for the
  * renderer and the wrong one for the person looking at the screen: nine
  * combinations, most of them meaningless, asked through two icon triplets.
- * A view is a named point in that space — the three ways people actually want
- * to look at an assembly — so the UI exposes one control with one concept
- * while the renderer keeps both axes.
+ * A view is a named point in that space — the ways people actually want to
+ * look at an assembly — so the UI exposes one control with one concept while
+ * the renderer keeps both axes.
  */
 export const ASSEMBLY_VIEWS = ["build", "focus", "isolate", "full"] as const;
 

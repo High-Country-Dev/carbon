@@ -232,9 +232,9 @@ export const AssemblyPlayer = forwardRef<
   const [cameraMode, setCameraMode] = useState<"auto" | "free">("auto");
   // Stable identity — the scene re-subscribes its controls listener otherwise.
   const handleFreeCamera = useCallback(() => setCameraMode("free"), []);
-  // The two visibility axes are exposed as three NAMED views rather than as the
-  // axes themselves. Six icon buttons made the reader learn a two-axis model to
-  // ask one question ("what am I fitting right now?"); a named view answers it
+  // The two visibility axes are exposed as NAMED views rather than as the axes
+  // themselves. Six icon buttons made the reader learn a two-axis model to ask
+  // one question ("what am I fitting right now?"); a named view answers it
   // directly, reads the same in ERP and MES, and needs no icon to be decoded.
   // The axes are untouched underneath — a view is purely a derived pair.
   const [view, setView] = useState<AssemblyView>(() =>
@@ -2647,8 +2647,8 @@ function PauseIcon() {
 /**
  * The button text and its spoken form, for each named view.
  *
- * The visible label is one word so three of them fit the narrow MES centre
- * column; `description` is what a screen reader announces, since "Build" alone
+ * The visible label is one word so they all fit the narrow MES centre column;
+ * `description` is what a screen reader announces, since "Build" alone
  * does not say what changes. English lives here rather than going through
  * Lingui because `@carbon/viewer` is deliberately i18n-free — see
  * `packages/viewer/AGENTS.md`; the apps translate around it.
