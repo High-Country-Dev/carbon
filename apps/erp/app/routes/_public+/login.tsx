@@ -65,7 +65,7 @@ import {
 import {
   isSelfSignupBlockedForEmail,
   SELF_SIGNUP_BLOCKED_MESSAGE
-} from "~/modules/shared/shared.server";
+} from "~/modules/shared/self-signup-blocklist.server";
 import type { Result } from "~/types";
 import { path } from "~/utils/path";
 
