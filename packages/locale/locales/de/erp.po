@@ -593,6 +593,10 @@ msgstr "Eine Abschreibungsmethode, die jede Periode einen festen Prozentsatz des
 msgid "A depreciation method that charges an equal amount each period across the asset's useful life."
 msgstr "Eine Abschreibungsmethode, die über die gesamte Nutzungsdauer des Vermögenswerts einen gleichen Betrag pro Periode belastet."
 
+#. placeholder {0}: file.name
+msgid "A file named {0} already exists — delete or rename it first"
+msgstr "Eine Datei mit dem Namen {0} existiert bereits – löschen oder umbenennen Sie sie zuerst"
+
 msgid "A firm customer commitment to deliver; fulfillment status splits across ship and invoice before reaching Completed."
 msgstr "Eine feste Kundenvereinbarung zum Liefern; der Erfüllungsstatus teilt sich zwischen Versand und Rechnung auf, bevor er als Abgeschlossen erreicht wird."
 

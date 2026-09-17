@@ -593,6 +593,10 @@ msgstr "Un método de depreciación que carga un porcentaje fijo del valor en li
 msgid "A depreciation method that charges an equal amount each period across the asset's useful life."
 msgstr "Un método de depreciación que carga una cantidad igual cada período durante la vida útil del activo."
 
+#. placeholder {0}: file.name
+msgid "A file named {0} already exists — delete or rename it first"
+msgstr "Un archivo llamado {0} ya existe — elimine o renombre el archivo primero"
+
 msgid "A firm customer commitment to deliver; fulfillment status splits across ship and invoice before reaching Completed."
 msgstr "Un compromiso firme del cliente para entregar; el estado de cumplimiento se divide entre envío e factura antes de llegar a Completado."
 

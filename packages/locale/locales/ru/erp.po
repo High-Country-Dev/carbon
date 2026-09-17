@@ -593,6 +593,10 @@ msgstr "Метод амортизации, который списывает ф�
 msgid "A depreciation method that charges an equal amount each period across the asset's useful life."
 msgstr "Метод амортизации, который списывает равную сумму каждый период в течение срока полезного использования актива."
 
+#. placeholder {0}: file.name
+msgid "A file named {0} already exists — delete or rename it first"
+msgstr "Файл с именем {0} уже существует — удалите или переименуйте его сначала"
+
 msgid "A firm customer commitment to deliver; fulfillment status splits across ship and invoice before reaching Completed."
 msgstr "Твердое обязательство покупателя осуществить поставку; статус выполнения разделяется на отгрузку и счет-фактуру до достижения статуса Завершено."
 

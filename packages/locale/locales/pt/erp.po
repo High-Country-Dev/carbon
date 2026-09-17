@@ -593,6 +593,10 @@ msgstr "Um método de depreciação que cobra uma porcentagem fixa do valor cont
 msgid "A depreciation method that charges an equal amount each period across the asset's useful life."
 msgstr "Um método de depreciação que cobra uma quantidade igual cada período durante a vida útil do ativo."
 
+#. placeholder {0}: file.name
+msgid "A file named {0} already exists — delete or rename it first"
+msgstr "Um arquivo nomeado {0} já existe — exclua ou renomeie-o primeiro"
+
 msgid "A firm customer commitment to deliver; fulfillment status splits across ship and invoice before reaching Completed."
 msgstr "Um compromisso firme do cliente para entregar; o status de cumprimento se divide entre remessa e fatura antes de alcançar Concluído."
 
@@ -5952,7 +5956,7 @@ msgid "Documents"
 msgstr "Documentos"
 
 msgid "Documents pushes invoices, bills and payments as native provider documents; their journals are recorded as covered by the document. It also pulls payments recorded in the provider back into Carbon, closing the matching invoice or bill and posting a Carbon GL journal. Off records them as deliberately excluded."
-msgstr "Documentos envia faturas, contas e pagamentos como documentos do provedor nativos; seus diários são registrados como cobertos pelo documento. Também puxa os pagamentos registrados no provedor de volta ao Carbon, fechando a fatura ou conta correspondente e contabilizando um diário de GL do Carbon. Desativado os registra como deliberadamente excluído."
+msgstr "O recurso Documentos envia faturas, contas e pagamentos como documentos nativos do provedor; seus diários são registrados como cobertos pelo documento. Também puxa os pagamentos registrados no provedor de volta ao Carbon, fechando a fatura ou conta correspondente e contabilizando um diário de GL do Carbon. A opção Desativado registra-os como deliberadamente excluídos."
 
 msgid "Documents you open will show up here for quick access."
 msgstr "Documentos que abrir aparecerão aqui para acesso rápido."
@@ -5986,7 +5990,7 @@ msgid "Download Labels"
 msgstr "Baixar Etiquetas"
 
 msgid "Download Link"
-msgstr "Link de Baixar"
+msgstr "Link de download"
 
 msgid "Download PDF"
 msgstr "Baixar PDF"
@@ -17616,7 +17620,7 @@ msgid "This counterparty has nothing outstanding — the payment will be recorde
 msgstr "Este terceiro não tem nada pendente — o pagamento será registrado em conta."
 
 msgid "This download link is invalid or has been tampered with."
-msgstr "Este link de download é inválido ou foi violado."
+msgstr "Este link de download é inválido ou foi adulterado."
 
 msgid "This file is no longer available, or you don't have permission to download it."
 msgstr "Este arquivo não está mais disponível, ou você não tem permissão para baixá-lo."

@@ -593,6 +593,10 @@ msgstr "毎期残り帳簿価額の一定の割合を請求する減価償却方
 msgid "A depreciation method that charges an equal amount each period across the asset's useful life."
 msgstr "資産の耐用年数全体にわたって、毎期同じ金額を請求する減価償却方法。"
 
+#. placeholder {0}: file.name
+msgid "A file named {0} already exists — delete or rename it first"
+msgstr "ファイル {0} は既に存在します — 削除するか先に名前を変更してください"
+
 msgid "A firm customer commitment to deliver; fulfillment status splits across ship and invoice before reaching Completed."
 msgstr "得意先からの確定的な納期承諾；充足状況は出荷と請求書にわたって分散され、完了に達する前に処理されます。"
 

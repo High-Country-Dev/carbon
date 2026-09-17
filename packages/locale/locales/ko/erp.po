@@ -593,6 +593,10 @@ msgstr "각 기간마다 남은 장부가액의 고정 비율을 청구하는 �
 msgid "A depreciation method that charges an equal amount each period across the asset's useful life."
 msgstr "자산의 내용연수에 걸쳐 매 기간마다 동일한 금액을 청구하는 감가상각 방법입니다."
 
+#. placeholder {0}: file.name
+msgid "A file named {0} already exists — delete or rename it first"
+msgstr "{0} 파일이 이미 존재합니다 — 먼저 삭제하거나 이름을 바꾸세요"
+
 msgid "A firm customer commitment to deliver; fulfillment status splits across ship and invoice before reaching Completed."
 msgstr "배송을 위한 확정된 고객 약정이며, 이행 상태는 완료됨에 도달하기 전에 배송 및 송장에 걸쳐 진행됩니다."
 

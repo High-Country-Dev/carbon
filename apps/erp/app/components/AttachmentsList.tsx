@@ -1,6 +1,6 @@
 import { useCarbon } from "@carbon/auth";
 import { convertKbToString } from "@carbon/files";
-import { MediaUploader } from "@carbon/files/media";
+import { MediaUploader, wasConvertedFromHeic } from "@carbon/files/media";
 import {
   Badge,
   HStack,
@@ -96,6 +96,17 @@ export default function AttachmentsList({
         for (const file of files) {
           const safeName = stripSpecialCharacters(file.name);
           const storagePath = `${company.id}/supplier-interaction/${supplierInteractionId}/${safeName}`;
+          if (wasConvertedFromHeic(file)) {
+            const existing = await carbon.storage
+              .from("private")
+              .info(storagePath);
+            if (!existing.error && existing.data) {
+              toast.error(
+                t`A file named ${file.name} already exists — delete or rename it first`
+              );
+              continue;
+            }
+          }
           const upload = await carbon.storage
             .from("private")
             .upload(storagePath, file, {

@@ -593,6 +593,10 @@ msgstr "Un metodo di ammortamento che addebita una percentuale fissa del valore 
 msgid "A depreciation method that charges an equal amount each period across the asset's useful life."
 msgstr "Un metodo di ammortamento che addebita un importo uguale ogni periodo durante la vita utile dell'asset."
 
+#. placeholder {0}: file.name
+msgid "A file named {0} already exists — delete or rename it first"
+msgstr "Un file denominato {0} esiste già — eliminalo o rinominalo prima"
+
 msgid "A firm customer commitment to deliver; fulfillment status splits across ship and invoice before reaching Completed."
 msgstr "Un impegno fermo del cliente a consegnare; lo stato di adempimento si divide tra spedizione e fattura prima di raggiungere Completato."
 

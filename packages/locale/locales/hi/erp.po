@@ -593,6 +593,10 @@ msgstr "एक मूल्यह्रास विधि जो प्रत�
 msgid "A depreciation method that charges an equal amount each period across the asset's useful life."
 msgstr "एक मूल्यह्रास विधि जो संपत्ति के उपयोगी जीवन में प्रत्येक अवधि में समान राशि चार्ज करती है।"
 
+#. placeholder {0}: file.name
+msgid "A file named {0} already exists — delete or rename it first"
+msgstr "{0} नाम की फ़ाइल पहले से मौजूद है — पहले इसे हटाएँ या इसका नाम बदलें"
+
 msgid "A firm customer commitment to deliver; fulfillment status splits across ship and invoice before reaching Completed."
 msgstr "ग्राहक की एक मजबूत प्रतिबद्धता देने के लिए; पूरा होने की स्थिति पूर्ण तक पहुंचने से पहले शिपमेंट और चालान में विभाजित होती है।"
 

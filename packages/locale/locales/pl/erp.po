@@ -593,6 +593,10 @@ msgstr "Metoda amortyzacji, która obciąża stały procent pozostałej wartośc
 msgid "A depreciation method that charges an equal amount each period across the asset's useful life."
 msgstr "Metoda amortyzacji, która obciąża równą kwotę każdego okresu przez cały okres użytkowania środka trwałego."
 
+#. placeholder {0}: file.name
+msgid "A file named {0} already exists — delete or rename it first"
+msgstr "Plik o nazwie {0} już istnieje — usuń go lub zmień nazwę"
+
 msgid "A firm customer commitment to deliver; fulfillment status splits across ship and invoice before reaching Completed."
 msgstr "Stanowcze zobowiązanie klienta do dostarczenia; status spełnienia dzieli się między wysyłką a fakturą, zanim osiągnie Stan Ukończony."
 

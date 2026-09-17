@@ -177,6 +177,17 @@ export async function prepareImageUpload(
   }
 }
 
+// Conversion RENAMES a file (photo.heic → photo.jpg), which can silently
+// collide with a photo.jpg already in storage under upsert semantics. The
+// upload sites probe the target path for files this set marks; a WeakSet
+// holds no references once the File is gone.
+const convertedFromHeic = new WeakSet<File>();
+
+/** Was this File produced by HEIC conversion (and therefore renamed)? */
+export function wasConvertedFromHeic(file: File): boolean {
+  return convertedFromHeic.has(file);
+}
+
 /**
  * HEIC/HEIF → JPEG at original dimensions. HEIC must never be stored — call
  * this before any upload that could carry an iPhone photo.
@@ -185,7 +196,14 @@ export async function convertHeicToJpeg(
   client: StorageClient,
   { bucket, directory, file }: { bucket: string; directory: string; file: File }
 ): Promise<File> {
-  return prepareImageUpload(client, { bucket, directory, file, convert: true });
+  const converted = await prepareImageUpload(client, {
+    bucket,
+    directory,
+    file,
+    convert: true
+  });
+  convertedFromHeic.add(converted);
+  return converted;
 }
 
 /**

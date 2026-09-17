@@ -593,6 +593,10 @@ msgstr "Kalan defter değerinin her dönem sabit bir yüzdesini şarj eden bir a
 msgid "A depreciation method that charges an equal amount each period across the asset's useful life."
 msgstr "Varlığın Faydalı ömrü boyunca her dönemde eşit bir tutarı yükleyen Amortisman yöntemidir."
 
+#. placeholder {0}: file.name
+msgid "A file named {0} already exists — delete or rename it first"
+msgstr "Adı {0} olan bir dosya zaten var — önce silin veya yeniden adlandırın"
+
 msgid "A firm customer commitment to deliver; fulfillment status splits across ship and invoice before reaching Completed."
 msgstr "Müşterinin teslim etme konusunda kesin bir taahhüdü; yerine getirme durumu Tamamlanan statüsüne ulaşmadan önce gönderim ve fatura arasında bölünür."
 

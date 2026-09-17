@@ -1,5 +1,6 @@
 import { useCarbon } from "@carbon/auth";
 import { convertKbToString, downloadBlob } from "@carbon/files";
+import { wasConvertedFromHeic } from "@carbon/files/media";
 import { getLogger } from "@carbon/logger";
 import {
   Card,
@@ -73,6 +74,17 @@ export default function DefaultAttachmentsPanel({
       }
       for (const file of acceptedFiles) {
         const safeName = stripSpecialCharacters(file.name);
+        if (wasConvertedFromHeic(file)) {
+          const existing = await carbon.storage
+            .from("private")
+            .info(fullPath(safeName));
+          if (!existing.error && existing.data) {
+            toast.error(
+              t`A file named ${file.name} already exists — delete or rename it first`
+            );
+            continue;
+          }
+        }
         const upload = await carbon.storage
           .from("private")
           .upload(fullPath(safeName), file, {

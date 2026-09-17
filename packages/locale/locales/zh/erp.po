@@ -593,6 +593,10 @@ msgstr "一种折旧方法，每期对剩余账面价值收取固定百分比—
 msgid "A depreciation method that charges an equal amount each period across the asset's useful life."
 msgstr "一种折旧方法，在资产的使用年限内每期收取等额费用。"
 
+#. placeholder {0}: file.name
+msgid "A file named {0} already exists — delete or rename it first"
+msgstr "文件 {0} 已存在 — 请先删除或重新命名"
+
 msgid "A firm customer commitment to deliver; fulfillment status splits across ship and invoice before reaching Completed."
 msgstr "客户的明确交货承诺；履行状态在装运和发票之间分摊，最终达到已完成。"
 

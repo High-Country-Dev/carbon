@@ -1,5 +1,9 @@
 import { useCarbon } from "@carbon/auth";
-import { DuplicateFileNameError, MediaUploader } from "@carbon/files/media";
+import {
+  DuplicateFileNameError,
+  MediaUploader,
+  wasConvertedFromHeic
+} from "@carbon/files/media";
 import { toast } from "@carbon/react";
 import { useLingui } from "@lingui/react/macro";
 import { useCallback, useMemo, useState } from "react";
@@ -43,9 +47,17 @@ export function useFileUpload(options: FileUploadOptions = {}) {
     [carbon, company.id]
   );
 
+  const {
+    getPath: baseGetPath,
+    onSuccess: baseOnSuccess,
+    onError: baseOnError
+  } = options;
+
   const upload = useCallback(
     async (files: File[], overrides: FileUploadOptions = {}) => {
-      const { getPath, onSuccess, onError } = { ...options, ...overrides };
+      const getPath = overrides.getPath ?? baseGetPath;
+      const onSuccess = overrides.onSuccess ?? baseOnSuccess;
+      const onError = overrides.onError ?? baseOnError;
       if (!getPath) throw new Error("useFileUpload requires getPath");
       if (!carbon || !uploader) {
         toast.error(t`Carbon client not available`);
@@ -67,10 +79,27 @@ export function useFileUpload(options: FileUploadOptions = {}) {
         }
 
         for (const file of prepared) {
+          const targetPath = getPath(file);
+          // Conversion renamed this file (photo.heic → photo.jpg) — under
+          // upsert semantics it could silently replace an existing photo.jpg
+          // the user never mentioned. Plain same-name re-uploads keep the
+          // replace-by-name behavior; only the masked case is refused.
+          if (wasConvertedFromHeic(file)) {
+            const existing = await carbon.storage
+              .from("private")
+              .info(targetPath);
+            if (!existing.error && existing.data) {
+              toast.error(
+                t`A file named ${file.name} already exists — delete or rename it first`
+              );
+              onError?.(file);
+              continue;
+            }
+          }
           toast.info(t`Uploading ${file.name}`);
           const result = await carbon.storage
             .from("private")
-            .upload(getPath(file), file, {
+            .upload(targetPath, file, {
               cacheControl: `${12 * 60 * 60}`,
               upsert: true
             });
@@ -86,8 +115,8 @@ export function useFileUpload(options: FileUploadOptions = {}) {
         setIsUploading(false);
       }
     },
-    // options fields are listed individually so callers may pass an inline object
-    [carbon, uploader, t, options.getPath, options.onSuccess, options.onError]
+    // options fields are destructured above so callers may pass an inline object
+    [carbon, uploader, t, baseGetPath, baseOnSuccess, baseOnError]
   );
 
   return { upload, isUploading };
