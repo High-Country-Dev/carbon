@@ -156,3 +156,13 @@ CREATE POLICY "DELETE" ON "public"."customerBankAccount"
 FOR DELETE USING (
   "companyId" = ANY ((SELECT get_companies_with_employee_permission('accounting_delete'))::text[])
 );
+
+-- Register both tables for custom fields. Without these rows the tables never
+-- appear in Settings → Custom Fields, so the <CustomFormFields> block on each
+-- form has nothing to render and country-specific extras (US ACH account type,
+-- an Indian purpose code, a branch name) have nowhere structured to live.
+INSERT INTO "customFieldTable" ("table", "module", "name")
+VALUES
+  ('supplierBankAccount', 'Purchasing', 'Supplier Bank Account'),
+  ('customerBankAccount', 'Sales', 'Customer Bank Account')
+ON CONFLICT ("table") DO NOTHING;
