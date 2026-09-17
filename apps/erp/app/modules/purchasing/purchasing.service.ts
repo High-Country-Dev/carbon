@@ -1321,7 +1321,8 @@ export async function updatePurchaseOrderStatus(
   update: {
     id: string;
     status: (typeof purchaseOrderStatusType)[number];
-    assignee: null | undefined;
+    /** `null` clears the assignee (closing); omit it to leave the assignee alone. */
+    assignee?: null;
     updatedBy: string;
   }
 ) {

@@ -29,6 +29,7 @@ import * as ReactPhoneInput from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
 import { useControlField, useField } from "../hooks";
 import { useFormStateContext } from "../internal/formStateContext";
+import { toE164 } from "./phone";
 
 const PhoneInputComponent = ReactPhoneInput.default;
 
@@ -79,7 +80,7 @@ const PhoneInput: ForwardRefExoticComponent<PhoneInputProps> = forwardRef<
           id: name,
           ...props
         })}
-        value={value}
+        value={toE164(value)}
         /**
          * Handles the onChange event.
          *

@@ -474,6 +474,31 @@ export async function processStripeEvent({
       log.error("Error processing webhook", { error });
       throw new Error("Stripe webhook handler failed");
     }
+  } else if (eventType === "customer.subscription.resumed") {
+    // Quantity updates are skipped while a subscription is paused (see
+    // updateSubscriptionQuantityForCompany), so the seat count can be stale
+    // by the time billing resumes. Bring it back in line now.
+    const data = event.data.object as Stripe.Subscription;
+    const { customer } = data;
+
+    if (typeof customer !== "string") {
+      throw new Error("Stripe webhook handler failed");
+    }
+
+    try {
+      const companyPlan = await getCarbonServiceRole()
+        .from("companyPlan")
+        .select("id")
+        .eq("stripeCustomerId", customer)
+        .maybeSingle();
+      if (companyPlan.error) throw companyPlan.error;
+      if (companyPlan.data?.id) {
+        await updateSubscriptionQuantityForCompany(companyPlan.data.id);
+      }
+    } catch (error) {
+      log.error("Error processing webhook", { error });
+      throw new Error("Stripe webhook handler failed");
+    }
   } else if (
     eventType === "invoice.sent" ||
     eventType === "invoice.payment_succeeded" ||
@@ -702,6 +727,18 @@ export async function updateSubscriptionQuantityForCompany(companyId: string) {
     ) {
       log.error("No subscription items found for subscription", {
         stripeSubscriptionId
+      });
+      return;
+    }
+
+    // A paused subscription (trial ended with no payment method) refuses any
+    // update that would create invoice items, and a quantity change prorates.
+    // Skip it here; the `customer.subscription.resumed` webhook re-syncs the
+    // quantity once billing is live again.
+    if (subscription.status === "paused") {
+      log.debug("Skipping quantity update for paused Stripe subscription", {
+        stripeSubscriptionId,
+        companyId
       });
       return;
     }
