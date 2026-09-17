@@ -94,25 +94,21 @@ export async function fetchAllRecords<T extends object>(
       Array.from({ length: PAGE_CONCURRENCY }, (_, i) => fetchPage(page + i))
     );
 
+    // In page order, so the first SHORT page ends the read. Pages after it are
+    // speculative — they were issued before we knew where the data stopped, and
+    // a read past the end can legitimately fail (PostgREST answers an
+    // out-of-range `Range` with 416). Scanning every result for an error first
+    // would turn that into a failed fetch after the rows were already in hand.
     for (const result of results) {
       if (result.error) {
         return { data: null, count: null, error: result.error };
       }
-    }
 
-    // Promise.all preserves order, so pages append in range order.
-    let done = false;
-    for (const result of results) {
       const rows = (result.data ?? []) as T[];
       allData.push(...rows);
       if (rows.length < BATCH_SIZE) {
-        done = true;
-        break;
+        return { data: allData, count: allData.length, error: null };
       }
-    }
-
-    if (done) {
-      return { data: allData, count: allData.length, error: null };
     }
   }
 

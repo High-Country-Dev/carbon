@@ -27,6 +27,7 @@ import {
   useMount
 } from "@carbon/react";
 import { Trans, useLingui } from "@lingui/react/macro";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { LuFilter, LuTriangleAlert } from "react-icons/lu";
 import { useFetcher } from "react-router";
@@ -40,11 +41,7 @@ import { itemType, methodItemType } from "~/modules/shared";
 import { useItems } from "~/stores";
 import { latestRevisionByReadableId } from "~/stores/items";
 import { path } from "~/utils/path";
-import {
-  cachedApiQuery,
-  getCompanyId,
-  itemQuantitiesQuery
-} from "~/utils/react-query";
+import { getCompanyId, itemQuantitiesQuery } from "~/utils/react-query";
 import { MethodItemTypeIcon } from "../Icons";
 import { ItemLifecycleBadge } from "../ItemLifecycleBadge";
 import type { EntityKey } from "./emptyStates";
@@ -105,41 +102,45 @@ const useTranslatedItemType = () => {
   };
 };
 
+// Stable identity, so a picker with no quantities does not re-run its options
+// memo on every render.
+const NO_QUANTITIES: Record<string, number> = {};
+
 /**
  * On-hand per item for the option badge, keyed by the location in play ("all"
  * totals every location). This used to ride on the items store, which meant the
  * whole `itemStockQuantities` table (item x location) was downloaded into the
  * browser on every page load, re-polled every 10 minutes and re-read in full on
  * every stock movement — to decorate a dropdown. Fetching it here means pages
- * with no item picker fetch nothing, and `cachedApiQuery` dedupes across every
+ * with no item picker fetch nothing, and the shared client dedupes across every
  * picker on the page.
+ *
+ * An OBSERVED query, not the imperative `cachedApiQuery` read-through: a stock
+ * movement invalidates this key (`RealtimeDataProvider`), and only an observer
+ * re-fetches and re-renders. Copying one result into state left an open picker
+ * showing yesterday's numbers until it remounted.
  */
 function useItemQuantities(locationId?: string) {
-  const [quantities, setQuantities] = useState<Record<string, number>>({});
   const scope = locationId ?? "all";
+  const { queryKey, staleTime } = itemQuantitiesQuery(scope, getCompanyId());
 
-  useEffect(() => {
-    let cancelled = false;
+  const { data } = useQuery({
+    queryKey,
+    staleTime,
+    queryFn: async () => {
+      const response = await fetch(path.to.api.itemQuantities(scope));
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+      return (await response.json()) as {
+        data: Record<string, number> | null;
+      };
+    }
+  });
 
-    cachedApiQuery<{ data: Record<string, number> | null }>(
-      itemQuantitiesQuery(scope, getCompanyId()),
-      path.to.api.itemQuantities(scope)
-    )
-      .then((result) => {
-        if (!cancelled) setQuantities(result?.data ?? {});
-      })
-      // A badge is decoration — a failed read leaves it off rather than
-      // breaking the picker.
-      .catch(() => {
-        if (!cancelled) setQuantities({});
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [scope]);
-
-  return quantities;
+  // A badge is decoration — a failed read leaves it off rather than breaking
+  // the picker.
+  return data?.data ?? NO_QUANTITIES;
 }
 
 const Item = ({

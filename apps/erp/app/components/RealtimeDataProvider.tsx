@@ -306,11 +306,15 @@ const RealtimeDataProvider = ({ children }: { children: React.ReactNode }) => {
             // only when one is mounted. Re-reading the whole table here cost a
             // full download per burst of stock movements for a dropdown badge
             // that may not be on screen at all.
+            // Every key under this prefix, not just this company's: the
+            // companyId term of the key comes from `getCompanyId()`, which
+            // reads `document.cookie` — and every cookie here is httpOnly, so
+            // it is always "null". Matching on it invalidated nothing. Keys for
+            // another company would only exist after a company switch, which
+            // reloads the page and empties this in-memory cache anyway.
             window.clientCache?.invalidateQueries({
               predicate: (query) =>
-                (query.queryKey as unknown[])[0] ===
-                  ITEM_QUANTITIES_QUERY_KEY &&
-                (query.queryKey as unknown[])[1] === companyId
+                (query.queryKey as unknown[])[0] === ITEM_QUANTITIES_QUERY_KEY
             });
           }
         )

@@ -103,6 +103,19 @@ describe("fetchAllRecords", () => {
     expect(result.error?.message).toBe("boom");
   });
 
+  it("ignores a failure on a speculative page past the end of the data", async () => {
+    // 1500 rows: page 1 is short, so it ends the read. Pages 2-4 went out in
+    // the same wave before that was known, and a read past the end can fail
+    // (PostgREST answers an out-of-range `Range` with 416) — that must not
+    // discard rows already in hand.
+    const { build } = fakeTable(rowsOf(1500), { errorOnPage: 2 });
+
+    const result = await fetchAllRecords<Row>(build);
+
+    expect(result.error).toBeNull();
+    expect(result.data).toHaveLength(1500);
+  });
+
   it("refuses to return a partial read when the server ignores Range", async () => {
     const { build } = fakeTable(rowsOf(1000), { ignoreRange: true });
 
