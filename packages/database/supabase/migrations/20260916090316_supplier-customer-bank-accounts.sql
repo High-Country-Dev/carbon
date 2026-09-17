@@ -34,6 +34,10 @@ CREATE TABLE "supplierBankAccount" (
     -- Shape is validated per-country in the zod layer, not here.
     "bankDetails" JSONB,
 
+    -- Reserved for a future payment integration. Nothing reads these yet: the
+    -- accounts are reference data a person consults, so there is no default to
+    -- select and no archive flow. Deliberately left unindexed and unconstrained
+    -- until something actually consumes them.
     "isPrimary" BOOLEAN NOT NULL DEFAULT FALSE,
     "active" BOOLEAN NOT NULL DEFAULT TRUE,
     "notes" TEXT,
@@ -58,10 +62,6 @@ CREATE INDEX "supplierBankAccount_supplierId_idx" ON "supplierBankAccount" ("sup
 CREATE INDEX "supplierBankAccount_createdBy_idx" ON "supplierBankAccount" ("createdBy");
 CREATE INDEX "supplierBankAccount_updatedBy_idx" ON "supplierBankAccount" ("updatedBy");
 CREATE INDEX "supplierBankAccount_countryCode_idx" ON "supplierBankAccount" ("countryCode");
-
-CREATE UNIQUE INDEX "supplierBankAccount_primary_idx"
-    ON "supplierBankAccount" ("supplierId", "companyId")
-    WHERE "isPrimary" AND "active";
 
 ALTER TABLE "public"."supplierBankAccount" ENABLE ROW LEVEL SECURITY;
 
@@ -114,6 +114,10 @@ CREATE TABLE "customerBankAccount" (
     -- Shape is validated per-country in the zod layer, not here.
     "bankDetails" JSONB,
 
+    -- Reserved for a future payment integration. Nothing reads these yet: the
+    -- accounts are reference data a person consults, so there is no default to
+    -- select and no archive flow. Deliberately left unindexed and unconstrained
+    -- until something actually consumes them.
     "isPrimary" BOOLEAN NOT NULL DEFAULT FALSE,
     "active" BOOLEAN NOT NULL DEFAULT TRUE,
     "notes" TEXT,
@@ -138,10 +142,6 @@ CREATE INDEX "customerBankAccount_customerId_idx" ON "customerBankAccount" ("cus
 CREATE INDEX "customerBankAccount_createdBy_idx" ON "customerBankAccount" ("createdBy");
 CREATE INDEX "customerBankAccount_updatedBy_idx" ON "customerBankAccount" ("updatedBy");
 CREATE INDEX "customerBankAccount_countryCode_idx" ON "customerBankAccount" ("countryCode");
-
-CREATE UNIQUE INDEX "customerBankAccount_primary_idx"
-    ON "customerBankAccount" ("customerId", "companyId")
-    WHERE "isPrimary" AND "active";
 
 ALTER TABLE "public"."customerBankAccount" ENABLE ROW LEVEL SECURITY;
 

@@ -2024,9 +2024,6 @@ msgstr "Arşiv"
 msgid "Archive all"
 msgstr "Tümünü arşivle"
 
-msgid "Archive instead of deleting when an account is closed — payment history keeps pointing at it"
-msgstr ""
-
 msgid "Archived"
 msgstr "Arşivlenmiş"
 
@@ -9939,12 +9936,6 @@ msgstr "Piyasa kuru (USD başına)"
 msgid "Market Rate History (per USD)"
 msgstr "Piyasa kuru geçmişi (USD başına)"
 
-msgid "Marks the account to use when paying this supplier. Only one can be primary."
-msgstr ""
-
-msgid "Marks the account to use when refunding this customer. Only one can be primary."
-msgstr ""
-
 msgid "Marks the person off for every day in the range. They won't be scheduled while they're away."
 msgstr "Kişiyi aralıktaki her gün için işaretler. Uzakta iken çizelgelenmazlar."
 
@@ -12770,12 +12761,6 @@ msgstr "Fiyatlandırma Kuralları"
 
 msgid "Pricing Trace"
 msgstr "Fiyatlandırma İzleme"
-
-msgid "Primary"
-msgstr ""
-
-msgid "Primary Account"
-msgstr ""
 
 msgid "Primary cash account for bank transactions"
 msgstr "Banka işlemleri için birincil nakit hesabı"

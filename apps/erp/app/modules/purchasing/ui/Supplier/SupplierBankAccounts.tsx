@@ -1,5 +1,4 @@
 import {
-  Badge,
   Card,
   CardAction,
   CardContent,
@@ -91,25 +90,11 @@ const SupplierBankAccounts = ({ bankAccounts }: SupplierBankAccountsProps) => {
                 return (
                   <li
                     key={account.id}
-                    className={
-                      account.active === false
-                        ? "border rounded-lg p-4 flex justify-between items-start gap-4 opacity-60"
-                        : "border rounded-lg p-4 flex justify-between items-start gap-4"
-                    }
+                    className="border rounded-lg p-4 flex justify-between items-start gap-4"
                   >
                     <VStack spacing={1}>
                       <HStack>
                         <span className="font-medium">{account.name}</span>
-                        {account.isPrimary && (
-                          <Badge variant="secondary">
-                            <Trans>Primary</Trans>
-                          </Badge>
-                        )}
-                        {account.active === false && (
-                          <Badge variant="outline">
-                            <Trans>Archived</Trans>
-                          </Badge>
-                        )}
                       </HStack>
                       {account.bankName && (
                         <span className="text-muted-foreground text-sm">

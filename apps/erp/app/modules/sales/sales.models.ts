@@ -159,11 +159,6 @@ export const customerBankAccountValidator = z
           })
       )
       .optional(),
-    isPrimary: zfd.checkbox(),
-    // Archive rather than delete: a closed account still has payment history
-    // pointing at it. Requires a control on every form — an unchecked box
-    // submits nothing, so a field with no control would archive every save.
-    active: zfd.checkbox(),
     notes: zfd.text(z.string().optional())
   })
   .superRefine((data, ctx) => {
@@ -186,17 +181,25 @@ export const customerBankAccountValidator = z
       });
     }
 
-    if (
-      config.bankCodeLabel !== null &&
-      data.bankCode &&
-      config.validateBankCode &&
-      !config.validateBankCode(data.bankCode)
-    ) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Invalid bank code for the selected country",
-        path: ["bankCode"]
-      });
+    if (config.bankCodeLabel !== null) {
+      // A country that defines a routing identifier always needs it — there is
+      // no scheme where it is optional.
+      if (!data.bankCode) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "A bank code is required for the selected country",
+          path: ["bankCode"]
+        });
+      } else if (
+        config.validateBankCode &&
+        !config.validateBankCode(data.bankCode)
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Invalid bank code for the selected country",
+          path: ["bankCode"]
+        });
+      }
     }
 
     // Cross-border payments will not route without a BIC, so where the country

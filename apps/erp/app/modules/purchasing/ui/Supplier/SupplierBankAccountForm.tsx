@@ -18,7 +18,6 @@ import { useState } from "react";
 import { useFetcher, useNavigate, useParams } from "react-router";
 import type { z } from "zod";
 import {
-  Boolean,
   Currency,
   CustomFormFields,
   Hidden,
@@ -144,22 +143,12 @@ const SupplierBankAccountForm = ({
                 <Currency name="currencyCode" label={t`Currency`} />
                 <Input name="accountNumber" label={accountLabel} isRequired />
                 {bankCodeLabel && (
-                  <Input name="bankCode" label={bankCodeLabel} />
+                  <Input name="bankCode" label={bankCodeLabel} isRequired />
                 )}
                 <Input
                   name="swiftBic"
                   label={t`SWIFT / BIC`}
                   isRequired={bankFields.requiresSwift}
-                />
-                <Boolean
-                  name="isPrimary"
-                  label={t`Primary Account`}
-                  description={t`Marks the account to use when paying this supplier. Only one can be primary.`}
-                />
-                <Boolean
-                  name="active"
-                  label={t`Active`}
-                  description={t`Archive instead of deleting when an account is closed — payment history keeps pointing at it`}
                 />
                 <TextArea name="notes" label={t`Notes`} />
                 <CustomFormFields table="supplierBankAccount" />

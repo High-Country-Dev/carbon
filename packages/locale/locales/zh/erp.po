@@ -2024,9 +2024,6 @@ msgstr "存档"
 msgid "Archive all"
 msgstr "全部存档"
 
-msgid "Archive instead of deleting when an account is closed — payment history keeps pointing at it"
-msgstr ""
-
 msgid "Archived"
 msgstr "已归档"
 
@@ -9939,12 +9936,6 @@ msgstr "市场汇率（兑美元）"
 msgid "Market Rate History (per USD)"
 msgstr "市场汇率历史（兑美元）"
 
-msgid "Marks the account to use when paying this supplier. Only one can be primary."
-msgstr ""
-
-msgid "Marks the account to use when refunding this customer. Only one can be primary."
-msgstr ""
-
 msgid "Marks the person off for every day in the range. They won't be scheduled while they're away."
 msgstr "在范围内的每一天都标记该人缺席。他们在外出期间不会被安排。"
 
@@ -12770,12 +12761,6 @@ msgstr "定价规则"
 
 msgid "Pricing Trace"
 msgstr "定价追踪"
-
-msgid "Primary"
-msgstr ""
-
-msgid "Primary Account"
-msgstr ""
 
 msgid "Primary cash account for bank transactions"
 msgstr "银行交易的主要现金账户"

@@ -352,14 +352,10 @@ export async function getCustomerBankAccounts(
   client: SupabaseClient<Database>,
   customerId: string
 ) {
-  // Archived accounts are included: excluding them here would make an archived
-  // row unreachable from the UI, with no way to reactivate it.
   return client
     .from("customerBankAccount")
     .select("*")
     .eq("customerId", customerId)
-    .order("active", { ascending: false })
-    .order("isPrimary", { ascending: false })
     .order("name");
 }
 
@@ -378,61 +374,38 @@ export async function upsertCustomerBankAccount(
         customFields?: Json;
       })
 ) {
-  const { customerId, companyId, isPrimary } = bankAccount;
+  const { customerId, companyId } = bankAccount;
 
-  return db.transaction().execute(async (trx) => {
-    // The partial unique index is WHERE "isPrimary" AND "active", so the
-    // demote must match that predicate exactly — demoting archived rows would
-    // clear a flag the index never constrained. Both writes share one
-    // transaction: a demote that commits without its promotion would leave the
-    // customer with no primary account at all.
-    if (isPrimary) {
-      let demote = trx
-        .updateTable("customerBankAccount")
-        .set({ isPrimary: false })
-        .where("customerId", "=", customerId)
-        .where("companyId", "=", companyId)
-        .where("isPrimary", "=", true)
-        .where("active", "=", true);
-
-      if ("id" in bankAccount) {
-        demote = demote.where("id", "!=", bankAccount.id);
-      }
-
-      await demote.execute();
-    }
-
-    // bankDetails is a JSONB column, but the validator types it loosely after
-    // parsing the form's JSON string, so Kysely rejects it against the column's
-    // Json type. Narrow it inside each branch — hoisting the spread above the
-    // `createdBy` check collapses the union and loses that discriminant.
-    if ("createdBy" in bankAccount) {
-      const { bankDetails, ...fields } = bankAccount;
-      return await trx
-        .insertInto("customerBankAccount")
-        .values({ ...fields, bankDetails: bankDetails as Json })
-        .returning("id")
-        .executeTakeFirstOrThrow();
-    }
-
-    const { id, bankDetails, ...update } = bankAccount;
-
-    // customerId and companyId are scoping columns, not editable fields. They
-    // are also re-asserted in the WHERE clause so a forged form value cannot
-    // move this row to another customer.
-    return await trx
-      .updateTable("customerBankAccount")
-      .set({
-        ...update,
-        bankDetails: bankDetails as Json,
-        updatedAt: datetime.timestamp()
-      })
-      .where("id", "=", id)
-      .where("customerId", "=", customerId)
-      .where("companyId", "=", companyId)
+  // bankDetails is a JSONB column, but the validator types it loosely after
+  // parsing the form's JSON string, so Kysely rejects it against the column's
+  // Json type. Narrow it inside each branch — hoisting the spread above the
+  // `createdBy` check collapses the union and loses that discriminant.
+  if ("createdBy" in bankAccount) {
+    const { bankDetails, ...fields } = bankAccount;
+    return await db
+      .insertInto("customerBankAccount")
+      .values({ ...fields, bankDetails: bankDetails as Json })
       .returning("id")
       .executeTakeFirstOrThrow();
-  });
+  }
+
+  const { id, bankDetails, ...update } = bankAccount;
+
+  // customerId and companyId are scoping columns, not editable fields. They are
+  // also re-asserted in the WHERE clause so a forged form value cannot move
+  // this row to another customer.
+  return await db
+    .updateTable("customerBankAccount")
+    .set({
+      ...update,
+      bankDetails: bankDetails as Json,
+      updatedAt: datetime.timestamp()
+    })
+    .where("id", "=", id)
+    .where("customerId", "=", customerId)
+    .where("companyId", "=", companyId)
+    .returning("id")
+    .executeTakeFirstOrThrow();
 }
 
 export async function deleteCustomerContact(

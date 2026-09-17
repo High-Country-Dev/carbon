@@ -86,8 +86,6 @@ export default function EditSupplierBankAccountRoute() {
     accountNumber: bankAccount.accountNumber ?? "",
     bankCode: bankAccount.bankCode ?? "",
     swiftBic: bankAccount.swiftBic ?? "",
-    isPrimary: bankAccount.isPrimary ?? false,
-    active: bankAccount.active ?? true,
     notes: bankAccount.notes ?? ""
   };
 

@@ -86,8 +86,6 @@ export default function NewSupplierBankAccountRoute() {
     accountNumber: "",
     bankCode: "",
     swiftBic: "",
-    isPrimary: false,
-    active: true,
     notes: ""
   };
 

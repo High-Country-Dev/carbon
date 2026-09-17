@@ -2024,9 +2024,6 @@ msgstr "アーカイブ"
 msgid "Archive all"
 msgstr "すべてアーカイブ"
 
-msgid "Archive instead of deleting when an account is closed — payment history keeps pointing at it"
-msgstr ""
-
 msgid "Archived"
 msgstr "アーカイブ済み"
 
@@ -9939,12 +9936,6 @@ msgstr "市場レート（対USD）"
 msgid "Market Rate History (per USD)"
 msgstr "市場レート履歴（対USD）"
 
-msgid "Marks the account to use when paying this supplier. Only one can be primary."
-msgstr ""
-
-msgid "Marks the account to use when refunding this customer. Only one can be primary."
-msgstr ""
-
 msgid "Marks the person off for every day in the range. They won't be scheduled while they're away."
 msgstr "範囲内のすべての日について、その人を休止します。外出中はスケジュール設定されません。"
 
@@ -12770,12 +12761,6 @@ msgstr "価格設定ルール"
 
 msgid "Pricing Trace"
 msgstr "価格設定トレース"
-
-msgid "Primary"
-msgstr ""
-
-msgid "Primary Account"
-msgstr ""
 
 msgid "Primary cash account for bank transactions"
 msgstr "銀行取引の主要な現金勘定"

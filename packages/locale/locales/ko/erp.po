@@ -2024,9 +2024,6 @@ msgstr "보관"
 msgid "Archive all"
 msgstr "전체 보관"
 
-msgid "Archive instead of deleting when an account is closed — payment history keeps pointing at it"
-msgstr ""
-
 msgid "Archived"
 msgstr "보관됨"
 
@@ -9939,12 +9936,6 @@ msgstr "시장 환율 (USD당)"
 msgid "Market Rate History (per USD)"
 msgstr "시장 환율 기록 (USD당)"
 
-msgid "Marks the account to use when paying this supplier. Only one can be primary."
-msgstr ""
-
-msgid "Marks the account to use when refunding this customer. Only one can be primary."
-msgstr ""
-
 msgid "Marks the person off for every day in the range. They won't be scheduled while they're away."
 msgstr "범위 내의 모든 날짜에 대해 해당 사람을 표시합니다. 그들은 휴무 중에 스케줄되지 않습니다."
 
@@ -12770,12 +12761,6 @@ msgstr "가격 규칙"
 
 msgid "Pricing Trace"
 msgstr "가격 책정 추적"
-
-msgid "Primary"
-msgstr ""
-
-msgid "Primary Account"
-msgstr ""
 
 msgid "Primary cash account for bank transactions"
 msgstr "은행 거래를 위한 기본 현금 계정"

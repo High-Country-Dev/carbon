@@ -206,11 +206,14 @@ const BANK_FIELDS: Record<string, BankFieldConfig> = {
     bankCodeLabel: "bsb",
     validateBankCode: isValidBsb
   },
+  // India needs BOTH: the IFSC routes the payment domestically once it lands,
+  // the BIC gets it into the country. Neither substitutes for the other.
   IN: {
     accountLabel: "accountNumber",
     validateAccount: isValidInAccountNumber,
     bankCodeLabel: "ifsc",
-    validateBankCode: isValidIfsc
+    validateBankCode: isValidIfsc,
+    requiresSwift: true
   },
   CA: {
     accountLabel: "accountNumber",

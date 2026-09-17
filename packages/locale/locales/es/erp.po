@@ -2024,9 +2024,6 @@ msgstr "Archivo"
 msgid "Archive all"
 msgstr "Archivar todo"
 
-msgid "Archive instead of deleting when an account is closed — payment history keeps pointing at it"
-msgstr ""
-
 msgid "Archived"
 msgstr "Archivado"
 
@@ -9939,12 +9936,6 @@ msgstr "Tipo de cambio de mercado (por USD)"
 msgid "Market Rate History (per USD)"
 msgstr "Historial del tipo de cambio de mercado (por USD)"
 
-msgid "Marks the account to use when paying this supplier. Only one can be primary."
-msgstr ""
-
-msgid "Marks the account to use when refunding this customer. Only one can be primary."
-msgstr ""
-
 msgid "Marks the person off for every day in the range. They won't be scheduled while they're away."
 msgstr "Marca a la persona como ausente para cada día en el rango. No se programarán mientras estén fuera."
 
@@ -12770,12 +12761,6 @@ msgstr "Reglas de Precios"
 
 msgid "Pricing Trace"
 msgstr "Traza de fijación de precios"
-
-msgid "Primary"
-msgstr ""
-
-msgid "Primary Account"
-msgstr ""
 
 msgid "Primary cash account for bank transactions"
 msgstr "Cuenta de efectivo principal para transacciones bancarias"

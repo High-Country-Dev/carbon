@@ -2024,9 +2024,6 @@ msgstr "संग्रह"
 msgid "Archive all"
 msgstr "सभी को संग्रहित करें"
 
-msgid "Archive instead of deleting when an account is closed — payment history keeps pointing at it"
-msgstr ""
-
 msgid "Archived"
 msgstr "संग्रहीत"
 
@@ -9939,12 +9936,6 @@ msgstr "बाज़ार दर (प्रति USD)"
 msgid "Market Rate History (per USD)"
 msgstr "बाज़ार दर इतिहास (प्रति USD)"
 
-msgid "Marks the account to use when paying this supplier. Only one can be primary."
-msgstr ""
-
-msgid "Marks the account to use when refunding this customer. Only one can be primary."
-msgstr ""
-
 msgid "Marks the person off for every day in the range. They won't be scheduled while they're away."
 msgstr "रेंज में प्रत्येक दिन व्यक्ति को चिह्नित करता है। वे दूर रहते हुए शेड्यूल नहीं किए जाएंगे।"
 
@@ -12770,12 +12761,6 @@ msgstr "मूल्य निर्धारण नियम"
 
 msgid "Pricing Trace"
 msgstr "मूल्य निर्धारण ट्रेस"
-
-msgid "Primary"
-msgstr ""
-
-msgid "Primary Account"
-msgstr ""
 
 msgid "Primary cash account for bank transactions"
 msgstr "बैंक लेनदेन के लिए प्राथमिक नकद खाता"

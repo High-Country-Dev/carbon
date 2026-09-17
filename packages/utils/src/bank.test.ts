@@ -243,3 +243,18 @@ describe("bicMatchesCountry", () => {
     expect(bicMatchesCountry("GARBAGE!", "FR")).toBe(true);
   });
 });
+
+describe("India requires both identifiers", () => {
+  it("asks for a SWIFT/BIC alongside the IFSC", () => {
+    // The IFSC routes domestically; the BIC gets the money into the country.
+    const config = getBankFieldConfig("IN");
+    expect(config.bankCodeLabel).toBe("ifsc");
+    expect(config.requiresSwift).toBe(true);
+  });
+
+  it("accepts a real IFSC and an Indian BIC together", () => {
+    const config = getBankFieldConfig("IN");
+    expect(config.validateBankCode?.("HDFC0001234")).toBe(true);
+    expect(bicMatchesCountry("HDFCINBB", "IN")).toBe(true);
+  });
+});
