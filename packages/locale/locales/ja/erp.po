@@ -1725,6 +1725,9 @@ msgstr "ワークフローがそのステップに到達したときに、Carbon
 msgid "An integration or a custom change — the small slice that's actually custom."
 msgstr "連携またはカスタム変更 — 実際にカスタムされている小さなスライス。"
 
+msgid "An International Bank Account Number: one string holding the country, bank, branch, and account, with two check digits. Because it already identifies the bank, countries that use it need no separate routing code."
+msgstr ""
+
 msgid "An invitation is pending. They become active once they accept it."
 msgstr "招待待機中。承諾後に有効になります。"
 
@@ -16804,6 +16807,9 @@ msgstr "この仕入先が属するカテゴリ（原材料、サービス、請
 
 msgid "The code printed on the kanban card that operators scan to mark the job complete; auto-generated when left blank."
 msgstr "かんばんカードに印刷されるコード。作業者がスキャンして製造指図を完了するとマークします。空白の場合は自動生成されます。"
+
+msgid "The code that identifies a bank internationally, 8 or 11 characters. A cross-border payment will not route without it, while a domestic transfer usually travels on the local routing code instead."
+msgstr ""
 
 msgid "The contractor's expected weekly availability; scheduling uses this as the upper bound when assigning this contractor to operations across the week."
 msgstr "外部作業者の期待される毎週の利用可能性。スケジューリングはこれを、週間を通じてこの外部作業者を工程に割り当てる際の上限として使用します。"

@@ -1725,6 +1725,9 @@ msgstr "Una solicitud https que Carbon envía a un sistema tuyo cuando un flujo 
 msgid "An integration or a custom change — the small slice that's actually custom."
 msgstr "Una integración o un cambio personalizado — la pequeña parte que es realmente personalizada."
 
+msgid "An International Bank Account Number: one string holding the country, bank, branch, and account, with two check digits. Because it already identifies the bank, countries that use it need no separate routing code."
+msgstr ""
+
 msgid "An invitation is pending. They become active once they accept it."
 msgstr "Una invitación está pendiente. Se hacen activas una vez que la aceptan."
 
@@ -16804,6 +16807,9 @@ msgstr "La categoría a la que pertenece este proveedor (materia prima, servicio
 
 msgid "The code printed on the kanban card that operators scan to mark the job complete; auto-generated when left blank."
 msgstr "El código impreso en la tarjeta kanban que los operadores escanean para marcar el trabajo como completo; se genera automáticamente si se deja en blanco."
+
+msgid "The code that identifies a bank internationally, 8 or 11 characters. A cross-border payment will not route without it, while a domestic transfer usually travels on the local routing code instead."
+msgstr ""
 
 msgid "The contractor's expected weekly availability; scheduling uses this as the upper bound when assigning this contractor to operations across the week."
 msgstr "La disponibilidad semanal esperada del contratista; la programación usa esto como límite superior al asignar este contratista a operaciones durante la semana."

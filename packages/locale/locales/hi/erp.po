@@ -1725,6 +1725,9 @@ msgstr "एक HTTPS अनुरोध जो कार्बन आपके �
 msgid "An integration or a custom change — the small slice that's actually custom."
 msgstr "एक एकीकरण या एक कस्टम परिवर्तन — वह छोटा हिस्सा जो वास्तव में कस्टम है।"
 
+msgid "An International Bank Account Number: one string holding the country, bank, branch, and account, with two check digits. Because it already identifies the bank, countries that use it need no separate routing code."
+msgstr ""
+
 msgid "An invitation is pending. They become active once they accept it."
 msgstr "एक आमंत्रण लंबित है। वे सक्रिय हो जाते हैं एक बार जब वे इसे स्वीकार कर लेते हैं।"
 
@@ -16804,6 +16807,9 @@ msgstr "वह श्रेणी जिससे यह आपूर्ति�
 
 msgid "The code printed on the kanban card that operators scan to mark the job complete; auto-generated when left blank."
 msgstr "कानबान कार्ड पर मुद्रित कोड जिसे ऑपरेटर जॉब को पूर्ण करने के लिए स्कैन करते हैं; खाली छोड़ने पर स्वचालित रूप से उत्पन्न।"
+
+msgid "The code that identifies a bank internationally, 8 or 11 characters. A cross-border payment will not route without it, while a domestic transfer usually travels on the local routing code instead."
+msgstr ""
 
 msgid "The contractor's expected weekly availability; scheduling uses this as the upper bound when assigning this contractor to operations across the week."
 msgstr "ठेकेदार की अपेक्षित साप्ताहिक उपलब्धता; शेड्यूलिंग इसे इस सप्ताह भर में इस ठेकेदार को ऑपरेशन के लिए असाइन करते समय ऊपरी सीमा के रूप में उपयोग करती है।"

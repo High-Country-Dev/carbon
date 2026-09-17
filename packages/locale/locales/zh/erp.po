@@ -1725,6 +1725,9 @@ msgstr "当工作流到达该步骤时，Carbon向您的系统发送的HTTPS请�
 msgid "An integration or a custom change — the small slice that's actually custom."
 msgstr "一个集成或自定义更改——实际上是自定义的小部分。"
 
+msgid "An International Bank Account Number: one string holding the country, bank, branch, and account, with two check digits. Because it already identifies the bank, countries that use it need no separate routing code."
+msgstr ""
+
 msgid "An invitation is pending. They become active once they accept it."
 msgstr "邀请待处理。他们接受后就会启用"
 
@@ -16804,6 +16807,9 @@ msgstr "此供应商所属的类别（原材料、服务、合同制造商）；
 
 msgid "The code printed on the kanban card that operators scan to mark the job complete; auto-generated when left blank."
 msgstr "打印在看板卡上的代码，操作员扫码以标记工单完成；留空时自动生成。"
+
+msgid "The code that identifies a bank internationally, 8 or 11 characters. A cross-border payment will not route without it, while a domestic transfer usually travels on the local routing code instead."
+msgstr ""
 
 msgid "The contractor's expected weekly availability; scheduling uses this as the upper bound when assigning this contractor to operations across the week."
 msgstr "外协人员的预期每周可用性；排程在整周将此外协人员分配给工序时使用此作为上限。"

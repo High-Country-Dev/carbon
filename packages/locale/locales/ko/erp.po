@@ -1725,6 +1725,9 @@ msgstr "워크플로우가 해당 단계에 도달할 때 Carbon이 귀사의 �
 msgid "An integration or a custom change — the small slice that's actually custom."
 msgstr "연동이나 커스텀 변경 — 실제로 커스텀인 작은 부분."
 
+msgid "An International Bank Account Number: one string holding the country, bank, branch, and account, with two check digits. Because it already identifies the bank, countries that use it need no separate routing code."
+msgstr ""
+
 msgid "An invitation is pending. They become active once they accept it."
 msgstr "초대가 대기 중입니다. 초대를 수락하면 활성화됩니다."
 
@@ -16804,6 +16807,9 @@ msgstr "이 공급업체가 속하는 카테고리(원자재, 서비스, 위탁�
 
 msgid "The code printed on the kanban card that operators scan to mark the job complete; auto-generated when left blank."
 msgstr "칸반 카드에 인쇄되는 코드로, 작업자가 스캔하여 작업 완료를 표시합니다. 비워두면 자동으로 생성됩니다."
+
+msgid "The code that identifies a bank internationally, 8 or 11 characters. A cross-border payment will not route without it, while a domestic transfer usually travels on the local routing code instead."
+msgstr ""
 
 msgid "The contractor's expected weekly availability; scheduling uses this as the upper bound when assigning this contractor to operations across the week."
 msgstr "외주 인력의 예상 주간 가용성으로, 스케줄링이 이를 주 전체에서 공정에 외주 인력을 할당할 때의 상한으로 사용합니다."

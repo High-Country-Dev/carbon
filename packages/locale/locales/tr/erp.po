@@ -1725,6 +1725,9 @@ msgstr "Bir iş akışı bu adıma ulaştığında Carbon'un sisteminize gönder
 msgid "An integration or a custom change — the small slice that's actually custom."
 msgstr "Bir entegrasyon veya özel bir değişiklik — aslında özel olan küçük dilim."
 
+msgid "An International Bank Account Number: one string holding the country, bank, branch, and account, with two check digits. Because it already identifies the bank, countries that use it need no separate routing code."
+msgstr ""
+
 msgid "An invitation is pending. They become active once they accept it."
 msgstr "Bir davet beklemede. Kabul ettikleri zaman aktif hale gelirler."
 
@@ -16804,6 +16807,9 @@ msgstr "Bu tedarikçinin ait olduğu kategori (hammadde, hizmetler, sözleşmeli
 
 msgid "The code printed on the kanban card that operators scan to mark the job complete; auto-generated when left blank."
 msgstr "Operatörlerin işi tamamlandı olarak işaretlemek için taradığı kanban kartına basılan kod; boş bırakılırsa otomatik olarak oluşturulur."
+
+msgid "The code that identifies a bank internationally, 8 or 11 characters. A cross-border payment will not route without it, while a domestic transfer usually travels on the local routing code instead."
+msgstr ""
 
 msgid "The contractor's expected weekly availability; scheduling uses this as the upper bound when assigning this contractor to operations across the week."
 msgstr "Taşeronun beklenen haftalık kullanılabilirliği; planlama bu taşeronun haftasındaki operasyonlara atanırken bunu üst sınır olarak kullanır."

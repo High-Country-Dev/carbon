@@ -1725,6 +1725,9 @@ msgstr "HTTPS-запрос, который Carbon отправляет в ваш
 msgid "An integration or a custom change — the small slice that's actually custom."
 msgstr "Интеграция или пользовательское изменение — небольшая часть, которая действительно является пользовательской."
 
+msgid "An International Bank Account Number: one string holding the country, bank, branch, and account, with two check digits. Because it already identifies the bank, countries that use it need no separate routing code."
+msgstr ""
+
 msgid "An invitation is pending. They become active once they accept it."
 msgstr "Приглашение ожидает подтверждения. Они станут активными после его принятия."
 
@@ -16804,6 +16807,9 @@ msgstr "Категория, к которой принадлежит этот п
 
 msgid "The code printed on the kanban card that operators scan to mark the job complete; auto-generated when left blank."
 msgstr "Код, напечатанный на карточке канбан, который операторы сканируют, чтобы отметить производственный заказ завершенным; автоматически генерируется, если оставить пустым."
+
+msgid "The code that identifies a bank internationally, 8 or 11 characters. A cross-border payment will not route without it, while a domestic transfer usually travels on the local routing code instead."
+msgstr ""
 
 msgid "The contractor's expected weekly availability; scheduling uses this as the upper bound when assigning this contractor to operations across the week."
 msgstr "Ожидаемая еженедельная доступность подрядчика; планирование использует это как верхний предел при назначении подрядчика операциям в течение недели."
