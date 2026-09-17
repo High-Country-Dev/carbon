@@ -7017,12 +7017,6 @@ serve(async (req: Request) => {
               .insertInto("quoteLine")
               .values({
                 ...line,
-                // jsonb columns must be pre-serialised for Kysely on
-                // deno-postgres (see toJson) — a row whose additionalCharges,
-                // configuration, customFields, externalNotes, internalNotes,
-                // or priceTrace was ever stored as a bare string/array instead
-                // of an object round-trips as invalid JSON text otherwise,
-                // failing the whole copy with "invalid input syntax for type json".
                 additionalCharges: toJson(line.additionalCharges),
                 configuration: toJson(line.configuration),
                 customFields: toJson(line.customFields),
@@ -7275,9 +7269,6 @@ serve(async (req: Request) => {
                 operationUnitCost: op.operationUnitCost ?? 0,
                 overheadRate: op.overheadRate,
                 tags: op.tags ?? [],
-                // Pre-serialise like the quoteLine copy above — workInstruction
-                // is NOT NULL jsonb and a legacy row stored as a bare string
-                // fails the Kysely/deno-postgres insert otherwise.
                 workInstruction: toJson(op.workInstruction),
                 companyId,
                 createdBy: userId,
