@@ -885,6 +885,47 @@ export async function getItemQuantities(
     .maybeSingle();
 }
 
+/**
+ * On-hand quantity per item for the Item picker's badge, as a plain map.
+ *
+ * `locationId` of "all" totals every location (including the '' bucket for
+ * ledger rows with no location), matching what the picker shows when no
+ * location is in play. Zero rows are dropped — the picker renders no badge for
+ * an item it has no row for, so they carry no information and are the bulk of
+ * the table on a tenant with history.
+ */
+export async function getItemStockQuantitiesByLocation(
+  client: SupabaseClient<Database>,
+  companyId: string,
+  locationId: string
+) {
+  const { data, error } = await fetchAllFromTable<{
+    itemId: string;
+    quantityOnHand: number;
+  }>(client, "itemStockQuantities", "itemId, quantityOnHand", (query) => {
+    const scoped = query
+      .eq("companyId", companyId)
+      .neq("quantityOnHand", 0)
+      // Total order across the whole key: fetchAllFromTable pages, and without
+      // one a concurrent write can shift a row across a page boundary.
+      .order("itemId")
+      .order("locationId");
+
+    return locationId === "all" ? scoped : scoped.eq("locationId", locationId);
+  });
+
+  if (error) return { data: null, error };
+
+  const quantities: Record<string, number> = {};
+  for (const row of data ?? []) {
+    if (!row.itemId) continue;
+    quantities[row.itemId] =
+      (quantities[row.itemId] ?? 0) + (Number(row.quantityOnHand) || 0);
+  }
+
+  return { data: quantities, error: null };
+}
+
 export async function getItemReplenishment(
   client: SupabaseClient<Database>,
   itemId: string,

@@ -142,6 +142,8 @@ export const path = {
         generatePath(`${api}/items/${itemId}/make-method-status`),
       itemMpns: `${api}/items/mpns`,
       itemPostingGroups: `${api}/items/groups`,
+      itemQuantities: (locationId: string) =>
+        generatePath(`${api}/items/quantities/${locationId}`),
       itemRecipeProcesses: (itemId: string) =>
         generatePath(`${api}/items/${itemId}/recipe-processes`),
       jiraCreateIssue: `${api}/integrations/jira/issue/create`,

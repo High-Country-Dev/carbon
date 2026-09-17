@@ -8,7 +8,11 @@ DB types, Supabase/Kysely clients, audit config, event system types, rate limiti
 - Tables: composite PK `("id", "companyId")`, `id` default `id()` or `id('prefix')` — never raw UUID. Audit columns (`createdBy`/`createdAt`/`updatedBy`/`updatedAt`) with inline `REFERENCES "user"("id")`.
 - RLS: four policies named exactly `SELECT`/`INSERT`/`UPDATE`/`DELETE`. SELECT uses `get_companies_with_employee_role()`, writes use `get_companies_with_employee_permission('<module>_<action>')`. Schema-qualify tables, cast `::text[]`.
 - Import `Database` type from `@carbon/database`; `KyselyDatabase` / `Kysely` from `@carbon/database/client`. Never hand-edit `src/types.ts` — it's generated.
-- Use `fetchAllFromTable` / `fetchAllRecords` for paginated reads that exceed the 1000-row Supabase limit.
+- Use `fetchAllFromTable` for paginated reads that exceed the 1000-row Supabase limit. It pages
+  without `count: "exact"` (a `COUNT(*) OVER ()` per page is not free) and fetches the pages past
+  the first concurrently. `fetchAllRecords` is the same pager over a query FACTORY (`() => builder`)
+  — a factory, because supabase-js builders are mutable, so concurrent awaits on one builder all
+  fetch whichever `.range()` was set last.
 
 ## Ask First
 
@@ -35,7 +39,7 @@ pnpm --filter @carbon/database typecheck
 
 | Subpath | Provides |
 |---------|----------|
-| `.` (index) | `Database` type, `fetchAllFromTable`, `fetchAllRecords`, `fetchRecordsInBatches` |
+| `.` (index) | `Database` type, `fetchAllFromTable`, `fetchAllRecords` (takes a query factory), `fetchRecordsInBatches` |
 | `./client` | `Kysely`, `KyselyDatabase`, Postgres pool factories (`getPostgresClient`, `getPostgresConnectionPool`) |
 | `./datetime` | Node re-export of `supabase/functions/lib/datetime.ts` — the edge-runtime datetime helpers (`datetime`, `getCompanyTimeZone`, `getLocationTimeZone`) for Node consumers |
 | `./methods` | Node re-export of `supabase/functions/lib/methods.ts` — shared make-method helpers |

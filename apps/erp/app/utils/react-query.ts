@@ -123,6 +123,16 @@ export const itemPostingGroupsQuery = (companyId: string | null) => ({
   staleTime: RefreshRate.Low
 });
 
+export const ITEM_QUANTITIES_QUERY_KEY = "itemQuantities";
+
+export const itemQuantitiesQuery = (
+  locationId: string,
+  companyId: string | null
+) => ({
+  queryKey: [ITEM_QUANTITIES_QUERY_KEY, companyId ?? "null", locationId],
+  staleTime: RefreshRate.High
+});
+
 export const locationsQuery = (companyId: string | null) => ({
   queryKey: ["locations", companyId ?? "null"],
   staleTime: RefreshRate.Low

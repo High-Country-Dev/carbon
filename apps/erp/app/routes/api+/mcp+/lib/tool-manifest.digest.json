@@ -1,5 +1,5 @@
 {
-  "totalTools": 1572,
+  "totalTools": 1573,
   "modules": 15,
   "tools": [
     {"name":"account_deleteUserAttributeValue","classification":"DESTRUCTIVE","paramCount":2,"schema":"0d38e12233b4","response":"bcde375ebd4c","injectAuth":"companyId","permission":"none","paginates":false},
@@ -437,6 +437,7 @@
     {"name":"items_getItemQuantities","classification":"READ","paramCount":2,"schema":"ade4704d7338","response":"9fc7a6c9f2e3","injectAuth":"companyId","permission":"parts:view","paginates":false},
     {"name":"items_getItemReplenishment","classification":"READ","paramCount":1,"schema":"623ca47a6c74","response":"f399bb7eda67","injectAuth":"companyId","permission":"parts:view","paginates":false},
     {"name":"items_getItemShelfLife","classification":"READ","paramCount":1,"schema":"623ca47a6c74","response":"a406f3a83a89","injectAuth":"companyId","permission":"parts:view","paginates":false},
+    {"name":"items_getItemStockQuantitiesByLocation","classification":"READ","paramCount":1,"schema":"de371a276a58","response":"96915ea19193","injectAuth":"companyId","permission":"parts:view","paginates":false},
     {"name":"items_getItemStorageUnitQuantities","classification":"READ","paramCount":2,"schema":"ade4704d7338","response":"880fa3aa7279","injectAuth":"companyId","permission":"parts:view","paginates":false},
     {"name":"items_getItemSupersededBy","classification":"READ","paramCount":1,"schema":"623ca47a6c74","response":"8e2ea57c0664","injectAuth":"companyId","permission":"parts:view","paginates":false},
     {"name":"items_getItemSupersession","classification":"READ","paramCount":1,"schema":"623ca47a6c74","response":"0c693c4f3dcb","injectAuth":"companyId","permission":"parts:view","paginates":false},

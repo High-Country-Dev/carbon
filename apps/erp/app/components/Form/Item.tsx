@@ -40,6 +40,11 @@ import { itemType, methodItemType } from "~/modules/shared";
 import { useItems } from "~/stores";
 import { latestRevisionByReadableId } from "~/stores/items";
 import { path } from "~/utils/path";
+import {
+  cachedApiQuery,
+  getCompanyId,
+  itemQuantitiesQuery
+} from "~/utils/react-query";
 import { MethodItemTypeIcon } from "../Icons";
 import { ItemLifecycleBadge } from "../ItemLifecycleBadge";
 import type { EntityKey } from "./emptyStates";
@@ -100,6 +105,43 @@ const useTranslatedItemType = () => {
   };
 };
 
+/**
+ * On-hand per item for the option badge, keyed by the location in play ("all"
+ * totals every location). This used to ride on the items store, which meant the
+ * whole `itemStockQuantities` table (item x location) was downloaded into the
+ * browser on every page load, re-polled every 10 minutes and re-read in full on
+ * every stock movement — to decorate a dropdown. Fetching it here means pages
+ * with no item picker fetch nothing, and `cachedApiQuery` dedupes across every
+ * picker on the page.
+ */
+function useItemQuantities(locationId?: string) {
+  const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const scope = locationId ?? "all";
+
+  useEffect(() => {
+    let cancelled = false;
+
+    cachedApiQuery<{ data: Record<string, number> | null }>(
+      itemQuantitiesQuery(scope, getCompanyId()),
+      path.to.api.itemQuantities(scope)
+    )
+      .then((result) => {
+        if (!cancelled) setQuantities(result?.data ?? {});
+      })
+      // A badge is decoration — a failed read leaves it off rather than
+      // breaking the picker.
+      .catch(() => {
+        if (!cancelled) setQuantities({});
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [scope]);
+
+  return quantities;
+}
+
 const Item = ({
   name,
   label,
@@ -117,6 +159,7 @@ const Item = ({
   const { t } = useLingui();
   const translateItemType = useTranslatedItemType();
   const [items] = useItems();
+  const quantities = useItemQuantities(props.locationId);
 
   const options = useMemo(() => {
     let filtered = items.filter((item) => {
@@ -148,9 +191,7 @@ const Item = ({
     }
 
     let results = filtered.map((item) => {
-      const scopedQuantity = props.locationId
-        ? item.quantityByLocation?.[props.locationId]
-        : item.quantityOnHand;
+      const scopedQuantity = quantities[item.id];
       return {
         value: item.id,
         label: item.supersessionMode ? (
@@ -180,10 +221,10 @@ const Item = ({
     return results;
   }, [
     items,
+    quantities,
     props?.includeInactive,
     props.blacklist,
     props.latestRevisionOnly,
-    props.locationId,
     props.replenishmentSystem,
     props.whitelist,
     type,
