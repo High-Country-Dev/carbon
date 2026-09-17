@@ -39,7 +39,7 @@ import { z } from "zod";
 import {
   isSelfSignupBlockedForEmail,
   SELF_SIGNUP_BLOCKED_MESSAGE
-} from "~/services/self-signup-blocklist.server";
+} from "~/modules/shared/shared.server";
 import type { Result } from "~/types";
 import { path } from "~/utils/path";
 
