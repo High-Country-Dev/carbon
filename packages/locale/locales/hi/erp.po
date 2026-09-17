@@ -992,6 +992,9 @@ msgstr "एक टूल एक भौतिक आइटम है जिसक
 msgid "A user records the expiry date on each batch or serial when the goods are received. Use when suppliers ship lots with different expiry dates."
 msgstr "एक उपयोगकर्ता प्रत्येक बैच या सीरीज पर समाप्ति तिथि दर्ज करता है जब माल प्राप्त होता है। जब आपूर्तिकर्ता विभिन्न समाप्ति तिथियों के साथ लॉट भेजते हैं तो इसका उपयोग करें।"
 
+msgid "ABA"
+msgstr ""
+
 msgid "abilities"
 msgstr "कौशल"
 
@@ -8458,6 +8461,9 @@ msgstr "अगर कुछ गलत रास्ते पर है"
 
 msgid "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
 msgstr "यदि आप पार्ट नंबर बदलना चाहते हैं, तो कृपया रद्द करें पर क्लिक करें और परिवर्तित करने से पहले प्रत्येक पंक्ति आइटम के लिए पार्ट्स को मैन्युअल रूप से असाइन करें।"
+
+msgid "IFSC"
+msgstr ""
 
 msgid "IFSC Code"
 msgstr ""
@@ -16435,6 +16441,9 @@ msgstr "सतहें"
 msgid "Suspected Failure Mode"
 msgstr "संदिग्ध विफलता मोड"
 
+msgid "SWIFT"
+msgstr ""
+
 msgid "SWIFT / BIC"
 msgstr ""
 
@@ -18171,6 +18180,9 @@ msgstr "इस कंपनी की स्वामित्व किसी �
 
 msgid "Transfer To"
 msgstr "को स्थानांतरित करें"
+
+msgid "Transit"
+msgstr ""
 
 msgid "Transit & Institution"
 msgstr ""

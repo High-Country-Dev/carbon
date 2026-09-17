@@ -992,6 +992,9 @@ msgstr "Takım, birden fazla iş emri arasında kullanılabilen bir parça yapma
 msgid "A user records the expiry date on each batch or serial when the goods are received. Use when suppliers ship lots with different expiry dates."
 msgstr "Kullanıcı, mallar alındığında her parti veya seri için son kullanma tarihini kaydeder. Tedarikçiler farklı son kullanma tarihlerine sahip partiler gönderdiğinde kullanılır."
 
+msgid "ABA"
+msgstr ""
+
 msgid "abilities"
 msgstr "yetkinlikler"
 
@@ -8458,6 +8461,9 @@ msgstr "Bir şey yolunda değilse"
 
 msgid "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
 msgstr "Parça numaralarını değiştirmek isterseniz, lütfen iptal'e tıklayın ve dönüştürmeden önce her bir satır öğesi için parçaları manuel olarak atayın."
+
+msgid "IFSC"
+msgstr ""
 
 msgid "IFSC Code"
 msgstr ""
@@ -16435,6 +16441,9 @@ msgstr "Yüzeyler"
 msgid "Suspected Failure Mode"
 msgstr "Şüpheli Arıza Modu"
 
+msgid "SWIFT"
+msgstr ""
+
 msgid "SWIFT / BIC"
 msgstr ""
 
@@ -18171,6 +18180,9 @@ msgstr "Bu şirketin sahipliğini başka bir kullanıcıya aktarın"
 
 msgid "Transfer To"
 msgstr "Aktarılacak Lokasyon"
+
+msgid "Transit"
+msgstr ""
 
 msgid "Transit & Institution"
 msgstr ""

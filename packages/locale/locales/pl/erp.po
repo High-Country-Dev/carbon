@@ -992,6 +992,9 @@ msgstr "Narzędzie to rzeczywisty artykuł używany do produkcji części, któr
 msgid "A user records the expiry date on each batch or serial when the goods are received. Use when suppliers ship lots with different expiry dates."
 msgstr "Użytkownik notuje termin ważności dla każdej partii produkcyjnej lub serii, gdy towary są odbierane. Użyj, gdy dostawcy wysyłają partie z różnymi terminami ważności."
 
+msgid "ABA"
+msgstr ""
+
 msgid "abilities"
 msgstr "umiejętności"
 
@@ -8458,6 +8461,9 @@ msgstr "Jeśli coś nie przebiega prawidłowo"
 
 msgid "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
 msgstr "Jeśli chcesz zmienić numery części, kliknij Anuluj i ręcznie przypisz części dla każdej pozycji wiersza przed konwersją."
+
+msgid "IFSC"
+msgstr ""
 
 msgid "IFSC Code"
 msgstr ""
@@ -16435,6 +16441,9 @@ msgstr "Powierzchnie"
 msgid "Suspected Failure Mode"
 msgstr "Podejrzewany tryb awarii"
 
+msgid "SWIFT"
+msgstr ""
+
 msgid "SWIFT / BIC"
 msgstr ""
 
@@ -18171,6 +18180,9 @@ msgstr "Przenieś własność tej firmy na innego użytkownika"
 
 msgid "Transfer To"
 msgstr "Przenieś do"
+
+msgid "Transit"
+msgstr ""
 
 msgid "Transit & Institution"
 msgstr ""

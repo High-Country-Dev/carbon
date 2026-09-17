@@ -992,6 +992,9 @@ msgstr "工具は部品を製造するために使用され、複数の製造指
 msgid "A user records the expiry date on each batch or serial when the goods are received. Use when suppliers ship lots with different expiry dates."
 msgstr "ユーザーは商品受取時に各バッチまたはシリアルの使用期限を記録します。仕入先が異なる使用期限のロットを出荷する場合に使用します。"
 
+msgid "ABA"
+msgstr ""
+
 msgid "abilities"
 msgstr "スキル"
 
@@ -8458,6 +8461,9 @@ msgstr "何か問題が生じた場合"
 
 msgid "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
 msgstr "部品番号を変更したい場合は、[キャンセル]をクリックして、変換する前に各行アイテムの部品を手動で割り当ててください。"
+
+msgid "IFSC"
+msgstr ""
 
 msgid "IFSC Code"
 msgstr ""
@@ -16435,6 +16441,9 @@ msgstr "サーフェス"
 msgid "Suspected Failure Mode"
 msgstr "疑わしい故障モード"
 
+msgid "SWIFT"
+msgstr ""
+
 msgid "SWIFT / BIC"
 msgstr ""
 
@@ -18171,6 +18180,9 @@ msgstr "この会社の所有権を別のユーザーに転送します。"
 
 msgid "Transfer To"
 msgstr "転送先"
+
+msgid "Transit"
+msgstr ""
 
 msgid "Transit & Institution"
 msgstr ""

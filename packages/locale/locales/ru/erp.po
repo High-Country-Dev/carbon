@@ -992,6 +992,9 @@ msgstr "Инструмент — это физический предмет, и�
 msgid "A user records the expiry date on each batch or serial when the goods are received. Use when suppliers ship lots with different expiry dates."
 msgstr "Пользователь записывает срок годности для каждой серии при получении товара. Используется, когда поставщики отправляют партии с разными датами окончания срока годности."
 
+msgid "ABA"
+msgstr ""
+
 msgid "abilities"
 msgstr "навыки"
 
@@ -8458,6 +8461,9 @@ msgstr "Если что-то идет не по плану"
 
 msgid "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
 msgstr "Если вы хотите изменить номера деталей, нажмите Отмена и вручную назначьте детали для каждого элемента строки перед преобразованием."
+
+msgid "IFSC"
+msgstr ""
 
 msgid "IFSC Code"
 msgstr ""
@@ -16435,6 +16441,9 @@ msgstr "Поверхности"
 msgid "Suspected Failure Mode"
 msgstr "Предполагаемый режим отказа"
 
+msgid "SWIFT"
+msgstr ""
+
 msgid "SWIFT / BIC"
 msgstr ""
 
@@ -18171,6 +18180,9 @@ msgstr "Передайте право собственности на эту о�
 
 msgid "Transfer To"
 msgstr "Передать в"
+
+msgid "Transit"
+msgstr ""
 
 msgid "Transit & Institution"
 msgstr ""

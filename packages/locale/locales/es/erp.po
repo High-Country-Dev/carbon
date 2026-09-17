@@ -992,6 +992,9 @@ msgstr "Una herramienta es un artículo físico utilizado para fabricar una piez
 msgid "A user records the expiry date on each batch or serial when the goods are received. Use when suppliers ship lots with different expiry dates."
 msgstr "Un usuario registra la fecha de caducidad en cada lote de producción o serie cuando se reciben los bienes. Usar cuando los proveedores envían lotes con diferentes fechas de caducidad."
 
+msgid "ABA"
+msgstr ""
+
 msgid "abilities"
 msgstr "habilidades"
 
@@ -8458,6 +8461,9 @@ msgstr "Si algo se desvía del plan"
 
 msgid "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
 msgstr "Si desea cambiar los números de pieza, haga clic en Cancelar y Asigne manualmente las Piezas para cada Línea de Artículo antes de convertir."
+
+msgid "IFSC"
+msgstr ""
 
 msgid "IFSC Code"
 msgstr ""
@@ -16435,6 +16441,9 @@ msgstr "Superficies"
 msgid "Suspected Failure Mode"
 msgstr "Modo de Falla Sospechado"
 
+msgid "SWIFT"
+msgstr ""
+
 msgid "SWIFT / BIC"
 msgstr ""
 
@@ -18171,6 +18180,9 @@ msgstr "Transferir la propiedad de esta empresa a otro usuario"
 
 msgid "Transfer To"
 msgstr "Transferir a"
+
+msgid "Transit"
+msgstr ""
 
 msgid "Transit & Institution"
 msgstr ""

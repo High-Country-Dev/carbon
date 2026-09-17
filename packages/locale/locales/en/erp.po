@@ -992,6 +992,9 @@ msgstr "A tool is a physical item used to make a part that can be used across mu
 msgid "A user records the expiry date on each batch or serial when the goods are received. Use when suppliers ship lots with different expiry dates."
 msgstr "A user records the expiry date on each batch or serial when the goods are received. Use when suppliers ship lots with different expiry dates."
 
+msgid "ABA"
+msgstr "ABA"
+
 msgid "abilities"
 msgstr "abilities"
 
@@ -8458,6 +8461,9 @@ msgstr "If something is off track"
 
 msgid "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
 msgstr "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
+
+msgid "IFSC"
+msgstr "IFSC"
 
 msgid "IFSC Code"
 msgstr "IFSC Code"
@@ -16435,6 +16441,9 @@ msgstr "Surfaces"
 msgid "Suspected Failure Mode"
 msgstr "Suspected Failure Mode"
 
+msgid "SWIFT"
+msgstr "SWIFT"
+
 msgid "SWIFT / BIC"
 msgstr "SWIFT / BIC"
 
@@ -18171,6 +18180,9 @@ msgstr "Transfer ownership of this company to another user"
 
 msgid "Transfer To"
 msgstr "Transfer To"
+
+msgid "Transit"
+msgstr "Transit"
 
 msgid "Transit & Institution"
 msgstr "Transit & Institution"

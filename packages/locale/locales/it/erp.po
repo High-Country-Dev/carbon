@@ -992,6 +992,9 @@ msgstr "Un utensile è un articolo fisico usato per fare un componente che può 
 msgid "A user records the expiry date on each batch or serial when the goods are received. Use when suppliers ship lots with different expiry dates."
 msgstr "Un utente registra la data di scadenza su ogni lotto o numero seriale quando i beni vengono ricevuti. Utilizzare quando i fornitori spediscono lotti con date di scadenza diverse."
 
+msgid "ABA"
+msgstr ""
+
 msgid "abilities"
 msgstr "Competenze"
 
@@ -8458,6 +8461,9 @@ msgstr "Se qualcosa non è in linea"
 
 msgid "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
 msgstr "Se desideri modificare i numeri dei componenti, fai clic su Annulla e assegna manualmente i componenti per ogni riga prima della conversione."
+
+msgid "IFSC"
+msgstr ""
 
 msgid "IFSC Code"
 msgstr ""
@@ -16435,6 +16441,9 @@ msgstr "Superfici"
 msgid "Suspected Failure Mode"
 msgstr "Modalità di guasto sospetta"
 
+msgid "SWIFT"
+msgstr ""
+
 msgid "SWIFT / BIC"
 msgstr ""
 
@@ -18171,6 +18180,9 @@ msgstr "Trasferisci la proprietà di questa azienda a un altro utente"
 
 msgid "Transfer To"
 msgstr "Trasferisci A"
+
+msgid "Transit"
+msgstr ""
 
 msgid "Transit & Institution"
 msgstr ""

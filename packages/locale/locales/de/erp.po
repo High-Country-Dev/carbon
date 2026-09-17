@@ -992,6 +992,9 @@ msgstr "Ein Werkzeug ist ein physischer Artikel, der zur Herstellung eines Teils
 msgid "A user records the expiry date on each batch or serial when the goods are received. Use when suppliers ship lots with different expiry dates."
 msgstr "Ein Benutzer erfasst das Verfallsdatum für jede Charge oder Seriennummer, wenn die Waren eingehen. Verwenden Sie dies, wenn Lieferanten Chargen mit unterschiedlichen Verfallsdaten versenden."
 
+msgid "ABA"
+msgstr ""
+
 msgid "abilities"
 msgstr "qualifikationen"
 
@@ -8458,6 +8461,9 @@ msgstr "Wenn etwas aus dem Ruder läuft"
 
 msgid "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
 msgstr "Wenn Sie die Teilenummern ändern möchten, klicken Sie bitte Abbrechen und weisen Sie manuell die Teile für jede Position zu, bevor Sie konvertieren."
+
+msgid "IFSC"
+msgstr ""
 
 msgid "IFSC Code"
 msgstr ""
@@ -16435,6 +16441,9 @@ msgstr "Oberflächen"
 msgid "Suspected Failure Mode"
 msgstr "Vermuteter Fehlermodus"
 
+msgid "SWIFT"
+msgstr ""
+
 msgid "SWIFT / BIC"
 msgstr ""
 
@@ -18171,6 +18180,9 @@ msgstr "Übertragen Sie das Eigentum dieses Unternehmens auf einen anderen Benut
 
 msgid "Transfer To"
 msgstr "Übertragung zu"
+
+msgid "Transit"
+msgstr ""
 
 msgid "Transit & Institution"
 msgstr ""

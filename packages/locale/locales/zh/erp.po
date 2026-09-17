@@ -992,6 +992,9 @@ msgstr "刀具是用于制造零件的物理物料，可在多个工单中使用
 msgid "A user records the expiry date on each batch or serial when the goods are received. Use when suppliers ship lots with different expiry dates."
 msgstr "用户在收货时记录每个生产批次或序列号的有效期。当供应商发运具有不同有效期的批次时使用。"
 
+msgid "ABA"
+msgstr ""
+
 msgid "abilities"
 msgstr "技能"
 
@@ -8458,6 +8461,9 @@ msgstr "如果有什么偏离轨道"
 
 msgid "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
 msgstr "如果您希望更改零件号，请点击\"取消\"并在转换前为每个行项目手动分配零件。"
+
+msgid "IFSC"
+msgstr ""
 
 msgid "IFSC Code"
 msgstr ""
@@ -16435,6 +16441,9 @@ msgstr "表面"
 msgid "Suspected Failure Mode"
 msgstr "疑似故障模式"
 
+msgid "SWIFT"
+msgstr ""
+
 msgid "SWIFT / BIC"
 msgstr ""
 
@@ -18171,6 +18180,9 @@ msgstr "将此公司的所有权转移给另一个用户"
 
 msgid "Transfer To"
 msgstr "转移至"
+
+msgid "Transit"
+msgstr ""
 
 msgid "Transit & Institution"
 msgstr ""

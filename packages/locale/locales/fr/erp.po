@@ -992,6 +992,9 @@ msgstr "Un Outil est un Article physique utilisé pour fabriquer une Pièce qui 
 msgid "A user records the expiry date on each batch or serial when the goods are received. Use when suppliers ship lots with different expiry dates."
 msgstr "Un Utilisateur enregistre la date de Péremption pour chaque Lot de production ou numéro de série quand les marchandises sont reçues. À utiliser quand les Fournisseurs expédient des Lots avec différentes dates de péremption."
 
+msgid "ABA"
+msgstr ""
+
 msgid "abilities"
 msgstr "Compétences"
 
@@ -8458,6 +8461,9 @@ msgstr "Si quelque chose déraille"
 
 msgid "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
 msgstr "Si vous souhaitez modifier les numéros de pièce, veuillez cliquer sur Annuler et attribuer manuellement les pièces pour chaque ligne avant la conversion."
+
+msgid "IFSC"
+msgstr ""
 
 msgid "IFSC Code"
 msgstr ""
@@ -16435,6 +16441,9 @@ msgstr "Surfaces"
 msgid "Suspected Failure Mode"
 msgstr "Mode de défaillance suspecté"
 
+msgid "SWIFT"
+msgstr ""
+
 msgid "SWIFT / BIC"
 msgstr ""
 
@@ -18171,6 +18180,9 @@ msgstr "Transférer la propriété de cette société à un autre utilisateur."
 
 msgid "Transfer To"
 msgstr "Transférer vers"
+
+msgid "Transit"
+msgstr ""
 
 msgid "Transit & Institution"
 msgstr ""

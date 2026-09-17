@@ -10,10 +10,10 @@ import {
   DropdownMenuTrigger,
   HStack,
   IconButton,
-  useDisclosure,
-  VStack
+  useDisclosure
 } from "@carbon/react";
-import { maskAccountNumber } from "@carbon/utils";
+import type { BankCodeLabelKey } from "@carbon/utils";
+import { getBankFieldConfig, maskAccountNumber } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useCallback, useState } from "react";
 import {
@@ -25,6 +25,7 @@ import {
 } from "react-icons/lu";
 import { Outlet, useNavigate, useParams } from "react-router";
 import { New } from "~/components";
+import { useCountries } from "~/components/Form/Country";
 import { ConfirmDelete } from "~/components/Modals";
 import { usePermissions } from "~/hooks";
 import type { CustomerBankAccount } from "~/modules/sales/types";
@@ -43,6 +44,8 @@ const CustomerBankAccounts = ({ bankAccounts }: CustomerBankAccountsProps) => {
   const permissions = usePermissions();
   const canEdit = permissions.can("create", "accounting");
   const isEmpty = !bankAccounts || bankAccounts.length === 0;
+
+  const countries = useCountries();
 
   const deleteModal = useDisclosure();
   const [selected, setSelected] = useState<CustomerBankAccount>();
@@ -63,6 +66,18 @@ const CustomerBankAccounts = ({ bankAccounts }: CustomerBankAccountsProps) => {
     });
   }, []);
 
+  // The routing identifier goes by a different name in each country, so the
+  // row labels it the way the country writes it rather than showing a generic
+  // "Bank Code" that tells the reader nothing.
+  const BANK_CODE_LABELS: Record<BankCodeLabelKey, string> = {
+    aba: t`ABA`,
+    sortCode: t`Sort Code`,
+    bsb: t`BSB`,
+    ifsc: t`IFSC`,
+    transit: t`Transit`,
+    bankCode: t`Bank Code`
+  };
+
   return (
     <>
       <Card>
@@ -82,46 +97,95 @@ const CustomerBankAccounts = ({ bankAccounts }: CustomerBankAccountsProps) => {
               </p>
             </div>
           ) : (
-            <ul className="flex flex-col w-full gap-4">
+            <ul className="w-full divide-y divide-border">
               {bankAccounts.map((account) => {
                 const identifier = account.accountNumber ?? "";
                 const isRevealed = revealed.has(account.id);
+                const config = getBankFieldConfig(account.countryCode);
+                const bankCodeLabel = config.bankCodeLabel
+                  ? BANK_CODE_LABELS[config.bankCodeLabel]
+                  : null;
+                const countryName =
+                  countries.find((c) => c.value === account.countryCode)
+                    ?.label ?? account.countryCode;
 
                 return (
                   <li
                     key={account.id}
-                    className="border rounded-lg p-4 flex justify-between items-start gap-4"
+                    className="flex items-start justify-between gap-4 py-4 first:pt-0 last:pb-0"
                   >
-                    <VStack spacing={1}>
-                      <HStack>
-                        <span className="font-medium">{account.name}</span>
-                      </HStack>
-                      {account.bankName && (
-                        <span className="text-muted-foreground text-sm">
-                          {account.bankName}
-                        </span>
-                      )}
-                      <HStack>
-                        <span className="font-mono text-sm">
-                          {isRevealed
-                            ? identifier
-                            : maskAccountNumber(identifier)}
-                        </span>
-                        {identifier && (
-                          <IconButton
-                            aria-label={
-                              isRevealed
-                                ? t`Hide account number`
-                                : t`Reveal account number`
-                            }
-                            icon={isRevealed ? <LuEyeOff /> : <LuEye />}
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => toggleReveal(account.id)}
-                          />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-baseline gap-2">
+                        <p className="truncate text-sm font-medium">
+                          {account.name}
+                        </p>
+                        {account.currencyCode && (
+                          <span className="shrink-0 font-mono text-sm text-muted-foreground">
+                            {account.currencyCode}
+                          </span>
                         )}
-                      </HStack>
-                    </VStack>
+                      </div>
+
+                      {(account.bankName || countryName) && (
+                        <p className="truncate text-sm text-muted-foreground">
+                          {[account.bankName, countryName]
+                            .filter(Boolean)
+                            .join(" · ")}
+                        </p>
+                      )}
+
+                      <dl className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
+                        <div className="flex items-center gap-1.5">
+                          <dt className="text-sm font-medium">
+                            {config.accountLabel === "iban" ? (
+                              <Trans>IBAN</Trans>
+                            ) : (
+                              <Trans>Account</Trans>
+                            )}
+                          </dt>
+                          <dd className="flex items-center gap-1 font-mono text-sm tabular-nums text-muted-foreground">
+                            {isRevealed
+                              ? identifier
+                              : maskAccountNumber(identifier)}
+                            {identifier && (
+                              <IconButton
+                                aria-label={
+                                  isRevealed
+                                    ? t`Hide account number`
+                                    : t`Reveal account number`
+                                }
+                                icon={isRevealed ? <LuEyeOff /> : <LuEye />}
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => toggleReveal(account.id)}
+                              />
+                            )}
+                          </dd>
+                        </div>
+
+                        {bankCodeLabel && account.bankCode && (
+                          <div className="flex items-center gap-1.5">
+                            <dt className="text-sm font-medium">
+                              {bankCodeLabel}
+                            </dt>
+                            <dd className="font-mono text-sm tabular-nums text-muted-foreground">
+                              {account.bankCode}
+                            </dd>
+                          </div>
+                        )}
+
+                        {account.swiftBic && (
+                          <div className="flex items-center gap-1.5">
+                            <dt className="text-sm font-medium">
+                              <Trans>SWIFT</Trans>
+                            </dt>
+                            <dd className="font-mono text-sm text-muted-foreground">
+                              {account.swiftBic}
+                            </dd>
+                          </div>
+                        )}
+                      </dl>
+                    </div>
 
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -129,6 +193,7 @@ const CustomerBankAccounts = ({ bankAccounts }: CustomerBankAccountsProps) => {
                           aria-label={t`More`}
                           icon={<LuEllipsisVertical />}
                           variant="secondary"
+                          className="shrink-0"
                         />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
