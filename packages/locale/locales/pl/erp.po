@@ -353,7 +353,7 @@ msgid "{scopeCount} permissions"
 msgstr "{scopeCount} uprawnień"
 
 msgid "{selectedCount} selected"
-msgstr "{selectedCount} wybranych"
+msgstr "{selectedCount} zaznaczonych"
 
 msgid "{total} phases to get your company live on Carbon. Each one ends at a checkpoint."
 msgstr "{total} faz do uruchomienia Twojej firmy na Carbon. Każda kończy się punktem kontrolnym."
@@ -1013,6 +1013,9 @@ msgstr "Narzędzie to rzeczywisty artykuł używany do produkcji części, któr
 msgid "A user records the expiry date on each batch or serial when the goods are received. Use when suppliers ship lots with different expiry dates."
 msgstr "Użytkownik notuje termin ważności dla każdej partii produkcyjnej lub serii, gdy towary są odbierane. Użyj, gdy dostawcy wysyłają partie z różnymi terminami ważności."
 
+msgid "ABA"
+msgstr "ABA"
+
 msgid "abilities"
 msgstr "umiejętności"
 
@@ -1085,6 +1088,9 @@ msgstr "Rozliczaj koszt środków trwałych podczas ich zbycia."
 
 msgid "Account for the purchase cost of fixed assets"
 msgstr "Rozliczaj koszt nabycia środków trwałych."
+
+msgid "Account Holder"
+msgstr "Posiadacz konta"
 
 msgid "Account manager"
 msgstr "Menedżer konta"
@@ -1644,7 +1650,7 @@ msgid "All members of selected groups and selected individuals will be able to a
 msgstr "Wszyscy członkowie wybranych grup i wybrane osoby będą mogły zatwierdzać żądania"
 
 msgid "All returnable lines"
-msgstr "Wszystkie pozycje możliwe do zwrotu"
+msgstr "Wszystkie pozycje do zwrotu"
 
 msgid "All rows imported — {inserted} inserted, {updated} updated."
 msgstr "Wszystkie wiersze zaimportowane — {inserted} wstawiono, {updated} zaktualizowano."
@@ -1742,6 +1748,9 @@ msgstr "Żądanie https, które Carbon wysyła do Twojego systemu, gdy przepływ
 
 msgid "An integration or a custom change — the small slice that's actually custom."
 msgstr "Integracja lub zmiana niestandardowa — mała część, która jest faktycznie niestandardowa."
+
+msgid "An International Bank Account Number: one string holding the country, bank, branch, and account, with two check digits. Because it already identifies the bank, countries that use it need no separate routing code."
+msgstr "Międzynarodowy numer konta bankowego: jeden ciąg zawierający kraj, bank, oddział i konto z dwoma cyframi kontrolnymi. Ponieważ już identyfikuje bank, kraje go używające nie potrzebują oddzielnego kodu marszruty."
 
 msgid "An invitation is pending. They become active once they accept it."
 msgstr "Zaproszenie jest w status Oczekujące. Stają się Aktywne po zaakceptowaniu."
@@ -2362,6 +2371,9 @@ msgstr "Czy na pewno chcesz usunąć webhook: {0}? Tej czynności nie można cof
 msgid "Are you sure you want to delete this approval rule? This cannot be undone."
 msgstr "Czy na pewno chcesz usunąć tę regułę zatwierdzania? Tej operacji nie można cofnąć."
 
+msgid "Are you sure you want to delete this bank account?"
+msgstr "Czy na pewno chcesz usunąć to konto bankowe?"
+
 msgid "Are you sure you want to delete this change notice?"
 msgstr "Czy chcesz usunąć to zawiadomienie o zmianie?"
 
@@ -2436,6 +2448,9 @@ msgstr "Czy na pewno chcesz trwale usunąć {0}?"
 
 msgid "Are you sure you want to permanently delete the supplier process?"
 msgstr "Czy na pewno chcesz trwale usunąć proces dostawcy?"
+
+msgid "Are you sure you want to permanently delete this bank account?"
+msgstr "Czy na pewno chcesz na stałe usunąć to konto bankowe?"
 
 msgid "Are you sure you want to post this receipt?"
 msgstr "Czy na pewno chcesz zaksięgować ten dokument przyjęcia?"
@@ -2832,8 +2847,20 @@ msgstr "Rachunek bankowy denominowany w walucie obcej."
 msgid "Bank account denominated in the local currency"
 msgstr "Rachunek bankowy denominowany w walucie lokalnej."
 
+msgid "Bank Accounts"
+msgstr "Konta bankowe"
+
+msgid "Bank Address"
+msgstr "Adres banku"
+
 msgid "Bank and financial service charge expenses"
 msgstr "Wydatki na opłaty bankowe i usługi finansowe."
+
+msgid "Bank Code"
+msgstr "Kod banku"
+
+msgid "Bank Name"
+msgstr "Nazwa banku"
 
 msgid "Bars show each week's flow: <0>supply</0> pushes inventory up, <1>demand</1> pulls it down. The <2>line</2> is your projected on-hand inventory — when it dips below <3>safety stock</3> you're at risk, and below zero is a <4>stockout</4>."
 msgstr "Słupki pokazują przepływ każdego tygodnia: <0>Pokrycie</0> podnosi zapasy, <1>Zapotrzebowanie</1> je obniża. <2>Linia</2> to Twoje prognozowane dostępne zapasy — gdy spadną poniżej <3>Zapasu bezpieczeństwa</3>, jesteś zagrożony, a poniżej zera to <4>Brak zapasu</4>."
@@ -2899,7 +2926,7 @@ msgid "Batches"
 msgstr "Partie"
 
 msgid "Batches to return"
-msgstr "Partie produkcyjne do zwrotu"
+msgstr "Partie do zwrotu"
 
 msgid "Batching"
 msgstr "Tworzenie Partii Produkcyjnych"
@@ -3043,6 +3070,9 @@ msgstr "Przeglądaj bibliotekę"
 
 msgid "Browse the published version read-only. You can still rearrange steps to tidy the layout."
 msgstr "Przeglądaj opublikowaną wersję w trybie tylko do odczytu. Nadal możesz zmienić kolejność kroków, aby uporządkować układ."
+
+msgid "BSB"
+msgstr "BSB"
 
 msgid "Bucket"
 msgstr "Zasobnik"
@@ -6261,6 +6291,9 @@ msgstr "Edytuj atrybut"
 msgid "Edit Attribute Category"
 msgstr "Edytuj kategorię atrybutu"
 
+msgid "Edit Bank Account"
+msgstr "Edytuj konto bankowe"
+
 msgid "Edit Category"
 msgstr "Edytuj kategorię"
 
@@ -6723,7 +6756,7 @@ msgid "Enter a quantity between 1 and {0}."
 msgstr "Wprowadź ilość między 1 a {0}."
 
 msgid "Enter an item and quantity yourself."
-msgstr "Wprowadź artykuł i ilość samodzielnie."
+msgstr "Wpisz artykuł i ilość samodzielnie."
 
 msgid "Enter and approve vendor bills against a PO (three-way match)"
 msgstr "Wprowadź i zatwierdź faktury od dostawców względem zamówienia zakupu (uzgodnienie trójstronne)"
@@ -8192,6 +8225,9 @@ msgstr "Pomoc"
 msgid "Hide"
 msgstr "Ukryj"
 
+msgid "Hide account number"
+msgstr "Ukryj numer konta"
+
 msgid "Hide raw"
 msgstr "Ukryj surowe"
 
@@ -8417,6 +8453,9 @@ msgstr "Mam uzasadnioną podstawę, aby wierzyć, że ta osoba jest osobą ze St
 msgid "I'm Still Working"
 msgstr "Wciąż pracuję"
 
+msgid "IBAN"
+msgstr "IBAN"
+
 msgid "Id"
 msgstr "Id"
 
@@ -8467,6 +8506,12 @@ msgstr "Jeśli coś nie przebiega prawidłowo"
 
 msgid "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
 msgstr "Jeśli chcesz zmienić numery części, kliknij Anuluj i ręcznie przypisz części dla każdej pozycji wiersza przed konwersją."
+
+msgid "IFSC"
+msgstr "IFSC"
+
+msgid "IFSC Code"
+msgstr "Kod IFSC"
 
 msgid "Ignore"
 msgstr "Ignoruj"
@@ -9505,7 +9550,7 @@ msgid "Lines appear here once a purchase order receipt has been posted, and only
 msgstr "Pozycje pojawiają się tutaj po zaksięgowaniu przyjęcia z zamówienia zakupu i tylko dla ilości nieautoryzowanych już w innym zwrocie dostawcy. Użyj Dodaj pozycję dla zwrotu ślepego."
 
 msgid "Lines appear here once a sales order shipment has been posted, and only for quantities not already authorized on another RMA. Use Add Line Item for a blind return."
-msgstr "Pozycje pojawiają się tutaj po zaksięgowaniu wysyłki z zamówienia sprzedaży i tylko dla ilości nieautoryzowanych już w innym RMA. Użyj Dodaj pozycję dla zwrotu ślepego."
+msgstr "Pozycje pojawiają się tutaj po zaksięgowaniu wysyłki zamówienia sprzedaży i tylko dla ilości, które nie zostały już autoryzowane w innym RMA. Użyj opcji Dodaj pozycję dla zwrotu ślepego."
 
 msgid "Lines need internal part numbers"
 msgstr "Linie wymagają wewnętrznych numerów części"
@@ -10359,7 +10404,7 @@ msgid "Morning, {name}."
 msgstr "Poranek, {name}."
 
 msgid "Most recent — search to find more"
-msgstr "Najnowsze — wyszukaj, aby znaleźć więcej"
+msgstr "Najnowsze — szukaj, aby znaleźć więcej"
 
 msgid "Most things get caught and resolved here. Name it plainly."
 msgstr "Większość rzeczy zostaje tutaj wychwycona i rozwiązana. Nazwij to jasno."
@@ -10524,6 +10569,9 @@ msgstr "Nowy atrybut"
 
 msgid "New Attribute Category"
 msgstr "Nowa Kategoria Atrybutu"
+
+msgid "New Bank Account"
+msgstr "Nowe konto bankowe"
 
 msgid "New Batch"
 msgstr "Nowy wsad"
@@ -10925,11 +10973,14 @@ msgstr "Brak dostępnych filtrów"
 msgid "No available tracked entities found"
 msgstr "Nie znaleziono dostępnych śledzonych jednostek"
 
+msgid "No bank accounts have been added yet."
+msgstr "Brak dodanych kont bankowych."
+
 msgid "No batches"
 msgstr "Brak partii produkcyjnych"
 
 msgid "No batches selected yet."
-msgstr "Nie wybrano jeszcze żadnych partii produkcyjnych."
+msgstr "Żadne partie nie zostały jeszcze zaznaczone."
 
 msgid "No BOM input has a shelf-life policy"
 msgstr "Żadne wejście BOM nie ma polityki przydatności do spożycia"
@@ -10987,6 +11038,9 @@ msgstr "Brak skonfigurowanych slotów wymiarów"
 
 msgid "No dimension values mapped yet"
 msgstr "Nie ma jeszcze zmapowanych wartości wymiarów"
+
+msgid "No documents"
+msgstr "Brak dokumentów"
 
 msgid "No draft make method for this item yet."
 msgstr "Brak wersji roboczej metody produkcji dla tego artykułu."
@@ -11265,10 +11319,10 @@ msgid "No returnable lines for this customer"
 msgstr "Brak pozycji możliwych do zwrotu dla tego klienta"
 
 msgid "No returnable lines for this supplier"
-msgstr "Brak pozycji możliwych do zwrotu dla tego dostawcy"
+msgstr "Brak pozycji do zwrotu dla tego dostawcy"
 
 msgid "No returnable lines match your search"
-msgstr "Brak pozycji możliwych do zwrotu pasujących do twojego wyszukiwania"
+msgstr "Żadne pozycje do zwrotu nie pasują do Twojego wyszukiwania"
 
 msgid "No rows here."
 msgstr "Brak wierszy tutaj."
@@ -11280,7 +11334,7 @@ msgid "No scheduled work in this window"
 msgstr "Brak zaplanowanych prac w tym oknie czasowym"
 
 msgid "No serial numbers selected yet."
-msgstr "Nie wybrano jeszcze żadnych numerów seryjnych."
+msgstr "Żadne numery seryjne nie zostały jeszcze zaznaczone."
 
 msgid "No shifts configured — assuming Mon–Fri, 8h days"
 msgstr "Brak skonfigurowanych zmian — założenie pon–pt, dni po 8 godz."
@@ -11669,6 +11723,12 @@ msgstr "Edytowalne są tylko procedury w wersji roboczej. Utwórz nową wersję,
 
 msgid "Only empty, open periods can be deleted."
 msgstr "Usunięte mogą być tylko puste, otwarte okresy."
+
+msgid "Only if it differs from the customer name"
+msgstr "Tylko jeśli różni się od nazwy klienta"
+
+msgid "Only if it differs from the supplier name"
+msgstr "Tylko jeśli różni się od nazwy dostawcy"
 
 msgid "Only qualified employees can be scheduled for and run this process"
 msgstr "Tylko wykwalifikowani pracownicy mogą być zaplanowani i uruchamiać ten proces"
@@ -12452,13 +12512,13 @@ msgid "Pick serials/batches to return"
 msgstr "Wybierz numery seryjne/partie do zwrotu"
 
 msgid "Pick the batches on hand that were received from this supplier."
-msgstr "Wybierz partie produkcyjne dostępne, które zostały odebrane od tego dostawcy."
+msgstr "Wybierz partie dostępne na magazynie, które zostały odebrane od tego dostawcy."
 
 msgid "Pick the bin that needs stock, then pick the bins to pull it from."
 msgstr "Wybierz pojemnik, który potrzebuje zapasów, a następnie wybierz pojemniki, z których je pobrać."
 
 msgid "Pick the serial numbers on hand that were received from this supplier."
-msgstr "Wybierz numery seryjne dostępne, które zostały odebrane od tego dostawcy."
+msgstr "Wybierz numery seryjne dostępne na magazynie, które zostały odebrane od tego dostawcy."
 
 msgid "Pick tracked item"
 msgstr "Wybierz śledzony element"
@@ -14253,6 +14313,9 @@ msgstr "Zwraca:"
 msgid "Rev {revision}"
 msgstr "Wer. {revision}"
 
+msgid "Reveal account number"
+msgstr "Odsłoń numer konta"
+
 msgid "Revenue"
 msgstr "Przychody ze sprzedaży"
 
@@ -14440,6 +14503,9 @@ msgstr "Kieruj wszystkie faktury należności na jeden adres (np. siedzibę korp
 
 msgid "Routing"
 msgstr "Marszruta"
+
+msgid "Routing Number (ABA)"
+msgstr "Numer routingu (ABA)"
 
 msgid "rows"
 msgstr "wiersze"
@@ -14647,7 +14713,7 @@ msgid "Sales Person"
 msgstr "Pracownik sprzedaży"
 
 msgid "Sales Return"
-msgstr "Zwrot sprzedaży"
+msgstr "Zwrot ze sprzedaży"
 
 msgid "Sales Revenue"
 msgstr "Przychód ze sprzedaży"
@@ -14894,7 +14960,7 @@ msgid "Search by linear issue title..."
 msgstr "Szukaj po tytule problemu Linear..."
 
 msgid "Search by receipt, PO, or item"
-msgstr "Szukaj po przyjęciu, zamówieniu zakupu lub artykule"
+msgstr "Szukaj po przyjęciu, PO lub artykule"
 
 msgid "Search by shipment, sales order, or item"
 msgstr "Szukaj po wysyłce, zamówieniu sprzedaży lub artykule"
@@ -15147,7 +15213,7 @@ msgid "Select posted receipt lines from this supplier to return."
 msgstr "Wybierz pozycje przyjęcia zaksięgowane od tego dostawcy do zwrotu."
 
 msgid "Select posted shipment lines to this customer to return."
-msgstr "Wybierz pozycje wysyłki zaksięgowane dla tego klienta do zwrotu."
+msgstr "Wybierz zaksięgowane pozycje wysyłki do tego klienta do zwrotu."
 
 msgid "Select Printer"
 msgstr "Wybierz drukarkę"
@@ -15346,7 +15412,7 @@ msgid "Set a customer on this return to add from a shipment."
 msgstr "Ustaw klienta dla tego zwrotu, aby dodać z wysyłki."
 
 msgid "Set a supplier on this return to add from a receipt."
-msgstr "Ustaw dostawcę dla tego zwrotu, aby dodać z przyjęcia."
+msgstr "Ustaw dostawcę w tym zwrocie, aby dodać z przyjęcia."
 
 msgid "Set a target"
 msgstr "Ustaw cel"
@@ -15649,7 +15715,7 @@ msgid "Show a readable Supplier ID column on the supplier list, supplier forms, 
 msgstr "Pokaż kolumnę czytelnego identyfikatora dostawcy na liście dostawców, formularzach dostawcy i listach rozwijanych. Dostawcy są nadal identyfikowani wewnętrznie w każdym przypadku."
 
 msgid "Show available batch numbers"
-msgstr "Pokaż dostępne numery partii produkcyjnych"
+msgstr "Pokaż dostępne numery partii produkcyjnej"
 
 msgid "Show available tracking numbers"
 msgstr "Pokaż dostępne numery śledzenia"
@@ -15850,6 +15916,9 @@ msgstr "Sortuj rosnąco"
 
 msgid "Sort by"
 msgstr "Sortuj według"
+
+msgid "Sort Code"
+msgstr "Kod sortowania"
 
 msgid "Sort Descending"
 msgstr "Sortuj malejąco"
@@ -16499,6 +16568,12 @@ msgstr "Powierzchnie"
 msgid "Suspected Failure Mode"
 msgstr "Podejrzewany tryb awarii"
 
+msgid "SWIFT"
+msgstr "SWIFT"
+
+msgid "SWIFT / BIC"
+msgstr "SWIFT / BIC"
+
 msgid "Switch"
 msgstr "Przełącz"
 
@@ -16856,6 +16931,9 @@ msgstr "Kategoria, do której należy ten dostawca (surowiec, usługi, producent
 
 msgid "The code printed on the kanban card that operators scan to mark the job complete; auto-generated when left blank."
 msgstr "Kod drukowany na karcie kanban, który operatorzy skanują, aby oznaczyć zadanie jako ukończone; generowany automatycznie, jeśli pozostawiony pusty."
+
+msgid "The code that identifies a bank internationally, 8 or 11 characters. A cross-border payment will not route without it, while a domestic transfer usually travels on the local routing code instead."
+msgstr "Kod identyfikujący bank na arenie międzynarodowej, 8 lub 11 znaków. Płatność międzynarodowa nie będzie routowana bez niego, natomiast przesunięcie krajowe zwykle podróżuje lokalnym kodem routingu zamiast tego."
 
 msgid "The contractor's expected weekly availability; scheduling uses this as the upper bound when assigning this contractor to operations across the week."
 msgstr "Oczekiwana dostępność pracownika zewnętrznego co tydzień; planowanie używa tego jako górnego limitu podczas przydzielania pracownika do operacji w ciągu tygodnia."
@@ -18236,6 +18314,12 @@ msgstr "Przenieś własność tej firmy na innego użytkownika"
 msgid "Transfer To"
 msgstr "Przenieś do"
 
+msgid "Transit"
+msgstr "Tranzyt"
+
+msgid "Transit & Institution"
+msgstr "Tranzyt i Instytucja"
+
 msgid "Trash"
 msgstr "Kosz"
 
@@ -18930,6 +19014,9 @@ msgstr "Wyświetl historię"
 
 msgid "View in Academy"
 msgstr "Wyświetl w Academy"
+
+msgid "View in new tab"
+msgstr "Wyświetl w nowej karcie"
 
 msgid "View in project plan"
 msgstr "Wyświetl w planie projektu"

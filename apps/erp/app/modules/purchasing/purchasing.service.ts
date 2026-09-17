@@ -45,6 +45,7 @@ import type {
   purchasingRfqStatusType,
   selectedLinesValidator,
   supplierAccountingValidator,
+  supplierBankAccountValidator,
   supplierContactValidator,
   supplierPaymentValidator,
   supplierProcessValidator,
@@ -271,6 +272,64 @@ export async function deleteSupplierLocation(
       .eq("supplierId", supplierId)
       .eq("id", supplierLocationId);
   }
+}
+
+export async function deleteSupplierBankAccount(
+  client: SupabaseClient<Database>,
+  id: string
+) {
+  return client.from("supplierBankAccount").delete().eq("id", id);
+}
+
+export async function getSupplierBankAccounts(
+  client: SupabaseClient<Database>,
+  supplierId: string
+) {
+  return client
+    .from("supplierBankAccount")
+    .select("*")
+    .eq("supplierId", supplierId)
+    .order("name");
+}
+
+export async function upsertSupplierBankAccount(
+  db: Kysely<KyselyDatabase>,
+  bankAccount:
+    | (Omit<z.infer<typeof supplierBankAccountValidator>, "id"> & {
+        companyId: string;
+        createdBy: string;
+        customFields?: Json;
+      })
+    | (Omit<z.infer<typeof supplierBankAccountValidator>, "id"> & {
+        id: string;
+        companyId: string;
+        updatedBy: string;
+        customFields?: Json;
+      })
+) {
+  const { supplierId, companyId } = bankAccount;
+
+  if ("createdBy" in bankAccount) {
+    return await db
+      .insertInto("supplierBankAccount")
+      .values(bankAccount)
+      .returning("id")
+      .executeTakeFirstOrThrow();
+  }
+
+  const { id, ...update } = bankAccount;
+
+  // supplierId and companyId are scoping columns, not editable fields. They are
+  // also re-asserted in the WHERE clause so a forged form value cannot move
+  // this row to another supplier.
+  return await db
+    .updateTable("supplierBankAccount")
+    .set({ ...update, updatedAt: datetime.timestamp() })
+    .where("id", "=", id)
+    .where("supplierId", "=", supplierId)
+    .where("companyId", "=", companyId)
+    .returning("id")
+    .executeTakeFirstOrThrow();
 }
 
 export async function deleteSupplierProcess(

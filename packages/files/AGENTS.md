@@ -35,7 +35,7 @@ sources re-encode as JPEG (alpha flattened onto white), everything else as PNG.
 **HEIC is never stored.** Every upload chokepoint converts first, through
 `MediaUploader`: both apps' `FileDropzone`, the ERP `useFileUpload` hook (the one
 document-panel upload mutation — TanStack-shaped: options at the hook or per-call,
-`onSuccess`/`onError`, `isUploading`; all nine panels go through it),
+`onSuccess`/`onError`, `isUploading`; all ten document panels go through it, including `RecordDocuments` for supplier/customer records),
 `useImageUpload` (ERP + MES editor hooks), Suggestion, slide uploads,
 `DocumentCreateForm`, `AttachmentsList`, the three curated forms
 (`ItemThumbnailUpload`, `ProfilePhotoForm`, `CompanyLogoForm`). Non-browser callers

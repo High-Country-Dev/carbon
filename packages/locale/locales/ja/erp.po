@@ -353,7 +353,7 @@ msgid "{scopeCount} permissions"
 msgstr "{scopeCount} 個の権限"
 
 msgid "{selectedCount} selected"
-msgstr "{selectedCount}件選択されました"
+msgstr "{selectedCount} 件が選択されています"
 
 msgid "{total} phases to get your company live on Carbon. Each one ends at a checkpoint."
 msgstr "あなたの会社を Carbon に本格運用するまでの {total} つのフェーズがあります。それぞれがチェックポイントで終わります。"
@@ -362,7 +362,7 @@ msgid "{total} phases to go live"
 msgstr "{total}個のフェーズをライブにする"
 
 msgid "{totalCount} results"
-msgstr "{totalCount}件の結果"
+msgstr "{totalCount} 件の検索結果"
 
 msgid "{totalQuantity, plural, one {# unit} other {# units}}"
 msgstr "{totalQuantity, plural, one {# 個} other {# 個}}"
@@ -1013,6 +1013,9 @@ msgstr "工具は部品を製造するために使用され、複数の製造指
 msgid "A user records the expiry date on each batch or serial when the goods are received. Use when suppliers ship lots with different expiry dates."
 msgstr "ユーザーは商品受取時に各バッチまたはシリアルの使用期限を記録します。仕入先が異なる使用期限のロットを出荷する場合に使用します。"
 
+msgid "ABA"
+msgstr "ABA"
+
 msgid "abilities"
 msgstr "スキル"
 
@@ -1085,6 +1088,9 @@ msgstr "固定資産を除却する際の原価を会計処理する"
 
 msgid "Account for the purchase cost of fixed assets"
 msgstr "固定資産の購入原価を会計処理する"
+
+msgid "Account Holder"
+msgstr "口座名義人"
 
 msgid "Account manager"
 msgstr "アカウント マネージャー"
@@ -1644,7 +1650,7 @@ msgid "All members of selected groups and selected individuals will be able to a
 msgstr "選択されたグループのすべてのメンバーと選択された個人が承認リクエストを承認できます"
 
 msgid "All returnable lines"
-msgstr "すべての返却可能な明細"
+msgstr "すべての返品対象明細"
 
 msgid "All rows imported — {inserted} inserted, {updated} updated."
 msgstr "すべての行をインポート—{inserted}行挿入、{updated}行更新。"
@@ -1742,6 +1748,9 @@ msgstr "ワークフローがそのステップに到達したときに、Carbon
 
 msgid "An integration or a custom change — the small slice that's actually custom."
 msgstr "連携またはカスタム変更 — 実際にカスタムされている小さなスライス。"
+
+msgid "An International Bank Account Number: one string holding the country, bank, branch, and account, with two check digits. Because it already identifies the bank, countries that use it need no separate routing code."
+msgstr "国際銀行口座番号（IBAN）：国、銀行、支店、口座を1つの文字列に含み、2つのチェックディジットが付く。既に銀行を識別するため、これを使用する国では別のルーティングコードが不要です。"
 
 msgid "An invitation is pending. They become active once they accept it."
 msgstr "招待待機中。承諾後に有効になります。"
@@ -2362,6 +2371,9 @@ msgstr "Webhook: {0} を削除してもよろしいですか?これは元に戻�
 msgid "Are you sure you want to delete this approval rule? This cannot be undone."
 msgstr "このアプリケーション承認ルールを削除してもよろしいですか？この操作は取り消せません。"
 
+msgid "Are you sure you want to delete this bank account?"
+msgstr "この銀行口座を削除してもよろしいですか？"
+
 msgid "Are you sure you want to delete this change notice?"
 msgstr "この変更通知を削除してもよろしいですか？"
 
@@ -2436,6 +2448,9 @@ msgstr "{0}を完全に削除してもよろしいですか？"
 
 msgid "Are you sure you want to permanently delete the supplier process?"
 msgstr "仕入先工法を完全に削除してもよろしいですか？"
+
+msgid "Are you sure you want to permanently delete this bank account?"
+msgstr "この銀行口座を完全に削除してもよろしいですか？"
 
 msgid "Are you sure you want to post this receipt?"
 msgstr "このレシートを転記してもよろしいですか？"
@@ -2832,8 +2847,20 @@ msgstr "外国通貨で表示される銀行口座"
 msgid "Bank account denominated in the local currency"
 msgstr "地元通貨で示された銀行口座。"
 
+msgid "Bank Accounts"
+msgstr "銀行口座"
+
+msgid "Bank Address"
+msgstr "銀行住所"
+
 msgid "Bank and financial service charge expenses"
 msgstr "銀行およびサービス料費用"
+
+msgid "Bank Code"
+msgstr "銀行コード"
+
+msgid "Bank Name"
+msgstr "銀行名"
 
 msgid "Bars show each week's flow: <0>supply</0> pushes inventory up, <1>demand</1> pulls it down. The <2>line</2> is your projected on-hand inventory — when it dips below <3>safety stock</3> you're at risk, and below zero is a <4>stockout</4>."
 msgstr "棒グラフは毎週の流れを表示します：<0>供給</0>は在庫を増加させ、<1>所要量</1>は減少させます。<2>線</2>は予測在庫です。<3>安全在庫</3>を下回る場合はリスク状態であり、ゼロを下回る場合は<4>欠品</4>です。"
@@ -2899,7 +2926,7 @@ msgid "Batches"
 msgstr "バッチ"
 
 msgid "Batches to return"
-msgstr "返却するバッチ"
+msgstr "返品するバッチ"
 
 msgid "Batching"
 msgstr "バッチ処理"
@@ -3043,6 +3070,9 @@ msgstr "ライブラリを参照"
 
 msgid "Browse the published version read-only. You can still rearrange steps to tidy the layout."
 msgstr "公開済バージョンを読み取り専用で閲覧できます。レイアウトを整理するためにステップを並び替えることもできます。"
+
+msgid "BSB"
+msgstr "BSB"
 
 msgid "Bucket"
 msgstr "バケット"
@@ -3522,7 +3552,7 @@ msgid "Choose another file"
 msgstr "別のファイルを選択"
 
 msgid "Choose how to add lines to this return."
-msgstr "この返却に明細を追加する方法を選択してください。"
+msgstr "この返品に明細を追加する方法を選択してください。"
 
 msgid "Choose what appears on the printed job traveler."
 msgstr "印刷された製造指図現品票に表示される内容を選択します。"
@@ -6261,6 +6291,9 @@ msgstr "属性を編集"
 msgid "Edit Attribute Category"
 msgstr "属性カテゴリを編集"
 
+msgid "Edit Bank Account"
+msgstr "銀行口座を編集"
+
 msgid "Edit Category"
 msgstr "カテゴリを編集"
 
@@ -8192,6 +8225,9 @@ msgstr "ヘルプ"
 msgid "Hide"
 msgstr "非表示"
 
+msgid "Hide account number"
+msgstr "口座番号を隠す"
+
 msgid "Hide raw"
 msgstr "生データを非表示"
 
@@ -8417,6 +8453,9 @@ msgstr "この個人は22 CFR 120.62で定義されている米国人である�
 msgid "I'm Still Working"
 msgstr "まだ働いています"
 
+msgid "IBAN"
+msgstr "IBAN"
+
 msgid "Id"
 msgstr "ID"
 
@@ -8467,6 +8506,12 @@ msgstr "何か問題が生じた場合"
 
 msgid "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
 msgstr "部品番号を変更したい場合は、[キャンセル]をクリックして、変換する前に各行アイテムの部品を手動で割り当ててください。"
+
+msgid "IFSC"
+msgstr "IFSC"
+
+msgid "IFSC Code"
+msgstr "IFSC コード"
 
 msgid "Ignore"
 msgstr "無視"
@@ -9505,7 +9550,7 @@ msgid "Lines appear here once a purchase order receipt has been posted, and only
 msgstr "発注書入荷が転記済になった後、ここに明細が表示されます。別の仕入先返却で既に認可された数量は表示されません。盲目的な返却には明細を追加を使用してください。"
 
 msgid "Lines appear here once a sales order shipment has been posted, and only for quantities not already authorized on another RMA. Use Add Line Item for a blind return."
-msgstr "受注出荷が転記済になった後、ここに明細が表示されます。別のRMAで既に認可された数量は表示されません。盲目的な返却には明細を追加を使用してください。"
+msgstr "受注出荷が転記された後に、別のRMAで既に認可されていない数量のみが表示されます。目隠し返品の場合は「明細を追加」を使用してください。"
 
 msgid "Lines need internal part numbers"
 msgstr "明細には社内部品番号が必要です"
@@ -10359,7 +10404,7 @@ msgid "Morning, {name}."
 msgstr "朝、{name}さん。"
 
 msgid "Most recent — search to find more"
-msgstr "最近のもの — 検索してもっと見つけます"
+msgstr "最新のもの — さらに検索して見つける"
 
 msgid "Most things get caught and resolved here. Name it plainly."
 msgstr "ほとんどのことはここで発見され、解決されます。明確に名前を付けてください。"
@@ -10524,6 +10569,9 @@ msgstr "新しい属性"
 
 msgid "New Attribute Category"
 msgstr "新しい属性カテゴリ"
+
+msgid "New Bank Account"
+msgstr "新規銀行口座"
 
 msgid "New Batch"
 msgstr "新規バッチ"
@@ -10925,6 +10973,9 @@ msgstr "利用可能な絞り込みはありません"
 msgid "No available tracked entities found"
 msgstr "利用可能な追跡対象エンティティが見つかりません"
 
+msgid "No bank accounts have been added yet."
+msgstr "銀行口座がまだ追加されていません。"
+
 msgid "No batches"
 msgstr "バッチなし"
 
@@ -10987,6 +11038,9 @@ msgstr "ディメンションスロットが構成されていません"
 
 msgid "No dimension values mapped yet"
 msgstr "まだディメンション値がマップされていません"
+
+msgid "No documents"
+msgstr "ドキュメントがありません"
 
 msgid "No draft make method for this item yet."
 msgstr "この品目の下書き製造方法はまだありません。"
@@ -11265,10 +11319,10 @@ msgid "No returnable lines for this customer"
 msgstr "この得意先に返却可能な明細がありません"
 
 msgid "No returnable lines for this supplier"
-msgstr "この仕入先に返却可能な明細がありません"
+msgstr "この仕入先に返品対象の明細がありません。"
 
 msgid "No returnable lines match your search"
-msgstr "検索で返却可能な明細が見つかりません"
+msgstr "検索条件に一致する返品対象の明細がありません。"
 
 msgid "No rows here."
 msgstr "ここに行はありません。"
@@ -11669,6 +11723,12 @@ msgstr "下書きの手順書のみが編集可能です。有効またはアー
 
 msgid "Only empty, open periods can be deleted."
 msgstr "空のオープン期間のみ削除できます。"
+
+msgid "Only if it differs from the customer name"
+msgstr "得意先名と異なる場合のみ"
+
+msgid "Only if it differs from the supplier name"
+msgstr "仕入先名と異なる場合のみ"
 
 msgid "Only qualified employees can be scheduled for and run this process"
 msgstr "資格のある従業員のみがこのプロセスをスケジュールして実行できます"
@@ -13146,7 +13206,7 @@ msgid "Purchase Qty"
 msgstr "購入数量"
 
 msgid "Purchase Return"
-msgstr "購入返品"
+msgstr "購買返品"
 
 msgid "Purchase Tax Payable"
 msgstr "仕入税金支払い（デフォルト）"
@@ -14253,6 +14313,9 @@ msgstr "返す:"
 msgid "Rev {revision}"
 msgstr "Rev {revision}"
 
+msgid "Reveal account number"
+msgstr "銀行口座番号を表示"
+
 msgid "Revenue"
 msgstr "売上高"
 
@@ -14440,6 +14503,9 @@ msgstr "すべての売掛金請求書を、個別の拠点の代わりに、1�
 
 msgid "Routing"
 msgstr "工順"
+
+msgid "Routing Number (ABA)"
+msgstr "ルーティング番号（ABA）"
 
 msgid "rows"
 msgstr "行"
@@ -14894,7 +14960,7 @@ msgid "Search by linear issue title..."
 msgstr "Linear イシュータイトルで検索..."
 
 msgid "Search by receipt, PO, or item"
-msgstr "入荷、発注書、または品目で検索"
+msgstr "入荷、発注、または品目で検索"
 
 msgid "Search by shipment, sales order, or item"
 msgstr "出荷、受注、または品目で検索"
@@ -15147,7 +15213,7 @@ msgid "Select posted receipt lines from this supplier to return."
 msgstr "この仕入先からの転記済の入荷明細を選択してください。"
 
 msgid "Select posted shipment lines to this customer to return."
-msgstr "この得意先への転記済の出荷明細を選択してください。"
+msgstr "この得意先への転記済出荷明細を選択して返品する"
 
 msgid "Select Printer"
 msgstr "プリンターを選択"
@@ -15286,7 +15352,7 @@ msgid "Serial numbers received"
 msgstr "受け入れたシリアル番号"
 
 msgid "Serial numbers to return"
-msgstr "返却するシリアル番号"
+msgstr "返品するシリアル番号"
 
 msgid "Serial or Batch Tracking Required"
 msgstr "シリアルまたはバッチ追跡が必要です"
@@ -15346,7 +15412,7 @@ msgid "Set a customer on this return to add from a shipment."
 msgstr "この返却に得意先を設定して、出荷から追加してください。"
 
 msgid "Set a supplier on this return to add from a receipt."
-msgstr "この返却に仕入先を設定して、入荷から追加してください。"
+msgstr "この返品に仕入先を設定して入荷から追加"
 
 msgid "Set a target"
 msgstr "ターゲットを設定"
@@ -15661,7 +15727,7 @@ msgid "Show Durations"
 msgstr "期間を表示"
 
 msgid "Show more"
-msgstr "もっと表示"
+msgstr "さらに表示"
 
 msgid "Show one inventory number the floor and office both trust"
 msgstr "床と事務所の両方が信頼できる1つの在庫番号を表示する"
@@ -15850,6 +15916,9 @@ msgstr "昇順でソート"
 
 msgid "Sort by"
 msgstr "並べ替え"
+
+msgid "Sort Code"
+msgstr "ソートコード"
 
 msgid "Sort Descending"
 msgstr "降順でソート"
@@ -16499,6 +16568,12 @@ msgstr "サーフェス"
 msgid "Suspected Failure Mode"
 msgstr "疑わしい故障モード"
 
+msgid "SWIFT"
+msgstr "SWIFT"
+
+msgid "SWIFT / BIC"
+msgstr "SWIFT / BIC"
+
 msgid "Switch"
 msgstr "切り替え"
 
@@ -16856,6 +16931,9 @@ msgstr "この仕入先が属するカテゴリ（原材料、サービス、請
 
 msgid "The code printed on the kanban card that operators scan to mark the job complete; auto-generated when left blank."
 msgstr "かんばんカードに印刷されるコード。作業者がスキャンして製造指図を完了するとマークします。空白の場合は自動生成されます。"
+
+msgid "The code that identifies a bank internationally, 8 or 11 characters. A cross-border payment will not route without it, while a domestic transfer usually travels on the local routing code instead."
+msgstr "銀行を国際的に識別するコード（8文字または11文字）。国際送金はこれなしではルーティングされません。一方、国内振替は通常、ローカルルーティングコードで行われます。"
 
 msgid "The contractor's expected weekly availability; scheduling uses this as the upper bound when assigning this contractor to operations across the week."
 msgstr "外部作業者の期待される毎週の利用可能性。スケジューリングはこれを、週間を通じてこの外部作業者を工程に割り当てる際の上限として使用します。"
@@ -18236,6 +18314,12 @@ msgstr "この会社の所有権を別のユーザーに転送します。"
 msgid "Transfer To"
 msgstr "転送先"
 
+msgid "Transit"
+msgstr "トランジット"
+
+msgid "Transit & Institution"
+msgstr "トランジット・機関番号"
+
 msgid "Trash"
 msgstr "ゴミ箱"
 
@@ -18930,6 +19014,9 @@ msgstr "履歴を表示"
 
 msgid "View in Academy"
 msgstr "アカデミーで表示"
+
+msgid "View in new tab"
+msgstr "新規タブで表示"
 
 msgid "View in project plan"
 msgstr "プロジェクトプランで表示"
