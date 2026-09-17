@@ -39,6 +39,7 @@ import {
 } from "../shared/shared.service";
 import type {
   customerAccountingValidator,
+  customerBankAccountValidator,
   customerContactValidator,
   customerPaymentValidator,
   customerShippingValidator,
@@ -339,6 +340,64 @@ export async function deleteCustomer(
   customerId: string
 ) {
   return client.from("customer").delete().eq("id", customerId);
+}
+
+export async function deleteCustomerBankAccount(
+  client: SupabaseClient<Database>,
+  id: string
+) {
+  return client.from("customerBankAccount").delete().eq("id", id);
+}
+
+export async function getCustomerBankAccounts(
+  client: SupabaseClient<Database>,
+  customerId: string
+) {
+  return client
+    .from("customerBankAccount")
+    .select("*")
+    .eq("customerId", customerId)
+    .order("name");
+}
+
+export async function upsertCustomerBankAccount(
+  db: Kysely<KyselyDatabase>,
+  bankAccount:
+    | (Omit<z.infer<typeof customerBankAccountValidator>, "id"> & {
+        companyId: string;
+        createdBy: string;
+        customFields?: Json;
+      })
+    | (Omit<z.infer<typeof customerBankAccountValidator>, "id"> & {
+        id: string;
+        companyId: string;
+        updatedBy: string;
+        customFields?: Json;
+      })
+) {
+  const { customerId, companyId } = bankAccount;
+
+  if ("createdBy" in bankAccount) {
+    return await db
+      .insertInto("customerBankAccount")
+      .values(bankAccount)
+      .returning("id")
+      .executeTakeFirstOrThrow();
+  }
+
+  const { id, ...update } = bankAccount;
+
+  // customerId and companyId are scoping columns, not editable fields. They are
+  // also re-asserted in the WHERE clause so a forged form value cannot move
+  // this row to another customer.
+  return await db
+    .updateTable("customerBankAccount")
+    .set({ ...update, updatedAt: datetime.timestamp() })
+    .where("id", "=", id)
+    .where("customerId", "=", customerId)
+    .where("companyId", "=", companyId)
+    .returning("id")
+    .executeTakeFirstOrThrow();
 }
 
 export async function deleteCustomerContact(

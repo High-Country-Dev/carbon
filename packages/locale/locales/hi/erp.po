@@ -353,7 +353,7 @@ msgid "{scopeCount} permissions"
 msgstr "{scopeCount} अनुमतियाँ"
 
 msgid "{selectedCount} selected"
-msgstr ""
+msgstr "{selectedCount} चयनित"
 
 msgid "{total} phases to get your company live on Carbon. Each one ends at a checkpoint."
 msgstr "आपकी कंपनी को Carbon पर लाइव करने के लिए {total} चरण। प्रत्येक एक चेकपॉइंट पर समाप्त होता है।"
@@ -362,7 +362,7 @@ msgid "{total} phases to go live"
 msgstr "{total} चरण लाइव होने के लिए"
 
 msgid "{totalCount} results"
-msgstr ""
+msgstr "{totalCount} परिणाम"
 
 msgid "{totalQuantity, plural, one {# unit} other {# units}}"
 msgstr "{totalQuantity, plural, one {# इकाई} other {# इकाइयाँ}}"
@@ -1009,6 +1009,9 @@ msgstr "एक टूल एक भौतिक आइटम है जिसक
 msgid "A user records the expiry date on each batch or serial when the goods are received. Use when suppliers ship lots with different expiry dates."
 msgstr "एक उपयोगकर्ता प्रत्येक बैच या सीरीज पर समाप्ति तिथि दर्ज करता है जब माल प्राप्त होता है। जब आपूर्तिकर्ता विभिन्न समाप्ति तिथियों के साथ लॉट भेजते हैं तो इसका उपयोग करें।"
 
+msgid "ABA"
+msgstr "ABA"
+
 msgid "abilities"
 msgstr "कौशल"
 
@@ -1081,6 +1084,9 @@ msgstr "निपटान के समय अचल संपत्तिय�
 
 msgid "Account for the purchase cost of fixed assets"
 msgstr "अचल संपत्तियों की अधिग्रहण लागत के लिए खाता।"
+
+msgid "Account Holder"
+msgstr "खाता धारक"
 
 msgid "Account manager"
 msgstr "खाता प्रबंधक"
@@ -1357,10 +1363,10 @@ msgid "Add from library…"
 msgstr "लाइब्रेरी से जोड़ें…"
 
 msgid "Add from receipt"
-msgstr ""
+msgstr "प्राप्ति से जोड़ें"
 
 msgid "Add from shipment"
-msgstr ""
+msgstr "शिपमेंट से जोड़ें"
 
 msgid "Add Group"
 msgstr "समूह जोड़ें"
@@ -1384,7 +1390,7 @@ msgid "Add lines from document"
 msgstr "दस्तावेज़ से लाइनें जोड़ें"
 
 msgid "Add manually"
-msgstr ""
+msgstr "मैन्युअल रूप से जोड़ें"
 
 msgid "Add match"
 msgstr "मिलान जोड़ें"
@@ -1640,7 +1646,7 @@ msgid "All members of selected groups and selected individuals will be able to a
 msgstr "सभी चुने गए समूहों के सदस्य और चुने गए व्यक्ति अनुरोधों को अनुमोदित कर सकेंगे"
 
 msgid "All returnable lines"
-msgstr ""
+msgstr "सभी रिटर्न योग्य पंक्तियाँ"
 
 msgid "All rows imported — {inserted} inserted, {updated} updated."
 msgstr "सभी पंक्तियाँ आयात की गईं — {inserted} डाली गईं, {updated} अपडेट की गईं।"
@@ -1738,6 +1744,9 @@ msgstr "एक HTTPS अनुरोध जो कार्बन आपके �
 
 msgid "An integration or a custom change — the small slice that's actually custom."
 msgstr "एक एकीकरण या एक कस्टम परिवर्तन — वह छोटा हिस्सा जो वास्तव में कस्टम है।"
+
+msgid "An International Bank Account Number: one string holding the country, bank, branch, and account, with two check digits. Because it already identifies the bank, countries that use it need no separate routing code."
+msgstr "एक अंतर्राष्ट्रीय बैंक खाता संख्या: एक स्ट्रिंग जो देश, बैंक, शाखा और खाते को धारण करती है, दो जांच अंकों के साथ। क्योंकि यह पहले से ही बैंक की पहचान करती है, जो देश इसका उपयोग करते हैं उन्हें कोई अलग रूटिंग कोड की आवश्यकता नहीं है।"
 
 msgid "An invitation is pending. They become active once they accept it."
 msgstr "एक आमंत्रण लंबित है। वे सक्रिय हो जाते हैं एक बार जब वे इसे स्वीकार कर लेते हैं।"
@@ -2358,6 +2367,9 @@ msgstr "क्या आप वेबहुक {0} को हटाना चा
 msgid "Are you sure you want to delete this approval rule? This cannot be undone."
 msgstr "क्या आप इस अनुमोदन नियम को हटाना चाहते हैं? यह वापस नहीं किया जा सकता।"
 
+msgid "Are you sure you want to delete this bank account?"
+msgstr "क्या आप वाकई इस बैंक खाते को हटाना चाहते हैं?"
+
 msgid "Are you sure you want to delete this change notice?"
 msgstr "क्या आप इस परिवर्तन सूचना को हटाना चाहते हैं?"
 
@@ -2432,6 +2444,9 @@ msgstr "क्या आप {0} को स्थायी रूप से ह�
 
 msgid "Are you sure you want to permanently delete the supplier process?"
 msgstr "क्या आप आपूर्तिकर्ता प्रक्रिया को स्थायी रूप से हटाना चाहते हैं?"
+
+msgid "Are you sure you want to permanently delete this bank account?"
+msgstr "क्या आप वाकई इस बैंक खाते को स्थायी रूप से हटाना चाहते हैं?"
 
 msgid "Are you sure you want to post this receipt?"
 msgstr "क्या आप सुनिश्चित हैं कि आप इस रसीद को पोस्ट करना चाहते हैं?"
@@ -2828,8 +2843,20 @@ msgstr "बैंक खाता एक विदेशी मुद्रा �
 msgid "Bank account denominated in the local currency"
 msgstr "बैंक खाता स्थानीय मुद्रा में मूल्यवर्गित।"
 
+msgid "Bank Accounts"
+msgstr "बैंक खाते"
+
+msgid "Bank Address"
+msgstr "बैंक का पता"
+
 msgid "Bank and financial service charge expenses"
 msgstr "बैंक और वित्तीय सेवा शुल्क व्यय।"
+
+msgid "Bank Code"
+msgstr "बैंक कोड"
+
+msgid "Bank Name"
+msgstr "बैंक का नाम"
 
 msgid "Bars show each week's flow: <0>supply</0> pushes inventory up, <1>demand</1> pulls it down. The <2>line</2> is your projected on-hand inventory — when it dips below <3>safety stock</3> you're at risk, and below zero is a <4>stockout</4>."
 msgstr "बार प्रत्येक सप्ताह के प्रवाह को दिखाते हैं: &lt;0&gt;आपूर्ति&lt;/0&gt; इन्वेंटरी को ऊपर धकेलती है, &lt;1&gt;मांग&lt;/1&gt; इसे नीचे खींचती है। &lt;2&gt;लाइन&lt;/2&gt; आपकी अनुमानित उपलब्ध इन्वेंटरी है — जब यह &lt;3&gt;सुरक्षा स्टॉक&lt;/3&gt; के नीचे गिरती है तो आप जोखिम में हैं, और शून्य से नीचे एक &lt;4&gt;स्टॉकआउट&lt;/4&gt; है।"
@@ -2895,7 +2922,7 @@ msgid "Batches"
 msgstr "बैच"
 
 msgid "Batches to return"
-msgstr ""
+msgstr "वापस करने के लिए बैच"
 
 msgid "Batching"
 msgstr "बैचिंग"
@@ -3039,6 +3066,9 @@ msgstr "लाइब्रेरी ब्राउज़ करें"
 
 msgid "Browse the published version read-only. You can still rearrange steps to tidy the layout."
 msgstr "प्रकाशित संस्करण को केवल पढ़ने के लिए ब्राउज़ करें। आप अभी भी लेआउट को साफ करने के लिए चरणों को पुनर्व्यवस्थित कर सकते हैं।"
+
+msgid "BSB"
+msgstr "BSB"
 
 msgid "Bucket"
 msgstr "बकेट"
@@ -3518,7 +3548,7 @@ msgid "Choose another file"
 msgstr "दूसरी फ़ाइल चुनें"
 
 msgid "Choose how to add lines to this return."
-msgstr ""
+msgstr "इस रिटर्न में पंक्तियाँ कैसे जोड़ें, यह चुनें।"
 
 msgid "Choose what appears on the printed job traveler."
 msgstr "मुद्रित जॉब ट्रैवलर पर क्या दिखाई दे, इसे चुनें।"
@@ -6254,6 +6284,9 @@ msgstr "विशेषता संपादित करें"
 msgid "Edit Attribute Category"
 msgstr "विशेषता श्रेणी संपादित करें"
 
+msgid "Edit Bank Account"
+msgstr "बैंक खाते को संपादित करें"
+
 msgid "Edit Category"
 msgstr "श्रेणी संपादित करें"
 
@@ -6716,7 +6749,7 @@ msgid "Enter a quantity between 1 and {0}."
 msgstr "1 और {0} के बीच मात्रा दर्ज करें।"
 
 msgid "Enter an item and quantity yourself."
-msgstr ""
+msgstr "आइटम और मात्रा स्वयं दर्ज करें।"
 
 msgid "Enter and approve vendor bills against a PO (three-way match)"
 msgstr "PO के विरुद्ध विक्रेता बिलों को दर्ज करें और अनुमोदित करें (थ्री-वे मिलान)"
@@ -8182,6 +8215,9 @@ msgstr "मदद"
 msgid "Hide"
 msgstr "छिपाएं"
 
+msgid "Hide account number"
+msgstr "खाता संख्या छिपाएँ"
+
 msgid "Hide raw"
 msgstr "कच्चे को छुपाएं"
 
@@ -8407,6 +8443,9 @@ msgstr "मेरे पास यह मानने का उचित आध
 msgid "I'm Still Working"
 msgstr "मैं अभी भी काम कर रहा हूँ"
 
+msgid "IBAN"
+msgstr "IBAN"
+
 msgid "Id"
 msgstr "आईडी"
 
@@ -8457,6 +8496,12 @@ msgstr "अगर कुछ गलत रास्ते पर है"
 
 msgid "If you wish to change the part numbers, please click Cancel and manually assign the parts for each line item before converting."
 msgstr "यदि आप पार्ट नंबर बदलना चाहते हैं, तो कृपया रद्द करें पर क्लिक करें और परिवर्तित करने से पहले प्रत्येक पंक्ति आइटम के लिए पार्ट्स को मैन्युअल रूप से असाइन करें।"
+
+msgid "IFSC"
+msgstr "IFSC"
+
+msgid "IFSC Code"
+msgstr "IFSC कोड"
 
 msgid "Ignore"
 msgstr "अनदेखा करें"
@@ -9492,10 +9537,10 @@ msgid "Lines"
 msgstr "पंक्तियाँ"
 
 msgid "Lines appear here once a purchase order receipt has been posted, and only for quantities not already authorized on another supplier return. Use Add Line Item for a blind return."
-msgstr ""
+msgstr "पंक्तियाँ यहाँ दिखाई देती हैं जब क्रय आदेश की प्राप्ति पोस्ट की जाती है, और केवल उन मात्राओं के लिए जो पहले से किसी अन्य आपूर्तिकर्ता रिटर्न पर अधिकृत नहीं हैं। एक अंधी रिटर्न के लिए पंक्ति मद जोड़ें का उपयोग करें।"
 
 msgid "Lines appear here once a sales order shipment has been posted, and only for quantities not already authorized on another RMA. Use Add Line Item for a blind return."
-msgstr ""
+msgstr "पंक्तियाँ यहाँ दिखाई देती हैं जब विक्रय आदेश की शिपमेंट पोस्ट की जाती है, और केवल उन मात्राओं के लिए जो पहले से किसी अन्य RMA पर अधिकृत नहीं हैं। एक अंधी रिटर्न के लिए पंक्ति मद जोड़ें का उपयोग करें।"
 
 msgid "Lines need internal part numbers"
 msgstr "लाइनों को आंतरिक भाग संख्याओं की आवश्यकता है"
@@ -10349,7 +10394,7 @@ msgid "Morning, {name}."
 msgstr "सुबह, {name}।"
 
 msgid "Most recent — search to find more"
-msgstr ""
+msgstr "सबसे हाल ही की — अधिक खोजने के लिए खोजें"
 
 msgid "Most things get caught and resolved here. Name it plainly."
 msgstr "अधिकांश चीजें यहां पकड़ी जाती हैं और हल की जाती हैं। इसे स्पष्ट रूप से नाम दें।"
@@ -10514,6 +10559,9 @@ msgstr "नई विशेषता"
 
 msgid "New Attribute Category"
 msgstr "नई विशेषता श्रेणी"
+
+msgid "New Bank Account"
+msgstr "नया बैंक खाता"
 
 msgid "New Batch"
 msgstr "नया बैच"
@@ -10915,11 +10963,14 @@ msgstr "कोई उपलब्ध फ़िल्टर नहीं"
 msgid "No available tracked entities found"
 msgstr "कोई उपलब्ध ट्रैक किए गए इकाइयां नहीं मिलीं"
 
+msgid "No bank accounts have been added yet."
+msgstr "अभी तक कोई बैंक खाता जोड़ा नहीं गया है।"
+
 msgid "No batches"
 msgstr "कोई बैच नहीं"
 
 msgid "No batches selected yet."
-msgstr ""
+msgstr "अभी तक कोई बैच चयनित नहीं।"
 
 msgid "No BOM input has a shelf-life policy"
 msgstr "कोई BOM इनपुट शेल्फ-लाइफ नीति नहीं है"
@@ -10977,6 +11028,9 @@ msgstr "कोई आयाम स्लॉट कॉन्फ़िगर न�
 
 msgid "No dimension values mapped yet"
 msgstr "अभी तक कोई आयाम मान मैप नहीं किया गया"
+
+msgid "No documents"
+msgstr "कोई दस्तावेज़ नहीं"
 
 msgid "No draft make method for this item yet."
 msgstr "इस आइटम के लिए अभी तक कोई ड्राफ्ट निर्माण विधि नहीं है।"
@@ -11252,13 +11306,13 @@ msgid "No results found"
 msgstr "कोई परिणाम नहीं मिला"
 
 msgid "No returnable lines for this customer"
-msgstr ""
+msgstr "इस ग्राहक के लिए कोई रिटर्न योग्य पंक्तियाँ नहीं"
 
 msgid "No returnable lines for this supplier"
-msgstr ""
+msgstr "इस आपूर्तिकर्ता के लिए कोई रिटर्न योग्य पंक्तियाँ नहीं"
 
 msgid "No returnable lines match your search"
-msgstr ""
+msgstr "कोई रिटर्न योग्य पंक्तियाँ आपकी खोज से मेल नहीं खाती"
 
 msgid "No rows here."
 msgstr "यहाँ कोई पंक्तियाँ नहीं हैं।"
@@ -11270,7 +11324,7 @@ msgid "No scheduled work in this window"
 msgstr "इस विंडो में कोई शेड्यूल किया हुआ काम नहीं"
 
 msgid "No serial numbers selected yet."
-msgstr ""
+msgstr "अभी तक कोई सीरियल नंबर चयनित नहीं।"
 
 msgid "No shifts configured — assuming Mon–Fri, 8h days"
 msgstr "कोई पारियाँ कॉन्फ़िगर नहीं — सोमवार–शुक्रवार, 8 घंटे की दिन मानी जा रही है"
@@ -11659,6 +11713,12 @@ msgstr "केवल ड्राफ्ट कार्यविधियाँ 
 
 msgid "Only empty, open periods can be deleted."
 msgstr "केवल खाली, खुली अवधियों को हटाया जा सकता है।"
+
+msgid "Only if it differs from the customer name"
+msgstr "केवल यदि यह ग्राहक के नाम से भिन्न हो"
+
+msgid "Only if it differs from the supplier name"
+msgstr "केवल यदि यह आपूर्तिकर्ता के नाम से भिन्न हो"
 
 msgid "Only qualified employees can be scheduled for and run this process"
 msgstr "केवल योग्य कर्मचारी ही इस प्रक्रिया के लिए अनुसूचित और चलाए जा सकते हैं"
@@ -12442,13 +12502,13 @@ msgid "Pick serials/batches to return"
 msgstr "रिटर्न करने के लिए सीरीज/बैच चुनें"
 
 msgid "Pick the batches on hand that were received from this supplier."
-msgstr ""
+msgstr "इस आपूर्तिकर्ता से प्राप्त हाथ पर मौजूद बैच चुनें।"
 
 msgid "Pick the bin that needs stock, then pick the bins to pull it from."
 msgstr "स्टॉक की जरूरत वाली बिन को चुनें, फिर उन बिन को चुनें जहां से स्टॉक खींचना है।"
 
 msgid "Pick the serial numbers on hand that were received from this supplier."
-msgstr ""
+msgstr "इस आपूर्तिकर्ता से प्राप्त हाथ पर मौजूद सीरियल नंबर चुनें।"
 
 msgid "Pick tracked item"
 msgstr "ट्रैक किए गए आइटम को चुनें"
@@ -13136,7 +13196,7 @@ msgid "Purchase Qty"
 msgstr "खरीद मात्रा"
 
 msgid "Purchase Return"
-msgstr ""
+msgstr "क्रय रिटर्न"
 
 msgid "Purchase Tax Payable"
 msgstr "खरीद कर देय (डिफ़ॉल्ट)"
@@ -14243,6 +14303,9 @@ msgstr "रिटर्न:"
 msgid "Rev {revision}"
 msgstr "Rev {revision}"
 
+msgid "Reveal account number"
+msgstr "खाता संख्या दिखाएँ"
+
 msgid "Revenue"
 msgstr "राजस्व"
 
@@ -14430,6 +14493,9 @@ msgstr "सभी प्राप्य खाते चालानों क�
 
 msgid "Routing"
 msgstr "रूटिंग"
+
+msgid "Routing Number (ABA)"
+msgstr "रूटिंग संख्या (ABA)"
 
 msgid "rows"
 msgstr "पंक्तियाँ"
@@ -14637,7 +14703,7 @@ msgid "Sales Person"
 msgstr "विक्रय प्रतिनिधि"
 
 msgid "Sales Return"
-msgstr ""
+msgstr "विक्रय रिटर्न"
 
 msgid "Sales Revenue"
 msgstr "बिक्रय राजस्व"
@@ -14884,10 +14950,10 @@ msgid "Search by linear issue title..."
 msgstr "Linear समस्या शीर्षक द्वारा खोजें..."
 
 msgid "Search by receipt, PO, or item"
-msgstr ""
+msgstr "प्राप्ति, PO, या आइटम के अनुसार खोजें"
 
 msgid "Search by shipment, sales order, or item"
-msgstr ""
+msgstr "शिपमेंट, विक्रय आदेश, या आइटम के अनुसार खोजें"
 
 msgid "Search customers and types..."
 msgstr "ग्राहकों और प्रकारों को खोजें..."
@@ -15134,10 +15200,10 @@ msgid "Select operations"
 msgstr "संचालन चुनें"
 
 msgid "Select posted receipt lines from this supplier to return."
-msgstr ""
+msgstr "इस आपूर्तिकर्ता से पोस्ट की गई प्राप्ति पंक्तियों को रिटर्न के लिए चुनें।"
 
 msgid "Select posted shipment lines to this customer to return."
-msgstr ""
+msgstr "इस ग्राहक को भेजी गई शिपमेंट पंक्तियों को रिटर्न के लिए चुनें।"
 
 msgid "Select Printer"
 msgstr "प्रिंटर चुनें"
@@ -15276,7 +15342,7 @@ msgid "Serial numbers received"
 msgstr "प्राप्त सीरियल नंबर"
 
 msgid "Serial numbers to return"
-msgstr ""
+msgstr "रिटर्न के लिए सीरियल नंबर"
 
 msgid "Serial or Batch Tracking Required"
 msgstr "सीरियल या बैच ट्रैकिंग आवश्यक है"
@@ -15333,10 +15399,10 @@ msgid "Session locked"
 msgstr "सत्र लॉक किया गया"
 
 msgid "Set a customer on this return to add from a shipment."
-msgstr ""
+msgstr "शिपमेंट से जोड़ने के लिए इस रिटर्न पर एक ग्राहक सेट करें।"
 
 msgid "Set a supplier on this return to add from a receipt."
-msgstr ""
+msgstr "प्राप्ति से जोड़ने के लिए इस रिटर्न पर एक आपूर्तिकर्ता सेट करें।"
 
 msgid "Set a target"
 msgstr "लक्ष्य निर्धारित करें"
@@ -15639,10 +15705,10 @@ msgid "Show a readable Supplier ID column on the supplier list, supplier forms, 
 msgstr "आपूर्तिकर्ता सूची, आपूर्तिकर्ता फॉर्म और ड्रॉपडाउन पर एक पठनीय आपूर्तिकर्ता ID कॉलम दिखाएं। आपूर्तिकर्ता अभी भी किसी भी तरह से आंतरिक रूप से पहचाने जाते हैं।"
 
 msgid "Show available batch numbers"
-msgstr ""
+msgstr "उपलब्ध बैच संख्याएँ दिखाएँ"
 
 msgid "Show available tracking numbers"
-msgstr ""
+msgstr "उपलब्ध ट्रैकिंग संख्याएँ दिखाएँ"
 
 msgid "Show Customer IDs"
 msgstr "ग्राहक आईडी दिखाएं"
@@ -15651,7 +15717,7 @@ msgid "Show Durations"
 msgstr "अवधि दिखाएं"
 
 msgid "Show more"
-msgstr ""
+msgstr "और दिखाएँ"
 
 msgid "Show one inventory number the floor and office both trust"
 msgstr "एक इन्वेंटरी नंबर दिखाएं जिस पर फ्लोर और ऑफिस दोनों को विश्वास है"
@@ -15840,6 +15906,9 @@ msgstr "आरोही क्रम में सॉर्ट करें"
 
 msgid "Sort by"
 msgstr "द्वारा क्रमबद्ध करें"
+
+msgid "Sort Code"
+msgstr "सॉर्ट कोड"
 
 msgid "Sort Descending"
 msgstr "अवरोही क्रम में सॉर्ट करें"
@@ -16489,6 +16558,12 @@ msgstr "सतहें"
 msgid "Suspected Failure Mode"
 msgstr "संदिग्ध विफलता मोड"
 
+msgid "SWIFT"
+msgstr "SWIFT"
+
+msgid "SWIFT / BIC"
+msgstr "SWIFT / BIC"
+
 msgid "Switch"
 msgstr "स्विच करें"
 
@@ -16846,6 +16921,9 @@ msgstr "वह श्रेणी जिससे यह आपूर्ति�
 
 msgid "The code printed on the kanban card that operators scan to mark the job complete; auto-generated when left blank."
 msgstr "कानबान कार्ड पर मुद्रित कोड जिसे ऑपरेटर जॉब को पूर्ण करने के लिए स्कैन करते हैं; खाली छोड़ने पर स्वचालित रूप से उत्पन्न।"
+
+msgid "The code that identifies a bank internationally, 8 or 11 characters. A cross-border payment will not route without it, while a domestic transfer usually travels on the local routing code instead."
+msgstr "यह कोड अंतर्राष्ट्रीय स्तर पर एक बैंक को पहचानता है, 8 या 11 वर्ण। एक अंतर्राष्ट्रीय भुगतान इसके बिना रूट नहीं होगा, जबकि एक घरेलू स्थानांतरण आमतौर पर स्थानीय रूटिंग कोड का उपयोग करता है।"
 
 msgid "The contractor's expected weekly availability; scheduling uses this as the upper bound when assigning this contractor to operations across the week."
 msgstr "ठेकेदार की अपेक्षित साप्ताहिक उपलब्धता; शेड्यूलिंग इसे इस सप्ताह भर में इस ठेकेदार को ऑपरेशन के लिए असाइन करते समय ऊपरी सीमा के रूप में उपयोग करती है।"
@@ -18226,6 +18304,12 @@ msgstr "इस कंपनी की स्वामित्व किसी �
 msgid "Transfer To"
 msgstr "को स्थानांतरित करें"
 
+msgid "Transit"
+msgstr "ट्रांजिट"
+
+msgid "Transit & Institution"
+msgstr "ट्रांजिट और संस्था"
+
 msgid "Trash"
 msgstr "ट्रैश"
 
@@ -18920,6 +19004,9 @@ msgstr "इतिहास देखें"
 
 msgid "View in Academy"
 msgstr "अकादमी में देखें"
+
+msgid "View in new tab"
+msgstr ""
 
 msgid "View in project plan"
 msgstr "प्रोजेक्ट प्लान में देखें"
