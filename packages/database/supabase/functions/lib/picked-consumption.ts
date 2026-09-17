@@ -31,12 +31,56 @@ export type PickedBudget = {
   itemId: string;
   factor: number;
   storageUnitId: string | null;
+  sharedStorageUnitId: string | null;
+  own: number;
+  unclaimed: number;
   available: number;
   isInventory: boolean;
   isPredecessor: boolean;
 };
 
-type Take = { budget: PickedBudget; quantity: number };
+export type Take = {
+  budget: PickedBudget;
+  quantity: number;
+  fromOwn: number;
+  fromShared: number;
+};
+
+export type SharedTakes = Map<string, number>;
+
+export function sharedTakeKey(itemId: string, storageUnitId: string | null) {
+  return `${itemId}\u0000${storageUnitId ?? ""}`;
+}
+
+export function recordSharedTakes(takenShared: SharedTakes, takes: Take[]) {
+  for (const take of takes) {
+    if (take.fromShared <= 0) continue;
+    const key = sharedTakeKey(take.budget.itemId, take.budget.sharedStorageUnitId);
+    takenShared.set(key, (takenShared.get(key) ?? 0) + take.fromShared);
+  }
+}
+
+export function splitTakeByBin(
+  take: Take
+): { storageUnitId: string | null; quantity: number }[] {
+  const { budget, fromOwn, fromShared } = take;
+  if (
+    fromShared <= 0 ||
+    fromOwn <= 0 ||
+    budget.storageUnitId === budget.sharedStorageUnitId
+  ) {
+    return [
+      {
+        storageUnitId: fromOwn > 0 ? budget.storageUnitId : budget.sharedStorageUnitId,
+        quantity: take.quantity,
+      },
+    ];
+  }
+  return [
+    { storageUnitId: budget.storageUnitId, quantity: fromOwn },
+    { storageUnitId: budget.sharedStorageUnitId, quantity: fromShared },
+  ];
+}
 
 export function orderOldFirst(
   budgets: PickedBudget[],
@@ -68,7 +112,8 @@ export function allocateAcrossBudgets(
         : budget.available;
     const take = Math.min(remaining * budget.factor, usable);
     if (take <= 0) continue;
-    takes.push({ budget, quantity: take });
+    const fromOwn = Math.min(take, Math.max(0, budget.own));
+    takes.push({ budget, quantity: take, fromOwn, fromShared: take - fromOwn });
     remaining -= take / budget.factor;
   }
   return { takes, remaining: Math.max(0, remaining) };
@@ -226,10 +271,10 @@ export async function getPickedBudgets(
     locationId: string;
     companyId: string;
     opStorageUnitId?: string | null;
-    takenSoFar?: Map<string, number>;
+    takenShared?: SharedTakes;
   }
 ): Promise<PickedBudget[]> {
-  const { material, locationId, companyId, opStorageUnitId, takenSoFar } = args;
+  const { material, locationId, companyId, opStorageUnitId, takenShared } = args;
 
   const lines: {
     itemId: string;
@@ -363,14 +408,20 @@ export async function getPickedBudgets(
       0,
       (stagedByItem.get(itemId) ?? 0) - (consumedByItem.get(itemId) ?? 0)
     );
+    const sharedStorageUnitId = opStorageUnitId ?? null;
+    const unclaimed = Math.max(
+      0,
+      (credits.get(itemId)?.unclaimed ?? 0) -
+        (takenShared?.get(sharedTakeKey(itemId, sharedStorageUnitId)) ?? 0)
+    );
     return {
       itemId,
       factor: pickFactor(material, itemId, ruleByItem),
       storageUnitId,
-      available: Math.max(
-        0,
-        own + (credits.get(itemId)?.unclaimed ?? 0) - (takenSoFar?.get(itemId) ?? 0)
-      ),
+      sharedStorageUnitId,
+      own,
+      unclaimed,
+      available: own + unclaimed,
       isInventory: trackingByItem.get(itemId) === "Inventory",
       isPredecessor: !!successor && successor !== itemId && involvedSet.has(successor),
     };

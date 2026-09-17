@@ -34,6 +34,9 @@ import {
   getOperationLinesideBin,
   getPickedBudgets,
   orderOldFirst,
+  recordSharedTakes,
+  type SharedTakes,
+  splitTakeByBin,
 } from "../lib/picked-consumption.ts";
 import { resolveTrackedEntityBin } from "./resolve-tracked-entity-bin.ts";
 
@@ -225,7 +228,7 @@ async function issueJobOperationMaterials(
     jobOperationId,
     companyId,
   });
-  const takenSoFar = new Map<string, number>();
+  const takenShared: SharedTakes = new Map();
   for await (const material of materialsToIssue) {
     // Cap the backflush at the material's remaining unissued requirement,
     // mirroring backflush_job_materials. Without this, materials already
@@ -248,7 +251,7 @@ async function issueJobOperationMaterials(
         locationId: job.locationId,
         companyId,
         opStorageUnitId,
-        takenSoFar,
+        takenShared,
       }),
       material.itemId
     );
@@ -257,25 +260,24 @@ async function issueJobOperationMaterials(
       budgets,
       Number(material.quantity ?? 0)
     );
+    recordSharedTakes(takenShared, takes);
     for (const take of takes) {
-      takenSoFar.set(
-        take.budget.itemId,
-        (takenSoFar.get(take.budget.itemId) ?? 0) + take.quantity
-      );
       if (!take.budget.isInventory) continue;
-      itemLedgerInserts.push({
-        entryType: "Consumption",
-        documentType: "Job Consumption",
-        documentId: jobId,
-        documentLineId: jobOperationId,
-        companyId,
-        itemId: take.budget.itemId,
-        quantity: -take.quantity,
-        locationId: job.locationId,
-        storageUnitId: take.budget.storageUnitId,
-        postingDate: today,
-        createdBy: userId,
-      });
+      for (const row of splitTakeByBin(take)) {
+        itemLedgerInserts.push({
+          entryType: "Consumption",
+          documentType: "Job Consumption",
+          documentId: jobId,
+          documentLineId: jobOperationId,
+          companyId,
+          itemId: take.budget.itemId,
+          quantity: -row.quantity,
+          locationId: job.locationId,
+          storageUnitId: row.storageUnitId,
+          postingDate: today,
+          createdBy: userId,
+        });
+      }
     }
 
     if (remaining > 0) {
@@ -2064,18 +2066,20 @@ serve(async (req: Request) => {
                 remaining = allocation.remaining;
                 for (const take of allocation.takes) {
                   if (!take.budget.isInventory) continue;
-                  itemLedgerInserts.push({
-                    entryType: "Consumption",
-                    documentType: "Job Consumption",
-                    documentId: material.jobId,
-                    documentLineId: id,
-                    companyId,
-                    itemId: take.budget.itemId,
-                    locationId: job?.locationId,
-                    storageUnitId: take.budget.storageUnitId,
-                    quantity: -take.quantity,
-                    createdBy: userId,
-                  });
+                  for (const row of splitTakeByBin(take)) {
+                    itemLedgerInserts.push({
+                      entryType: "Consumption",
+                      documentType: "Job Consumption",
+                      documentId: material.jobId,
+                      documentLineId: id,
+                      companyId,
+                      itemId: take.budget.itemId,
+                      locationId: job?.locationId,
+                      storageUnitId: row.storageUnitId,
+                      quantity: -row.quantity,
+                      createdBy: userId,
+                    });
+                  }
                 }
               }
               if (item?.itemTrackingType === "Inventory" && remaining !== 0) {

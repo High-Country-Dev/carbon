@@ -5,17 +5,28 @@ import {
   type PickedBudget,
   pickFactor,
   linesideCredit,
+  recordSharedTakes,
+  sharedTakeKey,
+  type SharedTakes,
+  splitTakeByBin,
 } from "./picked-consumption.ts";
 
-const budget = (overrides: Partial<PickedBudget>): PickedBudget => ({
-  itemId: "OLD",
-  factor: 1,
-  storageUnitId: "shelf",
-  available: 0,
-  isInventory: true,
-  isPredecessor: false,
-  ...overrides,
-});
+const budget = (overrides: Partial<PickedBudget>): PickedBudget => {
+  const own = overrides.own ?? overrides.available ?? 0;
+  const unclaimed = overrides.unclaimed ?? 0;
+  return {
+    itemId: "OLD",
+    factor: 1,
+    storageUnitId: "shelf",
+    sharedStorageUnitId: "shelf",
+    isInventory: true,
+    isPredecessor: false,
+    ...overrides,
+    own,
+    unclaimed,
+    available: own + unclaimed,
+  };
+};
 
 Deno.test("orderOldFirst puts predecessors before the line item, then the rest", () => {
   const ordered = orderOldFirst(
@@ -132,10 +143,77 @@ Deno.test("linesideCredit: a cancelled pick leaves its material unclaimed, and t
 
 Deno.test("allocateAcrossBudgets takes a predecessor only in whole assemblies", () => {
   const budgets = [
-    { itemId: "old", factor: 1, storageUnitId: "ws", available: 3, isInventory: true, isPredecessor: true },
-    { itemId: "new", factor: 1, storageUnitId: "ws", available: 4, isInventory: true, isPredecessor: false },
+    budget({ itemId: "old", storageUnitId: "ws", available: 3, isPredecessor: true }),
+    budget({ itemId: "new", storageUnitId: "ws", available: 4 }),
   ];
   const { takes, remaining } = allocateAcrossBudgets(4, budgets, 2);
   assertEquals(takes.map((t) => [t.budget.itemId, t.quantity]), [["old", 2], ["new", 2]]);
   assertEquals(remaining, 0);
+});
+
+Deno.test("allocateAcrossBudgets attributes a take to the own pick first, then the shared stock", () => {
+  const { takes } = allocateAcrossBudgets(7, [
+    budget({ itemId: "X", own: 4, unclaimed: 5 }),
+  ]);
+  assertEquals(
+    takes.map((t) => [t.quantity, t.fromOwn, t.fromShared]),
+    [[7, 4, 3]]
+  );
+});
+
+Deno.test("recordSharedTakes ignores what came from a material's own pick", () => {
+  const takenShared: SharedTakes = new Map();
+  const { takes } = allocateAcrossBudgets(10, [
+    budget({ itemId: "X", own: 10, unclaimed: 0, sharedStorageUnitId: "lineside" }),
+  ]);
+  recordSharedTakes(takenShared, takes);
+  assertEquals(takenShared.size, 0);
+});
+
+Deno.test("recordSharedTakes accumulates the shared portion per item and bin", () => {
+  const takenShared: SharedTakes = new Map();
+  const first = allocateAcrossBudgets(6, [
+    budget({ itemId: "X", own: 4, unclaimed: 5, sharedStorageUnitId: "lineside" }),
+  ]);
+  recordSharedTakes(takenShared, first.takes);
+  const second = allocateAcrossBudgets(1, [
+    budget({ itemId: "X", own: 0, unclaimed: 3, sharedStorageUnitId: "lineside" }),
+    budget({ itemId: "X", own: 0, unclaimed: 3, sharedStorageUnitId: "other" }),
+  ]);
+  recordSharedTakes(takenShared, second.takes);
+  assertEquals(takenShared.get(sharedTakeKey("X", "lineside")), 3);
+  assertEquals(takenShared.get(sharedTakeKey("X", "other")), undefined);
+});
+
+Deno.test("a whole-assembly predecessor take still splits own-first", () => {
+  const { takes } = allocateAcrossBudgets(
+    4,
+    [budget({ itemId: "OLD", own: 1, unclaimed: 2, isPredecessor: true })],
+    2
+  );
+  assertEquals(
+    takes.map((t) => [t.quantity, t.fromOwn, t.fromShared]),
+    [[2, 1, 1]]
+  );
+});
+
+Deno.test("splitTakeByBin writes one row when the pools share a bin", () => {
+  const { takes } = allocateAcrossBudgets(7, [
+    budget({ itemId: "X", own: 4, unclaimed: 5, storageUnitId: "ws", sharedStorageUnitId: "ws" }),
+  ]);
+  assertEquals(splitTakeByBin(takes[0]), [{ storageUnitId: "ws", quantity: 7 }]);
+});
+
+Deno.test("splitTakeByBin charges each pool's own bin when they differ", () => {
+  const { takes } = allocateAcrossBudgets(7, [
+    budget({ itemId: "X", own: 4, unclaimed: 5, storageUnitId: "cart", sharedStorageUnitId: "ws" }),
+  ]);
+  assertEquals(splitTakeByBin(takes[0]), [
+    { storageUnitId: "cart", quantity: 4 },
+    { storageUnitId: "ws", quantity: 3 },
+  ]);
+  const shared = allocateAcrossBudgets(2, [
+    budget({ itemId: "X", own: 0, unclaimed: 5, storageUnitId: "cart", sharedStorageUnitId: "ws" }),
+  ]);
+  assertEquals(splitTakeByBin(shared.takes[0]), [{ storageUnitId: "ws", quantity: 2 }]);
 });

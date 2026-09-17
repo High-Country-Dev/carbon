@@ -253,6 +253,23 @@ consumers read the pick lines instead of the row:
   what no pick covered is returned as `remaining` and the caller falls back to
   the material's own item from its own bin (the pre-existing behaviour).
 
+**A budget is two pools, and only one is shared.** `own` is the material's
+OWN live pick (scoped by `jobMaterialId`, so private to that material, at
+the bin its pick lines went to); `unclaimed` is what sits at the operation's
+lineside bin that no live job's pick claims, shared by every material of the
+operation. `available` is their sum. `allocateAcrossBudgets` attributes each
+take own-first (`fromOwn` / `fromShared`), `recordSharedTakes` accumulates
+ONLY the shared portion per (item, bin) into a `SharedTakes` map, and
+`getPickedBudgets` subtracts that map from `unclaimed` alone. The backflush
+loops over every material of the operation before inserting its ledger rows,
+so without the map two materials sharing a picked item were both offered the
+same unclaimed stock; but recording the WHOLE take, keyed by item, let
+material A's private pick zero out material B's private pick, and B fell
+back to the warehouse while its staged stock sat at the machine.
+`splitTakeByBin` turns a take back into ledger rows — the own portion
+against the pick bin, the shared portion against the lineside bin — so a
+take that draws on both pools is never charged to one bin.
+
 Used by `issue` (`issueJobOperationMaterials` completion backflush and
 `partToOperation` manual/step issue, negative adjustments only) and by
 `post-picking` (`returnUntrackedMaterialRemainder` holds `owed` back
