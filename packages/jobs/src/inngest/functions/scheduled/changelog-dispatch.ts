@@ -1,8 +1,8 @@
 import { ChangelogEntryEmail } from "@carbon/documents/email";
-import { ERP_URL, RESEND_DOMAIN } from "@carbon/env";
+import { ERP_URL } from "@carbon/env";
+import { DEFAULT_FROM, sendEmail } from "@carbon/lib/email.server";
 import { NotificationTopic } from "@carbon/notifications";
 import { render } from "@react-email/components";
-import { Resend } from "resend";
 import {
   displayDate,
   entryEmailContent,
@@ -37,9 +37,12 @@ const CHANGELOG_FEED_URL =
  *  updates when the deploy finishes. So a run re-checks a few times before
  *  giving up; send the event again once the entry is visible. */
 const FEED_ATTEMPTS = 5;
-const RESEND_BATCH_SIZE = 100;
 
-const fromAddress = () => `Carbon <no-reply@${RESEND_DOMAIN}>`;
+/** Concurrent SMTP sends per entry. Email goes through the shared SMTP
+ *  transport (`@carbon/lib/email.server`), one message per recipient — there
+ *  is no batch API — so a few in flight at once keeps a large list moving
+ *  without hammering the relay. */
+const SEND_CONCURRENCY = 10;
 
 /** Where a reader turns the newsletter off: Account → Notifications in the ERP
  *  (path.to.notificationSettings — a signed-in page, since only the user may
@@ -153,51 +156,57 @@ export const changelogDispatchFunction = inngest.createFunction(
     // Feed is newest-first; send oldest-first so a backlog arrives in order.
     let dispatched = 0;
     for (const entry of [...newEntries].reverse()) {
-      // One durable step per entry. If a Resend batch fails partway, the retry
-      // re-sends the entry's earlier batches — an annoyance, never a data bug;
-      // the ledger row still guards against re-dispatching a finished entry.
+      // One durable step per entry. If a send fails partway through the list,
+      // the retry re-sends the entry to the recipients that already got it —
+      // an annoyance, never a data bug; the ledger row still guards against
+      // re-dispatching a finished entry.
       const emailsSent = await step.run(`dispatch-${entry.guid}`, async () => {
         const db = getJobDatabaseClient();
         const subscribers = await getNewsletterRecipients();
 
         let sent = 0;
-        if (subscribers.length > 0 && !process.env.DISABLE_RESEND) {
-          const resend = new Resend(process.env.RESEND_API_KEY!);
-          for (let i = 0; i < subscribers.length; i += RESEND_BATCH_SIZE) {
-            // One render per entry — nothing in the email is per-recipient.
-            // List-Unsubscribe points at the signed-in settings page; there is
-            // deliberately no List-Unsubscribe-Post (one-click needs an
-            // unauthenticated endpoint, which this design does not have).
-            const { subject, text } = entryEmailContent(entry, MANAGE_URL);
-            const html = await render(
-              ChangelogEntryEmail({
-                title: entry.title,
-                description: entry.description ?? undefined,
-                date: displayDate(entry.pubDate),
-                readUrl: entry.link,
-                manageUrl: MANAGE_URL
-              })
+        if (subscribers.length > 0) {
+          // One render per entry — nothing in the email is per-recipient.
+          // List-Unsubscribe points at the signed-in settings page; there is
+          // deliberately no List-Unsubscribe-Post (one-click needs an
+          // unauthenticated endpoint, which this design does not have).
+          const { subject, text } = entryEmailContent(entry, MANAGE_URL);
+          const html = await render(
+            ChangelogEntryEmail({
+              title: entry.title,
+              description: entry.description ?? undefined,
+              date: displayDate(entry.pubDate),
+              readUrl: entry.link,
+              manageUrl: MANAGE_URL
+            })
+          );
+          for (let i = 0; i < subscribers.length; i += SEND_CONCURRENCY) {
+            const results = await Promise.all(
+              subscribers.slice(i, i + SEND_CONCURRENCY).map((subscriber) =>
+                sendEmail({
+                  from: DEFAULT_FROM,
+                  to: subscriber.email,
+                  subject,
+                  html,
+                  text,
+                  headers: { "List-Unsubscribe": `<${MANAGE_URL}>` }
+                })
+              )
             );
-            const batch = subscribers
-              .slice(i, i + RESEND_BATCH_SIZE)
-              .map((subscriber) => ({
-                from: fromAddress(),
-                to: subscriber.email,
-                subject,
-                html,
-                text,
-                headers: { "List-Unsubscribe": `<${MANAGE_URL}>` }
-              }));
-            const response = await resend.batch.send(batch);
-            if (response.error) {
-              throw new Error(`Resend batch error: ${response.error.message}`);
+            for (const response of results) {
+              if (response.error) {
+                throw new Error(`Email error: ${response.error.message}`);
+              }
+              // data is null when SMTP is not configured — email is disabled,
+              // and the entry is ledgered without a send.
+              if (response.data) sent += 1;
             }
-            sent += batch.length;
           }
-        } else if (process.env.DISABLE_RESEND) {
-          logger.info("Resend disabled — recording dispatch without sending", {
-            guid: entry.guid
-          });
+          if (sent === 0) {
+            logger.info("Email disabled — recording dispatch without sending", {
+              guid: entry.guid
+            });
+          }
         }
 
         // Conflict-tolerant: a concurrent run that already ledgered this guid

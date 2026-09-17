@@ -29,7 +29,7 @@ import type { ExpressionBuilder } from "kysely";
 import { sql } from "kysely";
 import { nanoid } from "nanoid";
 import type { z } from "zod";
-import { buildDocumentUploadPath } from "~/modules/documents/documents.models";
+import { createDocumentUploadUrl } from "~/modules/documents/documents.service";
 import type { StorageItem } from "~/types";
 import { getEdgeFunctionErrorMessage } from "~/utils/error";
 import type { GenericQueryFilters } from "~/utils/query";
@@ -9800,7 +9800,7 @@ export async function saveInspectionDocumentAtomic(
 // scripts/generate-mcp.ts as production_issueMaterial / _completeJob / _scheduleJob.
 
 // `issueMaterial`, `completeJob`, and `scheduleJob` moved to `production.mcp.server.ts`: they
-// depend on server-only modules (`@carbon/ee/storage-rules.server`, `@carbon/auth/users.server`)
+// depend on server-only modules (`@carbon/ee/rules.server`, `@carbon/auth/users.server`)
 // that cannot be referenced from this file, which is client-reachable via the module barrel.
 
 /**
@@ -9994,13 +9994,10 @@ export async function createJobDocumentUploadUrl(
   client: SupabaseClient<Database>,
   args: { companyId: string; jobId: string; name: string }
 ) {
-  const documentPath = buildDocumentUploadPath({
+  return createDocumentUploadUrl(client, {
     companyId: args.companyId,
     folder: "job",
     entityId: args.jobId,
     name: args.name
   });
-  return client.storage
-    .from("private")
-    .createSignedUploadUrl(documentPath, { upsert: true });
 }

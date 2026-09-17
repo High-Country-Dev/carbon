@@ -21,7 +21,7 @@ is a bug, not a design choice. Grounded in the templates and `components/` in th
 | Templates | `packages/documents/src/email/*.tsx`, exported from `index.ts` → `@carbon/documents/email` |
 | Shared chrome | `components/Theme.tsx` (`EmailThemeProvider`, `getEmailThemeClasses`, Geist font, dark-mode meta), `components/Logo.tsx`, `components/notificationStyles.ts` (the `nf-*` classes) |
 | Rendering | jobs code: `render(SomeEmail({ ...props }))` from `@react-email/components` — a plain function call, no JSX in `@carbon/jobs` |
-| Sending | the `carbon/send-email` event (`notifications/send-email.ts`, needs a `companyId`) or Resend directly for platform mail with no company (`scheduled/changelog-dispatch.ts`) — both honor `DISABLE_RESEND` |
+| Sending | the `carbon/send-email` event (`notifications/send-email.ts`, needs a `companyId`) or `sendEmail` from `@carbon/lib/email.server` directly for platform mail with no company (`scheduled/changelog-dispatch.ts`) — both go through the shared SMTP transport, which no-ops (`data: null`) when no `SMTP_*` / `RESEND_API_KEY` is configured |
 | Previews | `src/email/previews/` — **one fixture per shipped email**, `pnpm --filter @carbon/documents email:previews` |
 
 **Never build email HTML by string concatenation.** The changelog emails briefly did; that
