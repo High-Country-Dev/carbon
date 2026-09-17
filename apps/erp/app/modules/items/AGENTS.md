@@ -71,6 +71,7 @@ pnpm --filter @carbon/erp test
 - `getSupplierParts` / `getSupplierPriceBreaksForItems` / `lookupBuyPrice` — vendor pricing
 - `upsertPickMethodWithShelfLife` — pick method with shelf life configuration
 - `getConfigurationParameters` / `getConfigurationRules` — product configurator
+- `createItemDocumentUploadUrl` — MCP file upload (step 1): presigned URL for an item document (`parts/{itemId}` folder); pair with `documents_insertUploadedDocument`. See `.claude/rules/mcp-tools-reference.md` → "File uploads"
 
 ## Key Exports
 
