@@ -42,7 +42,10 @@ document-panel upload mutation — TanStack-shaped: options at the hook or per-c
 (REST/MCP/integrations) use the `process-image` edge function, which runs the same
 `processImage`; the MCP signed-URL flow (`createDocumentUploadUrl` in
 `documents.service`, which every module's `create*DocumentUploadUrl` delegates to)
-refuses to mint an upload URL for a `.heic` name. Temp staging for the imgproxy
+mints a `.heic` name into `{companyId}/tmp/uploads/…` staging, and
+`insertUploadedDocument` converts it to JPEG (imgproxy round-trip — the bytes
+are already in storage) at the real path before the row exists; the nightly
+cleanup job sweeps everything under `{companyId}/tmp/` older than a day. Temp staging for the imgproxy
 fallback is `private/{companyId}/tmp/`.
 
 Fallback order in `prepareImageUpload`: wasm pipeline → (browser only) native
