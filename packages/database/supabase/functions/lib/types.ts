@@ -70458,6 +70458,7 @@ export type Database = {
           leadTime: number | null
           locationId: string | null
           parentMaterialId: string | null
+          quantityPerParent: number | null
           quantityToIssue: number | null
           replenishmentSystem:
             | Database["public"]["Enums"]["itemReplenishmentSystem"]
@@ -81632,6 +81633,17 @@ export type Database = {
           tags: string[]
           thumbnailPath: string
         }[]
+      }
+      get_lineside_credit: {
+        Args: {
+          p_company_id: string
+          p_item_id: string
+          p_job_id: string
+          p_job_material_id: string
+          p_location_id: string
+          p_storage_unit_id: string
+        }
+        Returns: number
       }
       get_maintenance_dispatches_by_location: {
         Args: { p_company_id: string; p_location_id: string }
