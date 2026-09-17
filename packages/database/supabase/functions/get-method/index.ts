@@ -28,7 +28,7 @@ import {
     traverseQuoteMethod,
 } from "../lib/methods.ts";
 import { getFunctionLogger } from "../lib/logging.ts";
-import { toJson } from "../lib/json.ts";
+import { toJson, toJsonColumns } from "../lib/json.ts";
 import { KyselyDatabase } from "../lib/postgres/index.ts";
 import { importTypeScript } from "../lib/sandbox.ee.ts";
 import { getStorageUnitId } from "../lib/storage-units.ts";
@@ -56,6 +56,16 @@ import { scrapAllowance } from "../shared/precision.ts";
 const pool = getConnectionPool(1);
 const db = getDatabaseClient<DB>(pool);
 const logger = getFunctionLogger("get-method");
+
+// quoteLine's jsonb columns — run through toJsonColumns() in quoteToQuote's per-line copy.
+const QUOTE_LINE_JSON_COLUMNS = [
+  "additionalCharges",
+  "configuration",
+  "customFields",
+  "externalNotes",
+  "internalNotes",
+  "priceTrace",
+] as const satisfies readonly (keyof Database["public"]["Tables"]["quoteLine"]["Row"])[];
 
 // Stored configurator rules are user-authored JS that may still return legacy "Inside"/"Outside" operationType values.
 const normalizeOperationType = (value: unknown) =>
@@ -1075,7 +1085,7 @@ serve(async (req: Request) => {
                   processId,
                   op.operationSupplierProcessId
                 ),
-                workInstruction: (!node.data.isRoot || parts.workInstructions) ? op.workInstruction : {},
+                workInstruction: toJson((!node.data.isRoot || parts.workInstructions) ? op.workInstruction : {}),
                 targetQuantity,
                 operationQuantity,
                 companyId,
@@ -1994,7 +2004,7 @@ serve(async (req: Request) => {
                   op.operationSupplierProcessId
                 ),
                 tags: op.tags ?? [],
-                workInstruction: parts.workInstructions ? op.workInstruction : {},
+                workInstruction: toJson(parts.workInstructions ? op.workInstruction : {}),
                 targetQuantity,
                 operationQuantity,
                 companyId,
@@ -2850,7 +2860,7 @@ serve(async (req: Request) => {
                 ),
                 operationMinimumCost: op.operationMinimumCost ?? 0,
                 tags: op.tags ?? [],
-                workInstruction: (!node.data.isRoot || parts.workInstructions) ? op.workInstruction : {},
+                workInstruction: toJson((!node.data.isRoot || parts.workInstructions) ? op.workInstruction : {}),
                 companyId,
                 createdBy: userId,
                 customFields: {},
@@ -3414,7 +3424,7 @@ serve(async (req: Request) => {
                   op.operationSupplierProcessId
                 ),
                 tags: op.tags ?? [],
-                workInstruction: parts.workInstructions ? op.workInstruction : {},
+                workInstruction: toJson(parts.workInstructions ? op.workInstruction : {}),
                 companyId,
                 createdBy: userId,
                 customFields: {},
@@ -3831,7 +3841,7 @@ serve(async (req: Request) => {
               operationLeadTime: op.operationLeadTime ?? 0,
               operationUnitCost: op.operationUnitCost ?? 0,
               tags: op.tags ?? [],
-              workInstruction: parts.workInstructions ? op.workInstruction : {},
+              workInstruction: toJson(parts.workInstructions ? op.workInstruction : {}),
               companyId,
               createdBy: userId,
               customFields: {},
@@ -4154,7 +4164,7 @@ serve(async (req: Request) => {
               operationUnitCost: op.operationUnitCost ?? 0,
               operationSupplierProcessId: op.operationSupplierProcessId,
               tags: op.tags ?? [],
-              workInstruction: parts.workInstructions ? op.workInstruction : {},
+              workInstruction: toJson(parts.workInstructions ? op.workInstruction : {}),
               companyId,
               createdBy: userId,
               customFields: {},
@@ -4784,9 +4794,9 @@ serve(async (req: Request) => {
                   operationLeadTime: op.operationLeadTime ?? 0,
                   operationUnitCost: op.operationUnitCost ?? 0,
                   tags: op.tags ?? [],
-                  workInstruction: parts.workInstructions
-                    ? op.workInstruction
-                    : {},
+                  workInstruction: toJson(
+                    parts.workInstructions ? op.workInstruction : {}
+                  ),
                   targetQuantity: opQuantities.targetQuantity,
                   // Fractional targets flow through; the scrap allowance is already whole
                   operationQuantity: opQuantities.totalWithScrap,
@@ -5371,7 +5381,7 @@ serve(async (req: Request) => {
           await trx
             .updateTable("jobOperation")
             .set({
-              workInstruction: procedure.data.content,
+              workInstruction: toJson(procedure.data.content),
               procedureId: procedureId,
             })
             .where("id", "=", operationId)
@@ -5589,7 +5599,7 @@ serve(async (req: Request) => {
               operationLeadTime: op.operationLeadTime ?? 0,
               operationUnitCost: op.operationUnitCost ?? 0,
               tags: op.tags ?? [],
-              workInstruction: parts.workInstructions ? op.workInstruction : {},
+              workInstruction: toJson(parts.workInstructions ? op.workInstruction : {}),
               companyId,
               createdBy: userId,
               customFields: {},
@@ -5908,7 +5918,7 @@ serve(async (req: Request) => {
               operationLeadTime: op.operationLeadTime ?? 0,
               operationUnitCost: op.operationUnitCost ?? 0,
               tags: op.tags ?? [],
-              workInstruction: parts.workInstructions ? op.workInstruction : {},
+              workInstruction: toJson(parts.workInstructions ? op.workInstruction : {}),
               companyId,
               createdBy: userId,
               customFields: {},
@@ -6447,7 +6457,7 @@ serve(async (req: Request) => {
                 operationLeadTime: op.operationLeadTime ?? 0,
                 operationUnitCost: op.operationUnitCost ?? 0,
                 tags: op.tags ?? [],
-                workInstruction: parts.workInstructions ? op.workInstruction : {},
+                workInstruction: toJson(parts.workInstructions ? op.workInstruction : {}),
                 targetQuantity: opQuantities.targetQuantity,
                 // Fractional targets flow through; the scrap allowance is already whole
                 operationQuantity: opQuantities.totalWithScrap,
@@ -6824,7 +6834,7 @@ serve(async (req: Request) => {
               operationUnitCost: op.operationUnitCost ?? 0,
               overheadRate: op.overheadRate,
               tags: op.tags ?? [],
-              workInstruction: parts.workInstructions ? op.workInstruction : {},
+              workInstruction: toJson(parts.workInstructions ? op.workInstruction : {}),
               companyId,
               createdBy: userId,
               customFields: {},
@@ -7117,12 +7127,7 @@ serve(async (req: Request) => {
               .insertInto("quoteLine")
               .values({
                 ...line,
-                additionalCharges: toJson(line.additionalCharges),
-                configuration: toJson(line.configuration),
-                customFields: toJson(line.customFields),
-                externalNotes: toJson(line.externalNotes),
-                internalNotes: toJson(line.internalNotes),
-                priceTrace: toJson(line.priceTrace),
+                ...toJsonColumns(line, QUOTE_LINE_JSON_COLUMNS),
                 quoteId: quote.id,
                 companyId,
               })
@@ -8111,7 +8116,7 @@ async function insertProcedureDataForJobOperation(
   await trx
     .updateTable("jobOperation")
     .set({
-      workInstruction: procedure?.data?.content ?? {},
+      workInstruction: toJson(procedure?.data?.content ?? {}),
     })
     .where("id", "=", operationId)
     .execute();
