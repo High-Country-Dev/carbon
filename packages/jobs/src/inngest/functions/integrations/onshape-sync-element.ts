@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { mkdtemp, rm, stat } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -22,10 +23,9 @@ import {
 // The caller (release-sync / backfill job) is responsible for turning a release
 // event into these inputs: resolve itemId by part number (readableIdWithRevision,
 // LINK-ONLY skip if none), and the documentId/versionId/elementId of the released
-// geometry. Thumbnails: the model sync stores Onshape's server-rendered element
-// thumbnail itself (thumbnailAttached: true); callers fire the
-// "carbon/model-thumbnail" screenshot job only as a fallback when that fetch
-// failed.
+// geometry, including the released partId and configuration. Individual-part
+// thumbnails come from that selected model after optimization; an element
+// thumbnail represents the entire Part Studio and must never be attached to it.
 
 type CarbonClient = SupabaseClient<Database>;
 type DocumentSourceType = Database["public"]["Enums"]["documentSourceType"];
@@ -38,10 +38,10 @@ export interface SyncOnshapeElementInput {
   documentId: string;
   versionId: string; // the released version — or a workspace id when sourceWvm is "w"
   sourceWvm?: "w" | "v"; // path segment for export/thumbnail calls; default "v"
-  partIds?: string; // export only these parts of a Part Studio (comma-separated partIds)
-  configuration?: string; // non-default configuration to export; absent = default
   modelElementId: string; // released Part Studio OR Assembly element to export
   modelElementKind: "partstudio" | "assembly"; // from the revision's elementType (0/1)
+  partId?: string | null; // REQUIRED for individual Part Studio releases
+  configuration?: string | null; // exact released configuration, not the current workspace
   drawingElementIds?: string[]; // optional PDF drawings (untested path — see client.ts)
   assetBaseName?: string; // filename base (e.g. item part number); falls back to Onshape name
 }
@@ -117,6 +117,22 @@ async function exportRawGltfModel(
   input: SyncOnshapeElementInput,
   scratchDir: string
 ): Promise<OnshapeModelFile> {
+  // Missing selection previously exported the entire studio. Fail closed:
+  // a release asset is one part, never an implicit list or whole-studio export.
+  if (
+    input.modelElementKind === "partstudio" &&
+    (typeof input.partId !== "string" ||
+      !input.partId.trim() ||
+      /[,\s]/.test(input.partId))
+  ) {
+    throw new Error(
+      "An individual Onshape release requires exactly one partId"
+    );
+  }
+  if (input.configuration != null && typeof input.configuration !== "string") {
+    throw new Error("Invalid released Onshape configuration");
+  }
+  const configuration = input.configuration ?? undefined;
   const gltfTranslation =
     input.modelElementKind === "assembly"
       ? await client.createAssemblyTranslation(
@@ -127,9 +143,7 @@ async function exportRawGltfModel(
             formatName: "GLTF",
             storeInDocument: false,
             wvm: input.sourceWvm ?? "v",
-            ...(input.configuration
-              ? { configuration: input.configuration }
-              : {})
+            configuration
           }
         )
       : await client.createPartStudioTranslation(
@@ -140,10 +154,8 @@ async function exportRawGltfModel(
             formatName: "GLTF",
             storeInDocument: false,
             wvm: input.sourceWvm ?? "v",
-            ...(input.partIds ? { partIds: input.partIds } : {}),
-            ...(input.configuration
-              ? { configuration: input.configuration }
-              : {})
+            configuration,
+            partIds: input.partId!
           }
         );
   const gltfDone = await waitForTranslation(client, gltfTranslation.id);
@@ -169,7 +181,29 @@ async function exportRawGltfModel(
   return {
     fileName: `${baseName}.gltf`,
     localPath: gltfPath,
-    size
+    size,
+    // Immutable generation: old optimizer/thumbnail/compact jobs can only
+    // finish against their old model ID. Replays of this exact released source
+    // share one ID; a different part/configuration cannot reuse its artifacts.
+    // Keep whole-assembly attachment behavior unchanged.
+    sourceId:
+      input.modelElementKind === "partstudio"
+        ? `onshape-${createHash("sha256")
+            .update(
+              JSON.stringify([
+                "selected-part-v1",
+                input.companyId,
+                input.itemId,
+                input.documentId,
+                input.versionId,
+                input.modelElementId,
+                input.partId,
+                configuration ?? ""
+              ])
+            )
+            .digest("hex")
+            .slice(0, 40)}`
+        : undefined
   };
 }
 
@@ -228,13 +262,15 @@ export async function syncOnshapeElementAssetsToItem(
       documents
     });
 
-    // Thumbnail: prefer Onshape's server-rendered element thumbnail — one small
-    // API call for an exact shaded render of the released geometry, instead of
-    // the model-thumbnail pipeline screenshotting the full decoded mesh in a
-    // headless browser (the very operation that struggles with big assemblies).
-    // Best-effort: on failure the caller falls back to the model-thumbnail event.
+    // The element-thumbnail endpoint cannot select a part or configuration.
+    // Keep it only for unconfigured assemblies. All other thumbnails are
+    // generated from the selected model by the optimizer's completion event.
     let thumbnailAttached = false;
-    if (attached.modelUploadId) {
+    if (
+      attached.modelUploadId &&
+      input.modelElementKind === "assembly" &&
+      (!input.configuration || input.configuration.toLowerCase() === "default")
+    ) {
       try {
         const thumbnail = await client.getElementThumbnail(
           input.documentId,

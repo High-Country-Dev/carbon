@@ -9,6 +9,7 @@ export { onshapeBackfillFunction } from "./onshape-backfill";
 export { onshapePanelSyncFunction } from "./onshape-panel-sync";
 export { onshapeRevisionSyncFunction } from "./onshape-revision-sync";
 export { paperlessPartsFunction } from "./paperless-parts";
+export { rilletImportContactsFunction } from "./rillet-import-contacts";
 export {
   slackDocumentAssignmentUpdateFunction,
   slackDocumentCreatedFunction,

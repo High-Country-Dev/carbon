@@ -582,6 +582,18 @@ export type Events = {
     };
   };
 
+  // Rillet contact import (the integration's "Import customers & vendors"
+  // action): pull Rillet Customers and Vendors into Carbon and link them
+  "carbon/rillet-import-contacts": {
+    data: {
+      companyId: string;
+      entityTypes?: {
+        customers?: boolean;
+        vendors?: boolean;
+      };
+    };
+  };
+
   // Onshape released-asset backfill / reconcile
   // Panel push: export one pushed element's assets (GLTF + thumbnail) onto an
   // item the push route already created/linked. Workspace- or version-scoped.

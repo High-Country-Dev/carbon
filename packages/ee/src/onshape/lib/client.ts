@@ -134,6 +134,7 @@ export interface OnshapeTranslation {
 // 0 = Part Studio, 1 = Assembly, 2 = Drawing. Carries the released version's
 // documentId/versionId/elementId — the join to a Carbon item is by partNumber.
 export interface OnshapeRevision {
+  id?: string;
   partNumber: string;
   revision: string;
   elementType: number;
@@ -141,12 +142,12 @@ export interface OnshapeRevision {
   versionId: string;
   elementId: string;
   partId?: string | null;
+  configuration?: string | null;
   mimeType?: string;
   name?: string;
   releaseId?: string;
   releaseName?: string;
   releaseCreatedDate?: string;
-  configuration?: string | null;
   isObsolete?: boolean;
   [key: string]: unknown;
 }

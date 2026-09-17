@@ -72,7 +72,7 @@ export const onshapePanelSyncFunction = inngest.createFunction(
         documentId: payload.documentId,
         versionId: payload.wvmId,
         sourceWvm: payload.wvm,
-        partIds: payload.partId,
+        partId: payload.partId,
         configuration: payload.configuration,
         modelElementId: payload.elementId,
         modelElementKind: elementKind,
