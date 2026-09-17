@@ -64,7 +64,7 @@ methods can live in plain `*.service.ts` files (no `*.mcp.server.ts` needed).
   `client.storage.from("private").createSignedUploadUrl(path, { upsert: true })`,
   returns `{ data: { path, token, signedUrl }, error }`.
   JSDoc (→ tool description) documents the two-step flow.
-- `confirmDocumentUpload(client, { companyId, createdBy, path, name, size, sourceDocument, sourceDocumentId })`
+- `insertUploadedDocument(client, { companyId, createdBy, path, name, size, sourceDocument, sourceDocumentId })`
   — ergonomic wrapper over `upsertDocument` that defaults
   `readGroups/writeGroups: [createdBy]` (an MCP agent can't guess group ids) and
   stores `size` as KB. This is the step-2 "confirm" tool. `size` is documented as
@@ -85,13 +85,13 @@ entity's folder + id.
 
 Each wrapper's JSDoc first sentence becomes the tool description and spells out:
 "Returns a presigned upload URL. PUT the file bytes to `signedUrl` (or
-`uploadToSignedUrl(path, token, file)`), then call `documents_confirmDocumentUpload`
+`uploadToSignedUrl(path, token, file)`), then call `documents_insertUploadedDocument`
 with the returned `path` (sourceDocument=`<type>`, sourceDocumentId=`<id>`)."
 
 ## The agent-facing flow (per upload)
 1. Call `production_createJobDocumentUploadUrl` (etc.) → `{ path, token, signedUrl }`.
 2. HTTP `PUT signedUrl` with the file bytes (`x-upsert: true`).
-3. Call `documents_confirmDocumentUpload` with `{ path, name, size(KB),
+3. Call `documents_insertUploadedDocument` with `{ path, name, size(KB),
    sourceDocument, sourceDocumentId }` → writes the `document` row.
    File then appears in the entity's document panel (panels list the storage folder
    directly, and the row is written — both read strategies covered).
@@ -99,7 +99,7 @@ with the returned `path` (sourceDocument=`<type>`, sourceDocumentId=`<id>`)."
 ## Tasks
 1. `documents.models.ts`: add `buildDocumentUploadPath` (+ unit test if a models
    test file exists).
-2. `documents.service.ts`: add `createDocumentUploadUrl`, `confirmDocumentUpload`.
+2. `documents.service.ts`: add `createDocumentUploadUrl`, `insertUploadedDocument`.
 3. `production/items/sales/purchasing` `*.service.ts`: add the six wrappers; export
    from each module barrel `index.ts` if the barrel enumerates (most use `export *`).
 4. Regenerate MCP metadata: `pnpm generate:mcp` (also runs on typecheck/build), then
@@ -111,7 +111,7 @@ with the returned `path` (sourceDocument=`<type>`, sourceDocumentId=`<id>`)."
 
 ## Verification
 - `pnpm generate:mcp` succeeds; new tools appear in `tool-metadata.json`
-  (grep `createJobDocumentUploadUrl`, `confirmDocumentUpload`).
+  (grep `createJobDocumentUploadUrl`, `insertUploadedDocument`).
 - `pnpm check:manifest` green (digest updated + staged).
 - `pnpm exec turbo run typecheck --filter=erp` green.
 - Manual (with a running stack, user-driven): via the MCP connector, run the
@@ -131,7 +131,7 @@ with the returned `path` (sourceDocument=`<type>`, sourceDocumentId=`<id>`)."
   requires `<module>_create` for API-key callers. `upsertDocument`'s own route uses
   `{}` (auth only), so there is a mild inconsistency; acceptable (attaching a doc to
   an opportunity ≈ a sales write). Note, don't block on it.
-- **Size unit.** `confirmDocumentUpload` takes `size` in **KB** to match the column
+- **Size unit.** `insertUploadedDocument` takes `size` in **KB** to match the column
   and the existing hooks. Document it in the schema; the agent divides bytes/1024.
 
 ## Non-goals
