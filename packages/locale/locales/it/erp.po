@@ -76,6 +76,10 @@ msgstr "{0} già in un lotto"
 msgid "{0} already started"
 msgstr "{0} già avviato"
 
+#. placeholder {0}: unitOfMeasure.name
+msgid "{0} cannot be deleted because it is still in use by {where}. Change those records to a different unit of measure first."
+msgstr "{0} non può essere eliminato perché è ancora in uso da {where}. Modifica prima quei record impostando un'altra unità di misura."
+
 #. placeholder {0}: tieOut.deltaCellCount
 msgid "{0} cells with deltas"
 msgstr "{0} celle con delta"
@@ -3751,6 +3755,9 @@ msgstr "Completa tutte le quantità alla scansione di completamento kanban"
 
 msgid "Complete Job"
 msgstr "Completa Lavoro"
+
+msgid "Complete serials/batches in MES before completing this job, or mark every operation Done to complete it automatically."
+msgstr "Completa i seriali/lotti in MES prima di completare questo ordine di produzione, oppure contrassegna ogni operazione come completata per completarlo automaticamente."
 
 msgid "Complete Stock Transfer"
 msgstr "Completa Trasferimento Magazzino"
@@ -7664,7 +7671,7 @@ msgid "Finishes"
 msgstr "Finiture"
 
 msgid "Finishing an incomplete pick"
-msgstr "Completamento di un prelievo incompleto"
+msgstr "Completare un prelievo incompleto"
 
 msgid "Finishing is refused until every line is picked or marked Short."
 msgstr "Il completamento è rifiutato finché ogni riga non è prelevata o marcata come Esaurito."
@@ -8847,8 +8854,20 @@ msgstr "Invitato"
 msgid "Invoice"
 msgstr "Fattura"
 
+msgid "Invoice Address"
+msgstr ""
+
 msgid "Invoice Contact"
 msgstr "Contatto Fattura"
+
+msgid "Invoice Contact Email"
+msgstr ""
+
+msgid "Invoice Contact Name"
+msgstr ""
+
+msgid "Invoice Contact Phone"
+msgstr ""
 
 msgid "Invoice customer"
 msgstr "Cliente fatturazione"
@@ -11472,6 +11491,9 @@ msgstr "Niente"
 msgid "Nothing at this location matches \"{0}\"."
 msgstr "Nulla in questa posizione corrisponde a \"{0}\"."
 
+msgid "Nothing completed in MES yet"
+msgstr "Nulla ancora completato in MES"
+
 msgid "Nothing else at this location has stock to pull from."
 msgstr "Niente altro in questa posizione ha stock da cui prelevare."
 
@@ -13162,6 +13184,15 @@ msgstr "Contatto acquisti"
 msgid "Purchasing Contact"
 msgstr "Contatto Acquisti"
 
+msgid "Purchasing Contact Email"
+msgstr ""
+
+msgid "Purchasing Contact Name"
+msgstr ""
+
+msgid "Purchasing Contact Phone"
+msgstr ""
+
 msgid "Purchasing Invoices"
 msgstr "Fatture di Acquisto"
 
@@ -13350,6 +13381,9 @@ msgstr "Riga offerta"
 msgid "Quote Line"
 msgstr "Riga offerta"
 
+msgid "Quote Lines"
+msgstr "Righe di Preventivo"
+
 msgid "Quote lines whose bill of materials includes this item"
 msgstr "Righe offerta la cui distinta base include questo articolo"
 
@@ -13379,6 +13413,9 @@ msgstr "Data Quotata"
 
 msgid "Quotes"
 msgstr "Preventivi"
+
+msgid "Quotes with Lines"
+msgstr "Preventivi con Righe"
 
 msgid "Quoting and sales orders"
 msgstr "Preventivi e ordini di vendita"
@@ -15248,6 +15285,9 @@ msgstr "Numeri di Serie"
 msgid "Serial numbers are only generated for serial- or batch-tracked items."
 msgstr "I numeri di serie vengono generati solo per articoli tracciati in serie o per lotto."
 
+msgid "Serial numbers received"
+msgstr "Numeri di serie ricevuti"
+
 msgid "Serial numbers to return"
 msgstr "Numeri di serie da restituire"
 
@@ -15259,6 +15299,9 @@ msgstr "Tracciamento dei numeri di serie"
 
 msgid "Serial Tracking"
 msgstr "Tracciamento Seriale"
+
+msgid "Serial-tracked jobs must be completed in whole units."
+msgstr "Gli ordini di produzione tracciati per numero di serie devono essere completati in unità intere."
 
 msgid "Serial/Batch #"
 msgstr "Seriale/Lotto #"
@@ -15515,8 +15558,20 @@ msgstr "Qtà Spedita"
 msgid "Shipping"
 msgstr "Spedizione"
 
+msgid "Shipping Address"
+msgstr ""
+
 msgid "Shipping Contact"
 msgstr "Contatto di spedizione"
+
+msgid "Shipping Contact Email"
+msgstr ""
+
+msgid "Shipping Contact Name"
+msgstr ""
+
+msgid "Shipping Contact Phone"
+msgstr ""
 
 msgid "Shipping Cost"
 msgstr "Spese di spedizione"

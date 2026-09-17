@@ -76,6 +76,10 @@ msgstr "{0} уже в партии"
 msgid "{0} already started"
 msgstr "{0} уже начата"
 
+#. placeholder {0}: unitOfMeasure.name
+msgid "{0} cannot be deleted because it is still in use by {where}. Change those records to a different unit of measure first."
+msgstr "{0} нельзя удалить, так как она всё ещё используется: {where}. Сначала измените эти записи на другую единицу измерения."
+
 #. placeholder {0}: tieOut.deltaCellCount
 msgid "{0} cells with deltas"
 msgstr "{0} ячеек с разницами"
@@ -3751,6 +3755,9 @@ msgstr "Завершить все количества при сканирова
 
 msgid "Complete Job"
 msgstr "Завершить работу"
+
+msgid "Complete serials/batches in MES before completing this job, or mark every operation Done to complete it automatically."
+msgstr "Завершите серийные номера/партии в MES перед завершением этого производственного заказа или отметьте каждую операцию как выполненную, чтобы он завершился автоматически."
 
 msgid "Complete Stock Transfer"
 msgstr "Завершить передачу запасов"
@@ -8847,8 +8854,20 @@ msgstr "Приглашено"
 msgid "Invoice"
 msgstr "Счет-фактура"
 
+msgid "Invoice Address"
+msgstr ""
+
 msgid "Invoice Contact"
 msgstr "Контактное лицо счета-фактуры"
+
+msgid "Invoice Contact Email"
+msgstr ""
+
+msgid "Invoice Contact Name"
+msgstr ""
+
+msgid "Invoice Contact Phone"
+msgstr ""
 
 msgid "Invoice customer"
 msgstr "Покупатель счета-фактуры"
@@ -11472,6 +11491,9 @@ msgstr "Ничего"
 msgid "Nothing at this location matches \"{0}\"."
 msgstr "В этом месте нет ничего, соответствующего \"{0}\"."
 
+msgid "Nothing completed in MES yet"
+msgstr "В MES пока ничего не завершено"
+
 msgid "Nothing else at this location has stock to pull from."
 msgstr "На этом месте больше нечего извлекать из запаса."
 
@@ -13162,6 +13184,15 @@ msgstr "контактное лицо закупок"
 msgid "Purchasing Contact"
 msgstr "Контактное лицо закупок"
 
+msgid "Purchasing Contact Email"
+msgstr ""
+
+msgid "Purchasing Contact Name"
+msgstr ""
+
+msgid "Purchasing Contact Phone"
+msgstr ""
+
 msgid "Purchasing Invoices"
 msgstr "Счета-фактуры закупок"
 
@@ -13350,6 +13381,9 @@ msgstr "Строка предложения"
 msgid "Quote Line"
 msgstr "Строка предложения"
 
+msgid "Quote Lines"
+msgstr "Строки предложения"
+
 msgid "Quote lines whose bill of materials includes this item"
 msgstr "Строки предложения, чья спецификация материалов включает этот товар"
 
@@ -13379,6 +13413,9 @@ msgstr "Дата предложения"
 
 msgid "Quotes"
 msgstr "Предложения"
+
+msgid "Quotes with Lines"
+msgstr "Предложения со строками"
 
 msgid "Quoting and sales orders"
 msgstr "Коммерческие предложения и заказы покупателей"
@@ -15248,6 +15285,9 @@ msgstr "Серийные номера"
 msgid "Serial numbers are only generated for serial- or batch-tracked items."
 msgstr "Серийные номера генерируются только для серийных или партионно отслеживаемых товаров."
 
+msgid "Serial numbers received"
+msgstr "Принятые серийные номера"
+
 msgid "Serial numbers to return"
 msgstr "Серийные номера для возврата"
 
@@ -15259,6 +15299,9 @@ msgstr "Отслеживание серийных номеров"
 
 msgid "Serial Tracking"
 msgstr "Отслеживание по серийным номерам"
+
+msgid "Serial-tracked jobs must be completed in whole units."
+msgstr "Производственные заказы с учётом по серийным номерам должны завершаться целыми единицами."
 
 msgid "Serial/Batch #"
 msgstr "Серийный номер/Партия №"
@@ -15515,8 +15558,20 @@ msgstr "Отправленное кол-во"
 msgid "Shipping"
 msgstr "Доставка"
 
+msgid "Shipping Address"
+msgstr ""
+
 msgid "Shipping Contact"
 msgstr "Контактное лицо отгрузки"
+
+msgid "Shipping Contact Email"
+msgstr ""
+
+msgid "Shipping Contact Name"
+msgstr ""
+
+msgid "Shipping Contact Phone"
+msgstr ""
 
 msgid "Shipping Cost"
 msgstr "Стоимость доставки"

@@ -76,6 +76,10 @@ msgstr "{0}はすでにバッチに含まれています"
 msgid "{0} already started"
 msgstr "{0}はすでに開始されています"
 
+#. placeholder {0}: unitOfMeasure.name
+msgid "{0} cannot be deleted because it is still in use by {where}. Change those records to a different unit of measure first."
+msgstr "{0}は{where}でまだ使用されているため削除できません。先にそれらのレコードを別の単位に変更してください。"
+
 #. placeholder {0}: tieOut.deltaCellCount
 msgid "{0} cells with deltas"
 msgstr "{0}個のデルタを持つセル"
@@ -3751,6 +3755,9 @@ msgstr "かんばんスキャン完了時にすべての数量を完了する"
 
 msgid "Complete Job"
 msgstr "ジョブを完了"
+
+msgid "Complete serials/batches in MES before completing this job, or mark every operation Done to complete it automatically."
+msgstr "この製造指図を完了する前にMESでシリアル/バッチを完了するか、すべての工程を完了にして自動的に完了させてください。"
 
 msgid "Complete Stock Transfer"
 msgstr "在庫移動を完了"
@@ -7664,7 +7671,7 @@ msgid "Finishes"
 msgstr "仕上げ"
 
 msgid "Finishing an incomplete pick"
-msgstr "不完全なピックの完了"
+msgstr "不完全なピック完了"
 
 msgid "Finishing is refused until every line is picked or marked Short."
 msgstr "すべてのラインがピックされるか「短い」とマークされるまで、完了は拒否されます。"
@@ -8847,8 +8854,20 @@ msgstr "招待済み"
 msgid "Invoice"
 msgstr "請求書"
 
+msgid "Invoice Address"
+msgstr ""
+
 msgid "Invoice Contact"
 msgstr "請求書担当者"
+
+msgid "Invoice Contact Email"
+msgstr ""
+
+msgid "Invoice Contact Name"
+msgstr ""
+
+msgid "Invoice Contact Phone"
+msgstr ""
 
 msgid "Invoice customer"
 msgstr "請求書得意先"
@@ -11472,6 +11491,9 @@ msgstr "なし"
 msgid "Nothing at this location matches \"{0}\"."
 msgstr "この場所には\"{0}\"に一致するものはありません。"
 
+msgid "Nothing completed in MES yet"
+msgstr "MESでまだ何も完了していません"
+
 msgid "Nothing else at this location has stock to pull from."
 msgstr "この場所には他に引き出す在庫がありません。"
 
@@ -13162,6 +13184,15 @@ msgstr "購買担当者"
 msgid "Purchasing Contact"
 msgstr "購買担当者"
 
+msgid "Purchasing Contact Email"
+msgstr ""
+
+msgid "Purchasing Contact Name"
+msgstr ""
+
+msgid "Purchasing Contact Phone"
+msgstr ""
+
 msgid "Purchasing Invoices"
 msgstr "購買請求書"
 
@@ -13350,6 +13381,9 @@ msgstr "見積明細"
 msgid "Quote Line"
 msgstr "見積明細"
 
+msgid "Quote Lines"
+msgstr "見積明細"
+
 msgid "Quote lines whose bill of materials includes this item"
 msgstr "この品目を含む部品表を持つ見積明細"
 
@@ -13379,6 +13413,9 @@ msgstr "見積日"
 
 msgid "Quotes"
 msgstr "見積"
+
+msgid "Quotes with Lines"
+msgstr "明細付き見積"
 
 msgid "Quoting and sales orders"
 msgstr "見積と受注"
@@ -15248,6 +15285,9 @@ msgstr "シリアル番号"
 msgid "Serial numbers are only generated for serial- or batch-tracked items."
 msgstr "シリアル番号は、シリアルまたはバッチ追跡アイテムに対してのみ生成されます。"
 
+msgid "Serial numbers received"
+msgstr "受け入れたシリアル番号"
+
 msgid "Serial numbers to return"
 msgstr "返品するシリアル番号"
 
@@ -15259,6 +15299,9 @@ msgstr "シリアルトラッキング"
 
 msgid "Serial Tracking"
 msgstr "シリアル追跡"
+
+msgid "Serial-tracked jobs must be completed in whole units."
+msgstr "シリアル番号で管理される製造指図は、整数単位で完了する必要があります。"
 
 msgid "Serial/Batch #"
 msgstr "シリアル/バッチ #"
@@ -15515,8 +15558,20 @@ msgstr "出荷数量"
 msgid "Shipping"
 msgstr "配送"
 
+msgid "Shipping Address"
+msgstr ""
+
 msgid "Shipping Contact"
 msgstr "出荷担当者"
+
+msgid "Shipping Contact Email"
+msgstr ""
+
+msgid "Shipping Contact Name"
+msgstr ""
+
+msgid "Shipping Contact Phone"
+msgstr ""
 
 msgid "Shipping Cost"
 msgstr "配送料金"

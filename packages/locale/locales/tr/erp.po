@@ -76,6 +76,10 @@ msgstr "{0} zaten bir toplu işte"
 msgid "{0} already started"
 msgstr "{0} zaten başlatıldı"
 
+#. placeholder {0}: unitOfMeasure.name
+msgid "{0} cannot be deleted because it is still in use by {where}. Change those records to a different unit of measure first."
+msgstr "{0} hâlâ {where} tarafından kullanıldığı için silinemez. Önce bu kayıtları farklı bir ölçü birimine değiştirin."
+
 #. placeholder {0}: tieOut.deltaCellCount
 msgid "{0} cells with deltas"
 msgstr "{0} deltaları olan hücreler"
@@ -3751,6 +3755,9 @@ msgstr "Kanban tamamlama taramasında tüm miktarları tamamla"
 
 msgid "Complete Job"
 msgstr "İşi Tamamla"
+
+msgid "Complete serials/batches in MES before completing this job, or mark every operation Done to complete it automatically."
+msgstr "Bu iş emrini tamamlamadan önce MES'te seri numaralarını/partileri tamamlayın veya otomatik olarak tamamlanması için her operasyonu Bitti olarak işaretleyin."
 
 msgid "Complete Stock Transfer"
 msgstr "Stok Transferini Tamamla"
@@ -7664,7 +7671,7 @@ msgid "Finishes"
 msgstr "Kaplamalar"
 
 msgid "Finishing an incomplete pick"
-msgstr "Eksik Seçimi Bitirme"
+msgstr "Eksik seçimi tamamlama"
 
 msgid "Finishing is refused until every line is picked or marked Short."
 msgstr "Bitirme, her satır seçilene veya Kısa olarak işaretlenene kadar reddedilir."
@@ -8847,8 +8854,20 @@ msgstr "Davetli"
 msgid "Invoice"
 msgstr "Fatura"
 
+msgid "Invoice Address"
+msgstr ""
+
 msgid "Invoice Contact"
 msgstr "Fatura İlgili Kişisi"
+
+msgid "Invoice Contact Email"
+msgstr ""
+
+msgid "Invoice Contact Name"
+msgstr ""
+
+msgid "Invoice Contact Phone"
+msgstr ""
 
 msgid "Invoice customer"
 msgstr "Fatura müşterisi"
@@ -11472,6 +11491,9 @@ msgstr "Hiçbir şey"
 msgid "Nothing at this location matches \"{0}\"."
 msgstr "Bu konumda \"{0}\" ile eşleşen hiçbir şey yok."
 
+msgid "Nothing completed in MES yet"
+msgstr "MES'te henüz hiçbir şey tamamlanmadı"
+
 msgid "Nothing else at this location has stock to pull from."
 msgstr "Bu konumda çekilecek başka hiçbir stok yok."
 
@@ -13162,6 +13184,15 @@ msgstr "Satın alma ilgili kişi"
 msgid "Purchasing Contact"
 msgstr "Satın alma ilgili kişi"
 
+msgid "Purchasing Contact Email"
+msgstr ""
+
+msgid "Purchasing Contact Name"
+msgstr ""
+
+msgid "Purchasing Contact Phone"
+msgstr ""
+
 msgid "Purchasing Invoices"
 msgstr "Satın Alma Faturaları"
 
@@ -13350,6 +13381,9 @@ msgstr "Teklif satırı"
 msgid "Quote Line"
 msgstr "Teklif Satırı"
 
+msgid "Quote Lines"
+msgstr "Teklif Satırları"
+
 msgid "Quote lines whose bill of materials includes this item"
 msgstr "Ürün ağacı bu stok kartını içeren teklif satırları"
 
@@ -13379,6 +13413,9 @@ msgstr "Teklif Tarihi"
 
 msgid "Quotes"
 msgstr "Teklifler"
+
+msgid "Quotes with Lines"
+msgstr "Satırlı Teklifler"
 
 msgid "Quoting and sales orders"
 msgstr "Teklifler ve satış siparişleri"
@@ -15248,6 +15285,9 @@ msgstr "Seri Numaraları"
 msgid "Serial numbers are only generated for serial- or batch-tracked items."
 msgstr "Seri numaraları yalnızca seri- veya batch-izlenen öğeler için oluşturulur."
 
+msgid "Serial numbers received"
+msgstr "Teslim alınan seri numaraları"
+
 msgid "Serial numbers to return"
 msgstr "İade edilecek seri numaraları"
 
@@ -15259,6 +15299,9 @@ msgstr "Seri numarası takibi"
 
 msgid "Serial Tracking"
 msgstr "Seri Takibi"
+
+msgid "Serial-tracked jobs must be completed in whole units."
+msgstr "Seri numarasıyla izlenen iş emirleri tam birimler halinde tamamlanmalıdır."
 
 msgid "Serial/Batch #"
 msgstr "Seri/Parti No"
@@ -15515,8 +15558,20 @@ msgstr "Sevk Edilen Miktar"
 msgid "Shipping"
 msgstr "Nakliye"
 
+msgid "Shipping Address"
+msgstr ""
+
 msgid "Shipping Contact"
 msgstr "Sevkiyat İlgili kişi"
+
+msgid "Shipping Contact Email"
+msgstr ""
+
+msgid "Shipping Contact Name"
+msgstr ""
+
+msgid "Shipping Contact Phone"
+msgstr ""
 
 msgid "Shipping Cost"
 msgstr "Nakliye bedeli"

@@ -76,6 +76,10 @@ msgstr "{0} already in a batch"
 msgid "{0} already started"
 msgstr "{0} already started"
 
+#. placeholder {0}: unitOfMeasure.name
+msgid "{0} cannot be deleted because it is still in use by {where}. Change those records to a different unit of measure first."
+msgstr "{0} cannot be deleted because it is still in use by {where}. Change those records to a different unit of measure first."
+
 #. placeholder {0}: tieOut.deltaCellCount
 msgid "{0} cells with deltas"
 msgstr "{0} cells with deltas"
@@ -3751,6 +3755,9 @@ msgstr "Complete all quantities on kanban complete scan"
 
 msgid "Complete Job"
 msgstr "Complete Job"
+
+msgid "Complete serials/batches in MES before completing this job, or mark every operation Done to complete it automatically."
+msgstr "Complete serials/batches in MES before completing this job, or mark every operation Done to complete it automatically."
 
 msgid "Complete Stock Transfer"
 msgstr "Complete Stock Transfer"
@@ -8847,8 +8854,20 @@ msgstr "Invited"
 msgid "Invoice"
 msgstr "Invoice"
 
+msgid "Invoice Address"
+msgstr "Invoice Address"
+
 msgid "Invoice Contact"
 msgstr "Invoice Contact"
+
+msgid "Invoice Contact Email"
+msgstr "Invoice Contact Email"
+
+msgid "Invoice Contact Name"
+msgstr "Invoice Contact Name"
+
+msgid "Invoice Contact Phone"
+msgstr "Invoice Contact Phone"
 
 msgid "Invoice customer"
 msgstr "Invoice customer"
@@ -11472,6 +11491,9 @@ msgstr "Nothing"
 msgid "Nothing at this location matches \"{0}\"."
 msgstr "Nothing at this location matches \"{0}\"."
 
+msgid "Nothing completed in MES yet"
+msgstr "Nothing completed in MES yet"
+
 msgid "Nothing else at this location has stock to pull from."
 msgstr "Nothing else at this location has stock to pull from."
 
@@ -13162,6 +13184,15 @@ msgstr "Purchasing contact"
 msgid "Purchasing Contact"
 msgstr "Purchasing Contact"
 
+msgid "Purchasing Contact Email"
+msgstr "Purchasing Contact Email"
+
+msgid "Purchasing Contact Name"
+msgstr "Purchasing Contact Name"
+
+msgid "Purchasing Contact Phone"
+msgstr "Purchasing Contact Phone"
+
 msgid "Purchasing Invoices"
 msgstr "Purchasing Invoices"
 
@@ -13350,6 +13381,9 @@ msgstr "Quote line"
 msgid "Quote Line"
 msgstr "Quote Line"
 
+msgid "Quote Lines"
+msgstr "Quote Lines"
+
 msgid "Quote lines whose bill of materials includes this item"
 msgstr "Quote lines whose bill of materials includes this item"
 
@@ -13379,6 +13413,9 @@ msgstr "Quoted Date"
 
 msgid "Quotes"
 msgstr "Quotes"
+
+msgid "Quotes with Lines"
+msgstr "Quotes with Lines"
 
 msgid "Quoting and sales orders"
 msgstr "Quoting and sales orders"
@@ -15248,6 +15285,9 @@ msgstr "Serial Numbers"
 msgid "Serial numbers are only generated for serial- or batch-tracked items."
 msgstr "Serial numbers are only generated for serial- or batch-tracked items."
 
+msgid "Serial numbers received"
+msgstr "Serial numbers received"
+
 msgid "Serial numbers to return"
 msgstr "Serial numbers to return"
 
@@ -15259,6 +15299,9 @@ msgstr "Serial tracking"
 
 msgid "Serial Tracking"
 msgstr "Serial Tracking"
+
+msgid "Serial-tracked jobs must be completed in whole units."
+msgstr "Serial-tracked jobs must be completed in whole units."
 
 msgid "Serial/Batch #"
 msgstr "Serial/Batch #"
@@ -15515,8 +15558,20 @@ msgstr "Shipped Qty"
 msgid "Shipping"
 msgstr "Shipping"
 
+msgid "Shipping Address"
+msgstr "Shipping Address"
+
 msgid "Shipping Contact"
 msgstr "Shipping Contact"
+
+msgid "Shipping Contact Email"
+msgstr "Shipping Contact Email"
+
+msgid "Shipping Contact Name"
+msgstr "Shipping Contact Name"
+
+msgid "Shipping Contact Phone"
+msgstr "Shipping Contact Phone"
 
 msgid "Shipping Cost"
 msgstr "Shipping Cost"

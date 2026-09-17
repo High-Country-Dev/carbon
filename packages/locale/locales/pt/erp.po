@@ -76,6 +76,10 @@ msgstr "{0} já em um lote"
 msgid "{0} already started"
 msgstr "{0} já iniciado"
 
+#. placeholder {0}: unitOfMeasure.name
+msgid "{0} cannot be deleted because it is still in use by {where}. Change those records to a different unit of measure first."
+msgstr "{0} não pode ser excluído porque ainda está em uso por {where}. Altere primeiro esses registros para outra unidade de medida."
+
 #. placeholder {0}: tieOut.deltaCellCount
 msgid "{0} cells with deltas"
 msgstr "{0} células com deltas"
@@ -3751,6 +3755,9 @@ msgstr "Concluir todas as quantidades ao escanear a conclusão do kanban"
 
 msgid "Complete Job"
 msgstr "Concluir Trabalho"
+
+msgid "Complete serials/batches in MES before completing this job, or mark every operation Done to complete it automatically."
+msgstr "Conclua os seriais/lotes no MES antes de concluir esta ordem de produção, ou marque cada operação como concluída para concluí-la automaticamente."
 
 msgid "Complete Stock Transfer"
 msgstr "Concluir Transferência de Estoque"
@@ -7664,7 +7671,7 @@ msgid "Finishes"
 msgstr "Acabamentos"
 
 msgid "Finishing an incomplete pick"
-msgstr "Concluindo uma colheita incompleta"
+msgstr "Conclusão de uma coleta incompleta"
 
 msgid "Finishing is refused until every line is picked or marked Short."
 msgstr "A conclusão é recusada até que cada linha seja colhida ou marcada como Curta."
@@ -8847,8 +8854,20 @@ msgstr "Convidado"
 msgid "Invoice"
 msgstr "Fatura"
 
+msgid "Invoice Address"
+msgstr ""
+
 msgid "Invoice Contact"
 msgstr "Contato da Fatura"
+
+msgid "Invoice Contact Email"
+msgstr ""
+
+msgid "Invoice Contact Name"
+msgstr ""
+
+msgid "Invoice Contact Phone"
+msgstr ""
 
 msgid "Invoice customer"
 msgstr "Cliente da fatura"
@@ -11472,6 +11491,9 @@ msgstr "Nada"
 msgid "Nothing at this location matches \"{0}\"."
 msgstr "Nada neste local corresponde a \"{0}\"."
 
+msgid "Nothing completed in MES yet"
+msgstr "Nada concluído no MES ainda"
+
 msgid "Nothing else at this location has stock to pull from."
 msgstr "Nada mais neste local tem estoque para puxar."
 
@@ -13162,6 +13184,15 @@ msgstr "Contato de compra"
 msgid "Purchasing Contact"
 msgstr "Contacto de Compras"
 
+msgid "Purchasing Contact Email"
+msgstr ""
+
+msgid "Purchasing Contact Name"
+msgstr ""
+
+msgid "Purchasing Contact Phone"
+msgstr ""
+
 msgid "Purchasing Invoices"
 msgstr "Faturas de Compra"
 
@@ -13350,6 +13381,9 @@ msgstr "Linha do orçamento"
 msgid "Quote Line"
 msgstr "Linha do orçamento"
 
+msgid "Quote Lines"
+msgstr "Linhas de Cotação"
+
 msgid "Quote lines whose bill of materials includes this item"
 msgstr "Linhas do orçamento cuja lista de materiais inclui este item"
 
@@ -13379,6 +13413,9 @@ msgstr "Data da Cotação"
 
 msgid "Quotes"
 msgstr "Orçamentos"
+
+msgid "Quotes with Lines"
+msgstr "Orçamentos com Linhas"
 
 msgid "Quoting and sales orders"
 msgstr "Cotação e pedidos de venda"
@@ -15248,6 +15285,9 @@ msgstr "Números de Série"
 msgid "Serial numbers are only generated for serial- or batch-tracked items."
 msgstr "Números de série são gerados apenas para itens rastreados por série ou lote."
 
+msgid "Serial numbers received"
+msgstr "Números de série recebidos"
+
 msgid "Serial numbers to return"
 msgstr "Números de série para devolver"
 
@@ -15259,6 +15299,9 @@ msgstr "Rastreamento de série"
 
 msgid "Serial Tracking"
 msgstr "Rastreamento em Série"
+
+msgid "Serial-tracked jobs must be completed in whole units."
+msgstr "Ordens de produção rastreadas por número de série devem ser concluídas em unidades inteiras."
 
 msgid "Serial/Batch #"
 msgstr "Série/Lote #"
@@ -15515,8 +15558,20 @@ msgstr "Qtd. Enviada"
 msgid "Shipping"
 msgstr "Envio"
 
+msgid "Shipping Address"
+msgstr ""
+
 msgid "Shipping Contact"
 msgstr "Contato de Envio"
+
+msgid "Shipping Contact Email"
+msgstr ""
+
+msgid "Shipping Contact Name"
+msgstr ""
+
+msgid "Shipping Contact Phone"
+msgstr ""
 
 msgid "Shipping Cost"
 msgstr "Frete"
