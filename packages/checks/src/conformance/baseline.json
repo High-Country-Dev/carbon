@@ -304,6 +304,7 @@
   "no-raw-rounding::apps/erp/app/modules/accounting/accounting.utils.ts::const quarterPlaced = Math.ceil((startDate.getMonth() + 1) / 3);",
   "no-raw-rounding::apps/erp/app/modules/accounting/ui/FixedAssets/AssetClassesTable.tsx::const years = life ? Math.round((life / 12) * 10) / 10 : null;",
   "no-raw-rounding::apps/erp/app/modules/agent/ui/greetings.ts::return GREETINGS[Math.floor(Math.random() * GREETINGS.length)]();",
+  "no-raw-rounding::apps/erp/app/modules/documents/documents.service.ts::size = Math.round(converted.data.size / 1024);",
   "no-raw-rounding::apps/erp/app/modules/documents/ui/Documents/DocumentCreateForm.tsx::formData.append(\"size\", Math.round(size / 1024).toString());",
   "no-raw-rounding::apps/erp/app/modules/inventory/ui/Inventory/InventoryStorageUnits.tsx::Math.round(",
   "no-raw-rounding::apps/erp/app/modules/inventory/ui/Receipts/ReceiptLines.tsx::formData.append(\"size\", Math.round(file.size / 1024).toString());",
