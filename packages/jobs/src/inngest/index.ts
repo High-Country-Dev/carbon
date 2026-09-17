@@ -56,7 +56,6 @@ import {
 } from "./functions/notifications";
 import {
   auditArchiveFunction,
-  changelogDispatchFunction,
   cleanupFunction,
   dispatchFunction,
   generateMaintenanceForScheduleFunction,
@@ -73,6 +72,7 @@ import {
 import {
   assemblyConvertFunction,
   assemblyPlanFunction,
+  changelogDispatchFunction,
   companyExportFunction,
   companyImportFunction,
   companyRestoreFinalizeFunction,
@@ -139,8 +139,8 @@ export const functions = [
   onboardFunction,
   printJobFunction,
   printJobDeliverFunction,
-  // Scheduled
   changelogDispatchFunction,
+  // Scheduled
   cleanupFunction,
   dispatchFunction,
   generateMaintenanceForScheduleFunction,

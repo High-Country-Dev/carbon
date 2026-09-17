@@ -5,7 +5,7 @@ import {
   parseChangelogFeed,
   planDispatch,
   unescapeXml
-} from "./feed";
+} from "./changelog-dispatch.feed";
 
 // The exact shape docs/app/changelog/rss.xml/route.ts emits.
 const FEED = `<?xml version="1.0" encoding="UTF-8"?>

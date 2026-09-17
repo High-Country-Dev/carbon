@@ -1,5 +1,4 @@
 export { auditArchiveFunction } from "./audit-archive";
-export { changelogDispatchFunction } from "./changelog-dispatch";
 export { cleanupFunction } from "./cleanup";
 export {
   dispatchFunction,

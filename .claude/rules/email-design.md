@@ -2,8 +2,7 @@
 paths:
   - "packages/documents/src/email/**"
   - "packages/jobs/src/inngest/functions/notifications/**"
-  - "packages/jobs/src/inngest/functions/scheduled/changelog-dispatch.ts"
-  - "packages/jobs/src/changelog/**"
+  - "packages/jobs/src/inngest/functions/tasks/changelog-dispatch*"
 ---
 
 # Email Design — every email is the notification card
@@ -21,7 +20,7 @@ is a bug, not a design choice. Grounded in the templates and `components/` in th
 | Templates | `packages/documents/src/email/*.tsx`, exported from `index.ts` → `@carbon/documents/email` |
 | Shared chrome | `components/Theme.tsx` (`EmailThemeProvider`, `getEmailThemeClasses`, Geist font, dark-mode meta), `components/Logo.tsx`, `components/notificationStyles.ts` (the `nf-*` classes) |
 | Rendering | jobs code: `render(SomeEmail({ ...props }))` from `@react-email/components` — a plain function call, no JSX in `@carbon/jobs` |
-| Sending | the `carbon/send-email` event (`notifications/send-email.ts`, needs a `companyId`) or `sendEmail` from `@carbon/lib/email.server` directly for platform mail with no company (`scheduled/changelog-dispatch.ts`) — both go through the shared SMTP transport, which no-ops (`data: null`) when no `SMTP_*` / `RESEND_API_KEY` is configured |
+| Sending | the `carbon/send-email` event (`notifications/send-email.ts`, needs a `companyId`) or `sendEmail` from `@carbon/lib/email.server` directly for platform mail with no company (`tasks/changelog-dispatch.ts`) — both go through the shared SMTP transport, which no-ops (`data: null`) when no `SMTP_*` / `RESEND_API_KEY` is configured |
 | Previews | `src/email/previews/` — **one fixture per shipped email**, `pnpm --filter @carbon/documents email:previews` |
 
 **Never build email HTML by string concatenation.** The changelog emails briefly did; that
@@ -49,7 +48,7 @@ are label/value details. Every piece below is load-bearing:
 
 - **Dark mode is done by CLASS, not inline style.** Backgrounds go through `nf-*` classes so the `!important` media-query overrides in `notificationStyles` can flip them; an inline `background-color` beats them and renders a white card on a black Gmail. Text colors use `getEmailThemeClasses()` (`email-text`, `email-muted`, …). Off-black `#0e0e0e` and off-white `#fefefe`, never pure `#000`/`#fff` — pure values get auto-inverted by some clients.
 - **No sample defaults on content props.** `NotificationEmail` deliberately gives `heading`/`message` no defaults: fabricated data must never reach a real recipient. Sample data lives in the preview fixture only. (Some older templates — `VerificationEmail` — still default their props; don't copy that, or their pre-card layout.)
-- **Always send a `text` alternative** alongside `html` — the job builds it from the same content (see `entryEmailContent` in `packages/jobs/src/changelog/feed.ts`).
+- **Always send a `text` alternative** alongside `html` — the job builds it from the same content (see `entryEmailContent` in `packages/jobs/src/inngest/functions/tasks/changelog-dispatch.feed.ts`).
 - **Broadcast mail carries a `List-Unsubscribe` header** and a footer link to where the reader turns it off. For the changelog newsletter that is the signed-in Account → Notifications page (only the user may change their preference), so there is no one-click `List-Unsubscribe-Post` and the email renders once per entry, not per recipient.
 - **Links in customer-authored text are not links** unless they pass `renderInlineLinks` against the ERP origin (`NotificationEmail` `details`) — an `https://` in a body someone typed stays literal text.
 - **Add the preview fixture in the same change** (`previews/<Name>.tsx`, props filled with obviously-sample values like "Acme Manufacturing" / "John Doe") — it is the only way anyone sees the email before a customer does.

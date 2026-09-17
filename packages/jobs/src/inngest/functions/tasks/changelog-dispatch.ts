@@ -3,14 +3,14 @@ import { ERP_URL } from "@carbon/env";
 import { DEFAULT_FROM, sendEmail } from "@carbon/lib/email.server";
 import { NotificationTopic } from "@carbon/notifications";
 import { render } from "@react-email/components";
+import { getJobDatabaseClient } from "../../../db";
+import { inngest } from "../../client";
 import {
   displayDate,
   entryEmailContent,
   parseChangelogFeed,
   planDispatch
-} from "../../../changelog/feed";
-import { getJobDatabaseClient } from "../../../db";
-import { inngest } from "../../client";
+} from "./changelog-dispatch.feed";
 
 /**
  * Changelog subscription pipeline (.ai/plans/2026-09-05-changelog-subscriptions.md).
@@ -38,11 +38,12 @@ const CHANGELOG_FEED_URL =
  *  giving up; send the event again once the entry is visible. */
 const FEED_ATTEMPTS = 5;
 
-/** Concurrent SMTP sends per entry. Email goes through the shared SMTP
+/** Recipients per durable send step. Email goes through the shared SMTP
  *  transport (`@carbon/lib/email.server`), one message per recipient — there
- *  is no batch API — so a few in flight at once keeps a large list moving
- *  without hammering the relay. */
-const SEND_CONCURRENCY = 10;
+ *  is no batch API — so a big list is split into steps: each is one short
+ *  invocation of the Inngest route, and a retry after a failure resumes at
+ *  the chunk that failed instead of re-sending the ones that finished. */
+const SEND_CHUNK_SIZE = 50;
 
 /** Where a reader turns the newsletter off: Account → Notifications in the ERP
  *  (path.to.notificationSettings — a signed-in page, since only the user may
@@ -55,7 +56,9 @@ const MANAGE_URL = `${ERP_URL.replace(/\/$/, "")}/x/account/notifications`;
  * a user in two companies who opted in from either gets ONE email, so the
  * rows are collapsed by user.
  */
-async function getNewsletterRecipients(): Promise<{ email: string }[]> {
+type DispatchPlan = ReturnType<typeof planDispatch>;
+
+async function getNewsletterRecipients(): Promise<string[]> {
   const db = getJobDatabaseClient();
   const rows = await db
     .selectFrom("notificationPreference")
@@ -66,11 +69,52 @@ async function getNewsletterRecipients(): Promise<{ email: string }[]> {
     .where("notificationPreference.enabled", "=", true)
     .where("user.active", "=", true)
     .distinct()
+    .orderBy("user.email")
     .execute();
-  return rows.filter((row) => row.email.length > 0);
+  return rows.map((row) => row.email).filter((email) => email.length > 0);
 }
 
-type DispatchPlan = ReturnType<typeof planDispatch>;
+/** Sends one entry to one chunk of recipients; returns how many were sent.
+ *  Zero with no error means the transport is not configured (email disabled). */
+async function sendEntryToRecipients(
+  entry: DispatchPlan["send"][number],
+  recipients: string[]
+): Promise<number> {
+  // One render per chunk — nothing in the email is per-recipient.
+  // List-Unsubscribe points at the signed-in settings page; there is
+  // deliberately no List-Unsubscribe-Post (one-click needs an
+  // unauthenticated endpoint, which this design does not have).
+  const { subject, text } = entryEmailContent(entry, MANAGE_URL);
+  const html = await render(
+    ChangelogEntryEmail({
+      title: entry.title,
+      description: entry.description ?? undefined,
+      date: displayDate(entry.pubDate),
+      readUrl: entry.link,
+      manageUrl: MANAGE_URL
+    })
+  );
+
+  let sent = 0;
+  // Sequential on purpose: the relay rate-limits, and a throttled send fails
+  // the step, which would re-send the whole chunk on retry.
+  for (const to of recipients) {
+    const response = await sendEmail({
+      from: DEFAULT_FROM,
+      to,
+      subject,
+      html,
+      text,
+      headers: { "List-Unsubscribe": `<${MANAGE_URL}>` }
+    });
+    if (response.error) {
+      throw new Error(`Email error: ${response.error.message}`);
+    }
+    // data is null when SMTP is not configured — email is disabled.
+    if (response.data) sent += 1;
+  }
+  return sent;
+}
 
 async function planFromLiveFeed(): Promise<DispatchPlan> {
   const response = await fetch(CHANGELOG_FEED_URL);
@@ -156,59 +200,32 @@ export const changelogDispatchFunction = inngest.createFunction(
     // Feed is newest-first; send oldest-first so a backlog arrives in order.
     let dispatched = 0;
     for (const entry of [...newEntries].reverse()) {
-      // One durable step per entry. If a send fails partway through the list,
-      // the retry re-sends the entry to the recipients that already got it —
-      // an annoyance, never a data bug; the ledger row still guards against
-      // re-dispatching a finished entry.
-      const emailsSent = await step.run(`dispatch-${entry.guid}`, async () => {
+      // The recipient list is memoised as a step so every chunk of this entry
+      // — and every retry — works from the same list.
+      const subscribers = await step.run(
+        `recipients-${entry.guid}`,
+        getNewsletterRecipients
+      );
+
+      // One durable step per chunk: a failed chunk is retried on its own, and
+      // the chunks before it are never re-sent. The ledger row (below) still
+      // guards against re-dispatching a finished entry.
+      let emailsSent = 0;
+      for (let i = 0; i < subscribers.length; i += SEND_CHUNK_SIZE) {
+        const chunk = subscribers.slice(i, i + SEND_CHUNK_SIZE);
+        emailsSent += await step.run(
+          `dispatch-${entry.guid}-${i / SEND_CHUNK_SIZE}`,
+          () => sendEntryToRecipients(entry, chunk)
+        );
+      }
+      if (subscribers.length > 0 && emailsSent === 0) {
+        logger.info("Email disabled — recording dispatch without sending", {
+          guid: entry.guid
+        });
+      }
+
+      await step.run(`ledger-${entry.guid}`, async () => {
         const db = getJobDatabaseClient();
-        const subscribers = await getNewsletterRecipients();
-
-        let sent = 0;
-        if (subscribers.length > 0) {
-          // One render per entry — nothing in the email is per-recipient.
-          // List-Unsubscribe points at the signed-in settings page; there is
-          // deliberately no List-Unsubscribe-Post (one-click needs an
-          // unauthenticated endpoint, which this design does not have).
-          const { subject, text } = entryEmailContent(entry, MANAGE_URL);
-          const html = await render(
-            ChangelogEntryEmail({
-              title: entry.title,
-              description: entry.description ?? undefined,
-              date: displayDate(entry.pubDate),
-              readUrl: entry.link,
-              manageUrl: MANAGE_URL
-            })
-          );
-          for (let i = 0; i < subscribers.length; i += SEND_CONCURRENCY) {
-            const results = await Promise.all(
-              subscribers.slice(i, i + SEND_CONCURRENCY).map((subscriber) =>
-                sendEmail({
-                  from: DEFAULT_FROM,
-                  to: subscriber.email,
-                  subject,
-                  html,
-                  text,
-                  headers: { "List-Unsubscribe": `<${MANAGE_URL}>` }
-                })
-              )
-            );
-            for (const response of results) {
-              if (response.error) {
-                throw new Error(`Email error: ${response.error.message}`);
-              }
-              // data is null when SMTP is not configured — email is disabled,
-              // and the entry is ledgered without a send.
-              if (response.data) sent += 1;
-            }
-          }
-          if (sent === 0) {
-            logger.info("Email disabled — recording dispatch without sending", {
-              guid: entry.guid
-            });
-          }
-        }
-
         // Conflict-tolerant: a concurrent run that already ledgered this guid
         // (shouldn't happen under concurrency 1, but cheap to be safe).
         await db
@@ -217,12 +234,10 @@ export const changelogDispatchFunction = inngest.createFunction(
             guid: entry.guid,
             title: entry.title,
             description: entry.description,
-            emailsSent: sent
+            emailsSent
           })
           .onConflict((oc) => oc.column("guid").doNothing())
           .execute();
-
-        return sent;
       });
       dispatched += 1;
       logger.info("Dispatched changelog entry", {

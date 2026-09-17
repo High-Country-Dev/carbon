@@ -16,13 +16,13 @@ IMPLEMENTED on this branch (uncommitted). Model, after two rounds of simplificat
 - **Unsubscribe** = the same toggle. Emails link (footer + `List-Unsubscribe` header) to the
   signed-in Account → Notifications page; there is no public unsubscribe endpoint and no
   one-click `List-Unsubscribe-Post`, by decision — only the user may change their preference.
-- **Dispatcher** `packages/jobs/src/inngest/functions/scheduled/changelog-dispatch.ts`
+- **Dispatcher** `packages/jobs/src/inngest/functions/tasks/changelog-dispatch.ts`
   (`changelogDispatchFunction`, on-demand `carbon/changelog-dispatch` event only — the cron
   and `changelog/entry.merged` were removed 2026-09-07): recipients =
   `notificationPreference ⋈ user` (enabled email rows, active users, deduped per user);
   renders `ChangelogEntryEmail` (`@carbon/documents/email`, the notification card) per
   recipient; Resend batches ≤100 with List-Unsubscribe; ledger insert incl. description;
-  empty-ledger bootstrap. Pure helpers + tests in `packages/jobs/src/changelog/`.
+  empty-ledger bootstrap. Pure helpers + tests sit beside it (`changelog-dispatch.feed.ts`, `*.test.ts`).
 - ~~`.github/workflows/changelog-dispatch.yml`~~ (removed 2026-09-07 — nothing fires the
   dispatcher automatically; send `carbon/changelog-dispatch` by hand); docs popover (email → "Manage in your Carbon
   account" link, RSS + Slack copy rows, unsubscribe notice).
