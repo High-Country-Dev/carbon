@@ -18940,6 +18940,9 @@ msgstr "Verlauf anzeigen"
 msgid "View in Academy"
 msgstr "Im Academy anzeigen"
 
+msgid "View in new tab"
+msgstr ""
+
 msgid "View in project plan"
 msgstr "Im Projektplan anzeigen"
 

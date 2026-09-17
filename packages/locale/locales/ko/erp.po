@@ -18940,6 +18940,9 @@ msgstr "이력 보기"
 msgid "View in Academy"
 msgstr "아카데미에서 보기"
 
+msgid "View in new tab"
+msgstr ""
+
 msgid "View in project plan"
 msgstr "프로젝트 계획에서 보기"
 

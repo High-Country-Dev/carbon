@@ -26,7 +26,7 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import type { FileObject } from "@supabase/storage-js";
 import type { ChangeEvent } from "react";
 import { useCallback } from "react";
-import { LuEllipsisVertical, LuUpload } from "react-icons/lu";
+import { LuEllipsisVertical, LuExternalLink, LuUpload } from "react-icons/lu";
 import { useFetchers, useRevalidator, useSubmit } from "react-router";
 import { DateTime, DocumentPreview, FileDropzone } from "~/components";
 import DocumentIcon from "~/components/DocumentIcon";
@@ -44,6 +44,13 @@ const logger = getLogger("erp", "recorddocuments");
  * under `${companyId}/${bucketPrefix}/${id}`, and each upload also writes a
  * `document` row so the file is searchable in the global Documents module.
  */
+/** PDFs and images are the only types a browser reliably renders inline; for
+ *  anything else a new tab would just trigger a download, so the action is hidden. */
+function isViewableInBrowser(fileName: string): boolean {
+  const type = getDocumentType(fileName);
+  return type === "PDF" || type === "Image";
+}
+
 type RecordDocumentsProps = {
   files: FileObject[];
   /** The record's id — becomes document.sourceDocumentId */
@@ -66,7 +73,7 @@ const RecordDocuments = ({
   isReadOnly
 }: RecordDocumentsProps) => {
   const { t } = useLingui();
-  const { canDelete, download, deleteAttachment, getPath, upload } =
+  const { canDelete, download, view, deleteAttachment, getPath, upload } =
     useRecordDocuments({ id, bucketPrefix, sourceDocument, module });
 
   const effectiveCanDelete = isReadOnly ? false : canDelete;
@@ -172,6 +179,12 @@ const RecordDocuments = ({
                           />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
+                          {isViewableInBrowser(file.name) && (
+                            <DropdownMenuItem onClick={() => view(file)}>
+                              <LuExternalLink className="mr-2" />
+                              <Trans>View in new tab</Trans>
+                            </DropdownMenuItem>
+                          )}
                           <DropdownMenuItem onClick={() => download(file)}>
                             <Trans>Download</Trans>
                           </DropdownMenuItem>
@@ -276,6 +289,19 @@ export const useRecordDocuments = ({
     [carbon?.storage, getPath, revalidator, t]
   );
 
+  const view = useCallback(
+    (file: FileObject) => {
+      // The preview route streams the file inline, so the browser renders it
+      // rather than downloading. noopener because this is a user-content URL.
+      window.open(
+        path.to.file.previewFile(`private/${getPath(file)}`),
+        "_blank",
+        "noopener,noreferrer"
+      );
+    },
+    [getPath]
+  );
+
   const download = useCallback(
     async (file: FileObject) => {
       const url = path.to.file.previewFile(`private/${getPath(file)}`);
@@ -363,6 +389,7 @@ export const useRecordDocuments = ({
     canDelete,
     deleteAttachment,
     download,
+    view,
     upload,
     getPath
   };

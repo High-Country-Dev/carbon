@@ -18940,6 +18940,9 @@ msgstr "查看历史记录"
 msgid "View in Academy"
 msgstr "在学院中查看"
 
+msgid "View in new tab"
+msgstr ""
+
 msgid "View in project plan"
 msgstr "在项目计划中查看"
 
