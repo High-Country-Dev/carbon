@@ -1,4 +1,5 @@
 import { resolveLanguage } from "@carbon/locale";
+import { getLogger } from "@carbon/logger";
 import type { Messages } from "@lingui/core";
 import { useEffect, useReducer } from "react";
 
@@ -11,13 +12,21 @@ const loaders = import.meta.glob(
 ) as Record<string, () => Promise<Messages>>;
 
 const cache = new Map<string, Messages>();
+const logger = getLogger("mes", "lingui");
 
 export async function preloadCatalog(locale?: string | null) {
   const language = resolveLanguage(locale);
   if (cache.has(language)) return;
   const load =
     loaders[`../../../../packages/locale/locales/${language}/mes.po`];
-  cache.set(language, load ? await load() : {});
+  try {
+    cache.set(language, load ? await load() : {});
+  } catch (err) {
+    // A failed chunk fetch (stale deploy hash, flaky network) must not leave
+    // the SSR page non-interactive: boot with source strings and retry on the
+    // next preload rather than caching the failure.
+    logger.error("Failed to load the catalog", { language, error: err });
+  }
 }
 
 export function getCatalog(locale?: string | null): Messages {
