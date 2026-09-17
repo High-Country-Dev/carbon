@@ -27586,9 +27586,6 @@ export default {
             $ref: "#/parameters/rowFilter.supplierBankAccount.swiftBic"
           },
           {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.bankDetails"
-          },
-          {
             $ref: "#/parameters/rowFilter.supplierBankAccount.isPrimary"
           },
           {
@@ -27711,9 +27708,6 @@ export default {
             $ref: "#/parameters/rowFilter.supplierBankAccount.swiftBic"
           },
           {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.bankDetails"
-          },
-          {
             $ref: "#/parameters/rowFilter.supplierBankAccount.isPrimary"
           },
           {
@@ -27788,9 +27782,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.supplierBankAccount.swiftBic"
-          },
-          {
-            $ref: "#/parameters/rowFilter.supplierBankAccount.bankDetails"
           },
           {
             $ref: "#/parameters/rowFilter.supplierBankAccount.isPrimary"
@@ -75229,9 +75220,6 @@ export default {
             $ref: "#/parameters/rowFilter.customerBankAccount.swiftBic"
           },
           {
-            $ref: "#/parameters/rowFilter.customerBankAccount.bankDetails"
-          },
-          {
             $ref: "#/parameters/rowFilter.customerBankAccount.isPrimary"
           },
           {
@@ -75354,9 +75342,6 @@ export default {
             $ref: "#/parameters/rowFilter.customerBankAccount.swiftBic"
           },
           {
-            $ref: "#/parameters/rowFilter.customerBankAccount.bankDetails"
-          },
-          {
             $ref: "#/parameters/rowFilter.customerBankAccount.isPrimary"
           },
           {
@@ -75431,9 +75416,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.customerBankAccount.swiftBic"
-          },
-          {
-            $ref: "#/parameters/rowFilter.customerBankAccount.bankDetails"
           },
           {
             $ref: "#/parameters/rowFilter.customerBankAccount.isPrimary"
@@ -110625,7 +110607,7 @@ export default {
       properties: {
         id: {
           description:
-            "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `supplierLocation.id`.<fk table='supplierLocation' column='id'/>",
+            "Note:\nThis is a Foreign Key to `supplierLocation.id`.<fk table='supplierLocation' column='id'/>",
           format: "text",
           type: "string"
         },
@@ -110674,7 +110656,7 @@ export default {
         },
         supplierLocationId: {
           description:
-            "Note:\nThis is a Foreign Key to `supplierLocation.id`.<fk table='supplierLocation' column='id'/>",
+            "Note:\nThis is a Primary Key.<pk/>\nThis is a Foreign Key to `supplierLocation.id`.<fk table='supplierLocation' column='id'/>",
           format: "text",
           type: "string"
         },
@@ -117553,9 +117535,6 @@ export default {
         swiftBic: {
           format: "text",
           type: "string"
-        },
-        bankDetails: {
-          format: "jsonb"
         },
         isPrimary: {
           default: false,
@@ -139723,9 +139702,6 @@ export default {
         swiftBic: {
           format: "text",
           type: "string"
-        },
-        bankDetails: {
-          format: "jsonb"
         },
         isPrimary: {
           default: false,
@@ -163152,12 +163128,6 @@ export default {
     },
     "rowFilter.supplierBankAccount.swiftBic": {
       name: "swiftBic",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.supplierBankAccount.bankDetails": {
-      name: "bankDetails",
       required: false,
       in: "query",
       type: "string"
@@ -187772,12 +187742,6 @@ export default {
     },
     "rowFilter.customerBankAccount.swiftBic": {
       name: "swiftBic",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.customerBankAccount.bankDetails": {
-      name: "bankDetails",
       required: false,
       in: "query",
       type: "string"

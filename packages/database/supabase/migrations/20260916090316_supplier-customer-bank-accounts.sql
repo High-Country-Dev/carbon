@@ -29,10 +29,6 @@ CREATE TABLE "supplierBankAccount" (
     -- One column for the same reason.
     "bankCode" TEXT,
     "swiftBic" TEXT,
-    -- Country-specific extras that payment files need but nothing queries:
-    -- accountType (checking/savings) for US ACH, branchName, purposeCode.
-    -- Shape is validated per-country in the zod layer, not here.
-    "bankDetails" JSONB,
 
     -- Reserved for a future payment integration. Nothing reads these yet: the
     -- accounts are reference data a person consults, so there is no default to
@@ -109,10 +105,6 @@ CREATE TABLE "customerBankAccount" (
     -- One column for the same reason.
     "bankCode" TEXT,
     "swiftBic" TEXT,
-    -- Country-specific extras that payment files need but nothing queries:
-    -- accountType (checking/savings) for US ACH, branchName, purposeCode.
-    -- Shape is validated per-country in the zod layer, not here.
-    "bankDetails" JSONB,
 
     -- Reserved for a future payment integration. Nothing reads these yet: the
     -- accounts are reference data a person consults, so there is no default to

@@ -432,35 +432,6 @@ export const supplierBankAccountValidator = z
     accountNumber: zfd.text(z.string().optional()),
     bankCode: zfd.text(z.string().optional()),
     swiftBic: zfd.text(z.string().optional()),
-    // Parsed, not just validated: the column is JSONB, so a raw string would be
-    // stored as a JSON string rather than an object.
-    bankDetails: zfd
-      .text(
-        z
-          .string()
-          .optional()
-          .transform((value, ctx) => {
-            if (!value) return undefined;
-            try {
-              const parsed = JSON.parse(value);
-              if (
-                parsed === null ||
-                typeof parsed !== "object" ||
-                Array.isArray(parsed)
-              ) {
-                throw new Error("not an object");
-              }
-              return parsed as Record<string, unknown>;
-            } catch {
-              ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                message: "Additional details must be a JSON object"
-              });
-              return z.NEVER;
-            }
-          })
-      )
-      .optional(),
     notes: zfd.text(z.string().optional())
   })
   .superRefine((data, ctx) => {

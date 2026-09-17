@@ -9479,7 +9479,6 @@ export type Database = {
           active: boolean
           bankAddress: string | null
           bankCode: string | null
-          bankDetails: Json | null
           bankName: string | null
           companyId: string
           countryCode: string | null
@@ -9503,7 +9502,6 @@ export type Database = {
           active?: boolean
           bankAddress?: string | null
           bankCode?: string | null
-          bankDetails?: Json | null
           bankName?: string | null
           companyId: string
           countryCode?: string | null
@@ -9527,7 +9525,6 @@ export type Database = {
           active?: boolean
           bankAddress?: string | null
           bankCode?: string | null
-          bankDetails?: Json | null
           bankName?: string | null
           companyId?: string
           countryCode?: string | null
@@ -56264,7 +56261,6 @@ export type Database = {
           active: boolean
           bankAddress: string | null
           bankCode: string | null
-          bankDetails: Json | null
           bankName: string | null
           companyId: string
           countryCode: string | null
@@ -56288,7 +56284,6 @@ export type Database = {
           active?: boolean
           bankAddress?: string | null
           bankCode?: string | null
-          bankDetails?: Json | null
           bankName?: string | null
           companyId: string
           countryCode?: string | null
@@ -56312,7 +56307,6 @@ export type Database = {
           active?: boolean
           bankAddress?: string | null
           bankCode?: string | null
-          bankDetails?: Json | null
           bankName?: string | null
           companyId?: string
           countryCode?: string | null
@@ -73068,14 +73062,14 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["supplierCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["supplierCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
@@ -76768,14 +76762,14 @@ export type Database = {
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["invoiceCountryCode"]
+            columns: ["customerCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]
           },
           {
             foreignKeyName: "address_countryCode_fkey"
-            columns: ["customerCountryCode"]
+            columns: ["invoiceCountryCode"]
             isOneToOne: false
             referencedRelation: "country"
             referencedColumns: ["alpha2"]

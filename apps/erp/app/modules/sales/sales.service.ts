@@ -376,31 +376,22 @@ export async function upsertCustomerBankAccount(
 ) {
   const { customerId, companyId } = bankAccount;
 
-  // bankDetails is a JSONB column, but the validator types it loosely after
-  // parsing the form's JSON string, so Kysely rejects it against the column's
-  // Json type. Narrow it inside each branch — hoisting the spread above the
-  // `createdBy` check collapses the union and loses that discriminant.
   if ("createdBy" in bankAccount) {
-    const { bankDetails, ...fields } = bankAccount;
     return await db
       .insertInto("customerBankAccount")
-      .values({ ...fields, bankDetails: bankDetails as Json })
+      .values(bankAccount)
       .returning("id")
       .executeTakeFirstOrThrow();
   }
 
-  const { id, bankDetails, ...update } = bankAccount;
+  const { id, ...update } = bankAccount;
 
   // customerId and companyId are scoping columns, not editable fields. They are
   // also re-asserted in the WHERE clause so a forged form value cannot move
   // this row to another customer.
   return await db
     .updateTable("customerBankAccount")
-    .set({
-      ...update,
-      bankDetails: bankDetails as Json,
-      updatedAt: datetime.timestamp()
-    })
+    .set({ ...update, updatedAt: datetime.timestamp() })
     .where("id", "=", id)
     .where("customerId", "=", customerId)
     .where("companyId", "=", companyId)
