@@ -76,6 +76,10 @@ msgstr "{0}은 이미 배치에 포함됨"
 msgid "{0} already started"
 msgstr "{0}은 이미 시작됨"
 
+#. placeholder {0}: unitOfMeasure.name
+msgid "{0} cannot be deleted because it is still in use by {where}. Change those records to a different unit of measure first."
+msgstr "{0}은(는) {where}에서 아직 사용 중이므로 삭제할 수 없습니다. 먼저 해당 레코드를 다른 단위로 변경하세요."
+
 #. placeholder {0}: tieOut.deltaCellCount
 msgid "{0} cells with deltas"
 msgstr "{0}개 셀에 변경사항 있음"
@@ -8836,8 +8840,20 @@ msgstr "초대됨"
 msgid "Invoice"
 msgstr "송장"
 
+msgid "Invoice Address"
+msgstr ""
+
 msgid "Invoice Contact"
 msgstr "송장 담당자"
+
+msgid "Invoice Contact Email"
+msgstr ""
+
+msgid "Invoice Contact Name"
+msgstr ""
+
+msgid "Invoice Contact Phone"
+msgstr ""
 
 msgid "Invoice customer"
 msgstr "송장 고객"
@@ -13161,6 +13177,15 @@ msgstr "구매 담당자"
 msgid "Purchasing Contact"
 msgstr "구매 담당자"
 
+msgid "Purchasing Contact Email"
+msgstr ""
+
+msgid "Purchasing Contact Name"
+msgstr ""
+
+msgid "Purchasing Contact Phone"
+msgstr ""
+
 msgid "Purchasing Invoices"
 msgstr "구매 송장"
 
@@ -15520,8 +15545,20 @@ msgstr "출하 수량"
 msgid "Shipping"
 msgstr "배송"
 
+msgid "Shipping Address"
+msgstr ""
+
 msgid "Shipping Contact"
 msgstr "배송 담당자"
+
+msgid "Shipping Contact Email"
+msgstr ""
+
+msgid "Shipping Contact Name"
+msgstr ""
+
+msgid "Shipping Contact Phone"
+msgstr ""
 
 msgid "Shipping Cost"
 msgstr "운송비"

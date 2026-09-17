@@ -1701,6 +1701,8 @@ full-screen ERP route.
 
 **Applies to:** `packages/database/supabase/functions/**` Kysely inserts of `internalNotes`, `externalNotes`, `customFields`, `priceTrace`, `configuration`, `additionalCharges`; every `*.models.ts` field that feeds a rich-text column (the purchasing `notes: z.any()` fields still need this).
 
+**Follow-up (found later):** The original fix only covered the `quote` header row's `internalNotes`/`externalNotes` in `quoteToQuote`. The per-line copy loop in the SAME function (`quoteToQuote`'s `sourceQuoteLines.data` insert into `quoteLine`) still spread the source row raw (`{...line, quoteId, companyId}`), leaving `additionalCharges`, `configuration`, `customFields`, `externalNotes`, `internalNotes`, and `priceTrace` unserialised — and `quoteOperation.workInstruction` (NOT NULL jsonb) was copied raw too. Any quote whose line ever picked up one of these as a non-object (a string/array) fails the copy deterministically with the same "invalid input syntax for type json" 500 — which the caller's `fetchWithRetry` (`packages/auth/src/lib/supabase/client.ts`) then retries blindly up to 3 times, and because this failure lands inside the SAME transaction as the `quote`/`quoteLine`/`quoteLinePrice` inserts it rolls back cleanly (no duplicate). **Rule addendum:** when applying this fix, grep the whole function for every `{...row}` spread and every raw `column: source.column` assignment into a jsonb column, not just the columns already known to be trouble — a partial rollout re-creates the exact bug it fixed, just narrower.
+
 ## An unchecked supabase-js insert turns a NOT NULL violation into silence
 
 **Context:** Inspection rejects were supposed to seed `nonConformanceItemTrackedEntity` links on the NCR's default Scrap row so the MRB could split or reassign specific entities. Nothing ever appeared. Both writers — `x+/inspection+/$id.reject.tsx` and `x+/issue+/new.tsx`'s job-operation auto-link — built their rows without `nonConformanceId`, which is `NOT NULL` on that table (`20260421130000_nc-item-tracked-entity.sql`).
@@ -1720,3 +1722,13 @@ full-screen ERP route.
 **Rule:** When a value is a sum of pools with different sharing scopes, never subtract a merged total from it. Keep the pools apart on the type, attribute each take to a pool, and subtract a take only from the pool it came from. Every fix that adds a cross-iteration accumulator gets a pure test with the accumulator non-empty before it is committed. After pushing review fixes, re-read the PR's open threads — the reviewer's follow-up is on the FIX commit, not the original diff.
 
 **Applies to:** `lib/picked-consumption.ts` (`SharedTakes`, `recordSharedTakes`, `splitTakeByBin`), `generatePickingList`'s `unclaimedRemaining`, `getPickedBudgets` callers, and any loop that allocates from a shared balance before persisting.
+
+## A cron that walks every tenant must isolate each tenant
+
+**Context:** `accounting-pull-sweep` looped `for (target of targets) await step.run(...)` over every active accounting integration; `mrp` ran every company inside ONE `step.run`. One Xero tenant's refresh token died (`invalid_grant` "Refresh token not found"); one MRP run outgrew Vercel's function timeout.
+
+**Problem:** An Inngest step that exhausts its retries throws into the function and fails the run, so the dead-token company silently skipped every company after it on every sweep — for weeks, with no notification. The single-step MRP was one Vercel invocation for all tenants, timed out, and every retry restarted from company #1. In both cases the run's status said what happened to the run, not to the tenants.
+
+**Rule:** One `step.run` per tenant, wrapped in `try/catch` that records `{ error }` and continues; return the per-tenant outcomes so the run output says who failed. Classify terminal failures (a refused OAuth grant is `AccountingAuthError`) and return them from the step instead of throwing — retries cannot fix them and only delay the next tenant. Pair the per-tenant step with a `maxDuration` on the serve route: a step's ceiling is that function's ceiling.
+
+**Applies to:** `packages/jobs/src/inngest/functions/**` — every cron with a per-company loop (`accounting-*-sweep`, `accounting-reconciliation`, `accounting-consolidation`, `scheduled/mrp.ts`); use `runIsolatedCompanyStep` (`integrations/accounting-auth-failure.ts`) for the accounting ones.

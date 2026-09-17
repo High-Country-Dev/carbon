@@ -29,6 +29,7 @@ import type { ExpressionBuilder } from "kysely";
 import { sql } from "kysely";
 import { nanoid } from "nanoid";
 import type { z } from "zod";
+import { buildDocumentUploadPath } from "~/modules/documents/documents.models";
 import type { StorageItem } from "~/types";
 import { getEdgeFunctionErrorMessage } from "~/utils/error";
 import type { GenericQueryFilters } from "~/utils/query";
@@ -1116,7 +1117,7 @@ export async function getCapacityReservationsForResources(
     .select(
       `id, operationId, jobId, resourceKind, resourceId, startAt, endAt, scheduleNote, workHours, isPlaceholder, jobOperationBatchId,
        job!inner(jobId, status, dueDate, locationId),
-       jobOperation(description, hasConflict, conflictReason),
+       jobOperation(description, hasConflict, conflictReason, jobMakeMethod(item(readableIdWithRevision, name, thumbnailPath, type))),
        jobOperationBatch(readableId)`
     )
     .eq("companyId", companyId)
@@ -9981,4 +9982,25 @@ export async function completeOperation(
   }
 
   return issue;
+}
+
+/**
+ * Create a presigned upload URL for a job document. First step of the two-step
+ * upload flow: PUT the file bytes to the returned `signedUrl`, then call
+ * `documents_insertUploadedDocument` with the returned `path`,
+ * `sourceDocument: "Job"`, and `sourceDocumentId: jobId`.
+ */
+export async function createJobDocumentUploadUrl(
+  client: SupabaseClient<Database>,
+  args: { companyId: string; jobId: string; name: string }
+) {
+  const documentPath = buildDocumentUploadPath({
+    companyId: args.companyId,
+    folder: "job",
+    entityId: args.jobId,
+    name: args.name
+  });
+  return client.storage
+    .from("private")
+    .createSignedUploadUrl(documentPath, { upsert: true });
 }

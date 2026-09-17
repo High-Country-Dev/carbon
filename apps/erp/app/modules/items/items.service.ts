@@ -11,6 +11,7 @@ import { datetime } from "@carbon/utils";
 import type { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import { nanoid } from "nanoid";
 import type { z } from "zod";
+import { buildDocumentUploadPath } from "~/modules/documents/documents.models";
 import type { GenericQueryFilters } from "~/utils/query";
 import {
   LIST_COUNT,
@@ -2267,6 +2268,18 @@ export async function getUnitOfMeasure(
     .eq("id", id)
     .eq("companyId", companyId)
     .single();
+}
+
+/**
+ * Which tables still reference a unit of measure, and how many rows each;
+ * empty means safe to delete (or id not visible to the caller). RPC-backed so
+ * the answer doesn't depend on the caller's module permissions.
+ */
+export async function getUnitOfMeasureUsage(
+  client: SupabaseClient<Database>,
+  id: string
+) {
+  return client.rpc("get_unit_of_measure_usage", { p_id: id });
 }
 
 export async function getUnitOfMeasures(
@@ -8223,4 +8236,26 @@ export async function getChangeNoticeDiff(
   }
 
   return { data: { items }, error: null };
+}
+
+/**
+ * Create a presigned upload URL for an item (part/material/tool/consumable/service)
+ * document. First step of the two-step upload flow: PUT the file bytes to the
+ * returned `signedUrl`, then call `documents_insertUploadedDocument` with the
+ * returned `path`, the item's type as `sourceDocument`, and
+ * `sourceDocumentId: itemId`.
+ */
+export async function createItemDocumentUploadUrl(
+  client: SupabaseClient<Database>,
+  args: { companyId: string; itemId: string; name: string }
+) {
+  const documentPath = buildDocumentUploadPath({
+    companyId: args.companyId,
+    folder: "parts",
+    entityId: args.itemId,
+    name: args.name
+  });
+  return client.storage
+    .from("private")
+    .createSignedUploadUrl(documentPath, { upsert: true });
 }
