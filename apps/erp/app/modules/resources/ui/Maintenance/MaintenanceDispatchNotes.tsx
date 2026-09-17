@@ -39,7 +39,7 @@ import { Await, useRevalidator } from "react-router";
 import { DocumentPreview, FileDropzone } from "~/components";
 import DocumentIcon from "~/components/DocumentIcon";
 import {
-  useHeicConversion,
+  useFileUpload,
   useImageUpload,
   usePermissions,
   useUser
@@ -192,36 +192,18 @@ function MaintenanceFilesContent({
     [company.id, dispatchId]
   );
 
-  const ensureNoHeic = useHeicConversion();
+  const { upload: uploadToStorage } = useFileUpload();
   const upload = useCallback(
     async (filesToUpload: File[]) => {
-      if (!carbon) {
-        toast.error(t`Carbon client not available`);
-        return;
-      }
-
-      const uploadable = await ensureNoHeic(filesToUpload);
-      if (!uploadable) return;
-
-      for (const file of uploadable) {
-        const filePath = getFilePath(file.name);
-
-        const result = await carbon.storage
-          .from("private")
-          .upload(filePath, file, {
-            cacheControl: `${12 * 60 * 60}`,
-            upsert: true
-          });
-
-        if (result.error) {
-          toast.error(t`Failed to upload file: ${file.name}`);
-        } else {
+      await uploadToStorage(filesToUpload, {
+        getPath: (file) => getFilePath(file.name),
+        onSuccess: (file) => {
           toast.success(t`${file.name} uploaded successfully`);
         }
-      }
+      });
       revalidator.revalidate();
     },
-    [ensureNoHeic, carbon, getFilePath, revalidator, t]
+    [uploadToStorage, getFilePath, revalidator, t]
   );
 
   const download = useCallback(

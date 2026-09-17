@@ -35,7 +35,7 @@ import {
   ModelOptimizedIndicator
 } from "~/components";
 import DocumentIcon from "~/components/DocumentIcon";
-import { useHeicConversion, usePermissions, useUser } from "~/hooks";
+import { useFileUpload, usePermissions, useUser } from "~/hooks";
 import type { OptimisticFileObject } from "~/modules/shared";
 import { getDocumentType } from "~/modules/shared";
 import type { ModelUpload, StorageItem } from "~/types";
@@ -175,37 +175,16 @@ const Documents = ({
     [getReadPath, t]
   );
 
-  const ensureNoHeic = useHeicConversion();
+  const { upload: uploadFiles } = useFileUpload();
   const upload = useCallback(
     async (files: File[]) => {
-      if (!carbon) {
-        toast.error(t`Carbon client not available`);
-        return;
-      }
-
-      const uploadable = await ensureNoHeic(files);
-      if (!uploadable) return;
-
-      for (const file of uploadable) {
-        const fileName = getWritePath({ name: file.name });
-        toast.info(t`Uploading ${file.name}`);
-        const fileUpload = await carbon.storage
-          .from("private")
-          .upload(fileName, file, {
-            cacheControl: `${12 * 60 * 60}`,
-            upsert: true
-          });
-
-        if (fileUpload.error) {
-          toast.error(t`Failed to upload file: ${file.name}`);
-        } else if (
-          fileUpload.data?.path &&
-          sourceDocument &&
-          sourceDocumentId
-        ) {
+      await uploadFiles(files, {
+        getPath: (file) => getWritePath({ name: file.name }),
+        onSuccess: (file, uploadedPath) => {
+          if (!sourceDocument || !sourceDocumentId) return;
           toast.success(t`Uploaded: ${file.name}`);
           const formData = new FormData();
-          formData.append("path", fileUpload.data.path);
+          formData.append("path", uploadedPath);
           formData.append("name", file.name);
           formData.append("size", Math.round(file.size / 1024).toString());
           formData.append("sourceDocument", sourceDocument);
@@ -218,13 +197,12 @@ const Documents = ({
             fetcherKey: `${sourceDocument}:${file.name}`
           });
         }
-      }
+      });
       revalidator.revalidate();
     },
     [
-      ensureNoHeic,
+      uploadFiles,
       getWritePath,
-      carbon,
       revalidator,
       submit,
       sourceDocument,

@@ -1,5 +1,5 @@
 import { useCarbon } from "@carbon/auth";
-import { convertHeicFiles, isHeic } from "@carbon/files/media";
+import { isHeic, MediaUploader } from "@carbon/files/media";
 import { cn, toast } from "@carbon/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type React from "react";
@@ -22,13 +22,13 @@ const FileDropzone: React.FC<FileDropzoneProps> = ({ onDrop }) => {
   const onDropWithConversion = async (acceptedFiles: File[]) => {
     let files = acceptedFiles;
     if (carbon && files.some((file) => isHeic(file.name, file.type))) {
+      const uploader = new MediaUploader(carbon, {
+        bucket: "private",
+        directory: `${company.id}/tmp`
+      });
       setIsConverting(true);
       try {
-        files = await convertHeicFiles(
-          carbon,
-          { bucket: "private", directory: `${company.id}/tmp` },
-          files
-        );
+        files = await uploader.prepareForUpload(files);
       } catch {
         toast.error(t`Failed to convert image`);
         return;

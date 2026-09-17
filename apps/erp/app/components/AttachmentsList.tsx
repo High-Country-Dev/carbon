@@ -1,6 +1,6 @@
 import { useCarbon } from "@carbon/auth";
 import { convertKbToString } from "@carbon/files";
-import { convertHeicFiles } from "@carbon/files/media";
+import { MediaUploader } from "@carbon/files/media";
 import {
   Badge,
   HStack,
@@ -88,11 +88,11 @@ export default function AttachmentsList({
       setUploading(true);
       try {
         // HEIC is never stored — convert to JPEG first.
-        const files = await convertHeicFiles(
-          carbon,
-          { bucket: "private", directory: `${company.id}/tmp` },
-          acceptedFiles
-        );
+        const uploader = new MediaUploader(carbon, {
+          bucket: "private",
+          directory: `${company.id}/tmp`
+        });
+        const files = await uploader.prepareForUpload(acceptedFiles);
         for (const file of files) {
           const safeName = stripSpecialCharacters(file.name);
           const storagePath = `${company.id}/supplier-interaction/${supplierInteractionId}/${safeName}`;

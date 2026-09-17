@@ -44,7 +44,7 @@ import {
 } from "~/components";
 import DocumentIcon from "~/components/DocumentIcon";
 import { Enumerable } from "~/components/Enumerable";
-import { useHeicConversion, usePermissions, useUser } from "~/hooks";
+import { useFileUpload, usePermissions, useUser } from "~/hooks";
 import type { OptimisticFileObject } from "~/modules/shared";
 import { getDocumentType } from "~/modules/shared";
 import type { ModelUpload } from "~/types";
@@ -240,57 +240,30 @@ const useOpportunityLineDocuments = ({
     [id, submit, type]
   );
 
-  const ensureNoHeic = useHeicConversion();
+  const { upload: uploadFiles } = useFileUpload();
   const upload = useCallback(
     async (
       files: File[],
       bucket: "opportunity-line" | "parts" = "opportunity-line"
     ) => {
-      if (!carbon) {
-        toast.error(t`Carbon client not available`);
-        return;
-      }
-
       if (bucket === "parts" && !itemId) {
         toast.error(t`Cannot upload to parts bucket without item ID`);
         return;
       }
 
-      const uploadable = await ensureNoHeic(files);
-      if (!uploadable) return;
-
-      for (const file of uploadable) {
-        const fileName = getPath(file, bucket);
-
-        const fileUpload = await carbon.storage
-          .from("private")
-          .upload(fileName, file, {
-            cacheControl: `${12 * 60 * 60}`,
-            upsert: true
-          });
-
-        if (fileUpload.error) {
-          toast.error(t`Failed to upload file: ${file.name}`);
-        } else if (fileUpload.data?.path) {
+      await uploadFiles(files, {
+        getPath: (file) => getPath(file, bucket),
+        onSuccess: (file, uploadedPath) =>
           createDocumentRecord({
-            path: fileUpload.data.path,
+            path: uploadedPath,
             name: file.name,
             size: file.size,
             bucket
-          });
-        }
-      }
+          })
+      });
       revalidator.revalidate();
     },
-    [
-      ensureNoHeic,
-      getPath,
-      createDocumentRecord,
-      carbon,
-      revalidator,
-      itemId,
-      t
-    ]
+    [uploadFiles, getPath, createDocumentRecord, revalidator, itemId, t]
   );
 
   const moveFile = useCallback(

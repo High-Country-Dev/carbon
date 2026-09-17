@@ -18,11 +18,12 @@ import {
 } from "./useCurrencies";
 import { useCurrencyFormatter } from "./useCurrencyFormatter";
 import { useDateFormatter } from "./useDateFormatter";
+import { useFileUpload } from "./useFileUpload";
 import { useFlags } from "./useFlags";
 import { useGooglePlaces } from "./useGooglePlaces";
 import { useHighlightFlash } from "./useHighlightFlash";
 import { useIdle } from "./useIdle";
-import { useHeicConversion, useImageUpload } from "./useImageUpload";
+import { useImageUpload } from "./useImageUpload";
 import { useModelUpload } from "./useModelUpload";
 import { useAllModules, useModules, useSettingsModule } from "./useModules";
 import { useMovingCellRef } from "./useMovingCellRef";
@@ -55,7 +56,7 @@ export {
   useFlags,
   useGooglePlaces,
   useIdle,
-  useHeicConversion,
+  useFileUpload,
   useImageUpload,
   useHighlightFlash,
   useAllModules,

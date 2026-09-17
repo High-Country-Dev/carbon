@@ -1,9 +1,9 @@
 import { useCarbon } from "@carbon/auth";
-import { convertHeicToJpeg, isHeic } from "@carbon/files/media";
+import { isHeic, MediaUploader } from "@carbon/files/media";
 import { toast } from "@carbon/react";
 import { useLingui } from "@lingui/react/macro";
 import { nanoid } from "nanoid";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { getPrivateUrl } from "~/utils/path";
 import { useUser } from "./useUser";
 
@@ -18,18 +18,25 @@ export function useImageUpload(directory: string) {
   const { company } = useUser();
   const { t } = useLingui();
 
+  const uploader = useMemo(
+    () =>
+      carbon
+        ? new MediaUploader(carbon, {
+            bucket: "private",
+            directory: `${company.id}/tmp`
+          })
+        : null,
+    [carbon, company.id]
+  );
+
   return useCallback(
     async (file: File) => {
-      if (!carbon) throw new Error("Carbon client not found");
+      if (!carbon || !uploader) throw new Error("Carbon client not found");
 
       let upload = file;
       if (isHeic(file.name, file.type)) {
         try {
-          upload = await convertHeicToJpeg(carbon, {
-            bucket: "private",
-            directory: `${company.id}/tmp`,
-            file
-          });
+          upload = await uploader.convertHeic(file);
         } catch (error) {
           toast.error(t`Failed to convert image`);
           throw error;
@@ -54,6 +61,6 @@ export function useImageUpload(directory: string) {
 
       return getPrivateUrl(result.data.path);
     },
-    [carbon, company.id, directory, t]
+    [carbon, uploader, company.id, directory, t]
   );
 }

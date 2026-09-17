@@ -8,7 +8,7 @@ in the codebase, shared by the browser, Node, and the Supabase edge runtime.
 |---------|----------|
 | `.` (root) | Cross-type helpers: `MEDIA_CONTENT_TYPES` + `getContentType` (the one extension→MIME map every file-serving route uses), `getFileExtension` / `effectiveExtension` (`.zst` unwrap), `getDocumentType` / `documentTypes` / `isPreviewableDocumentType` (file classification for the Documents UI), `convertKbToString`, and `downloadBlob` / `downloadText` — THE browser "save this as a file" sequence (object URL → anchor click → revoke); never hand-roll it |
 | `./csv` | `encodeCsv` (object rows) / `encodeCsvTable` (header + cells) — the ONE CSV encoder, injection-safe by construction (`stripCsvFormulaPrefix` on every string cell); `parseCsv` (text) / `parseCsvFile` (browser File, streamed); `downloadCsv`; `CSV_CONTENT_TYPE`. papaparse underneath, in every runtime. The Table export button, report exports, import templates, import-error re-exports and the sales CSV import all go through here — before this there were two libraries (`json-2-csv` + papaparse) and two hand-rolled encoders, and only ONE of the five export sites protected against formula injection |
-| `./media` | Images. `processImage` (the pipeline), `prepareImageUpload` (browser + server entry: pipeline → native-decode fallback → imgproxy fallback), `convertHeicToJpeg` / `convertHeicFiles`, `transformImageViaStorage` (imgproxy round-trip), `isHeic`, `IMAGE_UPLOAD_MIME_TYPES`, plus the storage-path helpers `getPrivateUrl` / `getRawModelUrl` / `parseJobFilePath` |
+| `./media` | Images. **`MediaUploader`** — the configured client (constructor takes the storage client + HEIC staging location once, files-sdk style): `prepareForUpload(files)` (HEIC → JPEG sequentially + duplicate-name refusal, throws `DuplicateFileNameError`), `convertHeic(file)`, `prepareImage(file, shape)`. Underneath: `processImage` (the pipeline), `prepareImageUpload` (pipeline → native-decode fallback → imgproxy fallback), `convertHeicToJpeg` / `convertHeicFiles` / `findDuplicateFileName`, `transformImageViaStorage` (imgproxy round-trip), `isHeic`, `IMAGE_UPLOAD_MIME_TYPES`, plus the storage-path helpers `getPrivateUrl` / `getRawModelUrl` / `parseJobFilePath` |
 | `./media/node` | `initNodeImageCodecs()` — Node-only wasm pre-instantiation; call once before the pipeline in Node (jobs, paperless, vitest). Touches `node:fs`: never import from client code |
 | `./cad` | CAD/model formats: `supportedModelTypes`, `optimizableModelFormat`, `modelPathOptimizeFormat`, `isModelRawDownloadable` |
 | `./pdf` | PDF *reading* on [unpdf](https://github.com/unjs/unpdf): `extractPdfText` (`--- Page N ---` joined, what the AI extraction prompts consume), `extractPdfPages`, `getPdfPageCount`, `getPdfMeta`, and `openPdf`/`closePdf` for page-level work (the inspection overlay export and anchor crop drive pages themselves; `closePdf` destroys the loading task — `cleanup()` alone leaks the document transport). Generation stays in `@carbon/documents` — this is file handling, not templating |
@@ -32,12 +32,18 @@ Shape modes (`ImageShapeOptions`): default = center-crop 300×300 (avatars),
 (logos, 128/512), `convert` = format normalization only (attachments). JPEG/HEIC/AVIF
 sources re-encode as JPEG (alpha flattened onto white), everything else as PNG.
 
-**HEIC is never stored.** Every upload chokepoint converts first: both apps'
-`FileDropzone`, `useImageUpload` (ERP + MES hooks), Suggestion, slide uploads,
+**HEIC is never stored.** Every upload chokepoint converts first, through
+`MediaUploader`: both apps' `FileDropzone`, the ERP `useFileUpload` hook (the one
+document-panel upload mutation — TanStack-shaped: options at the hook or per-call,
+`onSuccess`/`onError`, `isUploading`; all nine panels go through it),
+`useImageUpload` (ERP + MES editor hooks), Suggestion, slide uploads,
 `DocumentCreateForm`, `AttachmentsList`, the three curated forms
 (`ItemThumbnailUpload`, `ProfilePhotoForm`, `CompanyLogoForm`). Non-browser callers
 (REST/MCP/integrations) use the `process-image` edge function, which runs the same
-`processImage`. Temp staging for the imgproxy fallback is `private/{companyId}/tmp/`.
+`processImage`; the MCP signed-URL flow (`createDocumentUploadUrl` in
+`documents.service`, which every module's `create*DocumentUploadUrl` delegates to)
+refuses to mint an upload URL for a `.heic` name. Temp staging for the imgproxy
+fallback is `private/{companyId}/tmp/`.
 
 Fallback order in `prepareImageUpload`: wasm pipeline → (browser only) native
 `createImageBitmap` decode for formats the pipeline lacks (gif, avif) → imgproxy
@@ -53,8 +59,9 @@ export to `package.json`, and add a row above. Don't pre-create empty slots — 
 
 - Export/download through `encodeCsv` + `downloadCsv` (or `downloadBlob`); never
   string-join cells or build a `<a download>` inline.
-- Add a new upload site by calling `prepareImageUpload` / `convertHeicFiles`, never
-  by uploading a picked `File` raw.
+- Add a new ERP document-panel upload via the `useFileUpload` hook; anywhere else,
+  run picked files through `MediaUploader.prepareForUpload` first — never upload a
+  picked `File` raw.
 - Serve files with `getContentType(effectiveExtension(path))` — never a local
   MIME map.
 - Read PDFs through `./pdf` only. Never import `pdfjs-dist` or `pdfjs` from

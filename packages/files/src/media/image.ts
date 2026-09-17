@@ -15,7 +15,7 @@ import { getFileExtension, isHeic } from "./media";
 
 export * from "../../../database/supabase/functions/shared/image-pipeline.ts";
 
-type StorageClient = Pick<SupabaseClient, "storage">;
+export type StorageClient = Pick<SupabaseClient, "storage">;
 
 function replaceExtension(fileName: string, extension: string): string {
   const base = fileName.replace(/\.[^.]*$/, "");

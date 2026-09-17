@@ -1,8 +1,8 @@
 import { useCarbon } from "@carbon/auth";
 import {
-  convertHeicFiles,
-  findDuplicateFileName,
-  isHeic
+  DuplicateFileNameError,
+  isHeic,
+  MediaUploader
 } from "@carbon/files/media";
 import { cn, toast } from "@carbon/react";
 import { useLingui } from "@lingui/react/macro";
@@ -38,22 +38,22 @@ const FileDropzone: React.FC<FileDropzoneProps> = ({
   const onDropWithConversion = async (acceptedFiles: File[]) => {
     let files = acceptedFiles;
     if (carbon && files.some((file) => isHeic(file.name, file.type))) {
+      const uploader = new MediaUploader(carbon, {
+        bucket: "private",
+        directory: `${company.id}/tmp`
+      });
       setIsConverting(true);
       try {
-        files = await convertHeicFiles(
-          carbon,
-          { bucket: "private", directory: `${company.id}/tmp` },
-          files
+        files = await uploader.prepareForUpload(files);
+      } catch (error) {
+        toast.error(
+          error instanceof DuplicateFileNameError
+            ? t`Duplicate file names after image conversion`
+            : t`Failed to convert image`
         );
-      } catch {
-        toast.error(t`Failed to convert image`);
         return;
       } finally {
         setIsConverting(false);
-      }
-      if (findDuplicateFileName(files)) {
-        toast.error(t`Duplicate file names after image conversion`);
-        return;
       }
     }
     onDrop(files);

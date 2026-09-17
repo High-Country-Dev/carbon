@@ -1,4 +1,5 @@
 import type { Database } from "@carbon/database";
+import { isHeic } from "@carbon/files/media";
 import { trigger } from "@carbon/jobs";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { z } from "zod";
@@ -214,6 +215,17 @@ export async function createDocumentUploadUrl(
     name: string;
   }
 ) {
+  // HEIC is never stored — the signed-URL flow writes bytes straight to
+  // storage with no browser in the loop, so the invariant is enforced at
+  // mint time. The process-image edge function is the server-side converter.
+  if (isHeic(args.name)) {
+    return {
+      data: null,
+      error: new Error(
+        "HEIC files cannot be stored. Convert to JPEG first (the process-image function with convert=true does this), then request an upload URL for the .jpg."
+      )
+    };
+  }
   const documentPath = buildDocumentUploadPath(args);
   return client.storage
     .from("private")

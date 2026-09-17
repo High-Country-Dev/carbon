@@ -30,7 +30,7 @@ import { LuEllipsisVertical, LuUpload } from "react-icons/lu";
 import { Outlet, useFetchers, useRevalidator, useSubmit } from "react-router";
 import { DateTime, DocumentPreview, FileDropzone } from "~/components";
 import DocumentIcon from "~/components/DocumentIcon";
-import { useHeicConversion, usePermissions, useUser } from "~/hooks";
+import { useFileUpload, usePermissions, useUser } from "~/hooks";
 import { getDocumentType } from "~/modules/shared";
 import { path } from "~/utils/path";
 import { stripSpecialCharacters } from "~/utils/string";
@@ -291,42 +291,23 @@ export const useSupplierInteractionDocuments = ({
     [id, submit, type]
   );
 
-  const ensureNoHeic = useHeicConversion();
+  const { upload: uploadFiles } = useFileUpload();
   const upload = useCallback(
     async (files: File[]) => {
-      if (!carbon) {
-        toast.error(t`Carbon client not available`);
-        return;
-      }
-
-      const uploadable = await ensureNoHeic(files);
-      if (!uploadable) return;
-
-      for (const file of uploadable) {
-        const fileName = getPath(file);
-        toast.info(`Uploading ${file.name}`);
-
-        const fileUpload = await carbon.storage
-          .from("private")
-          .upload(fileName, file, {
-            cacheControl: `${12 * 60 * 60}`,
-            upsert: true
-          });
-
-        if (fileUpload.error) {
-          toast.error(`Failed to upload file: ${file.name}`);
-        } else if (fileUpload.data?.path) {
-          toast.success(`Uploaded: ${file.name}`);
+      await uploadFiles(files, {
+        getPath,
+        onSuccess: (file, uploadedPath) => {
+          toast.success(t`Uploaded: ${file.name}`);
           createDocumentRecord({
-            path: fileUpload.data.path,
+            path: uploadedPath,
             name: file.name,
             size: file.size
           });
         }
-      }
+      });
       revalidator.revalidate();
     },
-    [ensureNoHeic, getPath, createDocumentRecord, carbon, revalidator, t]
+    [uploadFiles, getPath, createDocumentRecord, revalidator, t]
   );
 
   return {

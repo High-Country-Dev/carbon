@@ -1,52 +1,11 @@
 import { useCarbon } from "@carbon/auth";
-import {
-  convertHeicFiles,
-  convertHeicToJpeg,
-  findDuplicateFileName,
-  isHeic
-} from "@carbon/files/media";
+import { isHeic, MediaUploader } from "@carbon/files/media";
 import { toast } from "@carbon/react";
 import { useLingui } from "@lingui/react/macro";
 import { nanoid } from "nanoid";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { getPrivateUrl } from "~/utils/path";
 import { useUser } from "./useUser";
-
-/**
- * HEIC guard for upload handlers fed by a raw `<input type="file">` (the
- * FileDropzone converts on its own). Returns the list with any HEIC files
- * converted to JPEG, or null after showing a toast when conversion fails —
- * callers must bail on null so a .heic is never stored.
- */
-export function useHeicConversion() {
-  const { carbon } = useCarbon();
-  const { company } = useUser();
-  const { t } = useLingui();
-
-  return useCallback(
-    async (files: File[]): Promise<File[] | null> => {
-      if (!carbon || !files.some((file) => isHeic(file.name, file.type))) {
-        return files;
-      }
-      try {
-        const converted = await convertHeicFiles(
-          carbon,
-          { bucket: "private", directory: `${company.id}/tmp` },
-          files
-        );
-        if (findDuplicateFileName(converted)) {
-          toast.error(t`Duplicate file names after image conversion`);
-          return null;
-        }
-        return converted;
-      } catch {
-        toast.error(t`Failed to convert image`);
-        return null;
-      }
-    },
-    [carbon, company.id, t]
-  );
-}
 
 /**
  * Shared editor/notes image-upload handler. HEIC is converted to JPEG before
@@ -59,18 +18,25 @@ export function useImageUpload(directory: string) {
   const { company } = useUser();
   const { t } = useLingui();
 
+  const uploader = useMemo(
+    () =>
+      carbon
+        ? new MediaUploader(carbon, {
+            bucket: "private",
+            directory: `${company.id}/tmp`
+          })
+        : null,
+    [carbon, company.id]
+  );
+
   return useCallback(
     async (file: File) => {
-      if (!carbon) throw new Error("Carbon client not found");
+      if (!carbon || !uploader) throw new Error("Carbon client not found");
 
       let upload = file;
       if (isHeic(file.name, file.type)) {
         try {
-          upload = await convertHeicToJpeg(carbon, {
-            bucket: "private",
-            directory: `${company.id}/tmp`,
-            file
-          });
+          upload = await uploader.convertHeic(file);
         } catch (error) {
           toast.error(t`Failed to convert image`);
           throw error;
@@ -95,6 +61,6 @@ export function useImageUpload(directory: string) {
 
       return getPrivateUrl(result.data.path);
     },
-    [carbon, company.id, directory, t]
+    [carbon, uploader, company.id, directory, t]
   );
 }
