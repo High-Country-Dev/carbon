@@ -18,7 +18,7 @@ import type {
 } from "@supabase/supabase-js";
 import { sql } from "kysely";
 import type { z } from "zod";
-import { buildDocumentUploadPath } from "~/modules/documents/documents.models";
+import { createDocumentUploadUrl } from "~/modules/documents/documents.service";
 import { getSupplierPriceBreaksForItems } from "~/modules/items/items.service";
 import { getEmployeeJob } from "~/modules/people";
 import type { GenericQueryFilters } from "~/utils/query";
@@ -7164,7 +7164,7 @@ export async function getShippedTrackedEntitiesForCustomer(
       (entities.data ?? [])
         .map(
           (entity) =>
-            (entity.attributes as Record<string, unknown> | null)?.["Shipment"]
+            (entity.attributes as Record<string, unknown> | null)?.Shipment
         )
         .filter((value): value is string => typeof value === "string")
     )
@@ -7190,9 +7190,8 @@ export async function getShippedTrackedEntitiesForCustomer(
 
   return {
     data: (entities.data ?? []).filter((entity) => {
-      const shipmentId = (
-        entity.attributes as Record<string, unknown> | null
-      )?.["Shipment"];
+      const shipmentId = (entity.attributes as Record<string, unknown> | null)
+        ?.Shipment;
       return (
         typeof shipmentId === "string" && customerShipmentIds.has(shipmentId)
       );
@@ -7809,15 +7808,12 @@ export async function createOpportunityDocumentUploadUrl(
   client: SupabaseClient<Database>,
   args: { companyId: string; opportunityId: string; name: string }
 ) {
-  const documentPath = buildDocumentUploadPath({
+  return createDocumentUploadUrl(client, {
     companyId: args.companyId,
     folder: "opportunity",
     entityId: args.opportunityId,
     name: args.name
   });
-  return client.storage
-    .from("private")
-    .createSignedUploadUrl(documentPath, { upsert: true });
 }
 
 /**
@@ -7830,13 +7826,10 @@ export async function createOpportunityLineDocumentUploadUrl(
   client: SupabaseClient<Database>,
   args: { companyId: string; lineId: string; name: string }
 ) {
-  const documentPath = buildDocumentUploadPath({
+  return createDocumentUploadUrl(client, {
     companyId: args.companyId,
     folder: "opportunity-line",
     entityId: args.lineId,
     name: args.name
   });
-  return client.storage
-    .from("private")
-    .createSignedUploadUrl(documentPath, { upsert: true });
 }

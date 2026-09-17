@@ -1,8 +1,8 @@
-import workerSrc from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+import { registerReactPdfWorker } from "@carbon/files/pdf/worker";
 import { startTransition } from "react";
 import { pdfjs } from "react-pdf";
 
-pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
+registerReactPdfWorker(pdfjs);
 
 import {
   CONTROLLED_ENVIRONMENT,

@@ -1,5 +1,5 @@
 {
-  "totalTools": 1573,
+  "totalTools": 1572,
   "modules": 15,
   "tools": [
     {"name":"account_deleteUserAttributeValue","classification":"DESTRUCTIVE","paramCount":2,"schema":"0d38e12233b4","response":"bcde375ebd4c","injectAuth":"companyId","permission":"none","paginates":false},
@@ -1514,7 +1514,6 @@
     {"name":"shared_getCountries","classification":"READ","paramCount":0,"schema":"efddc7bd8bbc","response":"0e8a11b4e81c","injectAuth":"companyId","permission":"none","paginates":false},
     {"name":"shared_getCustomerPortal","classification":"READ","paramCount":1,"schema":"3797626bd17e","response":"none","injectAuth":"companyId","permission":"none","paginates":false},
     {"name":"shared_getCustomerPortals","classification":"READ","paramCount":3,"schema":"04eded31eebb","response":"fbffc4ca5fac","injectAuth":"companyId","permission":"none","paginates":true},
-    {"name":"shared_getDocumentType","classification":"READ","paramCount":1,"schema":"0e1fe86f73c0","response":"1cc9297ced55","injectAuth":"companyId","permission":"none","paginates":false},
     {"name":"shared_getExternalLink","classification":"READ","paramCount":1,"schema":"3797626bd17e","response":"0f7860db4299","injectAuth":"companyId","permission":"none","paginates":false},
     {"name":"shared_getLatestApprovalRequestForDocument","classification":"READ","paramCount":2,"schema":"943dca4ef0da","response":"a46647e8d6f1","injectAuth":"companyId","permission":"none","paginates":false},
     {"name":"shared_getLowerTierApproverUserIds","classification":"READ","paramCount":2,"schema":"63a69fed1f5d","response":"681004346c78","injectAuth":"companyId","permission":"none","paginates":false},

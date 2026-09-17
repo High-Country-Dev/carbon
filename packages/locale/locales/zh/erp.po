@@ -593,6 +593,10 @@ msgstr "一种折旧方法，每期对剩余账面价值收取固定百分比—
 msgid "A depreciation method that charges an equal amount each period across the asset's useful life."
 msgstr "一种折旧方法，在资产的使用年限内每期收取等额费用。"
 
+#. placeholder {0}: file.name
+msgid "A file named {0} already exists — delete or rename it first"
+msgstr "文件 {0} 已存在 — 请先删除或重新命名"
+
 msgid "A firm customer commitment to deliver; fulfillment status splits across ship and invoice before reaching Completed."
 msgstr "客户的明确交货承诺；履行状态在装运和发票之间分摊，最终达到已完成。"
 
@@ -1363,7 +1367,7 @@ msgid "Add from library…"
 msgstr "从库中添加…"
 
 msgid "Add from receipt"
-msgstr "从收货中添加"
+msgstr "从收货添加"
 
 msgid "Add from shipment"
 msgstr "从发货中添加"
@@ -6146,6 +6150,9 @@ msgstr "应收期限"
 msgid "Duplicate"
 msgstr "复制"
 
+msgid "Duplicate file names after image conversion"
+msgstr "图像转换后文件名重复"
+
 msgid "Duplicate Item"
 msgstr "复制项目"
 
@@ -7203,6 +7210,9 @@ msgstr "无法添加行 — 已添加 {addedCount} / {0} 行"
 msgid "Failed to add lines"
 msgstr "添加行失败"
 
+msgid "Failed to convert image"
+msgstr "图像转换失败"
+
 #. placeholder {0}: fetcher.data.error.message
 msgid "Failed to create asset class: {0}"
 msgstr "创建资产类别失败：{0}"
@@ -7623,8 +7633,8 @@ msgstr "文件大小过大（最大 {0}）"
 msgid "File type not supported"
 msgstr "不支持的文件类型"
 
-msgid "File type not supported. Please use JPG, PNG, WebP, or GIF."
-msgstr "不支持的文件类型。请使用 JPG、PNG、WebP 或 GIF。"
+msgid "File type not supported. Please use JPG, PNG, WebP, GIF, or HEIC."
+msgstr "不支持的文件类型。请使用JPG、PNG、WebP、GIF或HEIC。"
 
 msgid "Files"
 msgstr "文件"
@@ -8886,19 +8896,19 @@ msgid "Invoice"
 msgstr "发票"
 
 msgid "Invoice Address"
-msgstr ""
+msgstr "发票地址"
 
 msgid "Invoice Contact"
 msgstr "发票联系人"
 
 msgid "Invoice Contact Email"
-msgstr ""
+msgstr "发票联系人电子邮箱"
 
 msgid "Invoice Contact Name"
-msgstr ""
+msgstr "发票联系人姓名"
 
 msgid "Invoice Contact Phone"
-msgstr ""
+msgstr "发票联系人电话"
 
 msgid "Invoice customer"
 msgstr "发票客户"
@@ -9537,7 +9547,7 @@ msgid "Lines"
 msgstr "行"
 
 msgid "Lines appear here once a purchase order receipt has been posted, and only for quantities not already authorized on another supplier return. Use Add Line Item for a blind return."
-msgstr "采购订单收货已过账后，行将显示在此处，仅适用于尚未在另一个供应商退货中授权的数量。对于盲目退货，请使用添加行项目。"
+msgstr "采购订单收货已过账后，此处显示行项目（仅限尚未在其他供应商退货上授权的数量）。如需盲目退货，请使用\"添加行项目\"。"
 
 msgid "Lines appear here once a sales order shipment has been posted, and only for quantities not already authorized on another RMA. Use Add Line Item for a blind return."
 msgstr "销售订单发货已过账后，行将显示在此处，仅适用于尚未在另一个RMA中授权的数量。对于盲目退货，请使用添加行项目。"
@@ -11306,7 +11316,7 @@ msgid "No results found"
 msgstr "未找到结果"
 
 msgid "No returnable lines for this customer"
-msgstr "此客户没有可退货的行"
+msgstr "此客户没有可退货行。"
 
 msgid "No returnable lines for this supplier"
 msgstr "此供应商没有可退货的行"
@@ -13238,13 +13248,13 @@ msgid "Purchasing Contact"
 msgstr "采购联系人"
 
 msgid "Purchasing Contact Email"
-msgstr ""
+msgstr "采购联系人电子邮箱"
 
 msgid "Purchasing Contact Name"
-msgstr ""
+msgstr "采购联系人姓名"
 
 msgid "Purchasing Contact Phone"
-msgstr ""
+msgstr "采购联系人电话"
 
 msgid "Purchasing Invoices"
 msgstr "采购发票"
@@ -15200,7 +15210,7 @@ msgid "Select operations"
 msgstr "选择工序"
 
 msgid "Select posted receipt lines from this supplier to return."
-msgstr "从该供应商的已过账收货行中选择要退货的"
+msgstr "选择来自此供应商的已过账收货行以退货。"
 
 msgid "Select posted shipment lines to this customer to return."
 msgstr "从该客户的已过账发货行中选择要退货的"
@@ -15399,7 +15409,7 @@ msgid "Session locked"
 msgstr "会话已锁定"
 
 msgid "Set a customer on this return to add from a shipment."
-msgstr "为此退货指定客户以从其发货中添加"
+msgstr "在此退货上设置客户以从发货添加。"
 
 msgid "Set a supplier on this return to add from a receipt."
 msgstr "为此退货指定供应商以从其收货中添加"
@@ -15612,19 +15622,19 @@ msgid "Shipping"
 msgstr "运输"
 
 msgid "Shipping Address"
-msgstr ""
+msgstr "收货地址"
 
 msgid "Shipping Contact"
 msgstr "配送联系人"
 
 msgid "Shipping Contact Email"
-msgstr ""
+msgstr "收货联系人电子邮箱"
 
 msgid "Shipping Contact Name"
-msgstr ""
+msgstr "收货联系人姓名"
 
 msgid "Shipping Contact Phone"
-msgstr ""
+msgstr "收货联系人电话"
 
 msgid "Shipping Cost"
 msgstr "运费"
@@ -15705,7 +15715,7 @@ msgid "Show a readable Supplier ID column on the supplier list, supplier forms, 
 msgstr "在供应商列表、供应商表单和下拉菜单上显示可读的供应商 ID 列。无论哪种方式，供应商在内部仍然可以被识别。"
 
 msgid "Show available batch numbers"
-msgstr "显示可用的生产批次号"
+msgstr "显示可用批次号"
 
 msgid "Show available tracking numbers"
 msgstr "显示可用的跟踪号码"
@@ -19006,7 +19016,7 @@ msgid "View in Academy"
 msgstr "在学院中查看"
 
 msgid "View in new tab"
-msgstr ""
+msgstr "在新标签页中查看"
 
 msgid "View in project plan"
 msgstr "在项目计划中查看"

@@ -1,4 +1,5 @@
 import { useCarbon } from "@carbon/auth";
+import { convertKbToString } from "@carbon/files";
 import { getLogger } from "@carbon/logger";
 import {
   Card,
@@ -21,7 +22,6 @@ import {
   Tr,
   toast
 } from "@carbon/react";
-import { convertKbToString } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { FileObject } from "@supabase/storage-js";
 import type { ChangeEvent } from "react";
@@ -30,7 +30,7 @@ import { LuEllipsisVertical, LuExternalLink, LuUpload } from "react-icons/lu";
 import { useFetchers, useRevalidator, useSubmit } from "react-router";
 import { DateTime, DocumentPreview, FileDropzone } from "~/components";
 import DocumentIcon from "~/components/DocumentIcon";
-import { usePermissions, useUser } from "~/hooks";
+import { useFileUpload, usePermissions, useUser } from "~/hooks";
 import type { OptimisticFileObject } from "~/modules/shared";
 import { getDocumentType } from "~/modules/shared";
 import { path } from "~/utils/path";
@@ -351,38 +351,23 @@ export const useRecordDocuments = ({
     [id, bucketPrefix, sourceDocument, submit]
   );
 
+  const { upload: uploadFiles } = useFileUpload();
   const upload = useCallback(
     async (files: globalThis.File[]) => {
-      if (!carbon) {
-        toast.error(t`Carbon client not available`);
-        return;
-      }
-
-      for (const file of files) {
-        const fileName = getPath(file);
-        toast.info(t`Uploading ${file.name}`);
-
-        const fileUpload = await carbon.storage
-          .from("private")
-          .upload(fileName, file, {
-            cacheControl: `${12 * 60 * 60}`,
-            upsert: true
-          });
-
-        if (fileUpload.error) {
-          toast.error(t`Failed to upload file: ${file.name}`);
-        } else if (fileUpload.data?.path) {
+      await uploadFiles(files, {
+        getPath,
+        onSuccess: (file, uploadedPath) => {
           toast.success(t`Uploaded: ${file.name}`);
           createDocumentRecord({
-            path: fileUpload.data.path,
+            path: uploadedPath,
             name: file.name,
             size: file.size
           });
         }
-      }
+      });
       revalidator.revalidate();
     },
-    [getPath, createDocumentRecord, carbon, revalidator, t]
+    [uploadFiles, getPath, createDocumentRecord, revalidator, t]
   );
 
   return {

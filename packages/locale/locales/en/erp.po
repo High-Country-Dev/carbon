@@ -593,6 +593,10 @@ msgstr "A depreciation method that charges a fixed percentage of remaining book 
 msgid "A depreciation method that charges an equal amount each period across the asset's useful life."
 msgstr "A depreciation method that charges an equal amount each period across the asset's useful life."
 
+#. placeholder {0}: file.name
+msgid "A file named {0} already exists — delete or rename it first"
+msgstr "A file named {0} already exists — delete or rename it first"
+
 msgid "A firm customer commitment to deliver; fulfillment status splits across ship and invoice before reaching Completed."
 msgstr "A firm customer commitment to deliver; fulfillment status splits across ship and invoice before reaching Completed."
 
@@ -6146,6 +6150,9 @@ msgstr "Due within"
 msgid "Duplicate"
 msgstr "Duplicate"
 
+msgid "Duplicate file names after image conversion"
+msgstr "Duplicate file names after image conversion"
+
 msgid "Duplicate Item"
 msgstr "Duplicate Item"
 
@@ -7203,6 +7210,9 @@ msgstr "Failed to add line — {addedCount} of {0} lines were added"
 msgid "Failed to add lines"
 msgstr "Failed to add lines"
 
+msgid "Failed to convert image"
+msgstr "Failed to convert image"
+
 #. placeholder {0}: fetcher.data.error.message
 msgid "Failed to create asset class: {0}"
 msgstr "Failed to create asset class: {0}"
@@ -7623,8 +7633,8 @@ msgstr "File size too big (max. {0})"
 msgid "File type not supported"
 msgstr "File type not supported"
 
-msgid "File type not supported. Please use JPG, PNG, WebP, or GIF."
-msgstr "File type not supported. Please use JPG, PNG, WebP, or GIF."
+msgid "File type not supported. Please use JPG, PNG, WebP, GIF, or HEIC."
+msgstr "File type not supported. Please use JPG, PNG, WebP, GIF, or HEIC."
 
 msgid "Files"
 msgstr "Files"
