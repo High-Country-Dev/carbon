@@ -17,6 +17,7 @@ import type {
 } from "@supabase/supabase-js";
 import { sql } from "kysely";
 import type { z } from "zod";
+import { buildDocumentUploadPath } from "~/modules/documents/documents.models";
 import { getEmployeeJob } from "~/modules/people";
 import type { GenericQueryFilters } from "~/utils/query";
 import { LIST_COUNT, setGenericQueryFilters } from "~/utils/query";
@@ -4412,4 +4413,47 @@ export async function createReplacementPurchaseOrder(
   if (link.error) return { data: null, error: link.error };
 
   return { data: { id: purchaseOrderId }, error: null };
+}
+
+/**
+ * Create a presigned upload URL for a supplier interaction (purchase order/supplier
+ * quote/RFQ) document. First step of the two-step upload flow: PUT the file bytes to
+ * the returned `signedUrl`, then call `documents_insertUploadedDocument` with the
+ * returned `path`, the document type as `sourceDocument`, and the document id as
+ * `sourceDocumentId`. The storage folder is scoped by `interactionId`.
+ */
+export async function createSupplierInteractionDocumentUploadUrl(
+  client: SupabaseClient<Database>,
+  args: { companyId: string; interactionId: string; name: string }
+) {
+  const documentPath = buildDocumentUploadPath({
+    companyId: args.companyId,
+    folder: "supplier-interaction",
+    entityId: args.interactionId,
+    name: args.name
+  });
+  return client.storage
+    .from("private")
+    .createSignedUploadUrl(documentPath, { upsert: true });
+}
+
+/**
+ * Create a presigned upload URL for a supplier interaction LINE document. First step
+ * of the two-step upload flow: PUT the file bytes to the returned `signedUrl`, then
+ * call `documents_insertUploadedDocument` with the returned `path`, the line's
+ * document type as `sourceDocument`, and the line id as `sourceDocumentId`.
+ */
+export async function createSupplierInteractionLineDocumentUploadUrl(
+  client: SupabaseClient<Database>,
+  args: { companyId: string; lineId: string; name: string }
+) {
+  const documentPath = buildDocumentUploadPath({
+    companyId: args.companyId,
+    folder: "supplier-interaction-line",
+    entityId: args.lineId,
+    name: args.name
+  });
+  return client.storage
+    .from("private")
+    .createSignedUploadUrl(documentPath, { upsert: true });
 }
