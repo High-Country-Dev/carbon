@@ -7017,6 +7017,12 @@ serve(async (req: Request) => {
               .insertInto("quoteLine")
               .values({
                 ...line,
+                additionalCharges: toJson(line.additionalCharges),
+                configuration: toJson(line.configuration),
+                customFields: toJson(line.customFields),
+                externalNotes: toJson(line.externalNotes),
+                internalNotes: toJson(line.internalNotes),
+                priceTrace: toJson(line.priceTrace),
                 quoteId: quote.id,
                 companyId,
               })
@@ -7263,7 +7269,7 @@ serve(async (req: Request) => {
                 operationUnitCost: op.operationUnitCost ?? 0,
                 overheadRate: op.overheadRate,
                 tags: op.tags ?? [],
-                workInstruction: op.workInstruction,
+                workInstruction: toJson(op.workInstruction),
                 companyId,
                 createdBy: userId,
                 customFields: {},
