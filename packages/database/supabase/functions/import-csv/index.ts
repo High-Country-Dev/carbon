@@ -276,6 +276,20 @@ function nullifyEmptyStrings<T extends Record<string, unknown>>(
   return out as Partial<T>;
 }
 
+// Postgres's extended-query protocol caps a single bind message at 65,535
+// parameters (uint16), so one multi-row insert of a full catalog (~10k rows
+// x ~13 columns) overflows the wire protocol. Batch large VALUES lists; row
+// order within and across batches is preserved, which the parallel-array
+// bookkeeping in the import branches relies on.
+const INSERT_BATCH_SIZE = 2000;
+function inBatches<T>(rows: T[]): T[][] {
+  const out: T[][] = [];
+  for (let i = 0; i < rows.length; i += INSERT_BATCH_SIZE) {
+    out.push(rows.slice(i, i + INSERT_BATCH_SIZE));
+  }
+  return out;
+}
+
 /**
  * Upsert CSV external ID mappings into the externalIntegrationMapping table.
  * Uses ON CONFLICT to handle re-imports idempotently.
@@ -294,35 +308,37 @@ async function upsertCsvMappings(
 
   const now = new Date().toISOString();
 
-  await trx
-    .insertInto("externalIntegrationMapping")
-    .values(
-      valid.map((m) => ({
-        entityType,
-        entityId: m.entityId,
-        integration: EXTERNAL_ID_KEY,
-        externalId: m.externalId,
-        companyId: cId,
-        allowDuplicateExternalId: false,
-        createdBy: userId,
-        createdAt: now,
-        updatedAt: now,
-      }))
-    )
-    // On conflict (orphan mapping with same csv id but stale entityId),
-    // repoint entityId to the freshly-inserted entity. The .where() matches
-    // the partial unique index's predicate, required by Postgres for
-    // arbitration on partial indexes (42P10 otherwise).
-    .onConflict((oc) =>
-      oc
-        .columns(["integration", "externalId", "entityType", "companyId"])
-        .where("allowDuplicateExternalId", "=", false)
-        .doUpdateSet((eb) => ({
-          entityId: eb.ref("excluded.entityId"),
-          updatedAt: eb.ref("excluded.updatedAt"),
+  for (const batch of inBatches(valid)) {
+    await trx
+      .insertInto("externalIntegrationMapping")
+      .values(
+        batch.map((m) => ({
+          entityType,
+          entityId: m.entityId,
+          integration: EXTERNAL_ID_KEY,
+          externalId: m.externalId,
+          companyId: cId,
+          allowDuplicateExternalId: false,
+          createdBy: userId,
+          createdAt: now,
+          updatedAt: now,
         }))
-    )
-    .execute();
+      )
+      // On conflict (orphan mapping with same csv id but stale entityId),
+      // repoint entityId to the freshly-inserted entity. The .where() matches
+      // the partial unique index's predicate, required by Postgres for
+      // arbitration on partial indexes (42P10 otherwise).
+      .onConflict((oc) =>
+        oc
+          .columns(["integration", "externalId", "entityType", "companyId"])
+          .where("allowDuplicateExternalId", "=", false)
+          .doUpdateSet((eb) => ({
+            entityId: eb.ref("excluded.entityId"),
+            updatedAt: eb.ref("excluded.updatedAt"),
+          }))
+      )
+      .execute();
+  }
 }
 
 /**
@@ -1867,25 +1883,30 @@ serve(async (req: Request) => {
           }
 
           if (itemInserts.length > 0) {
-            const insertedItems = await trx
-              .insertInto("item")
-              .values(itemInserts)
-              .onConflict((oc) =>
-                oc.constraint("item_unique").doUpdateSet({
-                  updatedAt: new Date().toISOString(),
-                  updatedBy: userId,
-                  name: sql`EXCLUDED."name"`,
-                  description: sql`EXCLUDED."description"`,
-                  mpn: sql`EXCLUDED."mpn"`,
-                  active: sql`EXCLUDED."active"`,
-                  unitOfMeasureCode: sql`EXCLUDED."unitOfMeasureCode"`,
-                  replenishmentSystem: sql`EXCLUDED."replenishmentSystem"`,
-                  defaultMethodType: sql`EXCLUDED."defaultMethodType"`,
-                  itemTrackingType: sql`EXCLUDED."itemTrackingType"`,
-                })
-              )
-              .returning(["id", "readableId"])
-              .execute();
+            const insertedItems: { id: string | null; readableId: string }[] =
+              [];
+            for (const batch of inBatches(itemInserts)) {
+              const insertedBatch = await trx
+                .insertInto("item")
+                .values(batch)
+                .onConflict((oc) =>
+                  oc.constraint("item_unique").doUpdateSet({
+                    updatedAt: new Date().toISOString(),
+                    updatedBy: userId,
+                    name: sql`EXCLUDED."name"`,
+                    description: sql`EXCLUDED."description"`,
+                    mpn: sql`EXCLUDED."mpn"`,
+                    active: sql`EXCLUDED."active"`,
+                    unitOfMeasureCode: sql`EXCLUDED."unitOfMeasureCode"`,
+                    replenishmentSystem: sql`EXCLUDED."replenishmentSystem"`,
+                    defaultMethodType: sql`EXCLUDED."defaultMethodType"`,
+                    itemTrackingType: sql`EXCLUDED."itemTrackingType"`,
+                  })
+                )
+                .returning(["id", "readableId"])
+                .execute();
+              insertedItems.push(...insertedBatch);
+            }
 
             await upsertCsvMappings(
               trx,
@@ -1916,20 +1937,22 @@ serve(async (req: Request) => {
                 createdBy: userId,
               }));
 
-              await trx
-                .insertInto(table)
-                .values(specificInserts as unknown as never)
-                // Hard-deleting an item does NOT remove its type row: the type
-                // tables (part/tool/fixture/consumable) key on readableId and have
-                // no FK back to item, so the row is orphaned by (id, companyId).
-                // Re-importing that Part Number would otherwise collide on the PK
-                // and abort the whole import (the "deleted then re-imported and it
-                // failed" case). The orphan already represents this Part Number, so
-                // keep it.
-                .onConflict((oc: any) =>
-                  oc.columns(["id", "companyId"]).doNothing()
-                )
-                .execute();
+              for (const batch of inBatches(specificInserts)) {
+                await trx
+                  .insertInto(table)
+                  .values(batch as unknown as never)
+                  // Hard-deleting an item does NOT remove its type row: the type
+                  // tables (part/tool/fixture/consumable) key on readableId and have
+                  // no FK back to item, so the row is orphaned by (id, companyId).
+                  // Re-importing that Part Number would otherwise collide on the PK
+                  // and abort the whole import (the "deleted then re-imported and it
+                  // failed" case). The orphan already represents this Part Number, so
+                  // keep it.
+                  .onConflict((oc: any) =>
+                    oc.columns(["id", "companyId"]).doNothing()
+                  )
+                  .execute();
+              }
             }
 
             if (
