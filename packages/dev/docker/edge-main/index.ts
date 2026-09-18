@@ -18,15 +18,15 @@ Deno.serve(async (req: Request) => {
     const worker = await EdgeRuntime.userWorkers.create({
       servicePath,
       memoryLimitMb: 512,
-      workerTimeoutMs: 5 * 60 * 1000,
+      workerTimeoutMs: 60 * 60 * 1000,
       // Without explicit budgets the runtime's low defaults (~1s soft / 2s
       // hard CPU) apply — worker BOOT (module evaluation of kysely/zod-heavy
       // functions) alone can blow that, and a hard-limit kill mid-request
       // surfaces as a hanging POST with "CPU time hard limit reached" in the
       // logs. Dev should never kill a worker for CPU; heavy functions (mrp,
       // schedule, get-method, batch-operations) legitimately burn it.
-      cpuTimeSoftLimitMs: 30 * 1000,
-      cpuTimeHardLimitMs: 60 * 1000,
+      cpuTimeSoftLimitMs: 10 * 60 * 1000,
+      cpuTimeHardLimitMs: 20 * 60 * 1000,
       noModuleCache: false,
       envVars: Object.entries(Deno.env.toObject()),
     });
