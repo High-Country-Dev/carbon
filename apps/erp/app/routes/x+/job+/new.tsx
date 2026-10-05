@@ -7,15 +7,16 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { getCarbonServiceRole } from "@carbon/auth/client.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
+import { redirect } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
 import type { ActionFunctionArgs } from "react-router";
-import { redirect } from "react-router";
 import { useUrlParams, useUser } from "~/hooks";
 import { getUnreleasedChangeOrderIssue } from "~/modules/items/items.server";
 import { insertJob, jobValidator } from "~/modules/production";
 import { JobForm } from "~/modules/production/ui/Jobs";
 import type { MethodItemType } from "~/modules/shared";
 import { requireCompanyRecord } from "~/modules/shared/shared.server";
+import { getDatabaseClient } from "~/services/database.server";
 import { setCustomFields } from "~/utils/form";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
@@ -91,6 +92,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const result = await insertJob(
     serviceRole,
+    getDatabaseClient(),
     {
       ...data,
       jobId: data.jobId || undefined,

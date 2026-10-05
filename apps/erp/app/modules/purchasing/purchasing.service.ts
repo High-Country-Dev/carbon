@@ -7,7 +7,9 @@ import { fetchAllFromTable, getCompanyTimeZone } from "@carbon/database";
 import type { Kysely, KyselyDatabase } from "@carbon/database/client";
 import { storage } from "@carbon/files";
 import { getLogger } from "@carbon/logger";
+import { serverFns } from "@carbon/server-functions";
 import {
+  async,
   datetime,
   EPSILON,
   getPurchaseOrderStatus,
@@ -97,6 +99,7 @@ export async function closePurchaseOrder(
 /** @mcp update */
 export async function convertSupplierQuoteToOrder(
   client: SupabaseClient<Database>,
+  db: Kysely<KyselyDatabase>,
   payload: {
     id: string;
     selectedLines: z.infer<typeof selectedLinesValidator>;
@@ -104,11 +107,10 @@ export async function convertSupplierQuoteToOrder(
     userId: string;
   }
 ) {
-  return client.functions.invoke<{ convertedId: string }>("convert", {
-    body: {
-      type: "supplierQuoteToPurchaseOrder",
-      ...payload
-    }
+  const { companyId, userId, ...input } = payload;
+  return serverFns.as({ client, db, companyId, userId }).invoke("convert", {
+    type: "supplierQuoteToPurchaseOrder",
+    ...input
   });
 }
 
@@ -392,23 +394,25 @@ export async function getPurchaseOrder(
 /** @mcp update */
 export async function finalizeSupplierQuote(
   client: SupabaseClient<Database>,
-  supplierQuoteId: string,
-  userId: string
+  db: Kysely<KyselyDatabase>,
+  payload: { supplierQuoteId: string; companyId: string; userId: string }
 ) {
-  const quoteUpdate = await client
-    .from("supplierQuote")
-    .update({
-      status: "Active",
-      updatedAt: datetime.timestamp(),
-      updatedBy: userId
-    })
-    .eq("id", supplierQuoteId);
+  const { companyId, userId, ...input } = payload;
+  return serverFns
+    .as({ client, db, companyId, userId })
+    .invoke("finalize-supplier-quote", input);
+}
 
-  if (quoteUpdate.error) {
-    return quoteUpdate;
-  }
-
-  return { data: null, error: null };
+/** @mcp update */
+export async function finalizePurchasingRfq(
+  client: SupabaseClient<Database>,
+  db: Kysely<KyselyDatabase>,
+  payload: { rfqId: string; companyId: string; userId: string }
+) {
+  const { companyId, userId, ...input } = payload;
+  return serverFns
+    .as({ client, db, companyId, userId })
+    .invoke("finalize-purchasing-rfq", input);
 }
 
 /** @mcp read */
@@ -728,6 +732,41 @@ export async function getSupplierInteractionLineDocuments(
     ...f,
     bucket: "supplier-interaction-line"
   }));
+}
+
+/**
+ * Signed links to every document attached to the given lines, for an email's
+ * attachments. Lines are listed and signed together, in the lines' order.
+ */
+export async function getSupplierInteractionLineAttachments(
+  client: SupabaseClient<Database>,
+  companyId: string,
+  lineIds: string[]
+): Promise<{ filename: string; path: string }[]> {
+  const perLine = await async.map(lineIds, async (lineId) => {
+    const docs = await getSupplierInteractionLineDocuments(
+      client,
+      companyId,
+      lineId
+    );
+    return async.map(docs, async (doc) => {
+      const storagePath = `${companyId}/supplier-interaction-line/${lineId}/${doc.name}`;
+      const { data, error } = await storage(client)
+        .company(companyId)
+        .createSignedUrl(storagePath, 3600);
+      if (!data) {
+        logger.error("Failed to create signed URL for attachment", {
+          storagePath,
+          error
+        });
+        return null;
+      }
+      return { filename: doc.name, path: data.signedUrl };
+    });
+  });
+  return perLine
+    .flat()
+    .flatMap((attachment) => (attachment ? [attachment] : []));
 }
 
 /** @mcp read */
@@ -1788,6 +1827,7 @@ export async function upsertPurchaseOrder(
       > & {
         id: string;
         purchaseOrderId: string;
+        companyGroupId?: string;
         updatedBy: string;
         customFields?: Json;
       }),
@@ -1795,9 +1835,11 @@ export async function upsertPurchaseOrder(
 ) {
   if ("id" in purchaseOrder) {
     // locationId belongs on the delivery record, as in the insert below, and
-    // notes are stored as internalNotes/externalNotes.
+    // notes are stored as internalNotes/externalNotes. companyGroupId is not a
+    // column of the order at all.
     const {
       locationId: _locationId,
+      companyGroupId: _companyGroupId,
       notes: _notes,
       ...orderUpdate
     } = purchaseOrder;
@@ -2735,7 +2777,6 @@ export async function getPurchasingRFQSuppliers(
   client: SupabaseClient<Database>,
   purchasingRfqId: string
 ): Promise<PostgrestResponse<PurchasingRfqSupplierWithSupplier>> {
-  // @ts-ignore TS2589 — supabase select-string instantiation depth sits on
   // tsgo's limit; the cliff shifts as unrelated modules join the program.
   // ts-ignore, not ts-expect-error, so it satisfies both tsc and tsgo.
   return client
@@ -3002,7 +3043,6 @@ export async function getLinkedSupplierQuotes(
   client: SupabaseClient<Database>,
   purchasingRfqId: string
 ): Promise<PostgrestResponse<LinkedSupplierQuote>> {
-  // @ts-ignore - nested select instantiation exceeds tsgo depth limit
   return client
     .from("purchasingRfqToSupplierQuote")
     .select(
@@ -3081,7 +3121,6 @@ export async function getSiblingQuotesForQuote(
   const rfqIds = linkedRfqs.map((r) => r.purchasingRfqId);
 
   // Get all quotes linked to any of these RFQs (excluding current quote)
-  // @ts-ignore - nested select instantiation exceeds tsgo depth limit
   return client
     .from("purchasingRfqToSupplierQuote")
     .select(
@@ -3117,7 +3156,6 @@ export async function getSupplierQuotesForComparison(
   purchasingRfqId: string
 ) {
   // 1. Get all supplier quote IDs linked to this RFQ with supplier info
-  // @ts-ignore - nested select instantiation exceeds tsgo depth limit
   const linksResult: PostgrestResponse<LinkedSupplierQuote> = await client
     .from("purchasingRfqToSupplierQuote")
     .select(
@@ -3182,7 +3220,6 @@ export async function getPurchasingRFQSuppliersWithLinks(
   client: SupabaseClient<Database>,
   purchasingRfqId: string
 ): Promise<PostgrestResponse<PurchasingRfqSupplierWithSupplier>> {
-  // @ts-ignore - nested select instantiation exceeds tsgo depth limit
   return client
     .from("purchasingRfqSupplier")
     .select("*, supplier(id, name)")

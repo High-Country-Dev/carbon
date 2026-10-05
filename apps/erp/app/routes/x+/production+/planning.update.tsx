@@ -14,6 +14,7 @@ import {
   recalculateJobRequirements,
   upsertJobMethod
 } from "~/modules/production";
+import { getDatabaseClient } from "~/services/database.server";
 
 const logger = getLogger("erp", "production", "planning");
 
@@ -175,6 +176,23 @@ export async function action({ request }: ActionFunctionArgs) {
         let processedItems = 0;
         let errors: string[] = [];
 
+        // Manufacturing data for every item being ordered, in one read
+        const manufacturingRows = await client
+          .from("itemReplenishment")
+          .select(
+            "itemId, manufacturingBlocked, scrapPercentage, requiresConfiguration"
+          )
+          .in(
+            "itemId",
+            itemsToOrder.flatMap((item) =>
+              item.orders.length > 0 ? [item.id] : []
+            )
+          )
+          .eq("companyId", companyId);
+        const manufacturingByItem = new Map(
+          (manufacturingRows.data ?? []).map((row) => [row.itemId, row])
+        );
+
         for (const item of itemsToOrder) {
           const orders = item.orders;
 
@@ -187,15 +205,14 @@ export async function action({ request }: ActionFunctionArgs) {
           const jobIds: string[] = [];
           const supplyForecastByPeriod: Record<string, number> = {};
 
-          // Get manufacturing data for this item
-          const manufacturing = await client
-            .from("itemReplenishment")
-            .select(
-              "manufacturingBlocked, scrapPercentage, requiresConfiguration"
-            )
-            .eq("itemId", item.id)
-            .eq("companyId", companyId)
-            .single();
+          const manufacturing = {
+            data: manufacturingByItem.get(item.id),
+            error:
+              manufacturingRows.error ??
+              (manufacturingByItem.has(item.id)
+                ? null
+                : { message: "No replenishment record" })
+          };
 
           if (manufacturing.error) {
             const errorMsg = `Failed to retrieve manufacturing data for item ${item.id}: ${manufacturing.error.message}`;
@@ -226,6 +243,7 @@ export async function action({ request }: ActionFunctionArgs) {
               // Create new job
               const createJob = await insertJob(
                 client,
+                getDatabaseClient(),
                 {
                   itemId: item.id,
                   quantity: order.quantity,
@@ -257,12 +275,17 @@ export async function action({ request }: ActionFunctionArgs) {
                 continue;
               }
 
-              const upsertMethod = await upsertJobMethod(client, "itemToJob", {
-                sourceId: item.id,
-                targetId: id,
-                companyId,
-                userId
-              });
+              const upsertMethod = await upsertJobMethod(
+                client,
+                getDatabaseClient(),
+                "itemToJob",
+                {
+                  sourceId: item.id,
+                  targetId: id,
+                  companyId,
+                  userId
+                }
+              );
 
               if (upsertMethod.error) {
                 const errorMsg = `Failed to create job method for item ${item.id}: ${upsertMethod.error.message}`;
@@ -378,7 +401,7 @@ export async function action({ request }: ActionFunctionArgs) {
         // Trigger recalculation for all jobs
         if (allJobIds.length > 0) {
           for (const jobId of allJobIds) {
-            await recalculateJobRequirements(client, {
+            await recalculateJobRequirements(client, getDatabaseClient(), {
               id: jobId,
               companyId,
               userId

@@ -36,6 +36,7 @@ import {
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
+  DrawerTitle,
   Heading,
   HStack,
   ScrollArea,
@@ -586,6 +587,9 @@ interface IntegrationFormProps {
   tabs?: IntegrationFormTab[];
   /** Initially-selected tab value (defaults to the Settings tab). */
   defaultTab?: string;
+  /** Rendered in the header under the connection details of an installed
+   * integration (e.g. an accounting integration's sync switch). */
+  headerExtra?: ReactNode;
 }
 
 export function IntegrationForm({
@@ -596,7 +600,8 @@ export function IntegrationForm({
   onClose,
   dynamicOptions = {},
   tabs = [],
-  defaultTab
+  defaultTab,
+  headerExtra
 }: IntegrationFormProps) {
   const { t } = useLingui();
   const permissions = usePermissions();
@@ -881,9 +886,11 @@ export function IntegrationForm({
         </div>
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           <div className="flex items-center gap-2">
-            <Heading size="h3" className="truncate">
-              {integration.name}
-            </Heading>
+            <DrawerTitle asChild>
+              <Heading size="h3" className="truncate">
+                {integration.name}
+              </Heading>
+            </DrawerTitle>
             {installed && <Badge variant="green">Installed</Badge>}
           </div>
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -928,6 +935,7 @@ export function IntegrationForm({
           </p>
         </div>
       )}
+      {installed && headerExtra}
     </div>
   );
 

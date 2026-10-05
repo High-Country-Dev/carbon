@@ -3031,14 +3031,25 @@ export async function getPeriodExternalGlSyncReadiness(
 ): Promise<{ failing: boolean; count: number; postingSyncEnabled: boolean }> {
   const integrations = await client
     .from("companyIntegration")
-    .select("id")
+    .select("id, metadata")
     .eq("companyId", companyId)
     .eq("active", true)
     .in("id", ACCOUNTING_SYNC_INTEGRATION_IDS);
 
-  const enabledIntegrationIds = (integrations.data ?? []).map(
-    (integration) => integration.id
-  );
+  // An integration with sync turned off (still being set up) delivers nothing,
+  // so it is treated like a disconnected one. Mirrors `isAccountingSyncEnabled`
+  // in @carbon/ee/accounting, which this module cannot import (see above):
+  // absent means on, only an explicit false is off.
+  const enabledIntegrationIds = (integrations.data ?? [])
+    .filter(
+      (integration) =>
+        (
+          integration.metadata as {
+            settings?: { syncEnabled?: unknown };
+          } | null
+        )?.settings?.syncEnabled !== false
+    )
+    .map((integration) => integration.id);
 
   if (enabledIntegrationIds.length === 0) {
     return { failing: false, count: 0, postingSyncEnabled: false };
@@ -4080,6 +4091,7 @@ export async function upsertAccount(
       })
     | (Omit<z.infer<typeof accountValidator>, "id"> & {
         id: string;
+        companyGroupId?: string;
         updatedBy: string;
         customFields?: Json;
       })
@@ -4087,9 +4099,10 @@ export async function upsertAccount(
   if ("createdBy" in account) {
     return client.from("account").insert([account]).select("*").single();
   }
+  const { companyGroupId: _companyGroupId, ...accountUpdate } = account;
   return client
     .from("account")
-    .update(sanitize(account))
+    .update(sanitize(accountUpdate))
     .eq("id", account.id)
     .select("id")
     .single();
@@ -4383,6 +4396,7 @@ export async function upsertDimension(
       })
     | (Omit<z.infer<typeof dimensionValidator>, "id" | "dimensionValues"> & {
         id: string;
+        companyGroupId?: string;
         updatedBy: string;
       }),
   dimensionValues?: string[]
@@ -4396,9 +4410,10 @@ export async function upsertDimension(
       .select("id, companyGroupId")
       .single();
   } else {
+    const { companyGroupId: _companyGroupId, ...dimensionUpdate } = dimension;
     dimensionResult = await client
       .from("dimension")
-      .update(sanitize(dimension))
+      .update(sanitize(dimensionUpdate))
       .eq("id", dimension.id)
       .select("id, companyGroupId")
       .single();

@@ -3,6 +3,7 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { getCarbonServiceRole } from "@carbon/auth/client.server";
+import { CHANGE_LOGGED_TABLES } from "@carbon/database/realtime-tables";
 import { requireBackupsEntitlement } from "@carbon/ee/backups.server";
 import { getLogger } from "@carbon/logger";
 import { chunkArray } from "@carbon/utils";
@@ -232,6 +233,16 @@ export async function wipeAndLoad(
         });
       }
     }
+
+    // Every list an open client keeps a copy of has just been replaced. With
+    // triggers off nothing logged that, so say it here: a null row id tells
+    // the client to read the whole table again.
+    await trx
+      .insertInto("tableChange")
+      .values(
+        CHANGE_LOGGED_TABLES.map((table) => ({ companyId, table, rowId: null }))
+      )
+      .execute();
   });
 
   return { rows: inserted, idRewrite };
@@ -425,7 +436,7 @@ export const companyRestoreFunction = inngest.createFunction(
 
     return await step.run("restore-company", async () => {
       const client = getCarbonServiceRole();
-      const db = getJobDatabaseClient(1);
+      const db = getJobDatabaseClient();
 
       // Idempotency — a retry after the run already reached a terminal state
       // must not wipe again.
@@ -696,7 +707,7 @@ export const companyRestoreRevertFunction = inngest.createFunction(
     // mid-restore. The lock is on companyRestoreFunction (the start).
     return await step.run("revert-restore", async () => {
       const client = getCarbonServiceRole();
-      const db = getJobDatabaseClient(1);
+      const db = getJobDatabaseClient();
 
       const marker = await readRestoreMarker(client, companyId, restoreRunId);
       const snapshotPath = marker?.metadata.snapshotPath;

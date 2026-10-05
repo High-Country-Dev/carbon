@@ -32,3 +32,54 @@ export function applyDotenvToProcessEnv(mode, appDir) {
     }
   }
 }
+
+/**
+ * Resolve `specifier` to `file` in the browser build only. A top-level
+ * `resolve.alias` applies to every environment, so a stub meant to keep a
+ * chunk out of the client bundle also replaces the module on the server.
+ *
+ * @param {string} specifier
+ * @param {string} file
+ * @returns {import("vite").Plugin}
+ */
+export function clientOnlyAlias(specifier, file) {
+  return {
+    name: `carbon:client-only-alias:${specifier}`,
+    enforce: "pre",
+    applyToEnvironment: (environment) => environment.name === "client",
+    resolveId(source) {
+      if (source === specifier) return file;
+    },
+  };
+}
+
+/**
+ * `@lingui/vite-plugin` 6.9.0 infers the parser from `path.basename(id)`, so a
+ * React Router route module (`route.tsx?__react-router-build-client-route`)
+ * is parsed as plain JS and fails on its first `import type`. Hand the macro
+ * transform the id without its query. Remove once Lingui strips it upstream.
+ *
+ * @param {import("vite").Plugin[]} plugins the array `lingui()` returns
+ * @returns {import("vite").Plugin[]}
+ */
+export function linguiWithoutIdQuery(plugins) {
+  const name = "vite-plugin-lingui-macro-transform";
+  if (!plugins.some((plugin) => plugin.name === name)) {
+    throw new Error(
+      `linguiWithoutIdQuery: no "${name}" plugin. Pass lingui({ macroTransform: true }); if Lingui renamed it, update or delete this wrapper.`
+    );
+  }
+  return plugins.map((plugin) => {
+    if (plugin.name !== name) return plugin;
+    const { handler } = plugin.transform;
+    return {
+      ...plugin,
+      transform: {
+        ...plugin.transform,
+        handler(code, id) {
+          return handler.call(this, code, id.split("?")[0]);
+        },
+      },
+    };
+  });
+}

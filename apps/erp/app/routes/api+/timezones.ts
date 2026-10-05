@@ -3,30 +3,22 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { requirePermissions } from "@carbon/auth/auth.server";
-import type {
-  ClientLoaderFunctionArgs,
-  LoaderFunctionArgs
-} from "react-router";
+import { cachedClientLoader, RefreshRate } from "@carbon/query/cache";
+import type { LoaderFunctionArgs } from "react-router";
+import { data } from "react-router";
 import { getCachedTimezoneNames } from "~/modules/shared/shared.server";
-import { timezonesQuery } from "~/utils/react-query";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client } = await requirePermissions(request, {});
-  return await getCachedTimezoneNames(client);
+  const result = await getCachedTimezoneNames(client);
+  if (!result.data?.length) return data(result);
+  // The same list for every company, and it only changes with the database's
+  // tzdata: the browser keeps it across page loads as long as the server does.
+  return data(result, {
+    headers: { "Cache-Control": "private, max-age=86400" }
+  });
 }
 
-export async function clientLoader({ serverLoader }: ClientLoaderFunctionArgs) {
-  const query = timezonesQuery();
-  const data = window?.clientCache?.getQueryData<
-    Awaited<ReturnType<typeof loader>>
-  >(query.queryKey);
-
-  if (!data) {
-    const serverData = await serverLoader<typeof loader>();
-    window?.clientCache?.setQueryData(query.queryKey, serverData);
-    return serverData;
-  }
-
-  return data;
-}
-clientLoader.hydrate = true;
+export const clientLoader = cachedClientLoader<typeof loader>({
+  staleTime: RefreshRate.Never
+});

@@ -13,6 +13,7 @@ import {
   HStack,
   IconButton,
   MENU_ITEM_SHORTCUTS,
+  PrefetchLink,
   ShortcutKey,
   Tooltip,
   TooltipContent,
@@ -222,7 +223,6 @@ export default function SalesInvoiceExplorer() {
       </VStack>
       {newSalesInvoiceLineDisclosure.isOpen && (
         <SalesInvoiceLineForm
-          // @ts-ignore
           initialValues={salesInvoiceLineInitialValues}
           type="modal"
           onClose={newSalesInvoiceLineDisclosure.onClose}
@@ -285,9 +285,8 @@ function SalesInvoiceLineItem({
 
   return (
     <VStack spacing={0} className="border-b">
-      <Link
+      <PrefetchLink
         to={path.to.salesInvoiceLine(invoiceId, line.id!)}
-        prefetch="intent"
         className="w-full"
       >
         <HStack
@@ -359,7 +358,7 @@ function SalesInvoiceLineItem({
             </DropdownMenu>
           </div>
         </HStack>
-      </Link>
+      </PrefetchLink>
     </VStack>
   );
 }

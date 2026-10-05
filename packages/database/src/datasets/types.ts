@@ -1329,7 +1329,7 @@ export type NonConformanceTaskStatus =
   | "Completed"
   | "Skipped";
 
-/** Mirrors the `create` edge function's nonConformanceTasks case; In Progress goes to the applying user. */
+/** Mirrors the `create` server function's nonConformanceTasks case; In Progress goes to the applying user. */
 export type NonConformanceActionTaskSpec = {
   action: string;
   status: NonConformanceTaskStatus;
@@ -1407,7 +1407,7 @@ export type NonConformanceSpec = {
   };
   /** In `requiredActionIds` order. */
   actionTasks?: NonConformanceActionTaskSpec[];
-  /** One approval task plus Engineering and Quality reviewers, as the edge function seeds. */
+  /** One approval task plus Engineering and Quality reviewers, as the server function seeds. */
   mrb?: {
     status: NonConformanceTaskStatus;
     dueDateOffset?: DayOffset;
@@ -1956,12 +1956,6 @@ export type TimecardSpec = {
   note?: string;
 };
 
-export type OpenTimecardSpec = {
-  /** UTC "HH:MM:SS" today; no later than the earliest running production event. */
-  clockIn: string;
-  note?: string;
-};
-
 /** Never today: a today row pre-filters the MES schedule to that one work center. */
 export type PeopleAssignmentSpec = {
   dayOffset: DayOffset;
@@ -2078,7 +2072,6 @@ export type OpsData = {
   replacementParts: ReplacementPartSpec[];
   trainings: TrainingSpec[];
   timecards: TimecardSpec[];
-  openTimecard: OpenTimecardSpec;
   peopleAssignments: PeopleAssignmentSpec[];
   peopleAbsences: PeopleAbsenceSpec[];
   suggestions: SuggestionSpec[];

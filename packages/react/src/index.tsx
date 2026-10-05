@@ -148,6 +148,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from "./Dropdown";
+import { Enumerable } from "./Enumerable";
 import { File } from "./File";
 import {
   FormControl,
@@ -277,6 +278,7 @@ import {
   PopoverHeader,
   PopoverTrigger
 } from "./Popover";
+import { PrefetchLink } from "./PrefetchLink";
 import { Progress } from "./Progress";
 import { PulsingDot } from "./PulsingDot";
 import { RadioGroup, RadioGroupButton, RadioGroupItem } from "./Radio";
@@ -401,6 +403,7 @@ export {
   AvatarGroupList,
   AvatarOverflowIndicator,
   Badge,
+  Enumerable,
   BadgeCloseButton,
   Button,
   Card,
@@ -581,6 +584,7 @@ export {
   PopoverFooter,
   PopoverHeader,
   PopoverTrigger,
+  PrefetchLink,
   Progress,
   PulsingDot,
   RadioGroup,

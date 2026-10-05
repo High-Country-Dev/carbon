@@ -4,7 +4,7 @@
 
 import { usePrinting } from "@carbon/printing/ui";
 import {
-  useNanoStore,
+  useIdle,
   useOptimisticLocation,
   useRouteData,
   useUrlParams
@@ -26,7 +26,6 @@ import { useFileUpload } from "./useFileUpload";
 import { useFlags } from "./useFlags";
 import { useGooglePlaces } from "./useGooglePlaces";
 import { useHighlightFlash } from "./useHighlightFlash";
-import { useIdle } from "./useIdle";
 import { useImageUpload } from "./useImageUpload";
 import { useModelUpload } from "./useModelUpload";
 import { useAllModules, useModules, useSettingsModule } from "./useModules";
@@ -68,7 +67,6 @@ export {
   useSettingsModule,
   useModelUpload,
   useMovingCellRef,
-  useNanoStore,
   useNextItemId,
   useNotifications,
   useOnboarding,

@@ -10,6 +10,7 @@ import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { EPSILON, round } from "../precision.ts";
 import {
   accounts,
   changeOrderRequiredActions,
@@ -25,8 +26,7 @@ import {
   returnReasons,
   scrapReasons,
   unitOfMeasures
-} from "../../supabase/functions/lib/seed.data.ts";
-import { EPSILON, round } from "../../supabase/functions/shared/precision.ts";
+} from "../seed-data.ts";
 import { Constants } from "../types.ts";
 import { NOT_CLOSED_MIN_OFFSET, OPEN_PERIOD_MIN_OFFSET } from "./dates.ts";
 import {
@@ -6279,33 +6279,6 @@ const PEOPLE_ABSENCE_WINDOW = { min: 7, max: 13 } as const;
 export function peopleAndTime(ctx: ValidationCtx): void {
   const { dataset, fail, need } = ctx;
   const ops = dataset.ops;
-
-  const clockIn = secondsOfDay(ops.openTimecard.clockIn);
-  if (clockIn === null) {
-    fail(
-      `ops.openTimecard: clockIn "${ops.openTimecard.clockIn}" is not a UTC "HH:MM:SS"`
-    );
-  } else {
-    const runningStarts = [
-      OPEN_EVENT_TIME,
-      dataset.production.batch.running.startTimeOfDay
-    ];
-    for (const job of dataset.production.jobs) {
-      for (const override of job.operationOverrides ?? []) {
-        if (override.running) {
-          runningStarts.push(override.running.startTimeOfDay);
-        }
-      }
-    }
-    const earliest = Math.min(
-      ...runningStarts.map((time) => secondsOfDay(time) ?? 0)
-    );
-    if (clockIn > earliest) {
-      fail(
-        `ops.openTimecard: clocked in at ${ops.openTimecard.clockIn}, after a production timer already running today`
-      );
-    }
-  }
 
   const assignmentDays = new Set<number>();
   const assignedWorkCenters = new Set<string>();

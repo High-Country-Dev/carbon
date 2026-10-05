@@ -9,6 +9,7 @@ import { storage } from "@carbon/files";
 import { trackWorkEvent } from "@carbon/lib/telemetry";
 import { raiseMoment } from "@carbon/lib/workflows";
 import { getLogger } from "@carbon/logger";
+import { serverFns } from "@carbon/server-functions";
 import type { PickPartial } from "@carbon/utils";
 import {
   datetime,
@@ -149,23 +150,24 @@ export async function closeSalesOrder(
 /** @mcp update */
 export async function convertSalesRfqToQuote(
   client: SupabaseClient<Database>,
+  db: Kysely<KyselyDatabase>,
   payload: {
     id: string;
     companyId: string;
     userId: string;
   }
 ) {
-  return client.functions.invoke<{ convertedId: string }>("convert", {
-    body: {
-      type: "salesRfqToQuote",
-      ...payload
-    }
+  const { companyId, userId, id } = payload;
+  return serverFns.as({ client, db, companyId, userId }).invoke("convert", {
+    type: "salesRfqToQuote",
+    id
   });
 }
 
 /** @mcp update */
 export async function convertQuoteToOrder(
   client: SupabaseClient<Database>,
+  db: Kysely<KyselyDatabase>,
   payload: {
     id: string;
     selectedLines: z.infer<typeof selectedLinesValidator>;
@@ -176,15 +178,13 @@ export async function convertQuoteToOrder(
     digitalQuoteAcceptedByEmail?: string;
   }
 ) {
-  const result = await client.functions.invoke<{ convertedId: string }>(
-    "convert",
-    {
-      body: {
-        type: "quoteToSalesOrder",
-        ...payload
-      }
-    }
-  );
+  const { companyId, userId, ...input } = payload;
+  const result = await serverFns
+    .as({ client, db, companyId, userId })
+    .invoke("convert", {
+      type: "quoteToSalesOrder",
+      ...input
+    });
 
   if (!result.error && result.data?.convertedId) {
     await raiseMoment("sales.quoteAccepted", {
@@ -216,13 +216,15 @@ export async function convertQuoteToOrder(
 /** @mcp create */
 export async function copyQuoteLine(
   client: SupabaseClient<Database>,
+  db: Kysely<KyselyDatabase>,
   payload: z.infer<typeof getMethodValidator> & {
     companyId: string;
     userId: string;
   }
 ) {
-  return client.functions.invoke<{ copiedId: string }>("get-method", {
-    body: {
+  return serverFns
+    .as({ client, db, companyId: payload.companyId, userId: payload.userId })
+    .invoke("get-method", {
       ...payload,
       type: "quoteLineToQuoteLine",
       parts: {
@@ -233,24 +235,28 @@ export async function copyQuoteLine(
         steps: payload.steps,
         workInstructions: payload.workInstructions
       }
-    }
-  });
+    });
 }
 
 /** @mcp create */
 export async function copyQuote(
   client: SupabaseClient<Database>,
-  payload: Omit<z.infer<typeof getMethodValidator>, "type"> & {
+  db: Kysely<KyselyDatabase>,
+  payload: {
+    /** The quote to copy. */
+    sourceId: string;
+    /** The same quote id for a new revision, "" for a new quote. */
+    targetId: string;
     companyId: string;
     userId: string;
   }
 ) {
-  return client.functions.invoke<{ newQuoteId: string }>("get-method", {
-    body: {
+  return serverFns
+    .as({ client, db, companyId: payload.companyId, userId: payload.userId })
+    .invoke("get-method", {
       ...payload,
       type: "quoteToQuote"
-    }
-  });
+    });
 }
 
 /** @mcp create */
@@ -1452,7 +1458,7 @@ function getQuoteMethodTreeArrayToTree(
     const parentId = item.parentMaterialId;
 
     if (!Object.prototype.hasOwnProperty.call(lookup, itemId)) {
-      // @ts-ignore
+      // @ts-expect-error
       lookup[itemId] = { id: itemId, children: [] };
     }
 
@@ -1465,7 +1471,7 @@ function getQuoteMethodTreeArrayToTree(
       rootItems.push(treeItem);
     } else {
       if (!Object.prototype.hasOwnProperty.call(lookup, parentId)) {
-        // @ts-ignore
+        // @ts-expect-error
         lookup[parentId] = { id: parentId, children: [] };
       }
 
@@ -3162,7 +3168,6 @@ export async function getCustomerItemPriceOverrideById(
   id: string,
   companyId: string
 ): Promise<PostgrestSingleResponse<CustomerItemPriceOverrideWithRelations>> {
-  // @ts-ignore - nested select instantiation exceeds tsgo depth limit
   return client
     .from("customerItemPriceOverride")
     .select(
@@ -3635,6 +3640,7 @@ export async function updateQuoteStatus(
 /** @mcp upsert */
 export async function upsertMakeMethodFromQuoteLine(
   client: SupabaseClient<Database>,
+  db: Kysely<KyselyDatabase>,
   lineMethod: {
     itemId: string;
     quoteId: string;
@@ -3651,21 +3657,25 @@ export async function upsertMakeMethodFromQuoteLine(
     };
   }
 ) {
-  return client.functions.invoke("get-method", {
-    body: {
+  return serverFns
+    .as({
+      client,
+      db,
+      companyId: lineMethod.companyId,
+      userId: lineMethod.userId
+    })
+    .invoke("get-method", {
       type: "quoteLineToItem",
       sourceId: `${lineMethod.quoteId}:${lineMethod.quoteLineId}`,
       targetId: lineMethod.itemId,
-      companyId: lineMethod.companyId,
-      userId: lineMethod.userId,
       parts: lineMethod.parts
-    }
-  });
+    });
 }
 
 /** @mcp upsert */
 export async function upsertMakeMethodFromQuoteMethod(
   client: SupabaseClient<Database>,
+  db: Kysely<KyselyDatabase>,
   quoteMethod: {
     sourceId: string;
     targetId: string;
@@ -3681,16 +3691,19 @@ export async function upsertMakeMethodFromQuoteMethod(
     };
   }
 ) {
-  const { error } = await client.functions.invoke("get-method", {
-    body: {
+  const { error } = await serverFns
+    .as({
+      client,
+      db,
+      companyId: quoteMethod.companyId,
+      userId: quoteMethod.userId
+    })
+    .invoke("get-method", {
       type: "quoteMakeMethodToItem",
       sourceId: quoteMethod.sourceId,
       targetId: quoteMethod.targetId,
-      companyId: quoteMethod.companyId,
-      userId: quoteMethod.userId,
       parts: quoteMethod.parts
-    }
-  });
+    });
 
   if (error) {
     return {
@@ -5510,6 +5523,7 @@ export async function repriceQuoteLineFromRules(
 /** @mcp upsert */
 export async function upsertQuoteLineMethod(
   client: SupabaseClient<Database>,
+  db: Kysely<KyselyDatabase>,
   lineMethod: {
     itemId: string;
     quoteId: string;
@@ -5560,9 +5574,9 @@ export async function upsertQuoteLineMethod(
     body.parts = lineMethod.parts;
   }
 
-  return client.functions.invoke("get-method", {
-    body
-  });
+  return serverFns
+    .as({ client, db, companyId: body.companyId, userId: body.userId })
+    .invoke("get-method", body);
 }
 
 /**
@@ -5619,6 +5633,7 @@ export async function upsertQuoteMaterial(
 /** @mcp upsert */
 export async function upsertQuoteMaterialMakeMethod(
   client: SupabaseClient<Database>,
+  db: Kysely<KyselyDatabase>,
   quoteMethod: {
     sourceId: string;
     targetId: string;
@@ -5668,9 +5683,9 @@ export async function upsertQuoteMaterialMakeMethod(
     body.parts = quoteMethod.parts;
   }
 
-  const { error } = await client.functions.invoke("get-method", {
-    body
-  });
+  const { error } = await serverFns
+    .as({ client, db, companyId: body.companyId, userId: body.userId })
+    .invoke("get-method", body);
 
   if (error) {
     return {

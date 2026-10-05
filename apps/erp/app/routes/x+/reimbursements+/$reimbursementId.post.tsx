@@ -5,8 +5,8 @@
 import { assertIsPost, error, success } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
+import { redirect } from "@carbon/utils";
 import type { ActionFunctionArgs } from "react-router";
-import { redirect } from "react-router";
 import { getReimbursement } from "~/modules/invoicing";
 import {
   linesBalanceHeader,
@@ -51,7 +51,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  // The totals guard, server-side, BEFORE the edge function is called.
+  // The totals guard, server-side, BEFORE the server function is called.
   const lines = reimbursement.data.reimbursementLine ?? [];
   if (
     !linesBalanceHeader(

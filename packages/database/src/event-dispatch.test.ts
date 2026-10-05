@@ -2,32 +2,31 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
-import { readdirSync, readFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { auditConfig } from "./audit.config";
 
-const migrations = fileURLToPath(
-  new URL("../supabase/migrations/", import.meta.url)
-);
+// Every trigger function that drops an UPDATE touching only bookkeeping columns.
+const files = [
+  "dispatch_event_batch",
+  "broadcast_table_changes",
+  "broadcast_user_changes",
+  "broadcast_reference_changes",
+  "log_table_changes",
+  "log_user_changes"
+].map((name) => `event-system/functions/${name}.sql`);
 
-function newestDefinition(signature: string) {
-  for (const file of readdirSync(migrations).sort().reverse()) {
-    const sql = readFileSync(`${migrations}${file}`, "utf8");
-    if (sql.includes(signature)) return { file, sql };
-  }
-  throw new Error(`No migration defines ${signature}`);
-}
+describe.each(files)("%s", (file) => {
+  const sql = readFileSync(
+    fileURLToPath(new URL(file, import.meta.url)),
+    "utf8"
+  );
 
-describe("dispatch_event_batch", () => {
   // The trigger drops an UPDATE that changes only these columns before it is
-  // queued, because the audit diff would discard it. A new definition forked
-  // from an older one silently loses the filter, and a skip field added on one
-  // side only makes the trigger and the handler disagree.
+  // queued or broadcast, because the audit diff would discard it. A skip field
+  // added on one side only makes the triggers and the handler disagree.
   it("ignores exactly the columns the audit diff skips", () => {
-    const { file, sql } = newestDefinition(
-      "CREATE OR REPLACE FUNCTION public.dispatch_event_batch()"
-    );
     const declared = sql.match(
       /ignored_columns CONSTANT TEXT\[\] := ARRAY\[([^\]]*)\]/
     );

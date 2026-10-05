@@ -305,7 +305,7 @@ Never use JavaScript `Date` here, and never `CURRENT_DATE` in a tier's SQL — t
 the company's day, the database session's is UTC, and the two disagree for a slice of every
 day. The pure validator checks offset VALUES (planning horizon, period floors, document
 chronology) but nothing scans for `Date` / `CURRENT_DATE` usage: `@carbon/checks` covers
-`apps/mes/app/services`, `packages/jobs/src`, `packages/database/supabase/functions` and
+`apps/mes/app/services`, `packages/jobs/src`, `packages/server-functions/src` and
 the ERP module/route files, none of which is `packages/database/src/**`. That part is
 convention only.
 
@@ -347,7 +347,7 @@ make parts. Keep it that way when authoring a new notice or a new dataset.
 
 Posted receipts and shipments, completed returns / transfers / picking lists / counts,
 Paid and Partially Paid invoices, disposed assets and Posted journals are all seeded. The
-posting edge functions cannot run inside the one seed transaction (and a post-commit call
+posting server functions cannot run inside the one seed transaction (and a post-commit call
 would break all-or-nothing apply and the drift check's rollback), so each posted state is
 **hand-authored together with the rows its posting path would have written** —
 `itemLedger`, `invoiceSettlement`, tracked entities/activities, receipt/shipment lines —
@@ -370,7 +370,7 @@ in the same tier. Conventions, each mirroring the real code path:
   shipment (a `costLedger` draw on those layers, else `itemCost.unitCost` = the item's
   `standardCost`) and scrapped lot (post-inventory-adjustment's `Inventory Adjustment`
   shape, CR inventory / DR `scrapAccount`), whether or not `accountingEnabled` is on,
-  through the edge functions'
+  through the server functions'
   own builders (`buildSalesPostingLines`, `buildPaymentJournal`, `buildMemoJournal`) or
   copies of their inline shapes (`helpers/posting-journals.ts`). Ids come from the
   `journalEntry` sequence, which the wipe never rewinds. Payments stay USD at rate 1,
@@ -554,7 +554,7 @@ the floor in the same change; adding a table means measuring and adding it.
 Tier `ctx.log` lines are buffered per dataset and printed (the last 12) only when that
 dataset fails, so the error is placed inside the tier sequence without drowning a green run.
 
-It runs from `.husky/pre-commit` whenever a staged file is under `packages/database/`
+It runs from `scripts/git-hooks/pre-commit` whenever a staged file is under `packages/database/`
 (a few seconds for all four); `CARBON_SKIP_DATASET_CHECK=1` skips both layers. Layer 2 exits
 0 with a warning when the database is unreachable, has no `user` table, or has no users — a
 hook that fails for reasons you cannot fix is a hook you learn to bypass, and every one of
@@ -600,14 +600,13 @@ answers "does every screen have rows".
 ## What is NOT how this works
 
 There is no archive, no `.carbon.json.gz`, no `company-templates` storage bucket in this
-path — that was an earlier unfinished design. `packages/database/supabase/backups/` is
-unused; its README lists the dormant code left behind. Backup export/restore for real
-customer companies is a separate feature and is unaffected.
+path — that was an earlier unfinished design, and `packages/database/supabase/backups/`
+was deleted with it. Backup export/restore for real customer companies is a separate
+feature and is unaffected.
 
 ## Local development note
 
 The dev CLI path needs only Postgres, so it works whenever your local database is up. The
-browser onboarding flow additionally calls the `seed-company` **edge function** (for the
-chart of accounts and other reference data) before the template step ever runs — so if the
-local edge runtime is unhealthy, onboarding fails before reaching any of this, and the CLI
-remains the way to exercise a dataset.
+browser onboarding flow additionally runs the `seed-company` server function
+(`@carbon/server-functions/seed-company`, for the chart of accounts and other reference data)
+before the template step ever runs, in-process in the ERP.

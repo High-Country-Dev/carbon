@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { useLoaderQuery } from "@carbon/query";
 import {
   Badge,
   Button,
@@ -411,22 +412,20 @@ export function BatchBuilder({
     processes
   ]);
 
-  const candidatesFetcher = useFetcher<CandidatesResponse>();
   const submitFetcher = useFetcher<{
     success?: boolean;
     message?: string;
     batchId?: string | null;
   }>();
 
-  // Load candidates whenever the scope is complete. Only the scope drives the
-  // fetch — the fetcher's `.load` identity is unstable and must not be a dep.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: intentional — scope-only trigger
-  useEffect(() => {
-    if (!locationId || !processId) return;
-    candidatesFetcher.load(
-      path.to.api.batchableOperations(locationId, processId)
-    );
-  }, [locationId, processId]);
+  // Candidates for the scope, once it is complete. `staleTime: 0`: operations
+  // move on the shop floor, so each scope change asks again.
+  const candidatesFetcher = useLoaderQuery<CandidatesResponse>(
+    locationId && processId
+      ? path.to.api.batchableOperations(locationId, processId)
+      : null,
+    { staleTime: 0 }
+  );
 
   // A scope change invalidates the current selection and filters.
   const resetComposition = useCallback(() => {
@@ -808,7 +807,7 @@ export function BatchBuilder({
         fd.set("lotNumbers", JSON.stringify(lots.lotNumbers));
       }
       // Create & Release: the create validator's zfd.checkbox reads "on" and
-      // the edge fn inserts the batch already Active (on the floor).
+      // the server fn inserts the batch already Active (on the floor).
       if (opts?.release) fd.set("release", "on");
       if (opts?.purchaseOrdersBySupplierId) {
         fd.set(
@@ -827,7 +826,7 @@ export function BatchBuilder({
   const isSubmitting = submitFetcher.state !== "idle";
   // Output lots are planned here; a batch never reaches the floor without them.
   const lotPlanIncomplete = outputLotsProblem(selected, outputLots) !== null;
-  const isLoading = candidatesFetcher.state !== "idle";
+  const isLoading = candidatesFetcher.isFetching;
 
   const locationOptions = useMemo(
     () =>
@@ -876,9 +875,9 @@ export function BatchBuilder({
   );
 
   // Release needs a work center the batch can run at: the explicit pick, or —
-  // mirroring the edge fn's adoption rule — the single distinct work center
+  // mirroring the server fn's adoption rule — the single distinct work center
   // the selected members already sit on (members without one don't block
-  // adoption). Otherwise the edge fn refuses Create & Release.
+  // adoption). Otherwise the server fn refuses Create & Release.
   const memberWorkCenterIds = useMemo(() => {
     const ids = new Set<string>();
     for (const c of selected) {

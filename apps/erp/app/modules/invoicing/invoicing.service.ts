@@ -5,11 +5,13 @@
 import type { Database, Json } from "@carbon/database";
 import { fetchAllFromTable, getCompanyTimeZone } from "@carbon/database";
 import type { Kysely, KyselyDatabase } from "@carbon/database/client";
+import { serverFns } from "@carbon/server-functions";
 import {
   allocatePaymentFunding,
   applyRate,
   assertCurrencyDecimals,
   assertExchangeRate,
+  calculateDueDate,
   chunkArray,
   datetime,
   type FundingConsumptionRow,
@@ -73,41 +75,19 @@ const SALES_INVOICES_LIST_COLUMNS =
   "id,invoiceId,status,customerId,customerReference,invoiceCustomerId,postingDate,dateIssued,dateDue,datePaid,balance,assignee,companyId,customFields,createdAt,createdBy,updatedAt,updatedBy,thumbnailPath,itemType,invoiceTotal,paymentTermName" as const;
 
 /**
- * The payment term an invoice falls back to when none is specified — Net 30,
- * matching Stripe's default of 30 days until an invoice is due. Without it an
- * invoice with no payment term carried no due date at all, so it could never
- * read as overdue and never surfaced in AR/AP aging.
- *
- * Mirrors DEFAULT_PAYMENT_TERM in
- * packages/database/supabase/functions/shared/calculate-due-date.ts — keep the
- * two in sync.
- */
-export const DEFAULT_PAYMENT_TERM: {
-  daysDue: number;
-  calculationMethod: Database["public"]["Enums"]["paymentTermCalculationMethod"];
-} = { daysDue: 30, calculationMethod: "Net" };
-
-/**
  * Compute an invoice's Due Date from its Issue Date and Payment Term.
  * Returns null only when the issue date is missing or can't be parsed — callers
  * fall back to a plain field update in that case. A missing payment term is NOT
  * a missing due date: an unset paymentTermId, or one whose row genuinely
- * doesn't exist for the company, falls back to DEFAULT_PAYMENT_TERM (Net 30).
+ * doesn't exist for the company, falls back to `DEFAULT_PAYMENT_TERM` (Net 30).
  * A payment-term *query failure* is different: it throws, so callers abort
  * instead of writing the invoice with a stale dateDue. The read is scoped by
  * companyId for tenant isolation (defense in depth alongside RLS) and uses
  * maybeSingle so an absent row is data: null (not an error) — keeping "missing"
  * distinguishable from "failed".
  *
- * The term's calculationMethod decides the anchor for daysDue:
- * - "Net": daysDue days after the issue date.
- * - "End of Month": daysDue days after the end of the issue month.
- * - "Day of Month": due on day daysDue of the month — the first occurrence on
- *   or after the issue date, clamped to the month's length (31 → Feb 28).
- *
- * Mirrors calculateDueDate in
- * packages/database/supabase/functions/shared/calculate-due-date.ts (used when
- * posting invoices) — keep the two in sync.
+ * The date arithmetic is `calculateDueDate` (@carbon/utils), the same one
+ * invoice posting uses.
  * @mcp read
  */
 export async function computeInvoiceDateDue(
@@ -136,29 +116,7 @@ export async function computeInvoiceDateDue(
     );
   }
 
-  const { daysDue, calculationMethod } =
-    paymentTerm?.data ?? DEFAULT_PAYMENT_TERM;
-
-  try {
-    const issued = parseDate(dateIssued);
-    switch (calculationMethod) {
-      case "End of Month":
-        return endOfMonth(issued).add({ days: daysDue }).toString();
-      case "Day of Month": {
-        // set() clamps daysDue to the month's length
-        const sameMonth = issued.set({ day: daysDue });
-        return (
-          sameMonth.compare(issued) >= 0
-            ? sameMonth
-            : issued.add({ months: 1 }).set({ day: daysDue })
-        ).toString();
-      }
-      default:
-        return issued.add({ days: daysDue }).toString();
-    }
-  } catch {
-    return null;
-  }
+  return calculateDueDate(dateIssued, paymentTerm?.data);
 }
 
 /**
@@ -268,51 +226,42 @@ export async function computeEarlyPaymentDiscounts(
 /** @mcp create */
 export async function createPurchaseInvoiceFromPurchaseOrder(
   client: SupabaseClient<Database>,
+  db: Kysely<KyselyDatabase>,
   purchaseOrderId: string,
   companyId: string,
   userId: string
 ) {
-  return client.functions.invoke<{ id: string }>("convert", {
-    body: {
-      type: "purchaseOrderToPurchaseInvoice",
-      id: purchaseOrderId,
-      companyId,
-      userId
-    }
+  return serverFns.as({ client, db, companyId, userId }).invoke("convert", {
+    type: "purchaseOrderToPurchaseInvoice",
+    id: purchaseOrderId
   });
 }
 
 /** @mcp create */
 export async function createSalesInvoiceFromSalesOrder(
   client: SupabaseClient<Database>,
+  db: Kysely<KyselyDatabase>,
   salesOrderId: string,
   companyId: string,
   userId: string
 ) {
-  return client.functions.invoke<{ id: string }>("convert", {
-    body: {
-      type: "salesOrderToSalesInvoice",
-      id: salesOrderId,
-      companyId,
-      userId
-    }
+  return serverFns.as({ client, db, companyId, userId }).invoke("convert", {
+    type: "salesOrderToSalesInvoice",
+    id: salesOrderId
   });
 }
 
 /** @mcp create */
 export async function createSalesInvoiceFromShipment(
   client: SupabaseClient<Database>,
+  db: Kysely<KyselyDatabase>,
   shipmentId: string,
   companyId: string,
   userId: string
 ) {
-  return client.functions.invoke<{ id: string }>("convert", {
-    body: {
-      type: "shipmentToSalesInvoice",
-      id: shipmentId,
-      companyId,
-      userId
-    }
+  return serverFns.as({ client, db, companyId, userId }).invoke("convert", {
+    type: "shipmentToSalesInvoice",
+    id: shipmentId
   });
 }
 
@@ -948,32 +897,26 @@ export async function upsertPurchaseInvoice(
   return invoice;
 }
 
-/** @mcp upsert */
+/**
+ * Updates an invoice's delivery. The row is created with the invoice and
+ * shares its id, so there is nothing to insert here.
+ * @mcp update
+ */
 export async function upsertPurchaseInvoiceDelivery(
   client: SupabaseClient<Database>,
-  purchaseInvoiceDelivery:
-    | (z.infer<typeof purchaseInvoiceDeliveryValidator> & {
-        companyId: string;
-        createdBy: string;
-        customFields?: Json;
-      })
-    | (z.infer<typeof purchaseInvoiceDeliveryValidator> & {
-        id: string;
-        updatedBy: string;
-        customFields?: Json;
-      })
-) {
-  if ("id" in purchaseInvoiceDelivery) {
-    return client
-      .from("purchaseInvoiceDelivery")
-      .update(sanitize(purchaseInvoiceDelivery))
-      .eq("id", purchaseInvoiceDelivery.id)
-      .select("id")
-      .single();
+  purchaseInvoiceDelivery: z.infer<typeof purchaseInvoiceDeliveryValidator> & {
+    companyId: string;
+    updatedBy: string;
+    customFields?: Json;
   }
+) {
+  // The company scopes the row; it is never written to it.
+  const { companyId, ...delivery } = purchaseInvoiceDelivery;
   return client
     .from("purchaseInvoiceDelivery")
-    .insert([purchaseInvoiceDelivery])
+    .update(sanitize(delivery))
+    .eq("id", delivery.id)
+    .eq("companyId", companyId)
     .select("id")
     .single();
 }
@@ -1336,32 +1279,26 @@ export async function upsertSalesInvoice(
   return invoice;
 }
 
-/** @mcp upsert */
+/**
+ * Updates an invoice's shipment. The row is created with the invoice and
+ * shares its id, so there is nothing to insert here.
+ * @mcp update
+ */
 export async function upsertSalesInvoiceShipment(
   client: SupabaseClient<Database>,
-  salesInvoiceShipment:
-    | (z.infer<typeof salesInvoiceShipmentValidator> & {
-        companyId: string;
-        createdBy: string;
-        customFields?: Json;
-      })
-    | (z.infer<typeof salesInvoiceShipmentValidator> & {
-        id: string;
-        updatedBy: string;
-        customFields?: Json;
-      })
-) {
-  if ("id" in salesInvoiceShipment) {
-    return client
-      .from("salesInvoiceShipment")
-      .update(sanitize(salesInvoiceShipment))
-      .eq("id", salesInvoiceShipment.id)
-      .select("id")
-      .single();
+  salesInvoiceShipment: z.infer<typeof salesInvoiceShipmentValidator> & {
+    companyId: string;
+    updatedBy: string;
+    customFields?: Json;
   }
+) {
+  // The company scopes the row; it is never written to it.
+  const { companyId, ...shipment } = salesInvoiceShipment;
   return client
     .from("salesInvoiceShipment")
-    .insert([salesInvoiceShipment])
+    .update(sanitize(shipment))
+    .eq("id", shipment.id)
+    .eq("companyId", companyId)
     .select("id")
     .single();
 }
@@ -3648,7 +3585,7 @@ export async function replaceInvoiceSettlements(
 // supplier), a signed amount against a reason GL account, and a set of
 // invoiceSettlement applications (memo as SOURCE) to open invoices of the same
 // party. Direction (Credit/Debit) is the discriminator; numbering uses the
-// creditMemo / debitMemo sequences. Posting is handled by the post-memo edge
+// creditMemo / debitMemo sequences. Posting is handled by the post-memo server
 // function; the apply table is editable only while the memo is Draft.
 
 /** @mcp read */

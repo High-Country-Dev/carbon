@@ -60800,6 +60800,33 @@ export type Database = {
           }
         ]
       }
+      tableChange: {
+        Row: {
+          companyId: string
+          createdAt: string
+          id: number
+          rowId: string | null
+          table: string
+          xid: unknown
+        }
+        Insert: {
+          companyId: string
+          createdAt?: string
+          id?: never
+          rowId?: string | null
+          table: string
+          xid?: unknown
+        }
+        Update: {
+          companyId?: string
+          createdAt?: string
+          id?: never
+          rowId?: string | null
+          table?: string
+          xid?: unknown
+        }
+        Relationships: []
+      }
       tableView: {
         Row: {
           columnOrder: string[] | null
@@ -83070,6 +83097,10 @@ export type Database = {
         }[]
       }
       get_api_key_scopes: { Args: never; Returns: Json }
+      get_app_shell: {
+        Args: { company_id: string; user_id: string }
+        Returns: Json
+      }
       get_ar_aging: {
         Args: {
           _aging_method?: string
@@ -83604,6 +83635,30 @@ export type Database = {
           unitOfMeasureCode: string
         }[]
       }
+      get_item_change_notices: {
+        Args: {
+          company_id: string
+          item_id: string
+          statuses?: Database["public"]["Enums"]["changeOrderStatus"][]
+        }
+        Returns: {
+          changeOrderId: string
+          changeOrderTypeId: string
+          createdAt: string
+          id: string
+          name: string
+          status: Database["public"]["Enums"]["changeOrderStatus"]
+        }[]
+      }
+      get_item_ledger_balance: {
+        Args: {
+          company_id: string
+          entry_number?: number
+          item_id: string
+          location_id: string
+        }
+        Returns: number
+      }
       get_item_quantities_by_tracking_id: {
         Args: { company_id: string; item_id: string; location_id: string }
         Returns: {
@@ -83652,6 +83707,10 @@ export type Database = {
           type: Database["public"]["Enums"]["itemType"]
           unitOfMeasureCode: string
         }[]
+      }
+      get_item_used_in: {
+        Args: { company_id: string; item_id: string }
+        Returns: Json
       }
       get_job_method: {
         Args: { jid: string }
@@ -85169,6 +85228,21 @@ export type Database = {
         }
         Returns: undefined
       }
+      set_event_triggers: {
+        Args: {
+          after_functions?: string[]
+          before_functions?: string[]
+          queue_events?: boolean
+          statement_functions?: string[]
+          table_name_text: string
+        }
+        Returns: undefined
+      }
+      set_inngest_event_config: {
+        Args: { p_base_url: string; p_key: string }
+        Returns: undefined
+      }
+      set_inngest_event_url: { Args: { p_url: string }; Returns: undefined }
       set_shelf_life_for_operation: {
         Args: {
           p_event: Database["public"]["Enums"]["shelfLifeTriggerTiming"]
@@ -85321,20 +85395,10 @@ export type Database = {
         Args: { p_new: Json; p_old: Json; p_operation: string; p_table: string }
         Returns: undefined
       }
-      sync_finish_job_operation:
-        | {
-            Args: { p_new: Json; p_old: Json; p_operation: string }
-            Returns: undefined
-          }
-        | {
-            Args: {
-              p_new: Json
-              p_old: Json
-              p_operation: string
-              p_table: string
-            }
-            Returns: undefined
-          }
+      sync_finish_job_operation: {
+        Args: { p_new: Json; p_old: Json; p_operation: string; p_table: string }
+        Returns: undefined
+      }
       sync_insert_company_related_records: {
         Args: { p_new: Json; p_old: Json; p_operation: string; p_table: string }
         Returns: undefined
@@ -85458,6 +85522,15 @@ export type Database = {
       sync_webhook_subscription: {
         Args: { p_new: Json; p_old: Json; p_operation: string; p_table: string }
         Returns: undefined
+      }
+      table_changes_since: {
+        Args: {
+          p_at?: string
+          p_company_id: string
+          p_epoch?: string
+          p_xid?: string
+        }
+        Returns: Json
       }
       terminal_job_operations: {
         Args: { p_job_id: string }

@@ -1,8 +1,9 @@
 # @carbon/logger
 
 Centralized, isomorphic logger built on [LogTape](https://logtape.org). Works in
-browser, Node (SSR + Inngest jobs), and — via a separate self-contained copy —
-Deno edge functions. Replaces raw `console.*`. Structured records, hierarchical
+browser and Node (SSR + Inngest jobs). Replaces raw `console.*` (the one
+self-contained Deno edge function, `embedding`, cannot import workspace packages and
+uses `console` directly). Structured records, hierarchical
 categories, env-driven levels, and cloud-agnostic request-id correlation.
 
 ## Always
@@ -12,8 +13,7 @@ categories, env-driven levels, and cloud-agnostic request-id correlation.
   `["carbon","erp","sales"]`. One logger per module/area.
 - Category convention: packages → `getLogger("<pkg>")`; ERP modules →
   `getLogger("erp","<module>")`; MES → `getLogger("mes",...)`; jobs →
-  `getLogger("jobs","<fnName>")`; edge functions → `["carbon","edge",fnName]`
-  (Deno side).
+  `getLogger("jobs","<fnName>")`.
 - Message + structured data: `logger.info("Created {id}", { id })` or the object
   form `logger.info("{*}", { id, companyId })`. Prefer structured properties over
   string concatenation — they survive to JSONL in prod.
@@ -63,9 +63,6 @@ categories, env-driven levels, and cloud-agnostic request-id correlation.
   `LOG_LEVEL` / `NODE_ENV` raw via `src/env.ts` instead.
 - Log at module top level. LogTape no-ops before `configure()` runs, so
   load-time logs are dropped. Log inside functions/handlers.
-- Hand-edit the Deno copy at `packages/database/supabase/functions/lib/logging.ts`
-  to diverge from this package's config without reason — it mirrors this on
-  purpose (edge functions can't import workspace packages).
 
 ## Validation Commands
 
@@ -81,8 +78,8 @@ pnpm --filter @carbon/logger test
 | `.` | `getLogger`, `LOG_LEVELS`, `parseLogLevel`, `CarbonLogLevel`, `Logger` type — isomorphic, safe everywhere |
 | `./config.server` | `ensureLoggingConfigured()` (ANSI dev / JSONL+redacted prod, ALS) |
 | `./config.client` | `ensureLoggingConfigured()` (plain console sink, no ALS) |
-| `./middleware.server` | `requestIdMiddleware`, `requestIdContext`, `getRequestId`, `REQUEST_ID_HEADER`, plus the request-context API re-exported from `context.server`: `requestContextMiddleware`, `getRouterContext`, `getRequestContext`, `oncePerRequest`, `oncePerRead` |
-| `./tracing.server` | `createTracing({ serviceName, afterRequest })` — React Router `instrumentations` (OpenTelemetry); `annotateRequestSpan(attributes)`; `nameRequestSpan(name)`; `namedMiddleware(list)`; `withSpan(name, attributes, run)`; `queryLog` — Kysely `log` hook, `undefined` when tracing is off |
+| `./middleware.server` | `requestMiddleware` (context + id + access log in one), `requestIdMiddleware`, `requestIdContext`, `getRequestId`, `REQUEST_ID_HEADER`, plus the request-context API re-exported from `context.server`: `requestContextMiddleware`, `getRouterContext`, `getRequestContext`, `oncePerRequest`, `oncePerRead` |
+| `./tracing.server` | `createTracing({ serviceName, afterRequest })` — React Router `instrumentations` (OpenTelemetry); `annotateRequestSpan(attributes)`; `nameRequestSpan(name)`; `timedMiddleware({ name: fn })`; `withSpan(name, attributes, run)`; `queryLog` — Kysely `log` hook, `undefined` when tracing is off |
 | `./inngest` | `createInngestLogger()` — adapter passed to `new Inngest({ logger })` |
 
 ## Wiring (per app)
@@ -91,7 +88,7 @@ pnpm --filter @carbon/logger test
 - `entry.client.tsx`: same from `@carbon/logger/config.client`.
 - `entry.server.tsx` also exports
   `instrumentations = createTracing({ serviceName: "carbon-erp", afterRequest })`.
-- `root.tsx`: `export const middleware = namedMiddleware([requestContextMiddleware, requestIdMiddleware, securityMiddleware, flashMiddleware])`
+- `root.tsx`: `export const middleware = timedMiddleware({ request: requestMiddleware, security: securityMiddleware, flash: flashMiddleware })` — `requestMiddleware` is the request scope in one middleware (context + request id + access log)
   (request context FIRST so every downstream middleware and handler runs inside
   the AsyncLocalStorage scope, then request id so downstream logs carry it).
 
@@ -131,10 +128,13 @@ One trace per request:
   `POST /api/mcp call_tool sales_getCustomers`, `POST /api/v1/sales/getCustomers`.
   Only known function ids and operations go into the name; the same values are
   on `inngest.function.id` / `carbon.operation` for grouping.
-- **`middleware|loader|action <routeId>`** spans, one per route handler. React
-  Router reports a middleware by its route alone, so the apps wrap the root list
-  in `namedMiddleware([...])`, which renames each span after its function
-  (`middleware requestIdMiddleware`). Each one contains everything after it.
+- **`loader|action <routeId>`** spans, one per route handler. Middleware get
+  no span: a middleware span contains everything after it, so it read as slow
+  whenever a loader was. The apps wrap the root list in
+  `timedMiddleware({ name: fn, ... })`, which records each middleware's OWN
+  time on the request span as `carbon.middleware.<name>.ms` (its total minus
+  the time in what it calls next). Named by key, not `fn.name`: the production
+  build minifies function names.
 - **Fetch spans** from `@opentelemetry/instrumentation-undici`, only for fetches
   made inside a request (`requireParentforSpans`). `fetchSpanName` names a
   Supabase call by what it does — `GET /rest/v1/methodMaterial`,
@@ -173,6 +173,4 @@ That host-specific line lives in each app's `entry.server.tsx`, not here.
 ## Cross-References
 
 - `packages/lib/src/inngest/client.ts` — consumes `createInngestLogger()`.
-- `packages/database/supabase/functions/lib/logging.ts` — Deno-native twin
-  (`getFunctionLogger`), configured from `jsr:@logtape/*`.
 - `packages/env/` — defines `LOG_LEVEL` (also exposed to `window.env`).
