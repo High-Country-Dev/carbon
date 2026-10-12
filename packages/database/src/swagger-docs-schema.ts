@@ -104017,6 +104017,13 @@ export default {
             name: "p_sort_method",
             required: false,
             type: "string"
+          },
+          {
+            format: "text",
+            in: "query",
+            name: "p_storage_unit_id",
+            required: false,
+            type: "string"
           }
         ],
         produces: [
@@ -104064,6 +104071,10 @@ export default {
                   type: "string"
                 },
                 p_sort_method: {
+                  format: "text",
+                  type: "string"
+                },
+                p_storage_unit_id: {
                   format: "text",
                   type: "string"
                 }
