@@ -11193,6 +11193,9 @@ msgstr "Taux de change de la facture"
 msgid "Invoice schedule"
 msgstr "Planning de facturation"
 
+msgid "Invoice Separately"
+msgstr ""
+
 msgid "Invoice settlement"
 msgstr "Règlement de facture"
 
@@ -11222,6 +11225,9 @@ msgstr "Facturé"
 
 msgid "Invoiced Amount:"
 msgstr "Montant facturé :"
+
+msgid "Invoiced separately"
+msgstr ""
 
 msgid "Invoiced Statuses"
 msgstr "Statuts facturés"
@@ -16564,6 +16570,9 @@ msgstr "Envoyer l'écriture sans l'axe analytique"
 msgid "Push to accounting"
 msgstr "Envoyer vers la comptabilité"
 
+msgid "Put this charge on its own invoice, held for review before it is posted. Otherwise it goes on the agreement's next invoice."
+msgstr ""
+
 msgid "Putting your data back"
 msgstr "Restauration de vos données"
 
@@ -19360,8 +19369,8 @@ msgstr "Configurer la comptabilité"
 msgid "Set Up Accounting"
 msgstr "Configurer la comptabilité"
 
-msgid "Set up accounting to use reports, journal entries, accounting periods, fixed assets and more."
-msgstr "Configurez la comptabilité pour utiliser des rapports, des écritures, des périodes comptables, des immobilisations et plus."
+msgid "Set up accounting to use reports, journal entries, accounting periods, depreciation runs and more."
+msgstr ""
 
 msgid "Set up authenticator app"
 msgstr "Configurer l'application d'authentification"

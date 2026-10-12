@@ -11193,6 +11193,9 @@ msgstr "发票汇率"
 msgid "Invoice schedule"
 msgstr "发票日程表"
 
+msgid "Invoice Separately"
+msgstr ""
+
 msgid "Invoice settlement"
 msgstr "发票结算"
 
@@ -11222,6 +11225,9 @@ msgstr "已开票"
 
 msgid "Invoiced Amount:"
 msgstr "已开票金额："
+
+msgid "Invoiced separately"
+msgstr ""
 
 msgid "Invoiced Statuses"
 msgstr "已开票状态"
@@ -16564,6 +16570,9 @@ msgstr "发布不包含维度的凭证"
 msgid "Push to accounting"
 msgstr "推送到会计系统"
 
+msgid "Put this charge on its own invoice, held for review before it is posted. Otherwise it goes on the agreement's next invoice."
+msgstr ""
+
 msgid "Putting your data back"
 msgstr "正在恢复您的数据"
 
@@ -19360,8 +19369,8 @@ msgstr "设置会计"
 msgid "Set Up Accounting"
 msgstr "设置会计"
 
-msgid "Set up accounting to use reports, journal entries, accounting periods, fixed assets and more."
-msgstr "设置会计以使用报告、凭证、会计期间、固定资产等。"
+msgid "Set up accounting to use reports, journal entries, accounting periods, depreciation runs and more."
+msgstr ""
 
 msgid "Set up authenticator app"
 msgstr "设置身份验证器应用"
