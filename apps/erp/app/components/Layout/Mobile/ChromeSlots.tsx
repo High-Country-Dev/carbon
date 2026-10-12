@@ -17,7 +17,7 @@ const bottomBarSlot = createPortalSlot();
 /** Where <AppBarActions> render: the right of the compact app bar. */
 export const AppBarActionsTarget = appBarActionsSlot.Target;
 
-/** True while any <BottomBar> is mounted; the tab bar hides then. */
+/** True while any <BottomBar> is mounted; the dock hides then. */
 export const useBottomBarActive = bottomBarSlot.useFilled;
 
 const MAX_APP_BAR_ACTIONS = 2;
@@ -34,10 +34,10 @@ export function AppBarActions({ children }: { children: ReactNode }) {
   return <appBarActionsSlot.Fill>{children}</appBarActionsSlot.Fill>;
 }
 
-/** A compact bottom bar (action bar or bulk bar) that replaces the tab bar. */
+/** A compact bottom bar (action bar or bulk bar) that replaces the dock. */
 export const BottomBar = bottomBarSlot.Fill;
 
-/** A page's phone action bar: its buttons in one row over the tab bar. */
+/** A page's phone action bar: its buttons in one row, in place of the dock. */
 export function PhoneActionBar({
   children,
   className
@@ -65,7 +65,11 @@ export function PhoneActionBar({
  * Removed on desktop, where the stylesheet values apply unchanged.
  */
 export function useCompactCssVar(
-  name: "--header-height" | "--hero-height" | "--content-inset",
+  name:
+    | "--header-height"
+    | "--hero-height"
+    | "--content-inset"
+    | "--dock-height",
   element: HTMLElement | null
 ) {
   const { isPhone } = useViewport();
@@ -88,16 +92,28 @@ export function useCompactCssVar(
 }
 
 /**
- * The shell's bottom chrome: the target for <BottomBar> and the tab bar. Its
- * height becomes `--content-inset`, so full-height pages end above it.
+ * The shell's bottom chrome: the target for <BottomBar> and the dock. A
+ * bottom bar is in flow and its height becomes `--content-inset`, so
+ * full-height pages end above it. The dock floats over the page with nothing
+ * behind the pill; its height becomes `--dock-height`, the room a scroller
+ * leaves at its end so its last row can scroll clear of the pill.
  */
 export function MobileBottomChrome({ children }: { children: ReactNode }) {
   const [element, setElement] = useState<HTMLElement | null>(null);
+  const [dock, setDock] = useState<HTMLElement | null>(null);
   useCompactCssVar("--content-inset", element);
+  useCompactCssVar("--dock-height", dock);
   return (
-    <div ref={setElement} className="md:hidden shrink-0">
-      <bottomBarSlot.Target className="empty:hidden" />
-      {children}
-    </div>
+    <>
+      <div ref={setElement} className="md:hidden shrink-0">
+        <bottomBarSlot.Target className="empty:hidden" />
+      </div>
+      <div
+        ref={setDock}
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-40 md:hidden"
+      >
+        {children}
+      </div>
+    </>
   );
 }

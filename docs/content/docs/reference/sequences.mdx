@@ -84,7 +84,7 @@ A document saved with a number it was given moves its sequence past that number:
 A document was saved with a higher number in the sequence's format, by a custom ID, the API, or an AI agent through MCP. Current moved up to it so the next automatic number does not collide. If the jump came from a typo, set Current back under Settings → Sequences, but not below the highest number already used.
 
 ### "Failed to insert …" because the number is already taken
-Before `20261009171423_advance-document-sequence.sql`, a number chosen by the caller never moved the counter, so the counter later issued a number that already existed. `20261009171437_backfill-document-sequences.sql` moved every counter that was behind past the highest existing number. On the sales order form, typing a number that already exists shows "Sales order … already exists" on the field.
+Before `20261012043717_advance-document-sequence.sql`, a number chosen by the caller never moved the counter, so the counter later issued a number that already existed. `20261012043741_backfill-document-sequences.sql` moved every counter that was behind past the highest existing number. On the sales order form, typing a number that already exists shows "Sales order … already exists" on the field.
 
 ### Editing a sequence didn't renumber existing documents
 By design: numbers are written at creation and never recomputed.
