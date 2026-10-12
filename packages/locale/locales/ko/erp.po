@@ -11193,6 +11193,9 @@ msgstr "송장 환율"
 msgid "Invoice schedule"
 msgstr "송장 일정"
 
+msgid "Invoice Separately"
+msgstr ""
+
 msgid "Invoice settlement"
 msgstr "송장 결제"
 
@@ -11222,6 +11225,9 @@ msgstr "송장 발행됨"
 
 msgid "Invoiced Amount:"
 msgstr "송장 발행 금액:"
+
+msgid "Invoiced separately"
+msgstr ""
 
 msgid "Invoiced Statuses"
 msgstr "송장 발행됨 상태"
@@ -16564,6 +16570,9 @@ msgstr "차원 없이 전표를 전기하세요"
 msgid "Push to accounting"
 msgstr "회계로 푸시"
 
+msgid "Put this charge on its own invoice, held for review before it is posted. Otherwise it goes on the agreement's next invoice."
+msgstr ""
+
 msgid "Putting your data back"
 msgstr "데이터 복원 중"
 
@@ -19360,8 +19369,8 @@ msgstr "회계 설정"
 msgid "Set Up Accounting"
 msgstr "회계 설정"
 
-msgid "Set up accounting to use reports, journal entries, accounting periods, fixed assets and more."
-msgstr "보고서, 전표, 회계 기간, 고정자산 등을 사용하기 위해 회계를 설정하십시오."
+msgid "Set up accounting to use reports, journal entries, accounting periods, depreciation runs and more."
+msgstr ""
 
 msgid "Set up authenticator app"
 msgstr "인증자 앱 설정"

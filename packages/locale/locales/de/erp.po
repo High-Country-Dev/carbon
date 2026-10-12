@@ -11193,6 +11193,9 @@ msgstr "Wechselkurs der Rechnung"
 msgid "Invoice schedule"
 msgstr "Rechnungsplan"
 
+msgid "Invoice Separately"
+msgstr ""
+
 msgid "Invoice settlement"
 msgstr "Rechnungsabrechnung"
 
@@ -11222,6 +11225,9 @@ msgstr "Fakturiert"
 
 msgid "Invoiced Amount:"
 msgstr "Fakturierter Betrag:"
+
+msgid "Invoiced separately"
+msgstr ""
 
 msgid "Invoiced Statuses"
 msgstr "Fakturierte Status"
@@ -16564,6 +16570,9 @@ msgstr "Den Buchungssatz ohne die Dimension verbuchen"
 msgid "Push to accounting"
 msgstr "Zur Buchhaltung senden"
 
+msgid "Put this charge on its own invoice, held for review before it is posted. Otherwise it goes on the agreement's next invoice."
+msgstr ""
+
 msgid "Putting your data back"
 msgstr "Ihre Daten werden wiederhergestellt"
 
@@ -19360,8 +19369,8 @@ msgstr "Buchhaltung einrichten"
 msgid "Set Up Accounting"
 msgstr "Buchhaltung einrichten"
 
-msgid "Set up accounting to use reports, journal entries, accounting periods, fixed assets and more."
-msgstr "Richten Sie die Buchhaltung ein, um Berichte, Buchungssätze, Buchungsperioden, Anlagegüter und weitere Funktionen nutzen zu können."
+msgid "Set up accounting to use reports, journal entries, accounting periods, depreciation runs and more."
+msgstr ""
 
 msgid "Set up authenticator app"
 msgstr "Authentifizierungs-App einrichten"

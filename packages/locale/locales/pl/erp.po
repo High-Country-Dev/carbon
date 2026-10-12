@@ -11193,6 +11193,9 @@ msgstr "Kurs wymiany faktury"
 msgid "Invoice schedule"
 msgstr "Harmonogram fakturowania"
 
+msgid "Invoice Separately"
+msgstr ""
+
 msgid "Invoice settlement"
 msgstr "Rozliczenie faktury"
 
@@ -11222,6 +11225,9 @@ msgstr "Zafakturowane"
 
 msgid "Invoiced Amount:"
 msgstr "Kwota zafakturowana:"
+
+msgid "Invoiced separately"
+msgstr ""
 
 msgid "Invoiced Statuses"
 msgstr "Statusy Zafakturowane"
@@ -16564,6 +16570,9 @@ msgstr "Wyślij dowód księgowy bez wymiaru"
 msgid "Push to accounting"
 msgstr "Wyślij do systemu księgowego"
 
+msgid "Put this charge on its own invoice, held for review before it is posted. Otherwise it goes on the agreement's next invoice."
+msgstr ""
+
 msgid "Putting your data back"
 msgstr "Przywracanie twoich danych"
 
@@ -19360,8 +19369,8 @@ msgstr "Skonfiguruj Księgowość"
 msgid "Set Up Accounting"
 msgstr "Skonfiguruj Księgowość"
 
-msgid "Set up accounting to use reports, journal entries, accounting periods, fixed assets and more."
-msgstr "Skonfiguruj Księgowość, aby korzystać z raportów, wpisów dziennika, okresów księgowych, środków trwałych i innych."
+msgid "Set up accounting to use reports, journal entries, accounting periods, depreciation runs and more."
+msgstr ""
 
 msgid "Set up authenticator app"
 msgstr "Skonfiguruj aplikację authenticator"

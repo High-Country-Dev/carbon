@@ -11193,6 +11193,9 @@ msgstr "請求書の為替レート"
 msgid "Invoice schedule"
 msgstr "請求スケジュール"
 
+msgid "Invoice Separately"
+msgstr ""
+
 msgid "Invoice settlement"
 msgstr "請求書決済"
 
@@ -11222,6 +11225,9 @@ msgstr "請求済み"
 
 msgid "Invoiced Amount:"
 msgstr "請求済み金額:"
+
+msgid "Invoiced separately"
+msgstr ""
 
 msgid "Invoiced Statuses"
 msgstr "請求済みステータス"
@@ -16564,6 +16570,9 @@ msgstr "ディメンションなしで仕訳を転記する"
 msgid "Push to accounting"
 msgstr "会計にプッシュ"
 
+msgid "Put this charge on its own invoice, held for review before it is posted. Otherwise it goes on the agreement's next invoice."
+msgstr ""
+
 msgid "Putting your data back"
 msgstr "データを復元中"
 
@@ -19360,8 +19369,8 @@ msgstr "会計を設定"
 msgid "Set Up Accounting"
 msgstr "会計を設定"
 
-msgid "Set up accounting to use reports, journal entries, accounting periods, fixed assets and more."
-msgstr "レポート、仕訳、会計期間、固定資産などを使用するために会計を設定します。"
+msgid "Set up accounting to use reports, journal entries, accounting periods, depreciation runs and more."
+msgstr ""
 
 msgid "Set up authenticator app"
 msgstr "認証アプリをセットアップ"
