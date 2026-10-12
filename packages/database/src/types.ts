@@ -89803,9 +89803,11 @@ export type Database = {
           p_exclude_allocated?: boolean
           p_exclude_line_id?: string
           p_exclude_lineside?: boolean
+          p_filter_storage_unit?: boolean
           p_item_id: string
           p_location_id: string
           p_sort_method?: string
+          p_storage_unit_id?: string
         }
         Returns: {
           availableQuantity: number

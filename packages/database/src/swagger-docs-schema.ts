@@ -104026,6 +104026,20 @@ export default {
             name: "p_sort_method",
             required: false,
             type: "string"
+          },
+          {
+            format: "boolean",
+            in: "query",
+            name: "p_filter_storage_unit",
+            required: false,
+            type: "boolean"
+          },
+          {
+            format: "text",
+            in: "query",
+            name: "p_storage_unit_id",
+            required: false,
+            type: "string"
           }
         ],
         produces: [
@@ -104064,6 +104078,10 @@ export default {
                   format: "boolean",
                   type: "boolean"
                 },
+                p_filter_storage_unit: {
+                  format: "boolean",
+                  type: "boolean"
+                },
                 p_item_id: {
                   format: "text",
                   type: "string"
@@ -104073,6 +104091,10 @@ export default {
                   type: "string"
                 },
                 p_sort_method: {
+                  format: "text",
+                  type: "string"
+                },
+                p_storage_unit_id: {
                   format: "text",
                   type: "string"
                 }
