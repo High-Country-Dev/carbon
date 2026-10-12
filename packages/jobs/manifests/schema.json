@@ -1,11 +1,11 @@
 {
   "kind": "carbon-company-backup",
   "version": 1,
-  "schemaVersion": "20261008171101",
+  "schemaVersion": "20261012043741",
   "sourceCompanyId": "schema-baseline",
   "sourceCompanyGroupId": null,
   "sourceCompanyName": null,
-  "exportedAt": "2026-10-09T04:43:53.337Z",
+  "exportedAt": "2026-10-12T04:41:12.765Z",
   "exportedBy": "schema-baseline",
   "label": "schema baseline",
   "includeStorage": "none",
@@ -99,7 +99,8 @@
         "rentalIncomeAccount",
         "leaseRevenueAccount",
         "leaseInterestIncomeAccount",
-        "netInvestmentInLeasesAccount"
+        "netInvestmentInLeasesAccount",
+        "migrationClearingAccount"
       ]
     },
     {
@@ -454,7 +455,10 @@
         "leaseSubstantiallyAllThresholdPercent",
         "leaseDefaultDiscountRate",
         "invoiceAutomation",
-        "invoiceNotificationGroup"
+        "invoiceNotificationGroup",
+        "accountingCutoverDate",
+        "accountingActivatedAt",
+        "accountingActivatedBy"
       ]
     },
     {
@@ -1119,7 +1123,8 @@
         "updatedAt",
         "updatedBy",
         "intercompanyPartnerId",
-        "createdBy"
+        "createdBy",
+        "accountDefaultRole"
       ]
     },
     {
@@ -6365,7 +6370,13 @@
         "createdBy",
         "createdAt",
         "updatedAt",
-        "updatedBy"
+        "updatedBy",
+        "rentalAgreementLineId",
+        "meter",
+        "notes",
+        "takeOutOfService",
+        "outOfServiceReason",
+        "residualDestination"
       ]
     },
     {
@@ -6664,7 +6675,9 @@
         "createdBy",
         "createdAt",
         "updatedAt",
-        "updatedBy"
+        "updatedBy",
+        "rentalAgreementLineId",
+        "meter"
       ]
     },
     {
@@ -7177,9 +7190,10 @@
         "updatedBy",
         "updatedAt",
         "customFields",
-        "unitPrice",
+        "supplierUnitPrice",
         "tags",
-        "orderMultiple"
+        "orderMultiple",
+        "currencyCode"
       ]
     },
     {
@@ -7188,7 +7202,7 @@
       "columns": [
         "supplierPartId",
         "quantity",
-        "unitPrice",
+        "supplierUnitPrice",
         "sourceType",
         "sourceDocumentId",
         "companyId",
@@ -7468,6 +7482,7 @@
     "oauthClient",
     "oauthCode",
     "oauthToken",
+    "pushSubscription",
     "ssoConnection",
     "ssoDomain",
     "tableChange",

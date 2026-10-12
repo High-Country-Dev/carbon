@@ -57,6 +57,11 @@ import { Enumerable } from "~/components/Enumerable";
 import { Tags } from "~/components/Form";
 import { useSupplierTypes } from "~/components/Form/SupplierType";
 import {
+  RecordAction,
+  RecordHero,
+  RecordPhoneChrome
+} from "~/components/Layout/RecordHeader";
+import {
   ApprovalDecision as ApprovalDecisionModal,
   ConfirmDelete
 } from "~/components/Modals";
@@ -152,11 +157,30 @@ const SupplierHeader = () => {
     [supplierId]
   );
 
+  const menuItems = (
+    <>
+      {auditLogTrigger}
+      <DropdownMenuSeparator />
+      <DropdownMenuItem
+        shortcut={MENU_ITEM_SHORTCUTS.delete}
+        disabled={!permissions.can("delete", "purchasing")}
+        destructive
+        onClick={deleteModal.onOpen}
+      >
+        <DropdownMenuIcon icon={<LuTrash />} />
+        <Trans>Delete Supplier</Trans>
+      </DropdownMenuItem>
+    </>
+  );
   return (
     <>
+      {/* The app bar titles the record with its name, so no hero. */}
+      {/* No hero; it still zeroes --header-height on phones. */}
+      <RecordHero />
+      <RecordPhoneChrome menu={menuItems} copyValue={supplierId} />
       <VStack>
         <Card>
-          <HStack className="justify-between items-start">
+          <HStack className="justify-between items-start max-md:hidden">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <span>{routeData?.supplier?.name}</span>
@@ -169,19 +193,7 @@ const SupplierHeader = () => {
                       size="sm"
                     />
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    {auditLogTrigger}
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      shortcut={MENU_ITEM_SHORTCUTS.delete}
-                      disabled={!permissions.can("delete", "purchasing")}
-                      destructive
-                      onClick={deleteModal.onOpen}
-                    >
-                      <DropdownMenuIcon icon={<LuTrash />} />
-                      <Trans>Delete Supplier</Trans>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
+                  <DropdownMenuContent>{menuItems}</DropdownMenuContent>
                 </DropdownMenu>
                 <Copy
                   text={supplierId}
@@ -194,54 +206,62 @@ const SupplierHeader = () => {
               {isApprovalRequired &&
                 status !== "Active" &&
                 !hasApprovalRequest && (
-                  <Button
-                    leftIcon={<LuClipboardCheck />}
-                    variant="primary"
-                    isDisabled={
-                      !permissions.can("update", "purchasing") ||
-                      requestApprovalFetcher.state !== "idle"
-                    }
-                    isLoading={requestApprovalFetcher.state !== "idle"}
-                    onClick={submitRequestApproval}
-                  >
-                    <Trans>Request Approval</Trans>
-                  </Button>
+                  <RecordAction slot="primary">
+                    <Button
+                      leftIcon={<LuClipboardCheck />}
+                      variant="primary"
+                      isDisabled={
+                        !permissions.can("update", "purchasing") ||
+                        requestApprovalFetcher.state !== "idle"
+                      }
+                      isLoading={requestApprovalFetcher.state !== "idle"}
+                      onClick={submitRequestApproval}
+                    >
+                      <Trans>Request Approval</Trans>
+                    </Button>
+                  </RecordAction>
                 )}
               {status === "Active" && canApprove && (
-                <Button
-                  leftIcon={<LuX />}
-                  variant="secondary"
-                  isLoading={makeInactiveFetcher.state !== "idle"}
-                  isDisabled={makeInactiveFetcher.state !== "idle"}
-                  onClick={makeInactiveModal.onOpen}
-                >
-                  <Trans>Make Inactive</Trans>
-                </Button>
+                <RecordAction slot="secondary">
+                  <Button
+                    leftIcon={<LuX />}
+                    variant="secondary"
+                    isLoading={makeInactiveFetcher.state !== "idle"}
+                    isDisabled={makeInactiveFetcher.state !== "idle"}
+                    onClick={makeInactiveModal.onOpen}
+                  >
+                    <Trans>Make Inactive</Trans>
+                  </Button>
+                </RecordAction>
               )}
               {isPending && hasApprovalRequest && (
                 <>
-                  <Button
-                    leftIcon={<LuCheckCheck />}
-                    variant="primary"
-                    isLoading={requestApprovalFetcher.state !== "idle"}
-                    isDisabled={
-                      !canApprove || requestApprovalFetcher.state !== "idle"
-                    }
-                    onClick={() => setApprovalDecision("Approved")}
-                  >
-                    <Trans>Approve</Trans>
-                  </Button>
-                  <Button
-                    leftIcon={<LuX />}
-                    variant="destructive"
-                    isLoading={requestApprovalFetcher.state !== "idle"}
-                    isDisabled={
-                      !canApprove || requestApprovalFetcher.state !== "idle"
-                    }
-                    onClick={() => setApprovalDecision("Rejected")}
-                  >
-                    <Trans>Reject</Trans>
-                  </Button>
+                  <RecordAction slot="primary">
+                    <Button
+                      leftIcon={<LuCheckCheck />}
+                      variant="primary"
+                      isLoading={requestApprovalFetcher.state !== "idle"}
+                      isDisabled={
+                        !canApprove || requestApprovalFetcher.state !== "idle"
+                      }
+                      onClick={() => setApprovalDecision("Approved")}
+                    >
+                      <Trans>Approve</Trans>
+                    </Button>
+                  </RecordAction>
+                  <RecordAction slot="secondary">
+                    <Button
+                      leftIcon={<LuX />}
+                      variant="destructive"
+                      isLoading={requestApprovalFetcher.state !== "idle"}
+                      isDisabled={
+                        !canApprove || requestApprovalFetcher.state !== "idle"
+                      }
+                      onClick={() => setApprovalDecision("Rejected")}
+                    >
+                      <Trans>Reject</Trans>
+                    </Button>
+                  </RecordAction>
                 </>
               )}
             </CardAction>
