@@ -276,6 +276,50 @@ describe.skipIf(!hasLocalDatabase)("tracked entity source bin", () => {
     }
   );
 
+  databaseTest(
+    "a shipment refuses a batch whose bin cannot cover the quantity",
+    async () => {
+      const lot = { itemId: batchItemId, quantity: 6 };
+      const batch = await stockIn("ship-batch-spread", aftersales, lot);
+      // The same batch also holds 4 in another bin, so 10 in total.
+      await seed(f, (trx) =>
+        trx
+          .insertInto("itemLedger")
+          .values({
+            itemId: batchItemId,
+            trackedEntityId: batch,
+            quantity: 4,
+            locationId: f.locationId,
+            storageUnitId: readyToSell,
+            entryType: "Positive Adjmt.",
+            companyId: f.companyId,
+            createdBy: USER
+          })
+          .execute()
+      );
+      await seed(f, (trx) =>
+        trx
+          .updateTable("trackedEntity")
+          .set({ quantity: 10 })
+          .where("id", "=", batch)
+          .execute()
+      );
+      const shipmentId = await shipmentFor("ship-batch-spread", batch, {
+        itemId: batchItemId,
+        quantity: 8
+      });
+
+      const result = await postShipment(f.ctx, { type: "post", shipmentId });
+      expect(result.error?.message).toMatch(
+        /SN-ship-batch-spread has only 6 in one storage unit, 8 needed/
+      );
+      expect(await onHand(batch)).toEqual({
+        [aftersales]: 6,
+        [readyToSell]: 4
+      });
+    }
+  );
+
   databaseTest("a shipment refuses a serial with no stock", async () => {
     const serial = await stockIn("ship-empty", "none");
     const shipmentId = await shipmentFor("ship-empty", serial);

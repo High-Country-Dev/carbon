@@ -303,7 +303,8 @@ const postShipment = defineServerFn({
               const locationId = shipmentHeader.locationId;
 
               // A serial or batch leaves the bin it actually holds stock in; the
-              // line's bin is only a default. One with no stock is refused.
+              // line's bin is only a default. A unit whose bin cannot cover the
+              // quantity is refused rather than driving that bin negative.
               const trackedEntityBins = await getTrackedEntityBins(db, {
                 trackedEntityIds: (shipmentLineTracking.data ?? []).map(
                   (tracking) => tracking.id
@@ -319,21 +320,27 @@ const postShipment = defineServerFn({
               });
               const sourceBin = (
                 trackedEntityId: string | undefined,
-                lineLocationId: string | null
+                lineLocationId: string | null,
+                quantity: number
               ): string | null => {
                 const bin =
                   trackedEntityId && lineLocationId
                     ? trackedEntityBins(trackedEntityId, lineLocationId)
                     : undefined;
-                if (bin === undefined) {
-                  const readableId = shipmentLineTracking.data?.find(
-                    (tracking) => tracking.id === trackedEntityId
-                  )?.readableId;
+                if (!bin || round(bin.quantity) < round(quantity)) {
+                  const readableId =
+                    shipmentLineTracking.data?.find(
+                      (tracking) => tracking.id === trackedEntityId
+                    )?.readableId ??
+                    trackedEntityId ??
+                    "A tracked item";
                   throw new Error(
-                    `${readableId ?? trackedEntityId ?? "A tracked item"} has no stock to ship at this location`
+                    bin
+                      ? `${readableId} has only ${round(bin.quantity)} in one storage unit, ${round(quantity)} needed. Move it into one storage unit first`
+                      : `${readableId} has no stock to ship at this location`
                   );
                 }
-                return bin;
+                return bin.storageUnitId;
               };
 
               for await (const shipmentLine of shipmentLines.data) {
@@ -493,7 +500,8 @@ const postShipment = defineServerFn({
                     locationId: shipmentLine.locationId ?? locationId,
                     storageUnitId: sourceBin(
                       batchId,
-                      shipmentLine.locationId ?? locationId
+                      shipmentLine.locationId ?? locationId,
+                      shippedQuantity
                     ),
                     entryType: "Negative Adjmt.",
                     documentType: "Sales Shipment",
@@ -523,7 +531,8 @@ const postShipment = defineServerFn({
                       locationId: shipmentLine.locationId ?? locationId,
                       storageUnitId: sourceBin(
                         tracking.id,
-                        shipmentLine.locationId ?? locationId
+                        shipmentLine.locationId ?? locationId,
+                        1
                       ),
                       entryType: "Negative Adjmt.",
                       documentType: "Sales Shipment",
@@ -982,7 +991,8 @@ const postShipment = defineServerFn({
                       bin: {
                         storageUnitId: sourceBin(
                           splitInfo.originalEntityId,
-                          shipmentLine?.locationId ?? locationId
+                          shipmentLine?.locationId ?? locationId,
+                          splitInfo.shippedQuantity
                         ),
                         locationId
                       },

@@ -56,8 +56,7 @@ describe("resolveTrackedEntityBins", () => {
       row("te", "aftersales", -1),
       row("te", null, 1)
     ]);
-    expect(bins.get("te")).toBeNull();
-    expect(bins.has("te")).toBe(true);
+    expect(bins.get("te")).toEqual({ storageUnitId: null, quantity: 1 });
   });
 
   it("picks the positive bin when another bin is negative", () => {
@@ -66,7 +65,7 @@ describe("resolveTrackedEntityBins", () => {
       row("te", null, 1),
       row("te", "ready-to-sell", -1)
     ]);
-    expect(bins.get("te")).toBeNull();
+    expect(bins.get("te")).toEqual({ storageUnitId: null, quantity: 1 });
   });
 
   it("leaves out an entity with no positive bin", () => {
@@ -84,8 +83,8 @@ describe("resolveTrackedEntityBins", () => {
       row("serial", "binC", 1),
       row(null, "binD", 9)
     ]);
-    expect(bins.get("batch")).toEqual("binB");
-    expect(bins.get("serial")).toEqual("binC");
+    expect(bins.get("batch")).toEqual({ storageUnitId: "binB", quantity: 15 });
+    expect(bins.get("serial")).toEqual({ storageUnitId: "binC", quantity: 1 });
     expect(bins.size).toBe(2);
   });
 });
