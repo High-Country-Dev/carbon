@@ -4,6 +4,7 @@
 
 import type { Database } from "@carbon/database";
 import type { Kysely, KyselyDatabase } from "@carbon/database/client";
+import { getLogger } from "@carbon/logger";
 import { datetime } from "@carbon/utils";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { toDocumentApprovalState, withdrawalVerdict } from "./document";
@@ -21,6 +22,8 @@ import type {
   ApprovalDocumentsRef,
   DocumentApprovalState
 } from "./types";
+
+const logger = getLogger("ee", "approvals");
 
 // The document-level approval lifecycle (state, open, cancel, decide), shared by
 // every approval document type. Each takes the service role: approvalRequest has
@@ -59,6 +62,16 @@ export async function getDocumentApprovalState(
       doc.userId
     )
   ]);
+
+  // A failed read must not look like "nothing pending": the page would hide
+  // Pending Approval and offer the advance form.
+  if (latest.error) {
+    logger.error("Failed to read the latest approval request", {
+      ...doc,
+      error: latest.error
+    });
+    throw new Error("Failed to read approval requests");
+  }
 
   return toDocumentApprovalState(latest.data, { isRequired, canApprove });
 }

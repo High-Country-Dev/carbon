@@ -814,7 +814,17 @@ export async function hasPendingApproval(
     .eq("status", "Pending")
     .limit(1);
 
-  return (result.data?.length ?? 0) > 0;
+  // Fail closed: "false" would unlock edits and skip the approval gate.
+  if (result.error) {
+    logger.error("Failed to check for a pending approval request", {
+      documentType,
+      documentId,
+      error: result.error
+    });
+    throw new Error("Failed to read approval requests");
+  }
+
+  return result.data.length > 0;
 }
 
 export async function isApprovalRequired(
