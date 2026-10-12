@@ -37,9 +37,13 @@ export const attachments = {
   address: { before: ["sync_address_to_parent"], events: true },
   assemblyPlanJob: { statement: ["broadcast_table_changes"] },
   changeOrder: {
+    events: true,
     after: ["sync_advance_document_sequence"],
     statement: ["broadcast_table_changes"]
   },
+  changeOrderActionTask: { events: true },
+  changeOrderAffectedItem: { events: true },
+  changeOrderSupersession: { events: true },
   charge: { events: true },
   company: { after: ["sync_insert_company_related_records"] },
   companyIntegration: { before: ["sync_verify_integration"], events: true },
