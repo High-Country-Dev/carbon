@@ -10,6 +10,7 @@ import {
   storage
 } from "@carbon/files";
 import { getLogger } from "@carbon/logger";
+import { useRevalidator } from "@carbon/query";
 import type { JSONContent } from "@carbon/react";
 import {
   Card,
@@ -21,10 +22,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   File,
-  generateHTML,
   HStack,
   IconButton,
   MENU_ITEM_SHORTCUTS,
+  RichTextView,
   Skeleton,
   Table,
   Tbody,
@@ -33,7 +34,8 @@ import {
   Thead,
   Tr,
   toast,
-  useDebounce
+  useDebounce,
+  useViewport
 } from "@carbon/react";
 import { Editor } from "@carbon/react/Editor";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -41,7 +43,7 @@ import type { FileObject } from "@supabase/storage-js";
 import type { ChangeEvent } from "react";
 import { Suspense, useCallback, useState } from "react";
 import { LuEllipsisVertical, LuUpload } from "react-icons/lu";
-import { Await, useRevalidator } from "react-router";
+import { Await } from "react-router";
 import { DocumentPreview, FileDropzone } from "~/components";
 import DocumentIcon from "~/components/DocumentIcon";
 import {
@@ -109,11 +111,9 @@ export function MaintenanceDispatchNotes({
             }}
           />
         ) : (
-          <div
-            className="prose dark:prose-invert"
-            dangerouslySetInnerHTML={{
-              __html: generateHTML(content as JSONContent)
-            }}
+          <RichTextView
+            content={content as JSONContent}
+            empty={<Trans>No notes</Trans>}
           />
         )}
       </CardContent>
@@ -187,6 +187,7 @@ function MaintenanceFilesContent({
   isReadOnly: boolean;
 }) {
   const { t } = useLingui();
+  const { isPhone } = useViewport();
   const { carbon } = useCarbon();
   const { company } = useUser();
   const revalidator = useRevalidator();
@@ -370,7 +371,8 @@ function MaintenanceFilesContent({
           )}
         </Tbody>
       </Table>
-      {!isReadOnly && <FileDropzone onDrop={onDrop} />}
+      {/* Phones: the header Upload already opens the same picker. */}
+      {!isReadOnly && !isPhone && <FileDropzone onDrop={onDrop} />}
     </>
   );
 }

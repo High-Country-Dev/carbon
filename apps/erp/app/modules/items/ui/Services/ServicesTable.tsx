@@ -28,7 +28,7 @@ import {
   useDisclosure,
   VStack
 } from "@carbon/react";
-
+import { distinctItemText } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
@@ -117,7 +117,7 @@ const ServicesTable = memo(({ data, tags, count }: ServicesTableProps) => {
     const defaultColumns: ColumnDef<ServiceListItem>[] = [
       {
         accessorKey: "id",
-        header: t`Service ID`,
+        header: t`Service`,
         cell: ({ row }) => (
           <HStack className="py-1 min-w-[200px] truncate">
             <ItemThumbnail
@@ -128,14 +128,20 @@ const ServicesTable = memo(({ data, tags, count }: ServicesTableProps) => {
             <Hyperlink to={path.to.serviceDetails(row.original.id!)}>
               <VStack spacing={0}>
                 {row.original.readableIdWithRevision}
-                <div className="w-full truncate text-muted-foreground text-xs">
-                  {row.original.name}
-                </div>
+                {distinctItemText(
+                  row.original.readableIdWithRevision,
+                  row.original.name
+                ) && (
+                  <div className="w-full truncate text-muted-foreground text-xs">
+                    {row.original.name}
+                  </div>
+                )}
               </VStack>
             </Hyperlink>
           </HStack>
         ),
         meta: {
+          mobile: "P1",
           icon: <LuBookMarked />,
           // The accessor is the raw item id — export the readable id
           // the cell shows instead of a UUID.
@@ -156,6 +162,7 @@ const ServicesTable = memo(({ data, tags, count }: ServicesTableProps) => {
           </div>
         ),
         meta: {
+          mobile: "P3",
           icon: <LuAlignJustify />
         }
       },
@@ -194,6 +201,7 @@ const ServicesTable = memo(({ data, tags, count }: ServicesTableProps) => {
           </Badge>
         ),
         meta: {
+          mobile: "P2",
           filter: {
             type: "static",
             options: serviceReplenishmentSystems.map((type) => ({
@@ -566,7 +574,12 @@ const ServicesTable = memo(({ data, tags, count }: ServicesTableProps) => {
         primaryAction={
           permissions.can("create", "parts") && (
             <div className="flex items-center gap-2">
-              <Button variant="secondary" leftIcon={<LuGroup />} asChild>
+              <Button
+                variant="secondary"
+                leftIcon={<LuGroup />}
+                className="max-md:hidden"
+                asChild
+              >
                 <Link to={path.to.itemPostingGroups}>
                   <Trans>Item Groups</Trans>
                 </Link>

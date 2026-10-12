@@ -10,6 +10,7 @@ export type { ChangedRows } from "./useChangedRows";
 export { useChangedRows } from "./useChangedRows";
 export type { LiveList, LiveListStorage } from "./useLiveList";
 export { LiveLists, liveListKey, useLiveList } from "./useLiveList";
+export type { LoaderData } from "./useLoaderQuery";
 export { useLoaderQuery } from "./useLoaderQuery";
 export type { BroadcastChange } from "./useRealtime";
 export {
@@ -21,3 +22,4 @@ export {
   useTopic
 } from "./useRealtime";
 export { useRealtimeChannel } from "./useRealtimeChannel";
+export { useRevalidator } from "./useRevalidator";

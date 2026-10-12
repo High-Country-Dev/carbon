@@ -12,9 +12,10 @@ import {
   MENU_ITEM_SHORTCUTS,
   MenuIcon,
   MenuItem,
+  RecordOutlet,
   VStack
 } from "@carbon/react";
-import { isUnaffectedByNavigation, redirect } from "@carbon/utils";
+import { redirect } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -31,11 +32,8 @@ import {
   LuTriangleAlert,
   LuUsers
 } from "react-icons/lu";
-import type {
-  LoaderFunctionArgs,
-  ShouldRevalidateFunction
-} from "react-router";
-import { Link, Outlet, useFetcher, useLoaderData } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import { Link, useFetcher, useLoaderData } from "react-router";
 import { Hyperlink, New, Table } from "~/components";
 import { usePermissions } from "~/hooks";
 import {
@@ -50,9 +48,6 @@ export const handle: Handle = {
   breadcrumb: msg`Assignments`,
   to: path.to.trainingAssignments
 };
-
-export const shouldRevalidate: ShouldRevalidateFunction = (args) =>
-  isUnaffectedByNavigation(args) ? false : args.defaultShouldRevalidate;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {
@@ -117,6 +112,7 @@ const TrainingAssignmentsTable = memo(
             </Hyperlink>
           ),
           meta: {
+            mobile: "P1",
             icon: <LuBookOpen />
           }
         },
@@ -135,6 +131,7 @@ const TrainingAssignmentsTable = memo(
           header: t`Period`,
           cell: ({ row }) => row.original.currentPeriod ?? "-",
           meta: {
+            mobile: "P3",
             icon: <LuClock />
           }
         },
@@ -208,6 +205,7 @@ const TrainingAssignmentsTable = memo(
             />
           ),
           meta: {
+            mobile: "P2",
             icon: <LuChartColumnIncreasing />
           }
         }
@@ -287,7 +285,7 @@ export default function TrainingAssignmentsRoute() {
         data={summary}
         assignmentsByTraining={assignmentsByTraining}
       />
-      <Outlet />
+      <RecordOutlet />
     </VStack>
   );
 }

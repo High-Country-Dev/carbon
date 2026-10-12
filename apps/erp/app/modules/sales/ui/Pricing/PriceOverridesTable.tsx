@@ -24,6 +24,7 @@ import {
   TooltipTrigger,
   VStack
 } from "@carbon/react";
+import { distinctItemText } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
@@ -153,13 +154,18 @@ const PriceListTable = memo(
                     {row.original.partId}
                   </span>
                 )}
-                <div className="w-full truncate text-muted-foreground text-xs">
-                  {row.original.itemName}
-                </div>
+                {distinctItemText(
+                  row.original.partId,
+                  row.original.itemName
+                ) && (
+                  <div className="w-full truncate text-muted-foreground text-xs">
+                    {row.original.itemName}
+                  </div>
+                )}
               </VStack>
             </HStack>
           ),
-          meta: { icon: <LuBookMarked /> }
+          meta: { icon: <LuBookMarked />, mobile: "P1" }
         },
         {
           accessorKey: "itemPostingGroupId",
@@ -178,7 +184,8 @@ const PriceListTable = memo(
                 label: <Enumerable value={group.label} />
               }))
             },
-            icon: <LuGroup />
+            icon: <LuGroup />,
+            mobile: "P3"
           }
         },
         {
@@ -189,7 +196,10 @@ const PriceListTable = memo(
               {currencyFormatter.format(row.original.basePrice)}
             </span>
           ),
-          meta: { icon: <LuCircleDollarSign /> }
+          meta: {
+            icon: <LuCircleDollarSign />,
+            mobile: hasScope ? undefined : "P2"
+          }
         }
       ];
 
@@ -217,7 +227,7 @@ const PriceListTable = memo(
                 />
               </HStack>
             ),
-            meta: { icon: <LuCircleDollarSign /> }
+            meta: { icon: <LuCircleDollarSign />, mobile: "P2" }
           },
           {
             accessorKey: "source",

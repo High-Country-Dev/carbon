@@ -6,9 +6,12 @@ import { assertIsPost, error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { validationError, validator } from "@carbon/form";
+import { Card, CardContent, CardHeader, Heading } from "@carbon/react";
 import { redirect } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import { NewRecordPage } from "~/components/NewRecordPage";
 import { useUser } from "~/hooks";
 import {
   insertWarehouseTransfer,
@@ -87,8 +90,18 @@ export default function WarehouseTransferNewRoute() {
   };
 
   return (
-    <div className="max-w-4xl w-full p-2 sm:p-0 mx-auto mt-0 md:mt-8">
-      <WarehouseTransferForm initialValues={initialValues} />
-    </div>
+    <NewRecordPage>
+      <Card>
+        <CardHeader>
+          <Heading as="h1" size="h3" className="font-sans">
+            <Trans>New Warehouse Transfer</Trans>
+          </Heading>
+        </CardHeader>
+        {/* The form's field grid follows its container's width. */}
+        <CardContent className="@container">
+          <WarehouseTransferForm initialValues={initialValues} />
+        </CardContent>
+      </Card>
+    </NewRecordPage>
   );
 }

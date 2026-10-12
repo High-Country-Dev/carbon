@@ -9,7 +9,7 @@ import { getCompanyPrivateBucket, storage } from "@carbon/files";
 import { convertHeicToJpeg, isHeic } from "@carbon/files/media";
 import { Array as ArrayInput, Input, ValidatedForm } from "@carbon/form";
 import { getLogger } from "@carbon/logger";
-import { useAction, useChangedRows } from "@carbon/query";
+import { useAction, useChangedRows, useRevalidator } from "@carbon/query";
 import type { JSONContent } from "@carbon/react";
 import {
   Alert,
@@ -24,6 +24,7 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
+  ContextMenuItem,
   Count,
   cn,
   DropdownMenu,
@@ -53,6 +54,7 @@ import {
   useDebounce,
   useDisclosure,
   useMount,
+  useViewport,
   VStack
 } from "@carbon/react";
 import { Editor } from "@carbon/react/Editor";
@@ -87,15 +89,11 @@ import {
   LuRefreshCcw,
   LuSend,
   LuShieldX,
-  LuTriangleAlert
+  LuSquareChartGantt,
+  LuTriangleAlert,
+  LuWorkflow
 } from "react-icons/lu";
-import {
-  Link,
-  useFetcher,
-  useFetchers,
-  useParams,
-  useRevalidator
-} from "react-router";
+import { Link, useFetcher, useFetchers, useParams } from "react-router";
 import type { z } from "zod";
 import {
   Assignee,
@@ -124,7 +122,6 @@ import {
 import AssemblyInstruction from "~/components/Form/AssemblyInstruction";
 import InspectionDocument from "~/components/Form/InspectionDocument";
 import Procedure from "~/components/Form/Procedure";
-import { SupplierProcessPreview } from "~/components/Form/SupplierProcess";
 import { getUnitHint } from "~/components/Form/UnitHint";
 import UnitOfMeasure, {
   useUnitOfMeasure
@@ -141,6 +138,7 @@ import {
   SortableListItemToggle
 } from "~/components/SortableList";
 import { StepLinkEditor } from "~/components/StepLinkEditor";
+import { CompactEmpty } from "~/components/Table/components/Compact/CompactEmpty";
 import {
   useCurrencyDecimals,
   useImageUpload,
@@ -149,6 +147,10 @@ import {
   useUrlParams,
   useUser
 } from "~/hooks";
+import {
+  OperationRowDetails,
+  OperationRowTitle
+} from "~/modules/items/ui/Item/MethodRow";
 import type {
   OperationParameter,
   OperationStep,
@@ -240,6 +242,17 @@ type JobBillOfProcessProps = {
   customerId: string;
 };
 
+function newIssueUrl(
+  operation: Operation,
+  urlParams: { [key: string]: string }
+) {
+  return `${path.to.newIssue}?${new URLSearchParams({
+    jobOperationId: operation.id!,
+    operationSupplierProcessId: operation.operationSupplierProcessId ?? "",
+    ...urlParams
+  }).toString()}`;
+}
+
 function makeItems(
   operations: Operation[],
   tags: { name: string }[],
@@ -272,67 +285,40 @@ function makeItem(
   return {
     id: operation.id!,
     title: (
-      <VStack spacing={0}>
-        <HStack spacing={2} className="w-full min-w-0">
-          <h3 className="font-semibold min-w-0 truncate cursor-pointer">
-            {operation.description}
-          </h3>
-          {operation.reworkId && <Badge variant="red">Rework</Badge>}
-          {operation.jobOperationBatch &&
-            (operation.jobOperationBatch.status === "Active" ||
-              operation.jobOperationBatch.status === "Completing") && (
-              <Badge
-                variant={
-                  operation.jobOperationBatch.status === "Completing"
-                    ? "yellow"
-                    : "secondary"
-                }
-              >
-                {operation.jobOperationBatch.readableId}
+      <OperationRowTitle
+        description={operation.description}
+        operationType={operation.operationType}
+        processId={operation.processId}
+        supplierProcessId={operation.operationSupplierProcessId}
+        badges={
+          <>
+            {operation.reworkId && (
+              <Badge variant="red">
+                <Trans>Rework</Trans>
               </Badge>
             )}
-        </HStack>
-        {operation.operationType === "Outside Processing" && (
-          <SupplierProcessPreview
-            processId={operation.processId}
-            supplierProcessId={operation.operationSupplierProcessId}
-          />
-        )}
-      </VStack>
+            {operation.jobOperationBatch &&
+              (operation.jobOperationBatch.status === "Active" ||
+                operation.jobOperationBatch.status === "Completing") && (
+                <Badge
+                  variant={
+                    operation.jobOperationBatch.status === "Completing"
+                      ? "yellow"
+                      : "secondary"
+                  }
+                >
+                  {operation.jobOperationBatch.readableId}
+                </Badge>
+              )}
+          </>
+        }
+      />
     ),
     checked: false,
     order: operation.operationOrder,
-    details: (
-      <HStack spacing={1}>
-        {operation.operationType === "Outside Processing" ? (
-          <Badge>Outside Processing</Badge>
-        ) : (
-          <>
-            {(operation?.setupTime ?? 0) > 0 && (
-              <Badge variant="secondary">
-                <TimeTypeIcon type="Setup" className="h-3 w-3 mr-1" />
-                {operation.setupTime} {operation.setupUnit}
-              </Badge>
-            )}
-            {(operation?.laborTime ?? 0) > 0 && (
-              <Badge variant="secondary">
-                <TimeTypeIcon type="Labor" className="h-3 w-3 mr-1" />
-                {operation.laborTime} {operation.laborUnit}
-              </Badge>
-            )}
-
-            {(operation?.machineTime ?? 0) > 0 && (
-              <Badge variant="secondary">
-                <TimeTypeIcon type="Machine" className="h-3 w-3 mr-1" />
-                {operation.machineTime} {operation.machineUnit}
-              </Badge>
-            )}
-          </>
-        )}
-      </HStack>
-    ),
+    details: <OperationRowDetails operation={operation} />,
     footer: temporaryItems[operation.id!] ? null : (
-      <HStack className="w-full justify-between">
+      <HStack className="w-full justify-between max-md:flex-col max-md:items-start max-md:gap-1 max-md:space-x-0">
         <HStack>
           <JobOperationStatus operation={operation} />
           <Assignee
@@ -342,13 +328,14 @@ function makeItem(
             value={operation.assignee ?? undefined}
           />
         </HStack>
-        <HStack>
+        <HStack className="max-md:flex-wrap">
           {projectedDate &&
             (behindDays > 0 ? (
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Badge variant="red">
-                    <Trans>Projected {formatDate(projectedDate)}</Trans>
+                  <Badge variant="red" className="gap-1">
+                    <LuSquareChartGantt className="size-3 shrink-0" />
+                    {formatDate(projectedDate)}
                   </Badge>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -358,8 +345,9 @@ function makeItem(
                 </TooltipContent>
               </Tooltip>
             ) : (
-              <span className="text-xs text-muted-foreground whitespace-nowrap">
-                <Trans>Projected {formatDate(projectedDate)}</Trans>
+              <span className="inline-flex items-center gap-1 text-xs text-muted-foreground whitespace-nowrap">
+                <LuSquareChartGantt className="size-3 shrink-0" />
+                {formatDate(projectedDate)}
               </span>
             ))}
           <OperationDueDatePicker
@@ -373,6 +361,7 @@ function makeItem(
               <a
                 href={path.to.external.mesJobOperation(operation.id!)}
                 title={t`Open in MES`}
+                className="max-md:hidden"
               >
                 <IconButton
                   icon={<LuPlay />}
@@ -391,13 +380,9 @@ function makeItem(
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                to={`${path.to.newIssue}?${new URLSearchParams({
-                  jobOperationId: operation.id,
-                  operationSupplierProcessId:
-                    operation.operationSupplierProcessId ?? "",
-                  ...urlParams
-                }).toString()}`}
+                to={newIssueUrl(operation, urlParams)}
                 title={t`Create Issue`}
+                className="max-md:hidden"
               >
                 <IconButton
                   icon={<LuShieldX />}
@@ -546,12 +531,10 @@ const JobBillOfProcess = ({
     });
 
   const [checkedState, setCheckedState] = useState<CheckedState>({});
-  const [orderState, setOrderState] = useState<OrderState>(() => {
-    return initialOperations.reduce((acc, op) => {
-      acc[op.id!] = op.order;
-      return acc;
-    }, {} as OrderState);
-  });
+  // Only the rows this session has reordered. Every other row takes its order
+  // from the loaded data: a copy of all of them taken at mount hid a reorder
+  // made anywhere else until the page was reloaded.
+  const [orderState, setOrderState] = useState<OrderState>({});
 
   const operationsById = new Map<
     string,
@@ -598,15 +581,12 @@ const JobBillOfProcess = ({
     (a, b) => (orderState[a.id!] ?? a.order) - (orderState[b.id!] ?? b.order)
   );
 
+  const issueUrlParams = { itemId, salesOrderLineId, customerId };
   const items = makeItems(
     operations,
     tags,
     temporaryItems,
-    {
-      itemId,
-      salesOrderLineId,
-      customerId
-    },
+    issueUrlParams,
     t
   ).map((item) => ({
     ...item,
@@ -616,6 +596,7 @@ const JobBillOfProcess = ({
   const isDisabled = ["Completed", "Cancelled"].includes(
     jobData?.job?.status ?? ""
   );
+  const isReadOnly = isDisabled || !permissions.can("update", "production");
 
   const onToggleItem = (id: string) => {
     if (!permissions.can("update", "parts")) return;
@@ -740,6 +721,7 @@ const JobBillOfProcess = ({
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const addOperationButtonRef = useRef<HTMLButtonElement>(null);
+  const { isPhone } = useViewport();
 
   useChangedRows<Database["public"]["Tables"]["productionEvent"]["Row"]>({
     companyId,
@@ -1017,6 +999,7 @@ const JobBillOfProcess = ({
 
     return (
       <SortableListItem<Operation>
+        isReadOnly={isReadOnly}
         item={item}
         items={items}
         order={order}
@@ -1026,6 +1009,24 @@ const JobBillOfProcess = ({
         onToggleItem={onToggleItem}
         onRemoveItem={onRemoveItem}
         handleDrag={onCloseOnDrag}
+        menuItems={
+          item.id in temporaryItems ? null : (
+            <>
+              <ContextMenuItem asChild>
+                <a href={path.to.external.mesJobOperation(item.id)}>
+                  <LuPlay className="mr-2 h-4 w-4" />
+                  <Trans>Open in MES</Trans>
+                </a>
+              </ContextMenuItem>
+              <ContextMenuItem asChild>
+                <Link to={newIssueUrl(item.data, issueUrlParams)}>
+                  <LuShieldX className="mr-2 h-4 w-4" />
+                  <Trans>Create Issue</Trans>
+                </Link>
+              </ContextMenuItem>
+            </>
+          )
+        }
         renderExtra={(item) => (
           <div>
             <SortableListItemToggle
@@ -1071,11 +1072,37 @@ const JobBillOfProcess = ({
       </HStack>
       <CardContent>
         <SortableList
+          isReadOnly={isReadOnly}
           items={items}
           onReorder={onReorder}
           onToggleItem={onToggleItem}
           onRemoveItem={onRemoveItem}
           renderItem={renderListItem}
+          emptyState={
+            isPhone ? (
+              <CompactEmpty
+                className="py-10"
+                icon={<LuWorkflow />}
+                heading={<Trans>No operations yet</Trans>}
+                description={
+                  <Trans>Add the operations that make this item.</Trans>
+                }
+                primaryAction={
+                  <Button
+                    variant="secondary"
+                    isDisabled={
+                      !permissions.can("update", "production") ||
+                      selectedItemId !== null ||
+                      isDisabled
+                    }
+                    onClick={onAddItem}
+                  >
+                    <Trans>Add Operation</Trans>
+                  </Button>
+                }
+              />
+            ) : undefined
+          }
         />
       </CardContent>
     </Card>
@@ -1119,7 +1146,8 @@ function StepsForm({
 
   // Update sort order when steps change
   useEffect(() => {
-    if (steps && steps.length > 0) {
+    // Also when the last step is deleted: its id must leave the order.
+    if (steps) {
       const sorted = [...steps]
         .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
         .map((step) => step.id || "");
@@ -1504,7 +1532,10 @@ function StepsForm({
                 <Input name="name" label={t`Name`} />
               </div>
 
-              <VStack spacing={2} className="w-full col-span-2">
+              <VStack
+                spacing={2}
+                className="w-full col-span-2 max-md:col-span-full"
+              >
                 <Label>
                   <Trans>Description</Trans>
                 </Label>
@@ -2154,7 +2185,10 @@ function StepsListItem({
               <Input name="name" label={t`Name`} />
             </div>
 
-            <VStack spacing={2} className="w-full col-span-2">
+            <VStack
+              spacing={2}
+              className="w-full col-span-2 max-md:col-span-full"
+            >
               <Label>
                 <Trans>Description</Trans>
               </Label>
@@ -3108,7 +3142,7 @@ function OperationForm({
           onChange={(newValue) => {
             setProcessData((d) => ({ ...d, description: newValue }));
           }}
-          className="col-span-2"
+          className="col-span-2 max-md:col-span-full"
         />
 
         <Select

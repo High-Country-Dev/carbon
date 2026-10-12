@@ -13,6 +13,7 @@ import { Enumerable } from "~/components/Enumerable";
 import { usePermissions, useUrlParams } from "~/hooks";
 import { useCustomColumns } from "~/hooks/useCustomColumns";
 import { path } from "~/utils/path";
+import { EACH_UNIT_OF_MEASURE_CODE } from "../../items.models";
 import type { UnitOfMeasure } from "../../types";
 
 type UnitOfMeasuresTableProps = {
@@ -39,6 +40,7 @@ const UnitOfMeasuresTable = memo(
             </Hyperlink>
           ),
           meta: {
+            mobile: "P1",
             icon: <LuBookMarked />
           }
         },
@@ -47,6 +49,7 @@ const UnitOfMeasuresTable = memo(
           header: t`Code`,
           cell: (item) => item.getValue(),
           meta: {
+            mobile: "P2",
             icon: <LuCode />
           }
         }
@@ -71,7 +74,11 @@ const UnitOfMeasuresTable = memo(
             <MenuItem
               shortcut={MENU_ITEM_SHORTCUTS.delete}
               destructive
-              disabled={!permissions.can("delete", "parts")}
+              // Each is built in; the database refuses to delete it.
+              disabled={
+                !permissions.can("delete", "parts") ||
+                row.code === EACH_UNIT_OF_MEASURE_CODE
+              }
               onClick={() => {
                 navigate(`${path.to.deleteUom(row.id)}?${params.toString()}`);
               }}

@@ -16,21 +16,14 @@ import {
 } from "@carbon/ee/audit.server";
 import { requireFeature } from "@carbon/ee/plan.server";
 import { getLogger } from "@carbon/logger";
-import { Button, Heading, ScrollArea, VStack } from "@carbon/react";
-import {
-  isUnaffectedByNavigation,
-  redirect,
-  redirectExternal
-} from "@carbon/utils";
+import { Button, RecordOutlet, ScrollArea } from "@carbon/react";
+import { redirect, redirectExternal } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { LuHistory } from "react-icons/lu";
-import type {
-  ActionFunctionArgs,
-  LoaderFunctionArgs,
-  ShouldRevalidateFunction
-} from "react-router";
-import { Link, Outlet, useLoaderData } from "react-router";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
+import { Link, useLoaderData } from "react-router";
+import { SettingsPage, SettingsPageHeading } from "~/components/SettingsPage";
 import { usePlanGate } from "~/hooks/usePlanGate";
 import { AuditLogSettings, AuditLogUpgradeOverlay } from "~/modules/settings";
 import type { Handle } from "~/utils/handle";
@@ -42,9 +35,6 @@ export const handle: Handle = {
   breadcrumb: msg`Audit Log`,
   to: path.to.auditLog
 };
-
-export const shouldRevalidate: ShouldRevalidateFunction = (args) =>
-  isUnaffectedByNavigation(args) ? false : args.defaultShouldRevalidate;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {
@@ -213,14 +203,11 @@ export default function AuditLogRoute() {
 
   return (
     <ScrollArea className="w-full h-[calc(100dvh-var(--topbar-height)-var(--content-inset))]">
-      <VStack
-        spacing={4}
-        className="py-12 px-4 max-w-[60rem] h-full mx-auto gap-4"
-      >
-        <div className="flex items-center justify-between w-full">
-          <Heading size="h3">
+      <SettingsPage className="gap-4">
+        <div className="flex items-center justify-between w-full max-md:justify-end">
+          <SettingsPageHeading>
             <Trans>Audit Logs</Trans>
-          </Heading>
+          </SettingsPageHeading>
           {enabled && (
             <Button variant="secondary" leftIcon={<LuHistory />} asChild>
               <Link to={path.to.auditLogDetails}>
@@ -234,8 +221,8 @@ export default function AuditLogRoute() {
           archives={archives}
           controlled={controlled}
         />
-        {enabled && <Outlet />}
-      </VStack>
+        {enabled && <RecordOutlet />}
+      </SettingsPage>
     </ScrollArea>
   );
 }

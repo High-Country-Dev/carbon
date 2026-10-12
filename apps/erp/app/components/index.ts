@@ -14,7 +14,6 @@ import { DateSelect } from "./DateSelect";
 import { DateTime } from "./DateTime";
 import { DeferredFiles } from "./DeferredFiles";
 import { DirectionAwareTabs } from "./DirectionAwareTabs";
-import DocumentHeader from "./DocumentHeader";
 import DocumentPreview from "./DocumentPreview";
 import Documents from "./Documents";
 import EmployeeAvatar from "./EmployeeAvatar";
@@ -37,6 +36,7 @@ import {
 } from "./Icons";
 import { ItemLifecycleBadge } from "./ItemLifecycleBadge";
 import ItemThumbnail from "./ItemThumbnail";
+import LinkValue from "./LinkValue";
 import Location from "./Location";
 import MetricCard from "./MetricCard";
 import { ModelOptimizedIndicator } from "./ModelOptimizedIndicator";
@@ -72,7 +72,6 @@ export {
   DateTime,
   DeferredFiles,
   DirectionAwareTabs,
-  DocumentHeader,
   DocumentPreview,
   Documents,
   EmployeeAvatar,
@@ -84,6 +83,7 @@ export {
   Hyperlink,
   ItemLifecycleBadge,
   ItemThumbnail,
+  LinkValue,
   Location,
   MethodBadge,
   MethodIcon,

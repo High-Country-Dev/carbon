@@ -12,7 +12,8 @@ export enum NotificationEvent {
   ApprovalApproved = "approval-approved",
   ApprovalRejected = "approval-rejected",
   ApprovalRequested = "approval-requested",
-  // Change-notice stage broadcasts (the only CN events; no approval flow in v1).
+  // Change-notice stage broadcasts. Change notice approvals use the Approval*
+  // events above with documentType "changeOrder".
   // Values are persisted in `notification.event`, so they keep the legacy
   // "change-order" spelling.
   ChangeNoticeStarted = "change-order-started",
@@ -41,6 +42,10 @@ export enum NotificationEvent {
   PurchasingRfqAssignment = "purchasing-rfq-assignment",
   QuoteAssignment = "quote-assignment",
   QuoteExpired = "quote-expired",
+  // Daily digest from the recurring-billing job, shared by every recurring
+  // invoice source. Payload-carried like IntegrationSync: the counts arrive as
+  // `body` ("2 posted, 1 emailed, 1 need review") and nothing is read.
+  RecurringInvoicing = "recurring-invoicing",
   RiskAssignment = "risk-assignment",
   SalesOrderAssignment = "sales-order-assignment",
   SalesRfqAssignment = "sales-rfq-assignment",
@@ -96,7 +101,9 @@ export const USER_FACING_NOTIFICATION_TOPICS = [
   NotificationTopic.Changelog
 ] as const satisfies readonly NotificationTopic[];
 
-// In-app is always delivered, so it is not a preference channel.
+// In-app is always delivered, so it is not a preference channel. Neither is
+// browser push: it mirrors in-app, every notification to every browser with
+// notifications enabled.
 export type NotificationPreferenceChannel = "email" | "slack";
 
 export function getNotificationTopicChannels(
@@ -150,7 +157,8 @@ export function isRecurringNotificationEvent(
 
 // Fan-out targets understood by the notify Inngest function. inApp is
 // always included regardless of what the caller passes — the topbar reflects
-// every notification. email and slack are opt-in extras.
+// every notification. email and slack are opt-in extras. Browser push is not
+// a destination: it follows in-app, so every notification pushes too.
 export enum NotificationDestination {
   InApp = "inApp",
   Email = "email",
@@ -181,6 +189,7 @@ export function getNotificationTopic(
     case NotificationEvent.SalesOrderAssignment:
     case NotificationEvent.SalesRfqAssignment:
     case NotificationEvent.SalesRfqReady:
+    case NotificationEvent.RecurringInvoicing:
       return NotificationTopic.Sales;
     case NotificationEvent.MaintenanceDispatchAssignment:
     case NotificationEvent.MaintenanceDispatchCreated:
@@ -297,6 +306,8 @@ export function getNotificationEmailHeading(event: NotificationEvent): string {
       return "Workflow";
     case NotificationEvent.IntegrationSync:
       return "Accounting sync needs attention";
+    case NotificationEvent.RecurringInvoicing:
+      return "Recurring invoicing summary";
     default:
       return "You have a new notification";
   }
@@ -335,6 +346,8 @@ export function getNotificationEmailCtaLabel(event: NotificationEvent): string {
       return "View details";
     case NotificationEvent.IntegrationSync:
       return "View sync activity";
+    case NotificationEvent.RecurringInvoicing:
+      return "Review invoices";
     default:
       return "View details";
   }

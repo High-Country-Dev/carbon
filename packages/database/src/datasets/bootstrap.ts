@@ -99,14 +99,8 @@ export async function bootstrap(
       userId,
       companyName: DEV_COMPANY_NAME
     });
-    // Dev/test convenience: enable accounting so posting flows create GL
-    // journals out of the box. Production keeps the column default (false) —
-    // this is the dev-seed bootstrap path only, not seedCompanyReferenceData,
-    // which onboarding and the drift checker also run.
-    await client.query(
-      `UPDATE "companySettings" SET "accountingEnabled" = true WHERE id = $1`,
-      [companyId]
-    );
+    // The dataset's tier 01 gives the company its accounting cutover, so its
+    // posting flows write Posted journals (spec 2026-10-08-accounting-cutover).
     await client.query("COMMIT");
     return { companyId, userId };
   } catch (err) {
@@ -381,8 +375,8 @@ export async function seedCompanyReferenceData(
         "assetAccountId", "accumulatedDepreciationAccountId",
         "depreciationExpenseAccountId", "writeOffAccountId",
         "writeDownAccountId", "gainOnDisposalAccountId", "lossOnDisposalAccountId",
-        "companyId", "createdBy"
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 'system')`,
+        "isConstructionInProgress", "companyId", "createdBy"
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, 'system')`,
       [
         fac.name,
         fac.depreciationMethod,
@@ -395,6 +389,7 @@ export async function seedCompanyReferenceData(
         accountIdByKey[fac.writeDownAccount],
         accountIdByKey[fac.gainOnDisposalAccount],
         accountIdByKey[fac.lossOnDisposalAccount],
+        fac.isConstructionInProgress,
         companyId
       ]
     );

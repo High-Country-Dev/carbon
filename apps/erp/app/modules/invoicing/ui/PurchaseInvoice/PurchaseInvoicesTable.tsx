@@ -91,6 +91,7 @@ const PurchaseInvoicesTable = memo(
             </HStack>
           ),
           meta: {
+            mobile: "P1",
             icon: <LuBookMarked />
           }
         },
@@ -101,6 +102,7 @@ const PurchaseInvoicesTable = memo(
             <SupplierAvatar supplierId={row.original.supplierId} />
           ),
           meta: {
+            mobile: "P3",
             filter: {
               type: "static",
               options: suppliers?.map((supplier) => ({
@@ -145,6 +147,7 @@ const PurchaseInvoicesTable = memo(
             return <PurchaseInvoicingStatus status={status} />;
           },
           meta: {
+            mobile: "P2",
             filter: {
               type: "static",
               options: purchaseInvoiceStatusType.map((status) => ({
@@ -161,6 +164,7 @@ const PurchaseInvoicesTable = memo(
           header: t`Order Total`,
           cell: (item) => currencyFormatter.format(item.getValue<number>()),
           meta: {
+            mobile: "P2",
             icon: <LuDollarSign />,
             formatter: currencyFormatter.format,
             renderTotal: true
@@ -200,6 +204,9 @@ const PurchaseInvoicesTable = memo(
             <DateTime value={item.getValue<string>()} variant="date" />
           ),
           meta: {
+            filter: {
+              type: "dateRange"
+            },
             icon: <LuCalendar />
           }
         },
@@ -210,6 +217,9 @@ const PurchaseInvoicesTable = memo(
             <DateTime value={item.getValue<string>()} variant="date" />
           ),
           meta: {
+            filter: {
+              type: "dateRange"
+            },
             icon: <LuCalendar />
           }
         },
@@ -220,6 +230,9 @@ const PurchaseInvoicesTable = memo(
             <DateTime value={item.getValue<string>()} variant="date" />
           ),
           meta: {
+            filter: {
+              type: "dateRange"
+            },
             icon: <LuCalendar />
           }
         },
@@ -230,6 +243,9 @@ const PurchaseInvoicesTable = memo(
             <DateTime value={item.getValue<string>()} variant="date" />
           ),
           meta: {
+            filter: {
+              type: "dateRange"
+            },
             icon: <LuCalendar />
           }
         },

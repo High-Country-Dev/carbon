@@ -20,12 +20,14 @@ import {
   useDisclosure,
   VStack
 } from "@carbon/react";
+import { distinctItemText } from "@carbon/utils";
 import {
   getLocalTimeZone,
   isSameDay,
   parseDate,
   today
 } from "@internationalized/date";
+import { plural } from "@lingui/core/macro";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
@@ -33,6 +35,7 @@ import { AiOutlinePartition } from "react-icons/ai";
 import {
   LuBookMarked,
   LuCalendar,
+  LuCirclePlay,
   LuClock,
   LuHash,
   LuLayers,
@@ -61,6 +64,7 @@ import { useLocations } from "~/components/Form/Location";
 import { ConfirmDelete } from "~/components/Modals";
 import { usePermissions, useUrlParams, useUser } from "~/hooks";
 import { useCustomColumns } from "~/hooks/useCustomColumns";
+import type { action as releaseAction } from "~/routes/x+/job+/release";
 import type { action } from "~/routes/x+/job+/update";
 import { useCustomers, useParts, usePeople, useTools } from "~/stores";
 import { path } from "~/utils/path";
@@ -150,10 +154,43 @@ function useReadableTrackedEntities(data: Job[], companyId: string) {
   return trackedEntities;
 }
 
+// A function declaration on purpose: `plural()` nested in `t` inside a
+// `memo(…)` component compiles to the global i18n, which is never activated
+// (see .claude/rules/i18n-lingui-system.md).
+function useReleasedJobsMessage() {
+  const { t } = useLingui();
+  return (count: number) =>
+    t`${plural(count, { one: "Released # job", other: "Released # jobs" })}`;
+}
+
+function renderQuantity(job: Job, unit?: string | null) {
+  const quantity = job.quantity;
+  const quantityComplete = job.quantityComplete ?? 0;
+
+  if (["In Progress", "Released", "Paused"].includes(job.status ?? "")) {
+    return (
+      <BarProgress
+        progress={(quantityComplete / (quantity ?? 0)) * 100}
+        value={`${quantityComplete}/${quantity}`}
+      />
+    );
+  }
+  if (unit) {
+    return (
+      <>
+        {quantity}
+        <span className="ml-1 text-[13px] text-muted-foreground">{unit}</span>
+      </>
+    );
+  }
+  return quantity;
+}
+
 const JobsTable = memo((props: JobsTableProps) => {
   const { data, count, tags, batchesByJobId = {} } = props;
   const navigate = useNavigate();
   const { t } = useLingui();
+  const releasedJobsMessage = useReleasedJobsMessage();
   const [params] = useUrlParams();
   const parts = useParts();
   const tools = useTools();
@@ -219,6 +256,7 @@ const JobsTable = memo((props: JobsTableProps) => {
           </HStack>
         ),
         meta: {
+          mobile: "P1",
           icon: <LuBookMarked />
         }
       },
@@ -229,13 +267,19 @@ const JobsTable = memo((props: JobsTableProps) => {
           return (
             <VStack spacing={0}>
               {row.original.itemReadableIdWithRevision}
-              <div className="w-full truncate text-muted-foreground text-xs">
-                {row.original.name}
-              </div>
+              {distinctItemText(
+                row.original.itemReadableIdWithRevision,
+                row.original.name
+              ) && (
+                <div className="w-full truncate text-muted-foreground text-xs">
+                  {row.original.name}
+                </div>
+              )}
             </VStack>
           );
         },
         meta: {
+          mobile: "P3",
           filter: {
             type: "static",
             options: items?.map((item) => ({
@@ -291,6 +335,7 @@ const JobsTable = memo((props: JobsTableProps) => {
           );
         },
         meta: {
+          mobile: "P2",
           filter: {
             type: "static",
             options: jobStatus.map((status) => ({
@@ -336,25 +381,12 @@ const JobsTable = memo((props: JobsTableProps) => {
       {
         accessorKey: "quantity",
         header: t`Quantity`,
-        cell: ({ row }) => {
-          const quantity = row.original.quantity;
-          const quantityComplete = row.original.quantityComplete ?? 0;
-
-          if (
-            ["In Progress", "Released", "Paused"].includes(
-              row.original.status ?? ""
-            )
-          ) {
-            return (
-              <BarProgress
-                progress={(quantityComplete / (quantity ?? 0)) * 100}
-                value={`${quantityComplete}/${quantity}`}
-              />
-            );
-          }
-          return quantity;
-        },
+        cell: ({ row }) => renderQuantity(row.original),
         meta: {
+          mobile: "P2",
+          // Phones: no column header, so the number carries its unit.
+          mobileCell: ({ row }) =>
+            renderQuantity(row.original, row.original.unitOfMeasureCode),
           icon: <LuHash />,
           renderTotal: true
         }
@@ -435,6 +467,9 @@ const JobsTable = memo((props: JobsTableProps) => {
           />
         ),
         meta: {
+          filter: {
+            type: "dateRange"
+          },
           icon: <LuCalendar />
         }
       },
@@ -449,6 +484,9 @@ const JobsTable = memo((props: JobsTableProps) => {
           />
         ),
         meta: {
+          filter: {
+            type: "dateRange"
+          },
           icon: <LuCalendar />
         }
       },
@@ -682,8 +720,43 @@ const JobsTable = memo((props: JobsTableProps) => {
     []
   );
 
+  // Bulk release for the selected rows — Draft and Planned jobs only. Posts the
+  // ids to the release action, which holds each job to the job page's release
+  // checks and releases the ones that pass; we toast the summary.
+  const releaseFetcher = useAction<typeof releaseAction>({
+    onSuccess: (result) => {
+      if (!result.success) return;
+      if (result.released) {
+        toast.success(releasedJobsMessage(result.released));
+      }
+      if (result.warnings.length) {
+        toast.error(
+          t`Released with problems: ${result.warnings
+            .map((w) => `${w.readableId} (${w.message})`)
+            .join(", ")}`
+        );
+      }
+      if (result.failed.length) {
+        toast.error(
+          t`Could not release ${result.failed.length}: ${result.failed
+            .map((f) => `${f.readableId} (${f.message})`)
+            .join(", ")}`
+        );
+      }
+      if (!result.scheduled) {
+        toast.error(t`The schedule could not be updated after the release`);
+      }
+    },
+    onError: (result) => {
+      if (!result.success) toast.error(result.message);
+    }
+  });
+
   const renderActions = useCallback(
     (selectedRows: typeof data) => {
+      const releasable = selectedRows.filter(
+        (row) => row.status === "Draft" || row.status === "Planned"
+      );
       return (
         <DropdownMenuContent align="end" className="min-w-[200px]">
           <DropdownMenuLabel>
@@ -691,6 +764,26 @@ const JobsTable = memo((props: JobsTableProps) => {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
+            <DropdownMenuItem
+              disabled={
+                !permissions.can("update", "production") ||
+                releasable.length === 0 ||
+                releaseFetcher.isPending
+              }
+              onClick={() =>
+                releaseFetcher.submit(
+                  { jobIds: releasable.flatMap((row) => row.id ?? []) },
+                  {
+                    method: "post",
+                    action: path.to.bulkReleaseJob,
+                    encType: "application/json"
+                  }
+                )
+              }
+            >
+              <MenuIcon icon={<LuCirclePlay />} />
+              <Trans>Release Jobs</Trans>
+            </DropdownMenuItem>
             <DropdownMenuItem
               disabled={
                 !permissions.can("delete", "production") ||
@@ -715,7 +808,7 @@ const JobsTable = memo((props: JobsTableProps) => {
         </DropdownMenuContent>
       );
     },
-    [onBulkUpdate, permissions]
+    [onBulkUpdate, permissions, releaseFetcher]
   );
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: suppressed due to migration

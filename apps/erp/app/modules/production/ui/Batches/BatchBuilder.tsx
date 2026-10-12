@@ -36,12 +36,14 @@ import {
   Spinner,
   toast,
   useLocalStorage,
+  useViewport,
   VStack
 } from "@carbon/react";
 import {
   type BatchRuleDimension,
   type BatchRules,
   type BatchType,
+  distinctItemText,
   formatDate,
   formatDurationMilliseconds,
   RoundingMode,
@@ -52,12 +54,10 @@ import {
   type CalendarDate,
   getLocalTimeZone,
   parseDate,
-  toCalendarDate,
   today
 } from "@internationalized/date";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useLocale } from "@react-aria/i18n";
-import type { DateRange } from "@react-types/datepicker";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -77,6 +77,9 @@ import {
 } from "react-icons/lu";
 import { useFetcher, useNavigate } from "react-router";
 import { DateSelect, Enumerable, ItemThumbnail, Table } from "~/components";
+import DateRangeFields, {
+  type DateRangeValue
+} from "~/components/DateRangeFields";
 import { EnumerableGroup } from "~/components/EnumerableGroup";
 import { path } from "~/utils/path";
 import type { jobStatus } from "../../production.models";
@@ -345,17 +348,13 @@ export function BatchBuilder({
   const [search, setSearch] = useState("");
   const [facets, setFacets] = useState<Record<string, string[]>>({});
   // The due filter as the standard DateSelect holds it: "all", a preset day
-  // count, or "custom" with the calendar's range.
+  // count, or "custom" with a From / To range, either side open.
   const [dueSelect, setDueSelect] = useState("all");
-  const [dueRange, setDueRange] = useState<DateRange | null>(null);
+  const [dueRange, setDueRange] = useState<DateRangeValue | null>(null);
   const due = useMemo<DueFilter | null>(() => {
     if (dueSelect === "custom") {
-      return dueRange
-        ? {
-            kind: "range",
-            start: toCalendarDate(dueRange.start),
-            end: toCalendarDate(dueRange.end)
-          }
+      return dueRange && (dueRange.from || dueRange.to)
+        ? { kind: "range", start: dueRange.from, end: dueRange.to }
         : null;
     }
     const days = Number(dueSelect);
@@ -1146,6 +1145,16 @@ function DrawerBodyGrid({
   left: React.ReactNode;
   right: React.ReactNode;
 }) {
+  const { isPhone } = useViewport();
+  if (isPhone) {
+    return (
+      <div className="flex flex-col min-h-0 flex-1 overflow-y-auto">
+        <div className="flex-shrink-0 border-b px-4 py-3 bg-card">{scope}</div>
+        <div className="flex h-full flex-shrink-0 flex-col">{left}</div>
+        <div className="flex flex-shrink-0 flex-col border-t">{right}</div>
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col min-h-0 flex-1 overflow-hidden">
       <div className="flex-shrink-0 border-b px-4 py-3 bg-card">{scope}</div>
@@ -1255,7 +1264,7 @@ function ScopeBar({
             <Trans>Scope</Trans>
           </span>
         </HStack>
-        <div className="w-[220px]">
+        <div className="w-[220px] max-md:w-full max-md:!mx-0">
           <Combobox
             size="md"
             value={locationId}
@@ -1264,7 +1273,7 @@ function ScopeBar({
             placeholder={t`Location`}
           />
         </div>
-        <div className="w-[220px]">
+        <div className="w-[220px] max-md:w-full max-md:!mx-0">
           <Combobox
             size="md"
             value={processId ?? ""}
@@ -1626,8 +1635,8 @@ function ComposePanel({
   dimensions: FacetDimension[];
   dueSelect: string;
   onDueSelectChange: (value: string) => void;
-  dueRange: DateRange | null;
-  onDueRangeChange: (range: DateRange | null) => void;
+  dueRange: DateRangeValue | null;
+  onDueRangeChange: (range: DateRangeValue | null) => void;
   isDueFiltered: boolean;
   dueDays: Set<string>;
   suggestions: Suggestion[];
@@ -1717,10 +1726,17 @@ function ComposePanel({
             value={dueSelect}
             onValueChange={onDueSelectChange}
             options={dueOptions}
-            dateRange={dueRange}
-            onDateRangeChange={onDueRangeChange}
-            isDateMarked={isDueDay}
           />
+          {dueSelect === "custom" && (
+            <DateRangeFields
+              layout="inline"
+              autoOpen
+              defaultValue={dueRange ?? undefined}
+              // From after To: keep filtering by the last valid range
+              onChange={(range) => range && onDueRangeChange(range)}
+              isDateMarked={isDueDay}
+            />
+          )}
         </HStack>
         {view === "table" && suggestions.length > 0 && (
           <SuggestionsBanner
@@ -1851,7 +1867,8 @@ function CandidateTable({
         header: t`Job`,
         cell: ({ row }) => (
           <span className="font-medium">{row.original.jobReadableId}</span>
-        )
+        ),
+        meta: { mobile: "P1" }
       },
       {
         id: "jobStatus",
@@ -1874,9 +1891,14 @@ function CandidateTable({
               <span className="text-sm truncate">
                 {row.original.itemReadableId}
               </span>
-              <span className="text-xs text-muted-foreground truncate">
-                {row.original.itemDescription}
-              </span>
+              {distinctItemText(
+                row.original.itemReadableId,
+                row.original.itemDescription
+              ) && (
+                <span className="text-xs text-muted-foreground truncate">
+                  {row.original.itemDescription}
+                </span>
+              )}
             </VStack>
           </HStack>
         )
@@ -1940,6 +1962,7 @@ function CandidateTable({
   return (
     <div className="flex-1 min-h-0 overflow-hidden w-full px-4">
       <Table<BatchCandidate>
+        mobileLayout="table"
         compact
         data={visible}
         columns={columns}

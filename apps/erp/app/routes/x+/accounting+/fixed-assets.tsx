@@ -3,15 +3,13 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { Button, VStack } from "@carbon/react";
-import { isUnaffectedByNavigation } from "@carbon/utils";
+import { Button, RecordOutlet, VStack } from "@carbon/react";
 import { msg } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { LuCirclePlus } from "react-icons/lu";
-import type {
-  LoaderFunctionArgs,
-  ShouldRevalidateFunction
-} from "react-router";
-import { Outlet, useLoaderData, useNavigate } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
+import { NewAction } from "~/components/New";
 import { usePermissions } from "~/hooks";
 import { getFixedAssetClassesList, getFixedAssets } from "~/modules/accounting";
 import { FixedAssetsTable } from "~/modules/accounting/ui/FixedAssets";
@@ -23,11 +21,6 @@ export const handle: Handle = {
   breadcrumb: msg`Fixed Assets`,
   to: path.to.fixedAssets
 };
-
-export const shouldRevalidate: ShouldRevalidateFunction = (args) =>
-  isUnaffectedByNavigation(args, { search: "all" })
-    ? false
-    : args.defaultShouldRevalidate;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {
@@ -68,6 +61,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function FixedAssetsRoute() {
   const { data, count, assetClasses } = useLoaderData<typeof loader>();
+  const { t } = useLingui();
   const permissions = usePermissions();
   const navigate = useNavigate();
 
@@ -79,17 +73,19 @@ export default function FixedAssetsRoute() {
         assetClasses={assetClasses}
         primaryAction={
           permissions.can("create", "accounting") && (
-            <Button
-              leftIcon={<LuCirclePlus />}
-              variant="primary"
-              onClick={() => navigate(path.to.newFixedAsset)}
-            >
-              Add Fixed Asset
-            </Button>
+            <NewAction label={t`Add Fixed Asset`} to={path.to.newFixedAsset}>
+              <Button
+                leftIcon={<LuCirclePlus />}
+                variant="primary"
+                onClick={() => navigate(path.to.newFixedAsset)}
+              >
+                <Trans>Add Fixed Asset</Trans>
+              </Button>
+            </NewAction>
           )
         }
       />
-      <Outlet />
+      <RecordOutlet />
     </VStack>
   );
 }

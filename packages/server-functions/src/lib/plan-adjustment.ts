@@ -43,7 +43,8 @@ export const JOURNAL_LINE_SAFE_DOCUMENT_TYPES: ReadonlySet<string> = new Set([
   "Inventory Count",
   "Non-Conformance",
   "Inbound Inspection",
-  "Scrap"
+  "Scrap",
+  "Asset Transfer"
 ]);
 
 export function toJournalLineDocumentType(
@@ -107,6 +108,8 @@ export function buildCostLedgerRow(args: {
   quantity: number;
   cost: number;
   postingDate: string;
+  // A serial unit's own layer (specific identification); null for FIFO/LIFO.
+  trackedEntityId?: string | null;
   companyId: string;
 }): CostLedgerInsert {
   const quantity = round(args.quantity);
@@ -121,6 +124,7 @@ export function buildCostLedgerRow(args: {
     cost: round(args.cost),
     remainingQuantity: quantity > 0 ? quantity : 0,
     postingDate: args.postingDate,
+    trackedEntityId: args.trackedEntityId ?? null,
     companyId: args.companyId
   };
 }
@@ -328,8 +332,6 @@ export function planStockRows(args: {
   rows: StockRowPlanInput[];
   itemCosts: ReadonlyMap<string, AdjustmentItemCost>;
   openLayersByItem: ReadonlyMap<string, OpenCostLayer[]>;
-  /** false ⇒ accounting disabled: no journal at all. */
-  hasAccounting: boolean;
 }): StockRowPlan[] {
   const plans: StockRowPlan[] = args.rows.map((row) => ({
     carriesValue: carriesAdjustmentValue(row.quantity, row.itemTrackingType),
@@ -360,7 +362,7 @@ export function planStockRows(args: {
       plans[rowIndex]!.cost = cost;
       // A zero-value movement posts no journal — `bookAdjustment`'s
       // `!accounting || cost === 0` guard, per row.
-      plans[rowIndex]!.postsJournal = args.hasAccounting && cost !== 0;
+      plans[rowIndex]!.postsJournal = cost !== 0;
     });
   }
 

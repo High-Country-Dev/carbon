@@ -76,6 +76,7 @@ const PurchaseReturnOrdersTable = memo(
             </Hyperlink>
           ),
           meta: {
+            mobile: "P1",
             icon: <LuBookMarked />
           }
         },
@@ -86,6 +87,7 @@ const PurchaseReturnOrdersTable = memo(
             <SupplierAvatar supplierId={row.original.supplierId} />
           ),
           meta: {
+            mobile: "P3",
             filter: {
               type: "static",
               options: suppliers?.map((supplier) => ({
@@ -106,6 +108,7 @@ const PurchaseReturnOrdersTable = memo(
             <PurchaseReturnOrderStatus status={row.original.status} />
           ),
           meta: {
+            mobile: "P2",
             filter: {
               type: "static",
               options: purchaseReturnOrderStatusType.map((status) => ({
@@ -130,6 +133,9 @@ const PurchaseReturnOrdersTable = memo(
           header: t`Order Date`,
           cell: (item) => formatDate(item.getValue<string>()),
           meta: {
+            filter: {
+              type: "dateRange"
+            },
             icon: <LuCalendar />
           }
         },

@@ -448,6 +448,17 @@ Format: `Context → Problem → Rule → Applies to`
 
 **Applies to:** `packages/database/supabase/migrations/` — any `CREATE OR REPLACE FUNCTION` fork; reviews of migrations that redefine shared functions (`complete_job_to_inventory`, `backflush_job_materials`, `get_inventory_quantities`, sync interceptors).
 
+**Also after a merge (2026-09-28):** a branch's migration that added the Make to Asset branch to
+`complete_job_to_inventory` and main's `20260925121735_rpc-function-guards` (forked from the
+definition before it, to add one guard line) merged cleanly — different files. In timestamp
+order main's copy ran last, so every fresh or local database lost the asset branch; production
+pushes with `--include-all`, which applies the older branch file AFTER main's, so there the
+guard went missing instead. `check-clobbers` compares against the merge base and reported
+nothing. After merging main, list main's migrations newer than your branch's oldest and grep
+them for every function and view your migrations define; for any hit, write a NEW migration
+dated after both that carries both changes (here, since folded into
+`20261006221601_complete-job-to-asset.sql`).
+
 ## Job-completion side effects must live in complete_job_to_inventory, not in route actions
 
 **Context:** Service-job fulfillment (advance the linked salesOrderLine on completion) was first implemented in the ERP `$jobId.complete.tsx` action after the RPC call. In e2e it never ran: the operator finished the last operation, and `sync_update_job_operation_quantities` → `sync_finish_job_operation` (DB interceptors) called `complete_job_to_inventory` directly — the ERP route was never involved.
@@ -1558,7 +1569,6 @@ full-screen ERP route.
 
 **Applies to:** `apps/erp/app/modules/inventory/supersession-pick.ts` / `generatePickingList`, `get_picking_schedule`, `packages/ee/src/planning/mrp/mrp.ts` (redirected BOM children), any consumer of `jobMaterial.substitutedFromItemId`.
 
-
 ## A post-insert fix-up pass must be scoped to the rows the flow inserted, not to the parent entity
 
 **Context:** `pullConsumeFirstPredecessors` in `get-method` ran after every jobMaterial insert and read `WHERE jobId = …`. Three of the four flows rebuild the whole job, so that read was equivalent — but `itemToJobMakeMethod` rebuilds ONE sub-method, and the pass rewrote lines on every other sub-method too, including rows that already had issued quantity in the successor's units.
@@ -1687,7 +1697,6 @@ full-screen ERP route.
 **Rule:** Use the user's explicit adoption premise to size compatibility work. For this spec, correct the monetary contract directly; do not add legacy-accounting machinery. An unused accounting module does not imply permission to delete operational records or reset a database.
 
 **Applies to:** `.ai/specs/2026-09-07-accounting-posting-corrections.md` and its implementation; other modules require their own adoption evidence.
-
 
 ## Accounting review: carrying balances and source principal
 
@@ -2213,6 +2222,29 @@ load-bearing only for the old one.
 sites across `apps/erp`, `apps/mes`, `packages/{jobs,ee,lib}`, and any future
 change to a helper whose result is destructured widely.
 
+## A git hook exports GIT_DIR, so any git run from a subdirectory gets the wrong work tree
+
+**Context:** The pre-commit backup check (`packages/jobs/src/scripts/check-backups.ts`,
+reached through `pnpm --filter @carbon/jobs`, so its cwd is `packages/jobs`) regenerates
+`packages/jobs/manifests/schema.json` and stages it with `git add <absolute path>`.
+
+**Problem:** Run by hand it staged the right path. Under the hook it ALSO indexed the
+same content as a root-level `manifests/schema.json` on every migration commit — a
+6,994-line file that existed nowhere on disk, resurfacing after each `git rm --cached`.
+Git runs hooks with `GIT_DIR` exported and no `GIT_WORK_TREE`; with `GIT_DIR` set, git
+treats the CURRENT directory as the work-tree root, so an absolute path under
+`packages/jobs` was recorded relative to `packages/jobs`. An absolute path does not
+protect you: the index path is computed from the assumed work tree, not from cwd.
+
+**Rule:** Any script a git hook may invoke must run its git commands from the
+repository root (`cwd: REPO_ROOT` derived from `import.meta.dirname`, or `git -C`),
+never from the package `pnpm --filter` dropped it in. Verify a hook-driven `git add`
+by reading `git show --stat HEAD` after the commit, not by running the script by hand.
+
+**Applies to:** `check-backups.ts`, `scripts/generate-mcp.ts`'s digest staging, the
+lingui staging in `.husky/pre-commit`, and any future hook step that writes and stages
+a generated file from inside a workspace package.
+
 ## Lingui: a ternary inside t`` bakes the English words as runtime values
 
 **Context:** Building the quote lead-time modal, plural labels were written as
@@ -2229,7 +2261,9 @@ invisible to the missing-translation gate because the placeholder IS filled.
 **Rule:** Never put a pluralizing (or any word-choosing) ternary inside a
 `t` tagged template or `<Trans>`. Use the ICU plural macro: `<Plural value={n}
 one="# day" other="# days" />` from `@lingui/react/macro` (or `plural()` in
-non-JSX). The whole phrase with `#` goes in each branch
+non-JSX — but not inside a `memo(…)`-wrapped component, see "Lingui: `plural()`
+inside a `memo(…)` component calls the global i18n" below). The whole phrase
+with `#` goes in each branch
 (`one="# operation has no time standards"`), so the words are extracted and
 translated. After adding one, re-run `lingui:extract` + `/translate` — the new
 ICU msgid needs its own filled `msgstr` per locale (locales with more CLDR
@@ -2238,6 +2272,51 @@ categories, e.g. Polish/Russian `few`/`many`, get the extra branches).
 **Applies to:** any `apps/{erp,mes}/app` or `packages/{react,form}/src` string
 with a count-dependent word; grep `? "` inside `` t` `` templates when reviewing
 i18n.
+
+## A migration file created while migrations are running is recorded as applied — empty
+
+**Context:** Phase D of the rentals plan. `crbn up` was booting (its migrate step
+runs `supabase migration up --include-all`) while `pnpm db:migrate:new lease-enum`
+created the next migration file, whose SQL was written a few seconds later.
+
+**Problem:** The running migrate step picked up the brand-new, still-empty file and
+recorded version `20260923051441` in `supabase_migrations.schema_migrations` with
+zero statements. Every later `crbn migrate` treated it as applied, so the enum value
+it adds never reached the database; the regenerated types silently lacked it and
+the first symptom was an unrelated-looking TS2353 in `@carbon/ee`. A sibling file
+created four seconds later had its SQL in time and applied normally — so "the other
+migration worked" proves nothing.
+
+**Rule:** Never create or edit a migration file while `crbn up` / `crbn migrate` /
+`pnpm db:migrate` is running; write the SQL first (or wait for the run to finish).
+When a regenerated type is missing something a new migration adds, check
+`select version, array_length(statements, 1) from supabase_migrations.schema_migrations
+order by version desc limit 5` — a NULL statement count on your version means it was
+recorded empty. Idempotent SQL can then be re-applied with `psql -f`.
+
+**Applies to:** every new migration under `packages/database/supabase/migrations/`
+during a `crbn up` boot or a background migrate.
+
+## A PR's CLA check counts every commit author on the branch, including copies of main's commits
+
+**Context:** PR #1697's `license/cla` stayed pending after the author had signed many
+times. The bot listed "Brad Barbin" (not a GitHub user) and `chasefostermfg` as unsigned.
+
+**Problem:** Two independent causes, neither fixable by signing again. (1) Commits made
+before `user.email` was configured were authored as `<user>@<hostname>.local` — git's
+fallback — which no GitHub account can own, so cla-assistant can never match them.
+(2) Rebasing the branch onto main by replaying commits copied other contributors'
+already-merged commits onto the branch with new SHAs, so they became PR commits and
+their authors became CLA "committers".
+
+**Rule:** Set `user.name` / `user.email` before the first commit
+(`git log origin/main..HEAD --format='%ae' | sort -u` must show only GitHub-linked
+emails). Bring main in with a MERGE, never by replaying main's commits onto the branch.
+To repair an affected PR, squash onto `origin/main` (merge main first so the tree is
+current, `git reset --soft origin/main`, commit once, confirm `HEAD^{tree}` is
+unchanged) and `git push --force-with-lease=<branch>:<known sha>`.
+
+**Applies to:** any PR on crbnos/carbon (cla-assistant.io).
 
 ## The root `.env` overrides `.env.local`, so a worktree's DB port is not the default
 
@@ -2260,7 +2339,12 @@ believing a Deno/DB test failure is yours, run a NEIGHBOURING suite you did not
 touch — `post-charge` next to `post-reimbursement`. Identical failure counts in
 untouched code means the environment, not the diff.
 
-**Applies to:** DB-backed tests (`packages/server-functions/src/**` fixtures); any `pnpm db:check:*` or psql work inside
+Vitest reads `SUPABASE_DB_URL` from the root `.env` too, so DB-backed vitest suites
+(`databaseTest` in `packages/server-functions`) connect to the stale port: they do not skip, because the host is still local. Export the
+worktree's URL before you run them:
+`export SUPABASE_DB_URL="$(grep -h '^SUPABASE_DB_URL' .env.local | cut -d= -f2- | tr -d '"')"`.
+
+**Applies to:** DB-backed tests (`packages/server-functions/src/**` fixtures, vitest `databaseTest`); any `pnpm db:check:*` or psql work inside
 a Conductor worktree.
 
 ## The `@carbon/ee` barrel boots the server env — four places that breaks
@@ -2717,10 +2801,9 @@ GET navigation, so every reused ancestor loader re-runs unless its route exports
 only opted out for same-pathname navigations, and the part layouts not at all. The burst is
 what makes each call slow: the first concurrent wave ran ~200 ms per call, later ones 30–60 ms.
 
-**Rule:** A layout loader with children exports `shouldRevalidate` and re-runs only when what
-it reads changes — `isUnaffectedByNavigation(args, { params, search })` from `@carbon/utils`,
-naming the route and search params the loader reads. Mutations and
-`useRevalidator().revalidate()` still reach it. Data in a shell loader that does not gate
+**Rule (superseded 2026-10-06, see "A layout that skips its loader is only as correct as its
+skip rule"):** layouts no longer export `shouldRevalidate`; the skip was removed and slow layout
+loaders are made faster instead. Data in a shell loader that does not gate
 rendering is returned as a promise and read with `useResolved` (`~/hooks/useResolved`), never
 awaited.
 
@@ -2729,6 +2812,32 @@ awaited.
 drawer (`foo.tsx` + `foo.new.tsx`). A list loader reads the whole query string, so it passes
 `search: "all"`. A loader that reads the pathname, a cookie or a header must not use the
 helper.
+
+## A `@container` block has no intrinsic width — it vanishes in a shrink-to-fit parent
+
+**Context:** The planning grid's expanded row (`PlanningActionLines`) was reused inside the
+order drawer, under a `VStack`, to list an item's suggested changes. The heading rendered and
+the rows did not.
+
+**Problem:** The block's root is `@container` (`container-type: inline-size`), which is
+inline-size containment: the element contributes NO intrinsic width to its parent. In the
+grid the Table hands it a width. `VStack` is `flex flex-col items-start`, so its children
+shrink-to-fit — and a contained element's fit width is zero plus padding. The table inside
+was `w-full` of nothing. Typecheck, lint and unit tests all pass on this; only a render
+shows it.
+
+**Rule:** Anything marked `@container` must be stretched by its parent (`w-full`, a block
+parent, or a flex column with default `items-stretch`) — never placed in `VStack`/`HStack`
+or any `items-start`/`inline-*`/`w-fit` parent without an explicit width. When moving a
+component to a new host, check what the OLD host was giving it for free: width, padding
+offsets (`pl-[52px]` lined the block up under a grid row and means nothing in a drawer) and
+column widths sized for a different pane. A layout built for one host usually wants its own
+variant in the next (the drawer now has its own `OpenOrdersGrid`), sharing only the
+behaviour.
+
+**Applies to:** `apps/erp/app/modules/production/ui/Planning/PlanningActionLines.tsx`
+(`PlanningActionLines` vs `PlanningOrderGrids.tsx`), and any `@container` component rendered
+through `VStack`/`HStack` (`packages/react/src/VStack.tsx` is `items-start`).
 
 ## A write that changes nothing still costs a queue message, an Inngest event and a function run
 
@@ -2803,6 +2912,103 @@ tag until proven otherwise.
 
 **Applies to:** `apps/erp/app/modules/*/*.service.ts`, `pnpm run generate:mcp`.
 
+## A supply figure that includes scrap cannot be written back as the order quantity
+
+**Context:** Planning actions measure each open job against demand and suggest Decrease /
+Increase. The job's supply came from `openProductionOrders.quantityToReceive`, which is
+`productionQuantity − received`, and `productionQuantity` is the generated `quantity + scrapQuantity`.
+
+**Problem:** Apply writes the suggested figure to `job.quantity`, the good units. A job of 80
+with scrap 4 counted as 84 against a demand of 80: "Only 80 of 84 is required", every run, for
+every job on an item with a scrap rate — and applying it changed nothing, so it came back.
+An Increase was 4 too high the same way. No test covered a job with scrap.
+
+**Rule:** Measure a document in the unit the action will WRITE. If the engine reads a derived
+total (with scrap, with a conversion factor), either convert at the boundary or read the base
+column. And when a write changes a base quantity, restate what rides on it (the scrap
+allowance), as the insert path does — a patch that sets one column of a pair is the bug class
+`.claude/rules/supersession-system.md` describes for `itemScrapPercentage`.
+
+**Applies to:** `generatePlanningActions` (`packages/planning/src/mrp/planning-actions.ts`),
+`updatePlanningJob` (`production.service.ts`), any engine that reads `openProductionOrders`
+or `openPurchaseOrderLines` and writes a document quantity back.
+
+## An `.in()` list built from a result set has no upper bound
+
+**Context:** The planning grids load the actions for the 100 parts on a page, then looked up
+each action's purchase order line with `.in("id", lineIds)`.
+
+**Problem:** `.in()` writes every id into the URL. The list was one id per ACTION, so it grew
+with the data, not the page size: 2,357 ids was a 54 kB request line and the gateway rejected
+it (HTTP 431). The loader did `planningActions.data ?? []`, so the page rendered every part
+with no actions — indistinguishable from "nothing to do". Demo data and hand-made test parts
+(a few actions each) never came near the limit; it took load data to see it.
+
+**Rule:** An id list for `.in()` must be bounded by something you control (the page size), and
+chunked when that bound is large — about 100 ids per request (`fetchAllByIds` in
+`@carbon/database` does the chunking and the paging). When the related rows hang off
+a foreign key, embed them in the first read instead of looking them up afterwards. And a
+loader never swaps a failed read for an empty list: log it and throw.
+
+A list the USER builds (the ids of a bulk selection: Apply, Dismiss, Assign) has no bound at
+all, and chunking a WRITE breaks its atomicity — a claim that lands in chunk 1 and fails in
+chunk 2 leaves rows claimed with nothing applied. Send such a list through Kysely instead:
+`where("id", "in", ids)` binds the ids as parameters, one statement, no URL, no `max_rows`.
+The same bulk Apply did this over PostgREST in five functions and would have failed whole on a
+page of busy parts.
+
+**Applies to:** `getPlanningActions` and the planning action worklist writes in
+`apps/erp/app/modules/production/production.service.ts`, the planning loaders and
+`planning.update` routes (`x+/purchasing+/planning*.tsx`, `x+/production+/planning*.tsx`), and
+any "read rows, then `.in()` their ids" enrichment.
+
+## `useNumberFormatter()` with no argument is a new formatter on every render
+
+**Context:** Opening or closing the order drawer on the planning pages stuttered. The drawer
+itself was cheap; the table behind it was the cost.
+
+**Problem:** react-aria memoizes the formatter on the options OBJECT
+(`useMemo(() => new NumberFormatter(locale, options), [locale, options])`), and the default
+`options = {}` is a new object on each call. So `useNumberFormatter()` returns a new formatter
+every render. It was a dependency of the table's `columns` memo, so every render rebuilt the
+columns; TanStack then sees new `cell` functions and React REMOUNTS every cell, and the
+shared `Table` re-measures its column widths. Opening the drawer re-rendered the table six
+times through fetcher state — 1,824 DOM nodes replaced, six main-thread blocks of 90–220 ms.
+With a stable formatter: zero nodes replaced, and the drawer shows in ~100 ms instead of ~220.
+
+**Rule:** A value that feeds a `useMemo`/`useCallback` dependency list must be stable. Pass
+`useNumberFormatter` a module-level options constant (or use the `@carbon/utils` formatter
+hooks), never the bare call. When a table feels slow, count DOM nodes replaced in its
+`tbody` during the interaction before optimizing anything else — a non-zero count on an
+interaction that changes no data means the columns are being rebuilt.
+
+**Applies to:** `PurchasingPlanningTable.tsx`, `ProductionPlanningTable.tsx` (fixed), and the
+other ERP files that still call `useNumberFormatter()` bare — it only costs where the
+formatter reaches a memo dependency list (`InventoryTable`, `TrackedEntitiesTable`,
+`JobMaterialsTable`, `DemandProjectionTable`, `JobOperationStepRecordsTable` are the
+candidates to check).
+
+## A drawer rendered as `{item && <Drawer />}` cannot animate closed
+
+**Context:** The planning order drawer slid in but vanished on close.
+
+**Problem:** Three things each removed it before a closing animation could run. The tables
+rendered it as `{selectedItem && <Drawer />}` and closed it by clearing `selectedItem`, so
+it left the DOM in the same render. The shared `Drawer` panel only had a slide-IN. And Radix
+keeps a closing dialog mounted only while the element its portal wraps is animating — that
+element is `DrawerPortal`'s positioning div, which had no animation, so even a mounted
+drawer with an exit animation on its panel was removed at once. Adding the exit classes to
+the panel alone changed nothing; the frame-by-frame trace still showed zero closing frames.
+
+**Rule:** A drawer that should animate closed stays mounted and is driven by `open`; keep the
+record it shows until the next open (`useDrawerItem`), and key it per open so each open
+still starts fresh. When a Radix exit animation does not play, check every element between
+the portal and the animated node — each `Presence` looks only at its own child. Verify with
+a trace of `data-state` and `getBoundingClientRect()` per frame, not by eye.
+
+**Applies to:** `packages/react/src/Drawer.tsx` (`portalVariants` + `sheetVariants` closing
+durations must match), `useDrawerItem` (`apps/erp/app/hooks`), both planning tables, and the
+other state-driven drawers that still unmount on close.
 
 ## A cast that silences excess-property errors hides failed writes
 
@@ -2814,7 +3020,6 @@ tag until proven otherwise.
 
 **Applies to:** every `{module}.service.ts` write, MES `services/*.service.ts`, `packages/utils/src/object.ts` (`unchecked`).
 
-
 ## A function redefined by forking its last migration picks up whatever that fork did
 
 **Context:** Database functions were changed by copying the newest definition into a new migration and editing it. `create_audit_log_table` was forked several times; one fork made its existing-table branch re-attach the append-only trigger and re-run `secure_audit_log_table` unconditionally, and `insert_audit_log_batch` calls it on every write.
@@ -2824,7 +3029,6 @@ tag until proven otherwise.
 **Rule:** A function that changes more than once is authored as a single file, not as a chain of forks. The event system's functions live in `packages/database/src/event-system/functions/<name>.sql`; edit the file and run `pnpm --filter @carbon/database authz migration <name>`. A function on a write path must not run DDL: check the catalog first and only repair what is missing (`audit-log-no-ddl-on-write.test.sql` asserts the trigger and policy oids do not change across writes).
 
 **Applies to:** `packages/database/src/event-system/functions/`, `packages/database/src/authz/helpers/`, `no-authz-ddl-in-migrations` (`@carbon/checks`).
-
 
 ## Work a request does not await is frozen with the instance on Vercel
 
@@ -2836,7 +3040,6 @@ tag until proven otherwise.
 
 **Applies to:** `apps/{erp,mes}/app/entry.server.tsx`, `packages/lib/src/telemetry/capture.ts`, `packages/stripe/src/stripe.server.ts`, any new fire-and-forget call.
 
-
 ## React Router's instrumentation API can observe a request, not change it
 
 **Context:** The request-id, access-log and request-context middlewares looked like candidates to move into `instrumentations`, to shorten the middleware chain.
@@ -2846,7 +3049,6 @@ tag until proven otherwise.
 **Rule:** Instrumentation is for spans and measurements. Anything that sets a header, provides context to downstream code or reads the request stays a middleware; merge middlewares into one (`requestMiddleware`) instead of moving them. A middleware's own cost is recorded by `timedMiddleware` as `carbon.middleware.<name>.ms`, not by a span, because a middleware span contains everything it calls.
 
 **Applies to:** `packages/logger/src/middleware.server.ts`, `packages/logger/src/tracing.server.ts`, both apps' `root.tsx`.
-
 
 ## A limiter must hand a freed slot to the next waiter, not decrement and let it race
 
@@ -2858,6 +3060,31 @@ tag until proven otherwise.
 
 **Applies to:** `packages/utils/src/async.ts` (`limit`), any hand-written semaphore.
 
+## Copying child rows onto a new record can make that record undeletable
+
+**Context:** A new item revision now inherits the source revision's supplier parts and their
+price breaks (`copyItemPlanningAndPurchasing`, called by `createRevision`). A change notice
+discards its draft revision by deleting the draft item.
+
+**Problem:** `supplierPart.itemId → item` is `ON DELETE CASCADE`, but
+`supplierPartPrice → supplierPart` is `ON DELETE RESTRICT`. An item delete therefore cascades
+into a supplier part that a price break refuses to let go, and the whole delete fails with
+`23503`. Before the copy, a fresh revision had no supplier parts, so nothing exercised that
+path; after it, every revision of an item with price breaks carries the blocker: the Item
+Master delete was refused, and the change notice's draft discard ignored the delete's error,
+so the draft would have survived silently. Reading the migrations for the table being copied
+was not enough; the constraint that mattered sat on its child.
+
+**Rule:** Before copying rows onto a record, list the delete rule of every FK that points at
+the copied tables (`pg_constraint.confdeltype`, or `grep REFERENCES` for the table name) and
+walk every path that deletes the parent. A `RESTRICT`/`NO ACTION` child turns a copy into a
+delete blocker. Either delete the child first on that path, in the same transaction as the
+parent so a refused parent delete does not lose the child, or change the rule in a migration.
+And a delete whose failure the caller ignores is not a delete: return the error.
+
+**Applies to:** `apps/erp/app/modules/items/items.service.ts` (`createRevision`,
+`deleteItemsWithPriceBreaks`, `deleteItem`, `discardChangeNoticeDrafts`,
+`deleteSupplierPart`), and any copy/duplicate of `supplierPart`.
 
 ## "Come back here" must carry the query string
 
@@ -2869,7 +3096,6 @@ tag until proven otherwise.
 
 **Applies to:** `packages/auth/src/utils/http.ts` (`getCurrentPath`, `makeRedirectToFromHere`), `requireAuthSession` / `refreshAuthSession`, every app's `login.tsx` callback URL and the `callback.tsx` that consumes it.
 
-
 ## A `resolve.alias` stub reaches the server bundle too
 
 **Context:** Both apps aliased `unpdf/pdfjs` to a throwing stub to keep unpdf's 1.5 MB engine out of the browser bundle, where react-pdf's `pdfjs-dist` is used instead.
@@ -2879,7 +3105,6 @@ tag until proven otherwise.
 **Rule:** A stub that exists to shrink the client bundle goes through `clientOnlyAlias` (`@carbon/dev/vite`), never `resolve.alias`. Verify a server-side dependency change against a bundle built with `ssr.noExternal: true`, not against the dev server.
 
 **Applies to:** `apps/{erp,mes}/vite.config.ts`, `app/ssr-shims/`, `packages/dev/vite.js`.
-
 
 ## A published schema default is a promise the server has to keep
 
@@ -2891,6 +3116,54 @@ tag until proven otherwise.
 
 **Applies to:** `scripts/lib/service-metadata.ts`, `apps/erp/app/routes/api+/v1+/lib/dispatch.server.ts`, any validator default that reaches an API schema.
 
+## Every sales invoice needs an opportunity
+
+**Context:** A sales invoice's documents, including the PDF written when it is posted,
+live under `{companyId}/opportunity/{opportunityId}/`. `insertSalesInvoice` and
+`upsertSalesInvoice` mint an opportunity and `convert` copies the sales order's, but
+`salesInvoice.opportunityId` is nullable.
+
+**Problem:** Rental billing inserted invoices with `opportunityId: null`. The invoice's
+documents card crashed on `opportunity.id` (shown as "Couldn't load documents", since
+`DeferredFiles` catches render errors too), and posting wrote the PDF to a literal
+`opportunity/null/` folder.
+
+**Rule:** Any new code path that inserts a `salesInvoice` (or `salesOrder` / `quote`)
+creates an opportunity for it in the same transaction. Nullable in the schema does not
+mean optional in the app.
+
+**Applies to:** `packages/server-functions/src/create-rental-invoices/`, any Kysely/server-function writer
+of `salesInvoice`; backfilled by `20261006220901_sales-invoice-opportunity-backfill.sql`.
+
+## A new FK on a busy table breaks bare PostgREST embeds of it (TS2589)
+
+**Context:** The contracts migration (`20261006221301_contracts.sql`) gave `salesInvoiceLine` four new FKs (`customerContractId`, `customerContractLineId`, `customerContractInvoiceLineId`, `projectId`).
+
+**Problem:** After `generate:types`, the ERP typecheck failed with TS2589 ("type instantiation is excessively deep") in four files that the change did not touch. Each did a bare embed such as `.select("salesInvoice(id, invoiceId)")` from `salesInvoiceLine`. More relationships on the table make the inference of a bare embed too deep. A `@ts-ignore` would hide it, but the next new FK moves the error to another file.
+
+**Rule:** When you add a FK to a table that other code embeds from, name the FK in every embed of its parent: `salesInvoice!salesInvoiceLine_invoiceId_fkey(...)`. Run the scoped `erp` typecheck after `generate:types`, before you commit the migration. Fix the cause at the embed by naming the FK (fix commit `5b26a095dd`). Use `@ts-ignore` (the TS2589 lesson above) only for an embed that already names its FK.
+
+**Applies to:** any migration that adds a FK column to `salesInvoiceLine`, `salesOrderLine`, `jobMaterial` or another widely embedded table; the PostgREST selects in `apps/erp` that embed from it.
+
+## A schedule computed live has no row ids until the first edit writes it
+
+**Context:** An unedited Draft contract has no `customerContractInvoice` rows. The loader computes the invoice schedule from the lines with the pure planner (`@carbon/database/contract-schedule`). The first edit writes the rows (plan decision 2).
+
+**Problem:** The page sent the edit with the ids of computed rows that were not in the database. The server function wrote the schedule, then looked up those ids, found nothing, and refused the edit. So the first edit of every Draft failed. No test covered an edit from the computed state.
+
+**Rule:** When a page shows rows that the server computes and does not store, give each row a reference by position, not an id. Contracts use `planned:<invoiceDate>` for an invoice and `planned:<invoiceDate>:<lineId>:<periodStart>[:adjustment]` for a row. The server writes the rows first, then resolves each reference against them. Test the first edit from the computed state with a database test, not from stored rows (`contract-lifecycle.test.ts`, fix commit `56fa0f7b8e`).
+
+**Applies to:** `post-customer-contract` `edit-schedule`, `ContractInvoiceGrid` / `ContractAmountsModal` (and `ContractRevenueGrid` for the revenue plan), and any future editable preview that persists on first edit.
+
+## Two sessions in one worktree share every uncommitted file
+
+**Context:** Two parallel sessions worked in the same Conductor worktree: one on contracts Phase B, one on hardening the period runs. Both edited `accounting.server.ts`, `propose-revenue-recognition-run/index.ts` and the accounting `AGENTS.md`.
+
+**Problem:** Each session's uncommitted edits sat in the same files as the other's. Neither could commit a file whole, so every commit needed hunk-level staging, and a doc written by one session described the other's half-finished code.
+
+**Rule:** Before a task, run `git status` and treat any change you did not make as foreign: stage only your own hunks and never stash, reset or check out over them. For a long task, ask for an isolated worktree (`isolation: "worktree"`) instead of sharing one.
+
+**Applies to:** Any session that starts in a worktree with uncommitted changes; parallel agents dispatched into the same checkout.
 
 ## A `prepare` script that edits git config reaches every worktree
 
@@ -2902,7 +3175,6 @@ tag until proven otherwise.
 
 **Applies to:** root `package.json` (`prepare`, `simple-git-hooks`), `scripts/git-hooks/`.
 
-
 ## `scripts/one-off/` is a registry, not a folder of leftovers
 
 **Context:** A cleanup pass listed `scripts/one-off/recopy-private-buckets.ts` as dead because nothing referenced it by name.
@@ -2912,7 +3184,6 @@ tag until proven otherwise.
 **Rule:** "No grep hits" does not mean dead. Before deleting a script, check whether its directory is enumerated (`readdirSync`, a glob in a workflow or `turbo.json`).
 
 **Applies to:** `scripts/one-off/`, `ci/src/one-off-scripts.ts`, any repo cleanup.
-
 
 ## A Vite plugin that reads the file name must drop the query first
 
@@ -2924,7 +3195,6 @@ tag until proven otherwise.
 
 **Applies to:** `packages/dev/vite.js` (`linguiWithoutIdQuery`), `apps/*/vite.config.ts`.
 
-
 ## A realtime subscription to a table that is not published fails silently
 
 **Context:** The ERP job page did not show an operation completed in the MES until a reload. It subscribed with `postgres_changes` to `jobOperationStep` and `jobOperationStepRecord`, which were never in the `supabase_realtime` publication, and it had no subscription to `jobOperation` or `job` at all.
@@ -2934,7 +3204,6 @@ tag until proven otherwise.
 **Rule:** Realtime goes through broadcast topics (`@carbon/query`). Declare a route's tables in `handle.realtime`; the table type is derived from `event-system/attachments.ts`, so a table with no broadcast handler does not compile, and `no-postgres-changes` fails the old API. Verify a "live" page by changing the row while the page is open, not by reading the subscription code.
 
 **Applies to:** `apps/*/app/routes/**` `handle.realtime`, `useRealtime`, `useChangedRows`, `.claude/rules/realtime-system.md`.
-
 
 ## `getCompanyId()` read an httpOnly cookie in the browser and always returned null
 
@@ -2946,7 +3215,6 @@ tag until proven otherwise.
 
 **Applies to:** `packages/query/src/cache.ts`, both `apps/*/app/routes/x+/_layout.tsx`, any new client-side tenant scoping.
 
-
 ## A `.client.ts` module is empty on the server, even for a value a route only calls at load
 
 **Context:** The invalidation middleware factory lived in `invalidate.client.ts`, next to `flash.client.ts`. `root.tsx` calls `createInvalidationMiddleware(...)` while the module is evaluated.
@@ -2957,7 +3225,6 @@ tag until proven otherwise.
 
 **Applies to:** `apps/*/app/root.tsx`, `packages/query/src/invalidation.ts`, any shared module imported by a route.
 
-
 ## Two hooks that open the same Realtime topic close each other's channel
 
 **Context:** The shell, the live lists and individual components each called `carbon.channel(topic)` for `company:<id>:<table>`.
@@ -2967,7 +3234,6 @@ tag until proven otherwise.
 **Rule:** One owner per topic. Listeners register in the registry in `packages/query/src/useRealtime.tsx` (`useTopic`, `useTableChanges`) and `RouteRealtime` owns the channels. Do not call `carbon.channel` or `useRealtimeChannel` for a broadcast topic directly.
 
 **Applies to:** `packages/query/src/useRealtime.tsx`, any new realtime listener.
-
 
 ## Chained Supabase writes in a route action are not a transaction
 
@@ -2989,7 +3255,6 @@ tag until proven otherwise.
 
 **Applies to:** `packages/query/src/useLiveList.tsx`, `packages/query/src/cache.ts`, any new client-side persistence.
 
-
 ## A prefetch the browser cannot reuse makes the click slower
 
 **Context:** Links prefetched their page's data on hover, then (2026-10-02) on press, to give the click a head start.
@@ -2999,3 +3264,255 @@ tag until proven otherwise.
 **Rule:** A prefetch only helps if the browser may reuse its response. Give a prefetch response (`Sec-Purpose: prefetch`) a short `private` lifetime and leave every other response uncached; `prefetchCacheMiddleware` (`@carbon/utils`) does it in each app's root `middleware`, the fix React Router points to (remix-run/react-router#13255). Measure a prefetch by click-to-page time, not by whether the request was sent. A first fix removed the prefetch instead (`6e3bdf7bc6`); it worked but threw away the head start.
 
 **Applies to:** `packages/react/src/PrefetchLink.tsx`; `packages/utils/src/prefetch.ts`; any `<Link prefetch>` or `PrefetchPageLinks`; a revalidation started while a navigation to the same URL is loading.
+
+## A revalidation during the navigation after a save loses the save
+
+**Context:** 186 layouts export `shouldRevalidate` and skip a GET navigation that leaves their params unchanged. Realtime calls `revalidate()` 300 ms after a broadcast.
+
+**Problem:** A save's own broadcast arrives while its redirect is still loading. `revalidate()` during a loading navigation restarts it with `overrideNavigation: state.navigation`, and for a fetcher submission that carries no `formMethod`. The restarted navigation looks like a plain one, so each layout returned `false` and kept its data from before the save: a new quote line was missing from the quote's explorer until a reload (2026-10-05). In single fetch `defaultShouldRevalidate` is `true` for every route on every navigation, so a predicate cannot tell a forced reload from a plain one. A first fix assumed React Router's default was `false` after a redirect with no cookie; logging the predicate's arguments in the browser showed the default was `true` and the first pass did include the layout.
+
+**Rule:** Never call React Router's `revalidate()` directly. Import `useRevalidator` from `@carbon/query`: it holds a call made while a navigation is in flight or a fetcher is submitting and runs it when the router is idle. The `no-raw-revalidator` check (`@carbon/checks`) fails an import of React Router's. Before explaining a skipped loader, log what `shouldRevalidate` received: wrap the route's `shouldRevalidate` on `window.__reactRouterDataRouter.routes` and read `formMethod`, `defaultShouldRevalidate` and both URLs for each call.
+
+**Applies to:** `packages/query/src/useRevalidator.ts`; every `revalidate()` call (realtime, polling timers, upload callbacks); every route that exports `shouldRevalidate`.
+
+## A drag re-rendered every card on the board
+
+**Context:** The schedule boards (operations, dates, batches) render one sortable card per operation or job, each with a form, avatars, tooltips and a menu.
+
+**Problem:** A drag stuttered: with 82 cards, six frames of a 90-frame sweep took over 100 ms. Two causes. dnd-kit re-renders every `useSortable` consumer when the drop target changes, and the hook sat inside the card, so every card's whole body rendered each time. And `useSensor(KeyboardSensor, { coordinateGetter })` passed a new options object on every render: dnd-kit memoizes the sensor on it, so every draggable got new `listeners`, which defeats `memo` on anything that takes them.
+
+**Rule:** A sortable card is a thin shell that calls `useSortable` and a `memo`ized body that takes plain props (`sortableCardProps` in `Schedule/Kanban/cardShell.ts`). `useSensor` options are a module constant (`no-inline-sensor-options` check). A context every card reads must have a stable value. To find what re-renders, count renders per component during a scripted drag; do not guess.
+
+**Applies to:** `apps/erp/app/modules/production/ui/Schedule/Kanban/**`; any dnd-kit board or list with more than a few dozen items.
+
+## Lingui: `plural()` inside a `memo(…)` component calls the global i18n
+
+**Context:** The jobs table's bulk-release toast needed "Released 1 job" / "Released N jobs". The table is `memo((props) => { … })`, and the toast text was written as `` t`${plural(count, { one: "Released # job", other: "Released # jobs" })}` `` with `t` from `useLingui()` and `plural` from `@lingui/core/macro`.
+
+**Problem:** Lingui 6.9.0's macro transform folds a nested `plural()` into the surrounding `t` only when the component or hook is a function declaration or a plain `const X = () => …`. When the function is an inline ARGUMENT of a call (`memo((props) => …)`), the `plural()` is expanded on its own into `i18n._(…)` on the global `@lingui/core` instance, and the outer `t` becomes `{0}` with that call as its value. The global instance is never activated here (see `.claude/rules/i18n-lingui-system.md`), so the string throws "Attempted to call a translation function without setting a locale" the first time it is built. Typecheck, Biome and `lingui:extract` all pass: the catalog shows a normal ICU plural msgid. Only the compiled output shows it.
+
+**Rule:** Do not call `plural()` (or `select()`) from `@lingui/core/macro` inside a component passed inline to `memo(…)` or any other call. Use `<Plural>` in JSX. For a string (a toast), either build it in a function-declaration hook (`function useX() { const { t } = useLingui(); return (n: number) => t`${plural(n, …)}`; }`), or choose between two whole `t` phrases (``n === 1 ? t`Released 1 job` : t`Released ${n} jobs` ``) — both phrases are extracted and translated, but a locale with more plural forms gets only two. When in doubt, read the compiled module (Vite `transformRequest` on the file) and check for an import of `i18n` from `@lingui/core`.
+
+**Applies to:** every `memo(…)` component in `apps/{erp,mes}/app` and `packages/{react,form}/src` (most ERP tables); any new use of `plural` / `select` from `@lingui/core/macro`.
+
+## A row stayed off a screen only because a column happened to be null
+
+**Context:** The MES Work Centers board, the ERP Priority board and the API read `get_active_job_operations_by_location`. Both boards group operations into work-center columns.
+
+**Problem:** An Outside Processing operation showed up on the MES board for an operator to start (2026-10-05). The function never filtered on `operationType`; subcontracted operations stayed off the boards only because they usually have no work center, so they had no column. The work center came back two ways. The operation forms hide the Work Center field for Outside Processing, and a hidden field is omitted from the submit, not cleared, so an update left the work center from the operation's earlier in-house type. Batching was the second way: `get_batchable_operations` offered outside operations, and releasing a batch writes the batch's work center onto every member.
+
+**Rule:** Filter on the fact that decides whether a row belongs, never on a column that only usually agrees with it. When a type makes a field meaningless, clear the field in the one function every writer goes through (`normalizeOperationSourceIds`), because hiding the input does not clear it. Hiding a row from a list is not a gate: refuse it in the routes that open and start it too.
+
+**Applies to:** `get_active_job_operations_by_location`; `get_batchable_operations` and the `batch-operations` `assertEligible`; the MES operation, start and event routes; any form that hides a field by type; any list whose visibility rests on a NULL.
+
+## State seeded from loaded data is a copy that nothing updates
+
+**Context:** A route's components stay mounted when only its params change, and loaded data changes under a mounted component constantly: a save's revalidation, a realtime reload, a layout that reloads after its page has mounted.
+
+**Problem:** `useState(valueFromLoaderData)` reads the value once. Two bugs came from it (2026-10-06). The quote summary summed its totals from lines copied into state at mount, so a deleted line stayed in the subtotal until a reload. And a notes editor seeded from record A stayed mounted on record B: B showed A's notes, and the first keystroke saved A's text into B. An audit of 467 seeded `useState` calls found 17 confirmed cases. Reloading every layout on every navigation had hidden most of the first kind, not fixed it.
+
+**Rule:** Do not copy loaded data into state. A value computed from the data is computed during render (`useMemo`). The user's choices over the data are the only state, combined with the current data during render (`selectQuoteLines`). A draft the user edits is fine as state because the page it lives in remounts for another record: every route under `/x` renders `RecordOutlet` (`@carbon/react`), never a plain `<Outlet>`. Do not write an effect that copies the data into state again. Checks: `no-bare-outlet` and `no-state-copy-of-loader-data` (`@carbon/checks`; the second sees only a hook result used by name in the same file, not a copy seeded from a prop).
+
+**Applies to:** every component that reads `useLoaderData`, `useRouteData` or props that come from them; every route with a param in its path.
+
+## A layout that skips its loader is only as correct as its skip rule
+
+**Context:** 186 layouts exported `shouldRevalidate` and skipped a GET navigation that left their params unchanged (`isUnaffectedByNavigation`, 2026-10-01), to save a layout loader run on each click.
+
+**Problem:** The rule inferred "nothing changed" from `formMethod`. React Router passes a fetcher's submission to the first navigation after it only, so a delete that redirected to a record's bare URL, whose index route redirects again, arrived as a plain navigation and every layout kept its data (2026-10-06). An earlier patch had fixed the same blind spot for a revalidation restarting a navigation. 154 of the 186 layouts also declared no realtime tables, so another user's change did not show until the record changed. A module-level "a save happened" flag closed the redirect case and was rejected: one package set it, another cleared it, a third read it.
+
+**Rule:** Layouts do not skip their loaders. Do not export `shouldRevalidate` from a layout to save a loader run; make the loader cheaper instead (one query, the direct connection, shared work through middleware context). The root and the app shell are the only exceptions. To see which loaders a navigation asked for, read the `_routes` query of its `.data` request. Estimated cost of removing the skip, from production traces: 100 to 300 ms on a click that used to skip, until the dozen slow record loaders are optimised.
+
+**Applies to:** every layout route; `packages/utils/src/revalidate.ts`; the record loaders (`purchase-order+/$orderId`, `supplier+/$supplierId`, `sales-invoice+/$invoiceId`, `part+/$itemId`, `sales-order+/$orderId`, `quote+/$quoteId`).
+
+## A restore told the change log but not the open tabs
+
+**Context:** Backup restore and template revert reload a company through `wipeAndLoad` with triggers off (`session_replication_role = replica`). The live lists (items, customers, suppliers, people) are kept in the browser and updated from broadcasts; the change log (`tableChange`) is what a tab reads when it loads or reconnects.
+
+**Problem:** With triggers off nothing was broadcast. `wipeAndLoad` wrote a reset row to the change log, but an open tab only reads the log when a broadcast tells it to, or once an hour. After a demo template was reverted and applied again, a tab's part picker held the reverted parts next to the new ones, and creating a job with a reverted part returned 404 (2026-10-06, production). The first reproductions missed it because they applied a template (triggers on), which broadcasts correctly.
+
+**Rule:** A writer that turns triggers off does both halves itself: a null-`rowId` row per `CHANGE_LOGGED_TABLES` entry, and a null-`ids` broadcast on every `REALTIME_TABLES` topic of the company, inside the same transaction. When a stale client list is suspected, compare the ids in `window.clientCache.getQueryData(["live", companyId, name])` with the database before reading code.
+
+**Applies to:** `packages/jobs/src/inngest/functions/tasks/company-restore.ts` (`wipeAndLoad`); any new job that sets `session_replication_role`.
+
+## macOS silently replaces a web notification that reuses a tag
+
+**Context:** Browser push notifications (`apps/erp/public/push-worker.js`) passed each notification's `tag` (`job-assignment:<id>`, `carbon-test`) to `showNotification`, so a second push about the same thing would replace the first instead of stacking.
+
+**Problem:** On macOS the browser hands the tag to the OS as the notification's identifier, and the OS replaces a notification with the same identifier silently: no banner, only an updated entry in Notification Center. The first test arrived while banners were still off, and every later test replaced it without a sound, so push looked broken although every send returned `201` (2026-10-08). `renotify: true` did not change it. The cause was only visible in the macOS log (`log show --predicate 'process == "usernoted"'`): `updatedExisting: true`.
+
+**Rule:** Never pass a reused `tag` to `showNotification` when the user must see the repeat. Close the older notifications yourself (`registration.getNotifications()`, match on `notification.data.tag`), then show the new one with no `tag`, so it gets a fresh identifier. To debug a push that "does not arrive", read the send's status code first, then the OS notification log, before changing code.
+
+**Applies to:** `apps/erp/public/push-worker.js`; any future service worker or Notification API caller.
+
+## A new key in an Inngest step's return breaks runs in flight at deploy
+
+**Context:** The `notify` function's step `filter-recipients-by-preference` returned `{ emailRecipientIds, slackRecipientIds }`. Browser notifications added `pushRecipientIds` to the same step, under the same step id, and the code after it read `pushRecipientIds.length` (2026-10-08).
+
+**Problem:** Inngest replays a completed step from its memoized output. A run that started before the deploy and resumes after it gets the OLD output, with no `pushRecipientIds`, so `.length` throws and the notification fails. Typecheck cannot see it: the type describes the new code, not the stored output. Self-review caught it before merge.
+
+**Rule:** When a step's return grows a key, read that key with a default (`pushRecipientIds = []`) and comment why, or rename the step id so old runs re-execute it (only when the step is idempotent). Never assume a memoized step output has the current shape. (The `pushRecipientIds` key was removed again later, when push stopped having a per-topic switch; the example stays as the pattern.)
+
+**Applies to:** every `step.run` in `packages/jobs/src/inngest/functions/**` whose return shape changes.
+
+
+## A notification click on an uncontrolled tab opens nothing
+
+**Context:** `push-worker.js` handled `notificationclick` with `clients.matchAll({ type: "window", includeUncontrolled: true })`, then `focus()` and `navigate()` on the first Carbon tab (2026-10-09).
+
+**Problem:** `WindowClient.navigate()` rejects for a tab the worker does not control: a tab opened before the worker was installed, or a hard-reloaded one. The rejection ended the click handler, so the click opened nothing. No error reached the page.
+
+**Rule:** Call `matchAll({ type: "window" })` without `includeUncontrolled` when you will call `navigate()`. Focus first, because the click allows focus for a short time only. Wrap the focus and the navigation in `try`, and call `clients.openWindow()` when either fails or no tab exists.
+
+**Applies to:** `apps/erp/public/push-worker.js`; any service worker that navigates a client.
+
+## A push service's 401 or 403 does not mean the subscription is dead
+
+**Context:** After the VAPID key changed, WNS answered 401 for a subscription made with the old key, and FCM answers 403 for the same case. Deleting the row on 401/403 was proposed so such rows stop failing (2026-10-09).
+
+**Problem:** Apple's push service answers 403 when it refuses our own token (`BadJwtToken`, for example a contact address it does not accept). That refusal hits every Safari subscription at once. A delete on 403 would remove every Safari row on each push, the page load would save them again, and no Safari user would ever get a push, with no error anywhere.
+
+**Rule:** Delete a subscription only on 404 or 410. On 401 or 403, log a warning with the push service's body and keep the row (`pushDeliveryOutcome` → `rejected`). An old-key row is replaced on the browser's next page load or ages out.
+
+**Applies to:** `packages/jobs/src/inngest/functions/notifications/push-outcome.ts`, `send-push.ts`; any Web Push sender.
+
+## A generated avatar is a seed, so the library version decides the face
+
+**Context:** `user.avatarUrl` stores a generated avatar as `dicebear:<style>:<seed>[:<rrggbb>]` (`packages/utils/src/avatar.ts`). The browser draws it with DiceBear every time it renders (`packages/react/src/utils/generatedAvatar.ts`). Nothing about the picture is stored, only the seed.
+
+**Problem:** A new DiceBear major version can draw a different face for the same seed. The move from version 9 to 10 (2026-10-08) changed every existing avatar, and nothing in the database showed it. A style removed from `GENERATED_AVATAR_STYLES` makes its stored values unparseable, so those avatars fall back to initials without an error.
+
+**Rule:** Pin `@dicebear/core` and `@dicebear/styles` to exact versions, never a range. Treat a DiceBear upgrade as "every user's avatar may change", and compare renders of fixed seeds before and after. Only add to `GENERATED_AVATAR_STYLES`; the `Record` type of `STYLE_LOADERS` makes a style without a loader a type error.
+
+**Applies to:** `packages/react/package.json` (DiceBear versions), `packages/utils/src/avatar.ts`, `packages/react/src/utils/generatedAvatar.ts`.
+
+## A library that every page renders must not be imported statically
+
+**Context:** `Avatar` (`@carbon/react`) is in the shell of every app. It renders generated avatars with `@dicebear/core`.
+
+**Problem:** A static `import { Avatar, Style } from "@dicebear/core"` put about 156 KB minified (25 KB gzipped) into the main bundle of the ERP, MES and academy, on every page, whether or not a generated avatar was shown (found in self-review, 2026-10-08). Typecheck, tests and Biome all passed. Only a bundle measurement showed it.
+
+**Rule:** In a component that every page renders, import a heavy library with `import()` at the point of first use, and keep only `import type` at the top of the file. Check with a split bundle: `npx esbuild <file> --bundle --splitting --format=esm --minify --outdir=/tmp/out '--external:@carbon/*' --external:react`. The entry file must stay small, and the library must be a separate chunk.
+
+**Applies to:** `packages/react/src/**` components used in app shells (`Avatar`, `NavRail`, layout parts); any new dependency of `@carbon/react`.
+
+## A JSON import attribute fixes the server and breaks the browser
+
+**Context:** `@carbon/react` loads each DiceBear style's JSON with `import()` (`packages/react/src/utils/generatedAvatar.ts`). The same code runs in the browser (the avatar picker) and on the server (the `/file/avatar/:value` route).
+
+**Problem:** On the server, Vite leaves a dependency's import external, and Node refuses JSON without `with: { type: "json" }` (`ERR_IMPORT_ATTRIBUTE_MISSING`). Adding the attribute fixed the route. But Vite passes the attribute through to the browser's `import()`, and serves the JSON as `text/javascript`, so the browser rejected every style and the picker previews stayed grey (2026-10-08). Typecheck, unit tests and the server route all passed; only the browser saw it.
+
+**Rule:** Never put an import attribute on a JSON import in code that also runs in the browser. Make the server bundle the package instead: add it to `ssrNoExternal` in each app's `vite.config.ts` (the ERP and MES lists apply to both `ssr.noExternal` and `environments.ssr.resolve.noExternal`). To check the browser side, fetch the module from the dev server (`curl $ERP_URL/@fs<absolute path>`) and confirm the `import()` call has no second argument.
+
+**Applies to:** `packages/react/src/utils/generatedAvatar.ts`; any isomorphic code that imports JSON from a dependency.
+
+## A value two layers must agree on lives once, in the client-safe pure module
+
+**Context:** The accounting enable wizard (ERP) and the `activate-accounting` server function both decide whether Migration Clearing totals zero. The wizard uses the answer to offer "Enable accounting". The server function uses it to refuse the enable. The wizard steps also pass the cutover date to each other in a search param.
+
+**Problem:** Until 2026-10-09 each layer kept its own copy. `MigrationClearingTable.tsx` defined `MIGRATION_CLEARING_TOLERANCE = 0.01` and `isMigrationClearingZero`. `activate-accounting/index.ts` defined a second `MIGRATION_CLEARING_TOLERANCE`. `accounting.server.ts` defined `ACTIVATION_CUTOVER_PARAM`. The copies matched, but nothing kept them matched. If one copy changes, the wizard offers an enable that the server refuses, or hides one that the server accepts. Typecheck cannot see a drift between two literals.
+
+**Rule:** Put a value that two layers must agree on in one place: the client-safe pure module that both layers already import. Export the predicate, not only the number, so every caller compares the same way. The accounting cutover keeps `MIGRATION_CLEARING_TOLERANCE`, `isMigrationClearingZero`, `MIGRATION_CLEARING_ACCOUNT_CLASS` and `ACTIVATION_CUTOVER_PARAM` in `@carbon/database/accounting-cutover` (commits 38602af774, b9f897608c, f1fe2b6c81). That module reads no database, so the browser can import it.
+
+**Applies to:** `packages/database/src/accounting-cutover.ts`; `apps/erp/app/modules/accounting/ui/Activation/MigrationClearingTable.tsx`; `apps/erp/app/routes/x+/accounting+/activation.enable.tsx`; `packages/server-functions/src/activate-accounting/index.ts`; any check that a wizard previews and a server function enforces.
+
+## A detector and the builder it feeds share one zero-value rule
+
+**Context:** The accounting enable, and the "Write missing journals" repair, find legacy documents: posted on or after the cutover with no journal (`packages/database/src/legacy-documents.ts`). A builder then writes each document's journal (`packages/server-functions/src/activate-accounting/legacy/`). After that, the enable's re-cost (`activate-accounting/recost.ts`) adjusts the inventory journal pair of each outbound movement whose cost changed.
+
+**Problem:** The detection and the builders used different zero rules, in both directions:
+
+1. The detection found documents that the builders write no line for: a comment-only invoice, a receipt with no received line, a return received at no cost. Such a document got no journal, so every later run found it again.
+2. The posting core wrote no journal for a zero-cost movement (`valueMovement` skipped the journal when `cost === 0`). When the re-cost gave that movement a cost, it found no pair to adjust and refused with a 409.
+
+Commit b9f897608c removed zero-value documents from the detection. Commits b9f897608c and 188a710e24 made every outbound cost row write its pair, at zero too.
+
+**Rule:** Write the zero rule once and apply it on both sides. If the builder writes no line for a document, the detection leaves the document out. If a later step adjusts a line, the builder writes that line even at zero. Pin the pair with a test that runs the detection, the builder, and the detection again: the second detection must find nothing (`activate-accounting/legacy/detection.test.ts`).
+
+**Applies to:** `packages/database/src/legacy-documents.ts`; `packages/server-functions/src/activate-accounting/legacy/*`; `packages/server-functions/src/activate-accounting/recost.ts`; `valueMovement` in `packages/server-functions/src/lib/post-adjustment.ts`; any detect-then-repair pair.
+
+## A migration that re-scopes companies uses the company test of the migration it follows
+
+**Context:** `20261008211304_reset-accounting.sql` deletes the journals of every company except the demo-template companies. It finds those as the companies that hold a `JE-SEED-%` journal, which only tier 09 of the dataset seed writes. `20261009004448_accounting-cutover.sql` (section 7) then gives the spared companies a cutover, because their history is already in Carbon.
+
+**Problem:** The second migration first chose its companies by `accountingEnabled = true`. Only the dev CLI ever set that flag. A template applied through onboarding or Settings → Demo Data has it false. So those companies kept their Posted seed journals, but got no cutover. Their seeded Posted Opening Balance then blocked the enable wizard for good. Commit 38602af774 changed the test to the reset's `JE-SEED-%` test.
+
+**Rule:** If migration B acts on the companies that migration A chose, B copies A's predicate. Do not use a flag that "should" mean the same thing. Before you write the `WHERE`, read A's predicate. Then grep every writer of any flag you plan to use instead.
+
+**Applies to:** `packages/database/supabase/migrations/20261008211304_reset-accounting.sql`; `packages/database/supabase/migrations/20261009004448_accounting-cutover.sql`; any data migration that follows another data migration.
+
+## Removing a feature flag can expose a fail-open `?.data` guard
+
+**Context:** Before always-posting, the return shipments in `post-shipment` and the sales return receipt in `post-receipt` read the account defaults only when `accountingEnabled` was true. Otherwise `accountDefaults` was null. The journal was written under `if (accountingEnabled && accountDefaults?.data && cost > 0)`. So `accountDefaults?.data` was part of the "accounting is off" test.
+
+**Problem:** The always-post change removed the flag and kept `if (accountDefaults.data && cost > 0)`. After that, the `.data` check only caught a failed read, and it failed open. If the defaults read failed, the post still wrote its stock and cost rows, but it skipped the journal with no error and no log. Typecheck and the tests passed. Commit b9f897608c makes both paths throw "Error getting account defaults" when the read fails.
+
+**Rule:** When you remove a flag, read every condition that used the flag. A null check that meant "feature off" becomes a silent error check when the flag goes. Turn a failed read into a throw before any write. Keep only business conditions, such as `cost > 0`, in the `if`.
+
+**Applies to:** `packages/server-functions/src/post-shipment/index.ts` (return shipments); `packages/server-functions/src/post-receipt/index.ts` (sales return receipt); any flag removal, such as `accountingEnabled` or a plan gate.
+
+## The pre-commit Lingui extract reads the working tree, not the commit
+
+**Context:** `scripts/git-hooks/pre-commit` runs `pnpm lingui:check` when a staged file is TS, JS or `.po`. That script runs `lingui extract --clean` and then compiles. The hook then stages every `packages/locale/locales/**/*.po` file.
+
+**Problem:** The extract reads the working tree, not the index. On 2026-10-09, commit eac7595333 ran the hook while another session had uncommitted UI edits in the same tree (`PaymentApplyTable.tsx` and others). The extract removed strings that the committed code still uses ("Applied amount for {0}", "Discount for {0}"). It added strings that only the uncommitted code uses ("Apply to {0}", "FX Gain/Loss"). The hook staged all 13 catalogs, with those changes, into that commit. Commit 814631c22f restored catalogs extracted from HEAD in a clean worktree.
+
+**Rule:** Before you commit TS or JS, run `git status`. If it shows uncommitted `.ts` or `.tsx` edits that are not part of your commit, the hook's catalogs are wrong. A catalog-only commit in the same tree does not fix them, because the hook extracts again from the same dirty tree. Make the catalog commit in a clean tree:
+
+1. Run `git worktree add -b i18n-catalogs <path> HEAD`.
+2. In that worktree, run `pnpm install`.
+3. In that worktree, run `pnpm lingui:check`, then `pnpm lingui:clean`.
+4. Stage `packages/locale/locales/*/*.po` there and commit. The hook now extracts from a clean tree.
+5. In your own tree, run `git merge --ff-only i18n-catalogs`. A fast-forward creates no commit, so no hook runs.
+6. Remove the worktree and the branch.
+
+After any commit, check its `.po` diff. A removed `msgid` that HEAD code still uses means that the extract read a dirty tree.
+
+**Applies to:** `scripts/git-hooks/pre-commit`; `packages/locale/locales/*/*.po`; every workspace that more than one session edits at a time.
+
+## One Inngest send carries at most 512 KB, and a rendered email is about 17 KB
+
+**Context:** `notify` rendered every recipient's notification email in one step, then sent all the `carbon/send-email` events with one `step.sendEvent` (2026-10-09).
+
+**Problem:** One rendered `NotificationEmail` is about 16.9 KB, because the event carries the full HTML. Inngest accepts at most 512 KB in one send and 4 MB in one step's output. So email to about 30 recipients or more could fail the send, and about 240 filled the step. A group notification reaches those sizes; a test with one recipient never does.
+
+**Rule:** Size a fan-out by its bytes, not its count. When each event carries a rendered body, render and send it in chunks (`EMAIL_CHUNK` in `notify.ts`), each chunk in its own step with an indexed id (`render-emails-${index}`). A new step id replays a run in flight at deploy, so a send step that changes id sends again for those runs.
+
+**Applies to:** `packages/jobs/src/inngest/functions/notifications/notify.ts`; any job that fans out events with large payloads.
+
+## A failed COPY in a plain-text dump can swallow the rest of the restore
+
+**Context:** On 2026-10-09 a `crbn restore` of a prod cluster backup ended with ✅. The restored database had no index, constraint, trigger or policy in `public`, and an empty migration ledger. The trailing `migration up --include-all` would then have replayed all 1,159 migrations.
+
+**Problem:** The local stack's auth, storage and realtime tables come from its own service images, and they are older than prod's. Prod's `storage.objects` has a column (`archived_at`) that the local table does not have. A `COPY` that names an unknown column or table fails when psql parses it, so psql never enters copy mode. It then reads the block's data rows as SQL. In that data an unbalanced quote opened a string that never closed, so psql read the rest of the file as part of it. With `ON_ERROR_STOP=0`, nothing failed. The same drift also reaches DDL. The backup's newer `storage.protect_bucket_control_columns` trigger reads columns that the local `storage.buckets` does not have, so every bucket insert failed. Those service-schema objects survive later restores, because a restore drops only `public`. Separately, a Supabase backup is not one consistent snapshot: it contained payments whose journal it did not hold. So 15 foreign keys could not be validated.
+
+**Rule:** Do not trust a restore that ran with `ON_ERROR_STOP=0` until you verify it by name. `scripts/restore-database.sh` now does these things:
+
+1. It fits each non-public `COPY` to the local columns, and drops the block when the local table does not exist.
+2. It skips function definitions owned by the auth, storage and realtime admin roles. Those functions belong to the local service images.
+3. It checks each `public` index, constraint, trigger and policy from the dump, and the ledger row count. It re-adds a foreign key that cannot be validated as `NOT VALID`.
+4. It exits 1 on any shortfall, and `crbn restore` then does not migrate.
+
+A ✓ that a script prints after a step that is allowed to fail is not evidence. Read the state back.
+
+**Applies to:** `scripts/restore-database.sh`, `packages/dev/src/commands/restore.ts`, and any tool that loads a plain-text dump through psql.
+
+## A caller-supplied document number used to leave the counter behind
+
+**Context:** Documents take their number from `get_next_sequence` unless the caller supplies one: a custom ID typed into `SequenceOrCustomId`, or an MCP / API upsert (`upsertSalesOrder`, `upsertQuote`, `upsertPurchaseOrder`, `upsertJob`, …) whose create path requires the number.
+
+**Problem:** A supplied number never moved the `sequence` row. Once the counter reached a number an agent or a user had already used, every new document failed on the unique constraint ("Failed to insert sales order") until someone moved the counter by hand.
+
+**Rule:** The counter is kept ahead in the database, not in app code: the `sync_advance_document_sequence` after-interceptor moves `sequence.next` past any number saved in the sequence's format, on insert and on a number change. A new numbered table must be added to that interceptor's `CASE` and given the interceptor in `attachments.ts`; the `document-sequence-synced` conformance check fails CI for a new counter that is neither covered nor in its `EXEMPT_COUNTERS`. Never "fix" a collision by retrying `get_next_sequence`.
+
+**Applies to:** `packages/database/src/event-system/handlers/sync_advance_document_sequence.sql`, `util.document_sequence_pattern`, any table with a readable document number.
+
+## An entity in `audit.config.ts` records nothing until its tables have `events: true`
+
+**Context:** Change notice history (the `changeOrder` audit entity) was empty in the History drawer even with audit logging on (2026-10-08).
+
+**Problem:** `auditConfig.entities.changeOrder` listed its 4 tables, and `syncAuditSubscriptions` created AUDIT subscriptions for them. But `packages/database/src/event-system/attachments.ts` gave `changeOrder` only a statement broadcast and the 3 child tables no entry at all, so no async event trigger existed and nothing reached the event queue. Every check looked green: subscriptions present, sweeper succeeding, queue empty.
+
+**Rule:** When you add an entity to `audit.config.ts`, give each of its tables `events: true` in `attachments.ts` and ship it with `pnpm --filter @carbon/database authz migration <name>`. To debug an empty audit log, first check `pg_trigger` for `trg_event_async_*` on the table.
+
+**Applies to:** `packages/database/src/audit.config.ts`, `packages/database/src/event-system/attachments.ts`.

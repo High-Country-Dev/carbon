@@ -10,6 +10,7 @@ import {
   PrefetchLink,
   VStack
 } from "@carbon/react";
+import { distinctItemText } from "@carbon/utils";
 import { useLingui } from "@lingui/react/macro";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
@@ -88,7 +89,10 @@ const StockMovementsTable = memo(
               <Hyperlink to={getInventoryItemActivityPath(row.original)}>
                 <VStack spacing={0}>
                   <span>{row.original.itemReadableId}</span>
-                  {row.original.itemDescription && (
+                  {distinctItemText(
+                    row.original.itemReadableId,
+                    row.original.itemDescription
+                  ) && (
                     <span className="text-muted-foreground text-xs">
                       {row.original.itemDescription}
                     </span>
@@ -98,6 +102,7 @@ const StockMovementsTable = memo(
             </HStack>
           ),
           meta: {
+            mobile: "P1",
             icon: <LuBlocks />
           }
         },
@@ -111,6 +116,7 @@ const StockMovementsTable = memo(
           header: t`Entry Type`,
           cell: (item) => <Enumerable value={item.getValue<string>()} />,
           meta: {
+            mobile: "P2",
             filter: {
               type: "static",
               options: itemLedgerTypes.map((type) => ({
@@ -126,6 +132,7 @@ const StockMovementsTable = memo(
           header: t`Document Type`,
           cell: (item) => <Enumerable value={item.getValue<string>()} />,
           meta: {
+            mobile: "P2",
             filter: {
               type: "static",
               options: itemLedgerDocumentTypes.map((type) => ({
@@ -165,6 +172,7 @@ const StockMovementsTable = memo(
           header: t`Quantity`,
           cell: ({ row }) => <QuantityDelta value={row.original.quantity} />,
           meta: {
+            mobile: "P2",
             icon: <LuHash />
           }
         },
@@ -239,6 +247,10 @@ const StockMovementsTable = memo(
             <DateTime value={item.getValue<string>()} variant="date" />
           ),
           meta: {
+            mobile: "P3",
+            filter: {
+              type: "dateRange"
+            },
             icon: <LuCalendar />
           }
         },

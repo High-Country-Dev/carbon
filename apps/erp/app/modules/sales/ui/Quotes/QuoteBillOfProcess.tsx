@@ -41,7 +41,7 @@ import {
   VStack
 } from "@carbon/react";
 import { Editor } from "@carbon/react/Editor";
-import { INPUT_FORMAT } from "@carbon/utils";
+import { distinctItemText, INPUT_FORMAT } from "@carbon/utils";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { DragControls } from "motion/react";
@@ -91,7 +91,6 @@ import {
 import AssemblyInstruction from "~/components/Form/AssemblyInstruction";
 import InspectionDocument from "~/components/Form/InspectionDocument";
 import Procedure from "~/components/Form/Procedure";
-import { SupplierProcessPreview } from "~/components/Form/SupplierProcess";
 import { getUnitHint } from "~/components/Form/UnitHint";
 import UnitOfMeasure, {
   useUnitOfMeasure
@@ -112,6 +111,10 @@ import {
   useRouteData,
   useUser
 } from "~/hooks";
+import {
+  OperationRowDetails,
+  OperationRowTitle
+} from "~/modules/items/ui/Item/MethodRow";
 import type {
   OperationParameter,
   OperationStep,
@@ -190,49 +193,16 @@ function makeItem(
   return {
     id: operation.id!,
     title: (
-      <VStack spacing={0}>
-        <h3 className="font-semibold max-w-full truncate cursor-pointer">
-          {operation.description}
-        </h3>
-        {operation.operationType === "Outside Processing" && (
-          <SupplierProcessPreview
-            processId={operation.processId}
-            supplierProcessId={operation.operationSupplierProcessId}
-          />
-        )}
-      </VStack>
+      <OperationRowTitle
+        description={operation.description}
+        operationType={operation.operationType}
+        processId={operation.processId}
+        supplierProcessId={operation.operationSupplierProcessId}
+      />
     ),
     checked: false,
     order: operation.operationOrder,
-    details: (
-      <HStack spacing={1}>
-        {operation.operationType === "Outside Processing" ? (
-          <Badge>Outside Processing</Badge>
-        ) : (
-          <>
-            {(operation?.setupTime ?? 0) > 0 && (
-              <Badge variant="secondary">
-                <TimeTypeIcon type="Setup" className="h-3 w-3 mr-1" />
-                {operation.setupTime} {operation.setupUnit}
-              </Badge>
-            )}
-            {(operation?.laborTime ?? 0) > 0 && (
-              <Badge variant="secondary">
-                <TimeTypeIcon type="Labor" className="h-3 w-3 mr-1" />
-                {operation.laborTime} {operation.laborUnit}
-              </Badge>
-            )}
-
-            {(operation?.machineTime ?? 0) > 0 && (
-              <Badge variant="secondary">
-                <TimeTypeIcon type="Machine" className="h-3 w-3 mr-1" />
-                {operation.machineTime} {operation.machineUnit}
-              </Badge>
-            )}
-          </>
-        )}
-      </HStack>
-    ),
+    details: <OperationRowDetails operation={operation} />,
     data: operation
   };
 }
@@ -321,7 +291,9 @@ const QuoteBillOfProcess = ({
         .map((item) => ({
           id: item.id,
           label: item.name ?? item.readableIdWithRevision,
-          helper: item.name ? item.readableIdWithRevision : undefined
+          helper: item.name
+            ? distinctItemText(item.name, item.readableIdWithRevision)
+            : undefined
         })),
     [allItems, materialItemIds]
   );
@@ -333,6 +305,7 @@ const QuoteBillOfProcess = ({
   const quoteData = useRouteData<{ quote: Quotation }>(path.to.quote(quoteId));
 
   const isDisabled = quoteData?.quote?.status !== "Draft";
+  const isReadOnly = isDisabled || !permissions.can("update", "sales");
 
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [temporaryItems, setTemporaryItems] = useState<TemporaryItems>({});
@@ -346,12 +319,10 @@ const QuoteBillOfProcess = ({
       }, {} as PendingWorkInstructions);
     });
   const [checkedState, setCheckedState] = useState<CheckedState>({});
-  const [orderState, setOrderState] = useState<OrderState>(() => {
-    return initialOperations.reduce((acc, op) => {
-      acc[op.id!] = op.order;
-      return acc;
-    }, {} as OrderState);
-  });
+  // Only the rows this session has reordered. Every other row takes its order
+  // from the loaded data: a copy of all of them taken at mount hid a reorder
+  // made anywhere else until the page was reloaded.
+  const [orderState, setOrderState] = useState<OrderState>({});
 
   const { t } = useLingui();
 
@@ -766,6 +737,7 @@ const QuoteBillOfProcess = ({
 
     return (
       <SortableListItem<Operation>
+        isReadOnly={isReadOnly}
         item={item}
         items={items}
         order={order}
@@ -820,6 +792,7 @@ const QuoteBillOfProcess = ({
       </HStack>
       <CardContent>
         <SortableList
+          isReadOnly={isReadOnly}
           items={items}
           onReorder={onReorder}
           onToggleItem={onToggleItem}
@@ -861,7 +834,8 @@ function AttributesForm({
 
   // Update sort order when steps change
   useEffect(() => {
-    if (steps && steps.length > 0) {
+    // Also when the last step is deleted: its id must leave the order.
+    if (steps) {
       const sorted = [...steps]
         .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0))
         .map((step) => step.id || "");
@@ -976,7 +950,10 @@ function AttributesForm({
               <Input name="name" label={t`Name`} />
             </div>
 
-            <VStack spacing={2} className="w-full col-span-2">
+            <VStack
+              spacing={2}
+              className="w-full col-span-2 max-md:col-span-full"
+            >
               <Label>Description</Label>
               <Editor
                 initialValue={description}
@@ -1222,7 +1199,10 @@ function AttributesListItem({
               <Input name="name" label={t`Name`} />
             </div>
 
-            <VStack spacing={2} className="w-full col-span-2">
+            <VStack
+              spacing={2}
+              className="w-full col-span-2 max-md:col-span-full"
+            >
               <Label>Description</Label>
               <Editor
                 initialValue={description}
@@ -2015,7 +1995,7 @@ function OperationForm({
           onChange={(newValue) => {
             setProcessData((d) => ({ ...d, description: newValue }));
           }}
-          className="col-span-2"
+          className="col-span-2 max-md:col-span-full"
         />
 
         <Select

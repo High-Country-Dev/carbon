@@ -81,6 +81,7 @@ const JournalEntriesTable = memo(
             </Hyperlink>
           ),
           meta: {
+            mobile: "P1",
             icon: <LuBookmark />
           }
         },
@@ -91,6 +92,9 @@ const JournalEntriesTable = memo(
             <DateTime value={row.original.postingDate} variant="date" />
           ),
           meta: {
+            filter: {
+              type: "dateRange"
+            },
             icon: <LuCalendar />
           }
         },
@@ -117,6 +121,9 @@ const JournalEntriesTable = memo(
             </HStack>
           ),
           meta: {
+            mobile: "P3",
+            // Phones: plain text on the row's context line.
+            mobileCell: ({ row }) => row.original.description || "—",
             icon: <LuFileText />
           }
         },
@@ -146,6 +153,7 @@ const JournalEntriesTable = memo(
             />
           ),
           meta: {
+            mobile: "P2",
             filter: {
               type: "static",
               options: journalEntryStatuses.map((v) => ({
@@ -162,6 +170,7 @@ const JournalEntriesTable = memo(
           cell: ({ row }) =>
             currencyFormatter.format(Number(row.original.totalDebits)),
           meta: {
+            mobile: "P2",
             icon: <LuCircleDollarSign />
           }
         },
@@ -277,6 +286,8 @@ const JournalEntriesTable = memo(
           primaryAction={primaryAction}
           renderContextMenu={renderContextMenu}
           title={t`Journal Entries`}
+          table="journal"
+          withSavedView
         />
         {selectedEntry && selectedEntry.id && (
           <ConfirmDelete

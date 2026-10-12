@@ -44,6 +44,7 @@ import {
   jiraSyncFunction,
   linearSyncFunction,
   mountPublishFunction,
+  mountSweepFunction,
   onshapeBackfillFunction,
   onshapeRevisionSyncFunction,
   paperlessPartsFunction,
@@ -61,6 +62,7 @@ import {
 import {
   notifyFunction,
   sendEmailFunction,
+  sendPushFunction,
   sendSlackFunction
 } from "./functions/notifications";
 import {
@@ -73,6 +75,8 @@ import {
   nightlyReplanFunction,
   notificationDigestFunction,
   purgeInactiveCompaniesFunction,
+  recurringBillingFunction,
+  revenueRecognitionProposalFunction,
   scheduleReplanWaveFunction,
   updateExchangeRatesFunction,
   weeklyFunction,
@@ -90,6 +94,7 @@ import {
   companyTemplateFinalizeFunction,
   companyTemplateFunction,
   companyTemplateRevertFunction,
+  invoiceAutomateFunction,
   modelCompactFunction,
   modelOptimizeFunction,
   modelThumbnailFunction,
@@ -113,6 +118,7 @@ export const functions = [
   // Notifications
   notifyFunction,
   sendEmailFunction,
+  sendPushFunction,
   sendSlackFunction,
   // Event handlers
   auditFunction,
@@ -139,6 +145,7 @@ export const functions = [
   companyTemplateFinalizeFunction,
   companyTemplateFunction,
   companyTemplateRevertFunction,
+  invoiceAutomateFunction,
   modelCompactFunction,
   modelOptimizeFunction,
   modelThumbnailFunction,
@@ -167,6 +174,8 @@ export const functions = [
     ? [purgeInactiveCompaniesFunction]
     : []),
   workflowRunRetentionFunction,
+  revenueRecognitionProposalFunction,
+  recurringBillingFunction,
   // Integrations
   jiraSyncFunction,
   linearSyncFunction,
@@ -178,6 +187,7 @@ export const functions = [
   accountingReconciliationFunction,
   accountingPullSweepFunction,
   mountPublishFunction,
+  mountSweepFunction,
   onshapeBackfillFunction,
   onshapeRevisionSyncFunction,
   rampSyncFunction,

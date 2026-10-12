@@ -3,13 +3,11 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { datetime, isUnaffectedByNavigation } from "@carbon/utils";
+import { datetime } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
-import type {
-  LoaderFunctionArgs,
-  ShouldRevalidateFunction
-} from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
+import { hasAccountingCutover } from "~/modules/accounting/accounting.utils";
 import {
   ARAPWorkbench,
   getArAging,
@@ -36,11 +34,6 @@ function parseBuckets(raw: string | null): [number, number, number] {
   return [30, 60, 90];
 }
 
-export const shouldRevalidate: ShouldRevalidateFunction = (args) =>
-  isUnaffectedByNavigation(args, { search: "all" })
-    ? false
-    : args.defaultShouldRevalidate;
-
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {
     view: "invoicing"
@@ -56,16 +49,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
       : "dueDate";
   const bucketDays = parseBuckets(url.searchParams.get("bucketDays"));
 
-  // GL tie-outs only mean something when journals are being posted — skip
-  // them entirely when accounting is disabled (result: null hides the
+  // GL tie-outs only mean something once journals count — skip them
+  // entirely before the accounting cutover (result: null hides the
   // tie-out panel and the adjusting-entry form in ARAPWorkbench).
   const companySettings = await getCompanySettings(client, companyId);
-  const accountingEnabled =
-    (companySettings.data as { accountingEnabled?: boolean } | null)
-      ?.accountingEnabled ?? false;
+  const accountingSetUp = hasAccountingCutover(companySettings.data);
 
   const [tieOut, aging, open] = await Promise.all([
-    accountingEnabled
+    accountingSetUp
       ? getArTieOut(client, companyId, asOfDate)
       : Promise.resolve({ data: null }),
     getArAging(client, companyId, asOfDate, { agingMethod, bucketDays }),

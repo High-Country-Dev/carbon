@@ -3,15 +3,13 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { Button, VStack } from "@carbon/react";
-import { isUnaffectedByNavigation } from "@carbon/utils";
+import { Button, RecordOutlet, VStack } from "@carbon/react";
 import { msg } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { LuCirclePlus } from "react-icons/lu";
-import type {
-  LoaderFunctionArgs,
-  ShouldRevalidateFunction
-} from "react-router";
-import { Outlet, useFetcher, useLoaderData } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import { useFetcher, useLoaderData } from "react-router";
+import { NewAction } from "~/components/New";
 import { usePermissions } from "~/hooks";
 import { getJournalEntries } from "~/modules/accounting";
 import { JournalEntriesTable } from "~/modules/accounting/ui/JournalEntries";
@@ -23,11 +21,6 @@ export const handle: Handle = {
   breadcrumb: msg`Journal Entries`,
   to: path.to.accountingJournals
 };
-
-export const shouldRevalidate: ShouldRevalidateFunction = (args) =>
-  isUnaffectedByNavigation(args, { search: "all" })
-    ? false
-    : args.defaultShouldRevalidate;
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {
@@ -58,18 +51,25 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 function NewJournalEntry() {
+  const { t } = useLingui();
   const fetcher = useFetcher();
   return (
-    <fetcher.Form method="post" action="new">
-      <Button
-        type="submit"
-        leftIcon={<LuCirclePlus />}
-        variant="primary"
-        isLoading={fetcher.state !== "idle"}
-      >
-        Add Journal Entry
-      </Button>
-    </fetcher.Form>
+    <NewAction
+      label={t`Add Journal Entry`}
+      isDisabled={fetcher.state !== "idle"}
+      onClick={() => fetcher.submit(null, { method: "post", action: "new" })}
+    >
+      <fetcher.Form method="post" action="new">
+        <Button
+          type="submit"
+          leftIcon={<LuCirclePlus />}
+          variant="primary"
+          isLoading={fetcher.state !== "idle"}
+        >
+          <Trans>Add Journal Entry</Trans>
+        </Button>
+      </fetcher.Form>
+    </NewAction>
   );
 }
 
@@ -86,7 +86,7 @@ export default function JournalEntriesRoute() {
           permissions.can("create", "accounting") && <NewJournalEntry />
         }
       />
-      <Outlet />
+      <RecordOutlet />
     </VStack>
   );
 }

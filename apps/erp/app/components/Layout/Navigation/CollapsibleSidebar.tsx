@@ -2,15 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
-import {
-  cn,
-  Drawer,
-  DrawerContent,
-  DrawerTitle,
-  IconButton,
-  useIsMobile
-} from "@carbon/react";
-import { Trans } from "@lingui/react/macro";
+import { cn, IconButton, useViewport } from "@carbon/react";
 import { motion, useReducedMotion } from "motion/react";
 import type { ComponentProps, PropsWithChildren } from "react";
 import {
@@ -24,9 +16,9 @@ import {
 import { LuPanelLeft } from "react-icons/lu";
 import type { Location } from "react-router";
 import { useLocation, useMatches, useNavigation } from "react-router";
-import { useOptimisticLocation } from "~/hooks";
 import { useUIStore } from "~/stores/ui";
 import type { Handle } from "~/utils/handle";
+import { useSlidingHoverCard } from "./useSlidingHoverCard";
 
 interface CollapsibleSidebarContextValue {
   hasSidebar: boolean;
@@ -51,29 +43,19 @@ function CollapsibleSidebarProvider({
   hasSidebar,
   children
 }: PropsWithChildren<{ hasSidebar: boolean }>) {
-  const isMobile = useIsMobile();
+  const { isPhone } = useViewport();
   const isSidebarOpen = useUIStore((state) => state.isSidebarOpen);
   const setSidebarOpen = useUIStore((state) => state.setSidebarOpen);
   const toggleSidebar = useUIStore((state) => state.toggleSidebar);
-  const setHasContentSidebar = useUIStore(
-    (state) => state.setHasContentSidebar
-  );
 
   // Only a change of breakpoint moves it: opening on mount would undo the
-  // user's collapse, and on a phone open the drawer for a frame.
-  const wasMobile = useRef(false);
+  // user's collapse.
+  const wasCompact = useRef(false);
   useEffect(() => {
-    if (isMobile) setSidebarOpen(false);
-    else if (wasMobile.current) setSidebarOpen(true);
-    wasMobile.current = isMobile;
-  }, [isMobile, setSidebarOpen]);
-
-  // Tell the (global) Topbar that this route has a content sub-nav, so it can
-  // surface a mobile "Sections" trigger.
-  useEffect(() => {
-    setHasContentSidebar(hasSidebar);
-    return () => setHasContentSidebar(false);
-  }, [hasSidebar, setHasContentSidebar]);
+    if (isPhone) setSidebarOpen(false);
+    else if (wasCompact.current) setSidebarOpen(true);
+    wasCompact.current = isPhone;
+  }, [isPhone, setSidebarOpen]);
 
   return (
     <CollapsibleSidebarContext.Provider
@@ -134,57 +116,45 @@ export function useSidebarLocation(isInside: (pathname: string) => boolean) {
  * background. A link opts in with `data-nav-item`.
  */
 export function SidebarLinks({ children }: PropsWithChildren) {
-  const listRef = useRef<HTMLDivElement>(null);
-  const hoverCardRef = useRef<HTMLSpanElement>(null);
-
-  // Written straight to the element: a hover must not re-render the list.
-  const moveHoverCard = (item: HTMLElement | null) => {
-    const card = hoverCardRef.current;
-    const list = listRef.current;
-    if (!card || !list) return;
-    if (!item) {
-      card.style.opacity = "0";
-      return;
-    }
-    const itemRect = item.getBoundingClientRect();
-    const listRect = list.getBoundingClientRect();
-    const left = itemRect.left - listRect.left + list.scrollLeft;
-    const top = itemRect.top - listRect.top + list.scrollTop;
-    // Entering the list: appear on the link rather than slide in from
-    // wherever the card was last.
-    card.style.transitionProperty = card.style.opacity === "1" ? "" : "opacity";
-    card.style.transform = `translate(${left}px, ${top}px)`;
-    card.style.width = `${itemRect.width}px`;
-    card.style.height = `${itemRect.height}px`;
-    card.style.opacity = "1";
-  };
+  const { containerRef, cardRef, handlers } =
+    useSlidingHoverCard<HTMLDivElement>();
 
   return (
     <div
-      ref={listRef}
+      ref={containerRef}
       className="relative overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-accent h-full w-full pb-8"
-      // The gaps between links are not links: the card stays where it is
-      // while the pointer crosses one, and only leaves with the pointer.
-      onPointerOver={(event) => {
-        if (event.pointerType !== "mouse") return;
-        const item = (event.target as HTMLElement).closest<HTMLElement>(
-          "[data-nav-item]"
-        );
-        if (item) moveHoverCard(item);
-      }}
-      // A press navigates, expands a link's views or starts a reorder: the
-      // row under the card is about to change or move.
-      onPointerDown={() => moveHoverCard(null)}
-      onPointerLeave={() => moveHoverCard(null)}
+      {...handlers}
     >
       <span
-        ref={hoverCardRef}
+        ref={cardRef}
         aria-hidden
         className="pointer-events-none absolute left-0 top-0 rounded-md bg-active/60 opacity-0 transition-[transform,opacity] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none"
       />
       {children}
     </div>
   );
+}
+
+/**
+ * The current module's sub-navigation component from the route handles, or
+ * undefined. The desktop sidebar and the compact section switcher both read it.
+ */
+export function useModuleSidebar() {
+  const matches = useMatches();
+  const handles = matches.map((match) => match.handle as Handle | undefined);
+  return handles.some((handle) => handle?.hideModuleSidebar)
+    ? undefined
+    : handles.find((handle) => handle?.sidebar)?.sidebar;
+}
+
+/** Phones: the module sidebar, or a route's phone-only section switcher. */
+export function useCompactModuleSidebar() {
+  const matches = useMatches();
+  const Sidebar = useModuleSidebar();
+  if (Sidebar) return Sidebar;
+  return matches
+    .map((match) => match.handle as Handle | undefined)
+    .find((handle) => handle?.compactSidebar)?.compactSidebar;
 }
 
 /**
@@ -195,11 +165,7 @@ export function SidebarLinks({ children }: PropsWithChildren) {
  * outside a module (detail pages) have none and get the full width.
  */
 export function ModuleSidebarLayout({ children }: PropsWithChildren) {
-  const matches = useMatches();
-  const handles = matches.map((match) => match.handle as Handle | undefined);
-  const Sidebar = handles.some((handle) => handle?.hideModuleSidebar)
-    ? undefined
-    : handles.find((handle) => handle?.sidebar)?.sidebar;
+  const Sidebar = useModuleSidebar();
 
   return (
     <CollapsibleSidebarProvider hasSidebar={Boolean(Sidebar)}>
@@ -229,9 +195,7 @@ const CollapsibleSidebar = ({
 }: PropsWithChildren<{ width?: number }>) => {
   const { isOpen } = useCollapsibleSidebar();
   const shouldReduceMotion = useReducedMotion();
-  const isMobile = useIsMobile();
-  const setSidebarOpen = useUIStore((state) => state.setSidebarOpen);
-  const location = useOptimisticLocation();
+  const { isPhone } = useViewport();
 
   const variants = useMemo(() => {
     return {
@@ -246,38 +210,9 @@ const CollapsibleSidebar = ({
     };
   }, [width]);
 
-  // On mobile the sub-nav is an overlay drawer; close it once the user picks a
-  // section (the pathname changes) so it doesn't sit over the destination.
-  useEffect(() => {
-    if (isMobile) setSidebarOpen(false);
-  }, [location.pathname, isMobile, setSidebarOpen]);
-
-  if (isMobile) {
-    return (
-      <>
-        {/* The sub-nav is a portaled overlay on mobile, but the module layout
-            grid (`grid-cols-[auto_minmax(0,1fr)]`) still expects a node in its
-            first (`auto`) track. Without this zero-width occupant the content
-            slides into the `auto` track and the `1fr` track becomes an empty
-            gutter on the right. */}
-        <div aria-hidden className="w-0" />
-        <Drawer open={isOpen} onOpenChange={setSidebarOpen}>
-          <DrawerContent
-            position="left"
-            size="content"
-            className="w-[17rem] max-w-[85vw] p-0"
-          >
-            <DrawerTitle className="px-4 py-3">
-              <Trans>Submodules</Trans>
-            </DrawerTitle>
-            <div className="flex flex-1 min-h-0 flex-col overflow-hidden">
-              {children}
-            </div>
-          </DrawerContent>
-        </Drawer>
-      </>
-    );
-  }
+  // Compact: the app bar title opens the section switcher sheet instead.
+  // Keep the zero-width occupant of the layout grid's first track.
+  if (isPhone) return <div aria-hidden className="w-0" />;
 
   return (
     <motion.div

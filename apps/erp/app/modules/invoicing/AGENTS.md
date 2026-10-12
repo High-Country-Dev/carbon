@@ -23,10 +23,17 @@ in `ui/index.ts`; `x+/sales-invoice+/` deep-imports it. Every other `ui/` folder
 
 - **Invoice status** — `salesInvoiceStatusType` / `purchaseInvoiceStatusType`;
   `is{Sales,Purchase}InvoiceLocked` = not Draft. **`Partially Paid` and `Overdue` are DERIVED**
-  in the `salesInvoices`/`purchaseInvoices` views from `invoiceSettlement`, and
-  `update{Sales,Purchase}InvoiceStatus` returns an error rather than writing either.
-  Base-status `Paid` is the manual/legacy/Xero "settled" signal, allowed by the route only
-  when accounting is disabled.
+  in the `salesInvoices`/`purchaseInvoices` views from `invoiceSettlement`. There is no
+  manual status change: Mark as Paid / Mark as Unpaid, their `$invoiceId.status.tsx` routes
+  and `update{Sales,Purchase}InvoiceStatus` are gone, so in Carbon a payment (through
+  `invoiceSettlement`) is the only way an invoice becomes paid. An accounting-provider pull
+  still writes the base status: the Xero and QuickBooks Online invoice and bill syncers
+  (`packages/ee/src/accounting/providers/{xero,quickbooks-online}/entities/{invoice,bill}.ts`,
+  `upsertLocal`) set `Paid` or `Partially Paid` from the remote document (Xero: `PAID` gives
+  `Paid`, and a bill with `AmountPaid` and `AmountDue` gives `Partially Paid`; QBO: `Balance`
+  against `TotalAmt`), and the bill syncers also set `datePaid`.
+  The `salesInvoices` / `purchaseInvoices` views show a base `Paid` as `Paid` with a zero
+  `balance`, whatever the settlements say.
 - **Due date** — `computeInvoiceDateDue` anchors `paymentTerm.daysDue` by `calculationMethod`
   (`Net` / `End of Month` / `Day of Month`, clamped). A missing term falls back to
   `DEFAULT_PAYMENT_TERM` (Net 30); a term *query failure* throws so the caller aborts instead
@@ -129,9 +136,9 @@ pnpm --filter erp test                                    # the whole app's vite
 
 | Table / View | Purpose |
 |---|---|
-| `salesInvoice` / `salesInvoices` (view) | AR header; view derives `balance`, `invoiceTotal`, `Partially Paid`/`Overdue`, `paymentTermName` |
-| `salesInvoiceLine` / `salesInvoiceLines` / `salesInvoiceLocations` (views) | AR lines (`salesInvoiceLineType` includes `Fixed Asset`) |
-| `salesInvoiceShipment` | Per-invoice shipping method/term/cost + incoterm |
+| `salesInvoice` / `salesInvoices` (view) | AR header; view derives `balance`, `invoiceTotal`, `Partially Paid`/`Overdue`, `paymentTermName`. Invoice automation columns: `automationHoldReason` (a Draft a person must review before automation posts it), `sentAt` / `sentTo` / `sendError` (the manual post route stamps `sentAt` when the email is QUEUED, or `sentTo: "Stripe"` once the Stripe send succeeds, and `sendError` when anything after the post — the PDF, the contact, the email or the Stripe send — fails; the automation stamps when it is SENT, and a sent stamp that fails to write becomes a `sendError` rather than a clean send). The header shows "Emailed", or "Sent via Stripe" when `sentTo` is `Stripe`. The view's `needsReview` = held Draft, or posted with `sendError` and no `sentAt` — the Sales Invoices list shows an orange "Needs Review" badge beside the status (tooltip: the hold reason or send error) and filters on the hidden `needsReview` column (`?filter=needsReview:eq:true`, the link the digest notification uses). There is no sidebar entry for it. A posted invoice that failed to send has a Send action (`$invoiceId.send.tsx`, fires `carbon/invoice.automate` with `resend: true`: the job sends through Stripe when the invoice's source mode is `Post and Send via Stripe`, otherwise by email — including a manually posted invoice with no recurring source). The posted PDF is stored under `{companyId}/opportunity/{opportunityId}/`, or `{companyId}/sales-invoice/{invoiceId}/` when the invoice has no opportunity; it is rendered by `@carbon/lib/sales-invoice-document.server` (shared with the PDF route and the automation job) |
+| `salesInvoiceLine` / `salesInvoiceLines` / `salesInvoiceLocations` (views) | AR lines (`salesInvoiceLineType` includes `Fixed Asset`). **Line discount** (migration `20261006221401`): `discountPercent` is a FRACTION 0–1 (CHECK, default 0) with generated `netUnitPrice` / `convertedNetUnitPrice`; it discounts the merchandise (`quantity × unitPrice`) only — add-ons and shipping never — and tax is charged on the discounted merchandise. `unitPrice` stays the LIST price. Every amount path applies it: the `salesInvoices` view totals, `calculateSalesPostingAmounts` (`@carbon/database`, `sales-posting-amounts.ts`), the PDF / email (`@carbon/documents` `utils/sales-invoice.ts`), `SalesInvoiceSummary`, Stripe (`toStripeInvoiceLines`) and the accounting providers (`sales-document-components.ts`). The form field "Discount (%)" posts percent POINTS; `$invoiceId.new` / `$invoiceId.$lineId.details` divide by 100 (`salesInvoiceLineValidator` accepts 0–100). `upsertSalesInvoiceLine` (an MCP tool) writes the value as given, so an MCP caller must send the fraction (20 is refused by the CHECK). Contract provenance: `customerContractId` / `customerContractLineId` / `customerContractInvoiceLineId` and `projectId` (written as the Project dimension on the line's revenue legs); `salesInvoice.customerContractId` and `memo.customerContractId` likewise. With these FKs, inferring a bare `salesInvoice(...)` embed from `salesInvoiceLine` exceeds TypeScript's instantiation depth (TS2589): name the FK, `salesInvoice!salesInvoiceLine_invoiceId_fkey(...)` |
+| `salesInvoiceShipment` | Per-invoice shipping method/term/cost + incoterm, and the customer ship-to `customerLocationId` ("Ship To" on `SalesInvoiceShipmentForm`; copied from the order / contract / rental agreement when one drafts the invoice; sales rules evaluate standalone lines against it, never the bill-to — see sales `AGENTS.md` "Invoice ship-to") |
 | `purchaseInvoice` / `purchaseInvoices` (view) | AP header; view derives `balance`, `orderTotal`, the derived statuses |
 | `purchaseInvoiceLine` / `purchaseInvoiceLines` (view) | AP lines (`purchaseInvoiceLineType` includes `G/L Account`) |
 | `purchaseInvoiceDelivery` | AP delivery terms |
@@ -199,7 +206,9 @@ guarded by `requireUnlockedBulk`, not validators.
 - **sales** / **purchasing** — invoices convert from sales orders, shipments and POs; sales
   rules gate the sales-invoice post; `getCustomerPayment`/`getCustomerShipping` (and the
   supplier equivalents) seed invoice headers.
-- **settings** — `getNextSequence`, `getCompanySettings` (`accountingEnabled`),
+- **settings** — `getNextSequence`, `getCompanySettings` (`accountingCutoverDate`, read through
+  `hasAccountingCutover` from `~/modules/accounting/accounting.utils`: before the cutover the receivables / payables
+  workbenches and the invoicing dashboard skip the GL tie-out, and the adjust routes refuse),
   `party-contact.server`.
 - **shared** — `getCompanyTimeZone` (`timezone.server`); `incoterms`/`itemType`/`methodType` from
   `shared.models` imported DIRECTLY, never via the `../shared` barrel (which drags Lingui macros

@@ -3,19 +3,27 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import type { Database, Json } from "@carbon/database";
-import { fetchAllFromTable, getCompanyTimeZone } from "@carbon/database";
+import {
+  fetchAllFromTable,
+  fetchAllRecords,
+  getCompanyTimeZone
+} from "@carbon/database";
 import type {
   ExpressionBuilder,
   Kysely,
   KyselyDatabase,
   KyselyTx
 } from "@carbon/database/client";
+import {
+  buildSupplierPriceMap,
+  type SupplierPriceBreak,
+  supplierPartCurrency
+} from "@carbon/database/supplier-part-price";
 import { storage } from "@carbon/files";
 import { getLogger } from "@carbon/logger";
 import { serverFns } from "@carbon/server-functions";
-import { datetime } from "@carbon/utils";
+import { datetime, isUniqueViolation, withPathIds } from "@carbon/utils";
 import type { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
-import { nanoid } from "nanoid";
 import type { z } from "zod";
 import { createDocumentUploadUrl } from "~/modules/documents/documents.service";
 import type { GenericQueryFilters } from "~/utils/query";
@@ -36,8 +44,8 @@ import {
   lookupBuyPriceFromMap,
   type MethodType,
   normalizeOperationSourceIds,
-  type PriceBreak,
   type SourcingType,
+  type SupplierPartPricing,
   type SupplierPriceMap
 } from "../shared";
 import { updateSortOrder } from "../shared/sort-order";
@@ -56,6 +64,7 @@ import {
   type configurationRuleValidator,
   type consumableValidator,
   type customerPartValidator,
+  EACH_UNIT_OF_MEASURE_CODE,
   type getMethodValidator,
   ItemTrackingType,
   isAllowedChangeNoticeTransition,
@@ -216,6 +225,196 @@ export async function copyItemPostingGroup(
     .eq("companyId", args.companyId);
 }
 
+// Kysely bypasses RLS, so before a Kysely write the caller's client vouches for
+// it: the permission the table's RLS policy would have asked for, in that
+// company. A service-role client passes.
+async function requireCompanyPermission(
+  client: SupabaseClient<Database>,
+  companyId: string,
+  permission: string
+): Promise<{ error: ServiceError | null }> {
+  const gate = await client.rpc("assert_company_access", {
+    p_company_id: companyId,
+    p_permission: permission
+  });
+  return { error: gate.error };
+}
+
+// What a new revision inherits from the revision it was copied from, beyond the
+// item row and the method: replenishment (batch size, scrap percent, lead time,
+// the preferred supplier and its purchasing unit), each location's reorder
+// policy with its parameters, the item group, and the supplier parts with their
+// price breaks. Runs in the transaction that inserted the target item: the item
+// interceptor has by then created the target's itemReplenishment / itemPlanning
+// / itemCost rows with defaults, and it has no supplier parts, so this updates
+// those rows in place and inserts the rest. Both sides of every statement are
+// scoped to the company.
+async function copyItemPlanningAndPurchasing(
+  trx: KyselyTx,
+  args: {
+    sourceItemId: string;
+    targetItemId: string;
+    companyId: string;
+    userId: string;
+  }
+) {
+  const { sourceItemId, targetItemId, companyId, userId } = args;
+  const updatedAt = datetime.timestamp();
+
+  await trx
+    .updateTable("itemReplenishment as target")
+    .from("itemReplenishment as source")
+    .set((eb) => ({
+      lotSize: eb.ref("source.lotSize"),
+      scrapPercentage: eb.ref("source.scrapPercentage"),
+      leadTime: eb.ref("source.leadTime"),
+      // The purchasing unit and conversion factor are properties of the
+      // preferred supplier's supplier part (see upsertItemPurchasing), which
+      // is copied below, so the three travel together.
+      preferredSupplierId: eb.ref("source.preferredSupplierId"),
+      purchasingUnitOfMeasureCode: eb.ref("source.purchasingUnitOfMeasureCode"),
+      conversionFactor: eb.ref("source.conversionFactor"),
+      updatedBy: userId,
+      updatedAt
+    }))
+    .where("target.itemId", "=", targetItemId)
+    .where("target.companyId", "=", companyId)
+    .where("source.itemId", "=", sourceItemId)
+    .where("source.companyId", "=", companyId)
+    .execute();
+
+  // A reorder policy is only meaningful with its parameters (Maximum
+  // Quantity needs a reorder point and a maximum, and so on), so the policy
+  // and its sizing parameters are copied together, location by location.
+  // The planning horizon and the responsible employee are not copied: a new
+  // revision inherits the company defaults for both. A location the source
+  // has no planning row for keeps the defaults.
+  await trx
+    .updateTable("itemPlanning as target")
+    .from("itemPlanning as source")
+    .set((eb) => ({
+      reorderingPolicy: eb.ref("source.reorderingPolicy"),
+      demandAccumulationPeriod: eb.ref("source.demandAccumulationPeriod"),
+      demandAccumulationSafetyStock: eb.ref(
+        "source.demandAccumulationSafetyStock"
+      ),
+      reorderPoint: eb.ref("source.reorderPoint"),
+      reorderQuantity: eb.ref("source.reorderQuantity"),
+      maximumInventoryQuantity: eb.ref("source.maximumInventoryQuantity"),
+      minimumOrderQuantity: eb.ref("source.minimumOrderQuantity"),
+      maximumOrderQuantity: eb.ref("source.maximumOrderQuantity"),
+      orderMultiple: eb.ref("source.orderMultiple"),
+      updatedBy: userId,
+      updatedAt
+    }))
+    .whereRef("target.locationId", "=", "source.locationId")
+    .where("target.itemId", "=", targetItemId)
+    .where("target.companyId", "=", companyId)
+    .where("source.itemId", "=", sourceItemId)
+    .where("source.companyId", "=", companyId)
+    .execute();
+
+  await trx
+    .updateTable("itemCost as target")
+    .from("itemCost as source")
+    .set((eb) => ({
+      itemPostingGroupId: eb.ref("source.itemPostingGroupId"),
+      updatedBy: userId,
+      updatedAt
+    }))
+    .where("target.itemId", "=", targetItemId)
+    .where("target.companyId", "=", companyId)
+    .where("source.itemId", "=", sourceItemId)
+    .where("source.companyId", "=", companyId)
+    .execute();
+
+  await trx
+    .insertInto("supplierPart")
+    .columns([
+      "itemId",
+      "supplierId",
+      "supplierPartId",
+      "supplierUnitOfMeasureCode",
+      "minimumOrderQuantity",
+      "orderMultiple",
+      "conversionFactor",
+      "supplierUnitPrice",
+      "currencyCode",
+      "active",
+      "customFields",
+      "tags",
+      "companyId",
+      "createdBy"
+    ])
+    .expression((eb) =>
+      eb
+        .selectFrom("supplierPart")
+        .select((eb) => [
+          eb.val(targetItemId).as("itemId"),
+          "supplierId",
+          "supplierPartId",
+          "supplierUnitOfMeasureCode",
+          "minimumOrderQuantity",
+          "orderMultiple",
+          "conversionFactor",
+          "supplierUnitPrice",
+          "currencyCode",
+          "active",
+          "customFields",
+          "tags",
+          "companyId",
+          eb.val(userId).as("createdBy")
+        ])
+        .where("itemId", "=", sourceItemId)
+        .where("companyId", "=", companyId)
+    )
+    .execute();
+
+  // Price breaks hang off the supplier part, not the item. A supplier has at
+  // most one supplier part per item, so the supplier pairs each source part
+  // with the copy just inserted.
+  await trx
+    .insertInto("supplierPartPrice")
+    .columns([
+      "supplierPartId",
+      "quantity",
+      "supplierUnitPrice",
+      "leadTime",
+      "sourceType",
+      "sourceDocumentId",
+      "companyId",
+      "createdBy"
+    ])
+    .expression((eb) =>
+      eb
+        .selectFrom("supplierPartPrice as price")
+        .innerJoin("supplierPart as source", (join) =>
+          join
+            .onRef("source.id", "=", "price.supplierPartId")
+            .onRef("source.companyId", "=", "price.companyId")
+        )
+        .innerJoin("supplierPart as target", (join) =>
+          join
+            .onRef("target.supplierId", "=", "source.supplierId")
+            .onRef("target.companyId", "=", "source.companyId")
+        )
+        .select((eb) => [
+          "target.id as supplierPartId",
+          "price.quantity",
+          "price.supplierUnitPrice",
+          "price.leadTime",
+          "price.sourceType",
+          "price.sourceDocumentId",
+          "price.companyId",
+          eb.val(userId).as("createdBy")
+        ])
+        .where("source.itemId", "=", sourceItemId)
+        .where("target.itemId", "=", targetItemId)
+        .where("price.companyId", "=", companyId)
+    )
+    .execute();
+}
+
 /** @mcp create */
 export async function createRevision(
   client: SupabaseClient<Database>,
@@ -246,65 +445,95 @@ export async function createRevision(
     // "New Revision" keeps the default (active).
     active?: boolean;
   }
-) {
+): Promise<
+  { data: { id: string }; error: null } | { data: null; error: ServiceError }
+> {
   const { item, revision, createdBy, active = true } = args;
-  const itemInsert = await client
-    .from("item")
-    .insert({
-      readableId: item.readableId,
-      revision: revision,
-      name: item.name,
-      type: item.type,
-      replenishmentSystem: item.replenishmentSystem,
-      defaultMethodType: item.defaultMethodType,
-      itemTrackingType: item.itemTrackingType,
-      unitOfMeasureCode: item.unitOfMeasureCode,
-      // A revision starts as a faithful copy of the source's attributes so the
-      // only differences the user (and the CO diff) sees are ones they made.
-      description: item.description,
-      sourcingType: item.sourcingType,
-      thumbnailPath: item.thumbnailPath,
-      mpn: item.mpn,
-      active,
-      modelUploadId: item.modelUploadId,
-      companyId: item.companyId,
-      createdBy: createdBy
-    })
-    .select("id")
-    .single();
-
-  if (itemInsert.error) {
-    return itemInsert;
+  const companyId = item.companyId;
+  if (!companyId) {
+    return { data: null, error: { message: "Item has no company" } };
   }
 
-  // Carry the source's item group (itemPostingGroupId lives on itemCost, which
-  // the item-insert trigger auto-creates with defaults) onto the new revision.
-  await copyItemPostingGroup(client, {
-    sourceItemId: item.id,
-    targetItemId: itemInsert.data.id,
-    companyId: item.companyId
-  });
+  // The revision is written with Kysely: the item INSERT policy asks for
+  // parts_create in the item's company.
+  const permitted = await requireCompanyPermission(
+    client,
+    companyId,
+    "parts_create"
+  );
+  if (permitted.error) return { data: null, error: permitted.error };
+
+  // The item and what it inherits land together or not at all: a revision
+  // with default planning and no suppliers is never visible, and a failure
+  // leaves nothing holding the revision label against a retry.
+  let revisionItemId: string;
+  try {
+    revisionItemId = await db.transaction().execute(async (trx) => {
+      const inserted = await trx
+        .insertInto("item")
+        .values({
+          readableId: item.readableId,
+          revision,
+          name: item.name,
+          type: item.type,
+          replenishmentSystem: item.replenishmentSystem,
+          defaultMethodType: item.defaultMethodType,
+          itemTrackingType: item.itemTrackingType,
+          unitOfMeasureCode: item.unitOfMeasureCode,
+          // A revision starts as a faithful copy of the source's attributes so
+          // the only differences the user (and the CO diff) sees are ones they
+          // made.
+          description: item.description,
+          sourcingType: item.sourcingType,
+          thumbnailPath: item.thumbnailPath,
+          mpn: item.mpn,
+          active,
+          modelUploadId: item.modelUploadId,
+          companyId,
+          createdBy
+        })
+        .returning("id")
+        .executeTakeFirstOrThrow();
+
+      await copyItemPlanningAndPurchasing(trx, {
+        sourceItemId: item.id,
+        targetItemId: inserted.id,
+        companyId,
+        userId: createdBy
+      });
+
+      return inserted.id;
+    });
+  } catch (error) {
+    logger.error("Failed to create revision", {
+      companyId,
+      sourceItemId: item.id,
+      revision,
+      error
+    });
+    return { data: null, error: writeError(error) };
+  }
 
   if (item.replenishmentSystem !== "Buy") {
     const copy = await serverFns
-      .as({ client, db, companyId: item.companyId!, userId: createdBy })
+      .as({ client, db, companyId, userId: createdBy })
       .invoke("get-method", {
         type: "itemToItem",
         sourceId: item.id,
-        targetId: itemInsert.data.id
+        targetId: revisionItemId
       });
     // The revision stands either way; its make method can be copied again.
     if (copy.error) {
       logger.error("Failed to copy the make method onto the new revision", {
-        companyId: item.companyId,
+        companyId,
         sourceItemId: item.id,
-        revisionItemId: itemInsert.data.id,
+        revisionItemId,
         error: copy.error
       });
     }
   }
 
-  return itemInsert;
+  return { data: { id: revisionItemId }, error: null };
 }
 
 // getNextRevision — numeric → +1, A → …→ Z → AA, AA → AB, etc.
@@ -405,9 +634,62 @@ export async function deleteConfigurationParameterGroup(
   return client.from("configurationParameterGroup").delete().eq("id", id);
 }
 
+// An item delete cascades to its supplier parts, and a price break restricts
+// the delete of its supplier part, so the price breaks go first. Runs in the
+// caller's transaction: when the item delete is refused (inventory history,
+// tracked entities) the price breaks stay.
+async function deleteItemsWithPriceBreaks(
+  trx: KyselyTx,
+  args: { itemIds: string[]; companyId: string }
+) {
+  const { itemIds, companyId } = args;
+  if (itemIds.length === 0) return;
+
+  await trx
+    .deleteFrom("supplierPartPrice")
+    .where("companyId", "=", companyId)
+    .where("supplierPartId", "in", (eb) =>
+      eb
+        .selectFrom("supplierPart")
+        .select("id")
+        .where("itemId", "in", itemIds)
+        .where("companyId", "=", companyId)
+    )
+    .execute();
+
+  await trx
+    .deleteFrom("item")
+    .where("id", "in", itemIds)
+    .where("companyId", "=", companyId)
+    .execute();
+}
+
 /** @mcp delete */
-export async function deleteItem(client: SupabaseClient<Database>, id: string) {
-  return client.from("item").delete().eq("id", id);
+export async function deleteItem(
+  client: SupabaseClient<Database>,
+  db: Kysely<KyselyDatabase>,
+  id: string,
+  companyId: string
+): Promise<{ data: null; error: ServiceError | null }> {
+  // The item DELETE policy asks for parts_delete in the item's company.
+  const permitted = await requireCompanyPermission(
+    client,
+    companyId,
+    "parts_delete"
+  );
+  if (permitted.error) return { data: null, error: permitted.error };
+
+  try {
+    await db
+      .transaction()
+      .execute((trx) =>
+        deleteItemsWithPriceBreaks(trx, { itemIds: [id], companyId })
+      );
+  } catch (error) {
+    logger.error("Failed to delete item", { companyId, itemId: id, error });
+    return { data: null, error: writeError(error) };
+  }
+  return { data: null, error: null };
 }
 
 /** @mcp delete */
@@ -1753,13 +2035,6 @@ export async function getMethodTreeArray(
 }
 
 function getMethodTreeArrayToTree(items: Method[]): MethodTreeItem[] {
-  function traverseAndRenameIds(node: MethodTreeItem) {
-    const clone = structuredClone(node);
-    clone.id = nanoid();
-    clone.children = clone.children.map((n) => traverseAndRenameIds(n));
-    return clone;
-  }
-
   const rootItems: MethodTreeItem[] = [];
   const lookup: { [id: string]: MethodTreeItem } = {};
 
@@ -1790,7 +2065,9 @@ function getMethodTreeArrayToTree(items: Method[]): MethodTreeItem[] {
     }
   }
 
-  return rootItems.map((item) => traverseAndRenameIds(item));
+  // A sub-assembly used in two places is one node above: give each place an
+  // id of its own, the same on every load (see `withPathIds`).
+  return withPathIds(rootItems);
 }
 
 export type BomItemAttributes = {
@@ -2219,6 +2496,26 @@ export async function getSupplierParts(
     .eq("active", true)
     .eq("itemId", id)
     .eq("companyId", companyId);
+}
+
+/** @mcp read */
+export async function getSupplierPartsBySupplier(
+  client: SupabaseClient<Database>,
+  supplierId: string,
+  companyId: string
+) {
+  // Paged past PostgREST's 1000-row cap: a distributor can supply thousands of parts.
+  return fetchAllRecords(() =>
+    client
+      .from("supplierPart")
+      .select(
+        "*, item(id, readableIdWithRevision, name, type, thumbnailPath, unitOfMeasureCode)"
+      )
+      .eq("active", true)
+      .eq("supplierId", supplierId)
+      .eq("companyId", companyId)
+      .order("id")
+  );
 }
 
 /** @mcp read */
@@ -5177,14 +5474,20 @@ async function requireMaterialUpdatable(
 
 class MaterialRuleViolation extends Error {}
 
-function materialWriteError(error: unknown): ServiceError {
-  if (error instanceof MaterialRuleViolation) return ruleError(error.message);
+// A thrown Kysely/Postgres error in the { message, code } shape services
+// return. The code is the SQLSTATE (23505 for a taken revision label).
+function writeError(error: unknown): ServiceError {
   const code =
     error && typeof error === "object" && "code" in error
       ? String((error as { code: unknown }).code)
       : undefined;
   const message = error instanceof Error ? error.message : String(error);
   return code ? { code, message } : { message };
+}
+
+function materialWriteError(error: unknown): ServiceError {
+  if (error instanceof MaterialRuleViolation) return ruleError(error.message);
+  return writeError(error);
 }
 
 async function writeMaterialIdentity(
@@ -5988,15 +6291,19 @@ export async function upsertMaterialSubstance(
 }
 
 /**
- * Creates a service (item row and service row) or updates one; on update `id`
- * is the item id (uuid) or the service's readable id and the write is a full
- * replace, so omitted optional fields are cleared.
+ * Creates a service (item row and service row) or updates one. A service is
+ * identified by its name: on create the readable id is `name`, and on update
+ * a changed name renames the readable id with it (a name another service uses
+ * is refused). On update `id` is the item id (uuid) or the
+ * service's readable id and the write is a full replace, so omitted optional
+ * fields are cleared.
  * @mcp upsert
  * @mcp key item id
  * @mcp key item readableId=id
  */
 export async function upsertService(
   client: SupabaseClient<Database>,
+  db: Kysely<KyselyDatabase>,
   service:
     | (z.infer<typeof serviceValidator> & {
         companyId: string;
@@ -6010,11 +6317,27 @@ export async function upsertService(
       })
 ) {
   if ("createdBy" in service) {
+    const readableId = service.name;
+    const existing = await client
+      .from("item")
+      .select("id")
+      .eq("readableId", readableId)
+      .eq("type", "Service")
+      .eq("companyId", service.companyId)
+      .limit(1);
+    if (existing.error) return existing;
+    if (existing.data.length > 0) {
+      return {
+        data: null,
+        error: ruleError(`A service named "${readableId}" already exists`)
+      };
+    }
+
     const itemInsert = await client
       .from("item")
       .insert({
-        readableId: service.id,
-        revision: service.revision ?? "0",
+        readableId,
+        revision: service.revision || "0",
         name: service.name,
         description: service.description,
         type: "Service",
@@ -6022,7 +6345,8 @@ export async function upsertService(
         defaultMethodType: service.defaultMethodType,
         // Services can never be shipped, received, or stocked
         itemTrackingType: "Non-Inventory",
-        unitOfMeasureCode: service.unitOfMeasureCode,
+        // A service is always counted in Each, whatever unit a caller sends.
+        unitOfMeasureCode: EACH_UNIT_OF_MEASURE_CODE,
         active: true,
         companyId: service.companyId,
         createdBy: service.createdBy
@@ -6034,7 +6358,7 @@ export async function upsertService(
 
     const [serviceInsert, itemCostUpdate] = await Promise.all([
       client.from("service").upsert({
-        id: service.id,
+        id: readableId,
         // Legacy column, no longer surfaced in the UI; the migration adds a
         // DB-level default of "External". Passed explicitly until the committed
         // (cloud-sourced) types pick up that default and make it optional.
@@ -6060,11 +6384,15 @@ export async function upsertService(
     const newService = await client
       .from("services")
       .select("*")
-      .eq("readableId", service.id)
+      .eq("readableId", readableId)
       .eq("companyId", service.companyId)
       .single();
 
     return newService;
+  }
+
+  if (!service.id) {
+    return { data: null, error: ruleError("Service id is required") };
   }
 
   const updated = await updateTypedItem(client, {
@@ -6073,17 +6401,97 @@ export async function upsertService(
     updatedBy: service.updatedBy,
     type: "Service",
     item: {
-      name: service.name,
       description: service.description,
       replenishmentSystem: service.replenishmentSystem,
       defaultMethodType: service.defaultMethodType,
       itemTrackingType: "Non-Inventory",
-      unitOfMeasureCode: service.unitOfMeasureCode,
+      // A service is always counted in Each, whatever unit a caller sends.
+      unitOfMeasureCode: EACH_UNIT_OF_MEASURE_CODE,
       active: true
     },
     typed: { customFields: service.customFields }
   });
-  return updated;
+  if (updated.error) return updated;
+
+  // The name is the readable id, so it is written by the rename (after the
+  // update above, which resolves `id` against the current readable id).
+  const renamed = await updateServiceName(db, {
+    itemId: updated.data.id,
+    name: service.name,
+    companyId: service.companyId,
+    userId: service.updatedBy
+  });
+  if (renamed.error) return renamed;
+  return {
+    data: { id: updated.data.id, readableId: renamed.data.readableId },
+    error: null
+  };
+}
+
+/**
+ * Renames a service. A service is identified by its name, so every revision's
+ * readable id and the service row's id follow it; a name another service
+ * already uses is refused.
+ */
+export async function updateServiceName(
+  db: Kysely<KyselyDatabase>,
+  args: { itemId: string; name: string; companyId: string; userId: string }
+): Promise<
+  | { data: { readableId: string }; error: null }
+  | { data: null; error: { code: string; message: string } }
+> {
+  const name = args.name.trim();
+  if (!name) {
+    return { data: null, error: ruleError("Name is required") };
+  }
+
+  const updatedAt = datetime.timestamp();
+
+  return db.transaction().execute(async (trx) => {
+    const item = await trx
+      .selectFrom("item")
+      .select("readableId")
+      .where("id", "=", args.itemId)
+      .where("type", "=", "Service")
+      .where("companyId", "=", args.companyId)
+      .executeTakeFirst();
+    if (!item) {
+      return { data: null, error: ruleError("Service not found") };
+    }
+
+    if (item.readableId !== name) {
+      const taken = await trx
+        .selectFrom("item")
+        .select("id")
+        .where("readableId", "=", name)
+        .where("type", "=", "Service")
+        .where("companyId", "=", args.companyId)
+        .executeTakeFirst();
+      if (taken) {
+        return {
+          data: null,
+          error: ruleError(`A service named "${name}" already exists`)
+        };
+      }
+
+      await trx
+        .updateTable("service")
+        .set({ id: name, updatedBy: args.userId, updatedAt })
+        .where("id", "=", item.readableId)
+        .where("companyId", "=", args.companyId)
+        .execute();
+    }
+
+    await trx
+      .updateTable("item")
+      .set({ readableId: name, name, updatedBy: args.userId, updatedAt })
+      .where("readableId", "=", item.readableId)
+      .where("type", "=", "Service")
+      .where("companyId", "=", args.companyId)
+      .execute();
+
+    return { data: { readableId: name }, error: null };
+  });
 }
 
 /** @mcp upsert */
@@ -6256,11 +6664,13 @@ export async function upsertTool(
 }
 
 /**
- * Batch pre-fetch supplier price breaks for multiple items.
- * Builds a SupplierPriceMap keyed by itemId, pooling price break
- * tiers from ALL suppliers for each item.
+ * Batch pre-fetch supplier pricing for multiple items, for costing.
+ * Builds a SupplierPriceMap keyed by itemId, pooling the price breaks of ALL
+ * suppliers for each item, converted to base currency per INVENTORY unit at
+ * today's exchange rates (`buildSupplierPriceMap`).
  *
  * Used by the quote loader to pre-load pricing data for BOM costing.
+ * Mirrored in `packages/database/src/methods.ts`.
  * @mcp read
  */
 export async function getSupplierPriceBreaksForItems(
@@ -6271,55 +6681,59 @@ export async function getSupplierPriceBreaksForItems(
 
   const supplierParts = await client
     .from("supplierPart")
-    .select("id, itemId, unitPrice")
+    .select(
+      "id, itemId, companyId, currencyCode, conversionFactor, supplierUnitPrice"
+    )
     .in("itemId", itemIds);
 
   if (!supplierParts.data?.length) return {};
 
+  const companyId = supplierParts.data[0].companyId;
   const supplierPartIds = supplierParts.data.map((sp) => sp.id);
 
-  const prices = await client
-    .from("supplierPartPrice")
-    .select("supplierPartId, quantity, unitPrice")
-    .in("supplierPartId", supplierPartIds)
-    .order("quantity", { ascending: true });
+  const [prices, rates, company] = await Promise.all([
+    client
+      .from("supplierPartPrice")
+      .select("supplierPartId, quantity, supplierUnitPrice")
+      .in("supplierPartId", supplierPartIds)
+      .eq("companyId", companyId),
+    client.rpc("get_exchange_rates", { p_company_id: companyId }),
+    client
+      .from("company")
+      .select("baseCurrencyCode")
+      .eq("id", companyId)
+      .single()
+  ]);
 
-  // Build a lookup from supplierPartId → itemId
-  const spToItem = new Map<string, string>();
-  for (const sp of supplierParts.data) {
-    spToItem.set(sp.id, sp.itemId);
-  }
-
-  const result: SupplierPriceMap = {};
-
-  // Initialize entries with fallback prices
-  for (const sp of supplierParts.data) {
-    if (!result[sp.itemId]) {
-      result[sp.itemId] = { priceBreaks: [], fallbackUnitPrice: null };
-    }
-    const current = result[sp.itemId].fallbackUnitPrice;
-    if (sp.unitPrice != null && (current === null || sp.unitPrice < current)) {
-      result[sp.itemId].fallbackUnitPrice = sp.unitPrice;
-    }
-  }
-
-  // Add price breaks
+  const breaksByPart = new Map<string, SupplierPriceBreak[]>();
   for (const price of prices.data ?? []) {
-    const itemId = spToItem.get(price.supplierPartId);
-    if (itemId && result[itemId]) {
-      result[itemId].priceBreaks.push({
-        quantity: price.quantity,
-        unitPrice: price.unitPrice
-      });
-    }
+    const breaks = breaksByPart.get(price.supplierPartId) ?? [];
+    breaks.push({
+      quantity: price.quantity,
+      supplierUnitPrice: price.supplierUnitPrice
+    });
+    breaksByPart.set(price.supplierPartId, breaks);
   }
 
-  return result;
+  return buildSupplierPriceMap(
+    supplierParts.data.map((sp) => ({
+      itemId: sp.itemId,
+      currencyCode: sp.currencyCode,
+      conversionFactor: sp.conversionFactor,
+      supplierUnitPrice: sp.supplierUnitPrice,
+      priceBreaks: breaksByPart.get(sp.id) ?? []
+    })),
+    Object.fromEntries(
+      (rates.data ?? []).map((rate) => [rate.currencyCode, rate.rate])
+    ),
+    company.data?.baseCurrencyCode ?? "USD"
+  );
 }
 
 /**
- * Async price lookup across ALL suppliers for an item.
- * Delegates to getSupplierPriceBreaksForItems + lookupBuyPriceFromMap.
+ * Async price lookup across ALL suppliers for an item, in base currency per
+ * inventory unit. Delegates to getSupplierPriceBreaksForItems +
+ * lookupBuyPriceFromMap.
  *
  * Used in quote creation where the specific supplier isn't known.
  * @mcp read
@@ -6335,23 +6749,82 @@ export async function lookupBuyPrice(
 }
 
 /**
- * Fetch price breaks array for a specific supplier part.
- * Used by PO and Invoice forms to cache breaks in state.
+ * A supplier part's pricing for a purchase document: its price and breaks as
+ * the supplier quoted them (per purchase unit, in the part's currency), with
+ * that currency's CURRENT exchange rate, so `resolveSupplierPrice` can convert
+ * them into the document's currency. A part in the document's own currency
+ * needs no rate; a missing rate is an error, never par.
+ * @mcp read
+ */
+export async function getSupplierPartPricing(
+  client: SupabaseClient<Database>,
+  supplierPart: {
+    id: string;
+    companyId: string;
+    currencyCode: string | null;
+    supplierUnitPrice: number | null;
+  },
+  baseCurrencyCode: string,
+  documentCurrencyCode: string
+): Promise<
+  | { data: SupplierPartPricing; error: null }
+  | { data: null; error: { message: string } }
+> {
+  const currencyCode = supplierPartCurrency(
+    supplierPart.currencyCode,
+    baseCurrencyCode
+  );
+  const needsRate =
+    currencyCode !== baseCurrencyCode && currencyCode !== documentCurrencyCode;
+
+  const [priceBreaks, rate] = await Promise.all([
+    getSupplierPartPriceBreaks(client, supplierPart.id),
+    needsRate
+      ? client.rpc("get_exchange_rate", {
+          p_company_id: supplierPart.companyId,
+          p_currency_code: currencyCode
+        })
+      : Promise.resolve({ data: 1, error: null })
+  ]);
+
+  if (rate.error || !rate.data) {
+    return {
+      data: null,
+      error: {
+        message: rate.error?.message ?? `No exchange rate for ${currencyCode}`
+      }
+    };
+  }
+
+  return {
+    data: {
+      priceBreaks,
+      supplierUnitPrice: supplierPart.supplierUnitPrice,
+      currency: { currencyCode, exchangeRate: Number(rate.data) }
+    },
+    error: null
+  };
+}
+
+/**
+ * Fetch price breaks array for a specific supplier part, as the supplier
+ * quoted them: purchase quantity and price per purchase unit, in the supplier
+ * part's currency. Used by PO and Invoice forms to cache breaks in state.
  * @mcp read
  */
 export async function getSupplierPartPriceBreaks(
   client: SupabaseClient<Database>,
   supplierPartId: string
-): Promise<PriceBreak[]> {
+): Promise<SupplierPriceBreak[]> {
   const result = await client
     .from("supplierPartPrice")
-    .select("quantity, unitPrice")
+    .select("quantity, supplierUnitPrice")
     .eq("supplierPartId", supplierPartId)
     .order("quantity", { ascending: true });
 
   return (result.data ?? []).map((pb) => ({
     quantity: pb.quantity,
-    unitPrice: pb.unitPrice
+    supplierUnitPrice: pb.supplierUnitPrice
   }));
 }
 // =============================================================================
@@ -6519,6 +6992,7 @@ export async function updateChangeNotice(
 /** @mcp delete */
 export async function deleteChangeNotice(
   client: SupabaseClient<Database>,
+  db: Kysely<KyselyDatabase>,
   changeNoticeId: string,
   companyId: string
 ) {
@@ -6532,11 +7006,17 @@ export async function deleteChangeNotice(
     .select("draftMakeMethodId, newItemId")
     .eq("changeOrderId", changeNoticeId)
     .eq("companyId", companyId);
-  if (!affected.error && affected.data) {
-    for (const item of affected.data) {
-      await discardChangeNoticeDraft(client, item, companyId);
-    }
-  }
+  if (affected.error) return { data: null, error: affected.error };
+
+  // A draft that cannot be discarded keeps its change notice: deleting the
+  // notice anyway would leave the draft with nothing pointing at it.
+  const discarded = await discardChangeNoticeDrafts(
+    client,
+    db,
+    affected.data,
+    companyId
+  );
+  if (discarded.error) return { data: null, error: discarded.error };
 
   // Remaining children (affected items, action tasks) cascade via ON DELETE CASCADE.
   return client
@@ -7053,7 +7533,7 @@ export async function createChangeNoticeDraftMethod(
       }
       // 23505 = unique_violation (makeMethod_unique_itemId_version); a parallel
       // CO grabbed this number first — recompute the next free version + retry.
-      if (res.error?.code === "23505") {
+      if (isUniqueViolation(res.error)) {
         const latest = await getActiveMakeMethodId(client, itemId, companyId);
         nextVersion = (latest?.maxVersion ?? nextVersion) + 1;
         continue;
@@ -7281,32 +7761,60 @@ export async function createChangeNoticeDraftMethod(
   };
 }
 
-// Discard an affected item's CO-owned Draft (used on change-type switch + when
-// removing the affected item). Deletes the new item for Revision/New Part
-// (cascades its method rows) or the Draft method for Version.
-async function discardChangeNoticeDraft(
+// Discard affected items' CO-owned Drafts (on a change-type switch, and when an
+// affected item or its change notice is removed): the new item for a
+// Revision / Replacement Part / New Part, which cascades its method rows, or
+// the Draft method for a Version. One transaction, so a failure leaves every
+// draft in place and the caller can stop instead of orphaning one.
+async function discardChangeNoticeDrafts(
   client: SupabaseClient<Database>,
-  affected: {
+  db: Kysely<KyselyDatabase>,
+  drafts: {
     draftMakeMethodId: string | null;
     newItemId: string | null;
-  },
+  }[],
   companyId: string
-): Promise<void> {
-  if (affected.newItemId) {
-    await client
-      .from("item")
-      .delete()
-      .eq("id", affected.newItemId)
-      .eq("companyId", companyId);
-    return;
+): Promise<{ error: ServiceError | null }> {
+  const itemIds = drafts.flatMap((draft) =>
+    draft.newItemId ? [draft.newItemId] : []
+  );
+  const makeMethodIds = drafts.flatMap((draft) =>
+    !draft.newItemId && draft.draftMakeMethodId ? [draft.draftMakeMethodId] : []
+  );
+  if (itemIds.length === 0 && makeMethodIds.length === 0) {
+    return { error: null };
   }
-  if (affected.draftMakeMethodId) {
-    await client
-      .from("makeMethod")
-      .delete()
-      .eq("id", affected.draftMakeMethodId)
-      .eq("companyId", companyId);
+
+  // The item and makeMethod DELETE policies both ask for parts_delete.
+  const permitted = await requireCompanyPermission(
+    client,
+    companyId,
+    "parts_delete"
+  );
+  if (permitted.error) return permitted;
+
+  try {
+    await db.transaction().execute(async (trx) => {
+      // A Revision draft inherits its source's price breaks.
+      await deleteItemsWithPriceBreaks(trx, { itemIds, companyId });
+      if (makeMethodIds.length > 0) {
+        await trx
+          .deleteFrom("makeMethod")
+          .where("id", "in", makeMethodIds)
+          .where("companyId", "=", companyId)
+          .execute();
+      }
+    });
+  } catch (error) {
+    logger.error("Failed to discard change notice drafts", {
+      companyId,
+      itemIds,
+      makeMethodIds,
+      error
+    });
+    return { error: writeError(error) };
   }
+  return { error: null };
 }
 
 // Add an affected item to a CO: insert the row, then spin its CO-owned Draft
@@ -7513,6 +8021,15 @@ export async function updateChangeNoticeAffectedItemChangeType(
     return { data: { id }, error: null };
   }
 
+  // The current Draft is deleted at the end, which takes parts_delete. Refuse
+  // now rather than after the swap, when the old draft could only be orphaned.
+  const canDiscard = await requireCompanyPermission(
+    client,
+    companyId,
+    "parts_delete"
+  );
+  if (canDiscard.error) return { data: null, error: canDiscard.error };
+
   // Create the replacement Draft BEFORE destroying the current one, so a failure
   // in creation or the ref swap leaves the affected row still pointing at a valid
   // (undeleted) draft instead of a dangling reference. The old draft is discarded
@@ -7547,8 +8064,15 @@ export async function updateChangeNoticeAffectedItemChangeType(
     .eq("companyId", companyId);
   if (updated.error) return { data: null, error: updated.error };
 
-  // Swap succeeded — now safe to discard the superseded draft.
-  await discardChangeNoticeDraft(client, previousDraft, companyId);
+  // Swap succeeded — now safe to discard the superseded draft. The type has
+  // changed either way; a draft that could not be removed is reported.
+  const discarded = await discardChangeNoticeDrafts(
+    client,
+    db,
+    [previousDraft],
+    companyId
+  );
+  if (discarded.error) return { data: null, error: discarded.error };
   return { data: { id }, error: null };
 }
 
@@ -7671,6 +8195,7 @@ export async function getChangeNoticeAffectedItems(
 /** @mcp action destructive */
 export async function removeChangeNoticeAffectedItem(
   client: SupabaseClient<Database>,
+  db: Kysely<KyselyDatabase>,
   id: string,
   companyId: string
 ) {
@@ -7680,8 +8205,17 @@ export async function removeChangeNoticeAffectedItem(
     .eq("id", id)
     .eq("companyId", companyId)
     .maybeSingle();
-  if (!affected.error && affected.data) {
-    await discardChangeNoticeDraft(client, affected.data, companyId);
+  if (affected.error) return { data: null, error: affected.error };
+  if (affected.data) {
+    // The affected row is the only pointer at its draft, so it stays until the
+    // draft is gone.
+    const discarded = await discardChangeNoticeDrafts(
+      client,
+      db,
+      [affected.data],
+      companyId
+    );
+    if (discarded.error) return { data: null, error: discarded.error };
   }
   return client
     .from("changeOrderAffectedItem")
@@ -8375,6 +8909,24 @@ function diffAttributes(
   return entries;
 }
 
+// Supplier parts of a draft item against the item it was drafted from. A
+// Revision draft starts with a copy of the source revision's supplier parts
+// (createRevision), so only what the user changed on the CO line shows: a
+// supplier has at most one supplier part per item, so the supplier pairs the
+// two sides. A Replacement Part or New Part draft starts with none — a null
+// base — and every supplier part is an addition.
+function diffSupplierParts(
+  base: Row[] | null,
+  target: Row[]
+): MethodDiffEntry<Row>[] {
+  // The two sides are different items by construction; that is not a change.
+  const withoutItem = ({ itemId: _itemId, ...row }: Row): Row => row;
+  const baseRows = (base ?? []).map(withoutItem);
+  const targetRows = target.map(withoutItem);
+  correlate(baseRows, targetRows, "supplierId", CHILD_SOURCE_KEY);
+  return diffRows(baseRows, targetRows, CHILD_SOURCE_KEY);
+}
+
 // -----------------------------------------------------------------------------
 // The pure diff engine
 // -----------------------------------------------------------------------------
@@ -8392,6 +8944,11 @@ export type DiffMethodInput = {
   // shape.
   baseOperationChildren?: ChildrenByOperationId;
   targetOperationChildren?: ChildrenByOperationId;
+  // Optional supplier parts of the draft item (target) and of the item it was
+  // drafted from (base). A null/omitted base means the draft started with none,
+  // so every target supplier part is an addition.
+  baseSupplierParts?: Row[] | null;
+  targetSupplierParts?: Row[];
 };
 
 export type DiffMethodResult = {
@@ -8401,11 +8958,13 @@ export type DiffMethodResult = {
   // against MethodDiffEntry<Row>[] keep working.
   operations: OperationDiffEntry[];
   attributes: MethodDiffEntry<Row>[];
+  supplierParts: MethodDiffEntry<Row>[];
 };
 
 // PURE. Compares two method snapshots. No DB access — the caller supplies plain
 // rows (live method rows as `base`, CO-staged rows as `target`), and optionally
-// the per-operation child buckets to also diff steps/parameters/tools.
+// the per-operation child buckets to also diff steps/parameters/tools, and the
+// two items' supplier parts.
 /**
  * @mcp read
  */
@@ -8425,6 +8984,10 @@ export function diffMethod(input: DiffMethodInput): DiffMethodResult {
     attributes: diffAttributes(
       input.baseAttributes ?? null,
       input.targetAttributes ?? null
+    ),
+    supplierParts: diffSupplierParts(
+      input.baseSupplierParts ?? null,
+      input.targetSupplierParts ?? []
     )
   };
 }
@@ -8586,17 +9149,13 @@ async function readItemAttributes(
   };
 }
 
-// A Revision/New Part draft item starts with no supplier parts (the source's
-// aren't copied); the ones the user sets up on the CO line are surfaced as `added`
-// entries. Mirrors getSupplierParts (items.service) — active rows for the item.
-async function readDraftSupplierParts(
+// One item's supplier parts for the diff. Mirrors getSupplierParts
+// (items.service) — active rows for the item.
+async function readSupplierPartRows(
   client: SupabaseClient<Database>,
   itemId: string,
   companyId: string
-): Promise<{
-  data: MethodDiffEntry<Row>[];
-  error: { message: string } | null;
-}> {
+): Promise<{ data: Row[]; error: { message: string } | null }> {
   const res = await client
     .from("supplierPart")
     .select("*")
@@ -8604,14 +9163,7 @@ async function readDraftSupplierParts(
     .eq("companyId", companyId)
     .eq("active", true);
   if (res.error) return { data: [], error: res.error };
-  return {
-    data: (res.data ?? []).map((row) => ({
-      status: "added" as const,
-      before: null,
-      after: row as Row
-    })),
-    error: null
-  };
+  return { data: (res.data ?? []) as Row[], error: null };
 }
 
 // Resolve item-group ids → their names for readable diff display.
@@ -8899,14 +9451,34 @@ export async function getChangeNoticeDiff(
         : await readItemAttributes(client, draftItemId, companyId);
 
     // Supplier parts on the draft item (Revision/Replacement Part/New Part; a
-    // Version shares the live item's suppliers, which are not a CO change).
-    // Surfaced as additions. A New Part's draft item IS its own item
-    // (draftItemId === itemId), so gate on the change type too.
-    let supplierParts: MethodDiffEntry<Row>[] = [];
+    // Version shares the live item's suppliers, which are not a CO change). A
+    // Revision is diffed against the source revision it was copied from; the
+    // other two start with none, so theirs are all additions. A New Part's
+    // draft item IS its own item (draftItemId === itemId), so gate on the
+    // change type too.
+    let draftSupplierParts: Row[] = [];
+    let sourceSupplierParts: Row[] | null = null;
     if (draftItemId !== affectedItem.itemId || isNewPart) {
-      const sp = await readDraftSupplierParts(client, draftItemId, companyId);
-      if (sp.error) return { data: { items: [] }, error: sp.error };
-      supplierParts = sp.data;
+      const draftParts = await readSupplierPartRows(
+        client,
+        draftItemId,
+        companyId
+      );
+      if (draftParts.error) {
+        return { data: { items: [] }, error: draftParts.error };
+      }
+      draftSupplierParts = draftParts.data;
+      if (affectedItem.changeType === "Revision") {
+        const sourceParts = await readSupplierPartRows(
+          client,
+          affectedItem.itemId,
+          companyId
+        );
+        if (sourceParts.error) {
+          return { data: { items: [] }, error: sourceParts.error };
+        }
+        sourceSupplierParts = sourceParts.data;
+      }
     }
 
     const diff = diffMethod({
@@ -8917,7 +9489,9 @@ export async function getChangeNoticeDiff(
       baseAttributes: isNewPart ? null : baseAttributes,
       targetAttributes,
       baseOperationChildren: base.children,
-      targetOperationChildren: target.children
+      targetOperationChildren: target.children,
+      baseSupplierParts: sourceSupplierParts,
+      targetSupplierParts: draftSupplierParts
     });
 
     // Label BOM lines by their component's readable id and BOP tools by the tool
@@ -8985,7 +9559,7 @@ export async function getChangeNoticeDiff(
       materials: diff.materials,
       operations: diff.operations,
       attributes: diff.attributes,
-      supplierParts
+      supplierParts: diff.supplierParts
     });
   }
 

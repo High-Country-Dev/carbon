@@ -4,7 +4,18 @@
 
 import type { Database, Tables } from "@carbon/database";
 import type { Kysely, KyselyDatabase } from "@carbon/database/client";
-import { getContentType, getFileExtension, storage } from "@carbon/files";
+import {
+  type CurrencyRate,
+  convertUnitPrice,
+  supplierPriceForQuantity
+} from "@carbon/database/supplier-part-price";
+import {
+  getContentType,
+  getFileExtension,
+  imageTransformErrorMessage,
+  storage
+} from "@carbon/files";
+import { getLogger } from "@carbon/logger";
 import { type ServerFnInput, serverFns } from "@carbon/server-functions";
 import type {
   PostgrestResponse,
@@ -13,8 +24,14 @@ import type {
 } from "@supabase/supabase-js";
 import type { GenericQueryFilters } from "~/utils/query";
 import { LIST_COUNT, setGenericQueryFilters } from "~/utils/query";
-import type { PriceBreak, SupplierPriceMap } from "./shared.models";
+import type {
+  PriceBreak,
+  SupplierPartPricing,
+  SupplierPriceMap
+} from "./shared.models";
 import type { ItemModelUpload } from "./types";
+
+const logger = getLogger("erp", "shared");
 
 export async function deleteNote(
   client: SupabaseClient<Database>,
@@ -73,10 +90,16 @@ export async function getBase64ImageFromSupabase(
     return null;
   }
 
-  const { data } = await storage(client)
+  const { data, error } = await storage(client)
     .company(companyId)
     .download(path, heic ? { transform: { quality: 90 } } : undefined);
   if (!data) {
+    if (heic) {
+      logger.error(
+        imageTransformErrorMessage(error, "Failed to transform HEIC file"),
+        { path, error }
+      );
+    }
     return null;
   }
 
@@ -502,28 +525,33 @@ export function resolveBuyUnitCost(
 }
 
 /**
- * Resolve the supplier unit price for a quantity.
+ * Resolve the supplier unit price for a purchase quantity, in the DOCUMENT's
+ * currency — what a purchase order or invoice line's `supplierUnitPrice` holds.
  *
- * `supplierPart.unitPrice` and `supplierPartPrice.unitPrice` are stored in the
- * company BASE currency -- neither table has a currency column, and all three
- * writers put base there. The field this feeds (`supplierUnitPrice`) is in the
- * SUPPLIER's currency. The document's `exchangeRate` is foreign-per-base, so
- * base to supplier is MULTIPLY.
+ * The supplier part's breaks and price are in its own currency, per purchase
+ * unit. A part in the document's currency lands as quoted; any other converts
+ * through base at the part currency's current rate and the document's rate
+ * (`convertUnitPrice`). With no supplier price for the quantity the
+ * `documentFallbackPrice` (already in the document's currency) is used.
  *
- * @param fallbackUnitPrice base currency, used when no break matches
- * @returns the price in the supplier's currency
+ * @param document the document's currency and its exchange rate (foreign per base)
  * @mcp read
  */
 export function resolveSupplierPrice(
-  priceBreaks: PriceBreak[],
+  pricing: SupplierPartPricing | null,
   quantity: number,
-  fallbackUnitPrice: number,
-  exchangeRate: number
+  document: CurrencyRate,
+  documentFallbackPrice: number
 ): number {
-  const basePrice = priceBreaks.length
-    ? lookupPriceFromBreaks(priceBreaks, quantity, fallbackUnitPrice)
-    : fallbackUnitPrice;
-  return basePrice * exchangeRate;
+  const supplierPrice = pricing
+    ? supplierPriceForQuantity(
+        pricing.priceBreaks,
+        quantity,
+        pricing.supplierUnitPrice
+      )
+    : null;
+  if (supplierPrice === null || !pricing) return documentFallbackPrice;
+  return convertUnitPrice(supplierPrice, pricing.currency, document);
 }
 
 // -----------------------------------------------------------------------------

@@ -30,6 +30,7 @@ import {
   LuBox,
   LuBuilding,
   LuBuilding2,
+  LuCalendarClock,
   LuCircle,
   LuCircleCheck,
   LuCircleDashed,
@@ -51,6 +52,7 @@ import {
   LuHardHat,
   LuHeadphones,
   LuImage,
+  LuKeyRound,
   LuLandmark,
   LuList,
   LuListChecks,
@@ -179,7 +181,7 @@ export function MethodBadge({ type, text, to, className }: MethodBadgeProps) {
         <MethodIcon type={type} className="w-3 h-3 mr-1 " />
         {text}
       </Badge>
-      <span className="group-hover:opacity-100 opacity-0 transition-opacity duration-200 w-4 h-4 text-foreground">
+      <span className="group-hover:opacity-100 md:opacity-0 transition-opacity duration-200 w-4 h-4 text-foreground">
         <LuExternalLink />
       </span>
     </PrefetchLink>
@@ -659,6 +661,12 @@ export const JournalEntrySourceTypeIcon = ({
       return <LuTriangleAlert className={className} />;
     case "Inbound Inspection":
       return <LuClipboardCheck className={className} />;
+    case "Revenue Recognition":
+      return <LuCalendarClock className={className} />;
+    case "Asset Transfer":
+      return <LuArrowLeftRight className={className} />;
+    case "Lease":
+      return <LuKeyRound className={className} />;
   }
 
   return <LuSquare className={cn("text-muted-foreground", className)} />;

@@ -1265,6 +1265,35 @@ async function buildEventContent(
         };
       }
 
+      if (opts.documentType === "changeOrder") {
+        const co = await client
+          .from("changeOrder")
+          .select("changeOrderId, name, status")
+          .eq("id", documentId)
+          .eq("companyId", opts.companyId)
+          .single();
+
+        if (co.error || !co.data) {
+          console.error(
+            "Failed to retrieve change notice for approval notification",
+            co.error
+          );
+          return {
+            description: `Change notice ${docPhrase}`,
+            details: []
+          };
+        }
+
+        return {
+          description: `Change notice ${co.data.changeOrderId} ${docPhrase}`,
+          reference: co.data.changeOrderId ?? undefined,
+          details: buildDetails([
+            { label: "Name", value: co.data.name },
+            { label: "Status", value: co.data.status }
+          ])
+        };
+      }
+
       return {
         description:
           outcome === "requested"
@@ -1359,6 +1388,17 @@ async function buildEventContent(
       return {
         description: opts?.title ?? "Accounting sync needs attention",
         details: opts?.body ? [{ label: "Detail", value: opts.body }] : []
+      };
+    }
+
+    // Payload-carried digest: the recurring-billing job sends the counts as
+    // `body`; documentIds are the invoices it touched, but nothing is read.
+    case NotificationEvent.RecurringInvoicing: {
+      return {
+        description: opts?.body
+          ? `Recurring invoicing: ${opts.body}`
+          : "Recurring invoicing",
+        details: []
       };
     }
 

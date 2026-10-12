@@ -95,6 +95,10 @@ function resolve(
       return path.to.pickingList(documentId);
     case NotificationEvent.SuggestionResponse:
       return path.to.suggestion(documentId);
+    case NotificationEvent.RecurringInvoicing:
+      // documentId is only the digest's first invoice; land on the list of
+      // invoices that need review (same target as the topbar row).
+      return `${path.to.invoicingSales}?filter=needsReview:eq:true`;
     case NotificationEvent.Workflow:
       return getRecordPath(documentType, documentId);
     case NotificationEvent.ApprovalApproved:
@@ -104,8 +108,9 @@ function resolve(
         return path.to.purchaseOrder(documentId);
       if (documentType === "qualityDocument")
         return path.to.qualityDocument(documentId);
-      if (documentType === "supplier")
-        return path.to.supplierApproval(documentId);
+      if (documentType === "supplier") return path.to.supplier(documentId);
+      if (documentType === "changeOrder")
+        return path.to.changeNoticeDetails(documentId);
       return null;
     default:
       return null;
@@ -136,7 +141,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   let redirectTo: string;
   if (page === "notification-settings") {
     // Email footer link — no document, but the company-switch below still applies.
-    redirectTo = path.to.notificationSettings;
+    redirectTo = path.to.accountSettings("notifications");
   } else if (event && documentId) {
     const link = resolve(event, documentId, documentType ?? undefined);
     redirectTo = link ?? path.to.authenticatedRoot;

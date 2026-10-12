@@ -7,6 +7,7 @@ import type {
   NotificationDestination,
   NotificationEvent
 } from "@carbon/notifications";
+import type { InvoiceAutomation } from "@carbon/utils";
 import type { RunTrigger } from "@carbon/workflows-core";
 
 type ApprovalDocumentType = Database["public"]["Enums"]["approvalDocumentType"];
@@ -48,6 +49,20 @@ export type Events = {
       text: string;
       blocks?: any[];
       companyId: string;
+    };
+  };
+
+  // Web Push events: one per pushSubscription row. userId is the recipient:
+  // send-push only sends when the row still belongs to them.
+  "carbon/send-push": {
+    data: {
+      subscriptionId: string;
+      userId: string;
+      companyId: string;
+      title: string;
+      body: string;
+      url: string;
+      tag: string;
     };
   };
 
@@ -628,11 +643,17 @@ export type Events = {
   };
 
   // Mount publish sweep (the integration's "Push customers / suppliers /
-  // parts" actions): push Carbon records Mount is missing or holds stale
+  // parts" actions, and the daily mount-sweep): push Carbon records Mount is
+  // missing or holds stale
   "carbon/mount-publish": {
     data: {
       companyId: string;
       entityTypes?: Array<"customer" | "supplier" | "item">;
+      // Who pressed Push; notified when the run needs attention.
+      userId?: string;
+      // Echoed into the run record so the page can find its own run.
+      requestId?: string;
+      trigger?: "manual" | "schedule";
     };
   };
 
@@ -781,6 +802,22 @@ export type Events = {
       actorId: string | null;
       /** Output name -> entity id, per the moment's declaration. */
       outputs: Record<string, { id: string }>;
+    };
+  };
+
+  // Invoice automation: post (and email) one drafted recurring invoice.
+  // Spec: `.ai/specs/implemented/2026-09-22-revenue-recognition-rentals-and-contracts.md` Part II
+  "carbon/invoice.automate": {
+    data: {
+      companyId: string;
+      invoiceId: string;
+      /** Absent = the invoice's recurring source's effective mode. */
+      mode?: InvoiceAutomation;
+      /**
+       * The invoice's Send action: retry a failed send of a posted invoice —
+       * via Stripe when that is the effective mode, else by email.
+       */
+      resend?: boolean;
     };
   };
 };

@@ -2,29 +2,19 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
-import { assertIsPost, success } from "@carbon/auth";
+import { assertIsPost } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { flash } from "@carbon/auth/session.server";
-import { validator } from "@carbon/form";
+import { validationError, validator } from "@carbon/form";
 import { useRouteData } from "@carbon/react";
-import { isUnaffectedByNavigation, redirect } from "@carbon/utils";
-import type {
-  ActionFunctionArgs,
-  LoaderFunctionArgs,
-  ShouldRevalidateFunction
-} from "react-router";
+import { isUniqueViolation } from "@carbon/utils";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useNavigate, useParams } from "react-router";
 import type { ToolSummary } from "~/modules/items";
 import { supplierPartValidator, upsertSupplierPart } from "~/modules/items";
 import { SupplierPartForm } from "~/modules/items/ui/Item";
 import { getDatabaseClient } from "~/services/database.server";
-import { setCustomFields } from "~/utils/form";
+import { getCustomFields, setCustomFields } from "~/utils/form";
 import { path } from "~/utils/path";
-
-export const shouldRevalidate: ShouldRevalidateFunction = (args) =>
-  isUnaffectedByNavigation(args, { params: ["itemId", "supplierPartId"] })
-    ? false
-    : args.defaultShouldRevalidate;
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {
@@ -43,7 +33,9 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       .single(),
     client
       .from("supplierPartPrice")
-      .select("quantity, unitPrice, sourceType, sourceDocumentId, createdAt")
+      .select(
+        "quantity, supplierUnitPrice, leadTime, sourceType, sourceDocumentId, createdAt"
+      )
       .eq("supplierPartId", supplierPartId)
       .order("quantity", { ascending: true })
   ]);
@@ -56,7 +48,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const purchasingHistory = await client
     .from("purchaseOrderLine")
     .select(
-      "id, purchaseQuantity, unitPrice, purchaseOrderId, purchaseOrder!inner(purchaseOrderId, supplierId, orderDate)"
+      "id, purchaseQuantity, supplierUnitPrice, purchaseOrderId, purchaseOrder!inner(purchaseOrderId, supplierId, orderDate, currencyCode)"
     )
     .eq("itemId", supplierPart.itemId)
     .eq("purchaseOrder.supplierId", supplierPart.supplierId)
@@ -99,6 +91,15 @@ export async function action({ request, params }: ActionFunctionArgs) {
     customFields: setCustomFields(formData)
   });
 
+  // buyMethod_part_supplier_unique: one supplier part per item and supplier
+  if (isUniqueViolation(updatedSupplierPart.error)) {
+    return validationError({
+      fieldErrors: {
+        supplierId: "This item already has a supplier part for this supplier"
+      }
+    });
+  }
+
   if (updatedSupplierPart.error) {
     return { success: false, message: "Failed to update supplier part" };
   }
@@ -107,7 +108,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
   if (priceBreaksRaw) {
     const priceBreaks = JSON.parse(priceBreaksRaw as string) as {
       quantity: number;
-      unitPrice: number;
+      supplierUnitPrice: number;
       leadTime: number;
     }[];
     const db = getDatabaseClient();
@@ -124,7 +125,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
             priceBreaks.map((pb) => ({
               supplierPartId,
               quantity: pb.quantity,
-              unitPrice: pb.unitPrice,
+              supplierUnitPrice: pb.supplierUnitPrice,
               leadTime: pb.leadTime ?? 0,
               sourceType: "Manual Entry" as const,
               companyId,
@@ -137,10 +138,9 @@ export async function action({ request, params }: ActionFunctionArgs) {
     });
   }
 
-  throw redirect(
-    path.to.toolPurchasing(itemId),
-    await flash(request, success("Supplier part updated"))
-  );
+  // Fetcher-friendly success, as on the part route: the form's fetcher effect
+  // toasts and fires onClose, so a caller outside the item page stays put.
+  return { success: true, message: "Supplier part updated" };
 }
 
 export default function EditToolSupplierRoute() {
@@ -162,11 +162,13 @@ export default function EditToolSupplierRoute() {
     itemId: supplierPart.itemId,
     supplierId: supplierPart.supplierId,
     supplierPartId: supplierPart.supplierPartId ?? "",
-    unitPrice: supplierPart.unitPrice ?? 0,
+    currencyCode: supplierPart.currencyCode ?? undefined,
+    supplierUnitPrice: supplierPart.supplierUnitPrice ?? 0,
     supplierUnitOfMeasureCode: supplierPart.supplierUnitOfMeasureCode ?? "EA",
     minimumOrderQuantity: supplierPart.minimumOrderQuantity ?? 1,
     orderMultiple: supplierPart.orderMultiple ?? 1,
-    conversionFactor: supplierPart.conversionFactor ?? 1
+    conversionFactor: supplierPart.conversionFactor ?? 1,
+    ...getCustomFields(supplierPart.customFields)
   };
 
   return (

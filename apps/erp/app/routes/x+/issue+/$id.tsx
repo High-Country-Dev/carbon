@@ -6,16 +6,13 @@ import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { getLogger } from "@carbon/logger";
-import { VStack } from "@carbon/react";
-import { isUnaffectedByNavigation, redirect } from "@carbon/utils";
+import { RecordOutlet, VStack } from "@carbon/react";
+import { redirect } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
 import { useLingui } from "@lingui/react/macro";
 import { Suspense } from "react";
-import type {
-  LoaderFunctionArgs,
-  ShouldRevalidateFunction
-} from "react-router";
-import { Await, Outlet, useLoaderData, useParams } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+import { Await, useLoaderData, useParams } from "react-router";
 import { PanelProvider, ResizablePanels } from "~/components/Layout/Panels";
 import {
   getChangeNoticesForNonConformance,
@@ -42,6 +39,7 @@ import { path } from "~/utils/path";
 const logger = getLogger("erp", "issue-detail");
 
 export const handle: Handle = {
+  appBarSubtitle: msg`Issue`,
   realtime: [
     { table: "nonConformance", column: "id", param: "id" },
     {
@@ -57,11 +55,6 @@ export const handle: Handle = {
   ),
   module: "quality"
 };
-
-export const shouldRevalidate: ShouldRevalidateFunction = (args) =>
-  isUnaffectedByNavigation(args, { params: ["id"] })
-    ? false
-    : args.defaultShouldRevalidate;
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {
@@ -131,6 +124,7 @@ export default function IssueRoute() {
         <div className="flex h-[calc(100dvh-var(--topbar-height)-var(--header-height)-var(--content-inset))] overflow-hidden w-full">
           <div className="flex flex-grow overflow-hidden">
             <ResizablePanels
+              explorerLabel={t`Associations`}
               explorer={
                 <Suspense fallback={<IssueAssociationsSkeleton />}>
                   <Await resolve={associations}>
@@ -257,7 +251,7 @@ export default function IssueRoute() {
               content={
                 <div className="bg-card h-[calc(100dvh-var(--topbar-height)-var(--header-height)-var(--content-inset))] overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-accent w-full">
                   <VStack spacing={4} className="p-4">
-                    <Outlet />
+                    <RecordOutlet />
                   </VStack>
                 </div>
               }

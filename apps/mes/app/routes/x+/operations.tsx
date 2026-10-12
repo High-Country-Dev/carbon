@@ -12,14 +12,13 @@ import {
   Button,
   CarbonPulse,
   ClientOnly,
-  Heading,
+  cn,
   HStack,
   IconButton,
   Popover,
   PopoverContent,
   PopoverTrigger,
   Separator,
-  SidebarTrigger,
   Switch,
   toast,
   useInterval,
@@ -36,7 +35,7 @@ import {
 } from "@internationalized/date";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { LuFactory, LuSettings2, LuTriangleAlert, LuX } from "react-icons/lu";
+import { LuFactory, LuSettings2, LuX } from "react-icons/lu";
 import type { LoaderFunctionArgs } from "react-router";
 import { data, useFetcher, useLoaderData } from "react-router";
 
@@ -44,6 +43,8 @@ import type { ColumnFilter } from "~/components/Filter";
 import { ActiveFilters, Filter, useFilters } from "~/components/Filter";
 import type { Column, DisplaySettings, Item } from "~/components/Kanban";
 import { Kanban } from "~/components/Kanban";
+import { MesAppBar, MesQueueHeader } from "~/components/MesAppBar";
+import { MesEmptyState } from "~/components/MesEmptyState";
 import SearchFilter from "~/components/SearchFilter";
 import { userContext } from "~/context";
 import { useUrlParams, useUser } from "~/hooks";
@@ -121,8 +122,33 @@ function collapseBatches(
   }
   for (const [batchId, members] of byBatch) {
     const total = batchTotals.get(batchId);
+    // The batch runs as one, so any member projected late makes the run late.
+    const conflicted = members.filter((m) => m.hasConflict);
+    // The earliest dated member deadline is the batch's binding constraint.
+    // Only Hard and Soft Deadline carry a due date; an ASAP job can still hold
+    // a stale one.
+    const earliest = members.reduce<Item | undefined>((acc, m) => {
+      if (
+        !m.dueDate ||
+        m.deadlineType === "ASAP" ||
+        m.deadlineType === "No Deadline"
+      )
+        return acc;
+      if (!acc?.dueDate || m.dueDate < acc.dueDate) return m;
+      return acc;
+    }, undefined);
     result.push({
       ...members[0],
+      dueDate: earliest?.dueDate ?? members[0].dueDate,
+      deadlineType: earliest?.deadlineType ?? members[0].deadlineType,
+      hasConflict: conflicted.length > 0 || undefined,
+      conflictReason: conflicted.length
+        ? conflicted
+            .map((m) =>
+              m.conflictReason ? `${m.title}: ${m.conflictReason}` : m.title
+            )
+            .join("\n")
+        : undefined,
       batchSize: total?.size ?? members.length,
       batchJobReadableIds:
         total?.jobReadableIds ?? members.map((m) => m.title).filter(Boolean),
@@ -228,12 +254,16 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
   // assignment for today and no explicit work-center filter (and hasn't
   // dismissed the default this session), open on their station.
   const effectiveUserId = context.get(userContext)?.effectiveUserId;
+  // The factory's calendar day: card urgency and the people assignment both
+  // read it, never the operator device's day.
+  const today = locationId
+    ? datetime
+        .today(await getLocationTimeZone(serviceRole, locationId, companyId))
+        .toString()
+    : null;
   let peopleStation: { workCenterId: string; name: string } | null = null;
   let peopleDate: string | null = null;
-  if (selectedWorkCenterIds.length === 0 && effectiveUserId && locationId) {
-    const today = datetime
-      .today(await getLocationTimeZone(serviceRole, locationId, companyId))
-      .toString();
+  if (selectedWorkCenterIds.length === 0 && effectiveUserId && today) {
     peopleDate = today;
     const dismissed = await getPeopleOverride(request);
     if (dismissed !== today) {
@@ -363,6 +393,7 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
     {
       peopleStation,
       peopleDate,
+      today,
       columns: filteredWorkCenters
         .map((wc: any) => ({
           id: wc.id!,
@@ -387,7 +418,9 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
             title: op.jobReadableId,
             subtitle: op.itemReadableId,
             description: op.description,
-            dueDate: op.operationDueDate,
+            // The JOB's due date, as on the operation view: the op's need-by
+            // target labelled "Due" read as the job being due weeks early.
+            dueDate: op.jobDueDate ?? undefined,
             duration:
               operation.setupDuration +
               Math.max(operation.laborDuration, operation.machineDuration),
@@ -432,7 +465,7 @@ export default function ScheduleRoute() {
   return (
     <ClientOnly
       fallback={
-        <div className="flex h-dvh w-[calc(100dvw-var(--sidebar-width-icon))] items-center justify-center">
+        <div className="flex w-full flex-1 items-center justify-center">
           <CarbonPulse />
         </div>
       }
@@ -566,47 +599,123 @@ function KanbanSchedule() {
     ];
   }, [processes, workCenters, availableTags, people, t]);
 
+  const showStationChip =
+    !!peopleStation &&
+    !currentFilters.some((filter) => filter.startsWith("workCenterId:"));
+
+  const renderStationChip = (className?: string) =>
+    showStationChip && peopleStation ? (
+      <HStack
+        spacing={0}
+        className={cn("rounded-md border border-border bg-card", className)}
+      >
+        <span className="flex items-center gap-1.5 px-2 py-1 text-sm whitespace-nowrap">
+          <LuFactory className="flex-shrink-0" />
+          <Trans>Your station: {peopleStation.name}</Trans>
+        </span>
+        <IconButton
+          aria-label={t`Clear station default`}
+          icon={<LuX />}
+          variant="ghost"
+          size="sm"
+          onClick={() =>
+            peopleOverrideFetcher.submit(
+              { date: peopleDate ?? "" },
+              { method: "post", action: path.to.peopleOverride }
+            )
+          }
+        />
+      </HStack>
+    ) : null;
+
+  const displayPopoverContent = (
+    <PopoverContent className="w-56">
+      <VStack>
+        <span className="text-xs font-medium text-muted-foreground">
+          <Trans>Columns</Trans>
+        </span>
+        {[{ key: "emptyWorkCenters", label: t`Empty work centers` }].map(
+          ({ key, label }) => (
+            <Switch
+              key={key}
+              variant="small"
+              label={label}
+              checked={mergedDisplaySettings[key as keyof DisplaySettings]}
+              onCheckedChange={(checked) =>
+                setDisplaySettings((prev) => ({
+                  ...defaultDisplaySettings,
+                  ...prev,
+                  [key]: checked
+                }))
+              }
+            />
+          )
+        )}
+        <Separator />
+        <span className="text-xs font-medium text-muted-foreground">
+          <Trans>Cards</Trans>
+        </span>
+        {[
+          { key: "showCustomer", label: t`Customer` },
+          { key: "showDescription", label: t`Description` },
+          { key: "showDueDate", label: t`Due Date` },
+          { key: "showDuration", label: t`Duration` },
+          { key: "showProgress", label: t`Progress` },
+          { key: "showStatus", label: t`Status` },
+          { key: "showSalesOrder", label: t`Sales Order` },
+          { key: "showThumbnail", label: t`Thumbnail` }
+        ].map(({ key, label }) => (
+          <Switch
+            key={key}
+            variant="small"
+            label={label}
+            checked={mergedDisplaySettings[key as keyof DisplaySettings]}
+            onCheckedChange={(checked) =>
+              setDisplaySettings((prev) => ({
+                ...defaultDisplaySettings,
+                ...prev,
+                [key]: checked
+              }))
+            }
+          />
+        ))}
+      </VStack>
+    </PopoverContent>
+  );
+
   return (
-    <div className="flex flex-col flex-1 min-h-0 w-full">
-      <header className="sticky top-0 z-10 flex h-[var(--header-height)] shrink-0 items-center gap-2 border-b bg-card">
-        <div className="flex items-center gap-2 px-2">
-          <SidebarTrigger />
-          <Heading size="h4">
-            <Trans>Schedule</Trans>
-          </Heading>
-        </div>
-      </header>
+    // Phones: the shell grows with its content, so the page takes the screen
+    // above the tab bar itself; each column then scrolls under its header.
+    <div className="flex flex-col flex-1 min-h-0 w-full max-md:h-[calc(100dvh-var(--mes-tab-bar-h))] max-md:flex-none">
+      <MesAppBar
+        title={<Trans>Schedule</Trans>}
+        actions={
+          <Popover>
+            <PopoverTrigger asChild>
+              <IconButton
+                aria-label={t`Display`}
+                variant="ghost"
+                size="lg"
+                icon={<LuSettings2 />}
+              />
+            </PopoverTrigger>
+            {displayPopoverContent}
+          </Popover>
+        }
+      />
+      <MesQueueHeader title={<Trans>Schedule</Trans>} />
       <div className="flex flex-col flex-1 min-h-0 overflow-auto relative">
-        <HStack className="px-4 py-2 justify-between bg-card border-b border-border">
-          <HStack>
-            <SearchFilter param="search" size="sm" placeholder={t`Search`} />
+        <HStack className="px-4 py-2 justify-between bg-card border-b border-border max-md:gap-2 max-md:space-x-0 max-md:pt-3">
+          <HStack className="max-md:min-w-0 max-md:flex-1 max-md:space-x-0 max-md:gap-2">
+            <SearchFilter
+              param="search"
+              size="sm"
+              placeholder={t`Search`}
+              groupClassName="max-md:min-w-0 max-md:flex-1"
+              className="max-md:w-full"
+            />
             <Filter filters={filters} />
-            {peopleStation &&
-              !currentFilters.some((filter) =>
-                filter.startsWith("workCenterId:")
-              ) && (
-                <HStack
-                  spacing={0}
-                  className="rounded-md border border-border bg-card"
-                >
-                  <span className="flex items-center gap-1.5 px-2 py-1 text-sm whitespace-nowrap">
-                    <LuFactory className="flex-shrink-0" />
-                    <Trans>Your station: {peopleStation.name}</Trans>
-                  </span>
-                  <IconButton
-                    aria-label={t`Clear station default`}
-                    icon={<LuX />}
-                    variant="ghost"
-                    size="sm"
-                    onClick={() =>
-                      peopleOverrideFetcher.submit(
-                        { date: peopleDate ?? "" },
-                        { method: "post", action: path.to.peopleOverride }
-                      )
-                    }
-                  />
-                </HStack>
-              )}
+            {renderStationChip("max-md:hidden")}
           </HStack>
 
           <Popover>
@@ -614,71 +723,22 @@ function KanbanSchedule() {
               <Button
                 leftIcon={<LuSettings2 />}
                 variant="secondary"
-                className="border-dashed border-border"
+                className="border-dashed border-border max-md:hidden"
               >
                 <Trans>Display</Trans>
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-56">
-              <VStack>
-                <span className="text-xs font-medium text-muted-foreground">
-                  <Trans>Columns</Trans>
-                </span>
-                {[
-                  { key: "emptyWorkCenters", label: t`Empty work centers` }
-                ].map(({ key, label }) => (
-                  <Switch
-                    key={key}
-                    variant="small"
-                    label={label}
-                    checked={
-                      mergedDisplaySettings[key as keyof DisplaySettings]
-                    }
-                    onCheckedChange={(checked) =>
-                      setDisplaySettings((prev) => ({
-                        ...defaultDisplaySettings,
-                        ...prev,
-                        [key]: checked
-                      }))
-                    }
-                  />
-                ))}
-                <Separator />
-                <span className="text-xs font-medium text-muted-foreground">
-                  <Trans>Cards</Trans>
-                </span>
-                {[
-                  { key: "showCustomer", label: t`Customer` },
-                  { key: "showDescription", label: t`Description` },
-                  { key: "showDueDate", label: t`Due Date` },
-                  { key: "showDuration", label: t`Duration` },
-                  { key: "showProgress", label: t`Progress` },
-                  { key: "showStatus", label: t`Status` },
-                  { key: "showSalesOrder", label: t`Sales Order` },
-                  { key: "showThumbnail", label: t`Thumbnail` }
-                ].map(({ key, label }) => (
-                  <Switch
-                    key={key}
-                    variant="small"
-                    label={label}
-                    checked={
-                      mergedDisplaySettings[key as keyof DisplaySettings]
-                    }
-                    onCheckedChange={(checked) =>
-                      setDisplaySettings((prev) => ({
-                        ...defaultDisplaySettings,
-                        ...prev,
-                        [key]: checked
-                      }))
-                    }
-                  />
-                ))}
-              </VStack>
-            </PopoverContent>
+            {displayPopoverContent}
           </Popover>
         </HStack>
+        {(showStationChip || currentFilters.length > 0) && (
+          <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide scroll-fade-x border-b border-border bg-card px-4 py-1.5 md:hidden [&>*]:shrink-0">
+            {renderStationChip()}
+            {currentFilters.length > 0 && <ActiveFilters filters={filters} />}
+          </div>
+        )}
         {currentFilters.length > 0 && (
-          <HStack className="px-4 py-1.5 justify-between bg-card border-b border-border w-full">
+          <HStack className="px-4 py-1.5 justify-between bg-card border-b border-border w-full max-md:hidden">
             <HStack>
               <ActiveFilters filters={filters} />
             </HStack>
@@ -695,26 +755,20 @@ function KanbanSchedule() {
                 progressByItemId={progressByOperation}
               />
             ) : hasFilters ? (
-              <div className="flex flex-col w-full h-full items-center justify-center gap-4">
-                <div className="flex justify-center items-center h-12 w-12 rounded-full bg-foreground text-background">
-                  <LuTriangleAlert className="h-6 w-6" />
-                </div>
-                <span className="text-xs font-mono font-light text-foreground uppercase">
-                  <Trans>No results</Trans>
-                </span>
-                <Button onClick={clearFilters}>
-                  <Trans>Clear Filters</Trans>
-                </Button>
-              </div>
+              <MesEmptyState
+                className="w-full h-full"
+                title={<Trans>No results</Trans>}
+                action={
+                  <Button onClick={clearFilters}>
+                    <Trans>Clear Filters</Trans>
+                  </Button>
+                }
+              />
             ) : (
-              <div className="flex flex-col w-full h-full items-center justify-center gap-4">
-                <div className="flex justify-center items-center h-12 w-12 rounded-full bg-foreground text-background">
-                  <LuTriangleAlert className="h-6 w-6" />
-                </div>
-                <span className="text-xs font-mono font-light text-foreground uppercase">
-                  <Trans>No work centers exist</Trans>
-                </span>
-              </div>
+              <MesEmptyState
+                className="w-full h-full"
+                title={<Trans>No work centers exist</Trans>}
+              />
             )}
           </div>
         </div>

@@ -4,11 +4,13 @@
 
 import { useCarbon } from "@carbon/auth";
 import { useChangedRows } from "@carbon/query";
-import { toast, useDisclosure, useInterval } from "@carbon/react";
+import { toast, useDisclosure, useInterval, useViewport } from "@carbon/react";
 import {
   getLocalTimeZone,
   now,
   parseAbsolute,
+  parseDate,
+  today,
   toZoned
 } from "@internationalized/date";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -90,7 +92,23 @@ export function useOperation({
   );
 
   const [activeTab, setActiveTab] = useState("details");
-  const [eventType, setEventType] = useState(() => {
+  const { isPhone } = useViewport();
+  // Phones open on the timer that runs, so Pause shows for it. A Setup or
+  // Labor timer counts only when it is this user's; Machine counts for anyone
+  // (the same rule as `activeEvents` below). Else: Setup, Machine, Labor.
+  const [eventType, setEventType] = useState<string>(() => {
+    const isRunning = (type: string) =>
+      events.some(
+        (e) =>
+          e.type === type &&
+          e.endTime === null &&
+          (type === "Machine" || e.employeeId === user.id)
+      );
+    const running =
+      isPhone && (["Setup", "Machine", "Labor"] as const).find(isRunning);
+    if (running) {
+      return running;
+    }
     if (operation.setupDuration > 0) {
       return "Setup";
     }
@@ -347,8 +365,12 @@ export function useOperation({
     finishModal,
     issueModal,
     serialModal,
-    isOverdue: operation.operationDueDate
-      ? new Date(operation.operationDueDate) < new Date()
+    // The JOB's deadline. The operation's own `operationDueDate` is the
+    // scheduler's need-by target for this step, shown separately.
+    isOverdue: operation.jobDueDate
+      ? parseDate(operation.jobDueDate.slice(0, 10)).compare(
+          today(getLocalTimeZone())
+        ) < 0
       : false,
     selectedMaterial,
     setSelectedMaterial,

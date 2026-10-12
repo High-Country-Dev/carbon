@@ -65,6 +65,7 @@ const WarehouseTransfersTable = memo(
             </Hyperlink>
           ),
           meta: {
+            mobile: "P1",
             icon: <LuBookMarked />
           }
         },
@@ -77,6 +78,7 @@ const WarehouseTransfersTable = memo(
             return <WarehouseTransferStatus status={status} />;
           },
           meta: {
+            mobile: "P2",
             filter: {
               type: "static",
               options: warehouseTransferStatusType.map((type) => ({
@@ -93,6 +95,7 @@ const WarehouseTransfersTable = memo(
           header: t`From Location`,
           cell: ({ row }) => row.original.fromLocation?.name || "N/A",
           meta: {
+            mobile: "P3",
             icon: <LuMapPin />
           }
         },
@@ -120,6 +123,10 @@ const WarehouseTransfersTable = memo(
             return date ? <DateTime value={date} variant="date" /> : "N/A";
           },
           meta: {
+            mobile: "P2",
+            filter: {
+              type: "dateRange"
+            },
             icon: <LuCalendar />
           }
         },
@@ -131,6 +138,9 @@ const WarehouseTransfersTable = memo(
             return date ? <DateTime value={date} variant="date" /> : "N/A";
           },
           meta: {
+            filter: {
+              type: "dateRange"
+            },
             icon: <LuCalendar />
           }
         },

@@ -6,6 +6,8 @@ import {
   applyDotenvToProcessEnv,
   clientOnlyAlias,
   linguiWithoutIdQuery,
+  precompressedAssets,
+  stackActivity,
 } from "@carbon/dev/vite";
 import { reactRouter } from "@react-router/dev/vite";
 import { getConfig } from "@lingui/conf";
@@ -53,6 +55,15 @@ export default defineConfig(({ command, mode, isSsrBuild }) => {
      * Bundling it lets each importer keep its own version.
      */
     "zustand",
+    /**
+     * @carbon/react imports each avatar style's JSON with a dynamic import().
+     * Externalized, Node loads that JSON natively and refuses it without an
+     * import attribute (ERR_IMPORT_ATTRIBUTE_MISSING), so /file/avatar fails.
+     * The attribute cannot go in the source: Vite passes it to the browser,
+     * which then rejects the JSON it serves as JavaScript. Bundled, Vite turns
+     * the JSON into a module on both sides.
+     */
+    "@dicebear/styles",
   ];
 
   return {
@@ -107,9 +118,11 @@ export default defineConfig(({ command, mode, isSsrBuild }) => {
       allowedHosts: [".ngrok-free.app", ".w.modal.host", ".w.modal.dev", ".dev", ".localhost", "host.docker.internal"],
     },
     plugins: [
+      stackActivity(),
       tailwindcss(),
       linguiWithoutIdQuery(lingui({ macroTransform: true })),
       reactRouter(),
+      precompressedAssets({ command, mode }),
       // react-aria ships strings for ~34 locales; keep the ones the app translates.
       optimizeLocales.vite({ locales: getConfig().locales }),
       // unpdf's bundled PDF.js engine is a dead lazy chunk in the browser, which

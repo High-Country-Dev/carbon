@@ -34,6 +34,7 @@ Carbon is a manufacturing ERP/MES/QMS. It contains apps for ERP, MES, academy, a
 - Never chain Supabase-client writes and call it a transaction — the client has none. Use a Kysely transaction (inside a server function when apps, the API or jobs share the write), or an RPC when it must also be callable through PostgREST.
 - Never construct a DB connection/pool/Kysely client inside a `{module}.service.ts` — service files are re-exported through the module barrel that client components import, so they are bundled for the browser. Build the client in a `.server` file (`getDatabaseClient()` from `~/services/database.server`) and pass it into the service as a `db: Kysely<KyselyDatabase>` argument from the route action. Enforced by the `no-db-client-in-service` check (`@carbon/checks`).
 - Never hand-edit generated DB types (`@carbon/database` types).
+- Never name a field, column, enum or form label "Kind" (or `*Kind`). Name what the choice decides — `revenueType` (One-time / Recurring), `billingFrequency`, `entryType`. "Kind" tells the reader nothing (see `.claude/rules/conventions-database.md`).
 - Never scatter service/models files — one `{module}.service.ts` and one `{module}.models.ts` per module.
 - Never rebuild the database to test changes — wait for the user.
 - Never commit credentials, tokens, or private keys.
@@ -84,6 +85,7 @@ IMPORTANT: Before any research or coding, match the task to this table. A single
 | **Server & Services** | |
 | Writing service functions | `.claude/rules/conventions-services.md` |
 | Authentication, RBAC, permissions | `.claude/rules/authentication-system.md` + `packages/auth/AGENTS.md` |
+| Account settings modal (ERP, MES, starter) | `packages/account/AGENTS.md` |
 | Background jobs and events (Inngest) | `.claude/rules/event-system.md` + `packages/jobs/AGENTS.md` |
 | Server functions (privileged/transactional writes shared by apps and jobs) | `packages/server-functions/AGENTS.md` |
 | Adding a Deno edge function (embedding only) | `.claude/rules/workflow-edge-function.md` |
@@ -111,6 +113,7 @@ IMPORTANT: Before any research or coding, match the task to this table. A single
 | Workflows (customer automation rules) | `.claude/rules/workflow-event-catalog.md` + `.claude/rules/workflow-matcher.md` + `.claude/rules/workflow-engine.md` + `packages/ee/src/workflows/AGENTS.md` |
 | Workflow run history + retention | `.claude/rules/workflow-run-history.md` |
 | Fixed assets | `.claude/rules/fixed-asset-lifecycle.md` |
+| Rental agreements / leases / revenue recognition | `apps/erp/app/modules/sales/AGENTS.md` (Rentals) + `apps/erp/app/modules/accounting/AGENTS.md` (Revenue recognition, Sales-type leases) + `.claude/rules/fixed-asset-lifecycle.md` + `.claude/rules/accounting-sync-handlers.md` |
 | Risk register | `.claude/rules/risk-register-module.md` |
 | **Infrastructure** | |
 | File uploads, images, HEIC, MIME types, CAD formats | `packages/files/AGENTS.md` |
@@ -149,7 +152,7 @@ IMPORTANT: Before any research or coding, match the task to this table. A single
 | Adding a new module | `.ai/docs/module-conventions.md` |
 | Creating/refreshing an AGENTS.md | `.claude/skills/create-agents-md/SKILL.md` |
 | **Design Specs** | |
-| Check existing specs before building | `.ai/specs/` + `.ai/specs/implemented/` |
+| Check existing specs before building | `.ai/specs/` + `.ai/specs/implemented/` (superseded designs: `.ai/specs/archived/`, history only) |
 | Writing a new spec | `.claude/skills/spec-writing/SKILL.md` + `.claude/rules/writing-ste.md` |
 | Explain a spec/plan as an HTML page (diagram + plain prose) | `.claude/skills/explain/SKILL.md` |
 | **Workflows** | |
@@ -209,7 +212,7 @@ IMPORTANT: Before any research or coding, match the task to this table. A single
 - **Database**: Supabase (Postgres) with RLS, typed via `@carbon/database` + Kysely
 - **Background jobs**: Inngest (NOT Trigger.dev), via `@carbon/jobs`
 - **Apps**: `erp` (main), `mes` (shop floor), `academy` (training), `starter` (example)
-- **Packages**: 29 under `packages/` — auth, database, lib, react, query, form, documents, jobs, notifications, config, env, checks, harness, dev, stripe, ee, tiptap, locale, utils, files, kv, printing, onboarding, logger, server-functions, planning, api, viewer, workflows-core — plus `@carbon/content` at `docs/content` (docs MDX + glossary)
+- **Packages**: 30 under `packages/` — account, auth, database, lib, react, query, form, documents, jobs, notifications, config, env, checks, harness, dev, stripe, ee, tiptap, locale, utils, files, kv, printing, onboarding, logger, server-functions, planning, api, viewer, workflows-core — plus `@carbon/content` at `docs/content` (docs MDX + glossary)
 - **Multi-tenancy**: every table has `companyId` + composite PK `("id", "companyId")`
 - **IDs**: `id('prefix')` default in SQL
 - **Imports**: `~/*` → app code; `@carbon/*` → workspace packages

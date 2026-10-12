@@ -25,6 +25,7 @@ import {
   useDisclosure,
   VStack
 } from "@carbon/react";
+import { distinctItemText } from "@carbon/utils";
 
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -130,14 +131,20 @@ const ConsumablesTable = memo(
               <Hyperlink to={path.to.consumableDetails(row.original.id!)}>
                 <VStack spacing={0}>
                   {row.original.readableIdWithRevision}
-                  <div className="w-full truncate text-muted-foreground text-xs">
-                    {row.original.name}
-                  </div>
+                  {distinctItemText(
+                    row.original.readableIdWithRevision,
+                    row.original.name
+                  ) && (
+                    <div className="w-full truncate text-muted-foreground text-xs">
+                      {row.original.name}
+                    </div>
+                  )}
                 </VStack>
               </Hyperlink>
             </HStack>
           ),
           meta: {
+            mobile: "P1",
             icon: <LuBookMarked />,
             // The accessor is the raw item id — export the readable id
             // the cell shows instead of a UUID.
@@ -158,6 +165,7 @@ const ConsumablesTable = memo(
             </div>
           ),
           meta: {
+            mobile: "P3",
             icon: <LuAlignJustify />
           }
         },
@@ -208,6 +216,7 @@ const ConsumablesTable = memo(
             </VStack>
           ),
           meta: {
+            mobile: "P2",
             filter: {
               type: "static",
               options: methodType.map((value) => ({
@@ -606,7 +615,12 @@ const ConsumablesTable = memo(
           primaryAction={
             permissions.can("create", "parts") && (
               <div className="flex items-center gap-2">
-                <Button variant="secondary" leftIcon={<LuGroup />} asChild>
+                <Button
+                  variant="secondary"
+                  leftIcon={<LuGroup />}
+                  className="max-md:hidden"
+                  asChild
+                >
                   <Link to={path.to.itemPostingGroups}>
                     <Trans>Item Groups</Trans>
                   </Link>

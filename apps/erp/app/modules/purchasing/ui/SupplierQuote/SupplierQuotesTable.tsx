@@ -89,6 +89,7 @@ const SupplierQuotesTable = memo(
             </HStack>
           ),
           meta: {
+            mobile: "P1",
             icon: <LuBookMarked />
           }
         },
@@ -99,6 +100,7 @@ const SupplierQuotesTable = memo(
             <SupplierAvatar supplierId={row.original.supplierId} />
           ),
           meta: {
+            mobile: "P3",
             filter: {
               type: "static",
               options: suppliers?.map((supplier) => ({
@@ -117,6 +119,7 @@ const SupplierQuotesTable = memo(
             <SupplierQuoteStatus status={row.original.status} />
           ),
           meta: {
+            mobile: "P2",
             filter: {
               type: "static",
               options: supplierQuoteStatusType.map((status) => ({
@@ -158,6 +161,9 @@ const SupplierQuotesTable = memo(
             <DateTime value={item.getValue<string>()} variant="date" />
           ),
           meta: {
+            filter: {
+              type: "dateRange"
+            },
             icon: <LuCalendar />
           }
         },
@@ -168,6 +174,9 @@ const SupplierQuotesTable = memo(
             <DateTime value={item.getValue<string>()} variant="date" />
           ),
           meta: {
+            filter: {
+              type: "dateRange"
+            },
             icon: <LuCalendar />
           }
         },

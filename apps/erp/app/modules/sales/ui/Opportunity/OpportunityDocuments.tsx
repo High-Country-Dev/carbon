@@ -5,6 +5,7 @@
 import { useCarbon } from "@carbon/auth";
 import { convertKbToString, downloadUrl, storage } from "@carbon/files";
 import { getLogger } from "@carbon/logger";
+import { useRevalidator } from "@carbon/query";
 import {
   Badge,
   Card,
@@ -12,6 +13,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
+  cn,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -40,7 +42,7 @@ import {
   LuShoppingCart,
   LuUpload
 } from "react-icons/lu";
-import { Outlet, useFetchers, useRevalidator, useSubmit } from "react-router";
+import { Outlet, useFetchers, useSubmit } from "react-router";
 import { DateTime, DocumentPreview, FileDropzone } from "~/components";
 import DocumentIcon from "~/components/DocumentIcon";
 import { useFileUpload, usePermissions, useUser } from "~/hooks";
@@ -107,7 +109,7 @@ const OpportunityDocuments = ({
               <Trans>Files</Trans>
             </CardTitle>
           </CardHeader>
-          <CardAction>
+          <CardAction className="max-md:hidden">
             {!isReadOnlyProp && (
               <OpportunityDocumentForm
                 opportunityId={opportunity.id}
@@ -119,7 +121,11 @@ const OpportunityDocuments = ({
         </HStack>
         <CardContent>
           <Table>
-            <Thead>
+            <Thead
+              className={cn(
+                attachmentsToRender.length === 0 && "max-md:hidden"
+              )}
+            >
               <Tr>
                 <Th>
                   <Trans>Name</Trans>

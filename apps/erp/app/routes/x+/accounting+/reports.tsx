@@ -29,6 +29,7 @@ import {
   LuBoxes,
   LuBriefcase,
   LuFileSpreadsheet,
+  LuGauge,
   LuHandCoins,
   LuPin,
   LuRecycle,
@@ -191,6 +192,24 @@ export default function ReportsIndexRoute() {
         defaultPinned: false
       },
       {
+        key: "revenue-waterfall",
+        name: t`Deferred Revenue Waterfall`,
+        description: t`When deferred, accrued and lease-interest revenue will be recognized`,
+        to: path.to.revenueWaterfall,
+        icon: LuFileSpreadsheet,
+        category: t`Close Reports`,
+        defaultPinned: false
+      },
+      {
+        key: "lease-net-investment",
+        name: t`Net Investment in Leases`,
+        description: t`Sales-type lease balances, the next interest and payments due by fiscal year`,
+        to: path.to.leaseNetInvestment,
+        icon: LuScale,
+        category: t`Close Reports`,
+        defaultPinned: false
+      },
+      {
         key: "revenue",
         name: t`Revenue`,
         description: t`Slice revenue by customer, customer type, or any dimension`,
@@ -232,6 +251,15 @@ export default function ReportsIndexRoute() {
         description: t`What drove inventory up or down, by any dimension`,
         to: path.to.analyticsReport("inventory-change"),
         icon: LuArrowUpDown,
+        category: t`Analytics`,
+        defaultPinned: false
+      },
+      {
+        key: "rental-utilization",
+        name: t`Rental Utilization`,
+        description: t`Time and dollar utilization of the rental fleet by asset and class`,
+        to: path.to.rentalUtilization,
+        icon: LuGauge,
         category: t`Analytics`,
         defaultPinned: false
       },
@@ -326,12 +354,13 @@ export default function ReportsIndexRoute() {
 
   return (
     <div className="h-[calc(100dvh-var(--header-height))] w-full overflow-y-auto bg-card">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 p-8">
-        <div className="flex items-center justify-between gap-4">
+      <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 p-8 max-md:gap-6 max-md:p-4">
+        {/* Phones: the app bar already titles the page. */}
+        <div className="flex items-center justify-between gap-4 max-md:[&>h1]:hidden">
           <Heading as="h1" size="h1">
             <Trans>Reporting</Trans>
           </Heading>
-          <InputGroup size="sm" className="w-64">
+          <InputGroup size="sm" className="w-64 max-md:w-full">
             <InputLeftElement>
               <LuSearch className="h-4 w-4 text-muted-foreground" />
             </InputLeftElement>
@@ -399,7 +428,9 @@ export default function ReportsIndexRoute() {
                       }
                     >
                       <report.icon className="h-4 w-4 shrink-0 text-muted-foreground" />
-                      <span className="text-sm font-medium">{report.name}</span>
+                      <span className="text-sm font-medium max-md:shrink-0 max-md:whitespace-nowrap">
+                        {report.name}
+                      </span>
                       <span className="truncate text-sm text-muted-foreground">
                         {report.description}
                       </span>

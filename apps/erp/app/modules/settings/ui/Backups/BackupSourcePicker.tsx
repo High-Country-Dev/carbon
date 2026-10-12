@@ -4,6 +4,7 @@
 
 import { TEMP_STAGING_BUCKET } from "@carbon/files";
 import { useControlField } from "@carbon/form";
+import { useRevalidator } from "@carbon/query";
 import {
   Command,
   CommandEmpty,
@@ -26,7 +27,6 @@ import {
   LuLoaderCircle,
   LuUpload
 } from "react-icons/lu";
-import { useRevalidator } from "react-router";
 import { UploadProgress } from "~/components/UploadProgress";
 import { uploadToSignedUrlWithProgress } from "~/utils/signed-upload";
 import { formatBackupDate, formatBackupName } from "./format";
@@ -37,7 +37,7 @@ type UploadState =
   | { phase: "unpacking" };
 
 const triggerClass =
-  "bg-transparent text-foreground flex h-10 w-full items-center justify-between gap-2 whitespace-nowrap rounded-md border border-input px-3 py-2 text-sm shadow-xs outline-none focus:border-ring focus:ring-[3px] focus:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50";
+  "bg-transparent text-foreground flex h-10 w-full items-center justify-between gap-2 whitespace-nowrap rounded-md border border-input px-3 py-2 text-sm shadow-xs outline-none focus:border-ring focus:ring-[3px] focus:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 max-md:h-11 max-md:text-base";
 
 // One control combining your backups + upload new. Selecting one sets the
 // hidden `source` field the restore form submits.

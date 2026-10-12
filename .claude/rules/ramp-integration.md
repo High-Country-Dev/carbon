@@ -80,14 +80,14 @@ providers, which own the data and mirror it out.
 >   2026-09-28, so a US supplier with a country but no state fell through to the
 >   useless "see the provider error" branch).
 >   The PREVENTIVE half is the `requireSupplierContactAndLocation` company setting
->   (`apps/erp/app/modules/settings/party-contact.ts`): when on, a supplier must have
+>   (`packages/lib/src/party-contact.ts`, re-exported by `apps/erp/app/modules/settings/party-contact.ts`): when on, a supplier must have
 >   an emailable contact AND a location whose address carries a country (plus a state
 >   when that country is US) before its supplier quote, purchase order or purchase
 >   invoice can be issued or posted, so the gap is caught while the person who can fix
 >   it is still looking at the document. ONE setting per party kind rather than two,
 >   because the platform needs all of it or none — a supplier with a contact but no
 >   location fails exactly as hard as one with neither. Enforced ONCE, on the PARTY
->   record, by `checkPartyContactRequirement` (`settings/party-contact.server.ts`) at
+>   record, by `checkPartyContactRequirement` (`@carbon/lib/party-contact.server`) at
 >   the six release/post boundaries — PO and supplier-quote finalize, sales-order
 >   confirm, quote finalize, and both invoice posts — surfaced as a flash naming the
 >   party and the missing fact.
@@ -780,9 +780,10 @@ keyset helpers and its two metadata cursors are gone.
   custom `"carbon-cost-center"` field (option = the journal-line dimension `valueId` that is
   a `costCenter.id`). Only accounts/cost centers Carbon has pushed (present in
   `externalIntegrationMapping` entityType `account`/`costCenter`) are coded; an unpushed one
-  degrades the line to uncoded rather than 422-ing the whole bill. An invoice with no posted
-  journal (accounting disabled at post time) fails with `UNMAPPED_ACCOUNTS` and retains its
-  cursor.
+  degrades the line to uncoded rather than 422-ing the whole bill. An invoice with no Posted
+  journal (posted before the accounting cutover, so its journal is Provisional or
+  Superseded, or posted before every company wrote journals) fails with `UNMAPPED_ACCOUNTS`
+  and retains its cursor.
   Maps `("bill", invoice.id, "ramp", <draft id>)`. It **NEVER submits** — Carbon hands off a
   provisional bill the customer completes/approves/pays in Ramp, because
   `POST /bills/drafts/{id}/submit` needs payment method + payee contact (per-vendor Ramp
@@ -909,7 +910,9 @@ enum values, document enums, indexes, RLS, event trigger, and the per-company
   invariant: Draft requires the journal and all posting/void audit fields to be null;
   Posted requires `postingDate`, `postedAt`, and `postedBy` with void audit fields null;
   Voided requires both posting and void audit fields. `journalId` remains optional for
-  Posted/Voided because accounting-disabled companies do not create a journal.
+  Posted/Voided: `20261008211304_reset-accounting` set it to NULL on every charge of every
+  company with no `JE-SEED-%` journal, and a charge posted while accounting was off never
+  had one. The enable's legacy backfill journals the charges dated on or after the cutover.
 
 ## Charges → the accounting provider
 
@@ -951,12 +954,13 @@ race.
 
 - **post**: only from Draft. Requires company settings/config, active non-group posting
   accounts in the company group, a Liability card account, Asset payment offset, Revenue
-  cashback offset, and company-scoped cost centers. Resolves the accounting period (shifts a Locked/Closed period
-  forward to the next open period, writing the shifted `postingDate` back). When
-  `companySettings.accountingEnabled`, builds the journal (`sourceType`/`documentType`
-  `'Charge'`) and writes cost-center `journalLineDimension`s against the
-  group's oldest active `CostCenter` `dimension` row; flips the row to Posted with
-  `journalId`. Accounting-off = Posted with no journal. **A line carrying a
+  cashback offset, and company-scoped cost centers. Builds the journal for every company
+  (`sourceType`/`documentType` `'Charge'`, status from `journalPostingStatus`: Provisional
+  before the accounting cutover, Posted after it). Only a Posted journal resolves the
+  accounting period (shifts a Locked/Closed period forward to the next open period, writing
+  the shifted `postingDate` back); a Provisional one has no period. Writes cost-center
+  `journalLineDimension`s against the group's oldest active `CostCenter` `dimension` row;
+  flips the row to Posted with `journalId`. **A line carrying a
   `costCenterId` with no such dimension row REFUSES to post** ("Company group has no
   active Cost Center dimension") rather than posting a balanced journal that silently
   lost the tag — `pushCostCenters` creates the row for installed integrations, so this
@@ -964,13 +968,24 @@ race.
   Payment/Cashback reject any coding lines; Charge/Credit/Repayment require finite,
   strictly positive line magnitudes summing to the header. Journal line ids are allocated
   before insertion and bound explicitly to dimensions, never inferred from RETURNING order.
-- **void**: only from Posted. When a journal exists, requires accounting enabled and proves
-  the original company-scoped journal is Posted, source type `Charge`, and every
-  line points back to this document. It writes a new Posted reversal with negated amounts
-  and copied dimensions, then flips the document to Voided. Documents posted while
-  accounting was disabled have no journal and void without fabricating one.
-  Reversal line ids are also allocated before insertion, preserving each original line's
-  dimension identity even if a database returns inserted rows in another order.
+- **void**: only from Posted. First, before any write, `voidCharge`
+  (`post-charge/post-charge-void.ts`) refuses a charge dated before the company's accounting
+  cutover (`postingDate ?? transactionDate`) through `refuseVoidBeforeCutover`
+  (`lib/cutover-void.ts`) with `CHARGE_VOID_BEFORE_CUTOVER_ERROR`: "This charge is from before
+  your accounting cutover. Record a journal entry to correct it instead." The enable
+  superseded that journal and opened its balances in the opening journal, so a reversal would
+  undo nothing. A company with no cutover passes. `voidReimbursement`
+  (`post-reimbursement/post-reimbursement-void.ts`) refuses the same way
+  (`postingDate ?? reimbursementDate`, `REIMBURSEMENT_VOID_BEFORE_CUTOVER_ERROR`). When a
+  journal exists, the void then proves the original company-scoped journal is Provisional or
+  Posted (`OPEN_ITEM_JOURNAL_STATUSES`), source type `Charge`, and every line points back to
+  this document. It writes a new reversal with negated amounts, copied dimensions and copied
+  `accountDefaultRole`, at the current posting status (Provisional before the cutover, with no
+  period), then flips the document to Voided. A charge with no journal (cleared by
+  `20261008211304_reset-accounting`, or posted while accounting was off) voids without
+  fabricating one. Reversal line ids are also allocated before insertion, preserving
+  each original line's dimension identity even if a database returns inserted rows in another
+  order.
 
 ### The journal builder (`build-charge-journal.ts`)
 

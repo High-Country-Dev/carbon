@@ -6,20 +6,18 @@ import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { getCarbonServiceRole } from "@carbon/auth/client.server";
 import { flash } from "@carbon/auth/session.server";
-import { isUnaffectedByNavigation, redirect } from "@carbon/utils";
+import { getDocumentApprovalState } from "@carbon/ee/approvals/document.server";
+import { RecordOutlet } from "@carbon/react";
+import { redirect } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
-import type {
-  LoaderFunctionArgs,
-  ShouldRevalidateFunction
-} from "react-router";
-import { Outlet } from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
+
 import {
   getSupplier,
   getSupplierContacts,
   getSupplierLocations,
   getSupplierTax
 } from "~/modules/purchasing";
-import { getSupplierApprovalContext } from "~/modules/purchasing/purchasing.server";
 import SupplierHeader from "~/modules/purchasing/ui/Supplier/SupplierHeader";
 import SupplierSidebar from "~/modules/purchasing/ui/Supplier/SupplierSidebar";
 import { getTagsList } from "~/modules/shared";
@@ -34,11 +32,6 @@ export const handle: Handle = {
   module: "purchasing"
 };
 
-export const shouldRevalidate: ShouldRevalidateFunction = (args) =>
-  isUnaffectedByNavigation(args, { params: ["supplierId"] })
-    ? false
-    : args.defaultShouldRevalidate;
-
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, companyId, userId } = await requirePermissions(request, {
     view: "purchasing"
@@ -47,10 +40,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { supplierId } = params;
   if (!supplierId) throw new Error("Could not find supplierId");
 
-  const serviceRole = getCarbonServiceRole();
-  // Kick off approval in parallel — it only needs supplier.status, so we chain
-  // off the supplier fetch rather than waiting for the whole Promise.all to
-  // settle.
   const supplierPromise = getSupplier(client, supplierId);
   const [supplier, contacts, locations, tags, supplierTax, approval] =
     await Promise.all([
@@ -59,15 +48,12 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       getSupplierLocations(client, supplierId),
       getTagsList(client, companyId, "supplier"),
       getSupplierTax(client, supplierId),
-      supplierPromise.then((s) =>
-        getSupplierApprovalContext(
-          serviceRole,
-          supplierId,
-          s.data?.status ?? null,
-          companyId,
-          userId
-        )
-      )
+      getDocumentApprovalState(getCarbonServiceRole(), {
+        documentType: "supplier",
+        documentId: supplierId,
+        companyId,
+        userId
+      })
     ]);
 
   if (supplier.error) {
@@ -86,7 +72,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     locations: locations.data ?? [],
     tags: tags.data ?? [],
     supplierTax: supplierTax.data,
-    ...approval
+    approval
   };
 }
 
@@ -94,9 +80,9 @@ export default function SupplierRoute() {
   return (
     <>
       <SupplierHeader />
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_4fr] h-full w-full gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_4fr] h-full w-full gap-4 max-md:h-auto max-md:gap-0">
         <SupplierSidebar />
-        <Outlet />
+        <RecordOutlet />
       </div>
     </>
   );

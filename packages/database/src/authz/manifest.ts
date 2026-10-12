@@ -322,8 +322,16 @@ export const manifest = {
       portal.customer("customerId", "sales_delete")
     )
   }),
+  customerContract: company("sales", { read: "sales_view" }),
+  customerContractAmendment: company("sales", { read: "sales_view" }),
+  customerContractInvoice: company("sales", { read: "sales_view" }),
+  customerContractInvoiceLine: company("sales", { read: "sales_view" }),
+  customerContractLedgerEntry: company("sales", { read: "sales_view" }),
+  customerContractLine: company("sales", { read: "sales_view" }),
+  customerContractRevenue: company("sales", { read: "sales_view" }),
   customerItemPriceOverride: company("sales"),
   customerItemPriceOverrideBreak: company("sales"),
+  customerItemRentalRate: company("sales", { read: "sales_view" }),
   customerLocation: policies({
     select: or(
       viaParent("customerId", "customer", "sales_view"),
@@ -605,12 +613,14 @@ export const manifest = {
   feedback: serviceOnly(),
   fiscalYearSettings: company("settings", { read: "settings_view" }),
   fixedAsset: company("accounting", { read: "accounting_view" }),
+  fixedAssetCipCost: company("accounting", { read: "accounting_view" }),
   fixedAssetClass: company("accounting", { read: "accounting_view" }),
   fixedAssetDisposal: company("accounting", {
     read: "accounting_view",
     update: false,
     delete: false
   }),
+  fixedAssetTransfer: company("accounting", { read: "accounting_view" }),
   fixedAssetUsageLog: company("accounting", { read: "accounting_view" }),
   fixture: serviceOnly(),
   fulfillment: company("sales", {
@@ -767,6 +777,12 @@ export const manifest = {
   }),
   itemPlanning: company("parts", { read: "parts_view", delete: false }),
   itemPostingGroup: company("accounting", { read: "accounting_view" }),
+  itemPostingGroupResponsibility: company("settings", {
+    create: "settings_update",
+    update: "settings_update",
+    delete: "settings_update"
+  }),
+  itemRentalRate: company("sales", { read: "sales_view" }),
   itemReplenishment: company("parts", { read: "parts_view" }),
   itemSerialSequence: company("settings"),
   itemShelfLife: company("parts", { read: "parts_view" }),
@@ -818,19 +834,50 @@ export const manifest = {
       "production_delete"
     )
   }),
-  journal: company("accounting", {
-    read: "accounting_view",
-    where: {
-      // Posted stays updatable only for the Posted -> Reversed transition, which the
-      // journal_posted_immutable trigger enforces. The new row is always checked
-      // against the company scope alone, so a journal can never move company.
-      update: (eb) => eb("status", "in", ["Draft", "Posted"]),
-      delete: (eb) => eb("status", "=", "Draft")
-    }
+  // Provisional and Superseded are the accounting cutover's automatic statuses
+  // (.ai/specs/implemented/2026-10-08-accounting-cutover.md): only the posting
+  // server functions and the enable write them, as the service connection. A
+  // user never creates a journal in either status nor moves one into it.
+  journal: policies({
+    select: inCompany("companyId", "accounting_view"),
+    insert: and(
+      where<"journal">((eb) => eb("status", "in", ["Draft", "Posted"])),
+      inCompany("companyId", "accounting_create")
+    ),
+    // Posted stays updatable only for the Posted -> Reversed transition, which the
+    // journal_posted_immutable trigger enforces. The new row keeps the company scope,
+    // so a journal can never move company, and a status a user may set: Draft,
+    // Posted (a manual posting) or Reversed (a reversal).
+    update: {
+      using: and(
+        where<"journal">((eb) => eb("status", "in", ["Draft", "Posted"])),
+        inCompany("companyId", "accounting_update")
+      ),
+      check: and(
+        where<"journal">((eb) =>
+          eb("status", "in", ["Draft", "Posted", "Reversed"])
+        ),
+        inCompany("companyId", "accounting_update")
+      )
+    },
+    delete: and(
+      where<"journal">((eb) => eb("status", "=", "Draft")),
+      inCompany("companyId", "accounting_delete")
+    )
   }),
   journalLine: policies({
     select: inCompany("companyId", "accounting_view"),
-    insert: inCompany("companyId", "accounting_create"),
+    // Lines go into a Draft journal, or into the Posted reversal the ERP's
+    // reverseJournalEntry writes through the user's client. Never into a
+    // Provisional, Superseded or Reversed journal.
+    insert: and(
+      inCompany("companyId", "accounting_create"),
+      exists(
+        "journal",
+        "journalId",
+        where<"journal">((eb) => eb("status", "in", ["Draft", "Posted"]))
+      )
+    ),
     update: and(
       inCompany("companyId", "accounting_update"),
       exists(
@@ -1050,6 +1097,18 @@ export const manifest = {
   }),
   pickMethod: company("parts", { read: "parts_view", delete: false }),
   plan: policies({ select: authenticated }),
+  // Read-only through the API. MRP writes it (Kysely) and the planning routes
+  // change it with the service role after their own checks; an API write could
+  // point an action's jobId / purchaseOrderLineId at another company's row
+  // (single-column foreign keys), which the service-role read then shows.
+  planningAction: company("production", {
+    // Read by the production AND purchasing planning pages with the user's
+    // client; the row names a supplier, an open quantity and an assignee.
+    read: anyOf("production_view", "purchasing_view"),
+    create: false,
+    update: false,
+    delete: false
+  }),
   pricingRule: company("sales"),
   printerRoute: company("printing", { read: "printing_view" }),
   printJob: company("printing", { read: "printing_view" }),
@@ -1108,6 +1167,15 @@ export const manifest = {
     read: "purchasing_view",
     update: false,
     delete: false
+  }),
+  pushSubscription: policies({
+    select: and(owner("userId"), member("companyId")),
+    insert: and(owner("userId"), member("companyId")),
+    update: {
+      using: owner("userId"),
+      check: and(owner("userId"), member("companyId"))
+    },
+    delete: and(owner("userId"), member("companyId"))
   }),
   qualityDocument: company("quality"),
   qualityDocumentStep: company("production"),
@@ -1248,6 +1316,11 @@ export const manifest = {
     CREATE POLICY "DELETE" ON ${t} AS PERMISSIVE FOR DELETE TO public USING ((EXISTS (SELECT 1 FROM public."reimbursementLine" l JOIN public."reimbursement" h ON ((h.id = l."reimbursementId") AND (h."companyId" = l."companyId")) WHERE ((l.id = ${t}."reimbursementLineId") AND (l."companyId" = ${t}."companyId") AND (h.status = 'Draft'::"reimbursementStatus"))) AND ("companyId" = ANY ((SELECT get_companies_with_employee_permission('invoicing_delete'::text))::text[]))));
   `
   ),
+  rentalAgreement: company("sales", { read: "sales_view" }),
+  rentalAgreementCharge: company("sales", { read: "sales_view" }),
+  rentalAgreementLine: company("sales", { read: "sales_view" }),
+  rentalBillingPeriod: company("sales", { read: "sales_view" }),
+  rentalLeaseScheduleLine: company("sales", { read: "sales_view" }),
   reportPin: policies({
     all: and(owner("userId"), inCompany("companyId", "employee"))
   }),
@@ -1264,6 +1337,11 @@ export const manifest = {
     delete: and(inCompany("companyId", "employee"), owner("createdBy"))
   }),
   returnReason: company("sales"),
+  revenueRecognitionRun: company("accounting", { read: "accounting_view" }),
+  revenueRecognitionRunLine: company("accounting", { read: "accounting_view" }),
+  revenueRecognitionSchedule: company("accounting", {
+    read: "accounting_view"
+  }),
   rework: company("production", { read: "production_view" }),
   riskRegister: company("quality", { create: "employee" }),
   salesInvoice: company("invoicing", { read: "invoicing_view" }),

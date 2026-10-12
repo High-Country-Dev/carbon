@@ -11,13 +11,14 @@ import {
 } from "@carbon/database/picked-consumption";
 import { consumableInWholeAssemblies } from "@carbon/database/supersession-pick";
 import { storage } from "@carbon/files";
+import { getLogger } from "@carbon/logger";
 import { type ServerFnInput, serverFns } from "@carbon/server-functions";
 import type { TrackedEntityAttributes } from "@carbon/utils";
 import { async, datetime, getErrorMessage } from "@carbon/utils";
 import type { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import { nanoid } from "nanoid";
 import type { z } from "zod";
-import { getNextSequence } from "~/modules/settings";
+import { getNextSequence } from "~/modules/settings/settings.service";
 import type { StorageItem } from "~/types";
 import type { GenericQueryFilters } from "~/utils/query";
 import {
@@ -57,6 +58,8 @@ import {
   resolvePickTarget,
   splitConsumeFirstPick
 } from "./supersession-pick";
+
+const logger = getLogger("erp", "inventory");
 
 /** @mcp delete */
 export async function deleteBatchProperty(
@@ -729,6 +732,59 @@ export async function getReceiptLines(
   return client.from("receiptLines").select("*").eq("receiptId", receiptId);
 }
 
+/**
+ * The documents around a receipt that its own row doesn't name: the purchase
+ * invoices raised against its supplier interaction (the PO's, so every
+ * receipt of that order shares them), and — for a customer return — the
+ * customer it came back from.
+ * @mcp read
+ */
+export async function getReceiptRelatedItems(
+  client: SupabaseClient<Database>,
+  companyId: string,
+  supplierInteractionId: string | null,
+  salesReturnOrderId: string | null
+) {
+  const [invoices, salesReturnOrder] = await Promise.all([
+    supplierInteractionId
+      ? client
+          .from("purchaseInvoice")
+          .select("id, invoiceId, status")
+          .eq("supplierInteractionId", supplierInteractionId)
+          .eq("companyId", companyId)
+          .order("createdAt")
+      : null,
+    salesReturnOrderId
+      ? client
+          .from("salesReturnOrder")
+          .select("customerId")
+          .eq("id", salesReturnOrderId)
+          .eq("companyId", companyId)
+          .maybeSingle()
+      : null
+  ]);
+
+  if (invoices?.error) {
+    logger.error("Failed to get receipt purchase invoices", {
+      companyId,
+      supplierInteractionId,
+      error: invoices.error
+    });
+  }
+  if (salesReturnOrder?.error) {
+    logger.error("Failed to get receipt sales return order", {
+      companyId,
+      salesReturnOrderId,
+      error: salesReturnOrder.error
+    });
+  }
+
+  return {
+    invoices: invoices?.data ?? [],
+    customerId: salesReturnOrder?.data?.customerId ?? null
+  };
+}
+
 /** @mcp read */
 export async function getReceiptTracking(
   client: SupabaseClient<Database>,
@@ -1333,7 +1389,15 @@ export async function getShipmentRelatedItems(
     .from("salesOrder")
     .select("*")
     .eq("id", sourceDocumentId)
-    .single();
+    .maybeSingle();
+
+  if (salesOrder.error) {
+    logger.error("Failed to get shipment sales order", {
+      shipmentId,
+      sourceDocumentId,
+      error: salesOrder.error
+    });
+  }
 
   const invoices = await client
     .from("salesInvoice")
@@ -1343,6 +1407,13 @@ export async function getShipmentRelatedItems(
         salesOrder.data?.opportunityId ?? ""
       }`
     );
+
+  if (invoices.error) {
+    logger.error("Failed to get shipment sales invoices", {
+      shipmentId,
+      error: invoices.error
+    });
+  }
 
   return {
     invoices: invoices.data ?? []
@@ -1360,6 +1431,50 @@ export async function getShipmentTracking(
     .select("*")
     .eq("attributes ->> Shipment", shipmentId)
     .eq("companyId", companyId);
+}
+
+/** @mcp read */
+export async function getRentalShipmentLines(
+  client: SupabaseClient<Database>,
+  shipmentId: string,
+  companyId: string
+) {
+  return (
+    client
+      .from("shipmentFixedAssetLine")
+      .select(
+        "id, shipped, meter, rentalAgreementLineId, rentalAgreementLine!shipmentFixedAssetLine_rentalAgreementLineId_fkey(id, status, lessorClassification, fixedAsset(id, fixedAssetId, name, serialNumber), item(name, readableIdWithRevision, thumbnailPath, type), trackedEntity(readableId))"
+      )
+      .eq("shipmentId", shipmentId)
+      .eq("companyId", companyId)
+      .not("rentalAgreementLineId", "is", null)
+      // A document's units are inserted in one statement and share a createdAt;
+      // without a tie-breaker an update reorders them.
+      .order("createdAt")
+      .order("id")
+  );
+}
+
+/** @mcp read */
+export async function getRentalReceiptLines(
+  client: SupabaseClient<Database>,
+  receiptId: string,
+  companyId: string
+) {
+  return (
+    client
+      .from("receiptFixedAssetLine")
+      .select(
+        "id, received, meter, notes, takeOutOfService, outOfServiceReason, residualDestination, rentalAgreementLineId, rentalAgreementLine!receiptFixedAssetLine_rentalAgreementLineId_fkey(id, status, lessorClassification, fixedAsset(id, fixedAssetId, name, serialNumber), item(name, readableIdWithRevision, thumbnailPath, type), trackedEntity(readableId))"
+      )
+      .eq("receiptId", receiptId)
+      .eq("companyId", companyId)
+      .not("rentalAgreementLineId", "is", null)
+      // A document's units are inserted in one statement and share a createdAt;
+      // without a tie-breaker an update reorders them.
+      .order("createdAt")
+      .order("id")
+  );
 }
 
 /** @mcp read */
@@ -1439,6 +1554,42 @@ export async function getShippingTermsList(
     .eq("companyId", companyId)
     .eq("active", true)
     .order("name", { ascending: true });
+}
+
+/** What each serial unit of an item on hand would leave stock at — the
+ *  `preview-serial-unit-costs` server function, valued the way a shipment or
+ *  a capitalization would relieve it. Keyed by tracked entity id. */
+export async function getSerialUnitCosts(
+  client: SupabaseClient<Database>,
+  db: Kysely<KyselyDatabase>,
+  args: {
+    companyId: string;
+    userId: string;
+    itemId: string;
+    locationId?: string | null;
+  }
+) {
+  const { companyId, userId, ...input } = args;
+  return serverFns
+    .as({ client, db, companyId, userId })
+    .invoke("preview-serial-unit-costs", input);
+}
+
+/** Recost one serial unit in stock — the `recost-serial-unit` server
+ *  function: re-books the unit's layer at `unitCost` and posts the
+ *  difference against the offset account. Requires accounting update. */
+export async function recostSerialUnit(
+  client: SupabaseClient<Database>,
+  db: Kysely<KyselyDatabase>,
+  args: ServerFnInput<"recost-serial-unit"> & {
+    companyId: string;
+    userId: string;
+  }
+) {
+  const { companyId, userId, ...input } = args;
+  return serverFns
+    .as({ client, db, companyId, userId })
+    .invoke("recost-serial-unit", input);
 }
 
 // Merge >=2 same-item Available lots into ONE new entity (fresh id, summed
@@ -1668,6 +1819,55 @@ export async function getWarehouseTransfer(
     .single();
 }
 
+/**
+ * The documents a warehouse transfer has raised: the shipments that send it
+ * out of the source location and the receipts that take it in at the
+ * destination.
+ * @mcp read
+ */
+export async function getWarehouseTransferRelatedItems(
+  client: SupabaseClient<Database>,
+  companyId: string,
+  transferId: string
+) {
+  const [shipments, receipts] = await Promise.all([
+    client
+      .from("shipment")
+      .select("id, shipmentId, status")
+      .eq("sourceDocument", "Outbound Transfer")
+      .eq("sourceDocumentId", transferId)
+      .eq("companyId", companyId)
+      .order("createdAt"),
+    client
+      .from("receipt")
+      .select("id, receiptId, status")
+      .eq("sourceDocument", "Inbound Transfer")
+      .eq("sourceDocumentId", transferId)
+      .eq("companyId", companyId)
+      .order("createdAt")
+  ]);
+
+  if (shipments.error) {
+    logger.error("Failed to get warehouse transfer shipments", {
+      companyId,
+      transferId,
+      error: shipments.error
+    });
+  }
+  if (receipts.error) {
+    logger.error("Failed to get warehouse transfer receipts", {
+      companyId,
+      transferId,
+      error: receipts.error
+    });
+  }
+
+  return {
+    shipments: shipments.data ?? [],
+    receipts: receipts.data ?? []
+  };
+}
+
 /** @mcp read */
 export async function getWarehouseTransferLine(
   client: SupabaseClient<Database>,
@@ -1700,8 +1900,8 @@ export async function getWarehouseTransferLines(
 // Thin wrapper over the post-inventory-adjustment server function — the single
 // write path for manual adjustments (shared with MES). The server function owns
 // Set Quantity resolution, storage-unit transfers, serial/batch stock-target
-// resolution, tracked-entity updates, cost layers, and GL posting (only when
-// companySettings.accountingEnabled) in one transaction.
+// resolution, tracked-entity updates, cost layers, and GL posting (Provisional
+// before the accounting cutover) in one transaction.
 /**
  * @mcp create
  * @mcp audit createdBy
@@ -2969,6 +3169,41 @@ export async function getPickingListLines(
     .eq("pickingListId", pickingListId)
     .order("jobOperationId")
     .order("itemId");
+}
+
+/**
+ * The documents around a picking list that its own row doesn't name: the
+ * jobs its lines pick for, with their status.
+ * @mcp read
+ */
+export async function getPickingListRelatedItems(
+  client: SupabaseClient<Database>,
+  companyId: string,
+  pickingListId: string
+) {
+  const jobs = await client
+    .from("job")
+    .select("id, jobId, status, itemId, pickingListLine!inner(pickingListId)")
+    .eq("pickingListLine.pickingListId", pickingListId)
+    .eq("companyId", companyId)
+    .order("jobId");
+
+  if (jobs.error) {
+    logger.error("Failed to get picking list jobs", {
+      companyId,
+      pickingListId,
+      error: jobs.error
+    });
+  }
+
+  return {
+    jobs: (jobs.data ?? []).map(({ id, jobId, status, itemId }) => ({
+      id,
+      jobId,
+      status,
+      itemId
+    }))
+  };
 }
 
 /**

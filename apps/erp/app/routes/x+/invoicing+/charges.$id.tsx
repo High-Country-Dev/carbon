@@ -23,25 +23,18 @@ import {
   useDisclosure,
   VStack
 } from "@carbon/react";
-import { formatDate, isUnaffectedByNavigation, redirect } from "@carbon/utils";
+import { formatDate, redirect } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useLocale } from "@react-aria/i18n";
-import type {
-  LoaderFunctionArgs,
-  ShouldRevalidateFunction
-} from "react-router";
+import type { LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useNavigate } from "react-router";
 import { Hyperlink } from "~/components";
 import { Enumerable } from "~/components/Enumerable";
 import { Confirm } from "~/components/Modals";
 import { useCurrencyFormatter, usePermissions } from "~/hooks";
+import { JournalEntryStatus } from "~/modules/accounting/ui/JournalEntries";
 import { ChargeStatus, getCharge } from "~/modules/invoicing";
 import { path } from "~/utils/path";
-
-export const shouldRevalidate: ShouldRevalidateFunction = (args) =>
-  isUnaffectedByNavigation(args, { params: ["id"] })
-    ? false
-    : args.defaultShouldRevalidate;
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, companyId, companyGroupId } = await requirePermissions(
@@ -108,14 +101,11 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     charge.data.journalId
       ? client
           .from("journal")
-          .select("id, journalEntryId")
+          .select("id, journalEntryId, status")
           .eq("id", charge.data.journalId)
           .eq("companyId", companyId)
           .maybeSingle()
-      : Promise.resolve({
-          data: null as { id: string; journalEntryId: string } | null,
-          error: null
-        })
+      : Promise.resolve({ data: null, error: null })
   ]);
 
   const auxiliaryError =
@@ -227,9 +217,12 @@ export default function ChargeDetailRoute() {
                   </dt>
                   <dd>
                     {journal ? (
-                      <Hyperlink to={path.to.journalEntryDetails(journal.id)}>
-                        {journal.journalEntryId}
-                      </Hyperlink>
+                      <HStack spacing={2}>
+                        <Hyperlink to={path.to.journalEntryDetails(journal.id)}>
+                          {journal.journalEntryId}
+                        </Hyperlink>
+                        <JournalEntryStatus status={journal.status} />
+                      </HStack>
                     ) : (
                       charge.journalId
                     )}
