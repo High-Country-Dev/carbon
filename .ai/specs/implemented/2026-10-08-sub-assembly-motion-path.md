@@ -73,9 +73,9 @@ There's no schema change. Every `assemblyInstructionStep` row already has `"moti
 
 ### ERP UI (`apps/erp/.../Assemblies`)
 
-- **Using step's panel** (`AssemblyInstructionProperties.tsx`, Playback section at `:644-720`): under the step's own Motion row, one row per sub-assembly this step carries in, labelled "{Sub-assembly name} path". The row shows "Automatic" or "Custom path" and has an `Edit Path` / `Done Editing Path` button and a `Reset` action that sets `none`.
+- **Using step's panel** (`AssemblyInstructionProperties.tsx`, the Playback section of `StepForm`; the row is `AssemblySubAssemblyPathRow.tsx`): under the step's own Motion row, one row per sub-assembly this step carries in, labelled "{Sub-assembly name} path". The row shows "Automatic" or "Custom path" and has an `Edit Path` / `Done Editing Path` button and a `Reset` action. Reset posts `reset`, which puts back the header's motion from before the first drawn path (`warnings.plannedMotion`, else `none`).
 - **Unused sub-assembly's panel** (`AssemblySubAssemblyProperties.tsx`): the same row when `usedInStepId` is null. That sub-assembly joins at its own row, and `subassembly.ts:187` already puts it in its own `carriesIn`.
-- **Route** (`apps/erp/app/routes/x+/assembly+/$id.tsx:613-680`): `onEditMotion(stepId, { unitHeaderId? })`. Saving goes through the existing `$id.steps.motion.$stepId` action with the header id. That action calls `updateAssemblyStepMotion`, which updates by id, so headers work with no new route.
+- **Route** (`apps/erp/app/routes/x+/assembly+/$id.tsx`, through `ui/Assemblies/useStepMotionEditor.ts`): `motionEditing.onEdit(stepId, unitHeaderId?)`. Saving goes through the existing `$id.steps.motion.$stepId` action with the header id. That action calls `updateAssemblyStepMotion`, which updates by id, so headers work with no new route.
 - Every new string uses Lingui `<Trans>`/`t`. There's a new help term for the unit path row, next to the existing `assembly-step-motion` term.
 
 ### MES
@@ -106,7 +106,7 @@ There's no MES-specific code beyond the `playerMotionTypes` allow-list. MES alre
 6. A rigid-group step rotated at a waypoint turns as one body about its centroid. Parts keep their positions relative to each other.
 7. Paths with no rotation are saved as `linear`/`L` (check the row's `motion` JSON). Rotated ones are saved as `waypoints`.
 8. The MES operation view plays the same unit paths and rotations as the ERP editor.
-9. Reset on a unit path sets the header's `motion` back to `none`, and playback returns to the fallback.
+9. Reset on a unit path puts back the header's motion from before the first drawn path (`none` for a header the planner never moved), and playback returns to the fallback.
 10. `npm run typecheck` passes and viewer unit tests cover `waypoints` keyframes, the round-trip, and unit sequencing timing.
 
 ## Verification (2026-10-08)
