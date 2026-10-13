@@ -3938,6 +3938,9 @@ msgstr "Behind target by {daysBehindTarget} day(s)"
 msgid "Being phased out — successor: <0>{0}</0>"
 msgstr "Being phased out — successor: <0>{0}</0>"
 
+msgid "Below level"
+msgstr "Below level"
+
 msgid "Below safety stock"
 msgstr "Below safety stock"
 
@@ -14996,6 +14999,9 @@ msgstr "On {sentDate}"
 msgid "On a control account, Carbon opens the balance from its own open items, inventory and fixed assets. The trial balance must agree: every difference stays on Migration Clearing, which must total zero."
 msgstr "On a control account, Carbon opens the balance from its own open items, inventory and fixed assets. The trial balance must agree: every difference stays on Migration Clearing, which must total zero."
 
+msgid "On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, Carbon creates a Released stock transfer for the kanban quantity."
+msgstr "On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, Carbon creates a Released stock transfer for the kanban quantity."
+
 msgid "On cutover day, work the checklist below in order. Acceptance tests come from your in-scope requirements. Support details are at the bottom."
 msgstr "On cutover day, work the checklist below in order. Acceptance tests come from your in-scope requirements. Support details are at the bottom."
 
@@ -16825,6 +16831,9 @@ msgstr "Project start"
 msgid "Projected"
 msgstr "Projected"
 
+msgid "Projected (To)"
+msgstr "Projected (To)"
+
 msgid "Projected completion"
 msgstr "Projected completion"
 
@@ -17154,6 +17163,9 @@ msgstr "PV of Payments"
 
 msgid "PV of Residual"
 msgstr "PV of Residual"
+
+msgid "QR Code to complete the current operation for this kanban"
+msgstr "QR Code to complete the current operation for this kanban"
 
 #. placeholder {0}: getKanbanCreateNoun(row.original.replenishmentSystem)
 msgid "QR Code to create a {0} for this kanban"
@@ -18213,6 +18225,9 @@ msgstr "Replacing the PDF removes all balloon placements on this document. Chara
 
 msgid "Replenishment"
 msgstr "Replenishment"
+
+msgid "Replenishment Level"
+msgstr "Replenishment Level"
 
 msgid "Replenishment system"
 msgstr "Replenishment system"
@@ -22459,6 +22474,9 @@ msgstr "The push to Mount finished. Some records need attention"
 msgid "The quantity breakpoints this line is priced at; each column carries its own per-unit price for buyer–supplier negotiation and for converting to downstream documents."
 msgstr "The quantity breakpoints this line is priced at; each column carries its own per-unit price for buyer–supplier negotiation and for converting to downstream documents."
 
+msgid "The quantity moved from the From storage unit on each signal."
+msgstr "The quantity moved from the From storage unit on each signal."
+
 msgid "The quantity of the item to be reordered on scan-based replenishment."
 msgstr "The quantity of the item to be reordered on scan-based replenishment."
 
@@ -25176,6 +25194,9 @@ msgstr "When the kanban card is scanned, the job is automatically moved out of d
 
 msgid "When the lease starts and how long it runs, including renewals that are reasonably certain."
 msgstr "When the lease starts and how long it runs, including renewals that are reasonably certain."
+
+msgid "When the projected quantity in the To storage unit drops below this level, a Released stock transfer for Quantity is created. Leave blank for scan-only."
+msgstr "When the projected quantity in the To storage unit drops below this level, a Released stock transfer for Quantity is created. Leave blank for scan-only."
 
 msgid "When the receiving location expects the stock to arrive; drives MRP availability at the destination."
 msgstr "When the receiving location expects the stock to arrive; drives MRP availability at the destination."

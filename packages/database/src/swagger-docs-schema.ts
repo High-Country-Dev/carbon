@@ -28738,6 +28738,9 @@ export default {
             $ref: "#/parameters/rowFilter.kanbans.fromStorageUnitId"
           },
           {
+            $ref: "#/parameters/rowFilter.kanbans.replenishmentLevel"
+          },
+          {
             $ref: "#/parameters/rowFilter.kanbans.name"
           },
           {
@@ -91591,6 +91594,9 @@ export default {
             $ref: "#/parameters/rowFilter.stockTransfer.tags"
           },
           {
+            $ref: "#/parameters/rowFilter.stockTransfer.kanbanId"
+          },
+          {
             $ref: "#/parameters/select"
           },
           {
@@ -91692,6 +91698,9 @@ export default {
             $ref: "#/parameters/rowFilter.stockTransfer.tags"
           },
           {
+            $ref: "#/parameters/rowFilter.stockTransfer.kanbanId"
+          },
+          {
             $ref: "#/parameters/preferReturn"
           }
         ],
@@ -91745,6 +91754,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.stockTransfer.tags"
+          },
+          {
+            $ref: "#/parameters/rowFilter.stockTransfer.kanbanId"
           },
           {
             $ref: "#/parameters/body.stockTransfer"
@@ -103174,6 +103186,9 @@ export default {
             $ref: "#/parameters/rowFilter.kanban.fromStorageUnitId"
           },
           {
+            $ref: "#/parameters/rowFilter.kanban.replenishmentLevel"
+          },
+          {
             $ref: "#/parameters/select"
           },
           {
@@ -103290,6 +103305,9 @@ export default {
             $ref: "#/parameters/rowFilter.kanban.fromStorageUnitId"
           },
           {
+            $ref: "#/parameters/rowFilter.kanban.replenishmentLevel"
+          },
+          {
             $ref: "#/parameters/preferReturn"
           }
         ],
@@ -103358,6 +103376,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.kanban.fromStorageUnitId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.kanban.replenishmentLevel"
           },
           {
             $ref: "#/parameters/body.kanban"
@@ -106148,6 +106169,51 @@ export default {
           }
         },
         tags: ["(rpc) xid"]
+      }
+    },
+    "/rpc/sync_kanban_level_check": {
+      post: {
+        parameters: [
+          {
+            in: "body",
+            name: "args",
+            required: true,
+            schema: {
+              properties: {
+                p_new: {
+                  format: "jsonb"
+                },
+                p_old: {
+                  format: "jsonb"
+                },
+                p_operation: {
+                  format: "text",
+                  type: "string"
+                },
+                p_table: {
+                  format: "text",
+                  type: "string"
+                }
+              },
+              required: ["p_table", "p_operation", "p_new", "p_old"],
+              type: "object"
+            }
+          },
+          {
+            $ref: "#/parameters/preferParams"
+          }
+        ],
+        produces: [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json"
+        ],
+        responses: {
+          "200": {
+            description: "OK"
+          }
+        },
+        tags: ["(rpc) sync_kanban_level_check"]
       }
     },
     "/rpc/get_method_tree": {
@@ -112618,6 +112684,77 @@ export default {
           }
         },
         tags: ["(rpc) get_my_claim"]
+      }
+    },
+    "/rpc/get_kanban_projected_quantities": {
+      get: {
+        parameters: [
+          {
+            format: "text",
+            in: "query",
+            name: "company_id",
+            required: true,
+            type: "string"
+          },
+          {
+            format: "text[]",
+            in: "query",
+            name: "kanban_ids",
+            required: false,
+            type: "string"
+          }
+        ],
+        produces: [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json"
+        ],
+        responses: {
+          "200": {
+            description: "OK"
+          }
+        },
+        tags: ["(rpc) get_kanban_projected_quantities"]
+      },
+      post: {
+        parameters: [
+          {
+            in: "body",
+            name: "args",
+            required: true,
+            schema: {
+              properties: {
+                company_id: {
+                  format: "text",
+                  type: "string"
+                },
+                kanban_ids: {
+                  format: "text[]",
+                  items: {
+                    type: "string"
+                  },
+                  type: "array"
+                }
+              },
+              required: ["company_id"],
+              type: "object"
+            }
+          },
+          {
+            $ref: "#/parameters/preferParams"
+          }
+        ],
+        produces: [
+          "application/json",
+          "application/vnd.pgrst.object+json;nulls=stripped",
+          "application/vnd.pgrst.object+json"
+        ],
+        responses: {
+          "200": {
+            description: "OK"
+          }
+        },
+        tags: ["(rpc) get_kanban_projected_quantities"]
       }
     },
     "/rpc/delete_old_audit_logs": {
@@ -130239,6 +130376,10 @@ export default {
             "Note:\nThis is a Foreign Key to `storageUnit.id`.<fk table='storageUnit' column='id'/>",
           format: "text",
           type: "string"
+        },
+        replenishmentLevel: {
+          format: "numeric",
+          type: "number"
         },
         name: {
           format: "text",
@@ -160336,6 +160477,10 @@ export default {
             type: "string"
           },
           type: "array"
+        },
+        kanbanId: {
+          format: "text",
+          type: "string"
         }
       },
       type: "object"
@@ -166042,6 +166187,12 @@ export default {
             "Note:\nThis is a Foreign Key to `storageUnit.id`.<fk table='storageUnit' column='id'/>",
           format: "text",
           type: "string"
+        },
+        replenishmentLevel: {
+          description:
+            'Transfer kanbans only. When the projected quantity at the To storage unit is below this level, Carbon creates a Released stock transfer for "quantity". NULL = scan-only.',
+          format: "numeric",
+          type: "number"
         }
       },
       type: "object"
@@ -181325,6 +181476,12 @@ export default {
     },
     "rowFilter.kanbans.fromStorageUnitId": {
       name: "fromStorageUnitId",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.kanbans.replenishmentLevel": {
+      name: "replenishmentLevel",
       required: false,
       in: "query",
       type: "string"
@@ -214918,6 +215075,12 @@ export default {
       in: "query",
       type: "string"
     },
+    "rowFilter.stockTransfer.kanbanId": {
+      name: "kanbanId",
+      required: false,
+      in: "query",
+      type: "string"
+    },
     "body.exchangeRateOverride": {
       name: "exchangeRateOverride",
       description: "exchangeRateOverride",
@@ -221200,6 +221363,14 @@ export default {
     },
     "rowFilter.kanban.fromStorageUnitId": {
       name: "fromStorageUnitId",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.kanban.replenishmentLevel": {
+      name: "replenishmentLevel",
+      description:
+        'Transfer kanbans only. When the projected quantity at the To storage unit is below this level, Carbon creates a Released stock transfer for "quantity". NULL = scan-only.',
       required: false,
       in: "query",
       type: "string"

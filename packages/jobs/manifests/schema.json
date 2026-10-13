@@ -5,7 +5,7 @@
   "sourceCompanyId": "schema-baseline",
   "sourceCompanyGroupId": null,
   "sourceCompanyName": null,
-  "exportedAt": "2026-10-13T12:25:44.953Z",
+  "exportedAt": "2026-10-13T00:04:42.459Z",
   "exportedBy": "schema-baseline",
   "label": "schema baseline",
   "includeStorage": "none",
@@ -2267,26 +2267,6 @@
         "createdBy",
         "updatedAt",
         "updatedBy"
-      ]
-    },
-    {
-      "name": "stockTransfer",
-      "rows": 0,
-      "columns": [
-        "id",
-        "stockTransferId",
-        "locationId",
-        "status",
-        "completedAt",
-        "companyId",
-        "createdAt",
-        "createdBy",
-        "updatedAt",
-        "updatedBy",
-        "notes",
-        "assignee",
-        "customFields",
-        "tags"
       ]
     },
     {
@@ -5364,29 +5344,6 @@
       ]
     },
     {
-      "name": "stockTransferLine",
-      "rows": 0,
-      "columns": [
-        "id",
-        "stockTransferId",
-        "jobId",
-        "jobMaterialId",
-        "itemId",
-        "fromStorageUnitId",
-        "toStorageUnitId",
-        "quantity",
-        "pickedQuantity",
-        "trackedEntityId",
-        "requiresBatchTracking",
-        "requiresSerialTracking",
-        "companyId",
-        "createdAt",
-        "createdBy",
-        "updatedAt",
-        "updatedBy"
-      ]
-    },
-    {
       "name": "jobMaterialStep",
       "rows": 0,
       "columns": ["jobMaterialId", "jobOperationStepId", "quantity"]
@@ -5704,7 +5661,52 @@
         "autoStartJob",
         "completedBarcodeOverride",
         "jobId",
-        "fromStorageUnitId"
+        "fromStorageUnitId",
+        "replenishmentLevel"
+      ]
+    },
+    {
+      "name": "stockTransfer",
+      "rows": 0,
+      "columns": [
+        "id",
+        "stockTransferId",
+        "locationId",
+        "status",
+        "completedAt",
+        "companyId",
+        "createdAt",
+        "createdBy",
+        "updatedAt",
+        "updatedBy",
+        "notes",
+        "assignee",
+        "customFields",
+        "tags",
+        "kanbanId"
+      ]
+    },
+    {
+      "name": "stockTransferLine",
+      "rows": 0,
+      "columns": [
+        "id",
+        "stockTransferId",
+        "jobId",
+        "jobMaterialId",
+        "itemId",
+        "fromStorageUnitId",
+        "toStorageUnitId",
+        "quantity",
+        "pickedQuantity",
+        "trackedEntityId",
+        "requiresBatchTracking",
+        "requiresSerialTracking",
+        "companyId",
+        "createdAt",
+        "createdBy",
+        "updatedAt",
+        "updatedBy"
       ]
     },
     {

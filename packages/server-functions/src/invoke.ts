@@ -29,6 +29,7 @@ const registry = {
   "import-csv": () => import("./import-csv"),
   issue: () => import("./issue"),
   "journal-legacy-documents": () => import("./journal-legacy-documents"),
+  "kanban-replenish": () => import("./kanban-replenish"),
   "post-asset-transfer": () => import("./post-asset-transfer"),
   "post-charge": () => import("./post-charge"),
   "post-customer-contract": () => import("./post-customer-contract"),

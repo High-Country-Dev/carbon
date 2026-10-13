@@ -3938,6 +3938,9 @@ msgstr "En retard de {daysBehindTarget} jour(s)"
 msgid "Being phased out — successor: <0>{0}</0>"
 msgstr "En cours de suppression — successeur : <0>{0}</0>"
 
+msgid "Below level"
+msgstr "Sous le niveau"
+
 msgid "Below safety stock"
 msgstr "Sous stock de sécurité"
 
@@ -14996,6 +14999,9 @@ msgstr "Le {sentDate}"
 msgid "On a control account, Carbon opens the balance from its own open items, inventory and fixed assets. The trial balance must agree: every difference stays on Migration Clearing, which must total zero."
 msgstr "Sur un compte de contrôle, Carbon établit le solde d'ouverture à partir de ses propres articles ouverts, stocks et immobilisations. La balance d'essai doit concorder : toute différence reste dans le compte de transition, qui doit totaliser zéro."
 
+msgid "On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, Carbon creates a Released stock transfer for the kanban quantity."
+msgstr "Sur un kanban de transfert, la quantité minimale pour l'unité de stockage de destination. Lorsque le stock disponible plus les transferts entrants ouverts descend au-dessous, Carbon crée un transfert de stock lancé pour la quantité du kanban."
+
 msgid "On cutover day, work the checklist below in order. Acceptance tests come from your in-scope requirements. Support details are at the bottom."
 msgstr "Le jour du basculement, travaillez la liste de contrôle ci-dessous dans l'ordre. Les tests d'acceptation proviennent de vos exigences dans le périmètre. Les détails du support se trouvent en bas."
 
@@ -16825,6 +16831,9 @@ msgstr "Démarrage du projet"
 msgid "Projected"
 msgstr "Prévue"
 
+msgid "Projected (To)"
+msgstr "Projeté (Vers)"
+
 msgid "Projected completion"
 msgstr "Achèvement projeté"
 
@@ -17154,6 +17163,9 @@ msgstr "VA des paiements"
 
 msgid "PV of Residual"
 msgstr "VA de la valeur résiduelle"
+
+msgid "QR Code to complete the current operation for this kanban"
+msgstr "QR Code pour terminer l'opération en cours pour ce kanban"
 
 #. placeholder {0}: getKanbanCreateNoun(row.original.replenishmentSystem)
 msgid "QR Code to create a {0} for this kanban"
@@ -18213,6 +18225,9 @@ msgstr "Le remplacement du PDF supprime tous les placements de bulles sur ce doc
 
 msgid "Replenishment"
 msgstr "Réapprovisionnement"
+
+msgid "Replenishment Level"
+msgstr "Niveau de réapprovisionnement"
 
 msgid "Replenishment system"
 msgstr "Mode d'approvisionnement"
@@ -22459,6 +22474,9 @@ msgstr "L'envoi vers Mount est terminé. Certains enregistrements nécessitent u
 msgid "The quantity breakpoints this line is priced at; each column carries its own per-unit price for buyer–supplier negotiation and for converting to downstream documents."
 msgstr "Les points d'arrêt de quantité à laquelle cette ligne est tarifée; chaque colonne porte son propre prix par unité pour la négociation acheteur-fournisseur et la conversion en documents aval."
 
+msgid "The quantity moved from the From storage unit on each signal."
+msgstr "La quantité déplacée de l'unité de stockage source à chaque signal."
+
 msgid "The quantity of the item to be reordered on scan-based replenishment."
 msgstr "La quantité de l'article à réapprovisionner lors du réapprovisionnement basé sur la numérisation."
 
@@ -25176,6 +25194,9 @@ msgstr "Lorsque la carte kanban est scannée, le travail est automatiquement dé
 
 msgid "When the lease starts and how long it runs, including renewals that are reasonably certain."
 msgstr "Quand le bail commence et combien de temps il s'exécute, y compris les renouvellements qui sont raisonnablement certains."
+
+msgid "When the projected quantity in the To storage unit drops below this level, a Released stock transfer for Quantity is created. Leave blank for scan-only."
+msgstr "Lorsque la quantité projetée dans l'unité de stockage de destination descend au-dessous de ce niveau, un transfert de stock lancé pour la Quantité est créé. Laissez vide pour la numérisation uniquement."
 
 msgid "When the receiving location expects the stock to arrive; drives MRP availability at the destination."
 msgstr "Quand le site de réception s'attend à la réception du stock ; détermine la disponibilité du MRP à destination."

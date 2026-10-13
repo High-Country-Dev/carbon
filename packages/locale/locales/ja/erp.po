@@ -3938,6 +3938,9 @@ msgstr "ターゲットから {daysBehindTarget} 日遅れています"
 msgid "Being phased out — successor: <0>{0}</0>"
 msgstr "段階的に廃止されます — 後継品目：<0>{0}</0>"
 
+msgid "Below level"
+msgstr "レベル以下"
+
 msgid "Below safety stock"
 msgstr "安全在庫以下"
 
@@ -14996,6 +14999,9 @@ msgstr "{sentDate}に送信"
 msgid "On a control account, Carbon opens the balance from its own open items, inventory and fixed assets. The trial balance must agree: every difference stays on Migration Clearing, which must total zero."
 msgstr "管理勘定では、Carbonが未決済品目、在庫、固定資産から残高を決定します。試算表は一致する必要があります。すべての差異はマイグレーションクリアリングに留まり、合計はゼロである必要があります。"
 
+msgid "On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, Carbon creates a Released stock transfer for the kanban quantity."
+msgstr "転送かんばんでは、宛先保管ユニットの最小数量です。手持ちプラス未処理の受信転送がそれ以下に落ちると、Carbon はかんばん数量のためにリリース済の在庫転送を作成します。"
+
 msgid "On cutover day, work the checklist below in order. Acceptance tests come from your in-scope requirements. Support details are at the bottom."
 msgstr "カットオーバー日に、下のチェックリストを順番に作業してください。受け入れテストはあなたの対象要求事項から取得されます。サポートの詳細は下部にあります。"
 
@@ -16825,6 +16831,9 @@ msgstr "プロジェクト開始"
 msgid "Projected"
 msgstr "予測"
 
+msgid "Projected (To)"
+msgstr "予定 (To)"
+
 msgid "Projected completion"
 msgstr "予測完了"
 
@@ -17154,6 +17163,9 @@ msgstr "支払のPV"
 
 msgid "PV of Residual"
 msgstr "残存価値のPV"
+
+msgid "QR Code to complete the current operation for this kanban"
+msgstr "このかんばんの現在の工程を完了するためのQRコード"
 
 #. placeholder {0}: getKanbanCreateNoun(row.original.replenishmentSystem)
 msgid "QR Code to create a {0} for this kanban"
@@ -18213,6 +18225,9 @@ msgstr "PDFを置き換えると、このドキュメント上のすべてのバ
 
 msgid "Replenishment"
 msgstr "補充"
+
+msgid "Replenishment Level"
+msgstr "補充レベル"
 
 msgid "Replenishment system"
 msgstr "調達方式"
@@ -22459,6 +22474,9 @@ msgstr "Mount へのプッシュが完了しました。いくつかのレコー
 msgid "The quantity breakpoints this line is priced at; each column carries its own per-unit price for buyer–supplier negotiation and for converting to downstream documents."
 msgstr "この明細が価格設定される数量ブレークポイント。各列は買い手と仕入先の交渉および下流文書への変換用に、独自の単価を持ちます。"
 
+msgid "The quantity moved from the From storage unit on each signal."
+msgstr "各シグナルで From 保管ユニットから移動される数量。"
+
 msgid "The quantity of the item to be reordered on scan-based replenishment."
 msgstr "スキャンベースの補充時に再注文される品目の数量。"
 
@@ -25176,6 +25194,9 @@ msgstr "かんばんカードがスキャンされると、製造指図は自動
 
 msgid "When the lease starts and how long it runs, including renewals that are reasonably certain."
 msgstr "リースが開始される時期と期間、および合理的に確実な更新を含みます。"
+
+msgid "When the projected quantity in the To storage unit drops below this level, a Released stock transfer for Quantity is created. Leave blank for scan-only."
+msgstr "宛先保管ユニットの予定数量がこのレベル以下に落ちると、リリース済の在庫転送がかんばん数量で作成されます。スキャンのみの場合は空白のままにしてください。"
 
 msgid "When the receiving location expects the stock to arrive; drives MRP availability at the destination."
 msgstr "入荷拠点が在庫到着を予想する日時。目的地でのMRP在庫可用性を決定します。"
