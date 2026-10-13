@@ -932,7 +932,7 @@ function SubAssemblyRow({
             aria-label={t`More options`}
             size="sm"
             variant="ghost"
-            className="size-6 shrink-0 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 data-[state=open]:opacity-100"
+            className="size-6 shrink-0 md:opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 data-[state=open]:opacity-100"
             icon={<LuEllipsisVertical />}
             onClick={(e) => e.stopPropagation()}
           />
@@ -1094,7 +1094,7 @@ function StepRow({
               aria-label={t`More options`}
               size="sm"
               variant="ghost"
-              className="size-6 shrink-0 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 data-[state=open]:opacity-100"
+              className="size-6 shrink-0 md:opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 data-[state=open]:opacity-100"
               icon={<LuEllipsisVertical />}
               onClick={(e) => e.stopPropagation()}
             />

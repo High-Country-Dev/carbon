@@ -971,7 +971,7 @@ function StepComponentsEditor({
                   icon={<LuX />}
                   variant="ghost"
                   size="sm"
-                  className="opacity-0 group-hover:opacity-100 focus:opacity-100"
+                  className="md:opacity-0 group-hover:opacity-100 focus:opacity-100"
                   onClick={() => setUsedIn(used.headerId, "")}
                 />
               )}
@@ -1023,7 +1023,7 @@ function StepComponentsEditor({
                     icon={<LuX />}
                     variant="ghost"
                     size="sm"
-                    className="opacity-0 group-hover:opacity-100 focus:opacity-100"
+                    className="md:opacity-0 group-hover:opacity-100 focus:opacity-100"
                     onClick={(event) => {
                       event.stopPropagation();
                       onRemoveComponents(group.nodeIds);
