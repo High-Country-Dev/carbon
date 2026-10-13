@@ -30794,6 +30794,7 @@ export type Database = {
           locationId: string
           purchaseUnitOfMeasureCode: string | null
           quantity: number
+          replenishmentLevel: number | null
           replenishmentSystem: Database["public"]["Enums"]["kanbanReplenishmentSystem"]
           storageUnitId: string | null
           supplierId: string | null
@@ -30815,6 +30816,7 @@ export type Database = {
           locationId: string
           purchaseUnitOfMeasureCode?: string | null
           quantity: number
+          replenishmentLevel?: number | null
           replenishmentSystem?: Database["public"]["Enums"]["kanbanReplenishmentSystem"]
           storageUnitId?: string | null
           supplierId?: string | null
@@ -30836,6 +30838,7 @@ export type Database = {
           locationId?: string
           purchaseUnitOfMeasureCode?: string | null
           quantity?: number
+          replenishmentLevel?: number | null
           replenishmentSystem?: Database["public"]["Enums"]["kanbanReplenishmentSystem"]
           storageUnitId?: string | null
           supplierId?: string | null
@@ -63506,6 +63509,7 @@ export type Database = {
           createdBy: string
           customFields: Json | null
           id: string
+          kanbanId: string | null
           locationId: string
           notes: Json | null
           status: Database["public"]["Enums"]["stockTransferStatus"]
@@ -63522,6 +63526,7 @@ export type Database = {
           createdBy: string
           customFields?: Json | null
           id?: string
+          kanbanId?: string | null
           locationId: string
           notes?: Json | null
           status?: Database["public"]["Enums"]["stockTransferStatus"]
@@ -63538,6 +63543,7 @@ export type Database = {
           createdBy?: string
           customFields?: Json | null
           id?: string
+          kanbanId?: string | null
           locationId?: string
           notes?: Json | null
           status?: Database["public"]["Enums"]["stockTransferStatus"]
@@ -63644,6 +63650,20 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "userDefaults"
             referencedColumns: ["userId"]
+          },
+          {
+            foreignKeyName: "stockTransfer_kanbanId_fkey"
+            columns: ["kanbanId", "companyId"]
+            isOneToOne: false
+            referencedRelation: "kanban"
+            referencedColumns: ["id", "companyId"]
+          },
+          {
+            foreignKeyName: "stockTransfer_kanbanId_fkey"
+            columns: ["kanbanId", "companyId"]
+            isOneToOne: false
+            referencedRelation: "kanbans"
+            referencedColumns: ["id", "companyId"]
           },
           {
             foreignKeyName: "stockTransfer_locationId_fkey"
@@ -79374,6 +79394,7 @@ export type Database = {
           purchaseUnitOfMeasureCode: string | null
           quantity: number | null
           readableIdWithRevision: string | null
+          replenishmentLevel: number | null
           replenishmentSystem:
             | Database["public"]["Enums"]["kanbanReplenishmentSystem"]
             | null
@@ -92081,6 +92102,14 @@ export type Database = {
           thumbnailPath: string
         }[]
       }
+      get_kanban_projected_quantities: {
+        Args: { company_id: string; kanban_ids?: string[] }
+        Returns: {
+          kanbanId: string
+          projectedQuantity: number
+          replenishmentLevel: number
+        }[]
+      }
       get_lineside_credit: {
         Args: {
           p_company_id: string
@@ -93801,6 +93830,10 @@ export type Database = {
         Returns: undefined
       }
       sync_job_recompute_service_line: {
+        Args: { p_new: Json; p_old: Json; p_operation: string; p_table: string }
+        Returns: undefined
+      }
+      sync_kanban_level_check: {
         Args: { p_new: Json; p_old: Json; p_operation: string; p_table: string }
         Returns: undefined
       }

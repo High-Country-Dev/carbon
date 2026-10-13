@@ -3935,6 +3935,9 @@ msgstr "लक्ष्य से {daysBehindTarget} दिन पीछे"
 msgid "Being phased out — successor: <0>{0}</0>"
 msgstr "चरणबद्ध रूप से बंद किया जा रहा है — उत्तराधिकारी: <0>{0}</0>"
 
+msgid "Below level"
+msgstr "स्तर से नीचे"
+
 msgid "Below safety stock"
 msgstr "सुरक्षा स्टॉक से नीचे"
 
@@ -14984,6 +14987,9 @@ msgstr "{sentDate} को"
 msgid "On a control account, Carbon opens the balance from its own open items, inventory and fixed assets. The trial balance must agree: every difference stays on Migration Clearing, which must total zero."
 msgstr "एक नियंत्रण खाते पर, कार्बन अपने खुली आइटम, इन्वेंटरी और अचल संपत्ति से शेष राशि खोलता है। ट्रायल बैलेंस सहमत होना चाहिए: हर अंतर माइग्रेशन साफी पर रहता है, जो शून्य होना चाहिए।"
 
+msgid "On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, Carbon creates a Released stock transfer for the kanban quantity."
+msgstr "एक स्थानांतरण कानबान पर, To भंडारण इकाई के लिए न्यूनतम मात्रा। जब हाथ पर प्लस खुली आने वाली स्थानांतरण इससे नीचे चली जाती है, तो Carbon कानबान मात्रा के लिए एक जारी स्टॉक स्थानांतरण बनाता है।"
+
 msgid "On cutover day, work the checklist below in order. Acceptance tests come from your in-scope requirements. Support details are at the bottom."
 msgstr "कटओवर दिन पर, नीचे दी गई चेकलिस्ट को क्रम में काम करें। स्वीकृति परीक्षण आपकी स्कोप में शामिल आवश्यकताओं से आते हैं। समर्थन विवरण नीचे हैं।"
 
@@ -16804,6 +16810,9 @@ msgstr "प्रोजेक्ट शुरुआत"
 msgid "Projected"
 msgstr "अनुमानित"
 
+msgid "Projected (To)"
+msgstr "अनुमानित (To)"
+
 msgid "Projected completion"
 msgstr "अनुमानित पूर्णता"
 
@@ -17133,6 +17142,9 @@ msgstr "भुगतान का PV"
 
 msgid "PV of Residual"
 msgstr "अवशिष्ट का PV"
+
+msgid "QR Code to complete the current operation for this kanban"
+msgstr "इस कानबान के लिए वर्तमान ऑपरेशन पूर्ण करने के लिए QR कोड"
 
 #. placeholder {0}: getKanbanCreateNoun(row.original.replenishmentSystem)
 msgid "QR Code to create a {0} for this kanban"
@@ -18192,6 +18204,9 @@ msgstr "PDF को बदलने से इस दस्तावेज़ प
 
 msgid "Replenishment"
 msgstr "पुनःपूर्ति"
+
+msgid "Replenishment Level"
+msgstr "पुनर्पूरण स्तर"
 
 msgid "Replenishment system"
 msgstr "पुनःपूर्ति प्रणाली"
@@ -22406,7 +22421,7 @@ msgid "The purchase order"
 msgstr "क्रय आदेश"
 
 msgid "The push to Mount did not start. Try again."
-msgstr "Mount को पुश शुरू नहीं हुआ। फिर से कोशिश करें।"
+msgstr "Mount को पुश शुरू नहीं हुआ। फिर से प्रयास करें।"
 
 msgid "The push to Mount failed"
 msgstr "Mount को पुश विफल"
@@ -22419,6 +22434,9 @@ msgstr "Mount को पुश समाप्त हुआ। कुछ रि�
 
 msgid "The quantity breakpoints this line is priced at; each column carries its own per-unit price for buyer–supplier negotiation and for converting to downstream documents."
 msgstr "मात्रा विभाजन बिंदु जिन पर इस पंक्ति की कीमत है; प्रत्येक कॉलम क्रेता-आपूर्तिकर्ता बातचीत और डाउनस्ट्रीम दस्तावेजों में परिवर्तित करने के लिए अपनी स्वयं की प्रति-यूनिट कीमत रखता है।"
+
+msgid "The quantity moved from the From storage unit on each signal."
+msgstr "From भंडारण इकाई से प्रत्येक सिग्नल पर स्थानांतरित मात्रा।"
 
 msgid "The quantity of the item to be reordered on scan-based replenishment."
 msgstr "स्कैन-आधारित पुनःपूर्ति पर पुनः ऑर्डर किए जाने वाली वस्तु की मात्रा।"
@@ -25122,6 +25140,9 @@ msgstr "जब कानबान कार्ड को स्कैन कि�
 
 msgid "When the lease starts and how long it runs, including renewals that are reasonably certain."
 msgstr "जब पट्टा शुरू होता है और यह कितने समय तक चलता है, उचित रूप से निश्चित नवीनीकरण सहित।"
+
+msgid "When the projected quantity in the To storage unit drops below this level, a Released stock transfer for Quantity is created. Leave blank for scan-only."
+msgstr "जब To भंडारण इकाई में अनुमानित मात्रा इस स्तर से नीचे चली जाती है, तो मात्रा के लिए एक जारी स्टॉक स्थानांतरण बनाया जाता है। केवल स्कैन के लिए खाली छोड़ें।"
 
 msgid "When the receiving location expects the stock to arrive; drives MRP availability at the destination."
 msgstr "प्राप्ति स्थान को स्टॉक के आने की उम्मीद कब है; गंतव्य पर MRP उपलब्धता को संचालित करता है।"

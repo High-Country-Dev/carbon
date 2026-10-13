@@ -3935,6 +3935,9 @@ msgstr "Atrás del objetivo por {daysBehindTarget} día(s)"
 msgid "Being phased out — successor: <0>{0}</0>"
 msgstr "Siendo descontinuado — sucesor: <0>{0}</0>"
 
+msgid "Below level"
+msgstr "Por debajo del nivel"
+
 msgid "Below safety stock"
 msgstr "Por debajo del stock de seguridad"
 
@@ -12046,7 +12049,7 @@ msgstr "Apellido"
 
 #. placeholder {0}: record.error
 msgid "Last push {when} failed: {0}"
-msgstr "Último envío {when} falló: {0}"
+msgstr "El último envío {when} falló: {0}"
 
 msgid "Last push {when}:"
 msgstr "Último envío {when}:"
@@ -14984,6 +14987,9 @@ msgstr "El {sentDate}"
 msgid "On a control account, Carbon opens the balance from its own open items, inventory and fixed assets. The trial balance must agree: every difference stays on Migration Clearing, which must total zero."
 msgstr "En una cuenta de control, Carbon abre el saldo de sus propios artículos abiertos, existencias y activos fijos. El balance de comprobación debe coincidir: toda diferencia permanece en Liquidación de migración, que debe totalizar cero."
 
+msgid "On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, Carbon creates a Released stock transfer for the kanban quantity."
+msgstr "En un kanban de transferencia, la cantidad mínima para la unidad de almacenamiento de destino. Cuando las existencias disponibles más las transferencias entrantes abiertas caen por debajo de esto, Carbon crea una transferencia de existencias Liberada por la cantidad del kanban."
+
 msgid "On cutover day, work the checklist below in order. Acceptance tests come from your in-scope requirements. Support details are at the bottom."
 msgstr "En el día de la migración, trabaja la lista de verificación a continuación en orden. Las pruebas de aceptación provienen de tus requisitos dentro del alcance. Los detalles de soporte están en la parte inferior."
 
@@ -16804,6 +16810,9 @@ msgstr "Inicio del proyecto"
 msgid "Projected"
 msgstr "Proyectado"
 
+msgid "Projected (To)"
+msgstr "Proyectado (A)"
+
 msgid "Projected completion"
 msgstr "Finalización proyectada"
 
@@ -17133,6 +17142,9 @@ msgstr "VP de Pagos"
 
 msgid "PV of Residual"
 msgstr "VP de Residual"
+
+msgid "QR Code to complete the current operation for this kanban"
+msgstr "QR Code para completar la operación actual para este kanban"
 
 #. placeholder {0}: getKanbanCreateNoun(row.original.replenishmentSystem)
 msgid "QR Code to create a {0} for this kanban"
@@ -18192,6 +18204,9 @@ msgstr "Reemplazar el PDF elimina todas las ubicaciones de globos en este docume
 
 msgid "Replenishment"
 msgstr "Reabastecimiento"
+
+msgid "Replenishment Level"
+msgstr "Nivel de reabastecimiento"
 
 msgid "Replenishment system"
 msgstr "Sistema de reposición"
@@ -22420,6 +22435,9 @@ msgstr "El envío a Mount finalizó. Algunos registros necesitan atención"
 msgid "The quantity breakpoints this line is priced at; each column carries its own per-unit price for buyer–supplier negotiation and for converting to downstream documents."
 msgstr "Los puntos de ruptura de cantidad a los que se cotiza esta línea; cada columna lleva su propio precio por unidad para la negociación comprador-proveedor y para la conversión a documentos posteriores."
 
+msgid "The quantity moved from the From storage unit on each signal."
+msgstr "La cantidad que se mueve desde la unidad de almacenamiento de origen en cada señal."
+
 msgid "The quantity of the item to be reordered on scan-based replenishment."
 msgstr "La cantidad del artículo a ser reordenado en reabastecimiento basado en escaneo."
 
@@ -25122,6 +25140,9 @@ msgstr "Cuando se escanea la tarjeta kanban, el trabajo se mueve automáticament
 
 msgid "When the lease starts and how long it runs, including renewals that are reasonably certain."
 msgstr "Cuándo comienza el arrendamiento y cuánto tiempo dura, incluidas las renovaciones que son razonablemente ciertas."
+
+msgid "When the projected quantity in the To storage unit drops below this level, a Released stock transfer for Quantity is created. Leave blank for scan-only."
+msgstr "Cuando la cantidad proyectada en la unidad de almacenamiento de destino cae por debajo de este nivel, se crea una transferencia de existencias Liberada por la cantidad. Dejar en blanco para escaneo solamente."
 
 msgid "When the receiving location expects the stock to arrive; drives MRP availability at the destination."
 msgstr "Cuándo la ubicación de recepción espera que lleguen las existencias; impulsa la disponibilidad de MRP en el destino."
