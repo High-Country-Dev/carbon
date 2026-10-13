@@ -16,12 +16,13 @@ import {
   logAssemblyStep,
   readAndLogFormData
 } from "~/modules/production/assembly-debug.server";
+import { getDatabaseClient } from "~/services/database.server";
 
-// Autosave target for the 3D motion-path editor: patches only motion/camera on
-// a step (drag autosave + "Set view"/"Clear view"), leaving the rest untouched.
+// Autosave target for the 3D editor: patches only a step's motion, camera and
+// orientation, leaving the rest untouched.
 export async function action({ request, params }: ActionFunctionArgs) {
   assertIsPost(request);
-  const { client, companyId, userId } = await requirePermissions(request, {
+  const { companyId, userId } = await requirePermissions(request, {
     update: "production"
   });
 
@@ -44,10 +45,11 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  const update = await updateAssemblyStepMotion(client, {
+  const update = await updateAssemblyStepMotion(getDatabaseClient(), {
     id: stepId,
     motion: validation.data.motion,
     camera: validation.data.camera,
+    orientation: validation.data.orientation,
     reset: validation.data.reset,
     companyId,
     updatedBy: userId
@@ -56,6 +58,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
     stepId,
     motion: validation.data.motion,
     hasCamera: validation.data.camera !== undefined,
+    hasOrientation: validation.data.orientation !== undefined,
     error: update.error?.message ?? null,
     updatedId: update.data?.id ?? null
   });

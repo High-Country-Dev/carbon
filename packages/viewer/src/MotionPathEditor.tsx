@@ -14,7 +14,6 @@ import {
 } from "react";
 import {
   type Group,
-  Matrix4,
   type Mesh,
   MeshBasicMaterial,
   type Object3D,
@@ -23,7 +22,11 @@ import {
   Vector3
 } from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
-import { editorWaypointsToMotion, motionToEditorWaypoints } from "./motion";
+import { waypointMatrix } from "./keyframes";
+import {
+  editorWaypointsToMotion,
+  motionToEditorWaypoints
+} from "./path-editing";
 import type { Motion, Quat, Vec3 } from "./types";
 
 /** Rotation rings snap to this step, so 90° and 180° turns are easy to hit. */
@@ -40,9 +43,8 @@ type Waypoint = { position: Vector3; rotation: Quaternion };
  * Delete to remove it.
  *
  * A see-through copy of the moving parts shows the selected waypoint's pose.
- * With the Rotate tool, the selected waypoint gets rotation rings (snapping to
- * 15°) and the spheres stop dragging: the rings' free-rotation grip covers the
- * sphere, so allowing both made one drag move and spin the part at once.
+ * With the Rotate tool the spheres stop dragging: the rings' free-rotation grip
+ * covers the sphere, so one drag would both move and spin the part.
  *
  * Edits serialize back to a RELATIVE motion via `editorWaypointsToMotion` —
  * `linear`/`L` while nothing is turned, `waypoints` once something is — so
@@ -213,16 +215,10 @@ export function MotionPathEditor({
     };
   }, [controls]);
 
-  // Rotation rings act on a handle sitting at the selected waypoint; turning
-  // the handle turns that waypoint.
+  // The rings and the see-through copy show the selected waypoint, else the start.
+  const shownIndex = selected !== null && selected !== lastIndex ? selected : 0;
   const [ringHandle, setRingHandle] = useState<Group | null>(null);
-  // With the Rotate tool the rings sit on the selected waypoint, else the start.
-  const ringIndex =
-    tool !== "rotate" || lastIndex < 1
-      ? null
-      : selected !== null && selected !== lastIndex
-        ? selected
-        : 0;
+  const ringIndex = tool === "rotate" && lastIndex >= 1 ? shownIndex : null;
   const ringWaypoint = ringIndex !== null ? points[ringIndex] : undefined;
   useEffect(() => {
     if (!ringHandle || !ringWaypoint) return;
@@ -248,11 +244,7 @@ export function MotionPathEditor({
     [points]
   );
 
-  // The see-through copy shows the selected waypoint, else the start.
-  const ghostWaypoint =
-    (selected !== null && selected !== lastIndex
-      ? points[selected]
-      : undefined) ?? points[0];
+  const ghostWaypoint = points[shownIndex] ?? points[0];
   const showGhost = Boolean(ghostWaypoint) && points.length > 1;
 
   return (
@@ -325,7 +317,6 @@ export function MotionPathEditor({
 /**
  * The moving parts drawn see-through at one waypoint's pose: turned about the
  * seated center (`pivot`), then moved so that center sits on the waypoint.
- * Copies share the scene's geometry and never take part in picking.
  */
 function MotionGhost({
   nodes,
@@ -372,11 +363,13 @@ function MotionGhost({
   useLayoutEffect(() => {
     const group = groupRef.current;
     if (!group) return;
-    const [x, y, z] = pivot;
-    group.matrix
-      .makeTranslation(position.x, position.y, position.z)
-      .multiply(new Matrix4().makeRotationFromQuaternion(rotation))
-      .multiply(new Matrix4().makeTranslation(-x, -y, -z));
+    const center = new Vector3(...pivot);
+    waypointMatrix(
+      position.clone().sub(center),
+      rotation,
+      center,
+      group.matrix
+    );
     group.matrixWorldNeedsUpdate = true;
   }, [pivot, position, rotation]);
 

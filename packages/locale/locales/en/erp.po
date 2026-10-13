@@ -9495,6 +9495,9 @@ msgstr "Fleet Unit"
 msgid "Fleet Units"
 msgstr "Fleet Units"
 
+msgid "Flip over"
+msgstr "Flip over"
+
 msgid "For <0/>"
 msgstr "For <0/>"
 
@@ -10227,6 +10230,9 @@ msgstr "How the sample size is decided — Inspect All, Inspect First N, Percent
 
 msgid "How the unit price of each quantity was calculated."
 msgstr "How the unit price of each quantity was calculated."
+
+msgid "How the whole build is turned on a step, such as flipped to fit parts on its underside. Later steps of the same build keep it until a step turns the build again."
+msgstr "How the whole build is turned on a step, such as flipped to fit parts on its underside. Later steps of the same build keep it until a step turns the build again."
 
 msgid "How this gauge is used — Standard (regular checks) or Master (calibrates other gauges)."
 msgstr "How this gauge is used — Standard (regular checks) or Master (calibrates other gauges)."
@@ -14069,6 +14075,12 @@ msgstr "On hand {before} to {after}"
 msgid "On Hold"
 msgstr "On Hold"
 
+msgid "On its side"
+msgstr "On its side"
+
+msgid "On its side, from step {orientationSource}"
+msgstr "On its side, from step {orientationSource}"
+
 msgid "On Jobs"
 msgstr "On Jobs"
 
@@ -14589,6 +14601,9 @@ msgstr "Orders"
 
 msgid "Orders submitted"
 msgstr "Orders submitted"
+
+msgid "Orientation"
+msgstr "Orientation"
 
 msgid "Origin"
 msgstr "Origin"
@@ -19425,6 +19440,12 @@ msgstr "Specific Items"
 msgid "Spend by supplier, item, or category — your biggest cost drivers"
 msgstr "Spend by supplier, item, or category — your biggest cost drivers"
 
+msgid "Spin left"
+msgstr "Spin left"
+
+msgid "Spin right"
+msgstr "Spin right"
+
 msgid "Split"
 msgstr "Split"
 
@@ -20894,6 +20915,9 @@ msgstr "The material types you organize your stock by"
 msgid "The model is still loading."
 msgstr "The model is still loading."
 
+msgid "The model isn't ready yet"
+msgstr "The model isn't ready yet"
+
 msgid "The month your financial year begins; periods are numbered from this month."
 msgstr "The month your financial year begins; periods are numbered from this month."
 
@@ -21892,6 +21916,12 @@ msgstr "Timer running"
 msgid "Timezone"
 msgstr "Timezone"
 
+msgid "Tip away from you"
+msgstr "Tip away from you"
+
+msgid "Tip toward you"
+msgstr "Tip toward you"
+
 msgid "Title"
 msgstr "Title"
 
@@ -22764,6 +22794,15 @@ msgstr "Uploading…"
 
 msgid "Upon clicking Convert, parts will be created with the following internal part numbers:"
 msgstr "Upon clicking Convert, parts will be created with the following internal part numbers:"
+
+msgid "Upright"
+msgstr "Upright"
+
+msgid "Upside down"
+msgstr "Upside down"
+
+msgid "Upside down, from step {orientationSource}"
+msgstr "Upside down, from step {orientationSource}"
 
 msgid "URL"
 msgstr "URL"

@@ -58072,6 +58072,9 @@ export default {
             $ref: "#/parameters/rowFilter.assemblyInstructionStep.isSubAssembly"
           },
           {
+            $ref: "#/parameters/rowFilter.assemblyInstructionStep.orientation"
+          },
+          {
             $ref: "#/parameters/select"
           },
           {
@@ -58233,6 +58236,9 @@ export default {
             $ref: "#/parameters/rowFilter.assemblyInstructionStep.isSubAssembly"
           },
           {
+            $ref: "#/parameters/rowFilter.assemblyInstructionStep.orientation"
+          },
+          {
             $ref: "#/parameters/preferReturn"
           }
         ],
@@ -58346,6 +58352,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.assemblyInstructionStep.isSubAssembly"
+          },
+          {
+            $ref: "#/parameters/rowFilter.assemblyInstructionStep.orientation"
           },
           {
             $ref: "#/parameters/body.assemblyInstructionStep"
@@ -62332,6 +62341,12 @@ export default {
             $ref: "#/parameters/rowFilter.shipmentFixedAssetLine.updatedBy"
           },
           {
+            $ref: "#/parameters/rowFilter.shipmentFixedAssetLine.rentalAgreementLineId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.shipmentFixedAssetLine.meter"
+          },
+          {
             $ref: "#/parameters/select"
           },
           {
@@ -62421,6 +62436,12 @@ export default {
             $ref: "#/parameters/rowFilter.shipmentFixedAssetLine.updatedBy"
           },
           {
+            $ref: "#/parameters/rowFilter.shipmentFixedAssetLine.rentalAgreementLineId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.shipmentFixedAssetLine.meter"
+          },
+          {
             $ref: "#/parameters/preferReturn"
           }
         ],
@@ -62462,6 +62483,12 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.shipmentFixedAssetLine.updatedBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.shipmentFixedAssetLine.rentalAgreementLineId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.shipmentFixedAssetLine.meter"
           },
           {
             $ref: "#/parameters/body.shipmentFixedAssetLine"
@@ -100873,6 +100900,24 @@ export default {
             $ref: "#/parameters/rowFilter.receiptFixedAssetLine.updatedBy"
           },
           {
+            $ref: "#/parameters/rowFilter.receiptFixedAssetLine.rentalAgreementLineId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.receiptFixedAssetLine.meter"
+          },
+          {
+            $ref: "#/parameters/rowFilter.receiptFixedAssetLine.notes"
+          },
+          {
+            $ref: "#/parameters/rowFilter.receiptFixedAssetLine.takeOutOfService"
+          },
+          {
+            $ref: "#/parameters/rowFilter.receiptFixedAssetLine.outOfServiceReason"
+          },
+          {
+            $ref: "#/parameters/rowFilter.receiptFixedAssetLine.residualDestination"
+          },
+          {
             $ref: "#/parameters/select"
           },
           {
@@ -100962,6 +101007,24 @@ export default {
             $ref: "#/parameters/rowFilter.receiptFixedAssetLine.updatedBy"
           },
           {
+            $ref: "#/parameters/rowFilter.receiptFixedAssetLine.rentalAgreementLineId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.receiptFixedAssetLine.meter"
+          },
+          {
+            $ref: "#/parameters/rowFilter.receiptFixedAssetLine.notes"
+          },
+          {
+            $ref: "#/parameters/rowFilter.receiptFixedAssetLine.takeOutOfService"
+          },
+          {
+            $ref: "#/parameters/rowFilter.receiptFixedAssetLine.outOfServiceReason"
+          },
+          {
+            $ref: "#/parameters/rowFilter.receiptFixedAssetLine.residualDestination"
+          },
+          {
             $ref: "#/parameters/preferReturn"
           }
         ],
@@ -101003,6 +101066,24 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.receiptFixedAssetLine.updatedBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.receiptFixedAssetLine.rentalAgreementLineId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.receiptFixedAssetLine.meter"
+          },
+          {
+            $ref: "#/parameters/rowFilter.receiptFixedAssetLine.notes"
+          },
+          {
+            $ref: "#/parameters/rowFilter.receiptFixedAssetLine.takeOutOfService"
+          },
+          {
+            $ref: "#/parameters/rowFilter.receiptFixedAssetLine.outOfServiceReason"
+          },
+          {
+            $ref: "#/parameters/rowFilter.receiptFixedAssetLine.residualDestination"
           },
           {
             $ref: "#/parameters/body.receiptFixedAssetLine"
@@ -118860,7 +118941,8 @@ export default {
             "Inbound Transfer",
             "Outbound Transfer",
             "Manufacturing Consumption",
-            "Manufacturing Output"
+            "Manufacturing Output",
+            "Rental Agreement"
           ],
           format: 'public."receiptSourceDocument"',
           type: "string"
@@ -120227,7 +120309,8 @@ export default {
             "Inbound Transfer",
             "Outbound Transfer",
             "Manufacturing Consumption",
-            "Manufacturing Output"
+            "Manufacturing Output",
+            "Rental Agreement"
           ],
           format: 'public."receiptSourceDocument"',
           type: "string"
@@ -140895,7 +140978,8 @@ export default {
             "Purchase Invoice",
             "Purchase Return Order",
             "Inbound Transfer",
-            "Outbound Transfer"
+            "Outbound Transfer",
+            "Rental Agreement"
           ],
           format: 'public."shipmentSourceDocument"',
           type: "string"
@@ -142064,6 +142148,9 @@ export default {
           default: false,
           format: "boolean",
           type: "boolean"
+        },
+        orientation: {
+          format: "jsonb"
         }
       },
       type: "object"
@@ -143725,7 +143812,6 @@ export default {
       required: [
         "id",
         "shipmentId",
-        "salesOrderLineId",
         "shipped",
         "companyId",
         "createdBy",
@@ -143783,6 +143869,14 @@ export default {
         updatedBy: {
           format: "text",
           type: "string"
+        },
+        rentalAgreementLineId: {
+          format: "text",
+          type: "string"
+        },
+        meter: {
+          format: "numeric",
+          type: "number"
         }
       },
       type: "object"
@@ -162586,11 +162680,11 @@ export default {
       required: [
         "id",
         "receiptId",
-        "purchaseOrderLineId",
         "received",
         "companyId",
         "createdBy",
-        "createdAt"
+        "createdAt",
+        "takeOutOfService"
       ],
       properties: {
         id: {
@@ -162642,6 +162736,31 @@ export default {
           type: "string"
         },
         updatedBy: {
+          format: "text",
+          type: "string"
+        },
+        rentalAgreementLineId: {
+          format: "text",
+          type: "string"
+        },
+        meter: {
+          format: "numeric",
+          type: "number"
+        },
+        notes: {
+          format: "text",
+          type: "string"
+        },
+        takeOutOfService: {
+          default: false,
+          format: "boolean",
+          type: "boolean"
+        },
+        outOfServiceReason: {
+          format: "text",
+          type: "string"
+        },
+        residualDestination: {
           format: "text",
           type: "string"
         }
@@ -193673,6 +193792,12 @@ export default {
       in: "query",
       type: "string"
     },
+    "rowFilter.assemblyInstructionStep.orientation": {
+      name: "orientation",
+      required: false,
+      in: "query",
+      type: "string"
+    },
     "body.receiptLine": {
       name: "receiptLine",
       description: "receiptLine",
@@ -195554,6 +195679,18 @@ export default {
     },
     "rowFilter.shipmentFixedAssetLine.updatedBy": {
       name: "updatedBy",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.shipmentFixedAssetLine.rentalAgreementLineId": {
+      name: "rentalAgreementLineId",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.shipmentFixedAssetLine.meter": {
+      name: "meter",
       required: false,
       in: "query",
       type: "string"
@@ -216552,6 +216689,42 @@ export default {
     },
     "rowFilter.receiptFixedAssetLine.updatedBy": {
       name: "updatedBy",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.receiptFixedAssetLine.rentalAgreementLineId": {
+      name: "rentalAgreementLineId",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.receiptFixedAssetLine.meter": {
+      name: "meter",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.receiptFixedAssetLine.notes": {
+      name: "notes",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.receiptFixedAssetLine.takeOutOfService": {
+      name: "takeOutOfService",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.receiptFixedAssetLine.outOfServiceReason": {
+      name: "outOfServiceReason",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.receiptFixedAssetLine.residualDestination": {
+      name: "residualDestination",
       required: false,
       in: "query",
       type: "string"

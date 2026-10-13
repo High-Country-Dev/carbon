@@ -69,7 +69,7 @@ msgstr "{0, plural, one {# 공정에 표준시간이 없습니다} other {# 공�
 
 #. placeholder {0}: issues.length
 msgid "{0, plural, one {# record needs attention} other {# records need attention}}"
-msgstr ""
+msgstr "{0}개 레코드에 확인이 필요합니다"
 
 #. placeholder {0}: totalScopeRows(run.violationRowsByTable)
 msgid "{0, plural, one {# row links to data outside this company, so a safety copy of your current data can't be made.} other {# rows link to data outside this company, so a safety copy of your current data can't be made.}}"
@@ -405,7 +405,7 @@ msgid "{count} units"
 msgstr "{count}개"
 
 msgid "{created} created, {updated} updated."
-msgstr ""
+msgstr "{created}개 생성, {updated}개 업데이트."
 
 msgid "{days}d"
 msgstr "{days}일"
@@ -432,7 +432,7 @@ msgid "{from}–{to} of {count} operations"
 msgstr "{from}–{to}/{count} 공정"
 
 msgid "{hidden, plural, one {And # more record.} other {And # more records.}}"
-msgstr ""
+msgstr "그 외 {hidden}개 레코드가 더 있습니다."
 
 msgid "{hiddenCount} more: {hiddenNames}"
 msgstr "{hiddenCount}개 추가: {hiddenNames}"
@@ -9495,6 +9495,9 @@ msgstr "플릿 단위"
 msgid "Fleet Units"
 msgstr "플릿 단위"
 
+msgid "Flip over"
+msgstr "뒤집기"
+
 msgid "For <0/>"
 msgstr "대상 <0/>"
 
@@ -10227,6 +10230,9 @@ msgstr "샘플 크기를 결정하는 방식 — 전수 검사, 처음 N개 검�
 
 msgid "How the unit price of each quantity was calculated."
 msgstr "각 수량의 단가를 계산한 방법"
+
+msgid "How the whole build is turned on a step, such as flipped to fit parts on its underside. Later steps of the same build keep it until a step turns the build again."
+msgstr "단계에서 전체 빌드를 돌리는 방향입니다(예: 아랫면에 부품을 끼우기 위해 뒤집기). 같은 빌드의 이후 단계는 다른 단계에서 빌드를 다시 돌릴 때까지 이 방향을 유지합니다."
 
 msgid "How this gauge is used — Standard (regular checks) or Master (calibrates other gauges)."
 msgstr "이 계측기의 사용 방식 — 보통 검사(정기 점검) 또는 표준기(다른 계측기 교정)."
@@ -11389,10 +11395,10 @@ msgstr "성"
 
 #. placeholder {0}: record.error
 msgid "Last push {when} failed: {0}"
-msgstr ""
+msgstr "마지막 전송 {when} 실패: {0}"
 
 msgid "Last push {when}:"
-msgstr ""
+msgstr "마지막 전송 {when}:"
 
 msgid "Last Quarter"
 msgstr "지난 분기"
@@ -11401,7 +11407,7 @@ msgid "Last Run"
 msgstr "마지막 실행"
 
 msgid "Last scheduled push {when}:"
-msgstr ""
+msgstr "마지막 예약 전송 {when}:"
 
 msgid "Last synced: <0/>"
 msgstr "마지막 동기화: <0/>"
@@ -12551,7 +12557,7 @@ msgid "More overtime"
 msgstr "초과 근무 증가"
 
 msgid "More records are waiting. Push again to continue."
-msgstr ""
+msgstr "전송 대기 중인 레코드가 더 있습니다. 계속하려면 다시 전송하세요."
 
 msgid "Morning, {name}."
 msgstr "{name}님, 아침이군요."
@@ -12566,7 +12572,7 @@ msgid "Motion"
 msgstr "모션"
 
 msgid "Mount has {matches} records with this identifier. Delete or merge the extra ones in Mount, then push again."
-msgstr ""
+msgstr "Mount에 이 식별자를 가진 레코드가 {matches}개 있습니다. Mount에서 초과 레코드를 삭제하거나 병합한 뒤 다시 전송하세요."
 
 msgid "Move"
 msgstr "이동"
@@ -13284,7 +13290,7 @@ msgid "No comments yet. Be the first to add a comment."
 msgstr "아직 댓글이 없습니다. 첫 번째 댓글을 추가하세요."
 
 msgid "No companies match \"{query}\""
-msgstr ""
+msgstr "“{query}”와 일치하는 회사가 없습니다"
 
 msgid "No completed jobs within range"
 msgstr "범위 내에 완료된 작업 지시가 없습니다"
@@ -14069,6 +14075,12 @@ msgstr "보유수량: {before}에서 {after}(으)로"
 msgid "On Hold"
 msgstr "보류"
 
+msgid "On its side"
+msgstr "옆으로 눕힘"
+
+msgid "On its side, from step {orientationSource}"
+msgstr "단계 {orientationSource}에서 옆으로 눕힘"
+
 msgid "On Jobs"
 msgstr "작업 지시에"
 
@@ -14589,6 +14601,9 @@ msgstr "주문"
 
 msgid "Orders submitted"
 msgstr "제출된 주문"
+
+msgid "Orientation"
+msgstr "방향"
 
 msgid "Origin"
 msgstr "출처"
@@ -18255,7 +18270,7 @@ msgid "Search fields..."
 msgstr "필드 검색..."
 
 msgid "Search for a company"
-msgstr ""
+msgstr "회사 검색"
 
 msgid "Search for existing or create a new one"
 msgstr "기존 항목을 검색하거나 새로 생성하세요"
@@ -19425,6 +19440,12 @@ msgstr "특정 품목"
 msgid "Spend by supplier, item, or category — your biggest cost drivers"
 msgstr "공급업체, 품목 또는 카테고리별 지출 — 주요 원가 요인"
 
+msgid "Spin left"
+msgstr "왼쪽으로 회전"
+
+msgid "Spin right"
+msgstr "오른쪽으로 회전"
+
 msgid "Split"
 msgstr "분할"
 
@@ -19520,7 +19541,7 @@ msgid "Started"
 msgstr "시작됨"
 
 msgid "Starting"
-msgstr ""
+msgstr "시작 중"
 
 msgid "Starting…"
 msgstr "시작 중…"
@@ -20894,6 +20915,9 @@ msgstr "재고를 분류하는 자재 유형"
 msgid "The model is still loading."
 msgstr "모델이 여전히 로드 중입니다."
 
+msgid "The model isn't ready yet"
+msgstr "모델이 아직 준비되지 않았습니다"
+
 msgid "The month your financial year begins; periods are numbered from this month."
 msgstr "귀사 회계연도가 시작되는 월입니다. 기간은 이 월부터 번호가 매겨집니다."
 
@@ -21047,16 +21071,16 @@ msgid "The purchase order"
 msgstr "발주서"
 
 msgid "The push to Mount did not start. Try again."
-msgstr ""
+msgstr "Mount로의 전송을 시작하지 못했습니다. 다시 시도하세요."
 
 msgid "The push to Mount failed"
-msgstr ""
+msgstr "Mount로의 전송에 실패했습니다"
 
 msgid "The push to Mount finished"
-msgstr ""
+msgstr "Mount로의 전송이 완료되었습니다"
 
 msgid "The push to Mount finished. Some records need attention"
-msgstr ""
+msgstr "Mount로의 전송이 완료되었습니다. 일부 레코드에 확인이 필요합니다"
 
 msgid "The quantity breakpoints this line is priced at; each column carries its own per-unit price for buyer–supplier negotiation and for converting to downstream documents."
 msgstr "이 라인의 가격 책정 수량 구간점; 각 열은 구매자-공급업체 협상 및 다운스트림 문서로 변환하기 위한 자체 단가를 포함합니다."
@@ -21892,6 +21916,12 @@ msgstr "타이머 실행 중"
 msgid "Timezone"
 msgstr "시간대"
 
+msgid "Tip away from you"
+msgstr "몸에서 멀어지는 방향으로 기울이기"
+
+msgid "Tip toward you"
+msgstr "몸 쪽으로 기울이기"
+
 msgid "Title"
 msgstr "제목"
 
@@ -22272,7 +22302,7 @@ msgid "Triggers"
 msgstr "트리거"
 
 msgid "Try a different name."
-msgstr ""
+msgstr "다른 이름을 입력하세요."
 
 msgid "Tuesday"
 msgstr "화요일"
@@ -22764,6 +22794,15 @@ msgstr "업로드 중…"
 
 msgid "Upon clicking Convert, parts will be created with the following internal part numbers:"
 msgstr "전환을 클릭하면 다음의 내부 부품 번호로 부품이 생성됩니다:"
+
+msgid "Upright"
+msgstr "똑바로 세움"
+
+msgid "Upside down"
+msgstr "거꾸로"
+
+msgid "Upside down, from step {orientationSource}"
+msgstr "단계 {orientationSource}에서 거꾸로"
 
 msgid "URL"
 msgstr "URL"

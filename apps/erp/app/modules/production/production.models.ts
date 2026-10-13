@@ -1310,7 +1310,6 @@ const unitQuaternion = quaternion.refine(
   { message: "Rotation must be a unit quaternion" }
 );
 
-/** A waypoint at the seated pose: no offset and no turn (either quaternion sign). */
 function isSeatWaypoint(
   waypoint: { offset: number[]; rotation: number[] } | undefined
 ): boolean {
@@ -1320,10 +1319,7 @@ function isSeatWaypoint(
   return Math.hypot(ox, oy, oz) < 1e-3 && Math.abs(Math.abs(w) - 1) < 1e-6;
 }
 
-/**
- * Insertion motion of a step's parts. Mirrors `Motion` in
- * `packages/viewer/src/types.ts`, the shared contract.
- */
+/** Mirrors `Motion` in `packages/viewer/src/types.ts` — keep them in sync. */
 export const motionSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("linear"),
@@ -1363,8 +1359,7 @@ export const motionSchema = z.discriminatedUnion("type", [
       )
       .min(2)
   }),
-  // Editor-drawn path with rotation: poses relative to the seated pose. The
-  // last waypoint is the seat itself (no offset, no turn).
+  // Editor-drawn path; poses are relative to the seated pose.
   z.object({
     type: z.literal("waypoints"),
     waypoints: z
@@ -1392,6 +1387,12 @@ export const cameraSchema = z.union([
   })
 ]);
 
+/**
+ * A step's build orientation: a unit quaternion turning the model frame into
+ * the bench frame. Mirrors `AssemblyStep.orientation` in `@carbon/viewer`.
+ */
+export const orientationSchema = unitQuaternion;
+
 export const fastenerSchema = z.object({
   spec: z.string().optional(),
   count: z.number().int().positive().optional(),
@@ -1418,28 +1419,12 @@ export const stepPlanWarningsSchema = z.object({
   /**
    * The motion the step had before the author first drew a path (the
    * planner's, or `none`). Present = the path is hand-drawn, which also
-   * overrides `flagged`; Reset puts it back. A re-plan rewrites `warnings`,
+   * overrides `flagged` (`hasCustomMotion` / `isPlanFlagged` in
+   * `@carbon/viewer/steps`); Reset puts it back. A re-plan rewrites `warnings`,
    * so it clears this together with the drawn path it replaces.
    */
   plannedMotion: z.unknown().optional()
 });
-
-/**
- * The step's motion was drawn by hand in the path editor (see `plannedMotion`).
- * The planner stores `none` on a flagged step, so a flagged step that moves was
- * drawn too — paths drawn before `plannedMotion` existed carry no marker.
- */
-export function hasCustomMotion(warnings: unknown, motion: unknown): boolean {
-  const parsed = stepPlanWarningsSchema.safeParse(warnings).data;
-  if (parsed?.plannedMotion !== undefined) return true;
-  return (
-    parsed?.flagged === true &&
-    typeof motion === "object" &&
-    motion !== null &&
-    "type" in motion &&
-    motion.type !== "none"
-  );
-}
 
 const jsonField = <T extends z.ZodTypeAny>(schema: T) =>
   z.preprocess((raw) => {
@@ -1615,7 +1600,9 @@ export const assemblyInstructionStepMotionValidator = z.object({
   motion: jsonField(motionSchema.optional()),
   // Put back the motion the step had before the author first drew a path.
   reset: zfd.checkbox(),
-  camera: jsonField(cameraSchema.nullable().optional())
+  camera: jsonField(cameraSchema.nullable().optional()),
+  // The build's orientation from this step on; `null` = same as the step before.
+  orientation: jsonField(orientationSchema.nullable().optional())
 });
 
 /**

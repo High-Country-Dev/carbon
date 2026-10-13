@@ -110,6 +110,11 @@ export const terms = {
     definition: msg`The view a step plays from; without a saved view the step frames its own components.`,
     href: "/docs/reference/assembly-instructions#playback-settings"
   },
+  "assembly-build-orientation": {
+    term: msg`Orientation`,
+    definition: msg`How the whole build is turned on a step, such as flipped to fit parts on its underside. Later steps of the same build keep it until a step turns the build again.`,
+    href: "/docs/reference/assembly-instructions#playback-settings"
+  },
   "assembly-sub-assembly": {
     term: msg`Sub-assembly`,
     definition: msg`Steps built on their own, then fitted as one piece: in the step that uses it, or, when nothing uses it, right after its own steps.`,

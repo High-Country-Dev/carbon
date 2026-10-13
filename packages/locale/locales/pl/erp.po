@@ -69,7 +69,7 @@ msgstr "{0, plural, one {# operacja nie ma standardów czasu} few {# operacje ni
 
 #. placeholder {0}: issues.length
 msgid "{0, plural, one {# record needs attention} other {# records need attention}}"
-msgstr ""
+msgstr "{0, plural, one {# rekord wymaga uwagi} few {# rekordy wymagają uwagi} many {# rekordów wymaga uwagi} other {# rekordu wymaga uwagi}}"
 
 #. placeholder {0}: totalScopeRows(run.violationRowsByTable)
 msgid "{0, plural, one {# row links to data outside this company, so a safety copy of your current data can't be made.} other {# rows link to data outside this company, so a safety copy of your current data can't be made.}}"
@@ -405,7 +405,7 @@ msgid "{count} units"
 msgstr "{count} sztuk"
 
 msgid "{created} created, {updated} updated."
-msgstr ""
+msgstr "Utworzono: {created}, zaktualizowano: {updated}."
 
 msgid "{days}d"
 msgstr "{days}d"
@@ -432,7 +432,7 @@ msgid "{from}–{to} of {count} operations"
 msgstr "{from}–{to} z {count} operacji"
 
 msgid "{hidden, plural, one {And # more record.} other {And # more records.}}"
-msgstr ""
+msgstr "{hidden, plural, one {I jeszcze # rekord.} few {I jeszcze # rekordy.} many {I jeszcze # rekordów.} other {I jeszcze # rekordu.}}"
 
 msgid "{hiddenCount} more: {hiddenNames}"
 msgstr "{hiddenCount} więcej: {hiddenNames}"
@@ -9495,6 +9495,9 @@ msgstr "Sztuka floty"
 msgid "Fleet Units"
 msgstr "Sztuki floty"
 
+msgid "Flip over"
+msgstr "Przewróć"
+
 msgid "For <0/>"
 msgstr "Dla <0/>"
 
@@ -10227,6 +10230,9 @@ msgstr "Jak decyduje się o wielkości próbki — Sprawdzić Wszystko, Sprawdzi
 
 msgid "How the unit price of each quantity was calculated."
 msgstr "Jak obliczona została cena jednostkowa każdej ilości."
+
+msgid "How the whole build is turned on a step, such as flipped to fit parts on its underside. Later steps of the same build keep it until a step turns the build again."
+msgstr "Jak cały zespół jest obrócony w danym kroku, np. przewrócony, aby dopasować części od spodu. Kolejne kroki tego samego zespołu zachowują to ułożenie, dopóki któryś krok ponownie nie obróci zespołu."
 
 msgid "How this gauge is used — Standard (regular checks) or Master (calibrates other gauges)."
 msgstr "Jak ten przyrząd pomiarowy jest używany — Normalna (regularne sprawdzenia) czy Wzorzec (wzorcuje inne przyrządy pomiarowe)."
@@ -11389,10 +11395,10 @@ msgstr "Nazwisko"
 
 #. placeholder {0}: record.error
 msgid "Last push {when} failed: {0}"
-msgstr ""
+msgstr "Ostatnie wysłanie {when} nie powiodło się: {0}"
 
 msgid "Last push {when}:"
-msgstr ""
+msgstr "Ostatnie wysłanie {when}:"
 
 msgid "Last Quarter"
 msgstr "Ostatni kwartał"
@@ -11401,7 +11407,7 @@ msgid "Last Run"
 msgstr "Ostatnie uruchomienie"
 
 msgid "Last scheduled push {when}:"
-msgstr ""
+msgstr "Ostatnie zaplanowane wysłanie {when}:"
 
 msgid "Last synced: <0/>"
 msgstr "Ostatnia synchronizacja: <0/>"
@@ -12551,7 +12557,7 @@ msgid "More overtime"
 msgstr "Więcej nadgodzin"
 
 msgid "More records are waiting. Push again to continue."
-msgstr ""
+msgstr "Czekają kolejne rekordy. Wyślij ponownie, aby kontynuować."
 
 msgid "Morning, {name}."
 msgstr "Poranek, {name}."
@@ -12566,7 +12572,7 @@ msgid "Motion"
 msgstr "Ruch"
 
 msgid "Mount has {matches} records with this identifier. Delete or merge the extra ones in Mount, then push again."
-msgstr ""
+msgstr "Rekordy z tym identyfikatorem w Mount: {matches}. Usuń lub scal nadmiarowe rekordy w Mount, a następnie wyślij ponownie."
 
 msgid "Move"
 msgstr "Przenieś"
@@ -13284,7 +13290,7 @@ msgid "No comments yet. Be the first to add a comment."
 msgstr "Brak komentarzy. Bądź pierwszy i dodaj komentarz."
 
 msgid "No companies match \"{query}\""
-msgstr ""
+msgstr "Brak firm pasujących do „{query}”"
 
 msgid "No completed jobs within range"
 msgstr "Nie znaleziono zakończonych zleceń produkcyjnych w danym zakresie"
@@ -14069,6 +14075,12 @@ msgstr "W magazynie: z {before} na {after}"
 msgid "On Hold"
 msgstr "Wstrzymane"
 
+msgid "On its side"
+msgstr "Na boku"
+
+msgid "On its side, from step {orientationSource}"
+msgstr "Na boku, od kroku {orientationSource}"
+
 msgid "On Jobs"
 msgstr "Na zleceniach produkcyjnych"
 
@@ -14589,6 +14601,9 @@ msgstr "Zamówienia"
 
 msgid "Orders submitted"
 msgstr "Zamówienia przesłane"
+
+msgid "Orientation"
+msgstr "Orientacja"
 
 msgid "Origin"
 msgstr "Pochodzenie"
@@ -18255,7 +18270,7 @@ msgid "Search fields..."
 msgstr "Wyszukaj pola..."
 
 msgid "Search for a company"
-msgstr ""
+msgstr "Szukaj firmy"
 
 msgid "Search for existing or create a new one"
 msgstr "Wyszukaj istniejący lub utwórz nowy"
@@ -19425,6 +19440,12 @@ msgstr "Określone artykuły"
 msgid "Spend by supplier, item, or category — your biggest cost drivers"
 msgstr "Wydatki według dostawcy, pozycji lub kategorii — Twoje największe czynniki kosztowe"
 
+msgid "Spin left"
+msgstr "Obróć w lewo"
+
+msgid "Spin right"
+msgstr "Obróć w prawo"
+
 msgid "Split"
 msgstr "Podziel"
 
@@ -19520,7 +19541,7 @@ msgid "Started"
 msgstr "Rozpoczęto"
 
 msgid "Starting"
-msgstr ""
+msgstr "Uruchamianie"
 
 msgid "Starting…"
 msgstr "Uruchamianie…"
@@ -20894,6 +20915,9 @@ msgstr "Typy materiałów, według których organizujesz swoje zapasy"
 msgid "The model is still loading."
 msgstr "Model jest wciąż ładowany."
 
+msgid "The model isn't ready yet"
+msgstr "Model nie jest jeszcze gotowy"
+
 msgid "The month your financial year begins; periods are numbered from this month."
 msgstr "Miesiąc, w którym rozpoczyna się Twój rok obrachunkowy; okresy są numerowane od tego miesiąca."
 
@@ -21047,16 +21071,16 @@ msgid "The purchase order"
 msgstr "Zamówienie zakupu"
 
 msgid "The push to Mount did not start. Try again."
-msgstr ""
+msgstr "Wysłanie do Mount nie zostało uruchomione. Spróbuj ponownie."
 
 msgid "The push to Mount failed"
-msgstr ""
+msgstr "Wysłanie do Mount nie powiodło się"
 
 msgid "The push to Mount finished"
-msgstr ""
+msgstr "Wysłanie do Mount zakończone"
 
 msgid "The push to Mount finished. Some records need attention"
-msgstr ""
+msgstr "Wysłanie do Mount zakończone. Niektóre rekordy wymagają uwagi"
 
 msgid "The quantity breakpoints this line is priced at; each column carries its own per-unit price for buyer–supplier negotiation and for converting to downstream documents."
 msgstr "Punkty graniczne ilości, przy których ta pozycja jest wyceniona; każda kolumna nosi własną cenę za sztukę do negocjacji kupiec–dostawca i do konwersji na dokumenty następujące."
@@ -21892,6 +21916,12 @@ msgstr "Czasomierz uruchomiony"
 msgid "Timezone"
 msgstr "Strefa czasowa"
 
+msgid "Tip away from you"
+msgstr "Przechyl od siebie"
+
+msgid "Tip toward you"
+msgstr "Przechyl do siebie"
+
 msgid "Title"
 msgstr "Tytuł"
 
@@ -22272,7 +22302,7 @@ msgid "Triggers"
 msgstr "Wyzwalacze"
 
 msgid "Try a different name."
-msgstr ""
+msgstr "Spróbuj innej nazwy."
 
 msgid "Tuesday"
 msgstr "Wtorek"
@@ -22764,6 +22794,15 @@ msgstr "Przesyłanie…"
 
 msgid "Upon clicking Convert, parts will be created with the following internal part numbers:"
 msgstr "Po kliknięciu Przekształć części zostaną utworzone z następującymi wewnętrznymi numerami części:"
+
+msgid "Upright"
+msgstr "W pionie"
+
+msgid "Upside down"
+msgstr "Do góry nogami"
+
+msgid "Upside down, from step {orientationSource}"
+msgstr "Do góry nogami, od kroku {orientationSource}"
 
 msgid "URL"
 msgstr "URL"

@@ -40,6 +40,7 @@ import {
   indexAssemblyGraph,
   validateSubAssemblies
 } from "@carbon/viewer";
+import { isPlanFlagged } from "@carbon/viewer/steps";
 import { parseDate } from "@internationalized/date";
 import type { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import type { ExpressionBuilder } from "kysely";
@@ -100,15 +101,14 @@ import {
   cameraSchema,
   fastenerSchema,
   getAssemblyModelState,
-  hasCustomMotion,
   isJobLocked,
   isJobOrderStatusHidden,
   JOB_LOCKED_STATUSES,
   JOB_SUPPLY_STATUS_PRIORITY,
   motionSchema,
+  orientationSchema,
   PLANNING_EDITABLE_JOB_STATUSES,
   PO_STATUS_PRIORITY,
-  stepPlanWarningsSchema,
   WEEKDAYS_MONDAY_FIRST
 } from "./production.models";
 import type {
@@ -7873,72 +7873,82 @@ export async function upsertAssemblyInstructionStep(
  * Kept separate from `upsertAssemblyInstructionStep` (which always rewrites
  * `title` and the typed-step fields) so the 3D editor can autosave a drag or a
  * "Set view" click without touching the rest of the step. `camera: null` clears
- * the pose (return to auto-framing); omitting a field leaves it untouched.
+ * the pose (return to auto-framing); `orientation: null` makes the step keep the
+ * previous step's build orientation; omitting a field leaves it untouched.
+ *
+ * The first hand-drawn edit keeps the motion it replaces in
+ * `warnings.plannedMotion`; `reset` restores it and drops the marker. Both are
+ * ONE UPDATE that reads `motion`/`warnings` from the row it writes, so a drag
+ * save and a Reset reaching the server together cannot lose `plannedMotion`.
  * @mcp update
  */
 export async function updateAssemblyStepMotion(
-  client: SupabaseClient<Database>,
+  db: Kysely<KyselyDatabase>,
   data: {
     id: string;
     motion?: z.infer<typeof motionSchema>;
     camera?: z.infer<typeof cameraSchema> | null;
+    orientation?: z.infer<typeof orientationSchema> | null;
     /** Put back the motion the step had before its path was first drawn. */
     reset?: boolean;
     companyId: string;
     updatedBy: string;
   }
-) {
-  let motionPatch: { motion?: Json; warnings?: Json | null } = {};
-  if (data.reset || data.motion !== undefined) {
-    const current = await client
-      .from("assemblyInstructionStep")
-      .select("motion, warnings")
-      .eq("id", data.id)
-      .eq("companyId", data.companyId)
-      .single();
-    if (current.error) return { data: null, error: current.error };
-    // The first hand-drawn edit keeps the planner's motion in
-    // `warnings.plannedMotion`; Reset restores it and drops the marker.
-    const warnings =
-      current.data.warnings &&
-      typeof current.data.warnings === "object" &&
-      !Array.isArray(current.data.warnings)
-        ? (current.data.warnings as Record<string, Json | undefined>)
-        : {};
-    const { plannedMotion, ...rest } = warnings;
-    if (data.reset) {
-      motionPatch = {
-        motion: plannedMotion ?? { type: "none" },
-        warnings: Object.keys(rest).length > 0 ? (rest as Json) : null
-      };
-    } else {
-      motionPatch = {
-        motion: data.motion as Json,
-        ...(plannedMotion === undefined
+): Promise<
+  { data: { id: string }; error: null } | { data: null; error: Error }
+> {
+  const flags = sql<Json>`CASE WHEN jsonb_typeof("warnings") = 'object' THEN "warnings" ELSE '{}'::jsonb END`;
+  const motionPatch = data.reset
+    ? {
+        motion: sql<Json>`COALESCE(NULLIF(${flags} -> 'plannedMotion', 'null'::jsonb), '{"type":"none"}'::jsonb)`,
+        warnings: sql<Json | null>`NULLIF(${flags} - 'plannedMotion', '{}'::jsonb)`
+      }
+    : data.motion !== undefined
+      ? {
+          motion: sql<Json>`${JSON.stringify(data.motion)}::jsonb`,
+          // `"motion"` is the pre-UPDATE value: the motion the drawn path replaces.
+          warnings: sql<Json | null>`CASE WHEN ${flags} ? 'plannedMotion' THEN "warnings" ELSE ${flags} || jsonb_build_object('plannedMotion', "motion") END`
+        }
+      : {};
+  try {
+    const row = await db
+      .updateTable("assemblyInstructionStep")
+      .set({
+        ...motionPatch,
+        ...(data.camera !== undefined
           ? {
-              warnings: {
-                ...rest,
-                plannedMotion: current.data.motion
-              } as Json
+              camera:
+                data.camera === null
+                  ? null
+                  : sql<Json>`${JSON.stringify(data.camera)}::jsonb`
             }
-          : {})
-      };
-    }
+          : {}),
+        ...(data.orientation !== undefined
+          ? {
+              orientation:
+                data.orientation === null
+                  ? null
+                  : sql<Json>`${JSON.stringify(data.orientation)}::jsonb`
+            }
+          : {}),
+        updatedBy: data.updatedBy,
+        updatedAt: datetime.timestamp()
+      })
+      .where("id", "=", data.id)
+      .where("companyId", "=", data.companyId)
+      .returning("id")
+      .executeTakeFirst();
+    if (!row) return { data: null, error: new Error("Step not found") };
+    return { data: row, error: null };
+  } catch (err) {
+    return {
+      data: null,
+      error:
+        err instanceof Error
+          ? err
+          : new Error(getErrorMessage(err, "Failed to update motion"))
+    };
   }
-  return client
-    .from("assemblyInstructionStep")
-    .update({
-      ...motionPatch,
-      ...(data.camera !== undefined
-        ? { camera: data.camera as Json | null }
-        : {}),
-      updatedBy: data.updatedBy,
-      updatedAt: new Date().toISOString()
-    })
-    .eq("id", data.id)
-    .eq("companyId", data.companyId)
-    .select("id")
-    .single();
 }
 
 // Autosave target for the Details panel's Add/remove component controls: patches
@@ -10488,8 +10498,8 @@ export async function generateAssemblyStepsFromPlan(
 export function toViewerStep(step: AssemblyInstructionStepRow): AssemblyStep {
   const motion = motionSchema.safeParse(step.motion);
   const camera = cameraSchema.safeParse(step.camera);
+  const orientation = orientationSchema.safeParse(step.orientation);
   const fastener = fastenerSchema.safeParse(step.fastener);
-  const planWarnings = stepPlanWarningsSchema.safeParse(step.warnings);
 
   return {
     id: step.id,
@@ -10502,15 +10512,10 @@ export function toViewerStep(step: AssemblyInstructionStepRow): AssemblyStep {
     usedInStepId: step.usedInStepId ?? null,
     motion: motion.success ? motion.data : { type: "none" },
     camera: camera.success ? camera.data : null,
+    orientation: orientation.success ? orientation.data : null,
     fastener: fastener.success ? fastener.data : null,
     durationSeconds: step.durationSeconds,
-    // A hand-drawn path overrides the planner's "no clear path" flag.
-    flagged:
-      planWarnings.success &&
-      planWarnings.data.flagged === true &&
-      !hasCustomMotion(step.warnings, step.motion)
-        ? true
-        : undefined
+    flagged: isPlanFlagged(step.warnings, step.motion) ? true : undefined
   };
 }
 

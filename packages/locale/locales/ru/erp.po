@@ -69,7 +69,7 @@ msgstr "{0, plural, one {# операция не имеет временных �
 
 #. placeholder {0}: issues.length
 msgid "{0, plural, one {# record needs attention} other {# records need attention}}"
-msgstr ""
+msgstr "{0, plural, one {# запись требует внимания} few {# записи требуют внимания} many {# записей требуют внимания} other {# записей требуют внимания}}"
 
 #. placeholder {0}: totalScopeRows(run.violationRowsByTable)
 msgid "{0, plural, one {# row links to data outside this company, so a safety copy of your current data can't be made.} other {# rows link to data outside this company, so a safety copy of your current data can't be made.}}"
@@ -405,7 +405,7 @@ msgid "{count} units"
 msgstr "{count} единиц"
 
 msgid "{created} created, {updated} updated."
-msgstr ""
+msgstr "Создано: {created}, обновлено: {updated}."
 
 msgid "{days}d"
 msgstr "{days}д"
@@ -432,7 +432,7 @@ msgid "{from}–{to} of {count} operations"
 msgstr "{from}–{to} из {count} операций"
 
 msgid "{hidden, plural, one {And # more record.} other {And # more records.}}"
-msgstr ""
+msgstr "{hidden, plural, one {И ещё # запись.} few {И ещё # записи.} many {И ещё # записей.} other {И ещё # записей.}}"
 
 msgid "{hiddenCount} more: {hiddenNames}"
 msgstr "{hiddenCount} еще: {hiddenNames}"
@@ -9495,6 +9495,9 @@ msgstr "Единица парка"
 msgid "Fleet Units"
 msgstr "Единицы флота"
 
+msgid "Flip over"
+msgstr "Перевернуть"
+
 msgid "For <0/>"
 msgstr "На <0/>"
 
@@ -10227,6 +10230,9 @@ msgstr "Как определяется объем выборки — прове
 
 msgid "How the unit price of each quantity was calculated."
 msgstr "Как была рассчитана цена за единицу для каждого количества."
+
+msgid "How the whole build is turned on a step, such as flipped to fit parts on its underside. Later steps of the same build keep it until a step turns the build again."
+msgstr "Как вся сборка повернута на шаге, например перевернута, чтобы установить детали на её нижней стороне. Следующие шаги этой сборки сохраняют положение, пока какой-либо шаг снова не повернёт сборку."
 
 msgid "How this gauge is used — Standard (regular checks) or Master (calibrates other gauges)."
 msgstr "Как используется это средство измерения — Нормальный (регулярные проверки) или Эталон (калибрует другие средства измерения)."
@@ -11389,10 +11395,10 @@ msgstr "Фамилия"
 
 #. placeholder {0}: record.error
 msgid "Last push {when} failed: {0}"
-msgstr ""
+msgstr "Последняя отправка {when} завершилась ошибкой: {0}"
 
 msgid "Last push {when}:"
-msgstr ""
+msgstr "Последняя отправка {when}:"
 
 msgid "Last Quarter"
 msgstr "Последний квартал"
@@ -11401,7 +11407,7 @@ msgid "Last Run"
 msgstr "Последний запуск"
 
 msgid "Last scheduled push {when}:"
-msgstr ""
+msgstr "Последняя плановая отправка {when}:"
 
 msgid "Last synced: <0/>"
 msgstr "Последняя синхронизация: <0/>"
@@ -12551,7 +12557,7 @@ msgid "More overtime"
 msgstr "Больше переработки"
 
 msgid "More records are waiting. Push again to continue."
-msgstr ""
+msgstr "Есть ещё записи в очереди. Отправьте снова, чтобы продолжить."
 
 msgid "Morning, {name}."
 msgstr "Доброе утро, {name}."
@@ -12566,7 +12572,7 @@ msgid "Motion"
 msgstr "Движение"
 
 msgid "Mount has {matches} records with this identifier. Delete or merge the extra ones in Mount, then push again."
-msgstr ""
+msgstr "В Mount есть {matches} записей с этим идентификатором. Удалите или объедините лишние записи в Mount, затем отправьте снова."
 
 msgid "Move"
 msgstr "Переместить"
@@ -13284,7 +13290,7 @@ msgid "No comments yet. Be the first to add a comment."
 msgstr "Нет комментариев. Будьте первым, кто добавит комментарий."
 
 msgid "No companies match \"{query}\""
-msgstr ""
+msgstr "Нет организаций, соответствующих «{query}»"
 
 msgid "No completed jobs within range"
 msgstr "Нет завершенных производственных заказов в диапазоне"
@@ -14069,6 +14075,12 @@ msgstr "На складе: с {before} до {after}"
 msgid "On Hold"
 msgstr "Приостановлено"
 
+msgid "On its side"
+msgstr "На боку"
+
+msgid "On its side, from step {orientationSource}"
+msgstr "На боку, как на шаге {orientationSource}"
+
 msgid "On Jobs"
 msgstr "На производственных заказах"
 
@@ -14589,6 +14601,9 @@ msgstr "Заказы"
 
 msgid "Orders submitted"
 msgstr "Заказы отправлены"
+
+msgid "Orientation"
+msgstr "Ориентация"
 
 msgid "Origin"
 msgstr "Источник"
@@ -18255,7 +18270,7 @@ msgid "Search fields..."
 msgstr "Поиск полей..."
 
 msgid "Search for a company"
-msgstr ""
+msgstr "Поиск организации"
 
 msgid "Search for existing or create a new one"
 msgstr "Поиск существующей или создание новой"
@@ -19425,6 +19440,12 @@ msgstr "Конкретные товары"
 msgid "Spend by supplier, item, or category — your biggest cost drivers"
 msgstr "Расходы по поставщику, номенклатуре или категории — ваши основные факторы затрат"
 
+msgid "Spin left"
+msgstr "Повернуть влево"
+
+msgid "Spin right"
+msgstr "Повернуть вправо"
+
 msgid "Split"
 msgstr "Разделить"
 
@@ -19520,7 +19541,7 @@ msgid "Started"
 msgstr "Начал"
 
 msgid "Starting"
-msgstr ""
+msgstr "Запуск"
 
 msgid "Starting…"
 msgstr "Начинаю…"
@@ -20894,6 +20915,9 @@ msgstr "Типы материалов, по которым вы организу
 msgid "The model is still loading."
 msgstr "Модель еще загружается."
 
+msgid "The model isn't ready yet"
+msgstr "Модель ещё не готова"
+
 msgid "The month your financial year begins; periods are numbered from this month."
 msgstr "Месяц начала финансового года; периоды нумеруются, начиная с этого месяца."
 
@@ -21047,16 +21071,16 @@ msgid "The purchase order"
 msgstr "Заказ поставщику"
 
 msgid "The push to Mount did not start. Try again."
-msgstr ""
+msgstr "Отправка в Mount не запустилась. Попробуйте ещё раз."
 
 msgid "The push to Mount failed"
-msgstr ""
+msgstr "Отправка в Mount не удалась"
 
 msgid "The push to Mount finished"
-msgstr ""
+msgstr "Отправка в Mount завершена"
 
 msgid "The push to Mount finished. Some records need attention"
-msgstr ""
+msgstr "Отправка в Mount завершена. Некоторые записи требуют внимания"
 
 msgid "The quantity breakpoints this line is priced at; each column carries its own per-unit price for buyer–supplier negotiation and for converting to downstream documents."
 msgstr "Точки разрыва по количеству, при которых рассчитывается цена этой строки; каждый столбец содержит свою цену за единицу для переговоров между закупщиком и поставщиком и для преобразования в последующие документы."
@@ -21892,6 +21916,12 @@ msgstr "Таймер запущен"
 msgid "Timezone"
 msgstr "Часовой пояс"
 
+msgid "Tip away from you"
+msgstr "Наклонить от себя"
+
+msgid "Tip toward you"
+msgstr "Наклонить к себе"
+
 msgid "Title"
 msgstr "Название"
 
@@ -22272,7 +22302,7 @@ msgid "Triggers"
 msgstr "Триггеры"
 
 msgid "Try a different name."
-msgstr ""
+msgstr "Попробуйте другое название."
 
 msgid "Tuesday"
 msgstr "Вторник"
@@ -22764,6 +22794,15 @@ msgstr "Загрузка…"
 
 msgid "Upon clicking Convert, parts will be created with the following internal part numbers:"
 msgstr "При нажатии кнопки «Преобразовать» будут созданы детали со следующими внутренними номерами деталей:"
+
+msgid "Upright"
+msgstr "Вертикально"
+
+msgid "Upside down"
+msgstr "Вверх ногами"
+
+msgid "Upside down, from step {orientationSource}"
+msgstr "Вверх ногами, как на шаге {orientationSource}"
 
 msgid "URL"
 msgstr "URL"

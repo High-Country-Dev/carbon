@@ -69,7 +69,7 @@ msgstr "{0, plural, one {# 工程に標準時間がない} other {# 工程に標
 
 #. placeholder {0}: issues.length
 msgid "{0, plural, one {# record needs attention} other {# records need attention}}"
-msgstr ""
+msgstr "{0, plural, one {# 件のレコードに確認が必要です} other {# 件のレコードに確認が必要です}}"
 
 #. placeholder {0}: totalScopeRows(run.violationRowsByTable)
 msgid "{0, plural, one {# row links to data outside this company, so a safety copy of your current data can't be made.} other {# rows link to data outside this company, so a safety copy of your current data can't be made.}}"
@@ -405,7 +405,7 @@ msgid "{count} units"
 msgstr "{count} 個"
 
 msgid "{created} created, {updated} updated."
-msgstr ""
+msgstr "{created}件作成、{updated}件更新。"
 
 msgid "{days}d"
 msgstr "{days}日"
@@ -432,7 +432,7 @@ msgid "{from}–{to} of {count} operations"
 msgstr "{from}–{to} / {count} 件の工程"
 
 msgid "{hidden, plural, one {And # more record.} other {And # more records.}}"
-msgstr ""
+msgstr "{hidden, plural, one {ほか # 件のレコードがあります。} other {ほか # 件のレコードがあります。}}"
 
 msgid "{hiddenCount} more: {hiddenNames}"
 msgstr "{hiddenCount} 件さらに表示: {hiddenNames}"
@@ -9495,6 +9495,9 @@ msgstr "フリートユニット"
 msgid "Fleet Units"
 msgstr "フリート個"
 
+msgid "Flip over"
+msgstr "裏返す"
+
 msgid "For <0/>"
 msgstr "用<0/>"
 
@@ -10227,6 +10230,9 @@ msgstr "サンプルサイズがどのように決定されるか—すべてを
 
 msgid "How the unit price of each quantity was calculated."
 msgstr "各数量の単価がどのように計算されたか。"
+
+msgid "How the whole build is turned on a step, such as flipped to fit parts on its underside. Later steps of the same build keep it until a step turns the build again."
+msgstr "ステップ内でアセンブリ全体の向きを変えます。たとえば、底面に部品を取り付けるために裏返す場合などです。同じアセンブリの後続ステップは、別のステップで向きが変わるまでこの向きを維持します。"
 
 msgid "How this gauge is used — Standard (regular checks) or Master (calibrates other gauges)."
 msgstr "この測定器の使用方法 — なみ検査(通常のチェック)または標準器(他の測定器を校正)"
@@ -11389,10 +11395,10 @@ msgstr "姓"
 
 #. placeholder {0}: record.error
 msgid "Last push {when} failed: {0}"
-msgstr ""
+msgstr "前回の{when}の送信は失敗しました: {0}"
 
 msgid "Last push {when}:"
-msgstr ""
+msgstr "前回の送信 {when}:"
 
 msgid "Last Quarter"
 msgstr "前四半期"
@@ -11401,7 +11407,7 @@ msgid "Last Run"
 msgstr "最終実行"
 
 msgid "Last scheduled push {when}:"
-msgstr ""
+msgstr "前回のスケジュール送信 {when}:"
 
 msgid "Last synced: <0/>"
 msgstr "最後に同期: <0/>"
@@ -12551,7 +12557,7 @@ msgid "More overtime"
 msgstr "残業を増やす"
 
 msgid "More records are waiting. Push again to continue."
-msgstr ""
+msgstr "他にもレコードがあります。続けるには再度送信してください。"
 
 msgid "Morning, {name}."
 msgstr "朝、{name}さん。"
@@ -12566,7 +12572,7 @@ msgid "Motion"
 msgstr "モーション"
 
 msgid "Mount has {matches} records with this identifier. Delete or merge the extra ones in Mount, then push again."
-msgstr ""
+msgstr "Mountには、この識別子を持つレコードが{matches}件あります。Mountで余分なレコードを削除または統合してから、再度送信してください。"
 
 msgid "Move"
 msgstr "移動"
@@ -13284,7 +13290,7 @@ msgid "No comments yet. Be the first to add a comment."
 msgstr "まだコメントがありません。最初のコメントを追加してください。"
 
 msgid "No companies match \"{query}\""
-msgstr ""
+msgstr "「{query}」に一致する会社がありません"
 
 msgid "No completed jobs within range"
 msgstr "範囲内に完了した製造指図がありません"
@@ -14069,6 +14075,12 @@ msgstr "手持在庫: {before} から {after}"
 msgid "On Hold"
 msgstr "保留中"
 
+msgid "On its side"
+msgstr "横向き"
+
+msgid "On its side, from step {orientationSource}"
+msgstr "{orientationSource}のステップから横向き"
+
 msgid "On Jobs"
 msgstr "製造指図に対して"
 
@@ -14589,6 +14601,9 @@ msgstr "注文"
 
 msgid "Orders submitted"
 msgstr "注文が送信されました"
+
+msgid "Orientation"
+msgstr "向き"
 
 msgid "Origin"
 msgstr "オリジン"
@@ -18255,7 +18270,7 @@ msgid "Search fields..."
 msgstr "フィールドを検索..."
 
 msgid "Search for a company"
-msgstr ""
+msgstr "会社を検索"
 
 msgid "Search for existing or create a new one"
 msgstr "既存のものを検索するか、新しいものを作成してください"
@@ -19425,6 +19440,12 @@ msgstr "特定の品目"
 msgid "Spend by supplier, item, or category — your biggest cost drivers"
 msgstr "仕入先、品目、またはカテゴリ別の支出 — 最大の原価ドライバー"
 
+msgid "Spin left"
+msgstr "左に回転"
+
+msgid "Spin right"
+msgstr "右に回転"
+
 msgid "Split"
 msgstr "分割"
 
@@ -19520,7 +19541,7 @@ msgid "Started"
 msgstr "開始"
 
 msgid "Starting"
-msgstr ""
+msgstr "開始中"
 
 msgid "Starting…"
 msgstr "開始中…"
@@ -20894,6 +20915,9 @@ msgstr "あなたが在庫を整理する材料タイプ"
 msgid "The model is still loading."
 msgstr "モデルはまだ読み込み中です。"
 
+msgid "The model isn't ready yet"
+msgstr "モデルはまだ準備できていません"
+
 msgid "The month your financial year begins; periods are numbered from this month."
 msgstr "財務年度が開始される月。期間はこの月から番号が付けられます。"
 
@@ -21047,16 +21071,16 @@ msgid "The purchase order"
 msgstr "発注書"
 
 msgid "The push to Mount did not start. Try again."
-msgstr ""
+msgstr "Mountへの送信を開始できませんでした。もう一度お試しください。"
 
 msgid "The push to Mount failed"
-msgstr ""
+msgstr "Mountへの送信に失敗しました"
 
 msgid "The push to Mount finished"
-msgstr ""
+msgstr "Mountへの送信が完了しました"
 
 msgid "The push to Mount finished. Some records need attention"
-msgstr ""
+msgstr "Mountへの送信が完了しました。一部のレコードに確認が必要です"
 
 msgid "The quantity breakpoints this line is priced at; each column carries its own per-unit price for buyer–supplier negotiation and for converting to downstream documents."
 msgstr "この明細が価格設定される数量ブレークポイント。各列は買い手と仕入先の交渉および下流文書への変換用に、独自の単価を持ちます。"
@@ -21892,6 +21916,12 @@ msgstr "タイマー実行中"
 msgid "Timezone"
 msgstr "タイムゾーン"
 
+msgid "Tip away from you"
+msgstr "奥に傾ける"
+
+msgid "Tip toward you"
+msgstr "手前に傾ける"
+
 msgid "Title"
 msgstr "タイトル"
 
@@ -22272,7 +22302,7 @@ msgid "Triggers"
 msgstr "トリガー"
 
 msgid "Try a different name."
-msgstr ""
+msgstr "別の名前を試してください。"
 
 msgid "Tuesday"
 msgstr "火曜日"
@@ -22764,6 +22794,15 @@ msgstr "アップロード中…"
 
 msgid "Upon clicking Convert, parts will be created with the following internal part numbers:"
 msgstr "変換をクリックすると、以下の社内部品番号で部品が作成されます："
+
+msgid "Upright"
+msgstr "正立"
+
+msgid "Upside down"
+msgstr "逆さま"
+
+msgid "Upside down, from step {orientationSource}"
+msgstr "{orientationSource}のステップから逆さま"
 
 msgid "URL"
 msgstr "URL"

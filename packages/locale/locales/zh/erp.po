@@ -69,7 +69,7 @@ msgstr "{0, plural, one {# 道工序无工时定额} other {# 道工序无工时
 
 #. placeholder {0}: issues.length
 msgid "{0, plural, one {# record needs attention} other {# records need attention}}"
-msgstr ""
+msgstr "{0, plural, one {# 条记录需要处理} other {# 条记录需要处理}}"
 
 #. placeholder {0}: totalScopeRows(run.violationRowsByTable)
 msgid "{0, plural, one {# row links to data outside this company, so a safety copy of your current data can't be made.} other {# rows link to data outside this company, so a safety copy of your current data can't be made.}}"
@@ -405,7 +405,7 @@ msgid "{count} units"
 msgstr "{count} 件"
 
 msgid "{created} created, {updated} updated."
-msgstr ""
+msgstr "已创建 {created}，已更新 {updated}。"
 
 msgid "{days}d"
 msgstr "{days}天"
@@ -432,7 +432,7 @@ msgid "{from}–{to} of {count} operations"
 msgstr "第{from}–{to}个工序（共{count}个）"
 
 msgid "{hidden, plural, one {And # more record.} other {And # more records.}}"
-msgstr ""
+msgstr "{hidden, plural, one {还有 # 条记录。} other {还有 # 条记录。}}"
 
 msgid "{hiddenCount} more: {hiddenNames}"
 msgstr "还有{hiddenCount}个：{hiddenNames}"
@@ -9495,6 +9495,9 @@ msgstr "租赁单位"
 msgid "Fleet Units"
 msgstr "租赁设备"
 
+msgid "Flip over"
+msgstr "翻面"
+
 msgid "For <0/>"
 msgstr "对于 <0/>"
 
@@ -10227,6 +10230,9 @@ msgstr "样本量如何确定——检验全部、检验前N个、批次百分�
 
 msgid "How the unit price of each quantity was calculated."
 msgstr "每个数量的单价是如何计算的。"
+
+msgid "How the whole build is turned on a step, such as flipped to fit parts on its underside. Later steps of the same build keep it until a step turns the build again."
+msgstr "在某一步骤中整个组件的转动方式，例如翻面以便将零件装在其底面。同一组件的后续步骤会保持该方向，直到某一步骤再次转动组件。"
 
 msgid "How this gauge is used — Standard (regular checks) or Master (calibrates other gauges)."
 msgstr "此量具的用途——正常检验（定期检查）或标准器（校准其他量具）。"
@@ -11389,10 +11395,10 @@ msgstr "姓氏"
 
 #. placeholder {0}: record.error
 msgid "Last push {when} failed: {0}"
-msgstr ""
+msgstr "上次推送 {when} 失败：{0}"
 
 msgid "Last push {when}:"
-msgstr ""
+msgstr "上次推送 {when}："
 
 msgid "Last Quarter"
 msgstr "上一季度"
@@ -11401,7 +11407,7 @@ msgid "Last Run"
 msgstr "最后运行"
 
 msgid "Last scheduled push {when}:"
-msgstr ""
+msgstr "上次定时推送 {when}："
 
 msgid "Last synced: <0/>"
 msgstr "上次同步: <0/>"
@@ -12551,7 +12557,7 @@ msgid "More overtime"
 msgstr "更多加班"
 
 msgid "More records are waiting. Push again to continue."
-msgstr ""
+msgstr "仍有记录等待处理。请再次推送以继续。"
 
 msgid "Morning, {name}."
 msgstr "早上，{name}。"
@@ -12566,7 +12572,7 @@ msgid "Motion"
 msgstr "运动"
 
 msgid "Mount has {matches} records with this identifier. Delete or merge the extra ones in Mount, then push again."
-msgstr ""
+msgstr "Mount 中有 {matches} 条记录使用此标识。请在 Mount 中删除或合并多余记录，然后再次推送。"
 
 msgid "Move"
 msgstr "移动"
@@ -13284,7 +13290,7 @@ msgid "No comments yet. Be the first to add a comment."
 msgstr "还没有评论。成为第一个添加评论的人。"
 
 msgid "No companies match \"{query}\""
-msgstr ""
+msgstr "没有与“{query}”匹配的公司"
 
 msgid "No completed jobs within range"
 msgstr "范围内没有已完成的工单"
@@ -14069,6 +14075,12 @@ msgstr "现有：从 {before} 到 {after}"
 msgid "On Hold"
 msgstr "搁置"
 
+msgid "On its side"
+msgstr "侧放"
+
+msgid "On its side, from step {orientationSource}"
+msgstr "侧放，沿用步骤 {orientationSource}"
+
 msgid "On Jobs"
 msgstr "在工单上"
 
@@ -14589,6 +14601,9 @@ msgstr "订单"
 
 msgid "Orders submitted"
 msgstr "订单已提交"
+
+msgid "Orientation"
+msgstr "方向"
 
 msgid "Origin"
 msgstr "来源"
@@ -18255,7 +18270,7 @@ msgid "Search fields..."
 msgstr "搜索字段..."
 
 msgid "Search for a company"
-msgstr ""
+msgstr "搜索公司"
 
 msgid "Search for existing or create a new one"
 msgstr "搜索现有问题或创建新问题"
@@ -19425,6 +19440,12 @@ msgstr "特定物料"
 msgid "Spend by supplier, item, or category — your biggest cost drivers"
 msgstr "按供应商、项目或类别的支出 — 您最大的成本驱动因素"
 
+msgid "Spin left"
+msgstr "向左旋转"
+
+msgid "Spin right"
+msgstr "向右旋转"
+
 msgid "Split"
 msgstr "拆分"
 
@@ -19520,7 +19541,7 @@ msgid "Started"
 msgstr "开始于"
 
 msgid "Starting"
-msgstr ""
+msgstr "正在启动"
 
 msgid "Starting…"
 msgstr "正在启动…"
@@ -20894,6 +20915,9 @@ msgstr "您用来组织库存的原材料类型"
 msgid "The model is still loading."
 msgstr "模型正在加载。"
 
+msgid "The model isn't ready yet"
+msgstr "模型尚未就绪"
+
 msgid "The month your financial year begins; periods are numbered from this month."
 msgstr "财政年度开始的月份；期间从该月份开始编号。"
 
@@ -21047,16 +21071,16 @@ msgid "The purchase order"
 msgstr "采购订单"
 
 msgid "The push to Mount did not start. Try again."
-msgstr ""
+msgstr "未能开始推送至 Mount。请重试。"
 
 msgid "The push to Mount failed"
-msgstr ""
+msgstr "推送至 Mount 失败"
 
 msgid "The push to Mount finished"
-msgstr ""
+msgstr "推送至 Mount 已完成"
 
 msgid "The push to Mount finished. Some records need attention"
-msgstr ""
+msgstr "推送至 Mount 已完成，部分记录需要处理"
 
 msgid "The quantity breakpoints this line is priced at; each column carries its own per-unit price for buyer–supplier negotiation and for converting to downstream documents."
 msgstr "此行定价的数量断点;每一列都有自己的单位价格,用于采购方–供应商谈判和转换为下游文件。"
@@ -21892,6 +21916,12 @@ msgstr "计时器运行中"
 msgid "Timezone"
 msgstr "时区"
 
+msgid "Tip away from you"
+msgstr "向远离你的方向倾斜"
+
+msgid "Tip toward you"
+msgstr "向靠近你的方向倾斜"
+
 msgid "Title"
 msgstr "标题"
 
@@ -22272,7 +22302,7 @@ msgid "Triggers"
 msgstr "触发器"
 
 msgid "Try a different name."
-msgstr ""
+msgstr "请尝试其他名称。"
 
 msgid "Tuesday"
 msgstr "星期二"
@@ -22764,6 +22794,15 @@ msgstr "上传中…"
 
 msgid "Upon clicking Convert, parts will be created with the following internal part numbers:"
 msgstr "点击转换后，将使用以下内部零件编号创建零件："
+
+msgid "Upright"
+msgstr "直立"
+
+msgid "Upside down"
+msgstr "倒置"
+
+msgid "Upside down, from step {orientationSource}"
+msgstr "倒置，沿用步骤 {orientationSource}"
 
 msgid "URL"
 msgstr "网址"

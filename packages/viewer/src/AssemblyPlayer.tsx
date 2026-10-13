@@ -24,7 +24,6 @@ import {
   MeshStandardMaterial,
   type Object3D,
   PerspectiveCamera,
-  Quaternion,
   Vector3
 } from "three";
 import {
@@ -35,35 +34,39 @@ import {
 } from "three-mesh-bvh";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { AssemblyViewer } from "./AssemblyViewer";
-import { fitFraming } from "./camera";
+import { type FramingOccluder, frameStepPose } from "./camera";
+import { buildStepClip } from "./clip";
 import { describeStep, type NamedUnit } from "./describe";
+import { displayMotionForStep, naturalizeMotion } from "./display";
 import { indexAssemblyGraph } from "./graph";
 import { MotionPathEditor } from "./MotionPathEditor";
-import {
-  buildStepClip,
-  CARRY_IN_GLIDE_SECONDS,
-  displayMotionForStep,
-  fadeProgress,
-  motionDuration,
-  naturalizeMotion,
-  seatedBoundsCenter,
-  stepClipTiming
-} from "./motion";
+import { resolveOrientations, upForOrientation } from "./orientation";
+import { IDENTITY_QUAT, sameOrientation } from "./quat";
+import { isSavedView } from "./step-flags";
 import {
   arrivalIndexByNode,
   buildCarryPlans,
   buildSubAssemblyPlan,
-  type PathUnit,
-  worldOf
+  type CarryPlan,
+  carriesUnits,
+  stepWorlds
 } from "./subassembly";
+import {
+  CARRY_IN_GLIDE_SECONDS,
+  fadeProgress,
+  type StepClipTiming,
+  stepClipTiming
+} from "./timing";
 import type {
   AssemblyGraph,
   AssemblyStep,
   CameraPose,
   Motion,
+  Quat,
   Vec3
 } from "./types";
 import { useAssembly } from "./useAssembly";
+import { useBuildFrame } from "./useBuildFrame";
 import { cn } from "./utils";
 import {
   ASSEMBLY_VIEWS,
@@ -197,11 +200,7 @@ export type AssemblyPlayerProps = {
   isolationLabel?: string | null;
   /** Shown next to the isolation label while the active step carries a finished sub-assembly in. */
   carryInLabel?: string | null;
-  /**
-   * Labels for the path editor's Move / Rotate switch (shown while a path is
-   * being edited). The host translates them; without them the switch is hidden
-   * and waypoints only move.
-   */
+  /** Path editor Move / Rotate labels; without them the switch is hidden and waypoints only move. */
   pathToolLabels?: { move: string; rotate: string } | null;
   mode?: "dark" | "light";
   className?: string;
@@ -278,16 +277,16 @@ export const AssemblyPlayer = forwardRef<
   // Paused orbiting doesn't change modes (per-step framing already yields to
   // the framing-key guard there).
   const [cameraMode, setCameraMode] = useState<"auto" | "free">("auto");
-  // Path editor tool: drag waypoints to move them, or turn the selected one
-  // with rotation rings. Each edit session starts on Move.
-  const [pathTool, setPathTool] = useState<PathTool>("move");
-  const editKey = editMotion
-    ? `${editMotion.stepId}|${editMotion.nodeIds?.[0] ?? "own"}`
-    : null;
-  // biome-ignore lint/correctness/useExhaustiveDependencies: editKey identifies the edit session; a new session resets the tool
-  useEffect(() => {
-    setPathTool("move");
-  }, [editKey]);
+  // Each path-edit session starts on Move, even when the same path is reopened.
+  const editKey = editMotion ? editSessionKey(editMotion) : null;
+  const [toolChoice, setToolChoice] = useState<{
+    editKey: string | null;
+    tool: PathTool;
+  }>({ editKey: null, tool: "move" });
+  if (editKey === null && toolChoice.editKey !== null) {
+    setToolChoice({ editKey: null, tool: "move" });
+  }
+  const pathTool = toolChoice.editKey === editKey ? toolChoice.tool : "move";
   // Stable identity — the scene re-subscribes its controls listener otherwise.
   const handleFreeCamera = useCallback(() => setCameraMode("free"), []);
   // Exposed as named views, not raw axes: six icon buttons made the reader
@@ -329,15 +328,15 @@ export const AssemblyPlayer = forwardRef<
     [graph]
   );
 
-  const assemblyDiagonal = useMemo(() => {
-    const bbox = graphIndex?.graph.root.bbox;
-    if (!bbox) return 0;
-    return Math.hypot(
-      bbox.max[0] - bbox.min[0],
-      bbox.max[1] - bbox.min[1],
-      bbox.max[2] - bbox.min[2]
-    );
-  }, [graphIndex]);
+  const assemblyDiagonal = useMemo(
+    () =>
+      graphIndex
+        ? seatedBox([graphIndex.graph.root.nodeId], graphIndex.nodesById)
+            .getSize(new Vector3())
+            .length()
+        : 0,
+    [graphIndex]
+  );
 
   const stepCount = steps.length;
   const clampedIndex = Math.min(Math.max(activeStepIndex, 0), stepCount - 1);
@@ -385,35 +384,17 @@ export const AssemblyPlayer = forwardRef<
   // header. Each part therefore arrives at a different step depending on which
   // build is on screen — `arrivals` answers that per world.
   const subPlan = useMemo(() => buildSubAssemblyPlan(steps), [steps]);
-  const stepWorlds = useMemo(
-    () => steps.map((step) => worldOf(steps, step.id)),
-    [steps]
-  );
+  const worlds = useMemo(() => stepWorlds(steps), [steps]);
   const arrivals = useMemo(() => {
     const byWorld = new Map<string | null, Map<string, number>>();
-    for (const world of new Set(stepWorlds)) {
+    for (const world of new Set(worlds.values())) {
       byWorld.set(world, arrivalIndexByNode(steps, world));
     }
     return byWorld;
-  }, [steps, stepWorlds]);
-  // How each step's carried-in sub-assemblies arrive: on their own path
-  // (one after another, before the step's own parts) or gliding in beside
-  // the build.
+  }, [steps, worlds]);
   const carryPlans = useMemo(
     () => buildCarryPlans(steps, subPlan),
     [steps, subPlan]
-  );
-  const carriedPartIds = useMemo(
-    () => carryPlans.map((plan) => plan.carriedPartIds),
-    [carryPlans]
-  );
-  const pathUnits = useMemo(
-    () => carryPlans.map((plan) => plan.pathUnits),
-    [carryPlans]
-  );
-  const glidingPartIds = useMemo(
-    () => carryPlans.map((plan) => plan.glidingPartIds),
-    [carryPlans]
   );
   const scopeSet = useMemo(
     () => (scopeStepIds ? new Set(scopeStepIds) : null),
@@ -447,6 +428,8 @@ export const AssemblyPlayer = forwardRef<
     [playable]
   );
 
+  const orientations = useMemo(() => resolveOrientations(steps), [steps]);
+
   // Display-only motion adjustments — the stored data is untouched:
   // 1. Non-flagged steps saved with motion "none" (legacy plans, manual
   //    steps) get an AABB-synthesized insertion so components never pop into
@@ -456,120 +439,88 @@ export const AssemblyPlayer = forwardRef<
   //    insertion reads clearly at assembly scale.
   const displaySteps = useMemo(() => {
     if (!graphIndex) return steps;
-    const root = graphIndex.graph.root.bbox;
-    const assemblyDiagonal = Math.hypot(
-      root.max[0] - root.min[0],
-      root.max[1] - root.min[1],
-      root.max[2] - root.min[2]
-    );
     return steps.map((original, index) => {
-      // A step that carries a finished sub-assembly in moves its own parts AND
-      // the unit, so every per-step consumer (clip, fallback, framing, hidden
-      // list) sees the whole moving set.
-      const carried = carriedPartIds[index] ?? [];
+      const plan = carryPlans[index] ?? NO_CARRY;
       let step = original;
-      // A header whose unit joins on its own path: that path IS the header's
-      // motion, and the unit plays it — the header has no insertion of its own.
-      if (carryPlans[index]?.joinsOnOwnPath) {
+      if (plan.joinsOnOwnPath) {
         step = { ...step, motion: { type: "none" } };
       }
-      // The step's own insertion moves its own parts plus the gliding units.
-      const ownMoving = (glidingPartIds[index] ?? []).length
-        ? [
-            ...new Set([
-              ...step.componentNodeIds,
-              ...(glidingPartIds[index] ?? [])
-            ])
-          ]
-        : step.componentNodeIds;
-      const motionBasis = { ...step, componentNodeIds: ownMoving };
-      if (carried.length > 0) {
+      const motionBasis = { ...step, componentNodeIds: plan.ownMovingPartIds };
+      // A step that carries a finished sub-assembly in moves its own parts AND
+      // the unit, so every per-step consumer (fallback occluders, framing,
+      // hidden list) sees the whole moving set.
+      if (carriesUnits(plan)) {
         step = {
           ...step,
-          componentNodeIds: [...new Set([...step.componentNodeIds, ...carried])]
+          componentNodeIds: [
+            ...new Set([
+              ...step.componentNodeIds,
+              ...plan.ownMovingPartIds,
+              ...plan.pathUnits.flatMap((unit) => unit.nodeIds)
+            ])
+          ]
         };
       }
 
       // Fallback synthesis sees only the parts already in this step's build —
       // what is actually on the canvas when it plays.
-      const arrival = arrivals.get(stepWorlds[index] ?? null);
-      const world = new Set<string>();
+      const arrival = arrivals.get(worlds.get(step.id) ?? null);
+      const present = new Set<string>();
       for (const [nodeId, arrivedAt] of arrival ?? []) {
-        if (arrivedAt < index) world.add(nodeId);
+        if (arrivedAt < index) present.add(nodeId);
       }
       const baseMotion = suppressFallbackMotions
         ? step.motion
-        : displayMotionForStep(motionBasis, index, graphIndex, world);
+        : displayMotionForStep(motionBasis, index, graphIndex, present);
 
-      let minBox: [number, number, number] | null = null;
-      let maxBox: [number, number, number] | null = null;
-      for (const nodeId of motionBasis.componentNodeIds) {
-        const node = graphIndex.nodesById.get(nodeId);
-        if (!node) continue;
-        if (!minBox || !maxBox) {
-          minBox = [...node.bbox.min];
-          maxBox = [...node.bbox.max];
-        } else {
-          for (let axis = 0; axis < 3; axis++) {
-            minBox[axis] = Math.min(
-              minBox[axis] ?? 0,
-              node.bbox.min[axis] ?? 0
-            );
-            maxBox[axis] = Math.max(
-              maxBox[axis] ?? 0,
-              node.bbox.max[axis] ?? 0
-            );
-          }
-        }
-      }
-      if (!minBox || !maxBox) {
-        return baseMotion === step.motion
-          ? step
-          : { ...step, motion: baseMotion };
-      }
-      const componentDiagonal = Math.hypot(
-        maxBox[0] - minBox[0],
-        maxBox[1] - minBox[1],
-        maxBox[2] - minBox[2]
+      const moving = seatedBox(
+        motionBasis.componentNodeIds,
+        graphIndex.nodesById
       );
-      const motion = naturalizeMotion(
-        baseMotion,
-        componentDiagonal,
-        assemblyDiagonal
-      );
+      const motion = moving.isEmpty()
+        ? baseMotion
+        : naturalizeMotion(
+            baseMotion,
+            moving.getSize(new Vector3()).length(),
+            assemblyDiagonal
+          );
       return motion === step.motion ? step : { ...step, motion };
     });
   }, [
     steps,
     graphIndex,
     suppressFallbackMotions,
-    carriedPartIds,
     carryPlans,
-    glidingPartIds,
     arrivals,
-    stepWorlds
+    worlds,
+    assemblyDiagonal
   ]);
 
   // --- Continuous timeline ---------------------------------------------
   // A carry-in step also spends the time bringing its units in: each unit's
-  // own path, then the glide for the rest. Steps that don't play (a used
-  // sub-assembly's header, or outside an opened sub-assembly) take no time.
-  const segments = useMemo(
+  // own path, then the glide for the rest. Picking components keeps every
+  // part seated, so then the units and the glide take no time. Steps that
+  // don't play (a used sub-assembly's header, or outside an opened
+  // sub-assembly) take no time.
+  const timings = useMemo(
     () =>
-      displaySteps.map((step, index) =>
-        playable[index]
-          ? stepClipTiming(
-              step,
-              (glidingPartIds[index]?.length ?? 0) > 0
-                ? CARRY_IN_GLIDE_SECONDS
-                : 0,
-              (pathUnits[index] ?? []).map((unit) =>
-                motionDuration(unit.motion)
-              )
-            ).total
-          : 0
-      ),
-    [displaySteps, playable, glidingPartIds, pathUnits]
+      displaySteps.map((step, index) => {
+        const plan = carryPlans[index] ?? NO_CARRY;
+        const carries = !componentPickerActive;
+        return stepClipTiming(step, {
+          glideSeconds:
+            carries && plan.glidingPartIds.length > 0
+              ? CARRY_IN_GLIDE_SECONDS
+              : 0,
+          units: carries ? plan.pathUnits.map((unit) => unit.motion) : [],
+          ownParts: plan.ownMovingPartIds.length > 0
+        });
+      }),
+    [displaySteps, carryPlans, componentPickerActive]
+  );
+  const segments = useMemo(
+    () => timings.map((timing, index) => (playable[index] ? timing.total : 0)),
+    [timings, playable]
   );
   const startTimes = useMemo(() => {
     let elapsed = 0;
@@ -680,36 +631,33 @@ export const AssemblyPlayer = forwardRef<
 
   const activeInfo = activeStep ? subPlan.get(activeStep.id) : undefined;
   const isolatePartIds = activeInfo?.isolatePartIds ?? null;
-  const activeCarried = carriedPartIds[clampedIndex] ?? NO_NODE_IDS;
-  const activeGliding = glidingPartIds[clampedIndex] ?? NO_NODE_IDS;
-  const activePathUnits = pathUnits[clampedIndex] ?? NO_PATH_UNITS;
-  const activeArrivals = arrivals.get(stepWorlds[clampedIndex] ?? null) ?? null;
+  const activeCarry = carryPlans[clampedIndex] ?? NO_CARRY;
+  const activeGliding = activeCarry.glidingPartIds;
+  const activeArrivals =
+    arrivals.get((activeStep && worlds.get(activeStep.id)) ?? null) ?? null;
   // An isolated sub-assembly frames on its own parts, not the whole model.
-  const frameBounds = useMemo(() => {
-    const root = graphIndex?.graph.root.bbox ?? null;
-    if (!graphIndex || !isolatePartIds || isolatePartIds.length === 0) {
-      return root;
-    }
-    return unionBounds(isolatePartIds, graphIndex.nodesById) ?? root;
+  const frameBox = useMemo(() => {
+    if (!graphIndex) return null;
+    const isolated = seatedBox(isolatePartIds ?? [], graphIndex.nodesById);
+    return isolated.isEmpty()
+      ? seatedBox([graphIndex.graph.root.nodeId], graphIndex.nodesById)
+      : isolated;
   }, [graphIndex, isolatePartIds]);
   // A carried unit with no path of its own glides in from beside the build
   // that receives it.
   const carryIn = useMemo(() => {
-    if (!graphIndex || activeGliding.length === 0 || !frameBounds) return null;
-    const unit = unionBounds(activeGliding, graphIndex.nodesById);
-    if (!unit) return null;
-    const diagonal = Math.hypot(
-      frameBounds.max[0] - frameBounds.min[0],
-      frameBounds.max[1] - frameBounds.min[1],
-      frameBounds.max[2] - frameBounds.min[2]
-    );
+    if (!graphIndex || activeGliding.length === 0 || !frameBox) return null;
+    const unit = seatedBox(activeGliding, graphIndex.nodesById);
+    if (unit.isEmpty()) return null;
     const offset: Vec3 = [
-      frameBounds.max[0] + diagonal * CARRY_IN_GAP_FRACTION - unit.min[0],
+      frameBox.max.x +
+        frameBox.getSize(new Vector3()).length() * CARRY_IN_GAP_FRACTION -
+        unit.min.x,
       0,
       0
     ];
     return { nodeIds: activeGliding, offset };
-  }, [graphIndex, activeGliding, frameBounds]);
+  }, [graphIndex, activeGliding, frameBox]);
   const playablePosition = playableIndices.indexOf(clampedIndex);
   const prevIndex = nextPlayable(clampedIndex, -1);
   const nextIndex = nextPlayable(clampedIndex, 1);
@@ -747,11 +695,11 @@ export const AssemblyPlayer = forwardRef<
               readOnly={readOnly}
               onSelectComponents={onSelectComponents}
               editMotion={editMotion ?? null}
-              pathTool={pathToolLabels ? pathTool : "move"}
+              pathTool={pathTool}
               onMotionChange={onMotionChange}
               assemblyDiagonal={assemblyDiagonal}
               capturePoseRef={capturePoseRef}
-              assemblyBounds={frameBounds}
+              buildBox={frameBox}
               leafBounds={graphIndex?.leaves ?? null}
               seatedBoundsById={graphIndex?.nodesById ?? null}
               segments={segments}
@@ -767,7 +715,11 @@ export const AssemblyPlayer = forwardRef<
               installIndexByNode={activeArrivals}
               isolateNodeIds={isolatePartIds}
               carryIn={carryIn}
-              pathUnits={activePathUnits}
+              carryPlan={activeCarry}
+              timing={timings[clampedIndex] ?? NO_TIMING}
+              orientation={
+                orientations[clampedIndex]?.orientation ?? IDENTITY_QUAT
+              }
             />
           )}
         </AssemblyViewer>
@@ -781,7 +733,7 @@ export const AssemblyPlayer = forwardRef<
                 key={tool}
                 type="button"
                 aria-pressed={pathTool === tool}
-                onClick={() => setPathTool(tool)}
+                onClick={() => setToolChoice({ editKey, tool })}
                 className={cn(
                   "rounded-md px-2.5 py-1 transition-colors",
                   pathTool === tool
@@ -798,7 +750,7 @@ export const AssemblyPlayer = forwardRef<
           <div className="pointer-events-none absolute left-1/2 top-3 z-10 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground shadow-lg">
             <BoxesIcon />
             <span>{isolationLabel}</span>
-            {carryInLabel && activeCarried.length > 0 && (
+            {carryInLabel && carriesUnits(activeCarry) && (
               <>
                 <span aria-hidden className="h-3.5 w-px bg-border" />
                 <span className="text-muted-foreground">{carryInLabel}</span>
@@ -1144,7 +1096,7 @@ function AssemblyScene({
   onMotionChange,
   assemblyDiagonal,
   capturePoseRef,
-  assemblyBounds,
+  buildBox,
   leafBounds,
   seatedBoundsById,
   segments,
@@ -1160,7 +1112,9 @@ function AssemblyScene({
   installIndexByNode,
   isolateNodeIds,
   carryIn,
-  pathUnits
+  carryPlan,
+  timing,
+  orientation
 }: {
   scene: Object3D;
   nodesById: Map<string, Object3D>;
@@ -1183,8 +1137,11 @@ function AssemblyScene({
   assemblyDiagonal: number;
   /** The scene writes the live-camera reader here for the imperative handle */
   capturePoseRef: React.MutableRefObject<(() => CameraPose | null) | null>;
-  /** Seated world bounds from graph.json (stable under animation) */
-  assemblyBounds: { min: number[]; max: number[] } | null;
+  /**
+   * Seated bounds of the build on screen, from graph.json (stable under
+   * animation): it sets the standing camera distance and the turn center.
+   */
+  buildBox: Box3 | null;
   /** Seated per-leaf bounds for camera occlusion scoring */
   leafBounds:
     | { nodeId: string; bbox: { min: number[]; max: number[] } }[]
@@ -1229,8 +1186,11 @@ function AssemblyScene({
   isolateNodeIds: string[] | null;
   /** A finished sub-assembly carried in at the active step, gliding from `offset`. */
   carryIn: { nodeIds: string[]; offset: Vec3 } | null;
-  /** Carried sub-assemblies joining on their own path, in play order. */
-  pathUnits: PathUnit[];
+  carryPlan: CarryPlan;
+  /** The active step's timing — the same one its timeline segment comes from. */
+  timing: StepClipTiming;
+  /** The active step's build orientation: shown as a camera frame. */
+  orientation: Quat;
 }) {
   const camera = useThree((state) => state.camera);
   const controls = useThree(
@@ -1294,25 +1254,32 @@ function AssemblyScene({
     editMotion && activeStep && editMotion.stepId === activeStep.id
   );
 
-  // Anchor for the editable path: center of the step's components' seated world
-  // bounds — the visual center of the object at its final location. Node
-  // origins won't do: CAD exports often pivot far from the geometry, which
-  // would draw the locked endpoint away from the component. Components sit seated while
-  // editing (the clip is skipped below), so world space IS the final pose.
-  // The parts the edited path moves: a carried sub-assembly's when editing its
-  // path, else the step's own (every part except the units on their own path).
+  // The center a moving set turns about and the path editor anchors on: the
+  // center of its SEATED bounds from graph.json. The clip, the editor and the
+  // framed start pose all use it — the live nodes can't be measured instead,
+  // because the framing runs while a step's parts sit at their start pose.
+  const pivotOf = useCallback(
+    (nodeIds: string[]): Vec3 | null => {
+      const box = seatedBox(nodeIds, seatedBoundsById, nodesById);
+      return box.isEmpty()
+        ? null
+        : (box.getCenter(new Vector3()).toArray() as Vec3);
+    },
+    [seatedBoundsById, nodesById]
+  );
+
   const editedNodeIds = useMemo(() => {
     if (!isEditingActive || !activeStep) return NO_NODE_IDS;
-    if (editMotion?.nodeIds) return editMotion.nodeIds;
-    const onPath = new Set(pathUnits.flatMap((unit) => unit.nodeIds));
-    return activeStep.componentNodeIds.filter((nodeId) => !onPath.has(nodeId));
-  }, [isEditingActive, activeStep, editMotion?.nodeIds, pathUnits]);
+    return editMotion?.nodeIds ?? carryPlan.ownMovingPartIds;
+  }, [
+    isEditingActive,
+    activeStep,
+    editMotion?.nodeIds,
+    carryPlan.ownMovingPartIds
+  ]);
   const seatedCentroid = useMemo<Vec3 | null>(
-    () =>
-      editedNodeIds.length > 0
-        ? seatedBoundsCenter(editedNodeIds, nodesById)
-        : null,
-    [editedNodeIds, nodesById]
+    () => (editedNodeIds.length > 0 ? pivotOf(editedNodeIds) : null),
+    [editedNodeIds, pivotOf]
   );
   const editedNodes = useMemo(
     () =>
@@ -1614,6 +1581,26 @@ function AssemblyScene({
   const applyVisualsRef = useRef(applyVisuals);
   applyVisualsRef.current = applyVisuals;
 
+  // The framed build's bounds. Prefer the graph's seated bounds — measuring
+  // the scene mid-animation would inflate the box with displaced components.
+  const assemblyBox = useMemo(
+    () => buildBox ?? new Box3().setFromObject(scene),
+    [buildBox, scene]
+  );
+
+  // The build turns about the center of the bounds it is framed on. Called
+  // before the other frame loops: its turn plays first, and they wait for it.
+  const buildCenter = useMemo(
+    () => assemblyBox.getCenter(new Vector3()),
+    [assemblyBox]
+  );
+  const buildFrame = useBuildFrame({
+    camera,
+    controls,
+    orientation,
+    center: buildCenter
+  });
+
   // --- Animation -----------------------------------------------------------
 
   const mixer = useMemo(() => new AnimationMixer(scene), [scene]);
@@ -1642,13 +1629,18 @@ function AssemblyScene({
   segmentsLiveRef.current = segments;
   const carryInLiveRef = useRef(carryIn);
   carryInLiveRef.current = carryIn;
-  const pathUnitsLiveRef = useRef(pathUnits);
-  pathUnitsLiveRef.current = pathUnits;
+  const carryPlanLiveRef = useRef(carryPlan);
+  carryPlanLiveRef.current = carryPlan;
+  const timingLiveRef = useRef(timing);
+  timingLiveRef.current = timing;
+  const pivotOfLiveRef = useRef(pivotOf);
+  pivotOfLiveRef.current = pivotOf;
   // The carry-in glide and the units' paths are part of the signature so a
   // change rebuilds the clip.
   const carryInKey = carryIn
     ? JSON.stringify([carryIn.offset, carryIn.nodeIds.length])
     : "";
+  const pathUnits = carryPlan.pathUnits;
   const pathUnitsKey = pathUnits.length
     ? JSON.stringify(
         pathUnits.map((unit) => [
@@ -1692,33 +1684,37 @@ function AssemblyScene({
     if (isEditingActive) return;
 
     // Carried-in sub-assemblies come first: each one with a path of its own
-    // flies it, then the rest glide in from beside the build. Picking keeps
-    // everything seated: a click must select what the BOM tree shows.
-    const carry = componentPickerActive ? null : carryInLiveRef.current;
-    const units = componentPickerActive ? [] : pathUnitsLiveRef.current;
-    const timing = stepClipTiming(
-      step,
-      carry ? CARRY_IN_GLIDE_SECONDS : 0,
-      units.map((unit) => motionDuration(unit.motion))
-    );
-    const clip = buildStepClip(step, nodesById, {
-      duration: timing.motion,
-      holdSeconds: timing.hold,
-      units: units.map((unit, index) => ({
-        nodeIds: unit.nodeIds,
-        motion: unit.motion,
-        seconds: timing.units[index] ?? 0
-      })),
-      ...(carry
-        ? {
-            glide: {
-              offset: carry.offset,
-              seconds: timing.glide,
-              nodeIds: carry.nodeIds
+    // flies it, then the rest glide in from beside the build. The timing
+    // gives them no time while picking: a click must select what the BOM tree
+    // shows, so everything stays seated.
+    const timing = timingLiveRef.current;
+    const { pathUnits: units, ownMovingPartIds } = carryPlanLiveRef.current;
+    const carry = timing.glide > 0 ? carryInLiveRef.current : null;
+    const pivotOf = pivotOfLiveRef.current;
+    const clip = buildStepClip(
+      { ...step, componentNodeIds: ownMovingPartIds },
+      nodesById,
+      {
+        duration: timing.motion,
+        holdSeconds: timing.hold,
+        pivot: pivotOf(ownMovingPartIds),
+        units: units.slice(0, timing.units.length).map((unit, index) => ({
+          nodeIds: unit.nodeIds,
+          motion: unit.motion,
+          seconds: timing.units[index] ?? 0,
+          pivot: pivotOf(unit.nodeIds)
+        })),
+        ...(carry
+          ? {
+              glide: {
+                offset: carry.offset,
+                seconds: timing.glide,
+                nodeIds: carry.nodeIds
+              }
             }
-          }
-        : {})
-    });
+          : {})
+      }
+    );
     if (!clip) {
       // Nothing to animate (motion "none"), but a static selection must still
       // land on "step completed": the seated fade below reads this timer, and
@@ -1833,12 +1829,9 @@ function AssemblyScene({
     const overrides = overridesRef.current;
     const entries: { mesh: Mesh; fade: Material | Material[] }[] = [];
     const materials: Material[] = [];
-    const carried = new Set([
-      ...(carryIn?.nodeIds ?? []),
-      ...pathUnits.flatMap((unit) => unit.nodeIds)
-    ]);
-    for (const nodeId of step.componentNodeIds) {
-      if (carried.has(nodeId)) continue;
+    const gliding = new Set(carryPlan.glidingPartIds);
+    for (const nodeId of carryPlan.ownMovingPartIds) {
+      if (gliding.has(nodeId)) continue;
       nodesById.get(nodeId)?.traverse((object) => {
         if (!(object as Mesh).isMesh) return;
         const mesh = object as Mesh;
@@ -1853,14 +1846,13 @@ function AssemblyScene({
     }
     if (entries.length === 0) return;
 
+    // The fade starts once the units have seated, and fits in what is left.
     const segment = segments[activeStepIndex] ?? 0;
+    const delay = timing.unitsTotal;
     const seconds =
-      segment > 0 ? Math.min(FADE_SECONDS, segment) : FADE_SECONDS;
-    const delay = stepClipTiming(
-      step,
-      carryIn ? CARRY_IN_GLIDE_SECONDS : 0,
-      pathUnits.map((unit) => motionDuration(unit.motion))
-    ).units.reduce((sum, unitSeconds) => sum + unitSeconds, 0);
+      segment > 0
+        ? Math.min(FADE_SECONDS, Math.max(segment - delay, 1e-3))
+        : FADE_SECONDS;
     const progress = fadeProgress(
       localElapsedRef.current,
       delay,
@@ -1887,8 +1879,8 @@ function AssemblyScene({
     nodesById,
     segments,
     editMotion,
-    carryIn,
-    pathUnits
+    carryPlan,
+    timing
   ]);
 
   useFrame(() => {
@@ -1912,7 +1904,10 @@ function AssemblyScene({
     // MES loop: freeze the animation while the operator manipulates the model
     // (orbit/zoom/pan), so they can inspect it without the parts moving; it
     // resumes the moment they let go. Only in loop mode — the editor is unaffected.
-    const advancing = isPlaying && !(loop && orbitingRef.current);
+    // A step that turns the build holds its parts at the start until the build
+    // has turned over — at the bench you flip the frame, then fit the part.
+    const advancing =
+      isPlaying && !buildFrame.isTurning() && !(loop && orbitingRef.current);
     if (advancing) {
       mixer.update(delta);
       localElapsedRef.current += delta;
@@ -1940,20 +1935,21 @@ function AssemblyScene({
   // --- Camera ----------------------------------------------------------------
 
   // Expose a live-camera reader for the "Set view" button (per-step camera).
+  // A saved view is where the viewer stands at the bench, so it is read in the
+  // bench frame: turning the build later keeps the view and turns the build.
   useEffect(() => {
     capturePoseRef.current = () => {
       if (!controls) return null;
-      const fov = camera instanceof PerspectiveCamera ? camera.fov : 45;
       return {
-        position: camera.position.toArray() as Vec3,
-        target: controls.target.toArray() as Vec3,
-        fov
+        position: buildFrame.toBench(camera.position.clone()).toArray() as Vec3,
+        target: buildFrame.toBench(controls.target.clone()).toArray() as Vec3,
+        fov: camera instanceof PerspectiveCamera ? camera.fov : 45
       };
     };
     return () => {
       capturePoseRef.current = null;
     };
-  }, [camera, controls, capturePoseRef]);
+  }, [camera, controls, capturePoseRef, buildFrame]);
 
   const frameBox = useCallback(
     (box: Box3) => {
@@ -1978,27 +1974,13 @@ function AssemblyScene({
     [camera, controls]
   );
 
-  // The whole-assembly bounds set the standing camera distance: per-step
-  // transitions keep this distance and only rotate, so the zoom never jumps
-  // between steps. Prefer the graph's seated bounds — measuring the scene
-  // mid-animation would inflate the box with displaced components.
-  const getAssemblyBox = useCallback((): Box3 => {
-    if (assemblyBounds) {
-      return new Box3(
-        new Vector3(...(assemblyBounds.min as [number, number, number])),
-        new Vector3(...(assemblyBounds.max as [number, number, number]))
-      );
-    }
-    return new Box3().setFromObject(scene);
-  }, [assemblyBounds, scene]);
-
   // Initial framing of the whole assembly
   const framedSceneRef = useRef<Object3D | null>(null);
   useEffect(() => {
     if (!controls || framedSceneRef.current === scene) return;
     framedSceneRef.current = scene;
-    frameBox(getAssemblyBox());
-  }, [scene, controls, frameBox, getAssemblyBox]);
+    frameBox(assemblyBox);
+  }, [scene, controls, frameBox, assemblyBox]);
 
   // Smoothly approached camera pose (per-step rotation); cleared when the
   // user grabs the controls so they can take over mid-transition
@@ -2046,6 +2028,8 @@ function AssemblyScene({
   // and the distance eases, so the model never leaves the frame the way a
   // straight-line position lerp can.
   useFrame((_, delta) => {
+    // A turn to a new orientation plays first; framing waits for it.
+    if (buildFrame.isTurning()) return;
     const desired = desiredPoseRef.current;
     if (!desired || !controls) return;
     const alpha = 1 - Math.exp(-delta * 4);
@@ -2087,9 +2071,9 @@ function AssemblyScene({
   // the red tint (+ forced visibility) is the feedback. Auto-framing here
   // yanked the view away every time a component was picked in the components panel.
 
-  // Per-step camera: explicit pose wins; otherwise keep the standing
-  // whole-assembly distance and rotate so the active component and its travel
-  // face the camera — the zoom stays steady, only the view angle changes.
+  // Per-step camera: a saved view wins; otherwise keep the standing distance
+  // and turn toward the action (`frameStepPose`) — the zoom stays steady,
+  // only the view angle changes.
   useEffect(() => {
     const step = steps[activeStepIndex];
     if (!step || !controls) return;
@@ -2111,254 +2095,95 @@ function AssemblyScene({
       [...hiddenSet].sort().join(","),
       carryInKey,
       pathUnitsKey,
+      // Not the orientation: a turn plays under a still camera, and re-framing
+      // after it swings the camera along and visibly undoes the turn.
       isolateNodeIds?.length ?? 0
     ].join("|");
     if (framingKey === lastFramedKeyRef.current) return;
     lastFramedKeyRef.current = framingKey;
 
-    // Manual "Set view" pose — applied verbatim, fov included.
-    if (step.camera && !("source" in step.camera)) {
+    // A saved view is applied verbatim, fov included. It is stored in the
+    // bench frame (see the capture above), so it stays put when the build
+    // turns; a plan hint is about the parts and stays in the model frame.
+    const savedView = step.camera;
+    if (isSavedView(savedView)) {
       desiredPoseRef.current = {
-        position: new Vector3(...step.camera.position),
-        target: new Vector3(...step.camera.target)
+        position: buildFrame.fromBench(
+          new Vector3(...savedView.position),
+          orientation
+        ),
+        target: buildFrame.fromBench(
+          new Vector3(...savedView.target),
+          orientation
+        )
       };
       if (camera instanceof PerspectiveCamera) {
-        camera.fov = step.camera.fov;
+        camera.fov = savedView.fov;
         camera.updateProjectionMatrix();
       }
       return;
     }
 
-    // Planner-baked view direction: chosen at plan time with sight lines
-    // against the real triangles of everything installed earlier — the AABB
-    // scoring below can't tell a hollow container's open top from its wall.
-    // Target, distance, and the frustum fit still happen live.
-    const planDirection =
-      step.camera && "source" in step.camera
-        ? new Vector3(...step.camera.direction).normalize()
-        : null;
-
-    if (step.componentNodeIds.length === 0) return;
-
-    const assemblyBox = getAssemblyBox().clone();
-    if (assemblyBox.isEmpty()) return;
-
-    const componentBox = new Box3();
-    for (const nodeId of step.componentNodeIds) {
-      const seated = seatedBoundsById?.get(nodeId);
-      if (seated) {
-        componentBox.expandByPoint(
-          new Vector3(...(seated.bbox.min as [number, number, number]))
-        );
-        componentBox.expandByPoint(
-          new Vector3(...(seated.bbox.max as [number, number, number]))
-        );
+    // Where the camera looks from once any turn to this step's orientation
+    // has landed — the camera itself may still be in the previous frame.
+    const currentDirection = buildFrame.keptDirection(orientation);
+    if (!currentDirection) return;
+    const boxOf = (nodeIds: string[]) =>
+      seatedBox(nodeIds, seatedBoundsById, nodesById);
+    const stepComponents = new Set(step.componentNodeIds);
+    const occluders: FramingOccluder[] = [];
+    for (const leaf of leafBounds ?? []) {
+      if (stepComponents.has(leaf.nodeId) || hiddenSet.has(leaf.nodeId)) {
         continue;
       }
-      const node = nodesById.get(nodeId);
-      if (node) componentBox.expandByObject(node);
-    }
-    if (componentBox.isEmpty()) return;
-    // A carried-in unit starts beside the build: keep that spot in frame too.
-    const joinShift = carryIn ? new Vector3(...carryIn.offset) : null;
-    assemblyBox.union(componentBox);
-    if (joinShift) {
-      assemblyBox.union(componentBox.clone().translate(joinShift));
-    }
-    // A unit on its own path starts wherever its path begins, turned as its
-    // first waypoint turns it.
-    for (const unit of pathUnits) {
-      const unitBox = new Box3();
-      for (const nodeId of unit.nodeIds) {
-        const seated = seatedBoundsById?.get(nodeId);
-        if (!seated) continue;
-        unitBox.expandByPoint(
-          new Vector3(...(seated.bbox.min as [number, number, number]))
-        );
-        unitBox.expandByPoint(
-          new Vector3(...(seated.bbox.max as [number, number, number]))
-        );
-      }
-      const startBox = unitBox.isEmpty()
-        ? null
-        : startPoseBounds(unitBox, unit.motion);
-      if (startBox) assemblyBox.union(startBox);
-    }
-    const center = assemblyBox.getCenter(new Vector3());
-    const radius = assemblyBox.getSize(new Vector3()).length() / 2;
-    const fov = camera instanceof PerspectiveCamera ? camera.fov : 45;
-    const distance = Math.max(
-      (radius / Math.tan(((fov / 2) * Math.PI) / 180)) * 1.25,
-      radius * 2
-    );
-    const componentCenter = componentBox.getCenter(new Vector3());
-
-    // Aim mostly at the assembly (context) with a nudge toward the component
-    const target = center.clone().lerp(componentCenter, 0.3);
-
-    // Where the action happens: the seated body (corners, so a mostly-hidden
-    // part scores worse than a clear one) plus the full travel — start,
-    // midpoint, and seat.
-    const motionDirection = insertionDirection(step.motion);
-    const startOffset = insertionStartOffset(step.motion);
-    const boxCorner = (box: Box3, i: number, offset: Vector3 | null) => {
-      const corner = new Vector3(
-        i & 1 ? box.max.x : box.min.x,
-        i & 2 ? box.max.y : box.min.y,
-        i & 4 ? box.max.z : box.min.z
+      // Invisible geometry must not push the camera around.
+      const weight = occluderWeight(
+        stepIndexByNode.get(leaf.nodeId),
+        activeStepIndex,
+        futureMode,
+        installedMode
       );
-      return offset ? corner.add(offset) : corner;
-    };
-    const lookPoints = [componentCenter];
-    for (let i = 0; i < 8; i++) {
-      lookPoints.push(boxCorner(componentBox, i, null));
-      if (joinShift) lookPoints.push(boxCorner(componentBox, i, joinShift));
+      if (weight === null) continue;
+      occluders.push({
+        min: new Vector3().fromArray(leaf.bbox.min),
+        max: new Vector3().fromArray(leaf.bbox.max),
+        weight
+      });
     }
-    if (startOffset) {
-      lookPoints.push(
-        componentCenter.clone().addScaledVector(startOffset, 0.5)
-      );
-      lookPoints.push(componentCenter.clone().add(startOffset));
-    }
-
-    const up = camera.up.clone().normalize();
-    let bestDirection: Vector3;
-    if (planDirection && planDirection.lengthSq() > 1e-6) {
-      bestDirection = planDirection;
-    } else {
-      // Live fallback (manual/edited steps, plans without directions):
-      // AABB-scored candidates. Coarse — it can't see through hollow
-      // geometry — which is exactly why generated steps carry a baked
-      // direction instead.
-      const stepComponents = new Set(step.componentNodeIds);
-      const occluders: { min: Vector3; max: Vector3; weight: number }[] = [];
-      for (const leaf of leafBounds ?? []) {
-        if (stepComponents.has(leaf.nodeId)) continue;
-        if (hiddenSet.has(leaf.nodeId)) continue;
-        const leafStep = stepIndexByNode.get(leaf.nodeId);
-        // Invisible geometry must not push the camera around.
-        const weight = occluderWeight(
-          leafStep,
-          activeStepIndex,
-          futureMode,
-          installedMode
-        );
-        if (weight === null) continue;
-        occluders.push({
-          min: new Vector3(...(leaf.bbox.min as [number, number, number])),
-          max: new Vector3(...(leaf.bbox.max as [number, number, number])),
-          weight
-        });
-      }
-
-      // Candidate view directions: elevation rings around the up axis, plus
-      // the current view. Pick the one that sees the action with the fewest
-      // components in the way, preferring lateral travel and small turns.
-      let basisU = new Vector3().crossVectors(up, new Vector3(0, 0, 1));
-      if (basisU.lengthSq() < 1e-6) {
-        basisU = new Vector3().crossVectors(up, new Vector3(1, 0, 0));
-      }
-      basisU.normalize();
-      const basisV = new Vector3().crossVectors(up, basisU).normalize();
-
-      const currentDirection = camera.position
-        .clone()
-        .sub(controls.target)
-        .normalize();
-      const candidates: Vector3[] = [];
-      if (currentDirection.lengthSq() > 1e-6) candidates.push(currentDirection);
-      // Third, steeper ring: in dense machines the only clear sight line to a
-      // buried part is often from high above.
-      for (const elevation of [0.3, 0.55, 0.8]) {
-        const horizontal = Math.sqrt(1 - elevation * elevation);
-        for (let i = 0; i < 8; i++) {
-          const azimuth = (i / 8) * Math.PI * 2;
-          candidates.push(
-            new Vector3()
-              .addScaledVector(basisU, Math.cos(azimuth) * horizontal)
-              .addScaledVector(basisV, Math.sin(azimuth) * horizontal)
-              .addScaledVector(up, elevation)
-              .normalize()
-          );
-        }
-      }
-
-      bestDirection = candidates[0] ?? new Vector3(1, 1, 1).normalize();
-      let bestScore = Number.POSITIVE_INFINITY;
-      for (const candidate of candidates) {
-        const eye = target.clone().addScaledVector(candidate, distance);
-        let score = 0;
-        // How much is in the way of seeing the action?
-        for (const point of lookPoints) {
-          for (const occluder of occluders) {
-            if (segmentIntersectsBox(eye, point, occluder.min, occluder.max)) {
-              score += occluder.weight;
-            }
-          }
-        }
-        // Prefer travel running across the screen, not into it
-        if (motionDirection) {
-          score +=
-            4 * Math.max(0, Math.abs(candidate.dot(motionDirection)) - 0.6);
-        }
-        // Prefer small turns from the current view
-        score += 1.75 * (1 - candidate.dot(currentDirection));
-        if (score < bestScore) {
-          bestScore = score;
-          bestDirection = candidate;
-        }
-      }
-    }
-
-    // Guarantee the action is entirely in frame: pan the target (and only
-    // grow the distance when the action genuinely can't fit) so the seated
-    // body plus its travel-start copy sit inside the frustum.
-    let right = new Vector3().crossVectors(up, bestDirection);
-    if (right.lengthSq() < 1e-6) right = new Vector3(1, 0, 0);
-    right.normalize();
-    const trueUp = new Vector3().crossVectors(bestDirection, right).normalize();
-    const actionPoints: Vector3[] = [];
-    for (let i = 0; i < 8; i++) {
-      actionPoints.push(boxCorner(componentBox, i, null));
-      if (joinShift) actionPoints.push(boxCorner(componentBox, i, joinShift));
-      if (startOffset)
-        actionPoints.push(boxCorner(componentBox, i, startOffset));
-    }
-    const rel = new Vector3();
-    const camPoints: Vec3[] = actionPoints.map((point) => {
-      rel.copy(point).sub(target);
-      return [rel.dot(right), rel.dot(trueUp), rel.dot(bestDirection)];
+    const pose = frameStepPose({
+      buildBox: assemblyBox,
+      ownBox: boxOf(carryPlan.ownMovingPartIds),
+      motion: step.motion,
+      pathUnits: carryPlan.pathUnits.map((unit) => ({
+        box: boxOf(unit.nodeIds),
+        motion: unit.motion
+      })),
+      glideStartBox: carryIn
+        ? boxOf(carryIn.nodeIds).translate(new Vector3(...carryIn.offset))
+        : null,
+      occluders,
+      // The step's own up — mid-turn, `camera.up` is still on its way there.
+      up: new Vector3(...upForOrientation(orientation)),
+      currentDirection,
+      turned: !sameOrientation(orientation, IDENTITY_QUAT),
+      planDirection:
+        step.camera && "source" in step.camera
+          ? new Vector3(...step.camera.direction)
+          : null,
+      fov: camera instanceof PerspectiveCamera ? camera.fov : 45,
+      aspect:
+        camera instanceof PerspectiveCamera && camera.aspect > 0
+          ? camera.aspect
+          : 16 / 9
     });
-    const aspect =
-      camera instanceof PerspectiveCamera && camera.aspect > 0
-        ? camera.aspect
-        : 16 / 9;
-    const tanHalfV = Math.tan(((fov / 2) * Math.PI) / 180);
-    const fit = fitFraming(
-      camPoints,
-      tanHalfV * aspect,
-      tanHalfV,
-      0.85,
-      distance
-    );
-    const framedTarget = target
-      .clone()
-      .addScaledVector(right, fit.pan[0])
-      .addScaledVector(trueUp, fit.pan[1]);
-
-    desiredPoseRef.current = {
-      position: framedTarget
-        .clone()
-        .addScaledVector(bestDirection, fit.distance),
-      target: framedTarget
-    };
+    if (pose) desiredPoseRef.current = pose;
   }, [
     steps,
     activeStepIndex,
     nodesById,
     camera,
     controls,
-    getAssemblyBox,
+    assemblyBox,
     leafBounds,
     seatedBoundsById,
     hiddenSet,
@@ -2368,9 +2193,11 @@ function AssemblyScene({
     cameraMode,
     carryIn,
     carryInKey,
-    pathUnits,
+    carryPlan,
     pathUnitsKey,
-    isolateNodeIds
+    isolateNodeIds,
+    orientation,
+    buildFrame
   ]);
 
   // --- Selection -------------------------------------------------------------
@@ -2634,7 +2461,7 @@ function AssemblyScene({
       />
       {isEditingActive && editMotion && onMotionChange && seatedCentroid && (
         <MotionPathEditor
-          key={`${editMotion.stepId}|${editMotion.nodeIds?.[0] ?? "own"}`}
+          key={editSessionKey(editMotion)}
           motion={editMotion.motion}
           seatedPosition={seatedCentroid}
           scale={assemblyDiagonal}
@@ -2648,136 +2475,31 @@ function AssemblyScene({
 }
 
 /**
- * Does the open segment from `origin` to `end` pass through the AABB?
- * Slab clipping; ignores grazing contact right at the endpoint so a box
- * around the look-at point does not count as occluding itself.
+ * Seated world bounds of the nodes: graph.json's, which hold still while the
+ * parts animate; a node missing from the graph is measured live when its
+ * scene node is given. Empty when none resolve.
  */
-function segmentIntersectsBox(
-  origin: Vector3,
-  end: Vector3,
-  min: Vector3,
-  max: Vector3
-): boolean {
-  let tMin = 0;
-  let tMax = 0.98; // stop just short of the look-at point
-  const axes = ["x", "y", "z"] as const;
-  for (const axis of axes) {
-    const delta = end[axis] - origin[axis];
-    if (Math.abs(delta) < 1e-9) {
-      if (origin[axis] < min[axis] || origin[axis] > max[axis]) return false;
+function seatedBox(
+  nodeIds: string[],
+  seatedBoundsById: ReadonlyMap<
+    string,
+    { bbox: { min: number[]; max: number[] } }
+  > | null,
+  nodesById?: Map<string, Object3D>
+): Box3 {
+  const box = new Box3();
+  const point = new Vector3();
+  for (const nodeId of nodeIds) {
+    const seated = seatedBoundsById?.get(nodeId);
+    if (seated) {
+      box.expandByPoint(point.fromArray(seated.bbox.min));
+      box.expandByPoint(point.fromArray(seated.bbox.max));
       continue;
     }
-    let tNear = (min[axis] - origin[axis]) / delta;
-    let tFar = (max[axis] - origin[axis]) / delta;
-    if (tNear > tFar) [tNear, tFar] = [tFar, tNear];
-    tMin = Math.max(tMin, tNear);
-    tMax = Math.min(tMax, tFar);
-    if (tMin > tMax) return false;
+    const node = nodesById?.get(nodeId);
+    if (node) box.expandByObject(node);
   }
-  return true;
-}
-
-/**
- * Bounds of a set at the start of its motion: the seated box shifted by the
- * start offset, and for a `waypoints` motion first turned about its center as
- * the first waypoint turns it. Null when the motion has no start offset.
- */
-function startPoseBounds(
-  seated: Box3,
-  motion: AssemblyStep["motion"]
-): Box3 | null {
-  const startOffset = insertionStartOffset(motion);
-  if (!startOffset) return null;
-  const first = motion.type === "waypoints" ? motion.waypoints[0] : undefined;
-  if (!first) return seated.clone().translate(startOffset);
-  const rotation = new Quaternion(...first.rotation).normalize();
-  const center = seated.getCenter(new Vector3());
-  const turned = new Box3();
-  for (let i = 0; i < 8; i++) {
-    turned.expandByPoint(
-      new Vector3(
-        i & 1 ? seated.max.x : seated.min.x,
-        i & 2 ? seated.max.y : seated.min.y,
-        i & 4 ? seated.max.z : seated.min.z
-      )
-        .sub(center)
-        .applyQuaternion(rotation)
-        .add(center)
-        .add(startOffset)
-    );
-  }
-  return turned;
-}
-
-/**
- * Where a component starts relative to its seated pose for the given insertion
- * motion. Null when the motion does not translate the component.
- */
-function insertionStartOffset(motion: AssemblyStep["motion"]): Vector3 | null {
-  switch (motion.type) {
-    case "linear": {
-      const direction = new Vector3(...motion.direction).normalize();
-      return direction.multiplyScalar(-motion.distance);
-    }
-    case "L": {
-      const offset = new Vector3();
-      for (const segment of motion.segments) {
-        const direction = new Vector3(...segment.direction).normalize();
-        offset.addScaledVector(direction, -segment.distance);
-      }
-      return offset;
-    }
-    case "helix": {
-      const axis = new Vector3(...motion.axis).normalize();
-      const travel = motion.approach + motion.pitch * motion.turns;
-      return axis.multiplyScalar(-travel);
-    }
-    case "waypoints": {
-      const first = motion.waypoints[0];
-      return first ? new Vector3(...first.offset) : null;
-    }
-    default:
-      return null;
-  }
-}
-
-/**
- * The dominant travel direction of an insertion motion (used to pick a
- * camera angle where the motion reads laterally). Null for motions that
- * do not translate the component.
- */
-function insertionDirection(motion: AssemblyStep["motion"]): Vector3 | null {
-  switch (motion.type) {
-    case "linear":
-      return new Vector3(...motion.direction).normalize();
-    case "L": {
-      let longest: Vector3 | null = null;
-      let longestDistance = 0;
-      for (const segment of motion.segments) {
-        if (Math.abs(segment.distance) > longestDistance) {
-          longestDistance = Math.abs(segment.distance);
-          longest = new Vector3(...segment.direction);
-        }
-      }
-      return longest ? longest.normalize() : null;
-    }
-    case "helix":
-      return new Vector3(...motion.axis).normalize();
-    case "waypoints": {
-      // The longest leg, in travel order (start → seat).
-      let longest: Vector3 | null = null;
-      for (let i = 1; i < motion.waypoints.length; i++) {
-        const from = motion.waypoints[i - 1];
-        const to = motion.waypoints[i];
-        if (!from || !to) continue;
-        const leg = new Vector3(...to.offset).sub(new Vector3(...from.offset));
-        if (leg.lengthSq() > (longest?.lengthSq() ?? 1e-12)) longest = leg;
-      }
-      return longest ? longest.normalize() : null;
-    }
-    default:
-      return null;
-  }
+  return box;
 }
 
 function formatTime(seconds: number): string {
@@ -3158,31 +2880,19 @@ const CARRY_IN_GAP_FRACTION = 0.25;
 /** Stable empty list, so memos keyed on "no ids" don't churn. */
 const NO_NODE_IDS: string[] = [];
 
+const NO_CARRY: CarryPlan = {
+  pathUnits: [],
+  glidingPartIds: [],
+  ownMovingPartIds: [],
+  joinsOnOwnPath: false
+};
+
+const NO_TIMING: StepClipTiming = stepClipTiming({ motion: { type: "none" } });
+
 type PathTool = "move" | "rotate";
 
-const NO_PATH_UNITS: PathUnit[] = [];
-
-/** Seated world bounds of the given nodes, from graph.json; null when none resolve. */
-function unionBounds(
-  nodeIds: string[],
-  nodesById: ReadonlyMap<string, { bbox: { min: Vec3; max: Vec3 } }>
-): { min: Vec3; max: Vec3 } | null {
-  let min: Vec3 | null = null;
-  let max: Vec3 | null = null;
-  for (const nodeId of nodeIds) {
-    const node = nodesById.get(nodeId);
-    if (!node) continue;
-    if (!min || !max) {
-      min = [...node.bbox.min];
-      max = [...node.bbox.max];
-      continue;
-    }
-    for (let axis = 0; axis < 3; axis++) {
-      min[axis] = Math.min(min[axis] ?? 0, node.bbox.min[axis] ?? 0);
-      max[axis] = Math.max(max[axis] ?? 0, node.bbox.max[axis] ?? 0);
-    }
-  }
-  return min && max ? { min, max } : null;
+function editSessionKey(edit: EditMotion): string {
+  return `${edit.stepId}|${edit.nodeIds?.[0] ?? "own"}`;
 }
 
 function BoxesIcon() {

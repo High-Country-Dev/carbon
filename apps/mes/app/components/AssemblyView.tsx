@@ -52,6 +52,8 @@ import type { AssemblyStep, CameraPose, Fastener } from "@carbon/viewer";
 import {
   AssemblyPlayer,
   buildSubAssemblyPlan,
+  isOrientation,
+  isPlanFlagged,
   isPlayableMotion
 } from "@carbon/viewer";
 import { ModelPreview } from "@carbon/viewer/model-preview";
@@ -208,6 +210,8 @@ type AssemblyPlayback = {
     isSubAssembly: boolean;
     motion: Json;
     camera: Json | null;
+    /** The build's orientation from this step on (unit quaternion) */
+    orientation: Json | null;
     fastener: Json | null;
     durationSeconds: number | null;
     warnings: Json | null;
@@ -219,7 +223,6 @@ const SUB_ASSEMBLY_PARAM = "subAssembly";
 
 // DB row → @carbon/viewer AssemblyStep.
 function toViewerStep(step: AssemblyPlayback["steps"][number]): AssemblyStep {
-  const warnings = step.warnings as { flagged?: boolean } | null;
   return {
     id: step.id,
     title: step.title,
@@ -231,9 +234,11 @@ function toViewerStep(step: AssemblyPlayback["steps"][number]): AssemblyStep {
     isSubAssembly: step.isSubAssembly,
     motion: isPlayableMotion(step.motion) ? step.motion : { type: "none" },
     camera: (step.camera as CameraPose | null) ?? null,
+    orientation: isOrientation(step.orientation) ? step.orientation : null,
     fastener: (step.fastener as Fastener | null) ?? null,
     durationSeconds: step.durationSeconds,
-    flagged: warnings?.flagged === true ? true : undefined
+    // A hand-drawn path overrides the planner's flag, as in the ERP editor.
+    flagged: isPlanFlagged(step.warnings, step.motion) ? true : undefined
   };
 }
 

@@ -69,7 +69,7 @@ msgstr "{0, plural, one {# ऑपरेशन के लिए कोई सम�
 
 #. placeholder {0}: issues.length
 msgid "{0, plural, one {# record needs attention} other {# records need attention}}"
-msgstr ""
+msgstr "{0, plural, one {# रिकॉर्ड पर ध्यान देने की ज़रूरत है} other {# रिकॉर्ड्स पर ध्यान देने की ज़रूरत है}}"
 
 #. placeholder {0}: totalScopeRows(run.violationRowsByTable)
 msgid "{0, plural, one {# row links to data outside this company, so a safety copy of your current data can't be made.} other {# rows link to data outside this company, so a safety copy of your current data can't be made.}}"
@@ -405,7 +405,7 @@ msgid "{count} units"
 msgstr "{count} इकाइयाँ"
 
 msgid "{created} created, {updated} updated."
-msgstr ""
+msgstr "{created} बनाए गए, {updated} अपडेट किए गए."
 
 msgid "{days}d"
 msgstr "{days}d"
@@ -432,7 +432,7 @@ msgid "{from}–{to} of {count} operations"
 msgstr "{count} ऑपरेशन में से {from}–{to}"
 
 msgid "{hidden, plural, one {And # more record.} other {And # more records.}}"
-msgstr ""
+msgstr "{hidden, plural, one {और # रिकॉर्ड.} other {और # रिकॉर्ड्स.}}"
 
 msgid "{hiddenCount} more: {hiddenNames}"
 msgstr "और {hiddenCount}: {hiddenNames}"
@@ -9495,6 +9495,9 @@ msgstr "बेड़े की इकाई"
 msgid "Fleet Units"
 msgstr "फ्लीट इकाई"
 
+msgid "Flip over"
+msgstr "पलटें"
+
 msgid "For <0/>"
 msgstr "के लिए <0/>"
 
@@ -10227,6 +10230,9 @@ msgstr "नमूना आकार कैसे तय किया जात�
 
 msgid "How the unit price of each quantity was calculated."
 msgstr "प्रत्येक मात्रा की इकाई मूल्य की गणना कैसे की गई।"
+
+msgid "How the whole build is turned on a step, such as flipped to fit parts on its underside. Later steps of the same build keep it until a step turns the build again."
+msgstr "किसी चरण में पूरी असेंबली को किस तरह घुमाया गया है, जैसे नीचे की ओर लगे पार्ट्स के लिए उसे पलटना। उसी असेंबली के बाद के चरण तब तक यही स्थिति रखते हैं, जब तक कोई चरण असेंबली को फिर से न घुमाए."
 
 msgid "How this gauge is used — Standard (regular checks) or Master (calibrates other gauges)."
 msgstr "यह गेज कैसे उपयोग किया जाता है — मानक (नियमित जांच) या मास्टर (अन्य गेज को कैलिब्रेट करता है)।"
@@ -11389,10 +11395,10 @@ msgstr "अंतिम नाम"
 
 #. placeholder {0}: record.error
 msgid "Last push {when} failed: {0}"
-msgstr ""
+msgstr "अंतिम पुश ({when}) विफल हुआ: {0}"
 
 msgid "Last push {when}:"
-msgstr ""
+msgstr "अंतिम पुश ({when}):"
 
 msgid "Last Quarter"
 msgstr "पिछली तिमाही"
@@ -11401,7 +11407,7 @@ msgid "Last Run"
 msgstr "अंतिम रन"
 
 msgid "Last scheduled push {when}:"
-msgstr ""
+msgstr "अंतिम निर्धारित पुश ({when}):"
 
 msgid "Last synced: <0/>"
 msgstr "अंतिम सिंक: <0/>"
@@ -12551,7 +12557,7 @@ msgid "More overtime"
 msgstr "अधिक ओवरटाइम"
 
 msgid "More records are waiting. Push again to continue."
-msgstr ""
+msgstr "और रिकॉर्ड प्रतीक्षा में हैं। जारी रखने के लिए फिर से पुश करें."
 
 msgid "Morning, {name}."
 msgstr "सुबह, {name}।"
@@ -12566,7 +12572,7 @@ msgid "Motion"
 msgstr "गति"
 
 msgid "Mount has {matches} records with this identifier. Delete or merge the extra ones in Mount, then push again."
-msgstr ""
+msgstr "Mount में इस पहचानकर्ता वाले {matches} रिकॉर्ड हैं। Mount में अतिरिक्त रिकॉर्ड हटाएँ या मर्ज करें, फिर से पुश करें."
 
 msgid "Move"
 msgstr "स्थानांतरित करें"
@@ -13284,7 +13290,7 @@ msgid "No comments yet. Be the first to add a comment."
 msgstr "अभी कोई टिप्पणी नहीं है। पहली टिप्पणी जोड़ने वाले बनें।"
 
 msgid "No companies match \"{query}\""
-msgstr ""
+msgstr "कोई कंपनी “{query}” से मेल नहीं खाती"
 
 msgid "No completed jobs within range"
 msgstr "रेंज में कोई पूर्ण जॉब नहीं"
@@ -14069,6 +14075,12 @@ msgstr "हाथ में: {before} से {after}"
 msgid "On Hold"
 msgstr "होल्ड पर"
 
+msgid "On its side"
+msgstr "करवट पर"
+
+msgid "On its side, from step {orientationSource}"
+msgstr "चरण {orientationSource} से करवट पर"
+
 msgid "On Jobs"
 msgstr "जॉब पर"
 
@@ -14589,6 +14601,9 @@ msgstr "आदेश"
 
 msgid "Orders submitted"
 msgstr "ऑर्डर जमा किए गए"
+
+msgid "Orientation"
+msgstr "दिशा"
 
 msgid "Origin"
 msgstr "मूल"
@@ -18255,7 +18270,7 @@ msgid "Search fields..."
 msgstr "फ़ील्ड खोजें..."
 
 msgid "Search for a company"
-msgstr ""
+msgstr "कंपनी खोजें"
 
 msgid "Search for existing or create a new one"
 msgstr "मौजूदा को खोजें या नया बनाएं"
@@ -19425,6 +19440,12 @@ msgstr "विशिष्ट आइटम"
 msgid "Spend by supplier, item, or category — your biggest cost drivers"
 msgstr "आपूर्तिकर्ता, आइटम, या श्रेणी द्वारा व्यय — आपके सबसे बड़े लागत ड्राइवर"
 
+msgid "Spin left"
+msgstr "बाईं ओर घुमाएँ"
+
+msgid "Spin right"
+msgstr "दाईं ओर घुमाएँ"
+
 msgid "Split"
 msgstr "विभाजित करें"
 
@@ -19520,7 +19541,7 @@ msgid "Started"
 msgstr "शुरू किया गया"
 
 msgid "Starting"
-msgstr ""
+msgstr "शुरू हो रहा है"
 
 msgid "Starting…"
 msgstr "शुरू हो रहा है…"
@@ -20894,6 +20915,9 @@ msgstr "आप अपने स्टॉक को जिन सामग्र�
 msgid "The model is still loading."
 msgstr "मॉडल अभी भी लोड हो रहा है।"
 
+msgid "The model isn't ready yet"
+msgstr "मॉडल अभी तैयार नहीं है"
+
 msgid "The month your financial year begins; periods are numbered from this month."
 msgstr "वह महीना जब आपका वित्तीय वर्ष शुरू होता है; अवधियों को इस महीने से गिना जाता है।"
 
@@ -21047,16 +21071,16 @@ msgid "The purchase order"
 msgstr "क्रय आदेश"
 
 msgid "The push to Mount did not start. Try again."
-msgstr ""
+msgstr "Mount पर पुश शुरू नहीं हो सका। फिर से कोशिश करें."
 
 msgid "The push to Mount failed"
-msgstr ""
+msgstr "Mount पर पुश विफल रहा"
 
 msgid "The push to Mount finished"
-msgstr ""
+msgstr "Mount पर पुश पूरा हुआ"
 
 msgid "The push to Mount finished. Some records need attention"
-msgstr ""
+msgstr "Mount पर पुश पूरा हुआ। कुछ रिकॉर्ड पर ध्यान देने की ज़रूरत है"
 
 msgid "The quantity breakpoints this line is priced at; each column carries its own per-unit price for buyer–supplier negotiation and for converting to downstream documents."
 msgstr "मात्रा विभाजन बिंदु जिन पर इस पंक्ति की कीमत है; प्रत्येक कॉलम क्रेता-आपूर्तिकर्ता बातचीत और डाउनस्ट्रीम दस्तावेजों में परिवर्तित करने के लिए अपनी स्वयं की प्रति-यूनिट कीमत रखता है।"
@@ -21892,6 +21916,12 @@ msgstr "टाइमर चल रहा है"
 msgid "Timezone"
 msgstr "समय क्षेत्र"
 
+msgid "Tip away from you"
+msgstr "अपनी ओर से दूर झुकाएँ"
+
+msgid "Tip toward you"
+msgstr "अपनी ओर झुकाएँ"
+
 msgid "Title"
 msgstr "शीर्षक"
 
@@ -22272,7 +22302,7 @@ msgid "Triggers"
 msgstr "ट्रिगर"
 
 msgid "Try a different name."
-msgstr ""
+msgstr "कोई दूसरा नाम आज़माएँ."
 
 msgid "Tuesday"
 msgstr "मंगलवार"
@@ -22764,6 +22794,15 @@ msgstr "अपलोड हो रहा है…"
 
 msgid "Upon clicking Convert, parts will be created with the following internal part numbers:"
 msgstr "परिवर्तित करें क्लिक करने पर, पार्ट्स निम्नलिखित आंतरिक पार्ट संख्या के साथ बनाए जाएंगे:"
+
+msgid "Upright"
+msgstr "सीधा"
+
+msgid "Upside down"
+msgstr "उल्टा"
+
+msgid "Upside down, from step {orientationSource}"
+msgstr "चरण {orientationSource} से उल्टा"
 
 msgid "URL"
 msgstr "यूआरएल"

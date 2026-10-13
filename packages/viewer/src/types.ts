@@ -147,6 +147,12 @@ export type AssemblyStep = {
    * `null`/absent = it joins the main build at the header itself.
    */
   usedInStepId?: string | null;
+  /**
+   * The build's orientation from this step on (see `orientation.ts`): a unit
+   * quaternion turning the model frame into the bench frame. `null`/absent =
+   * the same as the previous step in this build.
+   */
+  orientation?: Quat | null;
 };
 
 /** One node of the assembly tree in graph.json. */

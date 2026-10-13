@@ -11,17 +11,11 @@ import {
   Button,
   ClientOnly,
   Spinner,
-  toast,
   useInterval,
   useMode
 } from "@carbon/react";
 import { redirect } from "@carbon/utils";
-import type {
-  AssemblyGraph,
-  AssemblyPlayerHandle,
-  CameraPose,
-  Motion
-} from "@carbon/viewer";
+import type { AssemblyGraph, AssemblyPlayerHandle } from "@carbon/viewer";
 import {
   AssemblyPlayer,
   buildSubAssemblyPlan,
@@ -65,6 +59,8 @@ import AssemblyInstructionHeader from "~/modules/production/ui/Assemblies/Assemb
 import AssemblyInstructionProperties from "~/modules/production/ui/Assemblies/AssemblyInstructionProperties";
 import { SUB_ASSEMBLY_PARAM } from "~/modules/production/ui/Assemblies/AssemblyStepList";
 import { ModelConvertProgress } from "~/modules/production/ui/Assemblies/ModelConvertProgress";
+import { useBuildOrientation } from "~/modules/production/ui/Assemblies/useBuildOrientation";
+import { useStepMotionEditor } from "~/modules/production/ui/Assemblies/useStepMotionEditor";
 import { detailBreadcrumb, type Handle } from "~/utils/handle";
 import { getPrivateUrl, path } from "~/utils/path";
 
@@ -319,7 +315,7 @@ export default function AssemblyInstructionRoute() {
   }, [hiddenFetcher.state, hiddenFetcher.data]);
 
   // The selected step shows its hidden draft before the autosave round-trips.
-  const viewerSteps = useMemo(
+  const savedViewerSteps = useMemo(
     () =>
       steps.map((step) => {
         const viewerStep = toViewerStep(step);
@@ -329,6 +325,21 @@ export default function AssemblyInstructionRoute() {
       }),
     [steps, draftHiddenNodeIds, selectedStep]
   );
+
+  const playerRef = useRef<AssemblyPlayerHandle>(null);
+  const { viewerSteps, orientation } = useBuildOrientation({
+    id,
+    steps: savedViewerSteps,
+    playerRef
+  });
+  const { editMotion, onMotionChange, leaveEdit, motionEditing, camera } =
+    useStepMotionEditor({
+      id,
+      viewerSteps,
+      playerRef,
+      selectedStepId: selectedStep?.id ?? null,
+      setSelectedStepId
+    });
 
   const subPlan = useMemo(
     () => buildSubAssemblyPlan(viewerSteps),
@@ -447,10 +458,7 @@ export default function AssemblyInstructionRoute() {
       setDraftComponentNodeIds(null);
       setDraftHiddenNodeIds(null);
       setIsAddingComponents(false);
-      // Leave any open motion-path edit session when moving to another step.
-      setEditingStepId(null);
-      setEditingUnitId(null);
-      setDraftMotion(null);
+      leaveEdit();
       // Changing steps drops any isolate — the new step's parts should be visible.
       setFocusedNodeIds([]);
       // Selecting a step makes its components the active selection — red in the
@@ -464,7 +472,7 @@ export default function AssemblyInstructionRoute() {
         setSelectedNodeIds(step.componentNodeIds ?? []);
       }
     },
-    []
+    [leaveEdit]
   );
 
   // Opening a sub-assembly lands on its first step (the player only plays its
@@ -615,124 +623,6 @@ export default function AssemblyInstructionRoute() {
   const cancelPlanFetcher = useFetcher<{ success: boolean }>();
   const retryFetcher = useFetcher<{}>();
 
-  // --- Motion path + camera editing (viewer-driven) ------------------------
-  // The 3D viewer edits the active step's motion path (drag waypoints) and
-  // captures its camera; both autosave via a dedicated partial-update route so
-  // they never round-trip the whole step form. `draftMotion` is the controlled
-  // value the viewer renders while editing.
-  const playerRef = useRef<AssemblyPlayerHandle>(null);
-  const motionFetcher = useFetcher<{ success: boolean }>();
-  const [editingStepId, setEditingStepId] = useState<string | null>(null);
-  // Editing the path of a sub-assembly the step carries in (saved on its
-  // header row) instead of the step's own motion.
-  const [editingUnitId, setEditingUnitId] = useState<string | null>(null);
-  const [draftMotion, setDraftMotion] = useState<Motion | null>(null);
-  const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const pendingMotion = useRef<{ targetId: string; motion: Motion } | null>(
-    null
-  );
-
-  const saveMotion = useCallback(
-    (
-      stepId: string,
-      body: { motion?: Motion; camera?: CameraPose | null; reset?: boolean }
-    ) => {
-      const formData = new FormData();
-      if (body.reset) formData.set("reset", "on");
-      if (body.motion !== undefined) {
-        formData.set("motion", JSON.stringify(body.motion));
-      }
-      if (body.camera !== undefined) {
-        formData.set("camera", JSON.stringify(body.camera));
-      }
-      motionFetcher.submit(formData, {
-        method: "post",
-        action: path.to.assemblyInstructionStepMotion(id, stepId)
-      });
-    },
-    [motionFetcher, id]
-  );
-
-  // The drag autosave waits 400 ms; leaving or switching an edit sends it now.
-  const flushMotionSave = useCallback(() => {
-    if (saveTimer.current) clearTimeout(saveTimer.current);
-    saveTimer.current = null;
-    const pending = pendingMotion.current;
-    pendingMotion.current = null;
-    if (pending) saveMotion(pending.targetId, { motion: pending.motion });
-  }, [saveMotion]);
-
-  const onEditMotion = useCallback(
-    (stepId: string, unitHeaderId?: string) => {
-      flushMotionSave();
-      const edited = viewerSteps.find((s) => s.id === (unitHeaderId ?? stepId));
-      setSelectedStepId(stepId);
-      setEditingStepId(stepId);
-      setEditingUnitId(unitHeaderId ?? null);
-      setDraftMotion(edited?.motion ?? { type: "none" });
-    },
-    [viewerSteps, flushMotionSave]
-  );
-
-  const onStopEditMotion = useCallback(() => {
-    flushMotionSave();
-    setEditingStepId(null);
-    setEditingUnitId(null);
-    setDraftMotion(null);
-  }, [flushMotionSave]);
-
-  const onMotionChange = useCallback(
-    (stepId: string, motion: Motion) => {
-      setDraftMotion(motion);
-      // A sub-assembly's path lives on its header row.
-      pendingMotion.current = { targetId: editingUnitId ?? stepId, motion };
-      if (saveTimer.current) clearTimeout(saveTimer.current);
-      saveTimer.current = setTimeout(flushMotionSave, 400);
-    },
-    [flushMotionSave, editingUnitId]
-  );
-
-  const onResetMotion = useCallback(
-    (stepId: string) => {
-      // A drag still waiting to save on this row must not land after the reset.
-      if (pendingMotion.current?.targetId === stepId) {
-        if (saveTimer.current) clearTimeout(saveTimer.current);
-        saveTimer.current = null;
-        pendingMotion.current = null;
-      } else {
-        flushMotionSave();
-      }
-      saveMotion(stepId, { reset: true });
-    },
-    [saveMotion, flushMotionSave]
-  );
-
-  const onSetCamera = useCallback(
-    (stepId: string) => {
-      const pose = playerRef.current?.captureCameraPose();
-      if (!pose) {
-        toast.error("The model isn't ready yet");
-        return;
-      }
-      saveMotion(stepId, { camera: pose });
-    },
-    [saveMotion]
-  );
-
-  const onClearCamera = useCallback(
-    (stepId: string) => saveMotion(stepId, { camera: null }),
-    [saveMotion]
-  );
-
-  const isEditingSelected =
-    editingStepId !== null && selectedStep?.id === editingStepId;
-  const isEditingSelectedMotion = isEditingSelected && editingUnitId === null;
-  const editingUnitPartIds = useMemo(
-    () =>
-      editingUnitId ? subAssemblyPartIds(viewerSteps, editingUnitId) : null,
-    [editingUnitId, viewerSteps]
-  );
-
   return (
     <PanelProvider key={id}>
       <div className="flex flex-col h-[calc(100dvh-var(--topbar-height)-var(--content-inset))] overflow-hidden w-full">
@@ -821,17 +711,7 @@ export default function AssemblyInstructionRoute() {
                           highlightedNodeIds={selectedNodeIds}
                           focusedNodeIds={focusedNodeIds}
                           readOnly={isDisabled}
-                          editMotion={
-                            editingStepId && isEditingSelected && draftMotion
-                              ? {
-                                  stepId: editingStepId,
-                                  motion: draftMotion,
-                                  ...(editingUnitPartIds
-                                    ? { nodeIds: editingUnitPartIds }
-                                    : {})
-                                }
-                              : null
-                          }
+                          editMotion={editMotion}
                           onMotionChange={onMotionChange}
                           units={namedUnits}
                           suppressFallbackMotions={isPlanning}
@@ -903,13 +783,9 @@ export default function AssemblyInstructionRoute() {
                   onRemoveComponents={onRemoveComponents}
                   hiddenNodeIds={selectedHiddenNodeIds}
                   onSetHiddenComponents={onSetHiddenComponents}
-                  isEditingMotion={isEditingSelectedMotion}
-                  editingUnitId={isEditingSelected ? editingUnitId : null}
-                  onEditMotion={onEditMotion}
-                  onStopEditMotion={onStopEditMotion}
-                  onResetMotion={onResetMotion}
-                  onSetCamera={onSetCamera}
-                  onClearCamera={onClearCamera}
+                  motionEditing={motionEditing}
+                  camera={camera}
+                  orientation={orientation}
                   stepMaterials={selectedStepMaterials}
                   stepSlides={selectedStepSlides}
                   stepTools={selectedStepTools}
