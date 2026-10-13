@@ -17,14 +17,18 @@ const IDENTITY = new Quaternion();
 // Reused every frame so the turn allocates nothing.
 const SCRATCH_DELTA = new Quaternion();
 const SCRATCH_STEP = new Quaternion();
+const SCRATCH_INVERSE = new Quaternion();
 
 export type BuildFrame = {
   /** A turn to a new orientation is playing: playback and framing wait for it. */
   isTurning: () => boolean;
-  /** A model-frame point as seen on the bench (where the viewer stands), in place. */
-  toBench: (point: Vector3) => Vector3;
-  /** A bench-frame point in the model frame of a build turned by `orientation`, in place. */
-  fromBench: (point: Vector3, orientation: Quat) => Vector3;
+  /**
+   * A model-frame point as seen on the bench (where the viewer stands), in
+   * place. `orientation` defaults to the one on screen now.
+   */
+  toBench: (point: Vector3, orientation?: Quat) => Vector3;
+  /** The inverse of `toBench`, in place. */
+  fromBench: (point: Vector3, orientation?: Quat) => Vector3;
   /**
    * The camera's current bench direction (target → eye, unit), in the model
    * frame of `orientation`: where it looks from once a turn to it lands.
@@ -169,13 +173,27 @@ export function useBuildFrame({
     return frame !== null && !frame.applied.equals(frame.to);
   }, []);
   const toBench = useCallback(
-    (point: Vector3) =>
-      turnAbout(point, frameRef.current?.applied ?? IDENTITY, pivotRef.current),
+    (point: Vector3, orientation?: Quat) =>
+      turnAbout(
+        point,
+        orientation
+          ? toQuaternion(orientation)
+          : (frameRef.current?.applied ?? IDENTITY),
+        pivotRef.current
+      ),
     []
   );
   const fromBench = useCallback(
-    (point: Vector3, target: Quat) =>
-      turnAbout(point, toQuaternion(target).invert(), pivotRef.current),
+    (point: Vector3, orientation?: Quat) =>
+      turnAbout(
+        point,
+        SCRATCH_INVERSE.copy(
+          orientation
+            ? toQuaternion(orientation)
+            : (frameRef.current?.applied ?? IDENTITY)
+        ).invert(),
+        pivotRef.current
+      ),
     []
   );
   const keptDirection = useCallback(

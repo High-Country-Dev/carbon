@@ -992,6 +992,8 @@ type MaterialOverrides = {
 // the transition allocates nothing.
 const SCRATCH_CURRENT_OFFSET = new Vector3();
 const SCRATCH_DESIRED_OFFSET = new Vector3();
+const SCRATCH_DESIRED_POSITION = new Vector3();
+const SCRATCH_DESIRED_TARGET = new Vector3();
 
 const HIGHLIGHT_COLOR = 0x3b82f6;
 // Selection is always red — both an in-scene click selection ("selected") and a
@@ -1983,7 +1985,9 @@ function AssemblyScene({
   }, [scene, controls, frameBox, assemblyBox]);
 
   // Smoothly approached camera pose (per-step rotation); cleared when the
-  // user grabs the controls so they can take over mid-transition
+  // user grabs the controls so they can take over mid-transition. Held in the
+  // bench frame, like the camera: a model-frame target went stale when the
+  // build turned before the camera reached it, and dragged the turn back.
   const desiredPoseRef = useRef<{ position: Vector3; target: Vector3 } | null>(
     null
   );
@@ -2030,8 +2034,16 @@ function AssemblyScene({
   useFrame((_, delta) => {
     // A turn to a new orientation plays first; framing waits for it.
     if (buildFrame.isTurning()) return;
-    const desired = desiredPoseRef.current;
-    if (!desired || !controls) return;
+    const desiredBench = desiredPoseRef.current;
+    if (!desiredBench || !controls) return;
+    const desired = {
+      position: buildFrame.fromBench(
+        SCRATCH_DESIRED_POSITION.copy(desiredBench.position)
+      ),
+      target: buildFrame.fromBench(
+        SCRATCH_DESIRED_TARGET.copy(desiredBench.target)
+      )
+    };
     const alpha = 1 - Math.exp(-delta * 4);
 
     controls.target.lerp(desired.target, alpha);
@@ -2108,14 +2120,8 @@ function AssemblyScene({
     const savedView = step.camera;
     if (isSavedView(savedView)) {
       desiredPoseRef.current = {
-        position: buildFrame.fromBench(
-          new Vector3(...savedView.position),
-          orientation
-        ),
-        target: buildFrame.fromBench(
-          new Vector3(...savedView.target),
-          orientation
-        )
+        position: new Vector3(...savedView.position),
+        target: new Vector3(...savedView.target)
       };
       if (camera instanceof PerspectiveCamera) {
         camera.fov = savedView.fov;
@@ -2176,7 +2182,12 @@ function AssemblyScene({
           ? camera.aspect
           : 16 / 9
     });
-    if (pose) desiredPoseRef.current = pose;
+    if (pose) {
+      desiredPoseRef.current = {
+        position: buildFrame.toBench(pose.position, orientation),
+        target: buildFrame.toBench(pose.target, orientation)
+      };
+    }
   }, [
     steps,
     activeStepIndex,
