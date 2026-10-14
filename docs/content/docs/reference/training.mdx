@@ -1,9 +1,9 @@
 ---
 title: Training
-description: Training programs, quiz questions, group assignments, per-period completion tracking, and the weekly reminder digest.
+description: Training programs, PDF guides, quiz questions, external certifications, group assignments, per-period completion tracking, and the weekly reminder digest.
 ---
 
-**Training** manages required courses, employee-group assignments, and completion records. A training program contains rich content and an optional quiz. Carbon tracks completion for each employee and period, sends weekly reminders for outstanding assignments, and allows managers to record manual completion. Training belongs to the [resources](/docs/reference/work-centers) area and uses the `resources` permission.
+**Training** manages required courses, employee-group assignments, and completion records. A training program contains rich content, an optional PDF guide, and either a quiz or, for training taken outside Carbon, a certificate upload. Carbon tracks completion for each employee and period, sends weekly reminders for outstanding assignments, and allows managers to record manual completion. Training belongs to the [resources](/docs/reference/work-centers) area and uses the `resources` permission.
 
 For example, create a "Lockout/Tagout" training with type **"Mandatory"** and frequency **"Annual"**, then assign it to the "Machinists" group. Each group member remains **"Pending"** for the current year until completion and receives a Sunday reminder while outstanding.
 
@@ -11,12 +11,16 @@ For example, create a "Lockout/Tagout" training with type **"Mandatory"** and fr
 
 Each training is a row in the `training` table (`packages/database/supabase/migrations/20251205021915_training.sql:18`). The create form requires only a **Name** (`apps/erp/app/modules/resources/ui/Training/TrainingForm.tsx:76`). Configure the remaining fields in the **Properties** panel (`apps/erp/app/modules/resources/ui/Training/TrainingProperties.tsx`), which saves each change through a bulk-update action.
 
+<Screenshot label="Training detail page: the Questions list on the left, the PDF Guide and Content cards in the middle, and the Properties panel on the right with the External Certification switch" caption="Questions on the left, the guide and content in the middle, properties on the right." />
+
 <FieldTable>
 <Field name="name" required>The training's title.</Field>
 <Field name="type" type="Mandatory | Optional">Whether completion is required. Drives the badge on the list and, for mandatory trainings, the sense of "you must finish this."</Field>
 <Field name="frequency" type="Once | Quarterly | Annual">How often the training must be re-taken. **"Once"** means complete it a single time, forever. **"Quarterly"** and **"Annual"** are *recurring* — completion is tracked per period and resets when a new period begins.</Field>
-<Field name="status" type="Draft | Active | Archived">Lifecycle of the training itself. See below.</Field>
-<Field name="content">The training material, stored as rich JSON (`content`). This is the body an employee reads.</Field>
+<Field name="status" type="Draft | Active | Archived">Lifecycle of the training itself, changed from the page header. See below.</Field>
+<Field name="content">The training material, stored as rich JSON (`content`). This is the body an employee reads, below the PDF guide.</Field>
+<Field name="guidePath">One optional PDF guide, uploaded in the **PDF Guide** card. Employees read it before the questions.</Field>
+<Field name="isExternal" type="boolean">**External Certification**. When on, employees complete the training by uploading a certificate instead of answering a quiz.</Field>
 <Field name="estimatedDuration">A free-text estimate of how long the training takes.</Field>
 <Field name="tags">Free-form tags for filtering the catalog.</Field>
 <Field name="assignee">The person responsible for the training.</Field>
@@ -24,11 +28,31 @@ Each training is a row in the `training` table (`packages/database/supabase/migr
 
 The status enum is a simple linear lifecycle on the training record — not to be confused with an employee's *completion* status further down.
 
+Change the status from the page header: a Draft training shows **Publish**, an Active one shows **Archive**, and **Reopen** in the ⋯ menu moves it back to Draft. Each asks for confirmation.
+
 <StatusFlow entity="trainingCourse">
 <Status name="Draft">Being authored. Not yet meant for assignment.</Status>
 <Status name="Active" accent>Published and in use. Assignments and reminders operate against active trainings.</Status>
 <Status name="Archived" terminal>Retired. Kept for history, no longer assigned.</Status>
 </StatusFlow>
+
+<Callout type="note" title="Only a Draft training can change">
+The content, the PDF guide, the questions, and the **External Certification** switch are editable only while the training is **"Draft"**; the server refuses the guide and the switch on any other status (`apps/erp/app/routes/x+/training+/update.tsx`). Employees can open and complete only an **"Active"** training. To change a published training, **Reopen** it first.
+</Callout>
+
+## PDF guide
+
+A training can carry one PDF guide, for shops that already have their training material as a document. Drop the PDF into the **PDF Guide** card while the training is Draft; **Replace** swaps it and **Remove** takes it off after a confirmation (`apps/erp/app/modules/resources/ui/Training/TrainingGuide.tsx`). Employees see the guide in a viewer on the first step of their training, above the typed content.
+
+## External certifications
+
+Some training happens outside Carbon, such as a forklift course from an outside provider. Turn on **External Certification** in Properties and the training has no quiz: the Questions panel explains this instead of listing questions, and employees complete it by uploading the certificate they received.
+
+- **Employee:** on the training page, **Upload Certificate**, then drop one PDF, PNG or JPG file of 10 MB or less and **Submit Certificate**. The training is complete at once (`apps/erp/app/modules/resources/resources.server.ts`).
+- **Manager:** on the assignment's roster, **Mark Complete** asks for the employee's certificate. A phone photo in HEIC format is converted to JPEG on upload.
+- **Proof:** a completed row shows **View Certificate** on the assignment roster and on the person's Trainings card.
+
+Carbon does not check what the file contains. If a certificate is wrong, a manager removes the completion (below) and the employee uploads again.
 
 ## Quiz questions
 
@@ -79,7 +103,9 @@ An employee's status is *computed*, not stored — Carbon evaluates it from whet
 Recurring trainings check the employee's start date against the period. Someone who joined after a past period closed shows **"Not Required"** for that period, not **"Overdue"** — so onboarding a new hire doesn't instantly paint their record red.
 </Callout>
 
-A manager marks completion from the assignment's Status tab; the action posts to `markTrainingComplete` with the employee and the current period (`apps/erp/app/modules/resources/ui/Training/TrainingAssignmentForm.tsx`). An employee already **"Completed"** or **"Not Required"** has no button — there's nothing to mark.
+A manager marks completion from the assignment's Status tab with **"Mark Complete"**; Carbon works out the current period on the server (`recordTrainingCompletion`, `apps/erp/app/modules/resources/resources.server.ts`). An employee already **"Completed"** or **"Not Required"** has no button — there's nothing to mark.
+
+To undo a wrong completion, **"Remove Completion"** on the roster deletes it and the employee goes back to **"Pending"** (or **"Overdue"**). It needs the `resources_delete` permission. Any ability the training granted stays with the employee; remove it on their Abilities page if needed.
 
 ## The weekly reminder
 
@@ -93,15 +119,20 @@ A recurring reminder is capped: once an outstanding training has had five succes
 
 Two one-time events announce assignments: **"Training assigned to you"** (`training-assignment`) and **"New training available"** (`resource-training-assignment`). See [notifications](/docs/reference/notifications) for delivery and preferences.
 
-## Abilities are a separate system
+## Training can grant an ability
 
-Carbon also tracks employee **abilities** — a skill or certification with a learning curve — under the [people](/docs/reference/people) side of the app (`apps/erp/app/modules/people/ui/Person/PersonAbilities.tsx`). An ability defines a starting proficiency, the weeks to reach full proficiency, and a shadowing period; each employee's progress against it is tracked as `NotStarted`, `InProgress`, or `Complete` (`apps/erp/app/modules/resources/types.ts`).
+An **ability** is an employee's qualification for a process. A training can grant one: set **Grants Ability** in Properties, and completing the training adds that ability to the employee (`grant_ability_on_training_completion`, `packages/database/supabase/migrations/20260720121629_capacity-planning.sql:264`). The scheduler and the shop floor use abilities to decide who may run the process.
 
-<Callout type="warn" title="Abilities and trainings are not linked">
-Despite the shared vocabulary, abilities and trainings are **two independent systems today**. There is no active link between a training and an ability, and work centers do not require a specific ability — the fields that would connect them (`requiredAbilityId` on a work center, an `abilityId` on a training) exist only as commented-out placeholders in the code (`apps/erp/app/modules/resources/resources.models.ts:495`). Completing a training does not advance an ability, and vice versa.
-</Callout>
+Training is one way to grant an ability; a manager can also add it by hand on the person's Abilities page. Removing a training completion does not remove the ability.
 
-Because they're separate, plan around it: use **training** for course-and-quiz compliance with reminders, and **abilities** for skill-curve tracking on a person's profile. Don't expect one to update the other.
+<Cards>
+  <Card title="People" href="/docs/reference/people">
+    Employees, their abilities, and their training records.
+  </Card>
+  <Card title="Notifications" href="/docs/reference/notifications">
+    Training assignment and reminder delivery.
+  </Card>
+</Cards>
 
 <AgentContext>
 ## Troubleshooting
@@ -126,6 +157,15 @@ Not an error string — a common question. Checklist of preconditions for the we
 
 ### "Why can't I mark someone complete / assign a training?"
 The action is gated by the `resources` permission — `resources_update` to mark complete and edit, `resources_create` to create a training or assignment (`apps/erp/app/modules/resources/ui/Training/TrainingAssignmentForm.tsx`). Without it the **"Mark Complete"** and **Save** buttons are disabled. (These permissions were `people_*` before migration `20251211012654_training-to-resources.sql`; the code now checks `resources`.)
+
+### "This training is not currently active"
+The employee or manager tried to complete a training that is **"Draft"** or **"Archived"**. Publish it (or **Reopen** and publish) first.
+
+### "Upload a certificate file" / "The certificate must be a PDF, PNG or JPG" / "The certificate must be 10 MB or smaller"
+An **External Certification** training needs one certificate file of an accepted type and size (`validateTrainingCertificate`, `apps/erp/app/modules/resources/resources.models.ts`). The employee page does not accept HEIC; the manager's **Mark Complete** dialog converts HEIC to JPEG.
+
+### "This can only change while the training is Draft"
+The PDF guide or the **External Certification** switch was changed on an Active or Archived training. **Reopen** it first.
 
 ### "A completed training re-appeared as Pending"
 Expected for recurring frequencies. A **"Quarterly"** or **"Annual"** training tracks completion per period; when the new period starts (a new `Q?-YYYY` or `YYYY`), a fresh completion is required and the employee resets to **"Pending"** (`20251206000000_training_assignments.sql`). Only **"Once"** trainings stay completed forever.
