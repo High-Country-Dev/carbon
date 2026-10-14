@@ -2908,7 +2908,7 @@ msgid "Archive all"
 msgstr "Alle archivieren"
 
 msgid "Archive Training"
-msgstr ""
+msgstr "Schulung archivieren"
 
 msgid "Archived"
 msgstr "Archiviert"
@@ -4656,13 +4656,13 @@ msgid "Cert Version"
 msgstr "Zertifikat-Version"
 
 msgid "Certificate not accepted"
-msgstr ""
+msgstr "Zertifikat nicht angenommen"
 
 msgid "Certificate Number"
 msgstr "Zertifikatnummer"
 
 msgid "Certificate Submitted"
-msgstr ""
+msgstr "Zertifikat eingereicht"
 
 msgid "Certificate uploaded"
 msgstr "Zertifikat hochgeladen"
@@ -4968,7 +4968,7 @@ msgid "Click components in the viewer to add them. Shift-click adds several."
 msgstr "Klicken Sie im Viewer auf Komponenten und Sie können diese hinzufügen. Mit Umschalt-Klick können Sie mehrere hinzufügen."
 
 msgid "Click or drop to choose a different file"
-msgstr ""
+msgstr "Klicken oder ziehen Sie eine andere Datei"
 
 msgid "Click to rename"
 msgstr "Klicken Sie zum Umbenennen"
@@ -8077,7 +8077,7 @@ msgid "Drop whole pages or sections a customer doesn't need."
 msgstr "Ganze Seiten oder Abschnitte entfernen, die ein Kunde nicht benötigt."
 
 msgid "Drop your certificate here, or click to choose a file"
-msgstr ""
+msgstr "Ziehen Sie Ihr Zertifikat hierher, oder klicken Sie, um eine Datei auszuwählen"
 
 msgid "Drop your file here, or click to browse."
 msgstr "Datei hier ablegen oder zum Durchsuchen klicken."
@@ -8758,19 +8758,19 @@ msgid "Employees"
 msgstr "Mitarbeiter"
 
 msgid "Employees assigned to this training can open it. The content, guide and questions can no longer change."
-msgstr ""
+msgstr "Mitarbeiter, die dieser Schulung zugewiesen sind, können sie öffnen. Der Inhalt, die Anleitung und die Fragen können sich nicht mehr ändern."
 
 msgid "Employees can no longer open this training."
-msgstr ""
+msgstr "Mitarbeiter können diese Schulung nicht mehr öffnen."
 
 msgid "Employees complete this training by uploading their certificate. Turn off External Certification in Properties to use questions."
-msgstr ""
+msgstr "Mitarbeiter schließen diese Schulung ab, indem sie ihr Zertifikat hochladen. Deaktivieren Sie die externe Zertifizierung in den Eigenschaften, um Fragen zu verwenden."
 
 msgid "Employees read it before the questions"
-msgstr ""
+msgstr "Mitarbeiter lesen es vor den Fragen"
 
 msgid "Employees will no longer see this PDF. You can upload a new one while the training is Draft."
-msgstr ""
+msgstr "Mitarbeiter sehen diese PDF nicht mehr. Sie können eine neue hochladen, während die Schulung im Entwurfsstadium ist."
 
 msgid "Empty"
 msgstr "Leer"
@@ -9490,10 +9490,10 @@ msgid "External"
 msgstr "Extern"
 
 msgid "External certification"
-msgstr ""
+msgstr "Externe Zertifizierung"
 
 msgid "External Certification"
-msgstr ""
+msgstr "Externe Zertifizierung"
 
 msgid "External Delta"
 msgstr "Externe Differenz"
@@ -14380,7 +14380,7 @@ msgid "No condition may match"
 msgstr "Keine Bedingung darf zutreffen"
 
 msgid "No content"
-msgstr ""
+msgstr "Kein Inhalt"
 
 msgid "No control account has a balance at the cutover."
 msgstr "Kein Kontrollkonto weist zum Übergangsdatum einen Saldo auf."
@@ -14738,7 +14738,7 @@ msgid "No payments yet."
 msgstr "Noch keine Zahlungen."
 
 msgid "No PDF guide"
-msgstr ""
+msgstr "Keine PDF-Anleitung"
 
 msgid "No planned invoices are removed."
 msgstr "Es werden keine geplanten Rechnungen entfernt."
@@ -14783,7 +14783,7 @@ msgid "No purchases in this period"
 msgstr "Keine Käufe in diesem Zeitraum"
 
 msgid "No quiz for external certifications"
-msgstr ""
+msgstr "Kein Quiz für externe Zertifizierungen"
 
 msgid "No Quote"
 msgstr "Kein Angebot"
@@ -16294,7 +16294,7 @@ msgid "PDF downloaded"
 msgstr "PDF heruntergeladen"
 
 msgid "PDF Guide"
-msgstr ""
+msgstr "PDF-Anleitung"
 
 msgid "PDF pages"
 msgstr "PDF-Seiten"
@@ -16306,7 +16306,7 @@ msgid "PDF Watermark"
 msgstr "PDF-Wasserzeichen"
 
 msgid "PDF, PNG or JPG, up to 10 MB"
-msgstr ""
+msgstr "PDF, PNG oder JPG, bis zu 10 MB"
 
 msgid "Pending"
 msgstr "Ausstehend"
@@ -17216,7 +17216,7 @@ msgid "Publish"
 msgstr "Veröffentlichen"
 
 msgid "Publish Training"
-msgstr ""
+msgstr "Schulung veröffentlichen"
 
 #. placeholder {0}: current.versionNumber
 msgid "Publish Version {0}?"
@@ -18296,7 +18296,7 @@ msgid "Remove clause"
 msgstr "Klausel entfernen"
 
 msgid "Remove Completion"
-msgstr ""
+msgstr "Abschluss entfernen"
 
 msgid "Remove condition"
 msgstr "Bedingung entfernen"
@@ -18347,7 +18347,7 @@ msgid "Remove path"
 msgstr "Pfad entfernen"
 
 msgid "Remove PDF Guide"
-msgstr ""
+msgstr "PDF-Anleitung entfernen"
 
 msgid "Remove row"
 msgstr "Zeile entfernen"
@@ -18456,7 +18456,7 @@ msgid "Reopen as Revision"
 msgstr "Wieder öffnen als Revision"
 
 msgid "Reopen Training"
-msgstr ""
+msgstr "Schulung wieder öffnen"
 
 msgid "Reorder"
 msgstr "Neu anordnen"
@@ -18504,7 +18504,7 @@ msgid "Repeats once for each item in {inputLabel}"
 msgstr "Wiederholt einmal für jedes Element in {inputLabel}"
 
 msgid "Replace"
-msgstr ""
+msgstr "Ersetzen"
 
 msgid "Replace Carbon's default chart with your own, before you set up accounting"
 msgstr "Ersetzen Sie den Standardkontenplan von Carbon durch Ihren eigenen, bevor Sie die Buchhaltung einrichten."
@@ -20734,7 +20734,7 @@ msgid "Shown as a faint background behind every page of generated PDFs"
 msgstr "Wird als schwacher Hintergrund hinter jeder Seite generierter PDFs angezeigt"
 
 msgid "Shown to employees below the PDF guide"
-msgstr ""
+msgstr "Wird Mitarbeitern unter der PDF-Anleitung angezeigt"
 
 msgid "Shown to the customer on the invoice"
 msgstr "Dem Kunden auf der Rechnung angezeigt"
@@ -21411,7 +21411,7 @@ msgid "Submit anonymously"
 msgstr "Anonym einreichen"
 
 msgid "Submit Certificate"
-msgstr ""
+msgstr "Zertifikat einreichen"
 
 msgid "Submit for approval"
 msgstr "Zur Genehmigung einreichen"
@@ -23077,10 +23077,10 @@ msgid "The traceable reference (e.g. NIST standard, master gauge serial) the cal
 msgstr "Die nachverfolgbare Referenz (z. B. NIST-Norm, Seriennummer des Normal-Prüfmittels), gegen die die Kalibrierungswerte verglichen wurden."
 
 msgid "The training goes back to Draft so you can change it. Employees cannot open it until you publish it again."
-msgstr ""
+msgstr "Die Schulung wird wieder zum Entwurf, damit Sie sie ändern können. Mitarbeiter können sie erst öffnen, wenn Sie sie erneut veröffentlichen."
 
 msgid "The training goes back to Pending for {employeeName}. The employee keeps any ability this training granted. Remove it on their Abilities page if needed."
-msgstr ""
+msgstr "Die Schulung wird für {employeeName} wieder ausstehend. Der Mitarbeiter behält alle Qualifikationen, die diese Schulung gewährte. Entfernen Sie sie auf ihrer Qualifikationsseite, falls erforderlich."
 
 msgid "The traveler lists each item on the bill of materials with its quantity."
 msgstr "Die Laufkarte listet jeden Artikel auf der Stückliste mit seiner Menge auf."
@@ -23540,7 +23540,7 @@ msgstr "Dieses Werkzeug wird aktiviert, wenn die Änderungsmitteilung {activatio
 
 #. placeholder {0}: assignment.employeeName?.trim()
 msgid "This training is external. Upload {0}'s certificate to mark it complete."
-msgstr ""
+msgstr "Diese Schulung ist extern. Laden Sie das Zertifikat von {0} hoch, um es als abgeschlossen zu markieren."
 
 msgid "This unit has no cost in inventory"
 msgstr "Diese Einheit hat keine Kosten im Bestand"
@@ -24078,13 +24078,13 @@ msgid "Training Assignments"
 msgstr "Schulungsaufträge"
 
 msgid "Training not recorded"
-msgstr ""
+msgstr "Schulung nicht aufgezeichnet"
 
 msgid "Training Plan"
 msgstr "Schulungsplan"
 
 msgid "Training taken outside Carbon, such as a vendor course. Employees complete it by uploading the certificate they received instead of answering a quiz."
-msgstr ""
+msgstr "Schulung außerhalb von Carbon absolviert, z. B. ein Herstellerkurs. Mitarbeiter schließen sie ab, indem sie das erhaltene Zertifikat hochladen, anstatt ein Quiz zu beantworten."
 
 msgid "Training your team via the Academy and in-app guides"
 msgstr "Schulung Ihres Teams über die Academy und In-App-Leitfäden"
@@ -24626,7 +24626,7 @@ msgid "Upload a PDF first"
 msgstr "Laden Sie zuerst eine PDF hoch"
 
 msgid "Upload Certificate"
-msgstr ""
+msgstr "Zertifikat hochladen"
 
 msgid "Upload chart"
 msgstr "Kontenplan hochladen"
@@ -24647,13 +24647,13 @@ msgid "Upload new backup…"
 msgstr "Neue Sicherung hochladen…"
 
 msgid "Upload one PDF, PNG or JPG file of 10 MB or less."
-msgstr ""
+msgstr "Laden Sie eine PDF-, PNG- oder JPG-Datei von 10 MB oder weniger hoch."
 
 msgid "Upload the certificate you received for this training. Uploading it marks the training as complete."
-msgstr ""
+msgstr "Laden Sie das Zertifikat hoch, das Sie für diese Schulung erhalten haben. Das Hochladen markiert die Schulung als abgeschlossen."
 
 msgid "Upload your certificate on the next step."
-msgstr ""
+msgstr "Laden Sie Ihr Zertifikat im nächsten Schritt hoch."
 
 msgid "Uploaded model"
 msgstr "Modell hochgeladen"

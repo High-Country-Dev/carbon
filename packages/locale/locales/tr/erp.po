@@ -2908,7 +2908,7 @@ msgid "Archive all"
 msgstr "Tümünü arşivle"
 
 msgid "Archive Training"
-msgstr ""
+msgstr "Eğitimi Arşivle"
 
 msgid "Archived"
 msgstr "Arşivlenmiş"
@@ -4656,13 +4656,13 @@ msgid "Cert Version"
 msgstr "Sertifika Versiyonu"
 
 msgid "Certificate not accepted"
-msgstr ""
+msgstr "Sertifika kabul edilmedi"
 
 msgid "Certificate Number"
 msgstr "Sertifika Numarası"
 
 msgid "Certificate Submitted"
-msgstr ""
+msgstr "Sertifika Gönderildi"
 
 msgid "Certificate uploaded"
 msgstr "Sertifika Yüklendi"
@@ -4968,7 +4968,7 @@ msgid "Click components in the viewer to add them. Shift-click adds several."
 msgstr "Bileşenleri eklemek için görüntüleyicide tıklayın. Shift tuşuyla tıklamak birkaçını ekler."
 
 msgid "Click or drop to choose a different file"
-msgstr ""
+msgstr "Farklı bir dosya seçmek için tıklayın veya sürükleyip bırakın"
 
 msgid "Click to rename"
 msgstr "Yeniden adlandırmak için tıklayın"
@@ -8077,7 +8077,7 @@ msgid "Drop whole pages or sections a customer doesn't need."
 msgstr "Müşterinin ihtiyaç duymadığı sayfaları veya bölümleri tamamen kaldırın."
 
 msgid "Drop your certificate here, or click to choose a file"
-msgstr ""
+msgstr "Sertifikanızı buraya sürükleyip bırakın veya bir dosya seçmek için tıklayın"
 
 msgid "Drop your file here, or click to browse."
 msgstr "Dosyanızı buraya bırakın veya göz atmak için tıklayın."
@@ -8758,19 +8758,19 @@ msgid "Employees"
 msgstr "Çalışanlar"
 
 msgid "Employees assigned to this training can open it. The content, guide and questions can no longer change."
-msgstr ""
+msgstr "Bu eğitime atanan çalışanlar açabilir. İçerik, kılavuz ve sorular artık değiştirilemez."
 
 msgid "Employees can no longer open this training."
-msgstr ""
+msgstr "Çalışanlar artık bu eğitimi açamaz."
 
 msgid "Employees complete this training by uploading their certificate. Turn off External Certification in Properties to use questions."
-msgstr ""
+msgstr "Çalışanlar bu eğitimi sertifikalarını yükleyerek tamamlarlar. Soruları kullanmak için Özelliklerde Harici Sertifika seçeneğini kapatın."
 
 msgid "Employees read it before the questions"
-msgstr ""
+msgstr "Çalışanlar bunu sorulardan önce okurlar"
 
 msgid "Employees will no longer see this PDF. You can upload a new one while the training is Draft."
-msgstr ""
+msgstr "Çalışanlar artık bu PDF'yi görmeyecekler. Eğitim Taslak iken yeni bir tane yükleyebilirsiniz."
 
 msgid "Empty"
 msgstr "Boş"
@@ -9490,10 +9490,10 @@ msgid "External"
 msgstr "Harici"
 
 msgid "External certification"
-msgstr ""
+msgstr "Harici sertifika"
 
 msgid "External Certification"
-msgstr ""
+msgstr "Harici Sertifika"
 
 msgid "External Delta"
 msgstr "Harici Fark"
@@ -14380,7 +14380,7 @@ msgid "No condition may match"
 msgstr "Hiçbir koşul eşleşemez"
 
 msgid "No content"
-msgstr ""
+msgstr "İçerik yok"
 
 msgid "No control account has a balance at the cutover."
 msgstr "Cutover'da hiçbir kontrol hesabının bakiyesi yoktur."
@@ -14738,7 +14738,7 @@ msgid "No payments yet."
 msgstr "Henüz ödeme yok."
 
 msgid "No PDF guide"
-msgstr ""
+msgstr "PDF kılavuzu yok"
 
 msgid "No planned invoices are removed."
 msgstr "Planlanmış fatura kaldırılmamıştır."
@@ -14783,7 +14783,7 @@ msgid "No purchases in this period"
 msgstr "Bu dönemde satın alma yok"
 
 msgid "No quiz for external certifications"
-msgstr ""
+msgstr "Harici sertifikalar için sınav yok"
 
 msgid "No Quote"
 msgstr "Teklif Yok"
@@ -16294,7 +16294,7 @@ msgid "PDF downloaded"
 msgstr "PDF indirildi"
 
 msgid "PDF Guide"
-msgstr ""
+msgstr "PDF Kılavuzu"
 
 msgid "PDF pages"
 msgstr "PDF sayfaları"
@@ -16306,7 +16306,7 @@ msgid "PDF Watermark"
 msgstr "PDF Filigranı"
 
 msgid "PDF, PNG or JPG, up to 10 MB"
-msgstr ""
+msgstr "PDF, PNG veya JPG, en fazla 10 MB"
 
 msgid "Pending"
 msgstr "Beklemede"
@@ -17216,7 +17216,7 @@ msgid "Publish"
 msgstr "Yayınla"
 
 msgid "Publish Training"
-msgstr ""
+msgstr "Eğitimi Yayınla"
 
 #. placeholder {0}: current.versionNumber
 msgid "Publish Version {0}?"
@@ -18296,7 +18296,7 @@ msgid "Remove clause"
 msgstr "Maddeyi kaldır"
 
 msgid "Remove Completion"
-msgstr ""
+msgstr "Tamamlamayı Kaldır"
 
 msgid "Remove condition"
 msgstr "Koşulu kaldır"
@@ -18347,7 +18347,7 @@ msgid "Remove path"
 msgstr "Yolu kaldır"
 
 msgid "Remove PDF Guide"
-msgstr ""
+msgstr "PDF Kılavuzunu Kaldır"
 
 msgid "Remove row"
 msgstr "Satırı kaldır"
@@ -18456,7 +18456,7 @@ msgid "Reopen as Revision"
 msgstr "Revizyon olarak yeniden aç"
 
 msgid "Reopen Training"
-msgstr ""
+msgstr "Eğitimi Yeniden Aç"
 
 msgid "Reorder"
 msgstr "Yeniden Sırala"
@@ -18504,7 +18504,7 @@ msgid "Repeats once for each item in {inputLabel}"
 msgstr "{inputLabel} içindeki her öğe için bir kez tekrarlanır"
 
 msgid "Replace"
-msgstr ""
+msgstr "Değiştir"
 
 msgid "Replace Carbon's default chart with your own, before you set up accounting"
 msgstr "Muhasebeleştirmeyi kurmadan önce Carbon'un varsayılan hesap planını kendinizle değiştirin"
@@ -20734,7 +20734,7 @@ msgid "Shown as a faint background behind every page of generated PDFs"
 msgstr "Oluşturulan PDF'lerin her sayfasının arkasında soluk bir arka plan olarak gösterilir"
 
 msgid "Shown to employees below the PDF guide"
-msgstr ""
+msgstr "PDF kılavuzunun altında çalışanlara gösterilen"
 
 msgid "Shown to the customer on the invoice"
 msgstr "Müşteriye faturada gösterilir"
@@ -21411,7 +21411,7 @@ msgid "Submit anonymously"
 msgstr "Anonim olarak gönder"
 
 msgid "Submit Certificate"
-msgstr ""
+msgstr "Sertifika Gönder"
 
 msgid "Submit for approval"
 msgstr "Onay için gönder"
@@ -23077,10 +23077,10 @@ msgid "The traceable reference (e.g. NIST standard, master gauge serial) the cal
 msgstr "Kalibrasyon değerlerinin karşılaştırıldığı izlenebilir referans (örneğin NIST standardı, mastar ölçüm aleti seri numarası)."
 
 msgid "The training goes back to Draft so you can change it. Employees cannot open it until you publish it again."
-msgstr ""
+msgstr "Eğitim değiştirebilmeniz için Taslak'a geri döner. Çalışanlar yeniden yayınlayana kadar açamaz."
 
 msgid "The training goes back to Pending for {employeeName}. The employee keeps any ability this training granted. Remove it on their Abilities page if needed."
-msgstr ""
+msgstr "Eğitim {employeeName} için Beklemede'ye geri döner. Çalışan bu eğitimin verdiği herhangi bir yetkinliği tutar. Gerekirse Yetkinlikleri sayfasında kaldırın."
 
 msgid "The traveler lists each item on the bill of materials with its quantity."
 msgstr "İş takip kartı ürün ağacındaki her stok kartını miktarıyla birlikte listeler."
@@ -23540,7 +23540,7 @@ msgstr "Bu alet, {activationLockId} değişiklik bildirisi yayınlandığında e
 
 #. placeholder {0}: assignment.employeeName?.trim()
 msgid "This training is external. Upload {0}'s certificate to mark it complete."
-msgstr ""
+msgstr "Bu eğitim haricidir. Tamamlandığını işaretlemek için {0}'nin sertifikasını yükleyin."
 
 msgid "This unit has no cost in inventory"
 msgstr "Bu adet envanterde maliyet yok"
@@ -24078,13 +24078,13 @@ msgid "Training Assignments"
 msgstr "Eğitim Atamaları"
 
 msgid "Training not recorded"
-msgstr ""
+msgstr "Eğitim kaydedilmedi"
 
 msgid "Training Plan"
 msgstr "Eğitim Planı"
 
 msgid "Training taken outside Carbon, such as a vendor course. Employees complete it by uploading the certificate they received instead of answering a quiz."
-msgstr ""
+msgstr "Carbon dışında alınan, satıcı kursu gibi eğitimler. Çalışanlar sınava cevap vermek yerine aldıkları sertifikayı yükleyerek tamamlarlar."
 
 msgid "Training your team via the Academy and in-app guides"
 msgstr "Ekibinizi Academy ve uygulama içi kılavuzlar aracılığıyla eğitin"
@@ -24626,7 +24626,7 @@ msgid "Upload a PDF first"
 msgstr "Önce bir PDF yükleyin"
 
 msgid "Upload Certificate"
-msgstr ""
+msgstr "Sertifika Yükle"
 
 msgid "Upload chart"
 msgstr "Hesap planını yükle"
@@ -24647,13 +24647,13 @@ msgid "Upload new backup…"
 msgstr "Yeni yedekleme yükle…"
 
 msgid "Upload one PDF, PNG or JPG file of 10 MB or less."
-msgstr ""
+msgstr "Bir PDF, PNG veya JPG dosyasını 10 MB veya daha az yükleyin."
 
 msgid "Upload the certificate you received for this training. Uploading it marks the training as complete."
-msgstr ""
+msgstr "Bu eğitim için aldığınız sertifikayı yükleyin. Yükleme, eğitimi tamamlandı olarak işaretler."
 
 msgid "Upload your certificate on the next step."
-msgstr ""
+msgstr "Sertifikanızı bir sonraki adımda yükleyin."
 
 msgid "Uploaded model"
 msgstr "Yüklenen model"

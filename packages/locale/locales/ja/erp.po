@@ -2908,7 +2908,7 @@ msgid "Archive all"
 msgstr "すべてアーカイブ"
 
 msgid "Archive Training"
-msgstr ""
+msgstr "教育訓練をアーカイブ"
 
 msgid "Archived"
 msgstr "アーカイブ済み"
@@ -4656,13 +4656,13 @@ msgid "Cert Version"
 msgstr "認定バージョン"
 
 msgid "Certificate not accepted"
-msgstr ""
+msgstr "証明書が承諾されていません"
 
 msgid "Certificate Number"
 msgstr "証明書番号"
 
 msgid "Certificate Submitted"
-msgstr ""
+msgstr "証明書提出済み"
 
 msgid "Certificate uploaded"
 msgstr "証明書がアップロードされました"
@@ -4968,7 +4968,7 @@ msgid "Click components in the viewer to add them. Shift-click adds several."
 msgstr "ビューアーでコンポーネントをクリックして追加します。Shift キーを押しながらクリックすると複数が追加されます。"
 
 msgid "Click or drop to choose a different file"
-msgstr ""
+msgstr "別のファイルを選択するにはクリックするか、ドロップしてください"
 
 msgid "Click to rename"
 msgstr "クリックして名前を変更"
@@ -8077,7 +8077,7 @@ msgid "Drop whole pages or sections a customer doesn't need."
 msgstr "得意先が必要としない全ページまたはセクションを削除します。"
 
 msgid "Drop your certificate here, or click to choose a file"
-msgstr ""
+msgstr "ここに証明書をドロップするか、クリックしてファイルを選択"
 
 msgid "Drop your file here, or click to browse."
 msgstr "ファイルをここにドラッグするか、クリックして参照してください。"
@@ -8758,19 +8758,19 @@ msgid "Employees"
 msgstr "従業員"
 
 msgid "Employees assigned to this training can open it. The content, guide and questions can no longer change."
-msgstr ""
+msgstr "この教育訓練に割り当てられた従業員は開くことができます。コンテンツ、ガイド、質問は変更できません。"
 
 msgid "Employees can no longer open this training."
-msgstr ""
+msgstr "従業員はこの教育訓練を開くことができなくなりました。"
 
 msgid "Employees complete this training by uploading their certificate. Turn off External Certification in Properties to use questions."
-msgstr ""
+msgstr "従業員は証明書をアップロードしてこの教育訓練を完了します。質問を使用するには、プロパティから外部認定を無効にしてください。"
 
 msgid "Employees read it before the questions"
-msgstr ""
+msgstr "従業員は質問の前にこれを読みます。"
 
 msgid "Employees will no longer see this PDF. You can upload a new one while the training is Draft."
-msgstr ""
+msgstr "従業員はこのPDFをもう見ることはできません。教育訓練が下書きの間に新しいものをアップロードできます。"
 
 msgid "Empty"
 msgstr "空"
@@ -9490,10 +9490,10 @@ msgid "External"
 msgstr "社外"
 
 msgid "External certification"
-msgstr ""
+msgstr "社外認定"
 
 msgid "External Certification"
-msgstr ""
+msgstr "社外認定"
 
 msgid "External Delta"
 msgstr "社外差分"
@@ -14380,7 +14380,7 @@ msgid "No condition may match"
 msgstr "条件が一致しない"
 
 msgid "No content"
-msgstr ""
+msgstr "コンテンツなし"
 
 msgid "No control account has a balance at the cutover."
 msgstr "カットオーバー時に残高がある管理勘定がありません"
@@ -14738,7 +14738,7 @@ msgid "No payments yet."
 msgstr "まだ支払いはありません。"
 
 msgid "No PDF guide"
-msgstr ""
+msgstr "PDFガイドなし"
 
 msgid "No planned invoices are removed."
 msgstr "計画済請求書は削除されません。"
@@ -14783,7 +14783,7 @@ msgid "No purchases in this period"
 msgstr "この期間に購入がありません"
 
 msgid "No quiz for external certifications"
-msgstr ""
+msgstr "社外認定のクイズなし"
 
 msgid "No Quote"
 msgstr "見積辞退"
@@ -16294,7 +16294,7 @@ msgid "PDF downloaded"
 msgstr "PDFをダウンロードしました"
 
 msgid "PDF Guide"
-msgstr ""
+msgstr "PDFガイド"
 
 msgid "PDF pages"
 msgstr "PDFページ"
@@ -16306,7 +16306,7 @@ msgid "PDF Watermark"
 msgstr "PDF透かし"
 
 msgid "PDF, PNG or JPG, up to 10 MB"
-msgstr ""
+msgstr "PDF、PNG、またはJPG(最大10MB)"
 
 msgid "Pending"
 msgstr "待機中"
@@ -17216,7 +17216,7 @@ msgid "Publish"
 msgstr "公開"
 
 msgid "Publish Training"
-msgstr ""
+msgstr "教育訓練を公開"
 
 #. placeholder {0}: current.versionNumber
 msgid "Publish Version {0}?"
@@ -18296,7 +18296,7 @@ msgid "Remove clause"
 msgstr "条項を除去"
 
 msgid "Remove Completion"
-msgstr ""
+msgstr "完了を除去"
 
 msgid "Remove condition"
 msgstr "条件を除去"
@@ -18347,7 +18347,7 @@ msgid "Remove path"
 msgstr "パスを除去"
 
 msgid "Remove PDF Guide"
-msgstr ""
+msgstr "PDFガイドを除去"
 
 msgid "Remove row"
 msgstr "行を除去"
@@ -18456,7 +18456,7 @@ msgid "Reopen as Revision"
 msgstr "リビジョンとして再オープン"
 
 msgid "Reopen Training"
-msgstr ""
+msgstr "教育訓練を再オープン"
 
 msgid "Reorder"
 msgstr "並び替え"
@@ -18504,7 +18504,7 @@ msgid "Repeats once for each item in {inputLabel}"
 msgstr "{inputLabel}内の各アイテムに対して1回繰り返します"
 
 msgid "Replace"
-msgstr ""
+msgstr "置き換え"
 
 msgid "Replace Carbon's default chart with your own, before you set up accounting"
 msgstr "会計を設定する前に、Carbon のデフォルト勘定科目表を自社のもので置き換えてください。"
@@ -20734,7 +20734,7 @@ msgid "Shown as a faint background behind every page of generated PDFs"
 msgstr "生成されたPDFの各ページの背景に薄く表示されます"
 
 msgid "Shown to employees below the PDF guide"
-msgstr ""
+msgstr "従業員に表示(PDFガイドの下)"
 
 msgid "Shown to the customer on the invoice"
 msgstr "請求書で顧客に表示されます"
@@ -21411,7 +21411,7 @@ msgid "Submit anonymously"
 msgstr "匿名で提出"
 
 msgid "Submit Certificate"
-msgstr ""
+msgstr "証明書を提出"
 
 msgid "Submit for approval"
 msgstr "承認のため提出"
@@ -23077,10 +23077,10 @@ msgid "The traceable reference (e.g. NIST standard, master gauge serial) the cal
 msgstr "校正値の比較対象となる追跡可能な参照（例：NIST標準、標準器のシリアル番号）。"
 
 msgid "The training goes back to Draft so you can change it. Employees cannot open it until you publish it again."
-msgstr ""
+msgstr "教育訓練が下書きに戻り、変更できます。従業員は再び公開されるまで開くことができません。"
 
 msgid "The training goes back to Pending for {employeeName}. The employee keeps any ability this training granted. Remove it on their Abilities page if needed."
-msgstr ""
+msgstr "教育訓練は{employeeName}に対して待機中に戻ります。従業員はこの教育訓練によって付与されたスキルを保持しています。必要に応じてスキルページで除去してください。"
 
 msgid "The traveler lists each item on the bill of materials with its quantity."
 msgstr "現品票は部品表上の各品目をその数量と共にリストします。"
@@ -23540,7 +23540,7 @@ msgstr "この工具は、変更通知 {activationLockId} がリリースされ�
 
 #. placeholder {0}: assignment.employeeName?.trim()
 msgid "This training is external. Upload {0}'s certificate to mark it complete."
-msgstr ""
+msgstr "この教育訓練は社外です。{0}の証明書をアップロードして完了にしてください。"
 
 msgid "This unit has no cost in inventory"
 msgstr "この品目は在庫に原価がありません。"
@@ -24078,13 +24078,13 @@ msgid "Training Assignments"
 msgstr "教育訓練の割り当て"
 
 msgid "Training not recorded"
-msgstr ""
+msgstr "教育訓練が記録されていません"
 
 msgid "Training Plan"
 msgstr "教育訓練計画"
 
 msgid "Training taken outside Carbon, such as a vendor course. Employees complete it by uploading the certificate they received instead of answering a quiz."
-msgstr ""
+msgstr "Carbonの外で実施された教育訓練(ベンダーコースなど)。従業員はクイズに回答する代わりに、受け取った証明書をアップロードして完了します。"
 
 msgid "Training your team via the Academy and in-app guides"
 msgstr "アカデミーとアプリ内ガイドを使用してチームを教育訓練します。"
@@ -24626,7 +24626,7 @@ msgid "Upload a PDF first"
 msgstr "まずPDFをアップロードしてください"
 
 msgid "Upload Certificate"
-msgstr ""
+msgstr "証明書をアップロード"
 
 msgid "Upload chart"
 msgstr "勘定科目表をアップロード"
@@ -24647,13 +24647,13 @@ msgid "Upload new backup…"
 msgstr "新しいバックアップをアップロード…"
 
 msgid "Upload one PDF, PNG or JPG file of 10 MB or less."
-msgstr ""
+msgstr "PDF、PNG、JPGいずれかのファイル(10MB以下)を1つアップロードしてください。"
 
 msgid "Upload the certificate you received for this training. Uploading it marks the training as complete."
-msgstr ""
+msgstr "この教育訓練で受け取った証明書をアップロードしてください。アップロードすると教育訓練が完了になります。"
 
 msgid "Upload your certificate on the next step."
-msgstr ""
+msgstr "次のステップで証明書をアップロードしてください。"
 
 msgid "Uploaded model"
 msgstr "モデルをアップロードしました"

@@ -2908,7 +2908,7 @@ msgid "Archive all"
 msgstr "全部存档"
 
 msgid "Archive Training"
-msgstr ""
+msgstr "存档培训"
 
 msgid "Archived"
 msgstr "已归档"
@@ -4656,13 +4656,13 @@ msgid "Cert Version"
 msgstr "证书版本"
 
 msgid "Certificate not accepted"
-msgstr ""
+msgstr "证书未被接受"
 
 msgid "Certificate Number"
 msgstr "证书编号"
 
 msgid "Certificate Submitted"
-msgstr ""
+msgstr "证书已提交"
 
 msgid "Certificate uploaded"
 msgstr "证书已上传"
@@ -4968,7 +4968,7 @@ msgid "Click components in the viewer to add them. Shift-click adds several."
 msgstr "点击查看器中的组件以添加它们。Shift 点击可添加多个。"
 
 msgid "Click or drop to choose a different file"
-msgstr ""
+msgstr "点击或拖放以选择不同的文件"
 
 msgid "Click to rename"
 msgstr "单击以重命名"
@@ -8077,7 +8077,7 @@ msgid "Drop whole pages or sections a customer doesn't need."
 msgstr "删除客户不需要的整个页面或部分。"
 
 msgid "Drop your certificate here, or click to choose a file"
-msgstr ""
+msgstr "在此拖放您的证书，或点击以选择文件"
 
 msgid "Drop your file here, or click to browse."
 msgstr "将文件拖放到此处，或点击浏览。"
@@ -8758,19 +8758,19 @@ msgid "Employees"
 msgstr "员工"
 
 msgid "Employees assigned to this training can open it. The content, guide and questions can no longer change."
-msgstr ""
+msgstr "已分配此培训的员工可以打开它。内容、指南和问题不再能更改。"
 
 msgid "Employees can no longer open this training."
-msgstr ""
+msgstr "员工无法再打开此培训"
 
 msgid "Employees complete this training by uploading their certificate. Turn off External Certification in Properties to use questions."
-msgstr ""
+msgstr "员工通过上传证书完成此培训。在属性中关闭外部认证以使用问题。"
 
 msgid "Employees read it before the questions"
-msgstr ""
+msgstr "员工在回答问题之前阅读它"
 
 msgid "Employees will no longer see this PDF. You can upload a new one while the training is Draft."
-msgstr ""
+msgstr "员工将不再看到此PDF。当培训处于草稿时，您可以上传新的。"
 
 msgid "Empty"
 msgstr "空"
@@ -9490,10 +9490,10 @@ msgid "External"
 msgstr "外部"
 
 msgid "External certification"
-msgstr ""
+msgstr "外部认证"
 
 msgid "External Certification"
-msgstr ""
+msgstr "外部认证"
 
 msgid "External Delta"
 msgstr "外部差异"
@@ -14380,7 +14380,7 @@ msgid "No condition may match"
 msgstr "没有条件可以匹配"
 
 msgid "No content"
-msgstr ""
+msgstr "无内容"
 
 msgid "No control account has a balance at the cutover."
 msgstr "截至结转日期，无控制帐户有余额"
@@ -14738,7 +14738,7 @@ msgid "No payments yet."
 msgstr "还没有付款。"
 
 msgid "No PDF guide"
-msgstr ""
+msgstr "无PDF指南"
 
 msgid "No planned invoices are removed."
 msgstr "未删除已计划的发票。"
@@ -14783,7 +14783,7 @@ msgid "No purchases in this period"
 msgstr "此期间无采购"
 
 msgid "No quiz for external certifications"
-msgstr ""
+msgstr "外部认证无测验"
 
 msgid "No Quote"
 msgstr "不报价"
@@ -16294,7 +16294,7 @@ msgid "PDF downloaded"
 msgstr "PDF已下载"
 
 msgid "PDF Guide"
-msgstr ""
+msgstr "PDF指南"
 
 msgid "PDF pages"
 msgstr "PDF 页面"
@@ -16306,7 +16306,7 @@ msgid "PDF Watermark"
 msgstr "PDF 水印"
 
 msgid "PDF, PNG or JPG, up to 10 MB"
-msgstr ""
+msgstr "PDF、PNG或JPG，最大10 MB"
 
 msgid "Pending"
 msgstr "待处理"
@@ -17216,7 +17216,7 @@ msgid "Publish"
 msgstr "发布"
 
 msgid "Publish Training"
-msgstr ""
+msgstr "发布培训"
 
 #. placeholder {0}: current.versionNumber
 msgid "Publish Version {0}?"
@@ -18296,7 +18296,7 @@ msgid "Remove clause"
 msgstr "移除条款"
 
 msgid "Remove Completion"
-msgstr ""
+msgstr "移除完成"
 
 msgid "Remove condition"
 msgstr "移除条件"
@@ -18347,7 +18347,7 @@ msgid "Remove path"
 msgstr "移除路径"
 
 msgid "Remove PDF Guide"
-msgstr ""
+msgstr "移除PDF指南"
 
 msgid "Remove row"
 msgstr "移除行"
@@ -18456,7 +18456,7 @@ msgid "Reopen as Revision"
 msgstr "作为修订版重新打开"
 
 msgid "Reopen Training"
-msgstr ""
+msgstr "重新打开培训"
 
 msgid "Reorder"
 msgstr "重新排序"
@@ -18504,7 +18504,7 @@ msgid "Repeats once for each item in {inputLabel}"
 msgstr "为 {inputLabel} 中的每个项目重复一次"
 
 msgid "Replace"
-msgstr ""
+msgstr "替换"
 
 msgid "Replace Carbon's default chart with your own, before you set up accounting"
 msgstr "在设置会计之前，将 Carbon 的默认科目表替换为您自己的"
@@ -20734,7 +20734,7 @@ msgid "Shown as a faint background behind every page of generated PDFs"
 msgstr "作为淡色背景显示在每个生成的PDF页面后面"
 
 msgid "Shown to employees below the PDF guide"
-msgstr ""
+msgstr "显示在PDF指南下方给员工"
 
 msgid "Shown to the customer on the invoice"
 msgstr "在发票上向客户显示"
@@ -21411,7 +21411,7 @@ msgid "Submit anonymously"
 msgstr "匿名提交"
 
 msgid "Submit Certificate"
-msgstr ""
+msgstr "提交证书"
 
 msgid "Submit for approval"
 msgstr "提交以审批"
@@ -23077,10 +23077,10 @@ msgid "The traceable reference (e.g. NIST standard, master gauge serial) the cal
 msgstr "校准值进行比对的可追溯参考(例如NIST标准、标准器序列号)。"
 
 msgid "The training goes back to Draft so you can change it. Employees cannot open it until you publish it again."
-msgstr ""
+msgstr "培训返回草稿，以便您可以更改它。员工无法打开它，直到您再次发布它。"
 
 msgid "The training goes back to Pending for {employeeName}. The employee keeps any ability this training granted. Remove it on their Abilities page if needed."
-msgstr ""
+msgstr "培训对 {employeeName} 返回待处理。员工保留此培训授予的任何技能。如果需要，在其技能页面上移除它。"
 
 msgid "The traveler lists each item on the bill of materials with its quantity."
 msgstr "流转卡列出物料清单上的每个物料及其数量。"
@@ -23540,7 +23540,7 @@ msgstr "当变更通知 {activationLockId} 已下达时，这个刀具被激活�
 
 #. placeholder {0}: assignment.employeeName?.trim()
 msgid "This training is external. Upload {0}'s certificate to mark it complete."
-msgstr ""
+msgstr "此培训是外部的。上传 {0} 的证书以标记为完成。"
 
 msgid "This unit has no cost in inventory"
 msgstr "该件在库存中没有成本"
@@ -24078,13 +24078,13 @@ msgid "Training Assignments"
 msgstr "培训分配"
 
 msgid "Training not recorded"
-msgstr ""
+msgstr "培训未记录"
 
 msgid "Training Plan"
 msgstr "培训计划"
 
 msgid "Training taken outside Carbon, such as a vendor course. Employees complete it by uploading the certificate they received instead of answering a quiz."
-msgstr ""
+msgstr "在Carbon外部进行的培训，例如供应商课程。员工通过上传他们收到的证书来完成它，而不是回答测验。"
 
 msgid "Training your team via the Academy and in-app guides"
 msgstr "通过 Academy 和应用内指南培训班组"
@@ -24626,7 +24626,7 @@ msgid "Upload a PDF first"
 msgstr "先上传 PDF"
 
 msgid "Upload Certificate"
-msgstr ""
+msgstr "上传证书"
 
 msgid "Upload chart"
 msgstr "上传科目表"
@@ -24647,13 +24647,13 @@ msgid "Upload new backup…"
 msgstr "上传新备份…"
 
 msgid "Upload one PDF, PNG or JPG file of 10 MB or less."
-msgstr ""
+msgstr "上传一个PDF、PNG或JPG文件，大小为10 MB或更少。"
 
 msgid "Upload the certificate you received for this training. Uploading it marks the training as complete."
-msgstr ""
+msgstr "上传您为此培训收到的证书。上传它将标记培训为完成。"
 
 msgid "Upload your certificate on the next step."
-msgstr ""
+msgstr "在下一步上传您的证书。"
 
 msgid "Uploaded model"
 msgstr "已上传模型"
