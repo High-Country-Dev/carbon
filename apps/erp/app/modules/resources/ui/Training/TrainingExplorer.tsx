@@ -114,9 +114,7 @@ export default function TrainingExplorer() {
     tolerance: selectedQuestion?.tolerance ?? undefined
   };
 
-  // External trainings have no quiz; the panel explains why instead of hiding.
-  const isExternal = trainingData?.training?.isExternal ?? false;
-  const isDisabled = trainingData?.training?.status !== "Draft" || isExternal;
+  const isDisabled = trainingData?.training?.status !== "Draft";
 
   const [sortOrder, setSortOrder] = useState<string[]>(
     Array.isArray(questions)
@@ -205,19 +203,7 @@ export default function TrainingExplorer() {
           className="w-full flex-1 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-accent"
           spacing={0}
         >
-          {isExternal ? (
-            <Empty
-              className="px-4 text-center"
-              title={<Trans>No quiz for external certifications</Trans>}
-              description={
-                <Trans>
-                  Employees complete this training by uploading their
-                  certificate. Turn off External Certification in Properties to
-                  use questions.
-                </Trans>
-              }
-            />
-          ) : questions && questions.length > 0 ? (
+          {questions && questions.length > 0 ? (
             <Reorder.Group
               axis="y"
               values={sortOrder}

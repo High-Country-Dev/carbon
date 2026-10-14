@@ -4655,14 +4655,8 @@ msgstr "一括請求は有効です"
 msgid "Cert Version"
 msgstr "認定バージョン"
 
-msgid "Certificate not accepted"
-msgstr "証明書が承諾されていません"
-
 msgid "Certificate Number"
 msgstr "証明書番号"
-
-msgid "Certificate Submitted"
-msgstr "証明書提出済み"
 
 msgid "Certificate uploaded"
 msgstr "証明書がアップロードされました"
@@ -4966,9 +4960,6 @@ msgstr "再度クリックして切断"
 
 msgid "Click components in the viewer to add them. Shift-click adds several."
 msgstr "ビューアーでコンポーネントをクリックして追加します。Shift キーを押しながらクリックすると複数が追加されます。"
-
-msgid "Click or drop to choose a different file"
-msgstr "別のファイルを選択するにはクリックするか、ドロップしてください"
 
 msgid "Click to rename"
 msgstr "クリックして名前を変更"
@@ -8076,9 +8067,6 @@ msgstr "ドロップシップメントステータス"
 msgid "Drop whole pages or sections a customer doesn't need."
 msgstr "得意先が必要としない全ページまたはセクションを削除します。"
 
-msgid "Drop your certificate here, or click to choose a file"
-msgstr "ここに証明書をドロップするか、クリックしてファイルを選択"
-
 msgid "Drop your file here, or click to browse."
 msgstr "ファイルをここにドラッグするか、クリックして参照してください。"
 
@@ -8763,14 +8751,8 @@ msgstr "この教育訓練に割り当てられた従業員は開くことがで
 msgid "Employees can no longer open this training."
 msgstr "従業員はこの教育訓練を開くことができなくなりました。"
 
-msgid "Employees complete this training by uploading their certificate. Turn off External Certification in Properties to use questions."
-msgstr "従業員は証明書をアップロードしてこの教育訓練を完了します。質問を使用するには、プロパティから外部認定を無効にしてください。"
-
-msgid "Employees read it before the questions"
-msgstr "従業員は質問の前にこれを読みます。"
-
-msgid "Employees will no longer see this PDF. You can upload a new one while the training is Draft."
-msgstr "従業員はこのPDFをもう見ることはできません。教育訓練が下書きの間に新しいものをアップロードできます。"
+msgid "Employees complete a training in Carbon"
+msgstr ""
 
 msgid "Empty"
 msgstr "空"
@@ -9489,12 +9471,6 @@ msgstr "拡張価格"
 msgid "External"
 msgstr "社外"
 
-msgid "External certification"
-msgstr "社外認定"
-
-msgid "External Certification"
-msgstr "社外認定"
-
 msgid "External Delta"
 msgstr "社外差分"
 
@@ -9518,6 +9494,9 @@ msgstr "社外参照"
 
 msgid "External Reference"
 msgstr "社外参照"
+
+msgid "External training"
+msgstr ""
 
 msgid "Extra fields to capture data Carbon doesn't track by default"
 msgstr "Carbonがデフォルトで追跡しないデータをキャプチャするための追加フィールド"
@@ -13057,6 +13036,10 @@ msgstr "マップされた値"
 msgid "Mark \"{0}\" as passed?"
 msgstr "「{0}」を合格にしますか？"
 
+#. placeholder {0}: assignment.employeeName?.trim()
+msgid "Mark {0} complete. Attach their certificate if you have one."
+msgstr ""
+
 msgid "Mark absent"
 msgstr "欠席をマーク"
 
@@ -14737,8 +14720,8 @@ msgstr "支払明細なし。"
 msgid "No payments yet."
 msgstr "まだ支払いはありません。"
 
-msgid "No PDF guide"
-msgstr "PDFガイドなし"
+msgid "No PDF uploaded"
+msgstr ""
 
 msgid "No planned invoices are removed."
 msgstr "計画済請求書は削除されません。"
@@ -14781,9 +14764,6 @@ msgstr "生産がまだ記録されていません。"
 
 msgid "No purchases in this period"
 msgstr "この期間に購入がありません"
-
-msgid "No quiz for external certifications"
-msgstr "社外認定のクイズなし"
 
 msgid "No Quote"
 msgstr "見積辞退"
@@ -16293,9 +16273,6 @@ msgstr "PDF (文書)"
 msgid "PDF downloaded"
 msgstr "PDFをダウンロードしました"
 
-msgid "PDF Guide"
-msgstr "PDFガイド"
-
 msgid "PDF pages"
 msgstr "PDFページ"
 
@@ -16304,9 +16281,6 @@ msgstr "PDFプレビュー"
 
 msgid "PDF Watermark"
 msgstr "PDF透かし"
-
-msgid "PDF, PNG or JPG, up to 10 MB"
-msgstr "PDF、PNG、またはJPG(最大10MB)"
 
 msgid "Pending"
 msgstr "待機中"
@@ -18346,8 +18320,8 @@ msgstr "部品を除去"
 msgid "Remove path"
 msgstr "パスを除去"
 
-msgid "Remove PDF Guide"
-msgstr "PDFガイドを除去"
+msgid "Remove PDF"
+msgstr ""
 
 msgid "Remove row"
 msgstr "行を除去"
@@ -20733,9 +20707,6 @@ msgstr "金額別上位 1,000 グループを表示中"
 msgid "Shown as a faint background behind every page of generated PDFs"
 msgstr "生成されたPDFの各ページの背景に薄く表示されます"
 
-msgid "Shown to employees below the PDF guide"
-msgstr "従業員に表示(PDFガイドの下)"
-
 msgid "Shown to the customer on the invoice"
 msgstr "請求書で顧客に表示されます"
 
@@ -21410,9 +21381,6 @@ msgstr "補助元帳"
 msgid "Submit anonymously"
 msgstr "匿名で提出"
 
-msgid "Submit Certificate"
-msgstr "証明書を提出"
-
 msgid "Submit for approval"
 msgstr "承認のため提出"
 
@@ -21757,6 +21725,9 @@ msgstr "パンモードに切り替え"
 msgid "Switch to select mode"
 msgstr "選択モードに切り替え"
 
+msgid "Switch to Written Content"
+msgstr ""
+
 msgid "Switch users over and confirm access"
 msgstr "ユーザーを切り替えてアクセスを確認"
 
@@ -21820,6 +21791,9 @@ msgstr "このアイテムを製造するために消費される材料全体で
 
 msgid "taken"
 msgstr "実施"
+
+msgid "Taken outside Carbon. You mark each employee complete."
+msgstr ""
 
 msgid "Takes Effect"
 msgstr "有効開始"
@@ -23480,6 +23454,9 @@ msgstr "この発注書"
 msgid "This Quarter"
 msgstr "今四半期"
 
+msgid "This removes the PDF. Employees will see the written content instead."
+msgstr ""
+
 msgid "This removes their authenticator app, so their next sign-in only needs a magic link. Use this when they have lost access to their authenticator. It affects their sign-in for every company they belong to."
 msgstr "これにより認証器アプリが削除されるため、次回のサインインはマジックリンクのみが必要になります。認証器へのアクセスを失った場合にこれを使用してください。彼らが属するすべての会社のサインインに影響します。"
 
@@ -23537,10 +23514,6 @@ msgstr "これは{employeeName}をその日のボードから削除します。�
 
 msgid "This tool is activated when change notice {activationLockId} is released."
 msgstr "この工具は、変更通知 {activationLockId} がリリースされると有効になります。"
-
-#. placeholder {0}: assignment.employeeName?.trim()
-msgid "This training is external. Upload {0}'s certificate to mark it complete."
-msgstr "この教育訓練は社外です。{0}の証明書をアップロードして完了にしてください。"
 
 msgid "This unit has no cost in inventory"
 msgstr "この品目は在庫に原価がありません。"
@@ -24083,8 +24056,8 @@ msgstr "教育訓練が記録されていません"
 msgid "Training Plan"
 msgstr "教育訓練計画"
 
-msgid "Training taken outside Carbon, such as a vendor course. Employees complete it by uploading the certificate they received instead of answering a quiz."
-msgstr "Carbonの外で実施された教育訓練(ベンダーコースなど)。従業員はクイズに回答する代わりに、受け取った証明書をアップロードして完了します。"
+msgid "Training taken outside Carbon, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
+msgstr ""
 
 msgid "Training your team via the Academy and in-app guides"
 msgstr "アカデミーとアプリ内ガイドを使用してチームを教育訓練します。"
@@ -24625,9 +24598,6 @@ msgstr "アップロード"
 msgid "Upload a PDF first"
 msgstr "まずPDFをアップロードしてください"
 
-msgid "Upload Certificate"
-msgstr "証明書をアップロード"
-
 msgid "Upload chart"
 msgstr "勘定科目表をアップロード"
 
@@ -24646,14 +24616,8 @@ msgstr "アップロードに失敗しました。もう一度お試しくださ
 msgid "Upload new backup…"
 msgstr "新しいバックアップをアップロード…"
 
-msgid "Upload one PDF, PNG or JPG file of 10 MB or less."
-msgstr "PDF、PNG、JPGいずれかのファイル(10MB以下)を1つアップロードしてください。"
-
-msgid "Upload the certificate you received for this training. Uploading it marks the training as complete."
-msgstr "この教育訓練で受け取った証明書をアップロードしてください。アップロードすると教育訓練が完了になります。"
-
-msgid "Upload your certificate on the next step."
-msgstr "次のステップで証明書をアップロードしてください。"
+msgid "Upload PDF"
+msgstr ""
 
 msgid "Uploaded model"
 msgstr "モデルをアップロードしました"
@@ -25424,6 +25388,9 @@ msgstr "各資産の価値、耐用年数、および期間終了時の処遇。
 msgid "What each period's payment is for this asset in the first year"
 msgstr "このアセットの初年度における各期の支払額"
 
+msgid "What employees read before the questions"
+msgstr ""
+
 msgid "What happens to an invoice once it is created"
 msgstr "請求書が作成されたら何が起こるか"
 
@@ -25962,6 +25929,9 @@ msgstr "設定とデータに関するワーキングセッション"
 
 msgid "Worst Performing Machines"
 msgstr "最も性能が低い機械"
+
+msgid "Write"
+msgstr ""
 
 msgid "Write a note…"
 msgstr "メモを書く…"

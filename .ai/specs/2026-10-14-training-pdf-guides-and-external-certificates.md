@@ -44,7 +44,7 @@ Today a completion row stores only the employee, the assignment, the time and th
 3. The employee wizard (`share+/training.$id.tsx`, `ContentStep`) shows the same viewer above the typed content.
 4. The author can replace or remove the PDF while the training is Draft.
 
-### Part 2 — External training
+### Part 2 — External training (superseded by Part 4)
 
 1. The author turns on **External** in the training properties panel.
 2. For an External training, the employee wizard shows the reading step, then a certificate upload step. It shows no questions.
@@ -96,6 +96,40 @@ Heuristics checklist:
 3. The author edits the name in Properties. The editor has no title block.
 4. For an External training, the questions explorer explains why there is no quiz.
 5. The shared editor loads the Color and Highlight extensions, so the color menu works in every editor.
+
+### Part 4 — External assignments (replaces Part 2)
+
+Product feedback after the first build: an external training happens in an outside system. Carbon has no content for it and must not send employees a link or a notification. An admin records who completed it.
+
+1. **No training for an external one.** The **New Assignment** form asks for **Internal** or **External**.
+   - Internal: pick a training, as today.
+   - External: type a **Name** (for example "Forklift license"). There is no training, no content and no frequency.
+2. **One-time.** An external assignment has no period. Each member is **"Pending"** until an admin marks them complete, then **"Completed"**. It is never **"Overdue"**.
+3. **Admin only.**
+   - Carbon sends no assignment notification and no weekly reminder for an external assignment.
+   - It does not appear in the employee's outstanding-trainings list.
+   - The employee completion page answers 404 for it.
+4. **Certificate optional.** On the assignment roster, **Mark Complete** opens a dialog with an optional certificate upload (PDF, PNG, JPG; HEIC converted to JPEG). The admin can complete without a file.
+5. **Remove the employee certificate flow.** The **External Certification** switch on a training, `training.isExternal`, the employee certificate step and its action are removed.
+6. **Content is either/or.** An internal training has written content **or** an uploaded PDF, not both. The Content card has a two-way switch, **Write** | **Upload PDF**. A training with a guide is a PDF training; the employee page shows only the chosen one. Choosing **Write** on a PDF training removes the PDF after a confirmation.
+7. **List and roster keyed by assignment.** The assignments list shows one row per assignment, with an **External** badge on external rows. The roster drawer opens by assignment id, not training id.
+
+Data model for Part 4:
+
+```sql
+ALTER TABLE "trainingAssignment"
+  ALTER COLUMN "trainingId" DROP NOT NULL,
+  ADD COLUMN "name" TEXT,
+  ADD CONSTRAINT "trainingAssignment_training_or_name"
+    CHECK (num_nonnulls("trainingId", "name") = 1);
+
+ALTER TABLE "training" DROP COLUMN "isExternal";
+```
+
+`get_training_assignment_status` and `get_training_assignment_summary` are dropped and recreated:
+- The status function left-joins `training`. It returns `COALESCE(t.name, ta.name)` as the name, `'Once'` as the frequency of an external row, and a new `isExternal` column. It keeps a row when its training is Active or when it has no training.
+- The summary groups by assignment and returns `trainingAssignmentId` and `isExternal`.
+- `recordTrainingCompletion` takes the assignment's training or, for an external assignment, treats it as Active and one-time. It validates a certificate only when one is posted.
 
 ## Data Model Changes
 
@@ -186,3 +220,4 @@ Every new string uses Lingui (`useLingui().t` or `<Trans>`).
 - 2026-10-14: Certificate paths come from a new service, not from the status RPC. Removing a completion keeps the ability.
 - 2026-10-14: Implemented. The server builds the certificate key. The employee wizard takes PDF, PNG and JPG; the manager modal also takes HEIC. Removing a completion needs `delete: resources`.
 - 2026-10-14: Page layout (Part 3). Every completion goes through `recordTrainingCompletion`: it refuses a training that is not Active, works out the period on the server and removes an orphaned certificate. `isExternal` changes only while Draft. Guide keys are `{uploadId}/{file name}`.
+- 2026-10-14: Part 4. External trainings become name-only assignments that only an admin completes, with an optional certificate. Content is written or a PDF, not both.

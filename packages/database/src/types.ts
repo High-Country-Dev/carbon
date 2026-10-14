@@ -69351,7 +69351,6 @@ export type Database = {
           grantsAbilityId: string | null
           guidePath: string | null
           id: string
-          isExternal: boolean
           name: string
           processId: string | null
           status: Database["public"]["Enums"]["trainingStatus"]
@@ -69373,7 +69372,6 @@ export type Database = {
           grantsAbilityId?: string | null
           guidePath?: string | null
           id?: string
-          isExternal?: boolean
           name: string
           processId?: string | null
           status?: Database["public"]["Enums"]["trainingStatus"]
@@ -69395,7 +69393,6 @@ export type Database = {
           grantsAbilityId?: string | null
           guidePath?: string | null
           id?: string
-          isExternal?: boolean
           name?: string
           processId?: string | null
           status?: Database["public"]["Enums"]["trainingStatus"]
@@ -69576,7 +69573,8 @@ export type Database = {
           createdBy: string
           groupIds: string[] | null
           id: string
-          trainingId: string
+          name: string | null
+          trainingId: string | null
           updatedAt: string | null
           updatedBy: string | null
         }
@@ -69586,7 +69584,8 @@ export type Database = {
           createdBy: string
           groupIds?: string[] | null
           id?: string
-          trainingId: string
+          name?: string | null
+          trainingId?: string | null
           updatedAt?: string | null
           updatedBy?: string | null
         }
@@ -69596,7 +69595,8 @@ export type Database = {
           createdBy?: string
           groupIds?: string[] | null
           id?: string
-          trainingId?: string
+          name?: string | null
+          trainingId?: string | null
           updatedAt?: string | null
           updatedBy?: string | null
         }
@@ -93991,6 +93991,7 @@ export type Database = {
           employeeName: string
           employeeStartDate: string
           frequency: Database["public"]["Enums"]["trainingFrequency"]
+          isExternal: boolean
           status: string
           trainingAssignmentId: string
           trainingId: string
@@ -94005,9 +94006,11 @@ export type Database = {
           completionPercent: number
           currentPeriod: string
           frequency: Database["public"]["Enums"]["trainingFrequency"]
+          isExternal: boolean
           overdue: number
           pending: number
           totalAssigned: number
+          trainingAssignmentId: string
           trainingId: string
           trainingName: string
         }[]

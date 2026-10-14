@@ -53,23 +53,10 @@ export async function action({ request }: ActionFunctionArgs) {
           updatedAt: new Date().toISOString()
         })
         .in("id", ids as string[]);
-    case "isExternal":
     case "guidePath": {
-      // These change how employees take the training, so Draft only.
+      // The guide is the training's content, so it changes only while Draft.
       const refusal = await refuseUnlessDraft(client, companyId, ids);
       if (refusal) return refusal;
-
-      if (field === "isExternal") {
-        return await client
-          .from("training")
-          .update({
-            isExternal: value === "on",
-            updatedBy: userId,
-            updatedAt: new Date().toISOString()
-          })
-          .in("id", ids as string[])
-          .eq("companyId", companyId);
-      }
 
       const trainingId = ids[0] as string;
       if (
@@ -122,7 +109,9 @@ async function refuseUnlessDraft(
   }
   if (trainings.data.some((training) => training.status !== "Draft")) {
     return {
-      error: { message: "This can only change while the training is Draft" },
+      error: {
+        message: "The guide can only change while the training is Draft"
+      },
       data: null
     };
   }

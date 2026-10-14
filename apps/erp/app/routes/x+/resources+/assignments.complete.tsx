@@ -59,28 +59,12 @@ export async function action({ request }: ActionFunctionArgs) {
     );
   }
 
-  const training = assignment.data.training;
-  if (!training || Array.isArray(training)) {
-    logger.error("Training not found for assignment", {
-      companyId,
-      trainingAssignmentId: trainingAssignmentId.toString()
-    });
-    return data(
-      { error: "Training not found" },
-      {
-        status: 404,
-        // @ts-expect-error TS2322 - TODO: fix type
-        headers: await flash(request, error(null, "Training not found"))
-      }
-    );
-  }
-
   const recorded = await recordTrainingCompletion(client, {
     companyId,
     trainingAssignmentId: trainingAssignmentId.toString(),
     employeeId: employeeId.toString(),
     completedBy: userId,
-    training,
+    assignment: assignment.data,
     certificate: formData.get("certificate")
   });
   if (recorded.error !== null) {

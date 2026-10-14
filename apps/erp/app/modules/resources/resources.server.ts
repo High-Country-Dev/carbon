@@ -51,15 +51,18 @@ export async function postMaintenanceLabor(args: {
 
 const trainingLogger = getLogger("erp", "training-completion");
 
-type TrainingForCompletion = {
-  status: string;
-  frequency: Database["public"]["Enums"]["trainingFrequency"];
-  isExternal: boolean;
+// An external assignment (no training) is always open and one-time.
+type AssignmentForCompletion = {
+  trainingId: string | null;
+  training: {
+    status: string;
+    frequency: Database["public"]["Enums"]["trainingFrequency"];
+  } | null;
 };
 
-// The only completion path (quiz, certificate upload, manager Mark Complete).
-// The server builds the certificate key, so a caller cannot point a completion
-// at another person's file.
+// The only completion path (quiz, manager Mark Complete). An external
+// assignment may carry a certificate; the server builds its key, so a caller
+// cannot point a completion at another person's file.
 export async function recordTrainingCompletion(
   client: SupabaseClient<Database>,
   args: {
@@ -67,19 +70,22 @@ export async function recordTrainingCompletion(
     trainingAssignmentId: string;
     employeeId: string;
     completedBy: string;
-    training: TrainingForCompletion;
+    assignment: AssignmentForCompletion;
     certificate?: FormDataEntryValue | null;
   }
 ): Promise<{ error: null } | { error: string; status: 400 | 500 }> {
-  const { companyId, trainingAssignmentId, employeeId, completedBy, training } =
-    args;
+  const { companyId, trainingAssignmentId, employeeId, completedBy } = args;
+  const isExternal = args.assignment.trainingId === null;
+  const training = args.assignment.training;
 
-  if (training.status !== "Active") {
+  if (!isExternal && training?.status !== "Active") {
     return { error: "This training is not currently active", status: 400 };
   }
 
   let certificatePath: string | null = null;
-  if (training.isExternal) {
+  const hasCertificate =
+    args.certificate instanceof File && args.certificate.size > 0;
+  if (isExternal && hasCertificate) {
     const certificate = validateTrainingCertificate(args.certificate ?? null);
     if (certificate.error !== null) {
       return { error: certificate.error, status: 400 };
@@ -104,7 +110,7 @@ export async function recordTrainingCompletion(
   }
 
   const period = await client.rpc("get_current_training_period", {
-    frequency: training.frequency
+    frequency: training?.frequency ?? "Once"
   });
 
   const completion = await insertTrainingCompletion(client, {

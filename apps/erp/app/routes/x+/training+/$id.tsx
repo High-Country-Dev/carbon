@@ -9,13 +9,17 @@ import { getLogger } from "@carbon/logger";
 import type { JSONContent } from "@carbon/react";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
+  HStack,
   isRichTextEmpty,
   RecordOutlet,
   RichTextView,
+  ToggleGroup,
+  ToggleGroupItem,
   useDebounce,
   VStack
 } from "@carbon/react";
@@ -28,6 +32,7 @@ import { useState } from "react";
 import type { LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useParams } from "react-router";
 import { PanelProvider, ResizablePanels } from "~/components/Layout/Panels";
+import { Confirm } from "~/components/Modals";
 import { useImageUpload, usePermissions, useUser } from "~/hooks";
 import {
   getTraining,
@@ -92,11 +97,6 @@ export default function TrainingRoute() {
   const { id } = useParams();
   if (!id) throw new Error("Could not find id");
 
-  const { training } = useLoaderData<typeof loader>();
-  const permissions = usePermissions();
-  const canEditGuide =
-    permissions.can("update", "people") && training.status === "Draft";
-
   return (
     <PanelProvider key={id}>
       <div className="flex flex-col h-[calc(100dvh-var(--topbar-height)-var(--content-inset))] overflow-hidden w-full">
@@ -109,12 +109,6 @@ export default function TrainingRoute() {
               content={
                 <div className="bg-card h-[calc(100dvh-var(--topbar-height)-var(--header-height)-var(--content-inset))] overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-accent w-full">
                   <VStack spacing={4} className="p-4">
-                    <TrainingGuide
-                      key={`guide-${id}`}
-                      trainingId={id}
-                      guidePath={training.guidePath}
-                      canEdit={canEditGuide}
-                    />
                     <TrainingContent key={`content-${id}`} />
                     <RecordOutlet />
                   </VStack>
@@ -133,6 +127,7 @@ function TrainingContent() {
   const { id } = useParams();
   if (!id) throw new Error("Could not find id");
 
+  const { t } = useLingui();
   const permissions = usePermissions();
   const loaderData = useLoaderData<typeof loader>();
 
@@ -164,18 +159,58 @@ function TrainingContent() {
     permissions.can("update", "people") &&
     loaderData?.training?.status === "Draft";
 
+  const guidePath = loaderData?.training?.guidePath ?? null;
+  // Content is written text or a PDF, never both. A training with a guide is a
+  // PDF training; the toggle only remembers "PDF" before the first upload.
+  const [pdfChosen, setPdfChosen] = useState(false);
+  const [isRemovePdfOpen, setIsRemovePdfOpen] = useState(false);
+  const contentType = guidePath || pdfChosen ? "pdf" : "write";
+
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>
-          <Trans>Content</Trans>
-        </CardTitle>
-        <CardDescription>
-          <Trans>Shown to employees below the PDF guide</Trans>
-        </CardDescription>
-      </CardHeader>
-      <CardContent className={canEdit ? "p-0 overflow-hidden" : undefined}>
-        {canEdit ? (
+      <HStack className="w-full justify-between items-start">
+        <CardHeader>
+          <CardTitle>
+            <Trans>Content</Trans>
+          </CardTitle>
+          <CardDescription>
+            <Trans>What employees read before the questions</Trans>
+          </CardDescription>
+        </CardHeader>
+        <CardAction>
+          <ToggleGroup
+            type="single"
+            value={contentType}
+            disabled={!canEdit}
+            onValueChange={(value) => {
+              if (value === "pdf") setPdfChosen(true);
+              if (value === "write") {
+                if (guidePath) setIsRemovePdfOpen(true);
+                else setPdfChosen(false);
+              }
+            }}
+          >
+            <ToggleGroupItem size="sm" value="write">
+              <Trans>Write</Trans>
+            </ToggleGroupItem>
+            <ToggleGroupItem size="sm" value="pdf">
+              <Trans>Upload PDF</Trans>
+            </ToggleGroupItem>
+          </ToggleGroup>
+        </CardAction>
+      </HStack>
+      <CardContent
+        className={
+          canEdit && contentType === "write" ? "p-0 overflow-hidden" : undefined
+        }
+      >
+        {contentType === "pdf" ? (
+          <TrainingGuide
+            trainingId={id}
+            guidePath={guidePath}
+            canEdit={canEdit}
+          />
+        ) : canEdit ? (
           // Flush toolbar: pad the text, not the panel.
           <Editor
             toolbar
@@ -201,6 +236,24 @@ function TrainingContent() {
           />
         )}
       </CardContent>
+      {isRemovePdfOpen && (
+        <Confirm
+          action={path.to.bulkUpdateTraining}
+          title={t`Switch to Written Content`}
+          text={t`This removes the PDF. Employees will see the written content instead.`}
+          confirmText={t`Remove PDF`}
+          confirmVariant="destructive"
+          onCancel={() => setIsRemovePdfOpen(false)}
+          onSubmit={() => {
+            setIsRemovePdfOpen(false);
+            setPdfChosen(false);
+          }}
+        >
+          <input type="hidden" name="ids" value={id} />
+          <input type="hidden" name="field" value="guidePath" />
+          <input type="hidden" name="value" value="" />
+        </Confirm>
+      )}
     </Card>
   );
 }

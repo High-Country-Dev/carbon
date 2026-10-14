@@ -752,11 +752,12 @@ export async function getOutstandingTrainingsForUser(
 
   if (error) return { data: null, error };
 
-  // Filter to this employee's pending/overdue trainings
+  // External assignments are completed by an admin, never by the employee.
   const filteredData = (data ?? [])
     .filter(
       (d) =>
         d.employeeId === employeeId &&
+        !d.isExternal &&
         (d.status === "Pending" || d.status === "Overdue")
     )
     .sort((a, b) => {
@@ -948,7 +949,7 @@ export async function getTrainingAssignment(
 ) {
   return client
     .from("trainingAssignment")
-    .select("*, training(id, name, frequency, type, status, isExternal)")
+    .select("*, training(id, name, frequency, type, status)")
     .eq("id", assignmentId)
     .single();
 }
@@ -972,7 +973,6 @@ export async function getTrainingAssignmentForCompletion(
         status,
         estimatedDuration,
         guidePath,
-        isExternal,
         trainingQuestion(*)
       )`
     )
@@ -1004,6 +1004,7 @@ export async function getTrainingAssignmentStatus(
   companyId: string,
   args?: {
     trainingId?: string;
+    trainingAssignmentId?: string;
     status?: "Completed" | "Pending" | "Overdue" | "Not Required";
     search?: string;
   } & GenericQueryFilters
@@ -1019,6 +1020,11 @@ export async function getTrainingAssignmentStatus(
   // Apply filters in memory since we're using an RPC function
   if (args?.trainingId) {
     filteredData = filteredData.filter((d) => d.trainingId === args.trainingId);
+  }
+  if (args?.trainingAssignmentId) {
+    filteredData = filteredData.filter(
+      (d) => d.trainingAssignmentId === args.trainingAssignmentId
+    );
   }
   if (args?.status) {
     filteredData = filteredData.filter((d) => d.status === args.status);
@@ -2142,7 +2148,8 @@ export async function upsertTrainingAssignment(
   client: SupabaseClient<Database>,
   assignment: {
     id?: string;
-    trainingId: string;
+    trainingId?: string | null;
+    name?: string | null;
     groupIds: string[];
     companyId: string;
     createdBy?: string;
@@ -2150,10 +2157,13 @@ export async function upsertTrainingAssignment(
   }
 ) {
   if (assignment.id) {
+    // Whether an assignment is internal or external is fixed at creation; only
+    // an external one's name can change.
     return client
       .from("trainingAssignment")
       .update({
         groupIds: assignment.groupIds,
+        ...(assignment.name ? { name: assignment.name } : {}),
         updatedBy: assignment.updatedBy
       })
       .eq("id", assignment.id)
@@ -2163,7 +2173,8 @@ export async function upsertTrainingAssignment(
   return client
     .from("trainingAssignment")
     .insert({
-      trainingId: assignment.trainingId,
+      trainingId: assignment.trainingId ?? null,
+      name: assignment.trainingId ? null : (assignment.name ?? null),
       groupIds: assignment.groupIds,
       companyId: assignment.companyId,
       createdBy: assignment.createdBy!

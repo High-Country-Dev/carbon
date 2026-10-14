@@ -63421,6 +63421,9 @@ export default {
             $ref: "#/parameters/rowFilter.trainingAssignment.updatedBy"
           },
           {
+            $ref: "#/parameters/rowFilter.trainingAssignment.name"
+          },
+          {
             $ref: "#/parameters/select"
           },
           {
@@ -63504,6 +63507,9 @@ export default {
             $ref: "#/parameters/rowFilter.trainingAssignment.updatedBy"
           },
           {
+            $ref: "#/parameters/rowFilter.trainingAssignment.name"
+          },
+          {
             $ref: "#/parameters/preferReturn"
           }
         ],
@@ -63539,6 +63545,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.trainingAssignment.updatedBy"
+          },
+          {
+            $ref: "#/parameters/rowFilter.trainingAssignment.name"
           },
           {
             $ref: "#/parameters/body.trainingAssignment"
@@ -96781,9 +96790,6 @@ export default {
             $ref: "#/parameters/rowFilter.training.guidePath"
           },
           {
-            $ref: "#/parameters/rowFilter.training.isExternal"
-          },
-          {
             $ref: "#/parameters/select"
           },
           {
@@ -96900,9 +96906,6 @@ export default {
             $ref: "#/parameters/rowFilter.training.guidePath"
           },
           {
-            $ref: "#/parameters/rowFilter.training.isExternal"
-          },
-          {
             $ref: "#/parameters/preferReturn"
           }
         ],
@@ -96971,9 +96974,6 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.training.guidePath"
-          },
-          {
-            $ref: "#/parameters/rowFilter.training.isExternal"
           },
           {
             $ref: "#/parameters/body.training"
@@ -147757,7 +147757,7 @@ export default {
       type: "object"
     },
     trainingAssignment: {
-      required: ["id", "trainingId", "companyId", "createdAt", "createdBy"],
+      required: ["id", "companyId", "createdAt", "createdBy"],
       properties: {
         id: {
           default: "public.id('ta'::text)",
@@ -147802,6 +147802,10 @@ export default {
         updatedBy: {
           description:
             "Note:\nThis is a Foreign Key to `user.id`.<fk table='user' column='id'/>",
+          format: "text",
+          type: "string"
+        },
+        name: {
           format: "text",
           type: "string"
         }
@@ -164110,8 +164114,7 @@ export default {
         "frequency",
         "type",
         "createdAt",
-        "createdBy",
-        "isExternal"
+        "createdBy"
       ],
       properties: {
         id: {
@@ -164213,11 +164216,6 @@ export default {
         guidePath: {
           format: "text",
           type: "string"
-        },
-        isExternal: {
-          default: false,
-          format: "boolean",
-          type: "boolean"
         }
       },
       type: "object"
@@ -201162,6 +201160,12 @@ export default {
       in: "query",
       type: "string"
     },
+    "rowFilter.trainingAssignment.name": {
+      name: "name",
+      required: false,
+      in: "query",
+      type: "string"
+    },
     "body.configurationRule": {
       name: "configurationRule",
       description: "configurationRule",
@@ -219544,12 +219548,6 @@ export default {
     },
     "rowFilter.training.guidePath": {
       name: "guidePath",
-      required: false,
-      in: "query",
-      type: "string"
-    },
-    "rowFilter.training.isExternal": {
-      name: "isExternal",
       required: false,
       in: "query",
       type: "string"

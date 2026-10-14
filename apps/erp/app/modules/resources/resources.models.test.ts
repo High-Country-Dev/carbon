@@ -125,3 +125,44 @@ describe("validateTrainingCertificate", async () => {
     ).toBe("The certificate must be 10 MB or smaller");
   });
 });
+
+// An external assignment has a name and no training; an internal one has a
+// training. Each must refuse the other's missing field.
+describe("trainingAssignmentValidator", async () => {
+  const { trainingAssignmentValidator } = await import("./resources.models");
+
+  it("accepts an internal assignment with a training", () => {
+    const parsed = trainingAssignmentValidator.safeParse({
+      isExternal: false,
+      trainingId: "trn_1",
+      groupIds: ["grp_1"]
+    });
+    expect(parsed.success).toBe(true);
+  });
+
+  it("refuses an internal assignment without a training", () => {
+    const parsed = trainingAssignmentValidator.safeParse({
+      isExternal: false,
+      groupIds: ["grp_1"]
+    });
+    expect(parsed.success).toBe(false);
+  });
+
+  it("accepts an external assignment with a name", () => {
+    const parsed = trainingAssignmentValidator.safeParse({
+      isExternal: true,
+      name: "Forklift Safety",
+      groupIds: ["grp_1"]
+    });
+    expect(parsed.success).toBe(true);
+  });
+
+  it("refuses an external assignment without a name", () => {
+    const parsed = trainingAssignmentValidator.safeParse({
+      isExternal: true,
+      name: "  ",
+      groupIds: ["grp_1"]
+    });
+    expect(parsed.success).toBe(false);
+  });
+});

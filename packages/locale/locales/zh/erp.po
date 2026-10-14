@@ -4655,14 +4655,8 @@ msgstr "集中式结算已启用"
 msgid "Cert Version"
 msgstr "证书版本"
 
-msgid "Certificate not accepted"
-msgstr "证书未被接受"
-
 msgid "Certificate Number"
 msgstr "证书编号"
-
-msgid "Certificate Submitted"
-msgstr "证书已提交"
 
 msgid "Certificate uploaded"
 msgstr "证书已上传"
@@ -4966,9 +4960,6 @@ msgstr "再次单击以断开连接"
 
 msgid "Click components in the viewer to add them. Shift-click adds several."
 msgstr "点击查看器中的组件以添加它们。Shift 点击可添加多个。"
-
-msgid "Click or drop to choose a different file"
-msgstr "点击或拖放以选择不同的文件"
 
 msgid "Click to rename"
 msgstr "单击以重命名"
@@ -8076,9 +8067,6 @@ msgstr "直运状态"
 msgid "Drop whole pages or sections a customer doesn't need."
 msgstr "删除客户不需要的整个页面或部分。"
 
-msgid "Drop your certificate here, or click to choose a file"
-msgstr "在此拖放您的证书，或点击以选择文件"
-
 msgid "Drop your file here, or click to browse."
 msgstr "将文件拖放到此处，或点击浏览。"
 
@@ -8763,14 +8751,8 @@ msgstr "已分配此培训的员工可以打开它。内容、指南和问题不
 msgid "Employees can no longer open this training."
 msgstr "员工无法再打开此培训"
 
-msgid "Employees complete this training by uploading their certificate. Turn off External Certification in Properties to use questions."
-msgstr "员工通过上传证书完成此培训。在属性中关闭外部认证以使用问题。"
-
-msgid "Employees read it before the questions"
-msgstr "员工在回答问题之前阅读它"
-
-msgid "Employees will no longer see this PDF. You can upload a new one while the training is Draft."
-msgstr "员工将不再看到此PDF。当培训处于草稿时，您可以上传新的。"
+msgid "Employees complete a training in Carbon"
+msgstr ""
 
 msgid "Empty"
 msgstr "空"
@@ -9489,12 +9471,6 @@ msgstr "扩展价格"
 msgid "External"
 msgstr "外部"
 
-msgid "External certification"
-msgstr "外部认证"
-
-msgid "External Certification"
-msgstr "外部认证"
-
 msgid "External Delta"
 msgstr "外部差异"
 
@@ -9518,6 +9494,9 @@ msgstr "外部参考"
 
 msgid "External Reference"
 msgstr "外部参考"
+
+msgid "External training"
+msgstr ""
 
 msgid "Extra fields to capture data Carbon doesn't track by default"
 msgstr "用于捕获 Carbon 默认不跟踪的额外数据的字段"
@@ -13057,6 +13036,10 @@ msgstr "已映射的值"
 msgid "Mark \"{0}\" as passed?"
 msgstr "将\"{0}\"标记为已通过？"
 
+#. placeholder {0}: assignment.employeeName?.trim()
+msgid "Mark {0} complete. Attach their certificate if you have one."
+msgstr ""
+
 msgid "Mark absent"
 msgstr "标记缺席"
 
@@ -14737,8 +14720,8 @@ msgstr "无付款行。"
 msgid "No payments yet."
 msgstr "还没有付款。"
 
-msgid "No PDF guide"
-msgstr "无PDF指南"
+msgid "No PDF uploaded"
+msgstr ""
 
 msgid "No planned invoices are removed."
 msgstr "未删除已计划的发票。"
@@ -14781,9 +14764,6 @@ msgstr "还没有生产记录。"
 
 msgid "No purchases in this period"
 msgstr "此期间无采购"
-
-msgid "No quiz for external certifications"
-msgstr "外部认证无测验"
 
 msgid "No Quote"
 msgstr "不报价"
@@ -16293,9 +16273,6 @@ msgstr "PDF（文件）"
 msgid "PDF downloaded"
 msgstr "PDF已下载"
 
-msgid "PDF Guide"
-msgstr "PDF指南"
-
 msgid "PDF pages"
 msgstr "PDF 页面"
 
@@ -16304,9 +16281,6 @@ msgstr "PDF 预览"
 
 msgid "PDF Watermark"
 msgstr "PDF 水印"
-
-msgid "PDF, PNG or JPG, up to 10 MB"
-msgstr "PDF、PNG或JPG，最大10 MB"
 
 msgid "Pending"
 msgstr "待处理"
@@ -18346,8 +18320,8 @@ msgstr "移除零件"
 msgid "Remove path"
 msgstr "移除路径"
 
-msgid "Remove PDF Guide"
-msgstr "移除PDF指南"
+msgid "Remove PDF"
+msgstr ""
 
 msgid "Remove row"
 msgstr "移除行"
@@ -20733,9 +20707,6 @@ msgstr "按金额显示前1,000个分组"
 msgid "Shown as a faint background behind every page of generated PDFs"
 msgstr "作为淡色背景显示在每个生成的PDF页面后面"
 
-msgid "Shown to employees below the PDF guide"
-msgstr "显示在PDF指南下方给员工"
-
 msgid "Shown to the customer on the invoice"
 msgstr "在发票上向客户显示"
 
@@ -21410,9 +21381,6 @@ msgstr "子分类账"
 msgid "Submit anonymously"
 msgstr "匿名提交"
 
-msgid "Submit Certificate"
-msgstr "提交证书"
-
 msgid "Submit for approval"
 msgstr "提交以审批"
 
@@ -21757,6 +21725,9 @@ msgstr "切换到平移模式"
 msgid "Switch to select mode"
 msgstr "切换到选择模式"
 
+msgid "Switch to Written Content"
+msgstr ""
+
 msgid "Switch users over and confirm access"
 msgstr "切换用户并确认访问权限"
 
@@ -21820,6 +21791,9 @@ msgstr "采用制造此物料所消耗的原材料中最短的保质期。当产
 
 msgid "taken"
 msgstr "已采取"
+
+msgid "Taken outside Carbon. You mark each employee complete."
+msgstr ""
 
 msgid "Takes Effect"
 msgstr "生效"
@@ -23480,6 +23454,9 @@ msgstr "此采购订单"
 msgid "This Quarter"
 msgstr "本季度"
 
+msgid "This removes the PDF. Employees will see the written content instead."
+msgstr ""
+
 msgid "This removes their authenticator app, so their next sign-in only needs a magic link. Use this when they have lost access to their authenticator. It affects their sign-in for every company they belong to."
 msgstr "此操作移除其身份验证应用，因此其下次登录只需要魔法链接。当他们无法访问其身份验证器时使用此选项。它影响其所属每个公司的登录。"
 
@@ -23537,10 +23514,6 @@ msgstr "这将从今天的日程表中移除{employeeName}。再次保存以确�
 
 msgid "This tool is activated when change notice {activationLockId} is released."
 msgstr "当变更通知 {activationLockId} 已下达时，这个刀具被激活。"
-
-#. placeholder {0}: assignment.employeeName?.trim()
-msgid "This training is external. Upload {0}'s certificate to mark it complete."
-msgstr "此培训是外部的。上传 {0} 的证书以标记为完成。"
 
 msgid "This unit has no cost in inventory"
 msgstr "该件在库存中没有成本"
@@ -24083,8 +24056,8 @@ msgstr "培训未记录"
 msgid "Training Plan"
 msgstr "培训计划"
 
-msgid "Training taken outside Carbon, such as a vendor course. Employees complete it by uploading the certificate they received instead of answering a quiz."
-msgstr "在Carbon外部进行的培训，例如供应商课程。员工通过上传他们收到的证书来完成它，而不是回答测验。"
+msgid "Training taken outside Carbon, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
+msgstr ""
 
 msgid "Training your team via the Academy and in-app guides"
 msgstr "通过 Academy 和应用内指南培训班组"
@@ -24625,9 +24598,6 @@ msgstr "上传"
 msgid "Upload a PDF first"
 msgstr "先上传 PDF"
 
-msgid "Upload Certificate"
-msgstr "上传证书"
-
 msgid "Upload chart"
 msgstr "上传科目表"
 
@@ -24646,14 +24616,8 @@ msgstr "上传失败。请重试。"
 msgid "Upload new backup…"
 msgstr "上传新备份…"
 
-msgid "Upload one PDF, PNG or JPG file of 10 MB or less."
-msgstr "上传一个PDF、PNG或JPG文件，大小为10 MB或更少。"
-
-msgid "Upload the certificate you received for this training. Uploading it marks the training as complete."
-msgstr "上传您为此培训收到的证书。上传它将标记培训为完成。"
-
-msgid "Upload your certificate on the next step."
-msgstr "在下一步上传您的证书。"
+msgid "Upload PDF"
+msgstr ""
 
 msgid "Uploaded model"
 msgstr "已上传模型"
@@ -25424,6 +25388,9 @@ msgstr "每项资产的价值、使用期限以及租期结束时的处理方式
 msgid "What each period's payment is for this asset in the first year"
 msgstr "第一年内该资产每个期间的付款是多少"
 
+msgid "What employees read before the questions"
+msgstr ""
+
 msgid "What happens to an invoice once it is created"
 msgstr "发票创建后会发生什么"
 
@@ -25962,6 +25929,9 @@ msgstr "配置和数据工作会议"
 
 msgid "Worst Performing Machines"
 msgstr "性能最差的机器"
+
+msgid "Write"
+msgstr ""
 
 msgid "Write a note…"
 msgstr "输入备注…"

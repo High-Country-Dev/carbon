@@ -6,6 +6,7 @@ import { Select, ValidatedForm } from "@carbon/form";
 import {
   Badge,
   Button,
+  ChoiceCardGroup,
   Count,
   cn,
   HStack,
@@ -37,7 +38,7 @@ import {
 import { useFetcher } from "react-router";
 import type { z } from "zod";
 import { DateTime, EmployeeAvatar, Empty } from "~/components";
-import { Hidden, Submit, Users } from "~/components/Form";
+import { Input as FormInput, Hidden, Submit, Users } from "~/components/Form";
 import { usePermissions } from "~/hooks";
 import { trainingAssignmentValidator } from "~/modules/resources";
 import type {
@@ -394,6 +395,7 @@ const TrainingAssignmentForm = ({
                       <AssignmentFormContent
                         trainings={trainings}
                         isEditing={isEditing}
+                        defaultIsExternal={initialValues.isExternal}
                       />
                     </TabsContent>
                     <TabsContent
@@ -418,6 +420,7 @@ const TrainingAssignmentForm = ({
                   <AssignmentFormContent
                     trainings={trainings}
                     isEditing={isEditing}
+                    defaultIsExternal={initialValues.isExternal}
                   />
                 )}
               </ModalDrawerBody>
@@ -442,25 +445,60 @@ const TrainingAssignmentForm = ({
   );
 };
 
+type TrainingSource = "internal" | "external";
+
 function AssignmentFormContent({
   trainings,
-  isEditing
+  isEditing,
+  defaultIsExternal
 }: {
   trainings: TrainingListItem[];
   isEditing: boolean;
+  defaultIsExternal: boolean;
 }) {
   const { t } = useLingui();
+  const [source, setSource] = useState<TrainingSource>(
+    defaultIsExternal ? "external" : "internal"
+  );
+  const isExternal = source === "external";
+
   return (
     <VStack spacing={4}>
-      <Select
-        name="trainingId"
-        label={t`Training`}
-        isReadOnly={isEditing}
-        options={trainings.map((training) => ({
-          label: training.name ?? "",
-          value: training.id ?? ""
-        }))}
-      />
+      {/* An assignment's source is fixed once it exists. */}
+      {!isEditing && (
+        <ChoiceCardGroup<TrainingSource>
+          label={t`Training`}
+          termId="external-training"
+          value={source}
+          onChange={setSource}
+          options={[
+            {
+              value: "internal",
+              title: t`Internal`,
+              description: t`Employees complete a training in Carbon`
+            },
+            {
+              value: "external",
+              title: t`External`,
+              description: t`Taken outside Carbon. You mark each employee complete.`
+            }
+          ]}
+        />
+      )}
+      {isExternal && <input type="hidden" name="isExternal" value="on" />}
+      {isExternal ? (
+        <FormInput name="name" label={t`Name`} isRequired />
+      ) : (
+        <Select
+          name="trainingId"
+          label={t`Training`}
+          isReadOnly={isEditing}
+          options={trainings.map((training) => ({
+            label: training.name ?? "",
+            value: training.id ?? ""
+          }))}
+        />
+      )}
       <Users
         name="groupIds"
         label={t`Assign to Groups`}

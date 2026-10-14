@@ -49,7 +49,7 @@ import { DateTime, EmployeeAvatar, Empty, FileDropzone } from "~/components";
 import { Confirm } from "~/components/Modals";
 import { usePermissions } from "~/hooks";
 import {
-  getTraining,
+  getTrainingAssignment,
   getTrainingAssignmentStatus,
   getTrainingCertificatePaths,
   trainingCertificateAccept
@@ -72,18 +72,18 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     role: "employee"
   });
 
-  const { trainingId } = params;
-  if (!trainingId) {
+  const { assignmentId } = params;
+  if (!assignmentId) {
     throw redirect(
       path.to.trainingAssignments,
-      await flash(request, error(null, "Training ID is required"))
+      await flash(request, error(null, "Assignment ID is required"))
     );
   }
 
-  const [training, assignmentStatus] = await Promise.all([
-    getTraining(client, trainingId),
+  const [assignment, assignmentStatus] = await Promise.all([
+    getTrainingAssignment(client, assignmentId),
     getTrainingAssignmentStatus(client, companyId, {
-      trainingId,
+      trainingAssignmentId: assignmentId,
       status: undefined,
       search: undefined,
       limit: 10000,
@@ -93,10 +93,13 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     })
   ]);
 
-  if (training.error) {
+  if (assignment.error || assignment.data.companyId !== companyId) {
     throw redirect(
       path.to.trainingAssignments,
-      await flash(request, error(training.error, "Error loading training"))
+      await flash(
+        request,
+        error(assignment.error, "Error loading training assignment")
+      )
     );
   }
 
@@ -128,7 +131,8 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   return {
-    training: training.data,
+    name: assignment.data.training?.name ?? assignment.data.name ?? "",
+    isExternal: assignment.data.trainingId === null,
     assignments,
     certificatePaths: certificatePaths.data ?? {}
   };
@@ -190,11 +194,10 @@ function CertificateCompleteModal({
   const [file, setFile] = useState<File | null>(null);
 
   const onSubmit = () => {
-    if (!file) return;
     const formData = new FormData();
     formData.append("trainingAssignmentId", assignment.trainingAssignmentId);
     formData.append("employeeId", assignment.employeeId);
-    formData.append("certificate", file);
+    if (file) formData.append("certificate", file);
     fetcher.submit(formData, {
       method: "post",
       action: path.to.markTrainingComplete,
@@ -212,15 +215,14 @@ function CertificateCompleteModal({
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-          <ModalTitle>{t`Upload Certificate`}</ModalTitle>
+          <ModalTitle>{t`Mark Complete`}</ModalTitle>
         </ModalHeader>
         <ModalBody>
           <VStack spacing={4}>
             <p className="text-sm text-muted-foreground">
               <Trans>
-                This training is external. Upload{" "}
-                {assignment.employeeName?.trim()}'s certificate to mark it
-                complete.
+                Mark {assignment.employeeName?.trim()} complete. Attach their
+                certificate if you have one.
               </Trans>
             </p>
             <FileDropzone
@@ -247,7 +249,7 @@ function CertificateCompleteModal({
           </Button>
           <Button
             onClick={onSubmit}
-            isDisabled={!file || isSubmitting}
+            isDisabled={isSubmitting}
             isLoading={isSubmitting}
             leftIcon={<LuCircleCheck />}
           >
@@ -406,7 +408,7 @@ function AssignmentListItem({
 
 export default function TrainingAssignmentDetailRoute() {
   const { t } = useLingui();
-  const { training, assignments, certificatePaths } =
+  const { name, isExternal, assignments, certificatePaths } =
     useLoaderData<typeof loader>();
   const permissions = usePermissions();
   const navigate = useNavigate();
@@ -448,7 +450,7 @@ export default function TrainingAssignmentDetailRoute() {
         <DrawerHeader>
           <HStack className="justify-between w-full pr-8">
             <HStack spacing={2}>
-              <DrawerTitle>{training?.name}</DrawerTitle>
+              <DrawerTitle>{name}</DrawerTitle>
               {currentPeriod && (
                 <Badge variant="secondary">{currentPeriod}</Badge>
               )}
@@ -534,7 +536,7 @@ export default function TrainingAssignmentDetailRoute() {
                           ? (certificatePaths[assignment.completionId] ?? null)
                           : null
                       }
-                      isExternal={training.isExternal}
+                      isExternal={isExternal}
                       canRemove={permissions.can("delete", "resources")}
                       disabled={!permissions.can("update", "resources")}
                       isLast={index === filteredAssignments.length - 1}

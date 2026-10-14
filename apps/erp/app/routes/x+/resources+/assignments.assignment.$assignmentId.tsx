@@ -108,11 +108,12 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return validationError(validation.error);
   }
 
-  const { trainingId, groupIds } = validation.data;
+  const { isExternal, trainingId, name, groupIds } = validation.data;
 
   const result = await upsertTrainingAssignment(client, {
     id: assignmentId,
     trainingId,
+    name: isExternal ? name : null,
     groupIds,
     companyId: "", // not used for updates
     updatedBy: userId
@@ -132,22 +133,24 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  // Send notifications to all users in the assigned groups
-  try {
-    await trigger("notify", {
-      companyId,
-      documentId: assignmentId,
-      event: NotificationEvent.TrainingAssignment,
-      recipient: {
-        type: "group",
-        groupIds
-      },
-      from: userId
-    });
-  } catch (err) {
-    logger.error("Failed to send training assignment notifications", {
-      error: err
-    });
+  // An external training happens in an outside system, which notifies people.
+  if (!isExternal) {
+    try {
+      await trigger("notify", {
+        companyId,
+        documentId: assignmentId,
+        event: NotificationEvent.TrainingAssignment,
+        recipient: {
+          type: "group",
+          groupIds
+        },
+        from: userId
+      });
+    } catch (err) {
+      logger.error("Failed to send training assignment notifications", {
+        error: err
+      });
+    }
   }
 
   throw redirect(
@@ -164,7 +167,9 @@ export default function EditTrainingAssignmentRoute() {
 
   const initialValues = {
     id: params.assignmentId!,
+    isExternal: !assignment?.trainingId,
     trainingId: assignment?.trainingId ?? "",
+    name: assignment?.name ?? "",
     groupIds: assignment?.groupIds ?? []
   };
 

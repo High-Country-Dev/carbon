@@ -4655,14 +4655,8 @@ msgstr "Merkezleştirilmiş faturalandırma etkinleştirildi"
 msgid "Cert Version"
 msgstr "Sertifika Versiyonu"
 
-msgid "Certificate not accepted"
-msgstr "Sertifika kabul edilmedi"
-
 msgid "Certificate Number"
 msgstr "Sertifika Numarası"
-
-msgid "Certificate Submitted"
-msgstr "Sertifika Gönderildi"
 
 msgid "Certificate uploaded"
 msgstr "Sertifika Yüklendi"
@@ -4966,9 +4960,6 @@ msgstr "Bağlantıyı kesmek için yeniden tıklayın"
 
 msgid "Click components in the viewer to add them. Shift-click adds several."
 msgstr "Bileşenleri eklemek için görüntüleyicide tıklayın. Shift tuşuyla tıklamak birkaçını ekler."
-
-msgid "Click or drop to choose a different file"
-msgstr "Farklı bir dosya seçmek için tıklayın veya sürükleyip bırakın"
 
 msgid "Click to rename"
 msgstr "Yeniden adlandırmak için tıklayın"
@@ -8076,9 +8067,6 @@ msgstr "Sevkiyatı Bölme Durumları"
 msgid "Drop whole pages or sections a customer doesn't need."
 msgstr "Müşterinin ihtiyaç duymadığı sayfaları veya bölümleri tamamen kaldırın."
 
-msgid "Drop your certificate here, or click to choose a file"
-msgstr "Sertifikanızı buraya sürükleyip bırakın veya bir dosya seçmek için tıklayın"
-
 msgid "Drop your file here, or click to browse."
 msgstr "Dosyanızı buraya bırakın veya göz atmak için tıklayın."
 
@@ -8763,14 +8751,8 @@ msgstr "Bu eğitime atanan çalışanlar açabilir. İçerik, kılavuz ve sorula
 msgid "Employees can no longer open this training."
 msgstr "Çalışanlar artık bu eğitimi açamaz."
 
-msgid "Employees complete this training by uploading their certificate. Turn off External Certification in Properties to use questions."
-msgstr "Çalışanlar bu eğitimi sertifikalarını yükleyerek tamamlarlar. Soruları kullanmak için Özelliklerde Harici Sertifika seçeneğini kapatın."
-
-msgid "Employees read it before the questions"
-msgstr "Çalışanlar bunu sorulardan önce okurlar"
-
-msgid "Employees will no longer see this PDF. You can upload a new one while the training is Draft."
-msgstr "Çalışanlar artık bu PDF'yi görmeyecekler. Eğitim Taslak iken yeni bir tane yükleyebilirsiniz."
+msgid "Employees complete a training in Carbon"
+msgstr ""
 
 msgid "Empty"
 msgstr "Boş"
@@ -9489,12 +9471,6 @@ msgstr "Genelletilmiş Fiyat"
 msgid "External"
 msgstr "Harici"
 
-msgid "External certification"
-msgstr "Harici sertifika"
-
-msgid "External Certification"
-msgstr "Harici Sertifika"
-
 msgid "External Delta"
 msgstr "Harici Fark"
 
@@ -9518,6 +9494,9 @@ msgstr "Harici Referans"
 
 msgid "External Reference"
 msgstr "Harici Referans"
+
+msgid "External training"
+msgstr ""
 
 msgid "Extra fields to capture data Carbon doesn't track by default"
 msgstr "Carbon'ın varsayılan olarak izlemediği verileri yakalamak için ekstra alanlar"
@@ -13057,6 +13036,10 @@ msgstr "Eşlenen değerler"
 msgid "Mark \"{0}\" as passed?"
 msgstr "\"{0}\" geçti olarak işaretle?"
 
+#. placeholder {0}: assignment.employeeName?.trim()
+msgid "Mark {0} complete. Attach their certificate if you have one."
+msgstr ""
+
 msgid "Mark absent"
 msgstr "Devamsız olarak işaretле"
 
@@ -14737,8 +14720,8 @@ msgstr "Ödeme satırı yok."
 msgid "No payments yet."
 msgstr "Henüz ödeme yok."
 
-msgid "No PDF guide"
-msgstr "PDF kılavuzu yok"
+msgid "No PDF uploaded"
+msgstr ""
 
 msgid "No planned invoices are removed."
 msgstr "Planlanmış fatura kaldırılmamıştır."
@@ -14781,9 +14764,6 @@ msgstr "Henüz kayıtlı üretim yok."
 
 msgid "No purchases in this period"
 msgstr "Bu dönemde satın alma yok"
-
-msgid "No quiz for external certifications"
-msgstr "Harici sertifikalar için sınav yok"
 
 msgid "No Quote"
 msgstr "Teklif Yok"
@@ -16293,9 +16273,6 @@ msgstr "PDF (Belge)"
 msgid "PDF downloaded"
 msgstr "PDF indirildi"
 
-msgid "PDF Guide"
-msgstr "PDF Kılavuzu"
-
 msgid "PDF pages"
 msgstr "PDF sayfaları"
 
@@ -16304,9 +16281,6 @@ msgstr "PDF Önizleme"
 
 msgid "PDF Watermark"
 msgstr "PDF Filigranı"
-
-msgid "PDF, PNG or JPG, up to 10 MB"
-msgstr "PDF, PNG veya JPG, en fazla 10 MB"
 
 msgid "Pending"
 msgstr "Beklemede"
@@ -18346,8 +18320,8 @@ msgstr "Parçayı kaldır"
 msgid "Remove path"
 msgstr "Yolu kaldır"
 
-msgid "Remove PDF Guide"
-msgstr "PDF Kılavuzunu Kaldır"
+msgid "Remove PDF"
+msgstr ""
 
 msgid "Remove row"
 msgstr "Satırı kaldır"
@@ -20733,9 +20707,6 @@ msgstr "Miktar açısından ilk 1.000 grup gösteriliyor"
 msgid "Shown as a faint background behind every page of generated PDFs"
 msgstr "Oluşturulan PDF'lerin her sayfasının arkasında soluk bir arka plan olarak gösterilir"
 
-msgid "Shown to employees below the PDF guide"
-msgstr "PDF kılavuzunun altında çalışanlara gösterilen"
-
 msgid "Shown to the customer on the invoice"
 msgstr "Müşteriye faturada gösterilir"
 
@@ -21410,9 +21381,6 @@ msgstr "Yardımcı Defter"
 msgid "Submit anonymously"
 msgstr "Anonim olarak gönder"
 
-msgid "Submit Certificate"
-msgstr "Sertifika Gönder"
-
 msgid "Submit for approval"
 msgstr "Onay için gönder"
 
@@ -21757,6 +21725,9 @@ msgstr "Pan moduna geç"
 msgid "Switch to select mode"
 msgstr "Seçim moduna geç"
 
+msgid "Switch to Written Content"
+msgstr ""
+
 msgid "Switch users over and confirm access"
 msgstr "Kullanıcıları değiştir ve erişimi onayla"
 
@@ -21820,6 +21791,9 @@ msgstr "Bu öğeyi üretmek için tüketilen malzemelerdeki en kısa kalan raf �
 
 msgid "taken"
 msgstr "alındı"
+
+msgid "Taken outside Carbon. You mark each employee complete."
+msgstr ""
 
 msgid "Takes Effect"
 msgstr "Yürürlüğe Girer"
@@ -23480,6 +23454,9 @@ msgstr "bu satın alma siparişi"
 msgid "This Quarter"
 msgstr "Bu Çeyrek"
 
+msgid "This removes the PDF. Employees will see the written content instead."
+msgstr ""
+
 msgid "This removes their authenticator app, so their next sign-in only needs a magic link. Use this when they have lost access to their authenticator. It affects their sign-in for every company they belong to."
 msgstr "Bu işlem onların kimlik doğrulayıcı uygulamasını kaldırır, bu nedenle sonraki oturum açışları yalnızca sihirli bir bağlantı gerektirir. Kimlik doğrulayıcılarına erişimini kaybettikleri zaman bunu kullanın. Ait oldukları her şirket için oturum açışlarını etkiler."
 
@@ -23537,10 +23514,6 @@ msgstr "Bu, {employeeName} öğesini günlük panelden kaldırır. Onaylamak iç
 
 msgid "This tool is activated when change notice {activationLockId} is released."
 msgstr "Bu alet, {activationLockId} değişiklik bildirisi yayınlandığında etkinleştirilir."
-
-#. placeholder {0}: assignment.employeeName?.trim()
-msgid "This training is external. Upload {0}'s certificate to mark it complete."
-msgstr "Bu eğitim haricidir. Tamamlandığını işaretlemek için {0}'nin sertifikasını yükleyin."
 
 msgid "This unit has no cost in inventory"
 msgstr "Bu adet envanterde maliyet yok"
@@ -24083,8 +24056,8 @@ msgstr "Eğitim kaydedilmedi"
 msgid "Training Plan"
 msgstr "Eğitim Planı"
 
-msgid "Training taken outside Carbon, such as a vendor course. Employees complete it by uploading the certificate they received instead of answering a quiz."
-msgstr "Carbon dışında alınan, satıcı kursu gibi eğitimler. Çalışanlar sınava cevap vermek yerine aldıkları sertifikayı yükleyerek tamamlarlar."
+msgid "Training taken outside Carbon, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
+msgstr ""
 
 msgid "Training your team via the Academy and in-app guides"
 msgstr "Ekibinizi Academy ve uygulama içi kılavuzlar aracılığıyla eğitin"
@@ -24625,9 +24598,6 @@ msgstr "Yükle"
 msgid "Upload a PDF first"
 msgstr "Önce bir PDF yükleyin"
 
-msgid "Upload Certificate"
-msgstr "Sertifika Yükle"
-
 msgid "Upload chart"
 msgstr "Hesap planını yükle"
 
@@ -24646,14 +24616,8 @@ msgstr "Yükleme başarısız oldu. Lütfen tekrar deneyin."
 msgid "Upload new backup…"
 msgstr "Yeni yedekleme yükle…"
 
-msgid "Upload one PDF, PNG or JPG file of 10 MB or less."
-msgstr "Bir PDF, PNG veya JPG dosyasını 10 MB veya daha az yükleyin."
-
-msgid "Upload the certificate you received for this training. Uploading it marks the training as complete."
-msgstr "Bu eğitim için aldığınız sertifikayı yükleyin. Yükleme, eğitimi tamamlandı olarak işaretler."
-
-msgid "Upload your certificate on the next step."
-msgstr "Sertifikanızı bir sonraki adımda yükleyin."
+msgid "Upload PDF"
+msgstr ""
 
 msgid "Uploaded model"
 msgstr "Yüklenen model"
@@ -25424,6 +25388,9 @@ msgstr "Her varlığın değeri, ne kadar sürdüğü ve dönem sonunda ona ne o
 msgid "What each period's payment is for this asset in the first year"
 msgstr "İlk yılda bu varlık için her dönemin ödeme tutarı"
 
+msgid "What employees read before the questions"
+msgstr ""
+
 msgid "What happens to an invoice once it is created"
 msgstr "Fatura oluşturulduktan sonra ne olur"
 
@@ -25962,6 +25929,9 @@ msgstr "Yapılandırma ve veri üzerinde çalışma oturumları"
 
 msgid "Worst Performing Machines"
 msgstr "En kötü performans gösteren makineler"
+
+msgid "Write"
+msgstr ""
 
 msgid "Write a note…"
 msgstr "Not yazın…"

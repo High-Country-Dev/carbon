@@ -2318,8 +2318,8 @@ export const terms = {
     term: msg`SWIFT / BIC`,
     definition: msg`The code that identifies a bank internationally, 8 or 11 characters. A cross-border payment will not route without it, while a domestic transfer usually travels on the local routing code instead.`
   },
-  "external-certification": {
-    term: msg`External certification`,
-    definition: msg`Training taken outside Carbon, such as a vendor course. Employees complete it by uploading the certificate they received instead of answering a quiz.`
+  "external-training": {
+    term: msg`External training`,
+    definition: msg`Training taken outside Carbon, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate.`
   }
 } as const satisfies Record<string, GlossaryEntry>;

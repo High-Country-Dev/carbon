@@ -385,13 +385,34 @@ export const trainingAssignmentStatusOptions = [
   "Not Required"
 ] as const;
 
-export const trainingAssignmentValidator = z.object({
-  id: zfd.text(z.string().optional()),
-  trainingId: z.string().min(1, { message: "Training is required" }),
-  groupIds: z
-    .array(z.string())
-    .min(1, { message: "At least one group is required" })
-});
+// An internal assignment points at a training; an external one only has a
+// name, because the training happens in an outside system.
+export const trainingAssignmentValidator = z
+  .object({
+    id: zfd.text(z.string().optional()),
+    isExternal: zfd.checkbox(),
+    trainingId: zfd.text(z.string().optional()),
+    name: zfd.text(z.string().trim().optional()),
+    groupIds: z
+      .array(z.string())
+      .min(1, { message: "At least one group is required" })
+  })
+  .superRefine((value, ctx) => {
+    if (value.isExternal && !value.name) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["name"],
+        message: "Name is required"
+      });
+    }
+    if (!value.isExternal && !value.trainingId) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["trainingId"],
+        message: "Training is required"
+      });
+    }
+  });
 
 export const trainingCompletionValidator = z.object({
   trainingAssignmentId: z

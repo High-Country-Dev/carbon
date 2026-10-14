@@ -41,7 +41,6 @@ import {
   LuCircleCheck,
   LuCircleX,
   LuClock,
-  LuFileCheck,
   LuFlag,
   LuHouse,
   LuRefreshCcw
@@ -52,12 +51,10 @@ import {
   Link,
   useActionData,
   useLoaderData,
-  useNavigation,
   useSubmit
 } from "react-router";
 import {
   getTrainingAssignmentForCompletion,
-  TrainingCertificateStep,
   TrainingGuideViewer
 } from "~/modules/resources";
 import { recordTrainingCompletion } from "~/modules/resources/resources.server";
@@ -68,8 +65,6 @@ const logger = getLogger("erp", "share", "training");
 const PASSING_THRESHOLD = 0.8;
 
 interface ActionData {
-  /** Set when an External training was completed by certificate upload. */
-  certificate?: boolean;
   error?: string;
   passed: boolean;
   score: number;
@@ -100,7 +95,9 @@ async function getAuthorizedAssignment(
     serviceRole,
     assignmentId
   );
-  if (assignment.error || !assignment.data) {
+  // An external assignment (no training) is completed by an admin; the
+  // employee never opens it.
+  if (assignment.error || !assignment.data || !assignment.data.trainingId) {
     throw new Response("Training assignment not found", { status: 404 });
   }
 
@@ -139,10 +136,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     });
   }
 
-  // An External training is completed by certificate upload, not by quiz.
-  const questions = training.isExternal
-    ? []
-    : ((training.trainingQuestion ?? []) as TrainingQuestion[]);
+  const questions = (training.trainingQuestion ?? []) as TrainingQuestion[];
   const sortedQuestions = questions.sort((a, b) => a.sortOrder - b.sortOrder);
 
   return {
@@ -155,8 +149,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       frequency: training.frequency,
       type: training.type,
       estimatedDuration: training.estimatedDuration,
-      guidePath: training.guidePath,
-      isExternal: training.isExternal
+      guidePath: training.guidePath
     },
     questions: sortedQuestions,
     userId,
@@ -181,14 +174,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return null;
   }
 
-  if (formData.get("intent") === "certificate") {
-    return completeWithCertificate({
-      assignmentId: id,
-      userId,
-      file: formData.get("certificate")
-    });
-  }
-
   const answersJson = formData.get("answers") as string;
 
   if (!answersJson) {
@@ -210,13 +195,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
       trainingAssignmentId: id
     });
     return data({ error: "Training not found" }, { status: 404 });
-  }
-
-  if (training.isExternal) {
-    return data(
-      { error: "This training is completed by uploading a certificate" },
-      { status: 400 }
-    );
   }
 
   const questions = (training.trainingQuestion ?? []) as TrainingQuestion[];
@@ -300,7 +278,7 @@ export async function action({ request, params }: ActionFunctionArgs) {
       trainingAssignmentId: id,
       employeeId: userId,
       completedBy: userId,
-      training
+      assignment: { trainingId: assignment.trainingId, training }
     });
     if (recorded.error !== null) {
       return data({ error: recorded.error }, { status: recorded.status });
@@ -316,75 +294,17 @@ export async function action({ request, params }: ActionFunctionArgs) {
   };
 }
 
-async function completeWithCertificate({
-  assignmentId,
-  userId,
-  file
-}: {
-  assignmentId: string;
-  userId: string;
-  file: FormDataEntryValue | null;
-}) {
-  const serviceRole = getCarbonServiceRole();
-  const assignment = await getAuthorizedAssignment(
-    serviceRole,
-    assignmentId,
-    userId
-  );
-
-  const training = assignment.training;
-  if (!training || Array.isArray(training)) {
-    logger.error("Training not found for assignment", {
-      companyId: assignment.companyId,
-      trainingAssignmentId: assignmentId
-    });
-    return data({ error: "Training not found" }, { status: 404 });
-  }
-  if (!training.isExternal) {
-    return data(
-      { error: "This training is completed by answering its questions" },
-      { status: 400 }
-    );
-  }
-
-  const recorded = await recordTrainingCompletion(serviceRole, {
-    companyId: assignment.companyId,
-    trainingAssignmentId: assignmentId,
-    employeeId: userId,
-    completedBy: userId,
-    training,
-    certificate: file
-  });
-  if (recorded.error !== null) {
-    return data({ error: recorded.error }, { status: recorded.status });
-  }
-
-  return {
-    certificate: true,
-    passed: true,
-    score: 1,
-    totalQuestions: 0,
-    userAnswers: {},
-    correctAnswers: 0
-  } satisfies ActionData;
-}
-
 export default function TrainingWizard() {
   const { training, questions } = useLoaderData<typeof loader>();
   const actionData = useActionData<ActionData>();
   const submit = useSubmit();
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting";
-
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, UserAnswer>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [certificate, setCertificate] = useState<File | null>(null);
 
-  const isExternal = training.isExternal;
-  const totalSteps = isExternal ? 2 : questions.length + 1;
+  const totalSteps = questions.length + 1;
   const isContentStep = currentStep === 0;
   const currentQuestionIndex = currentStep - 1;
   const currentQuestion = questions[currentQuestionIndex];
@@ -425,14 +345,6 @@ export default function TrainingWizard() {
     formData.append("answers", JSON.stringify(answers));
     formData.append("questions", JSON.stringify(questions));
     submit(formData, { method: "post" });
-  };
-
-  const handleSubmitCertificate = () => {
-    if (!certificate) return;
-    const formData = new FormData();
-    formData.append("intent", "certificate");
-    formData.append("certificate", certificate);
-    submit(formData, { method: "post", encType: "multipart/form-data" });
   };
 
   const handleRetry = () => {
@@ -532,13 +444,6 @@ export default function TrainingWizard() {
         <CardContent>
           {isContentStep ? (
             <ContentStep training={training} />
-          ) : isExternal ? (
-            <TrainingCertificateStep
-              file={certificate}
-              onFileChange={setCertificate}
-              error={actionData?.error}
-              isDisabled={isSubmitting}
-            />
           ) : (
             <QuestionStep
               question={currentQuestion}
@@ -551,7 +456,7 @@ export default function TrainingWizard() {
         </CardContent>
       </Card>
 
-      {actionData?.error && !isExternal && (
+      {actionData?.error && (
         <Alert variant="destructive">
           <LuCircleX className="h-4 w-4" />
           <AlertTitle>
@@ -573,31 +478,7 @@ export default function TrainingWizard() {
           Previous
         </Button>
 
-        {isExternal ? (
-          isContentStep ? (
-            <Button
-              isRound
-              variant="primary"
-              size="lg"
-              rightIcon={<LuChevronRight />}
-              onClick={handleNext}
-            >
-              <Trans>Upload Certificate</Trans>
-            </Button>
-          ) : (
-            <Button
-              isRound
-              variant="primary"
-              size="lg"
-              rightIcon={<LuCircleCheck />}
-              onClick={handleSubmitCertificate}
-              isDisabled={!certificate || isSubmitting}
-              isLoading={isSubmitting}
-            >
-              <Trans>Submit Certificate</Trans>
-            </Button>
-          )
-        ) : isLastStep && questions.length > 0 ? (
+        {isLastStep && questions.length > 0 ? (
           <Button
             isRound
             variant="primary"
@@ -650,7 +531,6 @@ function ContentStep({
     content: unknown;
     estimatedDuration: string | null;
     guidePath: string | null;
-    isExternal: boolean;
   };
 }) {
   const hasContent =
@@ -679,21 +559,16 @@ function ContentStep({
         </div>
       )}
 
-      {training.guidePath && (
+      {/* A training's content is either its PDF guide or written text. */}
+      {training.guidePath ? (
         <TrainingGuideViewer guidePath={training.guidePath} />
-      )}
-
-      {htmlContent ? (
+      ) : htmlContent ? (
         <div
           className="prose dark:prose-invert max-w-none w-full"
           dangerouslySetInnerHTML={{
             __html: htmlContent
           }}
         />
-      ) : training.guidePath ? null : training.isExternal ? (
-        <p className="text-muted-foreground italic">
-          <Trans>Upload your certificate on the next step.</Trans>
-        </p>
       ) : (
         <p className="text-muted-foreground italic">
           No training content available. Please proceed to the questions.
@@ -920,40 +795,31 @@ function ResultsView({
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {actionData.certificate ? (
-              <div className="flex flex-col items-center justify-center gap-2">
-                <LuFileCheck className="size-16 text-emerald-500" />
-                <span className="text-xl uppercase font-mono font-semibold tracking-tight text-emerald-500">
-                  <Trans>Certificate Submitted</Trans>
-                </span>
+            <div className="flex flex-col items-center justify-center gap-2">
+              <span
+                className={cn(
+                  "text-xl uppercase font-mono font-semibold tracking-tight",
+                  actionData.passed ? "text-emerald-500" : "text-red-500"
+                )}
+              >
+                {actionData.passed ? "Passed" : "Failed"}
+              </span>
+              <div
+                className={cn(
+                  "text-6xl font-mono font-semibold",
+                  actionData.passed ? "text-emerald-500" : "text-red-500"
+                )}
+              >
+                {scorePercent}%
               </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center gap-2">
-                <span
-                  className={cn(
-                    "text-xl uppercase font-mono font-semibold tracking-tight",
-                    actionData.passed ? "text-emerald-500" : "text-red-500"
-                  )}
-                >
-                  {actionData.passed ? "Passed" : "Failed"}
-                </span>
-                <div
-                  className={cn(
-                    "text-6xl font-mono font-semibold",
-                    actionData.passed ? "text-emerald-500" : "text-red-500"
-                  )}
-                >
-                  {scorePercent}%
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  {actionData.correctAnswers} of {actionData.totalQuestions}{" "}
-                  correct
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  (Passing score: {Math.round(PASSING_THRESHOLD * 100)}%)
-                </p>
-              </div>
-            )}
+              <p className="text-sm text-muted-foreground">
+                {actionData.correctAnswers} of {actionData.totalQuestions}{" "}
+                correct
+              </p>
+              <p className="text-sm text-muted-foreground">
+                (Passing score: {Math.round(PASSING_THRESHOLD * 100)}%)
+              </p>
+            </div>
 
             <div className="flex flex-col gap-4">
               {actionData.passed ? (

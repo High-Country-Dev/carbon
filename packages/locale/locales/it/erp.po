@@ -4655,14 +4655,8 @@ msgstr "La fatturazione centralizzata è abilitata"
 msgid "Cert Version"
 msgstr "Versione Certificazione"
 
-msgid "Certificate not accepted"
-msgstr "Certificato non accettato"
-
 msgid "Certificate Number"
 msgstr "Numero del Certificato"
-
-msgid "Certificate Submitted"
-msgstr "Certificato Inviato"
 
 msgid "Certificate uploaded"
 msgstr "Certificato caricato"
@@ -4966,9 +4960,6 @@ msgstr "Fai clic di nuovo per disconnettere"
 
 msgid "Click components in the viewer to add them. Shift-click adds several."
 msgstr "Fai clic sui componenti nel visualizzatore per aggiungerli. Maiusc+clic aggiunge più di uno."
-
-msgid "Click or drop to choose a different file"
-msgstr "Fai clic o trascina per scegliere un file diverso"
 
 msgid "Click to rename"
 msgstr "Fai clic per rinominare"
@@ -8076,9 +8067,6 @@ msgstr "Stati Spedizione Diretta"
 msgid "Drop whole pages or sections a customer doesn't need."
 msgstr "Elimina intere pagine o sezioni di cui il cliente non ha bisogno."
 
-msgid "Drop your certificate here, or click to choose a file"
-msgstr "Trascina il tuo certificato qui o fai clic per scegliere un file"
-
 msgid "Drop your file here, or click to browse."
 msgstr "Rilascia il tuo file qui, oppure fai clic per sfogliare."
 
@@ -8763,14 +8751,8 @@ msgstr "I dipendenti assegnati a questa formazione possono aprirla. Il contenuto
 msgid "Employees can no longer open this training."
 msgstr "I dipendenti non possono più aprire questa formazione."
 
-msgid "Employees complete this training by uploading their certificate. Turn off External Certification in Properties to use questions."
-msgstr "I dipendenti completano questa formazione caricando il loro certificato. Disattiva la certificazione esterna nelle proprietà per utilizzare le domande."
-
-msgid "Employees read it before the questions"
-msgstr "I dipendenti lo leggono prima delle domande"
-
-msgid "Employees will no longer see this PDF. You can upload a new one while the training is Draft."
-msgstr "I dipendenti non vedranno più questo PDF. Puoi caricare uno nuovo mentre la formazione è Bozza."
+msgid "Employees complete a training in Carbon"
+msgstr ""
 
 msgid "Empty"
 msgstr "Vuoto"
@@ -9489,12 +9471,6 @@ msgstr "Prezzo Esteso"
 msgid "External"
 msgstr "Esterno"
 
-msgid "External certification"
-msgstr "certificazione esterna"
-
-msgid "External Certification"
-msgstr "Certificazione esterna"
-
 msgid "External Delta"
 msgstr "Delta Esterno"
 
@@ -9518,6 +9494,9 @@ msgstr "Rif. Esterno"
 
 msgid "External Reference"
 msgstr "Riferimento Esterno"
+
+msgid "External training"
+msgstr ""
 
 msgid "Extra fields to capture data Carbon doesn't track by default"
 msgstr "Campi aggiuntivi per acquisire dati che Carbon non traccia per impostazione predefinita"
@@ -13057,6 +13036,10 @@ msgstr "Valori mappati"
 msgid "Mark \"{0}\" as passed?"
 msgstr "Contrassegna \"{0}\" come superato?"
 
+#. placeholder {0}: assignment.employeeName?.trim()
+msgid "Mark {0} complete. Attach their certificate if you have one."
+msgstr ""
+
 msgid "Mark absent"
 msgstr "Segna come assente"
 
@@ -14737,8 +14720,8 @@ msgstr "Nessuna riga di pagamento."
 msgid "No payments yet."
 msgstr "Nessun pagamento ancora."
 
-msgid "No PDF guide"
-msgstr "Nessuna guida PDF"
+msgid "No PDF uploaded"
+msgstr ""
 
 msgid "No planned invoices are removed."
 msgstr "Nessuna fattura pianificata viene rimossa."
@@ -14781,9 +14764,6 @@ msgstr "Nessuna produzione registrata ancora."
 
 msgid "No purchases in this period"
 msgstr "Nessun acquisto in questo periodo"
-
-msgid "No quiz for external certifications"
-msgstr "Nessun quiz per certificazioni esterne"
 
 msgid "No Quote"
 msgstr "Nessuna offerta"
@@ -16293,9 +16273,6 @@ msgstr "PDF (Documento)"
 msgid "PDF downloaded"
 msgstr "PDF scaricato"
 
-msgid "PDF Guide"
-msgstr "Guida PDF"
-
 msgid "PDF pages"
 msgstr "Pagine PDF"
 
@@ -16304,9 +16281,6 @@ msgstr "Anteprima PDF"
 
 msgid "PDF Watermark"
 msgstr "Filigrana PDF"
-
-msgid "PDF, PNG or JPG, up to 10 MB"
-msgstr "PDF, PNG o JPG, fino a 10 MB"
 
 msgid "Pending"
 msgstr "In attesa"
@@ -18346,8 +18320,8 @@ msgstr "Rimuovi parte"
 msgid "Remove path"
 msgstr "Rimuovi percorso"
 
-msgid "Remove PDF Guide"
-msgstr "Rimuovi Guida PDF"
+msgid "Remove PDF"
+msgstr ""
 
 msgid "Remove row"
 msgstr "Rimuovi riga"
@@ -20733,9 +20707,6 @@ msgstr "Visualizzazione dei primi 1.000 gruppi per importo"
 msgid "Shown as a faint background behind every page of generated PDFs"
 msgstr "Mostrato come sfondo tenue dietro ogni pagina dei PDF generati"
 
-msgid "Shown to employees below the PDF guide"
-msgstr "Mostrato ai dipendenti sotto la guida PDF"
-
 msgid "Shown to the customer on the invoice"
 msgstr "Mostrato al cliente sulla fattura"
 
@@ -21410,9 +21381,6 @@ msgstr "Sottolibro"
 msgid "Submit anonymously"
 msgstr "Invia in modo anonimo"
 
-msgid "Submit Certificate"
-msgstr "Invia Certificato"
-
 msgid "Submit for approval"
 msgstr "Invia per approvazione"
 
@@ -21757,6 +21725,9 @@ msgstr "Passa alla modalità panorama"
 msgid "Switch to select mode"
 msgstr "Passa alla modalità selezione"
 
+msgid "Switch to Written Content"
+msgstr ""
+
 msgid "Switch users over and confirm access"
 msgstr "Trasferisci gli utenti e conferma l'accesso"
 
@@ -21820,6 +21791,9 @@ msgstr "Prendi la durata di conservazione rimanente più breve tra i materiali c
 
 msgid "taken"
 msgstr "preso"
+
+msgid "Taken outside Carbon. You mark each employee complete."
+msgstr ""
 
 msgid "Takes Effect"
 msgstr "Ha effetto"
@@ -23480,6 +23454,9 @@ msgstr "questo ordine di acquisto"
 msgid "This Quarter"
 msgstr "Questo Trimestre"
 
+msgid "This removes the PDF. Employees will see the written content instead."
+msgstr ""
+
 msgid "This removes their authenticator app, so their next sign-in only needs a magic link. Use this when they have lost access to their authenticator. It affects their sign-in for every company they belong to."
 msgstr "Questo rimuove la loro app autenticatore, quindi il loro prossimo accesso ha bisogno solo di un collegamento magico. Usalo quando hanno perso l'accesso al loro autenticatore. Influisce sul loro accesso per ogni azienda a cui appartengono."
 
@@ -23537,10 +23514,6 @@ msgstr "Questo toglie {employeeName} dalla programmazione per il giorno. Salva d
 
 msgid "This tool is activated when change notice {activationLockId} is released."
 msgstr "Questo attrezzo viene attivato quando l'avviso di modifica {activationLockId} viene rilasciato."
-
-#. placeholder {0}: assignment.employeeName?.trim()
-msgid "This training is external. Upload {0}'s certificate to mark it complete."
-msgstr "Questa formazione è esterna. Carica il certificato di {0} per contrassegnarlo come completato."
 
 msgid "This unit has no cost in inventory"
 msgstr "Questa unità non ha costo nel magazzino"
@@ -24083,8 +24056,8 @@ msgstr "Formazione non registrata"
 msgid "Training Plan"
 msgstr "Piano di Formazione"
 
-msgid "Training taken outside Carbon, such as a vendor course. Employees complete it by uploading the certificate they received instead of answering a quiz."
-msgstr "Formazione svolta al di fuori di Carbon, come un corso del fornitore. I dipendenti la completano caricando il certificato che hanno ricevuto invece di rispondere a un quiz."
+msgid "Training taken outside Carbon, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
+msgstr ""
 
 msgid "Training your team via the Academy and in-app guides"
 msgstr "Formazione del tuo team tramite l'Academy e le guide in-app"
@@ -24625,9 +24598,6 @@ msgstr "Carica"
 msgid "Upload a PDF first"
 msgstr "Carica prima un PDF"
 
-msgid "Upload Certificate"
-msgstr "Carica Certificato"
-
 msgid "Upload chart"
 msgstr "Carica il piano dei conti"
 
@@ -24646,14 +24616,8 @@ msgstr "Caricamento non riuscito. Riprova."
 msgid "Upload new backup…"
 msgstr "Carica nuovo backup…"
 
-msgid "Upload one PDF, PNG or JPG file of 10 MB or less."
-msgstr "Carica un file PDF, PNG o JPG di 10 MB o meno."
-
-msgid "Upload the certificate you received for this training. Uploading it marks the training as complete."
-msgstr "Carica il certificato che hai ricevuto per questa formazione. Caricarlo contrassegna la formazione come completata."
-
-msgid "Upload your certificate on the next step."
-msgstr "Carica il tuo certificato nel passo successivo."
+msgid "Upload PDF"
+msgstr ""
 
 msgid "Uploaded model"
 msgstr "Modello caricato"
@@ -25424,6 +25388,9 @@ msgstr "Il valore di ogni cespite, la sua durata e cosa accade al termine del pe
 msgid "What each period's payment is for this asset in the first year"
 msgstr "L'importo del pagamento di ogni periodo per questo cespite nel primo anno"
 
+msgid "What employees read before the questions"
+msgstr ""
+
 msgid "What happens to an invoice once it is created"
 msgstr "Cosa accade a una fattura una volta creata"
 
@@ -25962,6 +25929,9 @@ msgstr "Sessioni di lavoro su configurazione e dati"
 
 msgid "Worst Performing Machines"
 msgstr "Macchine con Prestazioni Peggiori"
+
+msgid "Write"
+msgstr ""
 
 msgid "Write a note…"
 msgstr "Scrivi una nota…"

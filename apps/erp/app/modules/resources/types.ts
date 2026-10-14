@@ -95,10 +95,11 @@ export type TrainingQuestion = NonNullable<
 
 export type TrainingAssignmentStatusItem = {
   trainingAssignmentId: string;
-  trainingId: string;
+  trainingId: string | null;
   trainingName: string;
   frequency: (typeof trainingFrequency)[number];
   trainingType: "Mandatory" | "Optional";
+  isExternal: boolean;
   employeeId: string;
   employeeName: string | null;
   avatarUrl: string | null;
@@ -111,9 +112,11 @@ export type TrainingAssignmentStatusItem = {
 };
 
 export type TrainingAssignmentSummaryItem = {
-  trainingId: string;
+  trainingAssignmentId: string;
+  trainingId: string | null;
   trainingName: string;
   frequency: (typeof trainingFrequency)[number];
+  isExternal: boolean;
   currentPeriod: string | null;
   totalAssigned: number;
   completed: number;

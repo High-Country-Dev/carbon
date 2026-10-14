@@ -81,7 +81,9 @@ const PersonTrainings = ({
                   <HStack spacing={2}>
                     <Link
                       className="font-medium"
-                      to={path.to.trainingAssignmentDetail(training.trainingId)}
+                      to={path.to.trainingAssignmentDetail(
+                        training.trainingAssignmentId
+                      )}
                     >
                       {training.trainingName}
                     </Link>

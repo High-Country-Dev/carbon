@@ -23,7 +23,7 @@ import { useParams } from "react-router";
 import { z } from "zod";
 import Assignee, { useOptimisticAssignment } from "~/components/Assignee";
 import { Enumerable } from "~/components/Enumerable";
-import { Ability, Boolean, InputControlled, Tags } from "~/components/Form";
+import { Ability, InputControlled, Tags } from "~/components/Form";
 import { usePermissions, useRouteData } from "~/hooks";
 import { useTags } from "~/hooks/useTags";
 import type { Training } from "~/modules/resources";
@@ -59,8 +59,7 @@ const TrainingProperties = () => {
         | "frequency"
         | "estimatedDuration"
         | "description"
-        | "grantsAbilityId"
-        | "isExternal",
+        | "grantsAbilityId",
       value: string | null
     ) => {
       const formData = new FormData();
@@ -248,31 +247,6 @@ const TrainingProperties = () => {
             }}
           />
         </span>
-      </ValidatedForm>
-
-      <ValidatedForm
-        defaultValues={{
-          isExternal: routeData?.training?.isExternal ?? false
-        }}
-        validator={z.object({
-          isExternal: z.boolean()
-        })}
-        className="w-full"
-        // Changes how employees take the training: Draft only, like the content.
-        isReadOnly={
-          !permissions.can("update", "people") ||
-          routeData?.training?.status !== "Draft"
-        }
-      >
-        <Boolean
-          label={t`External Certification`}
-          termId="external-certification"
-          name="isExternal"
-          variant="small"
-          onChange={(value) => {
-            onUpdate("isExternal", value ? "on" : "off");
-          }}
-        />
       </ValidatedForm>
 
       <ValidatedForm

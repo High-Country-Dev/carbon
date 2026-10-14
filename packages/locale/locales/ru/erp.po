@@ -4655,14 +4655,8 @@ msgstr "Централизованное выставление счетов в�
 msgid "Cert Version"
 msgstr "Версия сертификата"
 
-msgid "Certificate not accepted"
-msgstr "Сертификат не принят"
-
 msgid "Certificate Number"
 msgstr "Номер сертификата"
-
-msgid "Certificate Submitted"
-msgstr "Сертификат отправлен"
 
 msgid "Certificate uploaded"
 msgstr "Сертификат загружен"
@@ -4966,9 +4960,6 @@ msgstr "Нажмите еще раз, чтобы отключить"
 
 msgid "Click components in the viewer to add them. Shift-click adds several."
 msgstr "Щелкните на компоненты в средстве просмотра, чтобы добавить их. Shift+щелчок добавляет несколько."
-
-msgid "Click or drop to choose a different file"
-msgstr "Щелкните или перетащите, чтобы выбрать другой файл"
 
 msgid "Click to rename"
 msgstr "Нажмите, чтобы переименовать"
@@ -8076,9 +8067,6 @@ msgstr "Статусы прямой отгрузки"
 msgid "Drop whole pages or sections a customer doesn't need."
 msgstr "Исключите целые страницы или разделы, которые покупателю не нужны."
 
-msgid "Drop your certificate here, or click to choose a file"
-msgstr "Перетащите ваш сертификат сюда или щелкните, чтобы выбрать файл"
-
 msgid "Drop your file here, or click to browse."
 msgstr "Перетащите файл сюда или нажмите для обзора."
 
@@ -8763,14 +8751,8 @@ msgstr "Сотрудники, назначенные на это обучени�
 msgid "Employees can no longer open this training."
 msgstr "Сотрудники больше не могут открыть это обучение."
 
-msgid "Employees complete this training by uploading their certificate. Turn off External Certification in Properties to use questions."
-msgstr "Сотрудники завершают это обучение путем загрузки своего сертификата. Отключите параметр «Внешняя сертификация» в свойствах, чтобы использовать вопросы."
-
-msgid "Employees read it before the questions"
-msgstr "Сотрудники читают это перед вопросами"
-
-msgid "Employees will no longer see this PDF. You can upload a new one while the training is Draft."
-msgstr "Сотрудники больше не будут видеть этот PDF. Вы можете загрузить новый, пока обучение находится в черновике."
+msgid "Employees complete a training in Carbon"
+msgstr ""
 
 msgid "Empty"
 msgstr "Пусто"
@@ -9489,12 +9471,6 @@ msgstr "Расширенная цена"
 msgid "External"
 msgstr "Внешние"
 
-msgid "External certification"
-msgstr "Внешняя сертификация"
-
-msgid "External Certification"
-msgstr "Внешняя сертификация"
-
 msgid "External Delta"
 msgstr "Внешняя разница"
 
@@ -9518,6 +9494,9 @@ msgstr "Внешняя ссылка"
 
 msgid "External Reference"
 msgstr "Внешняя ссылка"
+
+msgid "External training"
+msgstr ""
 
 msgid "Extra fields to capture data Carbon doesn't track by default"
 msgstr "Дополнительные поля для сбора данных, которые Carbon не отслеживает по умолчанию"
@@ -13057,6 +13036,10 @@ msgstr "Отображенные значения"
 msgid "Mark \"{0}\" as passed?"
 msgstr "Отметить \"{0}\" как пройденный?"
 
+#. placeholder {0}: assignment.employeeName?.trim()
+msgid "Mark {0} complete. Attach their certificate if you have one."
+msgstr ""
+
 msgid "Mark absent"
 msgstr "Отметить отсутствующим"
 
@@ -14737,8 +14720,8 @@ msgstr "Нет строк платежей."
 msgid "No payments yet."
 msgstr "Платежей пока нет."
 
-msgid "No PDF guide"
-msgstr "Нет руководства PDF"
+msgid "No PDF uploaded"
+msgstr ""
 
 msgid "No planned invoices are removed."
 msgstr "Запланированные счета-фактуры не удаляются."
@@ -14781,9 +14764,6 @@ msgstr "Производство еще не записано."
 
 msgid "No purchases in this period"
 msgstr "Нет покупок в этом периоде"
-
-msgid "No quiz for external certifications"
-msgstr "Нет викторины для внешних сертификаций"
 
 msgid "No Quote"
 msgstr "Отказ от предложения"
@@ -16293,9 +16273,6 @@ msgstr "PDF (Документ)"
 msgid "PDF downloaded"
 msgstr "PDF загружен"
 
-msgid "PDF Guide"
-msgstr "Руководство PDF"
-
 msgid "PDF pages"
 msgstr "Страницы PDF"
 
@@ -16304,9 +16281,6 @@ msgstr "Предпросмотр PDF"
 
 msgid "PDF Watermark"
 msgstr "Водяной знак PDF"
-
-msgid "PDF, PNG or JPG, up to 10 MB"
-msgstr "PDF, PNG или JPG размером до 10 МБ"
 
 msgid "Pending"
 msgstr "Ожидание"
@@ -18346,8 +18320,8 @@ msgstr "Убрать деталь"
 msgid "Remove path"
 msgstr "Убрать путь"
 
-msgid "Remove PDF Guide"
-msgstr "Убрать руководство PDF"
+msgid "Remove PDF"
+msgstr ""
 
 msgid "Remove row"
 msgstr "Убрать строку"
@@ -20733,9 +20707,6 @@ msgstr "Показано топ 1000 групп по сумме"
 msgid "Shown as a faint background behind every page of generated PDFs"
 msgstr "Отображается как бледный фон на каждой странице сгенерированных PDF-файлов"
 
-msgid "Shown to employees below the PDF guide"
-msgstr "Отображается сотрудникам ниже руководства PDF"
-
 msgid "Shown to the customer on the invoice"
 msgstr "Показано покупателю на счет-фактуре"
 
@@ -21410,9 +21381,6 @@ msgstr "Вспомогательная книга"
 msgid "Submit anonymously"
 msgstr "Отправить анонимно"
 
-msgid "Submit Certificate"
-msgstr "Отправить сертификат"
-
 msgid "Submit for approval"
 msgstr "Отправить на утверждение"
 
@@ -21757,6 +21725,9 @@ msgstr "Переключиться в режим панорамы"
 msgid "Switch to select mode"
 msgstr "Переключиться в режим выделения"
 
+msgid "Switch to Written Content"
+msgstr ""
+
 msgid "Switch users over and confirm access"
 msgstr "Переключите пользователей и подтвердите доступ"
 
@@ -21820,6 +21791,9 @@ msgstr "Возьмите кратчайший оставшийся срок хр
 
 msgid "taken"
 msgstr "взято"
+
+msgid "Taken outside Carbon. You mark each employee complete."
+msgstr ""
 
 msgid "Takes Effect"
 msgstr "Вступает в силу"
@@ -23480,6 +23454,9 @@ msgstr "этот заказ поставщику"
 msgid "This Quarter"
 msgstr "Этот квартал"
 
+msgid "This removes the PDF. Employees will see the written content instead."
+msgstr ""
+
 msgid "This removes their authenticator app, so their next sign-in only needs a magic link. Use this when they have lost access to their authenticator. It affects their sign-in for every company they belong to."
 msgstr "Это удаляет их приложение аутентификатора, поэтому их следующий вход требует только волшебной ссылки. Используйте это, когда они потеряли доступ к своему аутентификатору. Это влияет на их вход для каждой организации, которой они принадлежат."
 
@@ -23537,10 +23514,6 @@ msgstr "Это удаляет {employeeName} с доски на день. Сох
 
 msgid "This tool is activated when change notice {activationLockId} is released."
 msgstr "Этот инструмент активизируется при запуске извещения об изменении {activationLockId}."
-
-#. placeholder {0}: assignment.employeeName?.trim()
-msgid "This training is external. Upload {0}'s certificate to mark it complete."
-msgstr "Это обучение является внешним. Загрузите сертификат {0}, чтобы отметить его как завершенное."
 
 msgid "This unit has no cost in inventory"
 msgstr "У этой единицы нет стоимости в запасах"
@@ -24083,8 +24056,8 @@ msgstr "Обучение не записано"
 msgid "Training Plan"
 msgstr "План обучения"
 
-msgid "Training taken outside Carbon, such as a vendor course. Employees complete it by uploading the certificate they received instead of answering a quiz."
-msgstr "Обучение, пройденное вне Carbon, например курс поставщика. Сотрудники завершают его путем загрузки полученного сертификата вместо ответа на вопросы викторины."
+msgid "Training taken outside Carbon, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
+msgstr ""
 
 msgid "Training your team via the Academy and in-app guides"
 msgstr "Обучение вашей команды через Academy и встроенные руководства"
@@ -24625,9 +24598,6 @@ msgstr "Загрузить"
 msgid "Upload a PDF first"
 msgstr "Сначала загрузите PDF"
 
-msgid "Upload Certificate"
-msgstr "Загрузить сертификат"
-
 msgid "Upload chart"
 msgstr "Загрузить план"
 
@@ -24646,14 +24616,8 @@ msgstr "Не удалось загрузить файл. Попробуйте е
 msgid "Upload new backup…"
 msgstr "Загрузить новую резервную копию…"
 
-msgid "Upload one PDF, PNG or JPG file of 10 MB or less."
-msgstr "Загрузите один файл PDF, PNG или JPG размером 10 МБ или меньше."
-
-msgid "Upload the certificate you received for this training. Uploading it marks the training as complete."
-msgstr "Загрузите сертификат, который вы получили для этого обучения. Загрузка отмечает обучение как завершенное."
-
-msgid "Upload your certificate on the next step."
-msgstr "Загрузите ваш сертификат на следующем шаге."
+msgid "Upload PDF"
+msgstr ""
 
 msgid "Uploaded model"
 msgstr "Модель загружена"
@@ -25424,6 +25388,9 @@ msgstr "Стоимость каждого актива, продолжитель
 msgid "What each period's payment is for this asset in the first year"
 msgstr "Размер платежа каждого периода для этого актива в первый год"
 
+msgid "What employees read before the questions"
+msgstr ""
+
 msgid "What happens to an invoice once it is created"
 msgstr "Что происходит со счетом-фактурой после его создания"
 
@@ -25962,6 +25929,9 @@ msgstr "Рабочие сессии по конфигурации и данны�
 
 msgid "Worst Performing Machines"
 msgstr "Худшие станки"
+
+msgid "Write"
+msgstr ""
 
 msgid "Write a note…"
 msgstr "Написать примечание…"

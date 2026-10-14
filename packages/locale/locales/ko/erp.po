@@ -4655,14 +4655,8 @@ msgstr "중앙 집중식 청구가 활성화되었습니다"
 msgid "Cert Version"
 msgstr "인증 버전"
 
-msgid "Certificate not accepted"
-msgstr "인증서가 수락되지 않음"
-
 msgid "Certificate Number"
 msgstr "인증서 번호"
-
-msgid "Certificate Submitted"
-msgstr "인증서 제출됨"
 
 msgid "Certificate uploaded"
 msgstr "인증서가 업로드됨"
@@ -4966,9 +4960,6 @@ msgstr "다시 클릭하여 연결 해제"
 
 msgid "Click components in the viewer to add them. Shift-click adds several."
 msgstr "뷰어에서 구성품을 클릭하여 추가합니다. Shift 클릭으로 여러 개를 추가합니다."
-
-msgid "Click or drop to choose a different file"
-msgstr "다른 파일을 선택하려면 클릭하거나 드래그하세요"
 
 msgid "Click to rename"
 msgstr "클릭하여 이름 바꾸기"
@@ -8076,9 +8067,6 @@ msgstr "직송 출하 상태"
 msgid "Drop whole pages or sections a customer doesn't need."
 msgstr "고객에게 필요 없는 페이지나 섹션은 통째로 제외하세요."
 
-msgid "Drop your certificate here, or click to choose a file"
-msgstr "여기에 인증서를 드래그하거나 클릭하여 파일을 선택하세요"
-
 msgid "Drop your file here, or click to browse."
 msgstr "파일을 여기에 놓거나 클릭하여 찾아보세요."
 
@@ -8763,14 +8751,8 @@ msgstr "이 교육에 할당된 직원들이 그것을 열 수 있습니다. 콘
 msgid "Employees can no longer open this training."
 msgstr "직원들은 더 이상 이 교육을 열 수 없습니다."
 
-msgid "Employees complete this training by uploading their certificate. Turn off External Certification in Properties to use questions."
-msgstr "직원들은 인증서를 업로드하여 이 교육을 완료합니다. 질문을 사용하려면 속성에서 외부 자격증을 끕니다."
-
-msgid "Employees read it before the questions"
-msgstr "직원들은 질문 전에 이것을 읽습니다"
-
-msgid "Employees will no longer see this PDF. You can upload a new one while the training is Draft."
-msgstr "직원들은 더 이상 이 PDF를 볼 수 없습니다. 교육이 초안인 동안 새 파일을 업로드할 수 있습니다."
+msgid "Employees complete a training in Carbon"
+msgstr ""
 
 msgid "Empty"
 msgstr "비어있음"
@@ -9489,12 +9471,6 @@ msgstr "확장 가격"
 msgid "External"
 msgstr "외부"
 
-msgid "External certification"
-msgstr "외부 자격증"
-
-msgid "External Certification"
-msgstr "외부 자격증"
-
 msgid "External Delta"
 msgstr "외부 변경사항"
 
@@ -9518,6 +9494,9 @@ msgstr "외부 참조"
 
 msgid "External Reference"
 msgstr "외부 참조"
+
+msgid "External training"
+msgstr ""
 
 msgid "Extra fields to capture data Carbon doesn't track by default"
 msgstr "Carbon이 기본적으로 추적하지 않는 데이터를 담기 위한 추가 필드"
@@ -13057,6 +13036,10 @@ msgstr "매핑된 값"
 msgid "Mark \"{0}\" as passed?"
 msgstr "\"{0}\"을(를) 통과로 표시하시겠습니까?"
 
+#. placeholder {0}: assignment.employeeName?.trim()
+msgid "Mark {0} complete. Attach their certificate if you have one."
+msgstr ""
+
 msgid "Mark absent"
 msgstr "부재 표시"
 
@@ -14737,8 +14720,8 @@ msgstr "지불 라인 없음"
 msgid "No payments yet."
 msgstr "아직 지불이 없습니다."
 
-msgid "No PDF guide"
-msgstr "PDF 가이드 없음"
+msgid "No PDF uploaded"
+msgstr ""
 
 msgid "No planned invoices are removed."
 msgstr "계획된 송장이 제거되지 않습니다."
@@ -14781,9 +14764,6 @@ msgstr "아직 기록된 생산이 없습니다."
 
 msgid "No purchases in this period"
 msgstr "이 기간에 구매가 없습니다"
-
-msgid "No quiz for external certifications"
-msgstr "외부 자격증에 대한 퀴즈 없음"
 
 msgid "No Quote"
 msgstr "견적 거절"
@@ -16293,9 +16273,6 @@ msgstr "PDF(문서)"
 msgid "PDF downloaded"
 msgstr "PDF가 다운로드됨"
 
-msgid "PDF Guide"
-msgstr "PDF 가이드"
-
 msgid "PDF pages"
 msgstr "PDF 페이지"
 
@@ -16304,9 +16281,6 @@ msgstr "PDF 미리보기"
 
 msgid "PDF Watermark"
 msgstr "PDF 워터마크"
-
-msgid "PDF, PNG or JPG, up to 10 MB"
-msgstr "PDF, PNG 또는 JPG, 최대 10MB"
 
 msgid "Pending"
 msgstr "대기 중"
@@ -18346,8 +18320,8 @@ msgstr "부품 제거"
 msgid "Remove path"
 msgstr "경로 제거"
 
-msgid "Remove PDF Guide"
-msgstr "PDF 가이드 제거"
+msgid "Remove PDF"
+msgstr ""
 
 msgid "Remove row"
 msgstr "행 제거"
@@ -20733,9 +20707,6 @@ msgstr "금액별 상위 1,000개 그룹을 표시하고 있습니다"
 msgid "Shown as a faint background behind every page of generated PDFs"
 msgstr "생성된 PDF의 모든 페이지 배경에 옅게 표시됩니다"
 
-msgid "Shown to employees below the PDF guide"
-msgstr "PDF 가이드 아래에 직원들에게 표시됨"
-
 msgid "Shown to the customer on the invoice"
 msgstr "송장에서 고객에게 표시"
 
@@ -21410,9 +21381,6 @@ msgstr "보조원장"
 msgid "Submit anonymously"
 msgstr "익명으로 제출"
 
-msgid "Submit Certificate"
-msgstr "인증서 제출"
-
 msgid "Submit for approval"
 msgstr "승인을 위해 제출"
 
@@ -21757,6 +21725,9 @@ msgstr "팬 모드로 전환"
 msgid "Switch to select mode"
 msgstr "선택 모드로 전환"
 
+msgid "Switch to Written Content"
+msgstr ""
+
 msgid "Switch users over and confirm access"
 msgstr "사용자를 전환하고 접근 권한을 확인하세요"
 
@@ -21820,6 +21791,9 @@ msgstr "이 품목을 만드는 데 소비되는 자재 중 가장 짧은 보존
 
 msgid "taken"
 msgstr "사용됨"
+
+msgid "Taken outside Carbon. You mark each employee complete."
+msgstr ""
 
 msgid "Takes Effect"
 msgstr "발효됨"
@@ -23480,6 +23454,9 @@ msgstr "이 발주서"
 msgid "This Quarter"
 msgstr "이번 분기"
 
+msgid "This removes the PDF. Employees will see the written content instead."
+msgstr ""
+
 msgid "This removes their authenticator app, so their next sign-in only needs a magic link. Use this when they have lost access to their authenticator. It affects their sign-in for every company they belong to."
 msgstr "이것은 그들의 인증 앱을 제거하므로 다음 로그인에는 매직 링크만 필요합니다. 그들이 인증 수단에 대한 접근을 잃었을 때 이것을 사용하세요. 이것은 그들이 속한 모든 회사에 대한 로그인에 영향을 미칩니다."
 
@@ -23537,10 +23514,6 @@ msgstr "이것은 {employeeName}을 그 날의 보드에서 제거합니다. 확
 
 msgid "This tool is activated when change notice {activationLockId} is released."
 msgstr "이 공구는 변경 통지 {activationLockId}이 릴리스될 때 활성화됩니다."
-
-#. placeholder {0}: assignment.employeeName?.trim()
-msgid "This training is external. Upload {0}'s certificate to mark it complete."
-msgstr "이 교육은 외부입니다. {0}의 인증서를 업로드하여 완료로 표시하십시오."
 
 msgid "This unit has no cost in inventory"
 msgstr "이 개는 재고에 원가가 없습니다."
@@ -24083,8 +24056,8 @@ msgstr "교육이 기록되지 않음"
 msgid "Training Plan"
 msgstr "교육 계획"
 
-msgid "Training taken outside Carbon, such as a vendor course. Employees complete it by uploading the certificate they received instead of answering a quiz."
-msgstr "Carbon 외부에서 수강한 교육(예: 공급업체 과정). 직원들은 퀴즈에 답하는 대신 받은 인증서를 업로드하여 완료합니다."
+msgid "Training taken outside Carbon, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
+msgstr ""
 
 msgid "Training your team via the Academy and in-app guides"
 msgstr "아카데미와 인앱 가이드를 통한 팀 교육"
@@ -24625,9 +24598,6 @@ msgstr "업로드"
 msgid "Upload a PDF first"
 msgstr "먼저 PDF를 업로드하세요"
 
-msgid "Upload Certificate"
-msgstr "인증서 업로드"
-
 msgid "Upload chart"
 msgstr "계정과목표 업로드"
 
@@ -24646,14 +24616,8 @@ msgstr "업로드에 실패했습니다. 다시 시도해 주세요."
 msgid "Upload new backup…"
 msgstr "새 백업 업로드…"
 
-msgid "Upload one PDF, PNG or JPG file of 10 MB or less."
-msgstr "10MB 이하의 PDF, PNG 또는 JPG 파일 하나를 업로드하십시오."
-
-msgid "Upload the certificate you received for this training. Uploading it marks the training as complete."
-msgstr "이 교육을 위해 받은 인증서를 업로드하십시오. 업로드하면 교육이 완료로 표시됩니다."
-
-msgid "Upload your certificate on the next step."
-msgstr "다음 단계에서 인증서를 업로드하십시오."
+msgid "Upload PDF"
+msgstr ""
 
 msgid "Uploaded model"
 msgstr "업로드된 모델"
@@ -25424,6 +25388,9 @@ msgstr "각 자산의 가치, 지속 기간, 계약 종료 시 처리 방법입�
 msgid "What each period's payment is for this asset in the first year"
 msgstr "첫 해에 이 자산에 대한 각 기간의 지불액"
 
+msgid "What employees read before the questions"
+msgstr ""
+
 msgid "What happens to an invoice once it is created"
 msgstr "송장이 생성된 후 어떤 일이 일어나는지"
 
@@ -25962,6 +25929,9 @@ msgstr "설정 및 데이터에 대한 작업 세션"
 
 msgid "Worst Performing Machines"
 msgstr "성능이 가장 낮은 기계"
+
+msgid "Write"
+msgstr ""
 
 msgid "Write a note…"
 msgstr "메모 작성…"
