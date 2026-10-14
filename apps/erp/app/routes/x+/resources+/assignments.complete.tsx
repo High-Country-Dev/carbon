@@ -59,6 +59,32 @@ export async function action({ request }: ActionFunctionArgs) {
     );
   }
 
+  // Only the people the assignment targets can complete it: a completion can
+  // grant an ability, which gates scheduling.
+  const recipients = await client.rpc("users_for_groups", {
+    groups: assignment.data.groupIds ?? []
+  });
+  const recipientIds = (recipients.data ?? []) as string[];
+  if (recipients.error || !recipientIds.includes(employeeId.toString())) {
+    logger.error("Employee is not assigned this training", {
+      companyId,
+      trainingAssignmentId: trainingAssignmentId.toString(),
+      employeeId: employeeId.toString(),
+      error: recipients.error
+    });
+    return data(
+      { error: "This employee is not assigned this training" },
+      {
+        status: 400,
+        // @ts-expect-error TS2322 - TODO: fix type
+        headers: await flash(
+          request,
+          error(null, "This employee is not assigned this training")
+        )
+      }
+    );
+  }
+
   const recorded = await recordTrainingCompletion(client, {
     companyId,
     trainingAssignmentId: trainingAssignmentId.toString(),

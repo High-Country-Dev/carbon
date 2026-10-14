@@ -93983,6 +93983,7 @@ export type Database = {
         Args: { p_company_id: string; p_employee_id?: string }
         Returns: {
           avatarUrl: string
+          certificatePath: string
           companyId: string
           completedAt: string
           completionId: number

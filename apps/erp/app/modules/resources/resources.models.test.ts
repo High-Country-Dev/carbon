@@ -88,39 +88,60 @@ describe("isValidTrainingGuideKey", async () => {
 describe("validateTrainingCertificate", async () => {
   const { TRAINING_CERTIFICATE_MAX_BYTES, validateTrainingCertificate } =
     await import("./resources.models");
-  const file = (name: string, size = 10) =>
-    new File([new Uint8Array(size)], name);
+  const PDF = [0x25, 0x50, 0x44, 0x46, 0x2d];
+  const PNG = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+  const JPG = [0xff, 0xd8, 0xff];
+  const file = (name: string, head: number[] = [], size = 10) => {
+    const bytes = new Uint8Array(Math.max(size, head.length));
+    bytes.set(head);
+    return new File([bytes], name);
+  };
 
-  it("accepts a PDF, PNG or JPG and returns its extension", () => {
-    expect(validateTrainingCertificate(file("cert.PDF")).extension).toBe("pdf");
-    expect(validateTrainingCertificate(file("photo.jpeg")).extension).toBe(
-      "jpeg"
-    );
-    expect(validateTrainingCertificate(file("scan.png")).error).toBeNull();
-  });
-
-  it("refuses a missing or empty file", () => {
-    expect(validateTrainingCertificate(null).error).toBe(
-      "Upload a certificate file"
-    );
-    expect(validateTrainingCertificate(file("cert.pdf", 0)).error).toBe(
-      "Upload a certificate file"
-    );
-  });
-
-  it("refuses another type", () => {
-    expect(validateTrainingCertificate(file("notes.txt")).error).toBe(
-      "The certificate must be a PDF, PNG or JPG"
-    );
-    expect(validateTrainingCertificate(file("photo.heic")).error).toBe(
-      "The certificate must be a PDF, PNG or JPG"
-    );
-  });
-
-  it("refuses a file over the size limit", () => {
+  it("accepts a PDF, PNG or JPG and returns its extension", async () => {
     expect(
-      validateTrainingCertificate(
-        file("cert.pdf", TRAINING_CERTIFICATE_MAX_BYTES + 1)
+      (await validateTrainingCertificate(file("cert.PDF", PDF))).extension
+    ).toBe("pdf");
+    expect(
+      (await validateTrainingCertificate(file("photo.jpeg", JPG))).extension
+    ).toBe("jpeg");
+    expect(
+      (await validateTrainingCertificate(file("scan.png", PNG))).error
+    ).toBeNull();
+  });
+
+  it("refuses a missing or empty file", async () => {
+    expect((await validateTrainingCertificate(null)).error).toBe(
+      "Upload a certificate file"
+    );
+    expect(
+      (await validateTrainingCertificate(file("cert.pdf", [], 0))).error
+    ).toBe("Upload a certificate file");
+  });
+
+  it("refuses another type", async () => {
+    expect((await validateTrainingCertificate(file("notes.txt"))).error).toBe(
+      "The certificate must be a PDF, PNG or JPG"
+    );
+    expect((await validateTrainingCertificate(file("photo.heic"))).error).toBe(
+      "The certificate must be a PDF, PNG or JPG"
+    );
+  });
+
+  it("refuses a file whose bytes do not match its extension", async () => {
+    expect(
+      (await validateTrainingCertificate(file("cert.pdf", PNG))).error
+    ).toBe("The certificate must be a PDF, PNG or JPG");
+    expect((await validateTrainingCertificate(file("scan.png"))).error).toBe(
+      "The certificate must be a PDF, PNG or JPG"
+    );
+  });
+
+  it("refuses a file over the size limit", async () => {
+    expect(
+      (
+        await validateTrainingCertificate(
+          file("cert.pdf", PDF, TRAINING_CERTIFICATE_MAX_BYTES + 1)
+        )
       ).error
     ).toBe("The certificate must be 10 MB or smaller");
   });

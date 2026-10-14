@@ -8752,7 +8752,7 @@ msgid "Employees can no longer open this training."
 msgstr "Los empleados ya no pueden abrir esta capacitación."
 
 msgid "Employees complete a training in Carbon"
-msgstr ""
+msgstr "Los empleados completan una capacitación en Carbon"
 
 msgid "Empty"
 msgstr "Vacío"
@@ -9496,7 +9496,7 @@ msgid "External Reference"
 msgstr "Referencia Externa"
 
 msgid "External training"
-msgstr ""
+msgstr "Capacitación externa"
 
 msgid "Extra fields to capture data Carbon doesn't track by default"
 msgstr "Campos adicionales para capturar datos que Carbon no rastrea de forma predeterminada"
@@ -13038,7 +13038,7 @@ msgstr "¿Marcar \"{0}\" como superado?"
 
 #. placeholder {0}: assignment.employeeName?.trim()
 msgid "Mark {0} complete. Attach their certificate if you have one."
-msgstr ""
+msgstr "Completar {0}. Adjunta su certificado si tienes uno."
 
 msgid "Mark absent"
 msgstr "Marcar ausente"
@@ -14449,9 +14449,6 @@ msgstr "No hay dirección de correo para este Cliente"
 msgid "No employees assigned this week"
 msgstr "Sin empleados asignados esta semana"
 
-msgid "No employees assigned yet. Add groups to see status."
-msgstr "No hay empleados asignados aún. Agregue grupos para ver el estado."
-
 msgid "No employees found"
 msgstr "No se encontraron empleados"
 
@@ -14721,7 +14718,7 @@ msgid "No payments yet."
 msgstr "Sin pagos aún."
 
 msgid "No PDF uploaded"
-msgstr ""
+msgstr "Sin PDF subido"
 
 msgid "No planned invoices are removed."
 msgstr "No se eliminan facturas planificadas."
@@ -18321,7 +18318,7 @@ msgid "Remove path"
 msgstr "Quitar ruta"
 
 msgid "Remove PDF"
-msgstr ""
+msgstr "Quitar PDF"
 
 msgid "Remove row"
 msgstr "Quitar fila"
@@ -21726,7 +21723,7 @@ msgid "Switch to select mode"
 msgstr "Cambiar a modo selección"
 
 msgid "Switch to Written Content"
-msgstr ""
+msgstr "Cambiar a contenido escrito"
 
 msgid "Switch users over and confirm access"
 msgstr "Cambiar usuarios y confirmar acceso"
@@ -21793,7 +21790,7 @@ msgid "taken"
 msgstr "tomado"
 
 msgid "Taken outside Carbon. You mark each employee complete."
-msgstr ""
+msgstr "Realizada fuera de Carbon. Marcas como completado a cada empleado."
 
 msgid "Takes Effect"
 msgstr "Entra en vigencia"
@@ -23455,7 +23452,7 @@ msgid "This Quarter"
 msgstr "Este Trimestre"
 
 msgid "This removes the PDF. Employees will see the written content instead."
-msgstr ""
+msgstr "Esto quita el PDF. Los empleados verán el contenido escrito en su lugar."
 
 msgid "This removes their authenticator app, so their next sign-in only needs a magic link. Use this when they have lost access to their authenticator. It affects their sign-in for every company they belong to."
 msgstr "Esto elimina su aplicación autenticadora, por lo que su próximo inicio de sesión solo necesita un enlace mágico. Usa esto cuando hayan perdido acceso a su autenticador. Afecta su inicio de sesión en cada empresa a la que pertenecen."
@@ -24057,7 +24054,7 @@ msgid "Training Plan"
 msgstr "Plan de Capacitación"
 
 msgid "Training taken outside Carbon, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
-msgstr ""
+msgstr "Capacitación realizada fuera de Carbon, como un curso de proveedor. La asignación solo tiene un nombre. Un administrador marca como completado a cada empleado y puede adjuntar su certificado."
 
 msgid "Training your team via the Academy and in-app guides"
 msgstr "Capacitar a tu equipo a través de la Academia y guías en la aplicación"
@@ -24617,7 +24614,7 @@ msgid "Upload new backup…"
 msgstr "Subir nueva copia de seguridad…"
 
 msgid "Upload PDF"
-msgstr ""
+msgstr "Subir PDF"
 
 msgid "Uploaded model"
 msgstr "Modelo cargado"
@@ -25389,7 +25386,7 @@ msgid "What each period's payment is for this asset in the first year"
 msgstr "Cuál es el pago de cada período para este activo en el primer año"
 
 msgid "What employees read before the questions"
-msgstr ""
+msgstr "Lo que los empleados leen antes de las preguntas"
 
 msgid "What happens to an invoice once it is created"
 msgstr "Qué sucede a una factura una vez que se crea"
@@ -25931,7 +25928,7 @@ msgid "Worst Performing Machines"
 msgstr "Máquinas con Peor Desempeño"
 
 msgid "Write"
-msgstr ""
+msgstr "Escribir"
 
 msgid "Write a note…"
 msgstr "Escribir una nota…"

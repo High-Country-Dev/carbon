@@ -1,8 +1,7 @@
--- A training can carry one PDF guide, and an External training is completed by
--- uploading a certificate instead of passing the quiz.
+-- A training's content can be one PDF, and a completion can carry the
+-- certificate an admin attached.
 ALTER TABLE "training"
-  ADD COLUMN "guidePath" TEXT,
-  ADD COLUMN "isExternal" BOOLEAN NOT NULL DEFAULT false;
+  ADD COLUMN IF NOT EXISTS "guidePath" TEXT;
 
 ALTER TABLE "trainingCompletion"
-  ADD COLUMN "certificatePath" TEXT;
+  ADD COLUMN IF NOT EXISTS "certificatePath" TEXT;

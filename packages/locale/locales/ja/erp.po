@@ -8752,7 +8752,7 @@ msgid "Employees can no longer open this training."
 msgstr "従業員はこの教育訓練を開くことができなくなりました。"
 
 msgid "Employees complete a training in Carbon"
-msgstr ""
+msgstr "従業員がCarbonで教育訓練を完了する"
 
 msgid "Empty"
 msgstr "空"
@@ -9496,7 +9496,7 @@ msgid "External Reference"
 msgstr "社外参照"
 
 msgid "External training"
-msgstr ""
+msgstr "社外教育訓練"
 
 msgid "Extra fields to capture data Carbon doesn't track by default"
 msgstr "Carbonがデフォルトで追跡しないデータをキャプチャするための追加フィールド"
@@ -13038,7 +13038,7 @@ msgstr "「{0}」を合格にしますか？"
 
 #. placeholder {0}: assignment.employeeName?.trim()
 msgid "Mark {0} complete. Attach their certificate if you have one."
-msgstr ""
+msgstr "{0} を完了にしてください。証明書があれば添付してください。"
 
 msgid "Mark absent"
 msgstr "欠席をマーク"
@@ -14449,9 +14449,6 @@ msgstr "この得意先にはメールアドレスがありません。"
 msgid "No employees assigned this week"
 msgstr "今週割り当てられた従業員がいません"
 
-msgid "No employees assigned yet. Add groups to see status."
-msgstr "まだ従業員が割り当てられていません。グループを追加してステータスを確認してください。"
-
 msgid "No employees found"
 msgstr "従業員が見つかりません"
 
@@ -14721,7 +14718,7 @@ msgid "No payments yet."
 msgstr "まだ支払いはありません。"
 
 msgid "No PDF uploaded"
-msgstr ""
+msgstr "PDFがアップロードされていません"
 
 msgid "No planned invoices are removed."
 msgstr "計画済請求書は削除されません。"
@@ -18321,7 +18318,7 @@ msgid "Remove path"
 msgstr "パスを除去"
 
 msgid "Remove PDF"
-msgstr ""
+msgstr "PDFを除去"
 
 msgid "Remove row"
 msgstr "行を除去"
@@ -21726,7 +21723,7 @@ msgid "Switch to select mode"
 msgstr "選択モードに切り替え"
 
 msgid "Switch to Written Content"
-msgstr ""
+msgstr "記述内容に切り替える"
 
 msgid "Switch users over and confirm access"
 msgstr "ユーザーを切り替えてアクセスを確認"
@@ -21793,7 +21790,7 @@ msgid "taken"
 msgstr "実施"
 
 msgid "Taken outside Carbon. You mark each employee complete."
-msgstr ""
+msgstr "Carbon以外で実施。各従業員を完了にしてください。"
 
 msgid "Takes Effect"
 msgstr "有効開始"
@@ -23455,7 +23452,7 @@ msgid "This Quarter"
 msgstr "今四半期"
 
 msgid "This removes the PDF. Employees will see the written content instead."
-msgstr ""
+msgstr "これはPDFを除去します。従業員は代わりに記述内容を表示します。"
 
 msgid "This removes their authenticator app, so their next sign-in only needs a magic link. Use this when they have lost access to their authenticator. It affects their sign-in for every company they belong to."
 msgstr "これにより認証器アプリが削除されるため、次回のサインインはマジックリンクのみが必要になります。認証器へのアクセスを失った場合にこれを使用してください。彼らが属するすべての会社のサインインに影響します。"
@@ -24057,7 +24054,7 @@ msgid "Training Plan"
 msgstr "教育訓練計画"
 
 msgid "Training taken outside Carbon, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
-msgstr ""
+msgstr "Carbonの外で実施された教育訓練（例：ベンダーコース）。割り当ては名前のみです。管理者が各従業員を完了にし、証明書を添付できます。"
 
 msgid "Training your team via the Academy and in-app guides"
 msgstr "アカデミーとアプリ内ガイドを使用してチームを教育訓練します。"
@@ -24617,7 +24614,7 @@ msgid "Upload new backup…"
 msgstr "新しいバックアップをアップロード…"
 
 msgid "Upload PDF"
-msgstr ""
+msgstr "PDFをアップロード"
 
 msgid "Uploaded model"
 msgstr "モデルをアップロードしました"
@@ -25389,7 +25386,7 @@ msgid "What each period's payment is for this asset in the first year"
 msgstr "このアセットの初年度における各期の支払額"
 
 msgid "What employees read before the questions"
-msgstr ""
+msgstr "従業員が問題前に読む内容"
 
 msgid "What happens to an invoice once it is created"
 msgstr "請求書が作成されたら何が起こるか"
@@ -25931,7 +25928,7 @@ msgid "Worst Performing Machines"
 msgstr "最も性能が低い機械"
 
 msgid "Write"
-msgstr ""
+msgstr "書く"
 
 msgid "Write a note…"
 msgstr "メモを書く…"

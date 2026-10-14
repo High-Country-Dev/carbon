@@ -72,7 +72,7 @@ A new assignment is **Internal** or **External**. An internal assignment picks a
 The assignment stores `groupIds`, not employee ids. Carbon expands the groups to their members when it computes who owes the training, so adding a person to a group automatically enrolls them — you don't re-assign.
 </Callout>
 
-Open an existing assignment and switch to the **Status** tab to see the per-employee roster: each member with their current status, a completion date if they've finished, and a **"Mark Complete"** button (`apps/erp/app/modules/resources/ui/Training/TrainingAssignmentForm.tsx`). Assigning an internal training also fires a notification to the newly-covered employees (see [notifications](/docs/reference/notifications)).
+Click an assignment in the list to open its roster: each member with their current status, a completion date if they've finished, and a **"Mark Complete"** button (`apps/erp/app/routes/x+/resources+/assignments.$assignmentId.tsx`). **Edit Assignment** in the row menu changes its name or groups. Assigning an internal training also fires a notification to the newly-covered employees (see [notifications](/docs/reference/notifications)).
 
 ## External training
 
@@ -109,9 +109,9 @@ An employee's status is *computed*, not stored — Carbon evaluates it from whet
 Recurring trainings check the employee's start date against the period. Someone who joined after a past period closed shows **"Not Required"** for that period, not **"Overdue"** — so onboarding a new hire doesn't instantly paint their record red.
 </Callout>
 
-A manager marks completion from the assignment's Status tab with **"Mark Complete"**; Carbon works out the current period on the server (`recordTrainingCompletion`, `apps/erp/app/modules/resources/resources.server.ts`). An employee already **"Completed"** or **"Not Required"** has no button — there's nothing to mark.
+A manager marks completion from the assignment's roster with **"Mark Complete"**; Carbon works out the current period on the server (`recordTrainingCompletion`, `apps/erp/app/modules/resources/resources.server.ts`). An employee already **"Completed"** or **"Not Required"** has no button — there's nothing to mark.
 
-To undo a wrong completion, **"Remove Completion"** on the roster deletes it and the employee goes back to **"Pending"** (or **"Overdue"**). It needs the `resources_delete` permission. Any ability the training granted stays with the employee; remove it on their Abilities page if needed.
+To undo a wrong completion, **"Remove Completion"** on the roster deletes it and the employee goes back to **"Pending"** (or **"Overdue"**). It needs the `resources_delete` permission, and it also deletes the attached certificate file. Any ability the training granted stays with the employee; remove it on their Abilities page if needed.
 
 ## The weekly reminder
 
@@ -152,7 +152,7 @@ An internal assignment needs a training, and an external one needs a name (`trai
 An assignment must target at least one group; the `groupIds` array was empty. Add one or more groups in **"Assign to Groups"** before saving.
 
 ### "Training assignment is required" / "Employee is required"
-The mark-complete action needs both `trainingAssignmentId` and `employeeId` (`apps/erp/app/modules/resources/resources.models.ts:333`). These come from hidden fields on the Status-tab row; an empty value means the row didn't carry them — reload the assignment and try again from the Status tab.
+The mark-complete action needs both `trainingAssignmentId` and `employeeId` (`apps/erp/app/modules/resources/resources.models.ts:333`). These come from the roster row; an empty value means the row didn't carry them — reload the assignment and try again from its roster.
 
 ### "Why didn't a reminder send?"
 Not an error string — a common question. Checklist of preconditions for the weekly digest (`packages/jobs/src/inngest/functions/scheduled/weekly.ts`, cron `0 21 * * 0`, Sunday 21:00 UTC):
@@ -168,7 +168,10 @@ The action is gated by the `resources` permission — `resources_update` to mark
 The employee or manager tried to complete a training that is **"Draft"** or **"Archived"**. Publish it (or **Reopen** and publish) first.
 
 ### "The certificate must be a PDF, PNG or JPG" / "The certificate must be 10 MB or smaller"
-A certificate attached to an external assignment's **Mark Complete** must be of an accepted type and size (`validateTrainingCertificate`, `apps/erp/app/modules/resources/resources.models.ts`). The dialog converts HEIC to JPEG.
+A certificate attached to an external assignment's **Mark Complete** must be of an accepted type and size (`validateTrainingCertificate`, `apps/erp/app/modules/resources/resources.models.ts`). Carbon checks the file's first bytes, so a file renamed to `.pdf` is refused. The dialog converts HEIC to JPEG.
+
+### "This employee is not assigned this training"
+**Mark Complete** was sent for a person outside the assignment's groups (`assignments.complete.tsx`). Add the person to one of its groups first.
 
 ### "The guide can only change while the training is Draft"
 The PDF was changed on an Active or Archived training. **Reopen** it first.

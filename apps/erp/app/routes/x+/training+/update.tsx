@@ -3,9 +3,7 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { requirePermissions } from "@carbon/auth/auth.server";
-import type { Database } from "@carbon/database";
 import { unchecked } from "@carbon/utils";
-import type { SupabaseClient } from "@supabase/supabase-js";
 import type { ActionFunctionArgs } from "react-router";
 import {
   isValidTrainingGuideKey,
@@ -54,10 +52,6 @@ export async function action({ request }: ActionFunctionArgs) {
         })
         .in("id", ids as string[]);
     case "guidePath": {
-      // The guide is the training's content, so it changes only while Draft.
-      const refusal = await refuseUnlessDraft(client, companyId, ids);
-      if (refusal) return refusal;
-
       const trainingId = ids[0] as string;
       if (
         ids.length !== 1 ||
@@ -69,7 +63,9 @@ export async function action({ request }: ActionFunctionArgs) {
       ) {
         return { error: { message: "Invalid guide file" }, data: null };
       }
-      return await client
+      // The guide is the training's content, so it changes only while Draft.
+      // Filtering the update on status makes the check and the write one step.
+      const updated = await client
         .from("training")
         .update({
           guidePath: value === "" ? null : value,
@@ -77,7 +73,19 @@ export async function action({ request }: ActionFunctionArgs) {
           updatedAt: new Date().toISOString()
         })
         .eq("id", trainingId)
-        .eq("companyId", companyId);
+        .eq("companyId", companyId)
+        .eq("status", "Draft")
+        .select("id");
+      if (updated.error) return updated;
+      if (updated.data.length === 0) {
+        return {
+          error: {
+            message: "The guide can only change while the training is Draft"
+          },
+          data: null
+        };
+      }
+      return updated;
     }
     case "tags":
       return await client
@@ -92,28 +100,4 @@ export async function action({ request }: ActionFunctionArgs) {
     default:
       return { error: { message: "Invalid field" }, data: null };
   }
-}
-
-async function refuseUnlessDraft(
-  client: SupabaseClient<Database>,
-  companyId: string,
-  ids: FormDataEntryValue[]
-) {
-  const trainings = await client
-    .from("training")
-    .select("status")
-    .in("id", ids as string[])
-    .eq("companyId", companyId);
-  if (trainings.error || trainings.data.length !== ids.length) {
-    return { error: { message: "Training not found" }, data: null };
-  }
-  if (trainings.data.some((training) => training.status !== "Draft")) {
-    return {
-      error: {
-        message: "The guide can only change while the training is Draft"
-      },
-      data: null
-    };
-  }
-  return null;
 }

@@ -9,7 +9,7 @@ import { File as FileButton, HStack, Skeleton, toast } from "@carbon/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { nanoid } from "nanoid";
 import type { ChangeEvent } from "react";
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useRef, useState } from "react";
 import { LuFileText, LuUpload } from "react-icons/lu";
 import { FileDropzone } from "~/components";
 import { useUser } from "~/hooks";
@@ -46,9 +46,20 @@ const TrainingGuide = ({
   const { company } = useUser();
   const [isUploading, setIsUploading] = useState(false);
 
+  // The file is stored before the training points at it. If the update is
+  // refused (the training is no longer Draft), remove the new file.
+  const uploadedPath = useRef<string | null>(null);
   const fetcher = useAction<typeof action>({
+    onSuccess: () => {
+      uploadedPath.current = null;
+    },
     onError: (data) => {
       if (data?.error) toast.error(data.error.message);
+      const path = uploadedPath.current;
+      uploadedPath.current = null;
+      if (path && carbon) {
+        storage(carbon).company(company.id).remove([path]);
+      }
     }
   });
   const isBusy = isUploading || fetcher.state !== "idle";
@@ -69,6 +80,7 @@ const TrainingGuide = ({
       return;
     }
 
+    uploadedPath.current = result.data.path;
     const formData = new FormData();
     formData.append("ids", trainingId);
     formData.append("field", "guidePath");

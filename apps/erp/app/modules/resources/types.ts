@@ -108,6 +108,7 @@ export type TrainingAssignmentStatusItem = {
   currentPeriod: string | null;
   completionId: number | null;
   completedAt: string | null;
+  certificatePath: string | null;
   status: (typeof trainingAssignmentStatusOptions)[number];
 };
 

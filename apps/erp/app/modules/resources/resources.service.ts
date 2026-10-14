@@ -1317,35 +1317,8 @@ export async function deleteTrainingCompletion(
     .from("trainingCompletion")
     .delete()
     .eq("id", id)
-    .eq("companyId", companyId);
-}
-
-/**
- * The assignment status RPC does not return the certificate path.
- * @mcp read
- */
-export async function getTrainingCertificatePaths(
-  client: SupabaseClient<Database>,
-  companyId: string,
-  completionIds: number[]
-) {
-  if (completionIds.length === 0) {
-    return { data: {} as Record<number, string>, error: null };
-  }
-
-  const { data, error } = await client
-    .from("trainingCompletion")
-    .select("id, certificatePath")
     .eq("companyId", companyId)
-    .in("id", completionIds);
-
-  if (error) return { data: null, error };
-
-  const paths: Record<number, string> = {};
-  for (const row of data ?? []) {
-    if (row.certificatePath) paths[row.id] = row.certificatePath;
-  }
-  return { data: paths, error: null };
+    .select("certificatePath");
 }
 
 /**
@@ -2167,6 +2140,7 @@ export async function upsertTrainingAssignment(
         updatedBy: assignment.updatedBy
       })
       .eq("id", assignment.id)
+      .eq("companyId", assignment.companyId)
       .select("id")
       .single();
   }

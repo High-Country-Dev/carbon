@@ -14449,9 +14449,6 @@ msgstr "No email address for this customer"
 msgid "No employees assigned this week"
 msgstr "No employees assigned this week"
 
-msgid "No employees assigned yet. Add groups to see status."
-msgstr "No employees assigned yet. Add groups to see status."
-
 msgid "No employees found"
 msgstr "No employees found"
 

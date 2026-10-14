@@ -5,6 +5,7 @@
 import { assertIsPost, error, success } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
+import { storage } from "@carbon/files";
 import { getLogger } from "@carbon/logger";
 import { redirect } from "@carbon/utils";
 import type { ActionFunctionArgs } from "react-router";
@@ -60,6 +61,23 @@ export async function action({ request }: ActionFunctionArgs) {
         )
       }
     );
+  }
+
+  // The certificate holds employee data; nothing points at it any more.
+  const certificatePaths = (result.data ?? [])
+    .map((row) => row.certificatePath)
+    .filter((path): path is string => !!path);
+  if (certificatePaths.length > 0) {
+    const removed = await storage(client)
+      .company(companyId)
+      .remove(certificatePaths);
+    if (removed.error) {
+      logger.error("Failed to remove training certificate", {
+        companyId,
+        completionId,
+        error: removed.error
+      });
+    }
   }
 
   return data(

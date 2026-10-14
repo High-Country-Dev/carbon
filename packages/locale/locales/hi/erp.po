@@ -8752,7 +8752,7 @@ msgid "Employees can no longer open this training."
 msgstr "कर्मचारी अब इस प्रशिक्षण को खोल नहीं सकते।"
 
 msgid "Employees complete a training in Carbon"
-msgstr ""
+msgstr "कर्मचारी Carbon में प्रशिक्षण को पूर्ण करते हैं"
 
 msgid "Empty"
 msgstr "खाली"
@@ -9496,7 +9496,7 @@ msgid "External Reference"
 msgstr "बाहरी संदर्भ"
 
 msgid "External training"
-msgstr ""
+msgstr "बाहरी प्रशिक्षण"
 
 msgid "Extra fields to capture data Carbon doesn't track by default"
 msgstr "कार्बन डिफ़ॉल्ट रूप से ट्रैक नहीं करता है ऐसा डेटा कैप्चर करने के लिए अतिरिक्त फ़ील्ड"
@@ -13038,7 +13038,7 @@ msgstr "क्या \"{0}\" को उत्तीर्ण के रूप �
 
 #. placeholder {0}: assignment.employeeName?.trim()
 msgid "Mark {0} complete. Attach their certificate if you have one."
-msgstr ""
+msgstr "{0} को पूर्ण करें। यदि आपके पास है तो उनका प्रमाण पत्र संलग्न करें।"
 
 msgid "Mark absent"
 msgstr "अनुपस्थित चिह्नित करें"
@@ -14449,9 +14449,6 @@ msgstr "इस ग्राहक के लिए कोई ईमेल पत
 msgid "No employees assigned this week"
 msgstr "इस सप्ताह कोई कर्मचारी निर्धारित नहीं"
 
-msgid "No employees assigned yet. Add groups to see status."
-msgstr "अभी तक कोई कर्मचारी असाइन नहीं किया गया है। स्थिति देखने के लिए समूह जोड़ें।"
-
 msgid "No employees found"
 msgstr "कोई कर्मचारी नहीं मिला"
 
@@ -14721,7 +14718,7 @@ msgid "No payments yet."
 msgstr "अभी तक कोई भुगतान नहीं।"
 
 msgid "No PDF uploaded"
-msgstr ""
+msgstr "कोई PDF अपलोड नहीं किया गया"
 
 msgid "No planned invoices are removed."
 msgstr "कोई योजनाबद्ध चालान हटाया नहीं गया।"
@@ -18321,7 +18318,7 @@ msgid "Remove path"
 msgstr "पथ निकालें"
 
 msgid "Remove PDF"
-msgstr ""
+msgstr "PDF निकालें"
 
 msgid "Remove row"
 msgstr "पंक्ति निकालें"
@@ -21726,7 +21723,7 @@ msgid "Switch to select mode"
 msgstr "चयन मोड में स्विच करें"
 
 msgid "Switch to Written Content"
-msgstr ""
+msgstr "लिखित सामग्री पर स्विच करें"
 
 msgid "Switch users over and confirm access"
 msgstr "उपयोगकर्ताओं को स्विच करें और एक्सेस की पुष्टि करें"
@@ -21793,7 +21790,7 @@ msgid "taken"
 msgstr "लिया गया"
 
 msgid "Taken outside Carbon. You mark each employee complete."
-msgstr ""
+msgstr "Carbon के बाहर लिया गया। आप प्रत्येक कर्मचारी को पूर्ण करते हैं।"
 
 msgid "Takes Effect"
 msgstr "प्रभावी होता है"
@@ -23455,7 +23452,7 @@ msgid "This Quarter"
 msgstr "इस त्रैमासिक"
 
 msgid "This removes the PDF. Employees will see the written content instead."
-msgstr ""
+msgstr "यह PDF को हटाता है। कर्मचारी इसके बजाय लिखित सामग्री देखेंगे।"
 
 msgid "This removes their authenticator app, so their next sign-in only needs a magic link. Use this when they have lost access to their authenticator. It affects their sign-in for every company they belong to."
 msgstr "यह उनके प्रमाणीकरणकर्ता ऐप को निकालता है, इसलिए उनके अगले साइन-इन के लिए केवल एक जादुई लिंक की आवश्यकता होती है। जब वे अपने प्रमाणीकरणकर्ता तक पहुंच खो गए हों तो इसका उपयोग करें। यह उनके साइन-इन को उन सभी कंपनियों के लिए प्रभावित करता है जिनसे वे संबंधित हैं।"
@@ -24057,7 +24054,7 @@ msgid "Training Plan"
 msgstr "प्रशिक्षण योजना"
 
 msgid "Training taken outside Carbon, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
-msgstr ""
+msgstr "Carbon के बाहर लिया गया प्रशिक्षण, जैसे विक्रेता पाठ्यक्रम। असाइनमेंट के पास केवल एक नाम है। एक प्रशासक प्रत्येक कर्मचारी को पूर्ण करता है और उनके प्रमाण पत्र को संलग्न कर सकता है।"
 
 msgid "Training your team via the Academy and in-app guides"
 msgstr "Academy और इन-ऐप गाइड के माध्यम से अपनी टीम को प्रशिक्षण दें"
@@ -24617,7 +24614,7 @@ msgid "Upload new backup…"
 msgstr "नया बैकअप अपलोड करें…"
 
 msgid "Upload PDF"
-msgstr ""
+msgstr "PDF अपलोड करें"
 
 msgid "Uploaded model"
 msgstr "अपलोड किया गया मॉडल"
@@ -25389,7 +25386,7 @@ msgid "What each period's payment is for this asset in the first year"
 msgstr "पहले वर्ष में इस संपत्ति के लिए प्रत्येक अवधि का भुगतान क्या है"
 
 msgid "What employees read before the questions"
-msgstr ""
+msgstr "कर्मचारी प्रश्नों से पहले क्या पढ़ते हैं"
 
 msgid "What happens to an invoice once it is created"
 msgstr "एक चालान बनाए जाने के बाद क्या होता है"
@@ -25931,7 +25928,7 @@ msgid "Worst Performing Machines"
 msgstr "सबसे खराब प्रदर्शन करने वाली मशीनें"
 
 msgid "Write"
-msgstr ""
+msgstr "लिखें"
 
 msgid "Write a note…"
 msgstr "एक नोट लिखें…"

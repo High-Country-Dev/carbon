@@ -24,7 +24,6 @@ import { getPrivateUrl, path } from "~/utils/path";
 
 type PersonTrainingsProps = {
   trainings: TrainingAssignmentStatusItem[];
-  certificatePaths?: Record<number, string>;
 };
 
 function TrainingStatusBadge({ status }: { status: string }) {
@@ -61,10 +60,7 @@ function TrainingStatusBadge({ status }: { status: string }) {
   }
 }
 
-const PersonTrainings = ({
-  trainings,
-  certificatePaths = {}
-}: PersonTrainingsProps) => {
+const PersonTrainings = ({ trainings }: PersonTrainingsProps) => {
   return (
     <Card>
       <CardHeader>
@@ -90,20 +86,17 @@ const PersonTrainings = ({
                     <TrainingStatusBadge status={training.status} />
                   </HStack>
                   <HStack spacing={3}>
-                    {training.completionId &&
-                      certificatePaths[training.completionId] && (
-                        <a
-                          className="flex items-center gap-1 text-sm"
-                          href={getPrivateUrl(
-                            certificatePaths[training.completionId]
-                          )}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <LuFileCheck />
-                          <Trans>View Certificate</Trans>
-                        </a>
-                      )}
+                    {training.certificatePath && (
+                      <a
+                        className="flex items-center gap-1 text-sm"
+                        href={getPrivateUrl(training.certificatePath)}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <LuFileCheck />
+                        <Trans>View Certificate</Trans>
+                      </a>
+                    )}
                     {training.completedAt && (
                       <p className="text-sm text-muted-foreground">
                         <DateTime

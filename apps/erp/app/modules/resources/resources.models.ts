@@ -458,16 +458,27 @@ const trainingCertificateExtensions = Object.values(trainingCertificateAccept)
   .flat()
   .map((extension) => extension.slice(1));
 
-export function validateTrainingCertificate(
+// The first bytes of each accepted type. The extension alone can be renamed
+// onto any file.
+const trainingCertificateSignatures: Record<string, number[]> = {
+  pdf: [0x25, 0x50, 0x44, 0x46, 0x2d], // %PDF-
+  png: [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a],
+  jpg: [0xff, 0xd8, 0xff],
+  jpeg: [0xff, 0xd8, 0xff]
+};
+
+export async function validateTrainingCertificate(
   file: FormDataEntryValue | null
-):
+): Promise<
   | { file: File; extension: string; error: null }
-  | { file: null; extension: null; error: string } {
+  | { file: null; extension: null; error: string }
+> {
   if (!(file instanceof File) || file.size === 0) {
     return { file: null, extension: null, error: "Upload a certificate file" };
   }
   const extension = file.name.split(".").pop()?.toLowerCase() ?? "";
-  if (!trainingCertificateExtensions.includes(extension)) {
+  const signature = trainingCertificateSignatures[extension];
+  if (!trainingCertificateExtensions.includes(extension) || !signature) {
     return {
       file: null,
       extension: null,
@@ -479,6 +490,16 @@ export function validateTrainingCertificate(
       file: null,
       extension: null,
       error: "The certificate must be 10 MB or smaller"
+    };
+  }
+  const head = new Uint8Array(
+    await file.slice(0, signature.length).arrayBuffer()
+  );
+  if (!signature.every((byte, index) => head[index] === byte)) {
+    return {
+      file: null,
+      extension: null,
+      error: "The certificate must be a PDF, PNG or JPG"
     };
   }
   return { file, extension, error: null };

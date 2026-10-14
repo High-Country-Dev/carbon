@@ -86,7 +86,9 @@ export async function recordTrainingCompletion(
   const hasCertificate =
     args.certificate instanceof File && args.certificate.size > 0;
   if (isExternal && hasCertificate) {
-    const certificate = validateTrainingCertificate(args.certificate ?? null);
+    const certificate = await validateTrainingCertificate(
+      args.certificate ?? null
+    );
     if (certificate.error !== null) {
       return { error: certificate.error, status: 400 };
     }

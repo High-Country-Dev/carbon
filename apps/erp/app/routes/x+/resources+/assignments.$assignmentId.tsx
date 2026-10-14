@@ -5,7 +5,6 @@
 import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import { getLogger } from "@carbon/logger";
 import { useAction } from "@carbon/query";
 import {
   Badge,
@@ -51,15 +50,12 @@ import { usePermissions } from "~/hooks";
 import {
   getTrainingAssignment,
   getTrainingAssignmentStatus,
-  getTrainingCertificatePaths,
   trainingCertificateAccept
 } from "~/modules/resources";
 import type { TrainingAssignmentStatusItem } from "~/modules/resources/types";
 import type { action as completeAction } from "~/routes/x+/resources+/assignments.complete";
 import type { Handle } from "~/utils/handle";
 import { getPrivateUrl, path } from "~/utils/path";
-
-const logger = getLogger("erp", "training-assignments");
 
 export const handle: Handle = {
   breadcrumb: msg`Detail`,
@@ -113,28 +109,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  const assignments = (assignmentStatus.data ??
-    []) as TrainingAssignmentStatusItem[];
-
-  const certificatePaths = await getTrainingCertificatePaths(
-    client,
-    companyId,
-    assignments.flatMap((a) => (a.completionId ? [a.completionId] : []))
-  );
-
-  // The certificate links are optional: the page still loads without them.
-  if (certificatePaths.error) {
-    logger.error("Failed to load training certificate paths", {
-      companyId,
-      error: certificatePaths.error
-    });
-  }
-
   return {
     name: assignment.data.training?.name ?? assignment.data.name ?? "",
     isExternal: assignment.data.trainingId === null,
-    assignments,
-    certificatePaths: certificatePaths.data ?? {}
+    assignments: (assignmentStatus.data ?? []) as TrainingAssignmentStatusItem[]
   };
 }
 
@@ -263,14 +241,12 @@ function CertificateCompleteModal({
 
 function AssignmentListItem({
   assignment,
-  certificatePath,
   isExternal,
   canRemove,
   disabled,
   isLast
 }: {
   assignment: TrainingAssignmentStatusItem;
-  certificatePath: string | null;
   isExternal: boolean;
   canRemove: boolean;
   disabled: boolean;
@@ -318,7 +294,7 @@ function AssignmentListItem({
               <DateTime value={assignment.completedAt} variant="date" />
             </span>
           )}
-          {certificatePath && (
+          {assignment.certificatePath && (
             <Button
               variant="secondary"
               size="sm"
@@ -326,7 +302,7 @@ function AssignmentListItem({
               asChild
             >
               <a
-                href={getPrivateUrl(certificatePath)}
+                href={getPrivateUrl(assignment.certificatePath)}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -408,8 +384,7 @@ function AssignmentListItem({
 
 export default function TrainingAssignmentDetailRoute() {
   const { t } = useLingui();
-  const { name, isExternal, assignments, certificatePaths } =
-    useLoaderData<typeof loader>();
+  const { name, isExternal, assignments } = useLoaderData<typeof loader>();
   const permissions = usePermissions();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
@@ -531,11 +506,6 @@ export default function TrainingAssignmentDetailRoute() {
                     <AssignmentListItem
                       key={`${assignment.employeeId}-${assignment.trainingAssignmentId}`}
                       assignment={assignment}
-                      certificatePath={
-                        assignment.completionId
-                          ? (certificatePaths[assignment.completionId] ?? null)
-                          : null
-                      }
                       isExternal={isExternal}
                       canRemove={permissions.can("delete", "resources")}
                       disabled={!permissions.can("update", "resources")}

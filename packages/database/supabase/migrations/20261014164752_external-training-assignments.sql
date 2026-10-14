@@ -2,19 +2,19 @@
 -- name, has no training, and is completed by an admin. It is one-time.
 ALTER TABLE "trainingAssignment"
   ALTER COLUMN "trainingId" DROP NOT NULL,
-  ADD COLUMN "name" TEXT,
+  ADD COLUMN IF NOT EXISTS "name" TEXT,
+  DROP CONSTRAINT IF EXISTS "trainingAssignment_training_or_name";
+
+ALTER TABLE "trainingAssignment"
   ADD CONSTRAINT "trainingAssignment_training_or_name"
     CHECK (num_nonnulls("trainingId", "name") = 1);
-
--- Replaced by external assignments.
-ALTER TABLE "training" DROP COLUMN "isExternal";
 
 -- Both return types change, and the summary reads the status function.
 DROP FUNCTION IF EXISTS public.get_training_assignment_summary(text);
 DROP FUNCTION IF EXISTS public.get_training_assignment_status(text, text);
 
-CREATE FUNCTION public.get_training_assignment_status(p_company_id text, p_employee_id text DEFAULT NULL::text)
- RETURNS TABLE("trainingAssignmentId" text, "trainingId" text, "trainingName" text, frequency "trainingFrequency", "trainingType" "trainingType", "isExternal" boolean, "employeeId" text, "employeeName" text, "avatarUrl" text, "employeeStartDate" date, "companyId" text, "currentPeriod" text, "completionId" integer, "completedAt" timestamp with time zone, status text)
+CREATE OR REPLACE FUNCTION public.get_training_assignment_status(p_company_id text, p_employee_id text DEFAULT NULL::text)
+ RETURNS TABLE("trainingAssignmentId" text, "trainingId" text, "trainingName" text, frequency "trainingFrequency", "trainingType" "trainingType", "isExternal" boolean, "employeeId" text, "employeeName" text, "avatarUrl" text, "employeeStartDate" date, "companyId" text, "currentPeriod" text, "completionId" integer, "completedAt" timestamp with time zone, "certificatePath" text, status text)
  LANGUAGE plpgsql
  SECURITY DEFINER
 AS $function$
@@ -72,6 +72,7 @@ BEGIN
     wp."currentPeriod",
     tc.id AS "completionId",
     tc."completedAt" AS "completedAt",
+    tc."certificatePath" AS "certificatePath",
     CASE
       WHEN wp."frequency" = 'Once' THEN
         CASE WHEN tc.id IS NOT NULL THEN 'Completed' ELSE 'Pending' END
@@ -89,7 +90,7 @@ END;
 $function$;
 
 -- One row per assignment: an external assignment has no training to group by.
-CREATE FUNCTION public.get_training_assignment_summary(p_company_id text)
+CREATE OR REPLACE FUNCTION public.get_training_assignment_summary(p_company_id text)
  RETURNS TABLE("trainingAssignmentId" text, "trainingId" text, "trainingName" text, frequency "trainingFrequency", "isExternal" boolean, "currentPeriod" text, "totalAssigned" bigint, completed bigint, pending bigint, overdue bigint, "completionPercent" numeric)
  LANGUAGE plpgsql
  SECURITY DEFINER

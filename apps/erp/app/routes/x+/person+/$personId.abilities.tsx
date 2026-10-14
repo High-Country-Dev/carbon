@@ -5,7 +5,6 @@
 import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
-import { getLogger } from "@carbon/logger";
 import { VStack } from "@carbon/react";
 import { redirect } from "@carbon/utils";
 import type { LoaderFunctionArgs } from "react-router";
@@ -13,13 +12,10 @@ import { useLoaderData, useParams } from "react-router";
 import { PersonAbilities, PersonTrainings } from "~/modules/people/ui/Person";
 import {
   getEmployeeAbilities,
-  getTrainingAssignmentStatusForEmployee,
-  getTrainingCertificatePaths
+  getTrainingAssignmentStatusForEmployee
 } from "~/modules/resources";
 import type { TrainingAssignmentStatusItem } from "~/modules/resources/types";
 import { path } from "~/utils/path";
-
-const logger = getLogger("erp", "person-trainings");
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {
@@ -44,41 +40,21 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
-  const trainingRows = (trainings.data ?? []) as TrainingAssignmentStatusItem[];
-  const certificatePaths = await getTrainingCertificatePaths(
-    client,
-    companyId,
-    trainingRows.flatMap((t) => (t.completionId ? [t.completionId] : []))
-  );
-
-  // The certificate links are optional: the page still loads without them.
-  if (certificatePaths.error) {
-    logger.error("Failed to load training certificate paths", {
-      companyId,
-      error: certificatePaths.error
-    });
-  }
-
   return {
     abilities: employeeAbilities.data ?? [],
-    trainings: trainingRows,
-    certificatePaths: certificatePaths.data ?? {}
+    trainings: (trainings.data ?? []) as TrainingAssignmentStatusItem[]
   };
 }
 
 export default function PersonAbilitiesRoute() {
-  const { abilities, trainings, certificatePaths } =
-    useLoaderData<typeof loader>();
+  const { abilities, trainings } = useLoaderData<typeof loader>();
   const { personId } = useParams();
   if (!personId) throw new Error("Could not find personId");
 
   return (
     <VStack spacing={4}>
       <PersonAbilities personId={personId} abilities={abilities} />
-      <PersonTrainings
-        trainings={trainings}
-        certificatePaths={certificatePaths}
-      />
+      <PersonTrainings trainings={trainings} />
     </VStack>
   );
 }
