@@ -69349,7 +69349,9 @@ export type Database = {
           estimatedDuration: string | null
           frequency: Database["public"]["Enums"]["trainingFrequency"]
           grantsAbilityId: string | null
+          guidePath: string | null
           id: string
+          isExternal: boolean
           name: string
           processId: string | null
           status: Database["public"]["Enums"]["trainingStatus"]
@@ -69369,7 +69371,9 @@ export type Database = {
           estimatedDuration?: string | null
           frequency?: Database["public"]["Enums"]["trainingFrequency"]
           grantsAbilityId?: string | null
+          guidePath?: string | null
           id?: string
+          isExternal?: boolean
           name: string
           processId?: string | null
           status?: Database["public"]["Enums"]["trainingStatus"]
@@ -69389,7 +69393,9 @@ export type Database = {
           estimatedDuration?: string | null
           frequency?: Database["public"]["Enums"]["trainingFrequency"]
           grantsAbilityId?: string | null
+          guidePath?: string | null
           id?: string
+          isExternal?: boolean
           name?: string
           processId?: string | null
           status?: Database["public"]["Enums"]["trainingStatus"]
@@ -69711,6 +69717,7 @@ export type Database = {
       }
       trainingCompletion: {
         Row: {
+          certificatePath: string | null
           companyId: string
           completedAt: string
           completedBy: string
@@ -69724,6 +69731,7 @@ export type Database = {
           updatedBy: string | null
         }
         Insert: {
+          certificatePath?: string | null
           companyId: string
           completedAt?: string
           completedBy: string
@@ -69737,6 +69745,7 @@ export type Database = {
           updatedBy?: string | null
         }
         Update: {
+          certificatePath?: string | null
           companyId?: string
           completedAt?: string
           completedBy?: string

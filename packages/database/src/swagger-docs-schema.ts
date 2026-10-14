@@ -31114,6 +31114,9 @@ export default {
             $ref: "#/parameters/rowFilter.trainingCompletion.period"
           },
           {
+            $ref: "#/parameters/rowFilter.trainingCompletion.certificatePath"
+          },
+          {
             $ref: "#/parameters/select"
           },
           {
@@ -31206,6 +31209,9 @@ export default {
             $ref: "#/parameters/rowFilter.trainingCompletion.period"
           },
           {
+            $ref: "#/parameters/rowFilter.trainingCompletion.certificatePath"
+          },
+          {
             $ref: "#/parameters/preferReturn"
           }
         ],
@@ -31250,6 +31256,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.trainingCompletion.period"
+          },
+          {
+            $ref: "#/parameters/rowFilter.trainingCompletion.certificatePath"
           },
           {
             $ref: "#/parameters/body.trainingCompletion"
@@ -96769,6 +96778,12 @@ export default {
             $ref: "#/parameters/rowFilter.training.grantsAbilityId"
           },
           {
+            $ref: "#/parameters/rowFilter.training.guidePath"
+          },
+          {
+            $ref: "#/parameters/rowFilter.training.isExternal"
+          },
+          {
             $ref: "#/parameters/select"
           },
           {
@@ -96882,6 +96897,12 @@ export default {
             $ref: "#/parameters/rowFilter.training.grantsAbilityId"
           },
           {
+            $ref: "#/parameters/rowFilter.training.guidePath"
+          },
+          {
+            $ref: "#/parameters/rowFilter.training.isExternal"
+          },
+          {
             $ref: "#/parameters/preferReturn"
           }
         ],
@@ -96947,6 +96968,12 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.training.grantsAbilityId"
+          },
+          {
+            $ref: "#/parameters/rowFilter.training.guidePath"
+          },
+          {
+            $ref: "#/parameters/rowFilter.training.isExternal"
           },
           {
             $ref: "#/parameters/body.training"
@@ -132660,6 +132687,10 @@ export default {
         period: {
           format: "text",
           type: "string"
+        },
+        certificatePath: {
+          format: "text",
+          type: "string"
         }
       },
       type: "object"
@@ -164079,7 +164110,8 @@ export default {
         "frequency",
         "type",
         "createdAt",
-        "createdBy"
+        "createdBy",
+        "isExternal"
       ],
       properties: {
         id: {
@@ -164177,6 +164209,15 @@ export default {
             "Note:\nThis is a Foreign Key to `ability.id`.<fk table='ability' column='id'/>",
           format: "text",
           type: "string"
+        },
+        guidePath: {
+          format: "text",
+          type: "string"
+        },
+        isExternal: {
+          default: false,
+          format: "boolean",
+          type: "boolean"
         }
       },
       type: "object"
@@ -184310,6 +184351,12 @@ export default {
     },
     "rowFilter.trainingCompletion.period": {
       name: "period",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.trainingCompletion.certificatePath": {
+      name: "certificatePath",
       required: false,
       in: "query",
       type: "string"
@@ -219491,6 +219538,18 @@ export default {
     },
     "rowFilter.training.grantsAbilityId": {
       name: "grantsAbilityId",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.training.guidePath": {
+      name: "guidePath",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.training.isExternal": {
+      name: "isExternal",
       required: false,
       in: "query",
       type: "string"

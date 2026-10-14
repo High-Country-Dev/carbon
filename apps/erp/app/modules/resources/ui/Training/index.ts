@@ -3,8 +3,13 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 export { default as TrainingAssignmentForm } from "./TrainingAssignmentForm";
+export { default as TrainingCertificateStep } from "./TrainingCertificateStep";
 export { default as TrainingExplorer } from "./TrainingExplorer";
 export { default as TrainingForm } from "./TrainingForm";
+export {
+  default as TrainingGuide,
+  TrainingGuideViewer
+} from "./TrainingGuide";
 export { default as TrainingHeader } from "./TrainingHeader";
 export { default as TrainingProperties } from "./TrainingProperties";
 export { default as TrainingStatus } from "./TrainingStatus";

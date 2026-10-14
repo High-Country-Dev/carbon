@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { isUnsafeStoragePath } from "@carbon/files";
 import {
   type BatchRules,
   isValidTimeZone,
@@ -399,6 +400,68 @@ export const trainingCompletionValidator = z.object({
   employeeId: z.string().min(1, { message: "Employee is required" }),
   period: zfd.text(z.string().optional())
 });
+
+// Guide key: `{companyId}/training/{trainingId}/{uploadId}/{file name}` — the
+// last segment is the name the author uploaded.
+export function trainingGuideKeyPrefix(companyId: string, trainingId: string) {
+  return `${companyId}/training/${trainingId}/`;
+}
+
+// The browser posts the guide's key, so the server must not trust its shape.
+export function isValidTrainingGuideKey(key: string, prefix: string) {
+  if (!key.startsWith(prefix) || isUnsafeStoragePath(key)) return false;
+  const segments = key.slice(prefix.length).split("/");
+  return segments.length === 2 && segments.every((segment) => segment !== "");
+}
+
+export function trainingCertificateKeyPrefix(
+  companyId: string,
+  trainingAssignmentId: string,
+  employeeId: string
+) {
+  return `${companyId}/training-certificates/${trainingAssignmentId}/${employeeId}/`;
+}
+
+// A certificate is a PDF or a photo of one. HEIC is never stored: the ERP
+// dropzone converts it to JPEG first, and phone browsers hand a JPEG to a file
+// input that does not list HEIC.
+export const trainingCertificateAccept = {
+  "application/pdf": [".pdf"],
+  "image/png": [".png"],
+  "image/jpeg": [".jpg", ".jpeg"]
+};
+
+export const TRAINING_CERTIFICATE_MAX_BYTES = 10 * 1024 * 1024;
+
+const trainingCertificateExtensions = Object.values(trainingCertificateAccept)
+  .flat()
+  .map((extension) => extension.slice(1));
+
+export function validateTrainingCertificate(
+  file: FormDataEntryValue | null
+):
+  | { file: File; extension: string; error: null }
+  | { file: null; extension: null; error: string } {
+  if (!(file instanceof File) || file.size === 0) {
+    return { file: null, extension: null, error: "Upload a certificate file" };
+  }
+  const extension = file.name.split(".").pop()?.toLowerCase() ?? "";
+  if (!trainingCertificateExtensions.includes(extension)) {
+    return {
+      file: null,
+      extension: null,
+      error: "The certificate must be a PDF, PNG or JPG"
+    };
+  }
+  if (file.size > TRAINING_CERTIFICATE_MAX_BYTES) {
+    return {
+      file: null,
+      extension: null,
+      error: "The certificate must be 10 MB or smaller"
+    };
+  }
+  return { file, extension, error: null };
+}
 
 export const trainingFrequency = ["Once", "Quarterly", "Annual"] as const;
 

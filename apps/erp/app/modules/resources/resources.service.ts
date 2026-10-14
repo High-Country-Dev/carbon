@@ -948,7 +948,7 @@ export async function getTrainingAssignment(
 ) {
   return client
     .from("trainingAssignment")
-    .select("*, training(id, name, frequency, type, status)")
+    .select("*, training(id, name, frequency, type, status, isExternal)")
     .eq("id", assignmentId)
     .single();
 }
@@ -971,6 +971,8 @@ export async function getTrainingAssignmentForCompletion(
         type,
         status,
         estimatedDuration,
+        guidePath,
+        isExternal,
         trainingQuestion(*)
       )`
     )
@@ -1286,6 +1288,7 @@ export async function insertTrainingCompletion(
     companyId: string;
     completedBy: string;
     createdBy: string;
+    certificatePath?: string | null;
   }
 ) {
   return client
@@ -1296,6 +1299,47 @@ export async function insertTrainingCompletion(
     })
     .select("id")
     .single();
+}
+
+/** @mcp delete */
+export async function deleteTrainingCompletion(
+  client: SupabaseClient<Database>,
+  id: number,
+  companyId: string
+) {
+  return client
+    .from("trainingCompletion")
+    .delete()
+    .eq("id", id)
+    .eq("companyId", companyId);
+}
+
+/**
+ * The assignment status RPC does not return the certificate path.
+ * @mcp read
+ */
+export async function getTrainingCertificatePaths(
+  client: SupabaseClient<Database>,
+  companyId: string,
+  completionIds: number[]
+) {
+  if (completionIds.length === 0) {
+    return { data: {} as Record<number, string>, error: null };
+  }
+
+  const { data, error } = await client
+    .from("trainingCompletion")
+    .select("id, certificatePath")
+    .eq("companyId", companyId)
+    .in("id", completionIds);
+
+  if (error) return { data: null, error };
+
+  const paths: Record<number, string> = {};
+  for (const row of data ?? []) {
+    if (row.certificatePath) paths[row.id] = row.certificatePath;
+  }
+  return { data: paths, error: null };
 }
 
 /**

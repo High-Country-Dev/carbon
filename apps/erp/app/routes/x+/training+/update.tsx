@@ -3,11 +3,17 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { requirePermissions } from "@carbon/auth/auth.server";
+import type { Database } from "@carbon/database";
 import { unchecked } from "@carbon/utils";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import type { ActionFunctionArgs } from "react-router";
+import {
+  isValidTrainingGuideKey,
+  trainingGuideKeyPrefix
+} from "~/modules/resources";
 
 export async function action({ request }: ActionFunctionArgs) {
-  const { client, userId } = await requirePermissions(request, {
+  const { client, companyId, userId } = await requirePermissions(request, {
     update: "people"
   });
 
@@ -47,6 +53,45 @@ export async function action({ request }: ActionFunctionArgs) {
           updatedAt: new Date().toISOString()
         })
         .in("id", ids as string[]);
+    case "isExternal":
+    case "guidePath": {
+      // These change how employees take the training, so Draft only.
+      const refusal = await refuseUnlessDraft(client, companyId, ids);
+      if (refusal) return refusal;
+
+      if (field === "isExternal") {
+        return await client
+          .from("training")
+          .update({
+            isExternal: value === "on",
+            updatedBy: userId,
+            updatedAt: new Date().toISOString()
+          })
+          .in("id", ids as string[])
+          .eq("companyId", companyId);
+      }
+
+      const trainingId = ids[0] as string;
+      if (
+        ids.length !== 1 ||
+        (value !== "" &&
+          !isValidTrainingGuideKey(
+            value,
+            trainingGuideKeyPrefix(companyId, trainingId)
+          ))
+      ) {
+        return { error: { message: "Invalid guide file" }, data: null };
+      }
+      return await client
+        .from("training")
+        .update({
+          guidePath: value === "" ? null : value,
+          updatedBy: userId,
+          updatedAt: new Date().toISOString()
+        })
+        .eq("id", trainingId)
+        .eq("companyId", companyId);
+    }
     case "tags":
       return await client
         .from("training")
@@ -60,4 +105,26 @@ export async function action({ request }: ActionFunctionArgs) {
     default:
       return { error: { message: "Invalid field" }, data: null };
   }
+}
+
+async function refuseUnlessDraft(
+  client: SupabaseClient<Database>,
+  companyId: string,
+  ids: FormDataEntryValue[]
+) {
+  const trainings = await client
+    .from("training")
+    .select("status")
+    .in("id", ids as string[])
+    .eq("companyId", companyId);
+  if (trainings.error || trainings.data.length !== ids.length) {
+    return { error: { message: "Training not found" }, data: null };
+  }
+  if (trainings.data.some((training) => training.status !== "Draft")) {
+    return {
+      error: { message: "This can only change while the training is Draft" },
+      data: null
+    };
+  }
+  return null;
 }

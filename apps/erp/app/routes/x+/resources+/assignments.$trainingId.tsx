@@ -5,6 +5,8 @@
 import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
+import { getLogger } from "@carbon/logger";
+import { useAction } from "@carbon/query";
 import {
   Badge,
   Button,
@@ -17,6 +19,13 @@ import {
   DrawerTitle,
   HStack,
   Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  ModalTitle,
   ToggleGroup,
   ToggleGroupItem,
   VStack
@@ -29,17 +38,28 @@ import {
   LuCalendar,
   LuCircleCheck,
   LuClock,
+  LuFileCheck,
   LuSearch,
-  LuTriangleAlert
+  LuTriangleAlert,
+  LuUndo2
 } from "react-icons/lu";
 import type { LoaderFunctionArgs } from "react-router";
 import { useFetcher, useLoaderData, useNavigate } from "react-router";
-import { DateTime, EmployeeAvatar, Empty } from "~/components";
+import { DateTime, EmployeeAvatar, Empty, FileDropzone } from "~/components";
+import { Confirm } from "~/components/Modals";
 import { usePermissions } from "~/hooks";
-import { getTraining, getTrainingAssignmentStatus } from "~/modules/resources";
+import {
+  getTraining,
+  getTrainingAssignmentStatus,
+  getTrainingCertificatePaths,
+  trainingCertificateAccept
+} from "~/modules/resources";
 import type { TrainingAssignmentStatusItem } from "~/modules/resources/types";
+import type { action as completeAction } from "~/routes/x+/resources+/assignments.complete";
 import type { Handle } from "~/utils/handle";
-import { path } from "~/utils/path";
+import { getPrivateUrl, path } from "~/utils/path";
+
+const logger = getLogger("erp", "training-assignments");
 
 export const handle: Handle = {
   breadcrumb: msg`Detail`,
@@ -90,9 +110,27 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     );
   }
 
+  const assignments = (assignmentStatus.data ??
+    []) as TrainingAssignmentStatusItem[];
+
+  const certificatePaths = await getTrainingCertificatePaths(
+    client,
+    companyId,
+    assignments.flatMap((a) => (a.completionId ? [a.completionId] : []))
+  );
+
+  // The certificate links are optional: the page still loads without them.
+  if (certificatePaths.error) {
+    logger.error("Failed to load training certificate paths", {
+      companyId,
+      error: certificatePaths.error
+    });
+  }
+
   return {
     training: training.data,
-    assignments: (assignmentStatus.data ?? []) as TrainingAssignmentStatusItem[]
+    assignments,
+    certificatePaths: certificatePaths.data ?? {}
   };
 }
 
@@ -137,21 +175,118 @@ type StatusFilter =
   | "Overdue"
   | "Not Required";
 
+function CertificateCompleteModal({
+  assignment,
+  onClose
+}: {
+  assignment: TrainingAssignmentStatusItem;
+  onClose: () => void;
+}) {
+  const { t } = useLingui();
+  const fetcher = useAction<typeof completeAction>({
+    onSuccess: () => onClose()
+  });
+  const isSubmitting = fetcher.state !== "idle";
+  const [file, setFile] = useState<File | null>(null);
+
+  const onSubmit = () => {
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("trainingAssignmentId", assignment.trainingAssignmentId);
+    formData.append("employeeId", assignment.employeeId);
+    formData.append("certificate", file);
+    fetcher.submit(formData, {
+      method: "post",
+      action: path.to.markTrainingComplete,
+      encType: "multipart/form-data"
+    });
+  };
+
+  return (
+    <Modal
+      open
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>
+          <ModalTitle>{t`Upload Certificate`}</ModalTitle>
+        </ModalHeader>
+        <ModalBody>
+          <VStack spacing={4}>
+            <p className="text-sm text-muted-foreground">
+              <Trans>
+                This training is external. Upload{" "}
+                {assignment.employeeName?.trim()}'s certificate to mark it
+                complete.
+              </Trans>
+            </p>
+            <FileDropzone
+              onDrop={(files) => setFile(files[0] ?? null)}
+              accept={{
+                ...trainingCertificateAccept,
+                "image/heic": [".heic", ".heif"]
+              }}
+              multiple={false}
+              disabled={isSubmitting}
+              className="mt-0 w-full"
+            />
+            {file && (
+              <HStack spacing={2} className="text-sm">
+                <LuFileCheck className="text-emerald-500" />
+                <span className="break-all">{file.name}</span>
+              </HStack>
+            )}
+          </VStack>
+        </ModalBody>
+        <ModalFooter>
+          <Button variant="secondary" onClick={onClose}>
+            <Trans>Cancel</Trans>
+          </Button>
+          <Button
+            onClick={onSubmit}
+            isDisabled={!file || isSubmitting}
+            isLoading={isSubmitting}
+            leftIcon={<LuCircleCheck />}
+          >
+            <Trans>Mark Complete</Trans>
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+}
+
 function AssignmentListItem({
   assignment,
-  currentPeriod,
+  certificatePath,
+  isExternal,
+  canRemove,
   disabled,
   isLast
 }: {
   assignment: TrainingAssignmentStatusItem;
-  currentPeriod: string | null;
+  certificatePath: string | null;
+  isExternal: boolean;
+  canRemove: boolean;
   disabled: boolean;
   isLast: boolean;
 }) {
+  const { t } = useLingui();
   const fetcher = useFetcher();
   const isSubmitting = fetcher.state !== "idle";
+  const employeeName = assignment.employeeName?.trim() ?? "";
   const canMarkComplete =
     assignment.status !== "Completed" && assignment.status !== "Not Required";
+  const [isCertificateOpen, setIsCertificateOpen] = useState(false);
+  // Hold the completion id from when the dialog opened: the row loses its
+  // completionId as soon as the removal revalidates, and the dialog must stay
+  // mounted until its submission settles so it can close itself.
+  const [removeCompletionId, setRemoveCompletionId] = useState<number | null>(
+    null
+  );
 
   return (
     <div className={cn("p-4", !isLast && "border-b w-full")}>
@@ -181,7 +316,46 @@ function AssignmentListItem({
               <DateTime value={assignment.completedAt} variant="date" />
             </span>
           )}
-          {canMarkComplete && (
+          {certificatePath && (
+            <Button
+              variant="secondary"
+              size="sm"
+              leftIcon={<LuFileCheck />}
+              asChild
+            >
+              <a
+                href={getPrivateUrl(certificatePath)}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Trans>View Certificate</Trans>
+              </a>
+            </Button>
+          )}
+          {assignment.status === "Completed" &&
+            assignment.completionId &&
+            canRemove && (
+              <Button
+                variant="secondary"
+                size="sm"
+                leftIcon={<LuUndo2 />}
+                onClick={() => setRemoveCompletionId(assignment.completionId)}
+              >
+                <Trans>Remove Completion</Trans>
+              </Button>
+            )}
+          {canMarkComplete && isExternal && (
+            <Button
+              variant="secondary"
+              size="sm"
+              isDisabled={disabled}
+              leftIcon={<LuCircleCheck />}
+              onClick={() => setIsCertificateOpen(true)}
+            >
+              <Trans>Mark Complete</Trans>
+            </Button>
+          )}
+          {canMarkComplete && !isExternal && (
             <fetcher.Form method="post" action={path.to.markTrainingComplete}>
               <input
                 type="hidden"
@@ -193,7 +367,6 @@ function AssignmentListItem({
                 name="employeeId"
                 value={assignment.employeeId}
               />
-              <input type="hidden" name="period" value={currentPeriod ?? ""} />
               <Button
                 type="submit"
                 variant="secondary"
@@ -208,13 +381,33 @@ function AssignmentListItem({
           )}
         </HStack>
       </div>
+      {isCertificateOpen && (
+        <CertificateCompleteModal
+          assignment={assignment}
+          onClose={() => setIsCertificateOpen(false)}
+        />
+      )}
+      {removeCompletionId !== null && (
+        <Confirm
+          action={path.to.markTrainingIncomplete}
+          title={t`Remove Completion`}
+          text={t`The training goes back to Pending for ${employeeName}. The employee keeps any ability this training granted. Remove it on their Abilities page if needed.`}
+          confirmText={t`Remove`}
+          confirmVariant="destructive"
+          onCancel={() => setRemoveCompletionId(null)}
+          onSubmit={() => setRemoveCompletionId(null)}
+        >
+          <input type="hidden" name="completionId" value={removeCompletionId} />
+        </Confirm>
+      )}
     </div>
   );
 }
 
 export default function TrainingAssignmentDetailRoute() {
   const { t } = useLingui();
-  const { training, assignments } = useLoaderData<typeof loader>();
+  const { training, assignments, certificatePaths } =
+    useLoaderData<typeof loader>();
   const permissions = usePermissions();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
@@ -336,7 +529,13 @@ export default function TrainingAssignmentDetailRoute() {
                     <AssignmentListItem
                       key={`${assignment.employeeId}-${assignment.trainingAssignmentId}`}
                       assignment={assignment}
-                      currentPeriod={currentPeriod}
+                      certificatePath={
+                        assignment.completionId
+                          ? (certificatePaths[assignment.completionId] ?? null)
+                          : null
+                      }
+                      isExternal={training.isExternal}
+                      canRemove={permissions.can("delete", "resources")}
                       disabled={!permissions.can("update", "resources")}
                       isLast={index === filteredAssignments.length - 1}
                     />

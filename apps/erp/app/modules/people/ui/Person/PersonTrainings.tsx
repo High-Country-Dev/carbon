@@ -11,14 +11,20 @@ import {
   HStack
 } from "@carbon/react";
 import { Trans } from "@lingui/react/macro";
-import { LuCircleCheck, LuClock, LuTriangleAlert } from "react-icons/lu";
+import {
+  LuCircleCheck,
+  LuClock,
+  LuFileCheck,
+  LuTriangleAlert
+} from "react-icons/lu";
 import { Link } from "react-router";
 import { DateTime } from "~/components";
 import type { TrainingAssignmentStatusItem } from "~/modules/resources/types";
-import { path } from "~/utils/path";
+import { getPrivateUrl, path } from "~/utils/path";
 
 type PersonTrainingsProps = {
   trainings: TrainingAssignmentStatusItem[];
+  certificatePaths?: Record<number, string>;
 };
 
 function TrainingStatusBadge({ status }: { status: string }) {
@@ -55,7 +61,10 @@ function TrainingStatusBadge({ status }: { status: string }) {
   }
 }
 
-const PersonTrainings = ({ trainings }: PersonTrainingsProps) => {
+const PersonTrainings = ({
+  trainings,
+  certificatePaths = {}
+}: PersonTrainingsProps) => {
   return (
     <Card>
       <CardHeader>
@@ -78,18 +87,34 @@ const PersonTrainings = ({ trainings }: PersonTrainingsProps) => {
                     </Link>
                     <TrainingStatusBadge status={training.status} />
                   </HStack>
-                  {training.completedAt && (
-                    <p className="text-sm text-muted-foreground">
-                      <DateTime
-                        value={training.completedAt}
-                        variant="date"
-                        dateOptions={{
-                          month: "short",
-                          year: "numeric"
-                        }}
-                      />
-                    </p>
-                  )}
+                  <HStack spacing={3}>
+                    {training.completionId &&
+                      certificatePaths[training.completionId] && (
+                        <a
+                          className="flex items-center gap-1 text-sm"
+                          href={getPrivateUrl(
+                            certificatePaths[training.completionId]
+                          )}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <LuFileCheck />
+                          <Trans>View Certificate</Trans>
+                        </a>
+                      )}
+                    {training.completedAt && (
+                      <p className="text-sm text-muted-foreground">
+                        <DateTime
+                          value={training.completedAt}
+                          variant="date"
+                          dateOptions={{
+                            month: "short",
+                            year: "numeric"
+                          }}
+                        />
+                      </p>
+                    )}
+                  </HStack>
                 </HStack>
               </li>
             ))}

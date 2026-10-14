@@ -23,19 +23,14 @@ import { useParams } from "react-router";
 import { z } from "zod";
 import Assignee, { useOptimisticAssignment } from "~/components/Assignee";
 import { Enumerable } from "~/components/Enumerable";
-import { Ability, InputControlled, Tags } from "~/components/Form";
+import { Ability, Boolean, InputControlled, Tags } from "~/components/Form";
 import { usePermissions, useRouteData } from "~/hooks";
 import { useTags } from "~/hooks/useTags";
 import type { Training } from "~/modules/resources";
-import {
-  trainingFrequency,
-  trainingStatus,
-  trainingType
-} from "~/modules/resources";
-import type { action } from "~/routes/x+/items+/update";
+import { trainingFrequency, trainingType } from "~/modules/resources";
+import type { action } from "~/routes/x+/training+/update";
 import { path } from "~/utils/path";
 import { copyToClipboard } from "~/utils/string";
-import TrainingStatus from "./TrainingStatus";
 
 const TrainingProperties = () => {
   const { t } = useLingui();
@@ -64,7 +59,8 @@ const TrainingProperties = () => {
         | "frequency"
         | "estimatedDuration"
         | "description"
-        | "grantsAbilityId",
+        | "grantsAbilityId"
+        | "isExternal",
       value: string | null
     ) => {
       const formData = new FormData();
@@ -159,10 +155,32 @@ const TrainingProperties = () => {
             </Tooltip>
           </HStack>
         </HStack>
-        <span className="text-sm tracking-tight">
-          {routeData?.training?.name}
-        </span>
       </VStack>
+
+      <ValidatedForm
+        defaultValues={{
+          name: routeData?.training?.name ?? ""
+        }}
+        validator={z.object({
+          name: z.string()
+        })}
+        className="w-full"
+        isReadOnly={!permissions.can("update", "people")}
+      >
+        <InputControlled
+          label={t`Name`}
+          name="name"
+          inline
+          size="sm"
+          value={routeData?.training?.name ?? ""}
+          onBlur={(e) => {
+            const name = e.target.value.trim();
+            if (name && name !== routeData?.training?.name) {
+              onUpdate("name", name);
+            }
+          }}
+        />
+      </ValidatedForm>
 
       <Assignee
         id={id}
@@ -171,36 +189,6 @@ const TrainingProperties = () => {
         variant="inline"
         isReadOnly={!permissions.can("update", "resources")}
       />
-
-      <ValidatedForm
-        defaultValues={{
-          status: routeData?.training?.status ?? undefined
-        }}
-        validator={z.object({
-          status: z.string().min(1, { message: "Status is required" })
-        })}
-        className="w-full"
-      >
-        <span className="text-sm tracking-tight">
-          <Select
-            label={t`Status`}
-            name="status"
-            inline={(value) => (
-              <TrainingStatus
-                status={value as "Draft" | "Active" | "Archived"}
-              />
-            )}
-            options={trainingStatus.map((status) => ({
-              value: status,
-              label: <TrainingStatus status={status} />
-            }))}
-            value={routeData?.training?.status ?? ""}
-            onChange={(value) => {
-              onUpdate("status", value?.value ?? null);
-            }}
-          />
-        </span>
-      </ValidatedForm>
 
       <ValidatedForm
         defaultValues={{
@@ -260,6 +248,31 @@ const TrainingProperties = () => {
             }}
           />
         </span>
+      </ValidatedForm>
+
+      <ValidatedForm
+        defaultValues={{
+          isExternal: routeData?.training?.isExternal ?? false
+        }}
+        validator={z.object({
+          isExternal: z.boolean()
+        })}
+        className="w-full"
+        // Changes how employees take the training: Draft only, like the content.
+        isReadOnly={
+          !permissions.can("update", "people") ||
+          routeData?.training?.status !== "Draft"
+        }
+      >
+        <Boolean
+          label={t`External Certification`}
+          termId="external-certification"
+          name="isExternal"
+          variant="small"
+          onChange={(value) => {
+            onUpdate("isExternal", value ? "on" : "off");
+          }}
+        />
       </ValidatedForm>
 
       <ValidatedForm
