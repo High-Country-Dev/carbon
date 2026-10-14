@@ -1,6 +1,6 @@
 # Training PDF Guides and External Training Certificates
 
-> Status: in-progress
+> Status: Approved
 > Author: Aashu
 > Date: 2026-10-14
 
