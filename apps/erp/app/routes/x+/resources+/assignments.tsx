@@ -80,20 +80,20 @@ const TrainingAssignmentsTable = memo(
           accessorKey: "trainingName",
           header: t`Training`,
           cell: ({ row }) => (
-            <HStack spacing={2}>
-              <Hyperlink
-                to={path.to.trainingAssignmentDetail(
-                  row.original.trainingAssignmentId
-                )}
-              >
-                {row.original.trainingName}
-              </Hyperlink>
-              {row.original.isExternal && (
-                <Badge variant="outline">
-                  <Trans>External</Trans>
-                </Badge>
+            <Hyperlink
+              to={path.to.trainingAssignmentDetail(
+                row.original.trainingAssignmentId
               )}
-            </HStack>
+            >
+              <HStack spacing={2}>
+                <span>{row.original.trainingName}</span>
+                {row.original.isExternal && (
+                  <Badge variant="outline">
+                    <Trans>External</Trans>
+                  </Badge>
+                )}
+              </HStack>
+            </Hyperlink>
           ),
           meta: {
             mobile: "P1",
