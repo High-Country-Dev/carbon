@@ -6,6 +6,9 @@ import { registerReactPdfWorker } from "@carbon/files/pdf/worker";
 import { Skeleton } from "@carbon/react";
 import { useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
+// Without its stylesheet the annotation layer sits in normal flow under the
+// canvas and adds a blank page-sized gap below every page.
+import "react-pdf/dist/Page/AnnotationLayer.css";
 
 // Registered here, not in the client entry: this module is lazy, so the PDF
 // engine stays out of every page that shows no PDF.
