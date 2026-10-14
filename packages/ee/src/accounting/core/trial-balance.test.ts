@@ -4,6 +4,7 @@
 
 import { describe, expect, it } from "vitest";
 import {
+  fiscalYearStart,
   mapRemoteTrialBalance,
   parseQboTrialBalance,
   parseReportAmount,
@@ -405,6 +406,15 @@ describe("parseQboTrialBalance", () => {
   });
 });
 
+describe("fiscalYearStart", () => {
+  it("is the first of the start month on or before the date", () => {
+    expect(fiscalYearStart("2026-09-30", "January")).toBe("2026-01-01");
+    expect(fiscalYearStart("2026-09-30", "October")).toBe("2025-10-01");
+    expect(fiscalYearStart("2026-10-01", "October")).toBe("2026-10-01");
+    expect(fiscalYearStart("2026-03-15", "unknown")).toBe("2026-01-01");
+  });
+});
+
 describe("parseRilletTrialBalance", () => {
   const money = (amount: string) => ({ amount, currency: "USD" });
   const account = (
@@ -471,6 +481,28 @@ describe("parseRilletTrialBalance", () => {
         types
       )
     ).toThrow(/does not balance/);
+  });
+
+  it("reads credit totals Rillet sends negative", () => {
+    // Shaped like a Rillet sandbox report (2026-10-13): debit-signed
+    // balances, credit totals negative, income and expense starting at zero.
+    const rows = parseRilletTrialBalance(
+      {
+        accounts: [
+          account("cash", "220387.54", "49019.18", "-249090.80", "20315.92"),
+          account("ap", "8066.63", "100.00", "-367062.55", "-358895.92"),
+          account("revenue", "0.00", "3900.00", "-3980932.65", "-3977032.65"),
+          account("retained", "4315612.65", "0.00", "0.00", "4315612.65")
+        ]
+      },
+      new Map([...types, ["revenue", "INCOME"], ["retained", "EQUITY"]])
+    );
+    expect(balances(rows)).toEqual({
+      cash: 20315.92,
+      ap: -358895.92,
+      revenue: -3977032.65,
+      retained: 4315612.65
+    });
   });
 
   it("reads the FX totals as movement", () => {
