@@ -2907,6 +2907,9 @@ msgstr "Archivo"
 msgid "Archive all"
 msgstr "Archivar todo"
 
+msgid "Archive Training"
+msgstr ""
+
 msgid "Archived"
 msgstr "Archivado"
 
@@ -4652,8 +4655,14 @@ msgstr "La facturación centralizada está habilitada"
 msgid "Cert Version"
 msgstr "Versión de Certificado"
 
+msgid "Certificate not accepted"
+msgstr ""
+
 msgid "Certificate Number"
 msgstr "Número de Certificado"
+
+msgid "Certificate Submitted"
+msgstr ""
 
 msgid "Certificate uploaded"
 msgstr "Certificado cargado"
@@ -4957,6 +4966,9 @@ msgstr "Haz clic de nuevo para desconectar"
 
 msgid "Click components in the viewer to add them. Shift-click adds several."
 msgstr "Haz clic en los componentes en el visor para agregarlos. Shift+clic agrega varios."
+
+msgid "Click or drop to choose a different file"
+msgstr ""
 
 msgid "Click to rename"
 msgstr "Haz clic para renombrar"
@@ -8064,6 +8076,9 @@ msgstr "Estados de Envío Directo"
 msgid "Drop whole pages or sections a customer doesn't need."
 msgstr "Elimina páginas o secciones completas que el cliente no necesita."
 
+msgid "Drop your certificate here, or click to choose a file"
+msgstr ""
+
 msgid "Drop your file here, or click to browse."
 msgstr "Suelta tu archivo aquí, o haz clic para examinar."
 
@@ -8741,6 +8756,21 @@ msgstr "empleados"
 
 msgid "Employees"
 msgstr "Empleados"
+
+msgid "Employees assigned to this training can open it. The content, guide and questions can no longer change."
+msgstr ""
+
+msgid "Employees can no longer open this training."
+msgstr ""
+
+msgid "Employees complete this training by uploading their certificate. Turn off External Certification in Properties to use questions."
+msgstr ""
+
+msgid "Employees read it before the questions"
+msgstr ""
+
+msgid "Employees will no longer see this PDF. You can upload a new one while the training is Draft."
+msgstr ""
 
 msgid "Empty"
 msgstr "Vacío"
@@ -9458,6 +9488,12 @@ msgstr "Precio Extendido"
 
 msgid "External"
 msgstr "Externo"
+
+msgid "External certification"
+msgstr ""
+
+msgid "External Certification"
+msgstr ""
 
 msgid "External Delta"
 msgstr "Diferencia Externa"
@@ -14343,6 +14379,9 @@ msgstr "Sin componentes aún"
 msgid "No condition may match"
 msgstr "Ninguna condición puede coincidir"
 
+msgid "No content"
+msgstr ""
+
 msgid "No control account has a balance at the cutover."
 msgstr "Ninguna cuenta de control tiene saldo en el corte."
 
@@ -14698,6 +14737,9 @@ msgstr "Sin filas de pago."
 msgid "No payments yet."
 msgstr "Sin pagos aún."
 
+msgid "No PDF guide"
+msgstr ""
+
 msgid "No planned invoices are removed."
 msgstr "No se eliminan facturas planificadas."
 
@@ -14739,6 +14781,9 @@ msgstr "Sin producción registrada aún."
 
 msgid "No purchases in this period"
 msgstr "Sin compras en este período"
+
+msgid "No quiz for external certifications"
+msgstr ""
 
 msgid "No Quote"
 msgstr "Sin Cotización"
@@ -16248,6 +16293,9 @@ msgstr "PDF (Documento)"
 msgid "PDF downloaded"
 msgstr "PDF descargado"
 
+msgid "PDF Guide"
+msgstr ""
+
 msgid "PDF pages"
 msgstr "Páginas PDF"
 
@@ -16256,6 +16304,9 @@ msgstr "Vista previa de PDF"
 
 msgid "PDF Watermark"
 msgstr "Marca de agua PDF"
+
+msgid "PDF, PNG or JPG, up to 10 MB"
+msgstr ""
 
 msgid "Pending"
 msgstr "Pendiente"
@@ -17163,6 +17214,9 @@ msgstr "Público"
 
 msgid "Publish"
 msgstr "Publicar"
+
+msgid "Publish Training"
+msgstr ""
 
 #. placeholder {0}: current.versionNumber
 msgid "Publish Version {0}?"
@@ -18241,6 +18295,9 @@ msgstr "Quitar aplicación de autenticación"
 msgid "Remove clause"
 msgstr "Quitar cláusula"
 
+msgid "Remove Completion"
+msgstr ""
+
 msgid "Remove condition"
 msgstr "Quitar condición"
 
@@ -18288,6 +18345,9 @@ msgstr "Quitar pieza"
 
 msgid "Remove path"
 msgstr "Quitar ruta"
+
+msgid "Remove PDF Guide"
+msgstr ""
 
 msgid "Remove row"
 msgstr "Quitar fila"
@@ -18395,6 +18455,9 @@ msgstr "Reabrir"
 msgid "Reopen as Revision"
 msgstr "Reabrir como Revisión"
 
+msgid "Reopen Training"
+msgstr ""
+
 msgid "Reorder"
 msgstr "Reordenar"
 
@@ -18439,6 +18502,9 @@ msgstr "Repetir Ejecución"
 
 msgid "Repeats once for each item in {inputLabel}"
 msgstr "Se repite una vez para cada elemento en {inputLabel}"
+
+msgid "Replace"
+msgstr ""
 
 msgid "Replace Carbon's default chart with your own, before you set up accounting"
 msgstr "Reemplace el plan predeterminado de Carbon con el suyo, antes de configurar la contabilidad"
@@ -20667,6 +20733,9 @@ msgstr "Mostrando los 1,000 grupos principales por cantidad"
 msgid "Shown as a faint background behind every page of generated PDFs"
 msgstr "Se muestra como un fondo tenue detrás de cada página de los PDF generados"
 
+msgid "Shown to employees below the PDF guide"
+msgstr ""
+
 msgid "Shown to the customer on the invoice"
 msgstr "Se muestra al cliente en la factura"
 
@@ -21340,6 +21409,9 @@ msgstr "Subdiario"
 
 msgid "Submit anonymously"
 msgstr "Enviar anónimamente"
+
+msgid "Submit Certificate"
+msgstr ""
 
 msgid "Submit for approval"
 msgstr "Enviar para aprobación"
@@ -23004,6 +23076,12 @@ msgstr "El total a fabricar en todas las órdenes de trabajo creadas en esta ope
 msgid "The traceable reference (e.g. NIST standard, master gauge serial) the calibration values were compared against."
 msgstr "La referencia rastreable (por ejemplo, estándar NIST, número de serie del Instrumento de medición Patrón) contra la cual se compararon los valores de Calibración."
 
+msgid "The training goes back to Draft so you can change it. Employees cannot open it until you publish it again."
+msgstr ""
+
+msgid "The training goes back to Pending for {employeeName}. The employee keeps any ability this training granted. Remove it on their Abilities page if needed."
+msgstr ""
+
 msgid "The traveler lists each item on the bill of materials with its quantity."
 msgstr "La hoja viajera lista cada artículo en la lista de materiales con su cantidad."
 
@@ -23459,6 +23537,10 @@ msgstr "Esto quita a {employeeName} del tablero por el día. Guarda de nuevo par
 
 msgid "This tool is activated when change notice {activationLockId} is released."
 msgstr "Esta herramienta se activa cuando se libera el aviso de cambio {activationLockId}."
+
+#. placeholder {0}: assignment.employeeName?.trim()
+msgid "This training is external. Upload {0}'s certificate to mark it complete."
+msgstr ""
 
 msgid "This unit has no cost in inventory"
 msgstr "Esta unidad no tiene costo en el inventario"
@@ -23995,8 +24077,14 @@ msgstr "Capacitación"
 msgid "Training Assignments"
 msgstr "Asignaciones de Capacitación"
 
+msgid "Training not recorded"
+msgstr ""
+
 msgid "Training Plan"
 msgstr "Plan de Capacitación"
+
+msgid "Training taken outside Carbon, such as a vendor course. Employees complete it by uploading the certificate they received instead of answering a quiz."
+msgstr ""
 
 msgid "Training your team via the Academy and in-app guides"
 msgstr "Capacitar a tu equipo a través de la Academia y guías en la aplicación"
@@ -24537,6 +24625,9 @@ msgstr "Subir"
 msgid "Upload a PDF first"
 msgstr "Subir un PDF primero"
 
+msgid "Upload Certificate"
+msgstr ""
+
 msgid "Upload chart"
 msgstr "Subir plan"
 
@@ -24554,6 +24645,15 @@ msgstr "Error al subir el archivo. Inténtalo de nuevo."
 
 msgid "Upload new backup…"
 msgstr "Subir nueva copia de seguridad…"
+
+msgid "Upload one PDF, PNG or JPG file of 10 MB or less."
+msgstr ""
+
+msgid "Upload the certificate you received for this training. Uploading it marks the training as complete."
+msgstr ""
+
+msgid "Upload your certificate on the next step."
+msgstr ""
 
 msgid "Uploaded model"
 msgstr "Modelo cargado"

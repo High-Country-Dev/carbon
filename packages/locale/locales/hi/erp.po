@@ -2907,6 +2907,9 @@ msgstr "संग्रह"
 msgid "Archive all"
 msgstr "सभी को संग्रहित करें"
 
+msgid "Archive Training"
+msgstr ""
+
 msgid "Archived"
 msgstr "संग्रहीत"
 
@@ -4652,8 +4655,14 @@ msgstr "केंद्रीकृत बिलिंग सक्षम है
 msgid "Cert Version"
 msgstr "सर्ट संस्करण"
 
+msgid "Certificate not accepted"
+msgstr ""
+
 msgid "Certificate Number"
 msgstr "प्रमाणपत्र संख्या"
+
+msgid "Certificate Submitted"
+msgstr ""
 
 msgid "Certificate uploaded"
 msgstr "प्रमाणपत्र अपलोड किया गया"
@@ -4957,6 +4966,9 @@ msgstr "डिस्कनेक्ट करने के लिए फिर �
 
 msgid "Click components in the viewer to add them. Shift-click adds several."
 msgstr "दर्शक में घटकों पर क्लिक करें और उन्हें जोड़ें। Shift-क्लिक से कई जोड़ें।"
+
+msgid "Click or drop to choose a different file"
+msgstr ""
 
 msgid "Click to rename"
 msgstr "नाम बदलने के लिए क्लिक करें"
@@ -8064,6 +8076,9 @@ msgstr "ड्रॉप शिपमेंट स्थितियाँ"
 msgid "Drop whole pages or sections a customer doesn't need."
 msgstr "उन पूरे पृष्ठों या अनुभागों को हटाएं जिनकी ग्राहक को आवश्यकता नहीं है।"
 
+msgid "Drop your certificate here, or click to choose a file"
+msgstr ""
+
 msgid "Drop your file here, or click to browse."
 msgstr "अपनी फ़ाइल यहाँ ड्रॉप करें, या ब्राउज़ करने के लिए क्लिक करें।"
 
@@ -8741,6 +8756,21 @@ msgstr "कर्मचारियों"
 
 msgid "Employees"
 msgstr "कर्मचारी"
+
+msgid "Employees assigned to this training can open it. The content, guide and questions can no longer change."
+msgstr ""
+
+msgid "Employees can no longer open this training."
+msgstr ""
+
+msgid "Employees complete this training by uploading their certificate. Turn off External Certification in Properties to use questions."
+msgstr ""
+
+msgid "Employees read it before the questions"
+msgstr ""
+
+msgid "Employees will no longer see this PDF. You can upload a new one while the training is Draft."
+msgstr ""
 
 msgid "Empty"
 msgstr "खाली"
@@ -9458,6 +9488,12 @@ msgstr "विस्तारित मूल्य"
 
 msgid "External"
 msgstr "बाहरी"
+
+msgid "External certification"
+msgstr ""
+
+msgid "External Certification"
+msgstr ""
 
 msgid "External Delta"
 msgstr "बाहरी अंतर"
@@ -14343,6 +14379,9 @@ msgstr "अभी कोई घटक नहीं"
 msgid "No condition may match"
 msgstr "कोई भी शर्त मेल नहीं खा सकती"
 
+msgid "No content"
+msgstr ""
+
 msgid "No control account has a balance at the cutover."
 msgstr "कटऑवर पर किसी नियंत्रण खाते की शेष राशि नहीं है।"
 
@@ -14698,6 +14737,9 @@ msgstr "कोई भुगतान पंक्तियाँ नहीं।
 msgid "No payments yet."
 msgstr "अभी तक कोई भुगतान नहीं।"
 
+msgid "No PDF guide"
+msgstr ""
+
 msgid "No planned invoices are removed."
 msgstr "कोई योजनाबद्ध चालान हटाया नहीं गया।"
 
@@ -14739,6 +14781,9 @@ msgstr "अभी तक कोई उत्पादन दर्ज नही�
 
 msgid "No purchases in this period"
 msgstr "इस अवधि में कोई खरीद नहीं"
+
+msgid "No quiz for external certifications"
+msgstr ""
 
 msgid "No Quote"
 msgstr "कोई कोटेशन नहीं"
@@ -16248,6 +16293,9 @@ msgstr "PDF (दस्तावेज़)"
 msgid "PDF downloaded"
 msgstr "PDF डाउनलोड किया गया"
 
+msgid "PDF Guide"
+msgstr ""
+
 msgid "PDF pages"
 msgstr "पीडीएफ पृष्ठ"
 
@@ -16256,6 +16304,9 @@ msgstr "PDF पूर्वावलोकन"
 
 msgid "PDF Watermark"
 msgstr "PDF वॉटरमार्क"
+
+msgid "PDF, PNG or JPG, up to 10 MB"
+msgstr ""
 
 msgid "Pending"
 msgstr "लंबित"
@@ -17163,6 +17214,9 @@ msgstr "सार्वजनिक"
 
 msgid "Publish"
 msgstr "प्रकाशित करें"
+
+msgid "Publish Training"
+msgstr ""
 
 #. placeholder {0}: current.versionNumber
 msgid "Publish Version {0}?"
@@ -18241,6 +18295,9 @@ msgstr "प्रमाणकर्ता ऐप्लिकेशन निक�
 msgid "Remove clause"
 msgstr "खंड निकालें"
 
+msgid "Remove Completion"
+msgstr ""
+
 msgid "Remove condition"
 msgstr "शर्त निकालें"
 
@@ -18288,6 +18345,9 @@ msgstr "पार्ट निकालें"
 
 msgid "Remove path"
 msgstr "पथ निकालें"
+
+msgid "Remove PDF Guide"
+msgstr ""
 
 msgid "Remove row"
 msgstr "पंक्ति निकालें"
@@ -18395,6 +18455,9 @@ msgstr "फिर से खोलें"
 msgid "Reopen as Revision"
 msgstr "रिवीजन के रूप में फिर से खोलें"
 
+msgid "Reopen Training"
+msgstr ""
+
 msgid "Reorder"
 msgstr "पुनः क्रमित करें"
 
@@ -18439,6 +18502,9 @@ msgstr "दोहराएं रन"
 
 msgid "Repeats once for each item in {inputLabel}"
 msgstr "{inputLabel} में प्रत्येक आइटम के लिए एक बार दोहराएं"
+
+msgid "Replace"
+msgstr ""
 
 msgid "Replace Carbon's default chart with your own, before you set up accounting"
 msgstr "Carbon के डिफ़ॉल्ट चार्ट को अपने स्वयं के साथ बदलें, लेखांकन सेट अप करने से पहले"
@@ -20667,6 +20733,9 @@ msgstr "राशि द्वारा शीर्ष 1,000 समूह द�
 msgid "Shown as a faint background behind every page of generated PDFs"
 msgstr "जनरेट की गई PDF के हर पेज के पीछे हल्की पृष्ठभूमि के रूप में दिखाया जाता है"
 
+msgid "Shown to employees below the PDF guide"
+msgstr ""
+
 msgid "Shown to the customer on the invoice"
 msgstr "चालान पर ग्राहक को दिखाया जाता है"
 
@@ -21340,6 +21409,9 @@ msgstr "सहायक बहीखाता"
 
 msgid "Submit anonymously"
 msgstr "गुमनाम रूप से सबमिट करें"
+
+msgid "Submit Certificate"
+msgstr ""
 
 msgid "Submit for approval"
 msgstr "अनुमोदन के लिए सबमिट करें"
@@ -23004,6 +23076,12 @@ msgstr "इस बल्क बैच में बनाए गए सभी �
 msgid "The traceable reference (e.g. NIST standard, master gauge serial) the calibration values were compared against."
 msgstr "पता लगाने योग्य संदर्भ (उदाहरण के लिए, NIST मानक, मास्टर गेज सीरीज़ नंबर) जिसके विरुद्ध अंशांकन मान की तुलना की गई थी।"
 
+msgid "The training goes back to Draft so you can change it. Employees cannot open it until you publish it again."
+msgstr ""
+
+msgid "The training goes back to Pending for {employeeName}. The employee keeps any ability this training granted. Remove it on their Abilities page if needed."
+msgstr ""
+
 msgid "The traveler lists each item on the bill of materials with its quantity."
 msgstr "ट्रैवलर सामग्री सूची पर प्रत्येक आइटम को इसकी मात्रा के साथ सूचीबद्ध करता है।"
 
@@ -23459,6 +23537,10 @@ msgstr "यह {employeeName} को इस दिन के लिए बोर
 
 msgid "This tool is activated when change notice {activationLockId} is released."
 msgstr "यह उपकरण तब सक्रिय होता है जब परिवर्तन सूचना {activationLockId} जारी की जाती है।"
+
+#. placeholder {0}: assignment.employeeName?.trim()
+msgid "This training is external. Upload {0}'s certificate to mark it complete."
+msgstr ""
 
 msgid "This unit has no cost in inventory"
 msgstr "इस इकाई की इन्वेंटरी में कोई लागत नहीं है"
@@ -23995,8 +24077,14 @@ msgstr "प्रशिक्षण"
 msgid "Training Assignments"
 msgstr "प्रशिक्षण असाइनमेंट"
 
+msgid "Training not recorded"
+msgstr ""
+
 msgid "Training Plan"
 msgstr "प्रशिक्षण योजना"
+
+msgid "Training taken outside Carbon, such as a vendor course. Employees complete it by uploading the certificate they received instead of answering a quiz."
+msgstr ""
 
 msgid "Training your team via the Academy and in-app guides"
 msgstr "Academy और इन-ऐप गाइड के माध्यम से अपनी टीम को प्रशिक्षण दें"
@@ -24537,6 +24625,9 @@ msgstr "अपलोड करें"
 msgid "Upload a PDF first"
 msgstr "पहले एक PDF अपलोड करें"
 
+msgid "Upload Certificate"
+msgstr ""
+
 msgid "Upload chart"
 msgstr "चार्ट अपलोड करें"
 
@@ -24554,6 +24645,15 @@ msgstr "अपलोड विफल रहा। कृपया पुनः �
 
 msgid "Upload new backup…"
 msgstr "नया बैकअप अपलोड करें…"
+
+msgid "Upload one PDF, PNG or JPG file of 10 MB or less."
+msgstr ""
+
+msgid "Upload the certificate you received for this training. Uploading it marks the training as complete."
+msgstr ""
+
+msgid "Upload your certificate on the next step."
+msgstr ""
 
 msgid "Uploaded model"
 msgstr "अपलोड किया गया मॉडल"

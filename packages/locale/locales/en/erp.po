@@ -2907,6 +2907,9 @@ msgstr "Archive"
 msgid "Archive all"
 msgstr "Archive all"
 
+msgid "Archive Training"
+msgstr "Archive Training"
+
 msgid "Archived"
 msgstr "Archived"
 
@@ -4652,8 +4655,14 @@ msgstr "Centralized billing is enabled"
 msgid "Cert Version"
 msgstr "Cert Version"
 
+msgid "Certificate not accepted"
+msgstr "Certificate not accepted"
+
 msgid "Certificate Number"
 msgstr "Certificate Number"
+
+msgid "Certificate Submitted"
+msgstr "Certificate Submitted"
 
 msgid "Certificate uploaded"
 msgstr "Certificate uploaded"
@@ -4957,6 +4966,9 @@ msgstr "Click again to disconnect"
 
 msgid "Click components in the viewer to add them. Shift-click adds several."
 msgstr "Click components in the viewer to add them. Shift-click adds several."
+
+msgid "Click or drop to choose a different file"
+msgstr "Click or drop to choose a different file"
 
 msgid "Click to rename"
 msgstr "Click to rename"
@@ -8064,6 +8076,9 @@ msgstr "Drop Shipment Statuses"
 msgid "Drop whole pages or sections a customer doesn't need."
 msgstr "Drop whole pages or sections a customer doesn't need."
 
+msgid "Drop your certificate here, or click to choose a file"
+msgstr "Drop your certificate here, or click to choose a file"
+
 msgid "Drop your file here, or click to browse."
 msgstr "Drop your file here, or click to browse."
 
@@ -8741,6 +8756,21 @@ msgstr "employees"
 
 msgid "Employees"
 msgstr "Employees"
+
+msgid "Employees assigned to this training can open it. The content, guide and questions can no longer change."
+msgstr "Employees assigned to this training can open it. The content, guide and questions can no longer change."
+
+msgid "Employees can no longer open this training."
+msgstr "Employees can no longer open this training."
+
+msgid "Employees complete this training by uploading their certificate. Turn off External Certification in Properties to use questions."
+msgstr "Employees complete this training by uploading their certificate. Turn off External Certification in Properties to use questions."
+
+msgid "Employees read it before the questions"
+msgstr "Employees read it before the questions"
+
+msgid "Employees will no longer see this PDF. You can upload a new one while the training is Draft."
+msgstr "Employees will no longer see this PDF. You can upload a new one while the training is Draft."
 
 msgid "Empty"
 msgstr "Empty"
@@ -9458,6 +9488,12 @@ msgstr "Extended Price"
 
 msgid "External"
 msgstr "External"
+
+msgid "External certification"
+msgstr "External certification"
+
+msgid "External Certification"
+msgstr "External Certification"
 
 msgid "External Delta"
 msgstr "External Delta"
@@ -14343,6 +14379,9 @@ msgstr "No components yet"
 msgid "No condition may match"
 msgstr "No condition may match"
 
+msgid "No content"
+msgstr "No content"
+
 msgid "No control account has a balance at the cutover."
 msgstr "No control account has a balance at the cutover."
 
@@ -14698,6 +14737,9 @@ msgstr "No payment rows."
 msgid "No payments yet."
 msgstr "No payments yet."
 
+msgid "No PDF guide"
+msgstr "No PDF guide"
+
 msgid "No planned invoices are removed."
 msgstr "No planned invoices are removed."
 
@@ -14739,6 +14781,9 @@ msgstr "No production recorded yet."
 
 msgid "No purchases in this period"
 msgstr "No purchases in this period"
+
+msgid "No quiz for external certifications"
+msgstr "No quiz for external certifications"
 
 msgid "No Quote"
 msgstr "No Quote"
@@ -16248,6 +16293,9 @@ msgstr "PDF (Document)"
 msgid "PDF downloaded"
 msgstr "PDF downloaded"
 
+msgid "PDF Guide"
+msgstr "PDF Guide"
+
 msgid "PDF pages"
 msgstr "PDF pages"
 
@@ -16256,6 +16304,9 @@ msgstr "PDF Preview"
 
 msgid "PDF Watermark"
 msgstr "PDF Watermark"
+
+msgid "PDF, PNG or JPG, up to 10 MB"
+msgstr "PDF, PNG or JPG, up to 10 MB"
 
 msgid "Pending"
 msgstr "Pending"
@@ -17163,6 +17214,9 @@ msgstr "Public"
 
 msgid "Publish"
 msgstr "Publish"
+
+msgid "Publish Training"
+msgstr "Publish Training"
 
 #. placeholder {0}: current.versionNumber
 msgid "Publish Version {0}?"
@@ -18241,6 +18295,9 @@ msgstr "Remove authenticator app"
 msgid "Remove clause"
 msgstr "Remove clause"
 
+msgid "Remove Completion"
+msgstr "Remove Completion"
+
 msgid "Remove condition"
 msgstr "Remove condition"
 
@@ -18288,6 +18345,9 @@ msgstr "Remove part"
 
 msgid "Remove path"
 msgstr "Remove path"
+
+msgid "Remove PDF Guide"
+msgstr "Remove PDF Guide"
 
 msgid "Remove row"
 msgstr "Remove row"
@@ -18395,6 +18455,9 @@ msgstr "Reopen"
 msgid "Reopen as Revision"
 msgstr "Reopen as Revision"
 
+msgid "Reopen Training"
+msgstr "Reopen Training"
+
 msgid "Reorder"
 msgstr "Reorder"
 
@@ -18439,6 +18502,9 @@ msgstr "Repeat Run"
 
 msgid "Repeats once for each item in {inputLabel}"
 msgstr "Repeats once for each item in {inputLabel}"
+
+msgid "Replace"
+msgstr "Replace"
 
 msgid "Replace Carbon's default chart with your own, before you set up accounting"
 msgstr "Replace Carbon's default chart with your own, before you set up accounting"
@@ -20667,6 +20733,9 @@ msgstr "Showing the top 1,000 groups by amount"
 msgid "Shown as a faint background behind every page of generated PDFs"
 msgstr "Shown as a faint background behind every page of generated PDFs"
 
+msgid "Shown to employees below the PDF guide"
+msgstr "Shown to employees below the PDF guide"
+
 msgid "Shown to the customer on the invoice"
 msgstr "Shown to the customer on the invoice"
 
@@ -21340,6 +21409,9 @@ msgstr "Subledger"
 
 msgid "Submit anonymously"
 msgstr "Submit anonymously"
+
+msgid "Submit Certificate"
+msgstr "Submit Certificate"
 
 msgid "Submit for approval"
 msgstr "Submit for approval"
@@ -23004,6 +23076,12 @@ msgstr "The total to make across all jobs created in this bulk batch; combined w
 msgid "The traceable reference (e.g. NIST standard, master gauge serial) the calibration values were compared against."
 msgstr "The traceable reference (e.g. NIST standard, master gauge serial) the calibration values were compared against."
 
+msgid "The training goes back to Draft so you can change it. Employees cannot open it until you publish it again."
+msgstr "The training goes back to Draft so you can change it. Employees cannot open it until you publish it again."
+
+msgid "The training goes back to Pending for {employeeName}. The employee keeps any ability this training granted. Remove it on their Abilities page if needed."
+msgstr "The training goes back to Pending for {employeeName}. The employee keeps any ability this training granted. Remove it on their Abilities page if needed."
+
 msgid "The traveler lists each item on the bill of materials with its quantity."
 msgstr "The traveler lists each item on the bill of materials with its quantity."
 
@@ -23459,6 +23537,10 @@ msgstr "This takes {employeeName} off the board for the day. Save again to confi
 
 msgid "This tool is activated when change notice {activationLockId} is released."
 msgstr "This tool is activated when change notice {activationLockId} is released."
+
+#. placeholder {0}: assignment.employeeName?.trim()
+msgid "This training is external. Upload {0}'s certificate to mark it complete."
+msgstr "This training is external. Upload {0}'s certificate to mark it complete."
 
 msgid "This unit has no cost in inventory"
 msgstr "This unit has no cost in inventory"
@@ -23995,8 +24077,14 @@ msgstr "Training"
 msgid "Training Assignments"
 msgstr "Training Assignments"
 
+msgid "Training not recorded"
+msgstr "Training not recorded"
+
 msgid "Training Plan"
 msgstr "Training Plan"
+
+msgid "Training taken outside Carbon, such as a vendor course. Employees complete it by uploading the certificate they received instead of answering a quiz."
+msgstr "Training taken outside Carbon, such as a vendor course. Employees complete it by uploading the certificate they received instead of answering a quiz."
 
 msgid "Training your team via the Academy and in-app guides"
 msgstr "Training your team via the Academy and in-app guides"
@@ -24537,6 +24625,9 @@ msgstr "Upload"
 msgid "Upload a PDF first"
 msgstr "Upload a PDF first"
 
+msgid "Upload Certificate"
+msgstr "Upload Certificate"
+
 msgid "Upload chart"
 msgstr "Upload chart"
 
@@ -24554,6 +24645,15 @@ msgstr "Upload failed. Please try again."
 
 msgid "Upload new backup…"
 msgstr "Upload new backup…"
+
+msgid "Upload one PDF, PNG or JPG file of 10 MB or less."
+msgstr "Upload one PDF, PNG or JPG file of 10 MB or less."
+
+msgid "Upload the certificate you received for this training. Uploading it marks the training as complete."
+msgstr "Upload the certificate you received for this training. Uploading it marks the training as complete."
+
+msgid "Upload your certificate on the next step."
+msgstr "Upload your certificate on the next step."
 
 msgid "Uploaded model"
 msgstr "Uploaded model"
