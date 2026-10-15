@@ -69349,6 +69349,7 @@ export type Database = {
           estimatedDuration: string | null
           frequency: Database["public"]["Enums"]["trainingFrequency"]
           grantsAbilityId: string | null
+          guidePath: string | null
           id: string
           name: string
           processId: string | null
@@ -69369,6 +69370,7 @@ export type Database = {
           estimatedDuration?: string | null
           frequency?: Database["public"]["Enums"]["trainingFrequency"]
           grantsAbilityId?: string | null
+          guidePath?: string | null
           id?: string
           name: string
           processId?: string | null
@@ -69389,6 +69391,7 @@ export type Database = {
           estimatedDuration?: string | null
           frequency?: Database["public"]["Enums"]["trainingFrequency"]
           grantsAbilityId?: string | null
+          guidePath?: string | null
           id?: string
           name?: string
           processId?: string | null
@@ -69570,7 +69573,8 @@ export type Database = {
           createdBy: string
           groupIds: string[] | null
           id: string
-          trainingId: string
+          name: string | null
+          trainingId: string | null
           updatedAt: string | null
           updatedBy: string | null
         }
@@ -69580,7 +69584,8 @@ export type Database = {
           createdBy: string
           groupIds?: string[] | null
           id?: string
-          trainingId: string
+          name?: string | null
+          trainingId?: string | null
           updatedAt?: string | null
           updatedBy?: string | null
         }
@@ -69590,7 +69595,8 @@ export type Database = {
           createdBy?: string
           groupIds?: string[] | null
           id?: string
-          trainingId?: string
+          name?: string | null
+          trainingId?: string | null
           updatedAt?: string | null
           updatedBy?: string | null
         }
@@ -69711,6 +69717,7 @@ export type Database = {
       }
       trainingCompletion: {
         Row: {
+          certificatePath: string | null
           companyId: string
           completedAt: string
           completedBy: string
@@ -69724,6 +69731,7 @@ export type Database = {
           updatedBy: string | null
         }
         Insert: {
+          certificatePath?: string | null
           companyId: string
           completedAt?: string
           completedBy: string
@@ -69737,6 +69745,7 @@ export type Database = {
           updatedBy?: string | null
         }
         Update: {
+          certificatePath?: string | null
           companyId?: string
           completedAt?: string
           completedBy?: string
@@ -93974,6 +93983,7 @@ export type Database = {
         Args: { p_company_id: string; p_employee_id?: string }
         Returns: {
           avatarUrl: string
+          certificatePath: string
           companyId: string
           completedAt: string
           completionId: number
@@ -93982,6 +93992,7 @@ export type Database = {
           employeeName: string
           employeeStartDate: string
           frequency: Database["public"]["Enums"]["trainingFrequency"]
+          isExternal: boolean
           status: string
           trainingAssignmentId: string
           trainingId: string
@@ -93996,9 +94007,11 @@ export type Database = {
           completionPercent: number
           currentPeriod: string
           frequency: Database["public"]["Enums"]["trainingFrequency"]
+          isExternal: boolean
           overdue: number
           pending: number
           totalAssigned: number
+          trainingAssignmentId: string
           trainingId: string
           trainingName: string
         }[]
