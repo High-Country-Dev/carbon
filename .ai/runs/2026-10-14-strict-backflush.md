@@ -1,4 +1,4 @@
-# Feature run: Strict backflush (CARBON-113)
+# Feature run: Strict backflush
 
 - Date: 2026-10-14
 - Mode: fully-autonomous

@@ -10,6 +10,7 @@
 
 import type { Database } from "@carbon/database";
 import type { KyselyDatabase as DB } from "@carbon/database/client";
+import { inOrder } from "@carbon/database/rows";
 import {
   binShortfall,
   getPullFromLocations,
@@ -116,14 +117,15 @@ export async function binCoverProblem(
 
   if (binShortfall({ onHand, alreadyDrawn, quantity }) === 0) return null;
 
-  const [item, storageUnit] = await Promise.all([
-    readItemName(db, itemId, companyId),
-    db
-      .selectFrom("storageUnit")
-      .where("id", "=", storageUnitId)
-      .where("companyId", "=", companyId)
-      .select("name")
-      .executeTakeFirst()
+  const [item, storageUnit] = await inOrder([
+    () => readItemName(db, itemId, companyId),
+    () =>
+      db
+        .selectFrom("storageUnit")
+        .where("id", "=", storageUnitId)
+        .where("companyId", "=", companyId)
+        .select("name")
+        .executeTakeFirst()
   ]);
   const have = round(Math.max(onHand - alreadyDrawn, 0));
   return `Not enough ${item} in ${storageUnit?.name ?? storageUnitId}: need ${round(quantity)}, have ${have}`;
@@ -140,24 +142,25 @@ export async function assertMethodHasPullFrom(
 ): Promise<void> {
   const { makeMethodId, companyId } = args;
 
-  const [lines, locations] = await Promise.all([
-    db
-      .selectFrom("methodMaterial")
-      .innerJoin("item", "item.id", "methodMaterial.itemId")
-      .where("methodMaterial.makeMethodId", "=", makeMethodId)
-      .where("methodMaterial.companyId", "=", companyId)
-      .select([
-        "methodMaterial.methodType",
-        "methodMaterial.itemType",
-        "methodMaterial.storageUnitIds",
-        "methodMaterial.order",
-        "item.id as itemId",
-        "item.itemTrackingType",
-        "item.readableIdWithRevision"
-      ])
-      .orderBy("methodMaterial.order")
-      .execute(),
-    getPullFromLocations(db, companyId)
+  const [lines, locations] = await inOrder([
+    () =>
+      db
+        .selectFrom("methodMaterial")
+        .innerJoin("item", "item.id", "methodMaterial.itemId")
+        .where("methodMaterial.makeMethodId", "=", makeMethodId)
+        .where("methodMaterial.companyId", "=", companyId)
+        .select([
+          "methodMaterial.methodType",
+          "methodMaterial.itemType",
+          "methodMaterial.storageUnitIds",
+          "methodMaterial.order",
+          "item.id as itemId",
+          "item.itemTrackingType",
+          "item.readableIdWithRevision"
+        ])
+        .orderBy("methodMaterial.order")
+        .execute(),
+    () => getPullFromLocations(db, companyId)
   ]);
 
   const locationIds = locations.map((location) => location.id);

@@ -3,7 +3,6 @@
 > Status: implemented
 > Author: naveenkash
 > Date: 2026-10-14
-> Ticket: CARBON-113 — Backflush rules
 
 ## TLDR
 
@@ -161,7 +160,7 @@ No new table. No RLS change.
 
 ## Changelog
 
-- 2026-10-14: Created from the CARBON-113 design discussion.
+- 2026-10-14: Created from the backflush rules design discussion.
 - 2026-10-15: Long lists. A 20-line BoM produced a 912-character toast that ran off a small screen and faded before it could be read. Every strict refusal now names the first entries and counts the rest (`summarizeList`: 5 part names, 3 shortfalls; the SQL caps at 3 too). The Release dialog keeps the full list in a scroll box, and a collapsed BoM or job BoM row shows a red "No storage unit" badge.
 - 2026-10-15: The activation error names only the parts, not the locations (user request).
 - 2026-10-15: Browser test. Fixed: a location with a work center but no storage unit blocked activation for good; the release list named a part twice; the Release dialog did not warn before submit; the job BoM line showed "Default Storage Unit" and "Optional"; a refusal named only the first short material (TypeScript and SQL).

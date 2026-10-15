@@ -1,4 +1,4 @@
--- Strict backflush (.ai/specs/2026-10-14-strict-backflush.md, CARBON-113).
+-- Strict backflush (.ai/specs/2026-10-14-strict-backflush.md).
 --
 -- companySettings.requireBackflushStorageUnit turns it on (off by default).
 -- backflush_job_materials is copied from its live definition

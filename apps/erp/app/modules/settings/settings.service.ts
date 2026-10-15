@@ -1258,33 +1258,33 @@ export async function getActiveMethodsMissingPullFrom(
   error: Error | null;
 }> {
   try {
-    const [lines, locations] = await Promise.all([
-      db
-        .selectFrom("methodMaterial")
-        .innerJoin("makeMethod", (join) =>
-          join
-            .onRef("makeMethod.id", "=", "methodMaterial.makeMethodId")
-            .on("makeMethod.companyId", "=", companyId)
-            .on("makeMethod.status", "=", "Active")
-        )
-        .innerJoin("item as component", "component.id", "methodMaterial.itemId")
-        .innerJoin("item as parent", "parent.id", "makeMethod.itemId")
-        .where("methodMaterial.companyId", "=", companyId)
-        .where("methodMaterial.methodType", "!=", "Make to Order")
-        .where("methodMaterial.itemType", "in", [...PULLED_ITEM_TYPES])
-        .select([
-          "makeMethod.id as makeMethodId",
-          "parent.id as itemId",
-          "parent.type as itemType",
-          "parent.readableIdWithRevision as readableId",
-          "methodMaterial.methodType",
-          "methodMaterial.itemType as lineItemType",
-          "methodMaterial.storageUnitIds",
-          "component.itemTrackingType"
-        ])
-        .execute(),
-      getPullFromLocations(db, companyId)
-    ]);
+    // One query at a time: run together, each would take its own pooled
+    // connection, and opening one costs more than these reads do.
+    const lines = await db
+      .selectFrom("methodMaterial")
+      .innerJoin("makeMethod", (join) =>
+        join
+          .onRef("makeMethod.id", "=", "methodMaterial.makeMethodId")
+          .on("makeMethod.companyId", "=", companyId)
+          .on("makeMethod.status", "=", "Active")
+      )
+      .innerJoin("item as component", "component.id", "methodMaterial.itemId")
+      .innerJoin("item as parent", "parent.id", "makeMethod.itemId")
+      .where("methodMaterial.companyId", "=", companyId)
+      .where("methodMaterial.methodType", "!=", "Make to Order")
+      .where("methodMaterial.itemType", "in", [...PULLED_ITEM_TYPES])
+      .select([
+        "makeMethod.id as makeMethodId",
+        "parent.id as itemId",
+        "parent.type as itemType",
+        "parent.readableIdWithRevision as readableId",
+        "methodMaterial.methodType",
+        "methodMaterial.itemType as lineItemType",
+        "methodMaterial.storageUnitIds",
+        "component.itemTrackingType"
+      ])
+      .execute();
+    const locations = await getPullFromLocations(db, companyId);
 
     const locationIds = locations.map((location) => location.id);
     const methods = new Map<

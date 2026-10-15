@@ -689,6 +689,7 @@ export function JobStartModal({
                 "id, description, methodType, itemType, storageUnitId, item(itemTrackingType, readableIdWithRevision)"
               )
               .eq("jobId", job.id!)
+              .eq("companyId", job.companyId!)
               .is("storageUnitId", null)
           : Promise.resolve({ data: [] })
       ]);
