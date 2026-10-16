@@ -4,9 +4,10 @@
 
 // Strict backflush (companySettings.requireBackflushStorageUnit,
 // .ai/specs/2026-10-14-strict-backflush.md): a stocked material is consumed
-// only from its own storage unit, and a missing or short bin refuses the
-// backflush instead of falling back to another bin. The SQL job-completion
-// backflush (`backflush_job_materials`) enforces the same rule.
+// only from its own storage unit, never another bin. A missing bin refuses the
+// backflush; a short bin refuses it only while preventNegativeBackflush is on —
+// with it off the bin is drawn below zero. The SQL job-completion backflush
+// (`backflush_job_materials`) enforces the same rules.
 
 import type { Database } from "@carbon/database";
 import type { KyselyDatabase as DB } from "@carbon/database/client";
@@ -27,16 +28,33 @@ const logger = getLogger("server-functions", "strict-backflush");
 
 type LedgerInsert = Database["public"]["Tables"]["itemLedger"]["Insert"];
 
+export type StrictBackflushSettings = {
+  strict: boolean;
+  /** Only meaningful while `strict`: refuse a short bin instead of letting it
+   *  go negative. */
+  preventNegative: boolean;
+};
+
+export async function getStrictBackflushSettings(
+  db: Kysely<DB>,
+  companyId: string
+): Promise<StrictBackflushSettings> {
+  const row = await db
+    .selectFrom("companySettings")
+    .where("id", "=", companyId)
+    .select(["requireBackflushStorageUnit", "preventNegativeBackflush"])
+    .executeTakeFirst();
+  return {
+    strict: row?.requireBackflushStorageUnit === true,
+    preventNegative: row?.preventNegativeBackflush !== false
+  };
+}
+
 export async function isStrictBackflush(
   db: Kysely<DB>,
   companyId: string
 ): Promise<boolean> {
-  const row = await db
-    .selectFrom("companySettings")
-    .where("id", "=", companyId)
-    .select("requireBackflushStorageUnit")
-    .executeTakeFirst();
-  return row?.requireBackflushStorageUnit === true;
+  return (await getStrictBackflushSettings(db, companyId)).strict;
 }
 
 type BinCoverArgs = {
@@ -46,6 +64,8 @@ type BinCoverArgs = {
   storageUnitId: string | null | undefined;
   quantity: number;
   plannedRows: LedgerInsert[];
+  /** Refuse a short bin (true) or let it go negative (false). */
+  preventNegative: boolean;
 };
 
 /**
@@ -76,8 +96,9 @@ export function strictBackflushRefusal(problems: string[]): ServerFnError {
 }
 
 /**
- * Why `storageUnitId` cannot cover `quantity` — a missing bin or a short one —
- * or null when it can. Takes the bin's lock either way (see below).
+ * Why `storageUnitId` cannot cover `quantity` — a missing bin, or a short one
+ * while `preventNegative` — or null when it can. Takes the bin's lock whenever
+ * it checks the quantity (see below).
  */
 export async function binCoverProblem(
   db: Kysely<DB>,
@@ -89,6 +110,10 @@ export async function binCoverProblem(
     const item = await readItemName(db, itemId, companyId);
     return `${item} has no Pull From storage unit on this job`;
   }
+
+  // Negative stock allowed: the material is drawn from its own bin whatever
+  // that bin holds, so there is nothing to check or serialize.
+  if (!args.preventNegative) return null;
 
   // Serialize strict draws on this bin and item until the caller's transaction
   // ends, so two completions cannot both pass the check and overdraw it. SQL

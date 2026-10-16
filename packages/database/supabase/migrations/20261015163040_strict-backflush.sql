@@ -1,15 +1,21 @@
 -- Strict backflush (.ai/specs/2026-10-14-strict-backflush.md).
 --
 -- companySettings.requireBackflushStorageUnit turns it on (off by default).
+-- companySettings.preventNegativeBackflush (on by default) decides what a
+-- short bin does under it: refuse, or let the bin go negative.
 -- backflush_job_materials is copied from its live definition
--- (20261009010412_job-costing-always-post.sql) with one change: when the
--- setting is on, a stocked material is consumed only from
--- jobMaterial.storageUnitId, and a missing or short bin raises instead of
--- falling back to the pick method's bin or the fullest bin. With the setting
--- off the function is unchanged.
+-- (20261009010412_job-costing-always-post.sql) with one change: when strict
+-- backflush is on, a stocked material is consumed only from
+-- jobMaterial.storageUnitId — a missing bin raises, and a short bin raises
+-- only while preventNegativeBackflush is on — instead of falling back to the
+-- pick method's bin or the fullest bin. With strict backflush off the
+-- function is unchanged.
 
 ALTER TABLE "companySettings"
   ADD COLUMN IF NOT EXISTS "requireBackflushStorageUnit" BOOLEAN NOT NULL DEFAULT false;
+
+ALTER TABLE "companySettings"
+  ADD COLUMN IF NOT EXISTS "preventNegativeBackflush" BOOLEAN NOT NULL DEFAULT true;
 
 CREATE OR REPLACE FUNCTION public.backflush_job_materials(p_job_id text, p_quantity_complete numeric, p_company_id text, p_user_id text)
  RETURNS void
@@ -28,6 +34,7 @@ DECLARE
   v_bin_work_center_id TEXT;
   v_bin_on_hand NUMERIC;
   v_strict BOOLEAN;
+  v_prevent_negative BOOLEAN;
   v_storage_unit_name TEXT;
   v_strict_problems TEXT[] := '{}';
   v_material_costing_method TEXT;
@@ -82,12 +89,16 @@ BEGIN
   v_ratio := p_quantity_complete / v_job_quantity;
 
   -- Strict backflush (.ai/specs/2026-10-14-strict-backflush.md): a stocked
-  -- material is consumed only from its own storage unit, and a short bin
-  -- refuses the whole completion instead of drawing from another bin.
-  SELECT COALESCE("requireBackflushStorageUnit", false) INTO v_strict
+  -- material is consumed only from its own storage unit. A short bin refuses
+  -- the whole completion while preventNegativeBackflush is on; with it off the
+  -- bin is drawn below zero instead of drawing from another bin.
+  SELECT COALESCE("requireBackflushStorageUnit", false),
+         COALESCE("preventNegativeBackflush", true)
+  INTO v_strict, v_prevent_negative
   FROM "companySettings"
   WHERE id = p_company_id;
   v_strict := COALESCE(v_strict, false);
+  v_prevent_negative := COALESCE(v_prevent_negative, true);
 
   -- Backflush non-tracked materials
   FOR v_material IN
@@ -124,35 +135,39 @@ BEGIN
         CONTINUE;
       END IF;
 
-      -- Serialize strict draws on this bin and item until the transaction
-      -- ends; the TypeScript backflush (assertBinCovers) takes the same key.
-      PERFORM pg_advisory_xact_lock(hashtextextended(
-        'strict-backflush:' || p_company_id || ':' || v_material_storage_unit_id
-          || ':' || v_material."itemId",
-        0
-      ));
+      -- A short bin is refused only while negative stock is prevented; with it
+      -- allowed, the material is drawn from its own bin even below zero.
+      IF v_prevent_negative THEN
+        -- Serialize strict draws on this bin and item until the transaction
+        -- ends; the TypeScript backflush (assertBinCovers) takes the same key.
+        PERFORM pg_advisory_xact_lock(hashtextextended(
+          'strict-backflush:' || p_company_id || ':' || v_material_storage_unit_id
+            || ':' || v_material."itemId",
+          0
+        ));
 
-      SELECT COALESCE(SUM(quantity), 0) INTO v_bin_on_hand
-      FROM "itemLedger"
-      WHERE "itemId" = v_material."itemId"
-        AND "storageUnitId" = v_material_storage_unit_id
-        AND "locationId" = v_job_location_id
-        AND "companyId" = p_company_id
-        AND "trackedEntityId" IS NULL;
+        SELECT COALESCE(SUM(quantity), 0) INTO v_bin_on_hand
+        FROM "itemLedger"
+        WHERE "itemId" = v_material."itemId"
+          AND "storageUnitId" = v_material_storage_unit_id
+          AND "locationId" = v_job_location_id
+          AND "companyId" = p_company_id
+          AND "trackedEntityId" IS NULL;
 
-      IF v_bin_on_hand < v_material_qty_to_issue THEN
-        SELECT name INTO v_storage_unit_name
-        FROM "storageUnit"
-        WHERE id = v_material_storage_unit_id;
+        IF v_bin_on_hand < v_material_qty_to_issue THEN
+          SELECT name INTO v_storage_unit_name
+          FROM "storageUnit"
+          WHERE id = v_material_storage_unit_id;
 
-        v_strict_problems := v_strict_problems || format(
-          'Not enough %s in %s: need %s, have %s',
-          COALESCE(v_material."itemReadableId", v_material."itemId"),
-          COALESCE(v_storage_unit_name, v_material_storage_unit_id),
-          trim_scale(v_material_qty_to_issue),
-          trim_scale(GREATEST(v_bin_on_hand, 0))
-        );
-        CONTINUE;
+          v_strict_problems := v_strict_problems || format(
+            'Not enough %s in %s: need %s, have %s',
+            COALESCE(v_material."itemReadableId", v_material."itemId"),
+            COALESCE(v_storage_unit_name, v_material_storage_unit_id),
+            trim_scale(v_material_qty_to_issue),
+            trim_scale(GREATEST(v_bin_on_hand, 0))
+          );
+          CONTINUE;
+        END IF;
       END IF;
     ELSE
     -- Resolve storage unit (strict backflush off: the pre-existing fallbacks)

@@ -5,7 +5,7 @@
   "sourceCompanyId": "schema-baseline",
   "sourceCompanyGroupId": null,
   "sourceCompanyName": null,
-  "exportedAt": "2026-10-15T16:34:01.599Z",
+  "exportedAt": "2026-10-16T06:06:27.959Z",
   "exportedBy": "schema-baseline",
   "label": "schema baseline",
   "includeStorage": "none",
@@ -482,7 +482,8 @@
         "requireBackflushStorageUnit",
         "leaseIncrementalBorrowingRate",
         "leaseShortTermExpedient",
-        "leaseReminderDays"
+        "leaseReminderDays",
+        "preventNegativeBackflush"
       ]
     },
     {

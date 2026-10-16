@@ -1236,27 +1236,40 @@ export async function updateRequireBackflushStorageUnitSetting(
     .eq("id", companyId);
 }
 
-const MISSING_PULL_FROM_SHOWN = 10;
+/** @mcp update */
+export async function updatePreventNegativeBackflushSetting(
+  client: SupabaseClient<Database>,
+  companyId: string,
+  preventNegativeBackflush: boolean
+) {
+  return client
+    .from("companySettings")
+    .update({ preventNegativeBackflush })
+    .eq("id", companyId);
+}
 
-// Strict backflush: the Active make methods with a pulled, stocked line that
-// has no Pull From at a location with an active work center. Turning the
-// setting on leaves these methods Active; the settings card lists them.
-// Kysely, not PostgREST: a company's Active BoM lines can pass the 1000-row cap.
+export type MethodMissingPullFrom = {
+  makeMethodId: string;
+  itemId: string;
+  itemType: string;
+  readableId: string;
+  name: string;
+  version: number;
+  /** The pulled, stocked materials on this version with a gap. */
+  materials: string[];
+  /** The locations at least one of those materials has no Pull From at. */
+  locations: string[];
+};
+
+// Strict backflush: every Active make method with a pulled, stocked line that
+// has no Pull From at a location with an active work center and a storage
+// unit. Turning the setting on leaves these methods Active; the settings card
+// counts them and its drawer lists them. Kysely, not PostgREST: a company's
+// Active BoM lines can pass the 1000-row cap.
 export async function getActiveMethodsMissingPullFrom(
   db: Kysely<KyselyDatabase>,
   companyId: string
-): Promise<{
-  data: {
-    count: number;
-    methods: {
-      makeMethodId: string;
-      itemId: string;
-      itemType: string;
-      readableId: string;
-    }[];
-  } | null;
-  error: Error | null;
-}> {
+): Promise<{ data: MethodMissingPullFrom[] | null; error: Error | null }> {
   try {
     // One query at a time: run together, each would take its own pooled
     // connection, and opening one costs more than these reads do.
@@ -1275,29 +1288,33 @@ export async function getActiveMethodsMissingPullFrom(
       .where("methodMaterial.itemType", "in", [...PULLED_ITEM_TYPES])
       .select([
         "makeMethod.id as makeMethodId",
+        "makeMethod.version",
         "parent.id as itemId",
         "parent.type as itemType",
         "parent.readableIdWithRevision as readableId",
+        "parent.name",
         "methodMaterial.methodType",
         "methodMaterial.itemType as lineItemType",
         "methodMaterial.storageUnitIds",
-        "component.itemTrackingType"
+        "component.itemTrackingType",
+        "component.id as componentId",
+        "component.readableIdWithRevision as componentReadableId"
       ])
       .execute();
     const locations = await getPullFromLocations(db, companyId);
 
     const locationIds = locations.map((location) => location.id);
+    const locationName = new Map(
+      locations.map((location) => [location.id, location.name])
+    );
     const methods = new Map<
       string,
-      {
-        makeMethodId: string;
-        itemId: string;
-        itemType: string;
-        readableId: string;
+      Omit<MethodMissingPullFrom, "materials" | "locations"> & {
+        materials: Set<string>;
+        locations: Set<string>;
       }
     >();
     for (const line of lines) {
-      if (methods.has(line.makeMethodId)) continue;
       if (
         !needsPullFrom({
           methodType: line.methodType,
@@ -1306,23 +1323,123 @@ export async function getActiveMethodsMissingPullFrom(
         })
       )
         continue;
-      if (missingPullFromLocations(line.storageUnitIds, locationIds).length > 0)
-        methods.set(line.makeMethodId, {
-          makeMethodId: line.makeMethodId,
-          itemId: line.itemId,
-          itemType: line.itemType,
-          readableId: line.readableId ?? line.itemId
-        });
+      const missing = missingPullFromLocations(
+        line.storageUnitIds,
+        locationIds
+      );
+      if (missing.length === 0) continue;
+
+      const method = methods.get(line.makeMethodId) ?? {
+        makeMethodId: line.makeMethodId,
+        itemId: line.itemId,
+        itemType: line.itemType,
+        readableId: line.readableId ?? line.itemId,
+        name: line.name,
+        version: Number(line.version),
+        materials: new Set<string>(),
+        locations: new Set<string>()
+      };
+      method.materials.add(line.componentReadableId ?? line.componentId);
+      for (const id of missing)
+        method.locations.add(locationName.get(id) ?? id);
+      methods.set(line.makeMethodId, method);
     }
 
-    const sorted = [...methods.values()].sort((a, b) =>
-      a.readableId.localeCompare(b.readableId)
-    );
     return {
-      data: {
-        count: sorted.length,
-        methods: sorted.slice(0, MISSING_PULL_FROM_SHOWN)
-      },
+      data: [...methods.values()]
+        .map((method) => ({
+          ...method,
+          materials: [...method.materials].sort(),
+          locations: [...method.locations].sort()
+        }))
+        .sort((a, b) => a.readableId.localeCompare(b.readableId)),
+      error: null
+    };
+  } catch (error) {
+    return { data: null, error: error as Error };
+  }
+}
+
+export type JobMissingStorageUnit = {
+  id: string;
+  jobId: string;
+  status: Database["public"]["Enums"]["jobStatus"];
+  readableId: string | null;
+  locationName: string | null;
+  /** The pulled, stocked materials on this job with no storage unit. */
+  materials: string[];
+};
+
+// The jobs already on the floor (released before strict backflush was turned
+// on, or edited since) that have a pulled, stocked line with no storage unit.
+// Release refuses such a job, but these are past release — their next
+// backflush will be refused instead, so the settings card counts them and its
+// drawer lists them.
+const OPEN_JOB_STATUSES = ["Ready", "In Progress", "Paused"] as const;
+
+export async function getOpenJobsMissingStorageUnit(
+  db: Kysely<KyselyDatabase>,
+  companyId: string
+): Promise<{ data: JobMissingStorageUnit[] | null; error: Error | null }> {
+  try {
+    const lines = await db
+      .selectFrom("jobMaterial")
+      .innerJoin("job", (join) =>
+        join
+          .onRef("job.id", "=", "jobMaterial.jobId")
+          .on("job.companyId", "=", companyId)
+          .on("job.status", "in", [...OPEN_JOB_STATUSES])
+      )
+      .innerJoin("item as component", "component.id", "jobMaterial.itemId")
+      .leftJoin("item as jobItem", "jobItem.id", "job.itemId")
+      .leftJoin("location", "location.id", "job.locationId")
+      .where("jobMaterial.companyId", "=", companyId)
+      .where("jobMaterial.storageUnitId", "is", null)
+      .where("jobMaterial.methodType", "!=", "Make to Order")
+      .where("jobMaterial.itemType", "in", [...PULLED_ITEM_TYPES])
+      .select([
+        "job.id",
+        "job.jobId",
+        "job.status",
+        "jobItem.readableIdWithRevision as readableId",
+        "location.name as locationName",
+        "jobMaterial.methodType",
+        "jobMaterial.itemType",
+        "component.itemTrackingType",
+        "component.id as componentId",
+        "component.readableIdWithRevision as componentReadableId"
+      ])
+      .execute();
+
+    const jobs = new Map<
+      string,
+      Omit<JobMissingStorageUnit, "materials"> & { materials: Set<string> }
+    >();
+    for (const line of lines) {
+      if (
+        !needsPullFrom({
+          methodType: line.methodType,
+          itemType: line.itemType,
+          itemTrackingType: line.itemTrackingType
+        })
+      )
+        continue;
+      const job = jobs.get(line.id) ?? {
+        id: line.id,
+        jobId: line.jobId,
+        status: line.status,
+        readableId: line.readableId,
+        locationName: line.locationName,
+        materials: new Set<string>()
+      };
+      job.materials.add(line.componentReadableId ?? line.componentId);
+      jobs.set(line.id, job);
+    }
+
+    return {
+      data: [...jobs.values()]
+        .map((job) => ({ ...job, materials: [...job.materials].sort() }))
+        .sort((a, b) => a.jobId.localeCompare(b.jobId)),
       error: null
     };
   } catch (error) {

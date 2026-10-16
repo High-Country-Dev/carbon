@@ -1466,6 +1466,8 @@ export const path = {
     itemProperties: (id: string) => generatePath(`${x}/items/${id}/properties`),
     items: `${x}/items`,
     itemsSettings: `${x}/settings/items`,
+    itemsSettingsJobsMissingStorageUnit: `${x}/settings/items/jobs-missing-storage-unit`,
+    itemsSettingsMethodsMissingPullFrom: `${x}/settings/items/methods-missing-pull-from`,
     job: (id: string) => generatePath(`${x}/job/${id}`),
     jobBatchNumber: (id: string) => generatePath(`${x}/job/${id}/batch`),
     jobComplete: (id: string) => generatePath(`${x}/job/${id}/complete`),

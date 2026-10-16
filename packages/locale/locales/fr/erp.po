@@ -60,10 +60,6 @@ msgstr "(Associé à plusieurs comptes Carbon)"
 msgid "(not an Equity posting account)"
 msgstr "(pas un compte de comptabilisation de capitaux propres)"
 
-#. placeholder {0}: methodsMissingPullFrom.count
-msgid "{0, plural, one {# active method has materials with no Pull From} other {# active methods have materials with no Pull From}}"
-msgstr "{0, plural, one {# méthode active a des matières sans unité de prélèvement} other {# méthodes actives ont des matières sans unité de prélèvement}}"
-
 #. placeholder {0}: check.count
 msgid "{0, plural, one {# blocking record} other {# blocking records}}"
 msgstr "{0, plural, one {# enregistrement bloquant} other {# enregistrements bloquants}}"
@@ -528,6 +524,9 @@ msgstr "{hiddenCount} autres : {hiddenNames}"
 msgid "{inserted} inserted, {updated} updated, {0} need fixing, {1} skipped."
 msgstr "{inserted} insérés, {updated} mis à jour, {0} nécessitent correction, {1} ignorés."
 
+msgid "{jobsMissingStorageUnit, plural, one {# open job has materials with no storage unit} other {# open jobs have materials with no storage unit}}"
+msgstr "{jobsMissingStorageUnit, plural, one {# ordre de fabrication ouvert a des matériaux sans unité de stockage} other {# ordres de fabrication ouverts ont des matériaux sans unité de stockage}}"
+
 msgid "{label} is used by documents, journals or default accounts, so it cannot be deleted."
 msgstr "{label} est utilisé par des documents, des écritures ou des comptes par défaut, il ne peut donc pas être supprimé."
 
@@ -554,6 +553,9 @@ msgstr "{maxSizeMB}MB limite"
 
 msgid "{memberCount, plural, one {# step} other {# steps}}"
 msgstr "{memberCount, plural, one {# étape} other {# étapes}}"
+
+msgid "{methodsMissingPullFrom, plural, one {# active method has materials with no Pull From} other {# active methods have materials with no Pull From}}"
+msgstr "{methodsMissingPullFrom, plural, one {# méthode active a des matériaux sans Prélèvement depuis} other {# méthodes actives ont des matériaux sans Prélèvement depuis}}"
 
 msgid "{mismatchCount} months with mismatched totals"
 msgstr "{mismatchCount} mois avec des totaux non concordants"
@@ -724,6 +726,9 @@ msgstr "↩ {0} redirigé depuis {1} obsolète"
 #. placeholder {0}: formatHours(delta)
 msgid "+{0}h"
 msgstr "+{0}h"
+
+msgid "+{more} more"
+msgstr "+{more} plus"
 
 msgid "<0>Add a supplier part</0> for this item to set a preferred supplier."
 msgstr "<0>Ajoutez une pièce fournisseur</0> pour cet article pour définir un fournisseur préféré."
@@ -1438,6 +1443,9 @@ msgstr "Le numéro de suivi d'une expédition change"
 msgid "A short storage unit falls back to another storage unit with stock."
 msgstr "Une unité de stockage insuffisante bascule vers une autre unité de stockage ayant du stock."
 
+msgid "A short storage unit goes below zero, and the operation or job still completes."
+msgstr "Une unité de stockage peut descendre en dessous de zéro, et l'opération ou l'ordre de fabrication se termine quand même."
+
 msgid "A short-term asset cannot run past 12 months from the commencement. End it and enter the extension as a new lease."
 msgstr "Une location à court terme ne peut pas s'étendre au-delà de 12 mois à compter de sa date de début. Mettez-la fin et saisissez l'extension en tant que nouvelle location."
 
@@ -1814,6 +1822,9 @@ msgstr "Actif"
 
 msgid "Active Jobs"
 msgstr "Ordres de fabrication actifs"
+
+msgid "Active Methods Missing a Pull From"
+msgstr "Méthodes actives sans Prélèvement depuis"
 
 msgid "Active Statuses"
 msgstr "Statuts actifs"
@@ -2617,6 +2628,9 @@ msgstr "Une Opération effectuée par un Fournisseur externe plutôt qu'un Poste
 msgid "An operation on this job runs in this batch"
 msgstr "Une opération de cet OF s'exécute dans ce lot"
 
+msgid "An operation or job that would take its storage unit below zero is stopped until the stock is there."
+msgstr "Une opération ou un ordre de fabrication qui mènerait son unité de stockage en dessous de zéro est arrêté jusqu'à ce que le stock soit disponible."
+
 msgid "An operation's position in its work center's queue — the order the floor picks work up. The engine numbers it from placement order (earliest projected start first); reordering cards on the Work Centers board overrides it without changing dates."
 msgstr "La position d'une opération dans la file d'attente de son poste de travail — l'ordre dans lequel l'atelier exécute le travail. Le moteur la numérote d'après l'ordre de placement (le démarrage projeté le plus tôt d'abord) ; le réordonnancement des cartes sur le Tableau des postes de travail la remplace sans modifier les dates."
 
@@ -2789,6 +2803,9 @@ msgstr "S'applique à tous les Postes de travail"
 
 msgid "Applies to characteristics without their own rule, and to the lot when this plan drives an inspection."
 msgstr "S'applique aux caractéristiques sans leur propre règle et au lot lorsque ce plan de contrôle entraîne une inspection."
+
+msgid "Applies when strict backflush is on."
+msgstr "S'applique quand la post-consommation stricte est activée."
 
 msgid "Apply"
 msgstr "Appliquer"
@@ -3832,8 +3849,8 @@ msgstr "Retour à la traçabilité"
 msgid "Backflush"
 msgstr "Post-consommation"
 
-msgid "Backflush each material only from the storage unit on its material line, and stop the operation or job when that storage unit does not have enough stock."
-msgstr "Post-consommer chaque matière uniquement depuis l'unité de stockage de sa ligne de matière, et arrêter l'opération ou l'ordre de fabrication quand cette unité de stockage n'a pas assez de stock."
+msgid "Backflush each material only from the storage unit on its material line, never from another storage unit."
+msgstr "Post-consommer chaque matière uniquement depuis l'unité de stockage de sa ligne de matière, jamais depuis une autre unité de stockage."
 
 msgid "Background"
 msgstr "Arrière-plan"
@@ -13264,6 +13281,12 @@ msgstr "Les matériaux sont inclus"
 msgid "Materials are not included"
 msgstr "Les matériaux ne sont pas inclus"
 
+msgid "Materials missing a Pull From"
+msgstr "Matériaux sans Prélèvement depuis"
+
+msgid "Materials with no storage unit"
+msgstr "Matériaux sans unité de stockage"
+
 msgid "Matrix"
 msgstr "Matrice"
 
@@ -15539,6 +15562,9 @@ msgstr "Ordres de fabrication ouverts"
 msgid "Open Jobs"
 msgstr "Ordres de fabrication Ouverts"
 
+msgid "Open Jobs Missing a Storage Unit"
+msgstr "Ordres de fabrication ouverts sans unité de stockage"
+
 msgid "Open menu"
 msgstr "Ouvrir le menu"
 
@@ -16825,6 +16851,9 @@ msgstr "Appuyez sur « / » pour les commandes"
 
 msgid "Prev"
 msgstr "Précédent"
+
+msgid "Prevent negative stock"
+msgstr "Empêcher le stock négatif"
 
 msgid "Preventive action"
 msgstr "Action préventive"
@@ -20255,6 +20284,9 @@ msgstr "Session verrouillée"
 msgid "Set a customer on this return to add from a shipment."
 msgstr "Définissez un client sur ce retour pour ajouter à partir d'une expédition."
 
+msgid "Set a Pull From on each one through a new version."
+msgstr "Définissez un Prélèvement depuis pour chacun via une nouvelle version."
+
 #. placeholder {0}: summarizeList( job.materialsWithoutStorageUnit.map( (m) => m.description ) )
 msgid "set a Pull From storage unit on {0}"
 msgstr "Définir une unité de stockage de prélèvement sur {0}"
@@ -23181,6 +23213,9 @@ msgstr "Les heures de travail et les calendriers qui pilotent la planification"
 
 msgid "Their dates and splits are planned again from the lines."
 msgstr "Leurs dates et fractions sont recalculées à partir des lignes."
+
+msgid "Their next backflush will be refused until each material has a storage unit."
+msgstr "Leur prochaine post-consommation sera refusée jusqu'à ce que chaque matériau ait une unité de stockage."
 
 msgid "Theme"
 msgstr "Thème"

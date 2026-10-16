@@ -8,6 +8,7 @@ import { flash } from "@carbon/auth/session.server";
 import { Hidden, Select, Submit, ValidatedForm, validator } from "@carbon/form";
 import { getLogger } from "@carbon/logger";
 import {
+  Button,
   Card,
   CardContent,
   CardDescription,
@@ -15,6 +16,7 @@ import {
   CardHeader,
   CardTitle,
   HStack,
+  RecordOutlet,
   ScrollArea,
   Switch,
   toast,
@@ -23,6 +25,7 @@ import {
 import { redirect } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
 import { Plural, Trans, useLingui } from "@lingui/react/macro";
+import type { ReactNode } from "react";
 import { useCallback, useEffect } from "react";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { Link, useFetcher, useLoaderData } from "react-router";
@@ -32,12 +35,14 @@ import { plmReleaseControl } from "~/modules/items";
 import {
   getActiveMethodsMissingPullFrom,
   getCompanySettings,
+  getOpenJobsMissingStorageUnit,
   plmReleaseControlValidator,
   updateAllowLowercaseItemIdsSetting,
   updateBomExplorerReadableIdSetting,
   updateMaterialGeneratedIdsSetting,
   updateMetricSettings,
   updatePlmReleaseControlSetting,
+  updatePreventNegativeBackflushSetting,
   updateRequireBackflushStorageUnitSetting
 } from "~/modules/settings";
 import { getDatabaseClient } from "~/services/database.server";
@@ -66,26 +71,37 @@ export async function loader({ request }: LoaderFunctionArgs) {
       )
     );
 
-  // Strict backflush leaves Active methods as they are; the card lists the
-  // ones with a gap so they can be fixed.
-  let methodsMissingPullFrom: Awaited<
-    ReturnType<typeof getActiveMethodsMissingPullFrom>
-  >["data"] = null;
+  // Strict backflush leaves Active methods and released jobs as they are; the
+  // card counts the ones with a gap and links to a drawer listing them all.
+  let methodsMissingPullFrom: number | null = null;
+  let jobsMissingStorageUnit: number | null = null;
   if (companySettings.data.requireBackflushStorageUnit) {
-    const missing = await getActiveMethodsMissingPullFrom(
-      getDatabaseClient(),
-      companyId
-    );
-    if (missing.error) {
+    const db = getDatabaseClient();
+    // One at a time: each read would otherwise take its own pooled connection.
+    const methods = await getActiveMethodsMissingPullFrom(db, companyId);
+    if (methods.error) {
       logger.error("Failed to read methods missing a Pull From", {
         companyId,
-        error: missing.error
+        error: methods.error
       });
     }
-    methodsMissingPullFrom = missing.data;
+    methodsMissingPullFrom = methods.data?.length ?? null;
+
+    const jobs = await getOpenJobsMissingStorageUnit(db, companyId);
+    if (jobs.error) {
+      logger.error("Failed to read open jobs missing a storage unit", {
+        companyId,
+        error: jobs.error
+      });
+    }
+    jobsMissingStorageUnit = jobs.data?.length ?? null;
   }
 
-  return { companySettings: companySettings.data, methodsMissingPullFrom };
+  return {
+    companySettings: companySettings.data,
+    methodsMissingPullFrom,
+    jobsMissingStorageUnit
+  };
 }
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -139,6 +155,17 @@ export async function action({ request }: ActionFunctionArgs) {
       return { success: true, message: "Strict backflush setting updated" };
     }
 
+    case "preventNegativeBackflush": {
+      const result = await updatePreventNegativeBackflushSetting(
+        client,
+        companyId,
+        enabled
+      );
+      if (result.error)
+        return { success: false, message: result.error.message };
+      return { success: true, message: "Negative stock setting updated" };
+    }
+
     case "bomExplorerReadableId": {
       const result = await updateBomExplorerReadableIdSetting(
         client,
@@ -174,7 +201,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function ItemsSettingsRoute() {
   const { t } = useLingui();
-  const { companySettings, methodsMissingPullFrom } =
+  const { companySettings, methodsMissingPullFrom, jobsMissingStorageUnit } =
     useLoaderData<typeof loader>();
   const fetcher = useFetcher<typeof action>();
 
@@ -233,6 +260,16 @@ export default function ItemsSettingsRoute() {
     (checked: boolean) => {
       fetcher.submit(
         { intent: "requireBackflushStorageUnit", enabled: String(checked) },
+        { method: "POST" }
+      );
+    },
+    [fetcher]
+  );
+
+  const handlePreventNegativeBackflushToggle = useCallback(
+    (checked: boolean) => {
+      fetcher.submit(
+        { intent: "preventNegativeBackflush", enabled: String(checked) },
         { method: "POST" }
       );
     },
@@ -398,8 +435,7 @@ export default function ItemsSettingsRoute() {
             <CardDescription>
               <Trans>
                 Backflush each material only from the storage unit on its
-                material line, and stop the operation or job when that storage
-                unit does not have enough stock.
+                material line, never from another storage unit.
               </Trans>
             </CardDescription>
           </CardHeader>
@@ -434,36 +470,75 @@ export default function ItemsSettingsRoute() {
                   disabled={isToggling}
                 />
               </HStack>
-              {methodsMissingPullFrom && methodsMissingPullFrom.count > 0 && (
-                <VStack className="items-start w-full" spacing={1}>
-                  <span className="text-sm font-medium">
-                    <Plural
-                      value={methodsMissingPullFrom.count}
-                      one="# active method has materials with no Pull From"
-                      other="# active methods have materials with no Pull From"
-                    />
+              {/* Only meaningful under strict backflush: without it a short
+                  bin falls back to another storage unit and never goes
+                  negative from a backflush. */}
+              <HStack className="justify-between items-center w-full border-t pt-4">
+                <VStack className="items-start" spacing={1}>
+                  <span className="font-medium">
+                    <Trans>Prevent negative stock</Trans>
                   </span>
-                  <ul className="text-sm list-disc pl-4 space-y-1">
-                    {methodsMissingPullFrom.methods.map((method) => {
-                      const to = makeMethodPath(method);
-                      return (
-                        <li key={method.makeMethodId}>
-                          {to ? (
-                            <Link
-                              to={to}
-                              className="underline-offset-2 hover:underline"
-                            >
-                              {method.readableId}
-                            </Link>
-                          ) : (
-                            method.readableId
-                          )}
-                        </li>
-                      );
-                    })}
-                  </ul>
+                  <span className="text-sm text-muted-foreground">
+                    {!companySettings.requireBackflushStorageUnit ? (
+                      <Trans>Applies when strict backflush is on.</Trans>
+                    ) : companySettings.preventNegativeBackflush ? (
+                      <Trans>
+                        An operation or job that would take its storage unit
+                        below zero is stopped until the stock is there.
+                      </Trans>
+                    ) : (
+                      <Trans>
+                        A short storage unit goes below zero, and the operation
+                        or job still completes.
+                      </Trans>
+                    )}
+                  </span>
                 </VStack>
-              )}
+                <Switch
+                  checked={companySettings.preventNegativeBackflush ?? true}
+                  onCheckedChange={handlePreventNegativeBackflushToggle}
+                  disabled={
+                    isToggling || !companySettings.requireBackflushStorageUnit
+                  }
+                />
+              </HStack>
+              {methodsMissingPullFrom !== null &&
+                methodsMissingPullFrom > 0 && (
+                  <GapRow
+                    to={path.to.itemsSettingsMethodsMissingPullFrom}
+                    label={
+                      <Plural
+                        value={methodsMissingPullFrom}
+                        one="# active method has materials with no Pull From"
+                        other="# active methods have materials with no Pull From"
+                      />
+                    }
+                    description={
+                      <Trans>
+                        Set a Pull From on each one through a new version.
+                      </Trans>
+                    }
+                  />
+                )}
+              {jobsMissingStorageUnit !== null &&
+                jobsMissingStorageUnit > 0 && (
+                  <GapRow
+                    to={path.to.itemsSettingsJobsMissingStorageUnit}
+                    label={
+                      <Plural
+                        value={jobsMissingStorageUnit}
+                        one="# open job has materials with no storage unit"
+                        other="# open jobs have materials with no storage unit"
+                      />
+                    }
+                    description={
+                      <Trans>
+                        Their next backflush will be refused until each material
+                        has a storage unit.
+                      </Trans>
+                    }
+                  />
+                )}
             </VStack>
           </CardContent>
         </Card>
@@ -555,24 +630,34 @@ export default function ItemsSettingsRoute() {
             </CardFooter>
           </ValidatedForm>
         </Card>
+        <RecordOutlet />
       </SettingsPage>
     </ScrollArea>
   );
 }
 
-function makeMethodPath(method: {
-  itemId: string;
-  itemType: string;
-  makeMethodId: string;
-}): string | null {
-  switch (method.itemType) {
-    case "Part":
-      return path.to.partMake(method.itemId, method.makeMethodId);
-    case "Tool":
-      return path.to.toolMake(method.itemId, method.makeMethodId);
-    case "Service":
-      return path.to.serviceMake(method.itemId, method.makeMethodId);
-    default:
-      return null;
-  }
+// One gap in strict backflush coverage: the count, what it means, and a way to
+// see every entry (a searchable drawer — a long list does not fit a card).
+function GapRow({
+  to,
+  label,
+  description
+}: {
+  to: string;
+  label: ReactNode;
+  description: ReactNode;
+}) {
+  return (
+    <HStack className="justify-between items-center w-full border-t pt-4 gap-4">
+      <VStack className="items-start min-w-0 flex-1" spacing={1}>
+        <span className="text-sm font-medium">{label}</span>
+        <span className="text-sm text-muted-foreground">{description}</span>
+      </VStack>
+      <Button variant="secondary" className="shrink-0" asChild>
+        <Link to={to}>
+          <Trans>Review</Trans>
+        </Link>
+      </Button>
+    </HStack>
+  );
 }

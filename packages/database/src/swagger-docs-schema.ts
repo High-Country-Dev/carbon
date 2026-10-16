@@ -102406,6 +102406,9 @@ export default {
             $ref: "#/parameters/rowFilter.companySettings.leaseReminderDays"
           },
           {
+            $ref: "#/parameters/rowFilter.companySettings.preventNegativeBackflush"
+          },
+          {
             $ref: "#/parameters/select"
           },
           {
@@ -102681,6 +102684,9 @@ export default {
             $ref: "#/parameters/rowFilter.companySettings.leaseReminderDays"
           },
           {
+            $ref: "#/parameters/rowFilter.companySettings.preventNegativeBackflush"
+          },
+          {
             $ref: "#/parameters/preferReturn"
           }
         ],
@@ -102908,6 +102914,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.companySettings.leaseReminderDays"
+          },
+          {
+            $ref: "#/parameters/rowFilter.companySettings.preventNegativeBackflush"
           },
           {
             $ref: "#/parameters/body.companySettings"
@@ -166690,7 +166699,8 @@ export default {
         "requireBackflushStorageUnit",
         "leaseIncrementalBorrowingRate",
         "leaseShortTermExpedient",
-        "leaseReminderDays"
+        "leaseReminderDays",
+        "preventNegativeBackflush"
       ],
       properties: {
         id: {
@@ -167083,6 +167093,11 @@ export default {
           default: 90,
           format: "integer",
           type: "integer"
+        },
+        preventNegativeBackflush: {
+          default: true,
+          format: "boolean",
+          type: "boolean"
         }
       },
       type: "object"
@@ -222674,6 +222689,12 @@ export default {
     },
     "rowFilter.companySettings.leaseReminderDays": {
       name: "leaseReminderDays",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.companySettings.preventNegativeBackflush": {
+      name: "preventNegativeBackflush",
       required: false,
       in: "query",
       type: "string"

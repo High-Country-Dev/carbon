@@ -56,9 +56,10 @@ Example: the BoM says "pull 10 × PART-123 from Shelf A-4". Shelf A-4 has 6 and 
 | 3 | Which locations need a Pull From | Each location that has at least one active work center and at least one active storage unit. | Pull From is stored per location (`methodMaterial.storageUnitIds`). A location with no work center builds nothing. A location with no storage unit has no bin a line could name, so a Pull From there can never be set. |
 | 4 | Draft methods | Release refuses a job whose pulled line has no `storageUnitId`. | A job can come from a Draft method, so the activation check alone has a gap. |
 | 5 | Picked stock | The material's picks and unclaimed lineside stock are consumed first, as today. The strict rule applies to the remainder. | A pick moves stock out of the Pull From bin with a transfer, so the records stay correct. Picking also moves `jobMaterial.storageUnitId` to the lineside bin. |
+| 6a | Negative stock under strict bins | A second switch, `companySettings.preventNegativeBackflush` ("Prevent negative stock", default `true`), nested under Strict Backflush and only active while it is on. Off: the material is still drawn only from its own storage unit, and that storage unit may go below zero. A missing storage unit is refused either way. | A company can want strict bins (accurate per-location stock) without the hard stop on a short bin. Default `true` keeps the behavior the setting shipped with. |
 | 6 | Where a shortage stops the work | At operation completion (MES and ERP), at job completion, and at manual issue of a planned material. | If only job completion stopped, the operation would take stock from another bin first. |
 | 7 | Batch and serial items | The activation and release checks include them. Their issue flow does not change. | An operator scans the unit, and the unit knows its own bin. |
-| 8 | Methods that are already Active | Carbon does not change them. The settings card shows how many Active methods have a gap, and lists them. | Changing a live method without warning is a large risk. |
+| 8 | Methods that are already Active, jobs already released | Carbon does not change them. The settings card counts Active methods with a gap and open jobs (Ready, In Progress, Paused) with a material that has no storage unit. Each count opens a drawer with the full list, searchable and paged. | Changing a live method or job without warning is a large risk. A card can hold a count, not a list of hundreds. |
 | 9 | Produced units with no consumption | MES records a production quantity before it calls `issue`. When strict backflush is on, MES first runs `issue` as a dry run (all writes rolled back). If the dry run fails, MES records nothing. | Without the dry run, a refusal leaves produced units with no material consumed. A retry then records the units a second time. |
 | 10 | Error text | The refusal names the part, the storage unit, the quantity needed and the quantity on hand. One refusal lists every short material. MES and ERP show the server's message instead of a fixed fallback. | "Failed to issue materials" tells the operator nothing to fix. A refusal that names one part at a time makes the material controller fix them one retry at a time. |
 | 11 | One rule, three users | The line predicate lives once in `@carbon/database/strict-backflush`. Activation, release and the settings card all read it. | Three copies of the rule would drift apart. |
@@ -73,11 +74,14 @@ Example: the BoM says "pull 10 × PART-123 from Shelf A-4". Shelf A-4 has 6 and 
 
 ## Data Model Changes
 
-One new column. One function replaced.
+Two new columns. One function replaced.
 
 ```sql
 ALTER TABLE "companySettings"
   ADD COLUMN "requireBackflushStorageUnit" BOOLEAN NOT NULL DEFAULT false;
+
+ALTER TABLE "companySettings"
+  ADD COLUMN "preventNegativeBackflush" BOOLEAN NOT NULL DEFAULT true;
 ```
 
 `backflush_job_materials` is replaced with a copy of its live definition (`20261009010412_job-costing-always-post.sql`). The only changes are in the storage unit step:
@@ -105,7 +109,7 @@ No new table. No RLS change.
 | `getJobReleaseReadiness` | Each job gets `materialsWithoutStorageUnit: { id, description }[]`. The list is empty when the setting is off. |
 | `jobReleaseProblems` | Adds "set a Pull From storage unit on PART-1, PART-2". |
 | `$jobId.status.tsx` (Release dialog path) | Refuses a job with `materialsWithoutStorageUnit` and names the parts. |
-| `settings.service.ts` | `updateRequireBackflushStorageUnitSetting` and `getActiveMethodsMissingPullFrom(db, companyId)`. |
+| `settings.service.ts` | `updateRequireBackflushStorageUnitSetting`, `updatePreventNegativeBackflushSetting`, `getActiveMethodsMissingPullFrom(db, companyId)` and `getOpenJobsMissingStorageUnit(db, companyId)`. |
 | `versions.activate.$id.tsx`, `applyChangeNotice` | Show the server's message when activation fails. |
 | MES `complete.tsx`, `end.$operationId.tsx`, `quality.server.ts` | Run the `dryRun` issue before `insertProductionQuantity`. Show the server's message. |
 | MES `scrap.tsx`, `issue.tsx` | Show the server's message. |
@@ -131,7 +135,7 @@ No new table. No RLS change.
 - [ ] Shelf A-4 holds 10. The operation completes, and the ledger row is against Shelf A-4.
 - [ ] 6 of the 10 were picked to the lineside bin, and Shelf A-4 holds 4. The operation completes. 6 come from the lineside bin and 4 from Shelf A-4.
 - [ ] ERP Job → Complete with a short bin shows the refusal text, and the job stays open.
-- [ ] The settings card shows the count of Active methods with a gap.
+- [ ] The settings card shows the count of Active methods with a gap and of open jobs with a material that has no storage unit. Review opens a drawer that lists every one, with search.
 - [ ] Unit tests pin `needsPullFrom`, `missingPullFromLocations` and the shortfall arithmetic.
 
 ## Risks
@@ -161,6 +165,9 @@ No new table. No RLS change.
 ## Changelog
 
 - 2026-10-14: Created from the backflush rules design discussion.
+- 2026-10-16: The settings card counts open jobs with a material that has no storage unit, and both counts open a searchable drawer instead of an inline list (user request).
+- 2026-10-16: The drawers show locations as pills. A materials cell shows 3 part IDs, and "+N more" opens the full list in a popover that scrolls (user request).
+- 2026-10-16: Split the no-negative rule into its own switch, `preventNegativeBackflush` (decision 6a, user request).
 - 2026-10-15: Long lists. A 20-line BoM produced a 912-character toast that ran off a small screen and faded before it could be read. Every strict refusal now names the first entries and counts the rest (`summarizeList`: 5 part names, 3 shortfalls; the SQL caps at 3 too). The Release dialog keeps the full list in a scroll box, and a collapsed BoM or job BoM row shows a red "No storage unit" badge.
 - 2026-10-15: The activation error names only the parts, not the locations (user request).
 - 2026-10-15: Browser test. Fixed: a location with a work center but no storage unit blocked activation for good; the release list named a part twice; the Release dialog did not warn before submit; the job BoM line showed "Default Storage Unit" and "Optional"; a refusal named only the first short material (TypeScript and SQL).

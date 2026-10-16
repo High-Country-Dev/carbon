@@ -16,6 +16,9 @@ Routes: `/x/settings/items`, `/x/part/<itemId>/make/<makeMethodId>`, `/x/job/<jo
 ### 1. Settings — `/x/settings/items` → "Strict Backflush" card switch.
 Expect "Strict backflush is on" and "1 active method has materials with no Pull From"
 with a link (SAW-001).
+Below it, "Prevent negative stock" (enabled only while strict backflush is on). Off: a short
+storage unit is drawn below zero and the operation completes; a missing storage unit is
+still refused.
 ### 2. Activation — part make page → version button ("V1 Draft") → hover "Version 1 Draft"
 → "Set as Active Version" → "Make Active". With gaps: toast
 "Set a Pull From storage unit before you activate this version: <part>; <part>".

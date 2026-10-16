@@ -76,6 +76,7 @@ import {
 import {
   assertBinCovers,
   binCoverProblem,
+  getStrictBackflushSettings,
   isStrictBackflush,
   strictBackflushRefusal
 } from "../lib/strict-backflush";
@@ -231,7 +232,10 @@ async function issueJobOperationMaterials(
     jobOperationId,
     companyId
   });
-  const strict = await isStrictBackflush(trx, companyId);
+  const { strict, preventNegative } = await getStrictBackflushSettings(
+    trx,
+    companyId
+  );
   // Strict backflush: every material the bins cannot cover, refused together.
   const strictProblems: string[] = [];
   const takenShared: SharedTakes = new Map();
@@ -296,7 +300,8 @@ async function issueJobOperationMaterials(
         locationId: job.locationId,
         storageUnitId: material.storageUnitId,
         quantity: remaining,
-        plannedRows: itemLedgerInserts
+        plannedRows: itemLedgerInserts,
+        preventNegative
       });
       if (problem) strictProblems.push(problem);
       itemLedgerInserts.push({
@@ -3078,11 +3083,11 @@ const issue = defineServerFn({
                 // Strict backflush: a consuming issue takes what no pick
                 // covered from the material's own storage unit only. A return
                 // keeps the bin chosen above.
-                if (
-                  adjustmentType !== "Positive Adjmt." &&
-                  remaining > 0 &&
-                  (await isStrictBackflush(trx, companyId))
-                ) {
+                const strictSettings =
+                  adjustmentType !== "Positive Adjmt." && remaining > 0
+                    ? await getStrictBackflushSettings(trx, companyId)
+                    : null;
+                if (strictSettings?.strict) {
                   storageUnitId = material.storageUnitId;
                   await assertBinCovers(trx, {
                     companyId,
@@ -3090,7 +3095,8 @@ const issue = defineServerFn({
                     locationId: job?.locationId!,
                     storageUnitId,
                     quantity: remaining,
-                    plannedRows: itemLedgerInserts
+                    plannedRows: itemLedgerInserts,
+                    preventNegative: strictSettings.preventNegative
                   });
                 }
                 itemLedgerInserts.push({

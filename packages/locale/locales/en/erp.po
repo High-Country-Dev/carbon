@@ -60,10 +60,6 @@ msgstr "(mapped to more than one Carbon account)"
 msgid "(not an Equity posting account)"
 msgstr "(not an Equity posting account)"
 
-#. placeholder {0}: methodsMissingPullFrom.count
-msgid "{0, plural, one {# active method has materials with no Pull From} other {# active methods have materials with no Pull From}}"
-msgstr "{0, plural, one {# active method has materials with no Pull From} other {# active methods have materials with no Pull From}}"
-
 #. placeholder {0}: check.count
 msgid "{0, plural, one {# blocking record} other {# blocking records}}"
 msgstr "{0, plural, one {# blocking record} other {# blocking records}}"
@@ -528,6 +524,9 @@ msgstr "{hiddenCount} more: {hiddenNames}"
 msgid "{inserted} inserted, {updated} updated, {0} need fixing, {1} skipped."
 msgstr "{inserted} inserted, {updated} updated, {0} need fixing, {1} skipped."
 
+msgid "{jobsMissingStorageUnit, plural, one {# open job has materials with no storage unit} other {# open jobs have materials with no storage unit}}"
+msgstr "{jobsMissingStorageUnit, plural, one {# open job has materials with no storage unit} other {# open jobs have materials with no storage unit}}"
+
 msgid "{label} is used by documents, journals or default accounts, so it cannot be deleted."
 msgstr "{label} is used by documents, journals or default accounts, so it cannot be deleted."
 
@@ -554,6 +553,9 @@ msgstr "{maxSizeMB}MB limit"
 
 msgid "{memberCount, plural, one {# step} other {# steps}}"
 msgstr "{memberCount, plural, one {# step} other {# steps}}"
+
+msgid "{methodsMissingPullFrom, plural, one {# active method has materials with no Pull From} other {# active methods have materials with no Pull From}}"
+msgstr "{methodsMissingPullFrom, plural, one {# active method has materials with no Pull From} other {# active methods have materials with no Pull From}}"
 
 msgid "{mismatchCount} months with mismatched totals"
 msgstr "{mismatchCount} months with mismatched totals"
@@ -724,6 +726,9 @@ msgstr "↩ {0} redirected from superseded {1}"
 #. placeholder {0}: formatHours(delta)
 msgid "+{0}h"
 msgstr "+{0}h"
+
+msgid "+{more} more"
+msgstr "+{more} more"
 
 msgid "<0>Add a supplier part</0> for this item to set a preferred supplier."
 msgstr "<0>Add a supplier part</0> for this item to set a preferred supplier."
@@ -1438,6 +1443,9 @@ msgstr "A shipment's tracking number changes"
 msgid "A short storage unit falls back to another storage unit with stock."
 msgstr "A short storage unit falls back to another storage unit with stock."
 
+msgid "A short storage unit goes below zero, and the operation or job still completes."
+msgstr "A short storage unit goes below zero, and the operation or job still completes."
+
 msgid "A short-term asset cannot run past 12 months from the commencement. End it and enter the extension as a new lease."
 msgstr "A short-term asset cannot run past 12 months from the commencement. End it and enter the extension as a new lease."
 
@@ -1814,6 +1822,9 @@ msgstr "Active"
 
 msgid "Active Jobs"
 msgstr "Active Jobs"
+
+msgid "Active Methods Missing a Pull From"
+msgstr "Active Methods Missing a Pull From"
 
 msgid "Active Statuses"
 msgstr "Active Statuses"
@@ -2617,6 +2628,9 @@ msgstr "An operation done by an outside supplier rather than an in-house work ce
 msgid "An operation on this job runs in this batch"
 msgstr "An operation on this job runs in this batch"
 
+msgid "An operation or job that would take its storage unit below zero is stopped until the stock is there."
+msgstr "An operation or job that would take its storage unit below zero is stopped until the stock is there."
+
 msgid "An operation's position in its work center's queue — the order the floor picks work up. The engine numbers it from placement order (earliest projected start first); reordering cards on the Work Centers board overrides it without changing dates."
 msgstr "An operation's position in its work center's queue — the order the floor picks work up. The engine numbers it from placement order (earliest projected start first); reordering cards on the Work Centers board overrides it without changing dates."
 
@@ -2789,6 +2803,9 @@ msgstr "Applies to all work centers"
 
 msgid "Applies to characteristics without their own rule, and to the lot when this plan drives an inspection."
 msgstr "Applies to characteristics without their own rule, and to the lot when this plan drives an inspection."
+
+msgid "Applies when strict backflush is on."
+msgstr "Applies when strict backflush is on."
 
 msgid "Apply"
 msgstr "Apply"
@@ -3832,8 +3849,8 @@ msgstr "Back to traceability"
 msgid "Backflush"
 msgstr "Backflush"
 
-msgid "Backflush each material only from the storage unit on its material line, and stop the operation or job when that storage unit does not have enough stock."
-msgstr "Backflush each material only from the storage unit on its material line, and stop the operation or job when that storage unit does not have enough stock."
+msgid "Backflush each material only from the storage unit on its material line, never from another storage unit."
+msgstr "Backflush each material only from the storage unit on its material line, never from another storage unit."
 
 msgid "Background"
 msgstr "Background"
@@ -13264,6 +13281,12 @@ msgstr "Materials are included"
 msgid "Materials are not included"
 msgstr "Materials are not included"
 
+msgid "Materials missing a Pull From"
+msgstr "Materials missing a Pull From"
+
+msgid "Materials with no storage unit"
+msgstr "Materials with no storage unit"
+
 msgid "Matrix"
 msgstr "Matrix"
 
@@ -15539,6 +15562,9 @@ msgstr "Open jobs"
 msgid "Open Jobs"
 msgstr "Open Jobs"
 
+msgid "Open Jobs Missing a Storage Unit"
+msgstr "Open Jobs Missing a Storage Unit"
+
 msgid "Open menu"
 msgstr "Open menu"
 
@@ -16825,6 +16851,9 @@ msgstr "Press '/' for commands"
 
 msgid "Prev"
 msgstr "Prev"
+
+msgid "Prevent negative stock"
+msgstr "Prevent negative stock"
 
 msgid "Preventive action"
 msgstr "Preventive action"
@@ -20255,6 +20284,9 @@ msgstr "Session locked"
 msgid "Set a customer on this return to add from a shipment."
 msgstr "Set a customer on this return to add from a shipment."
 
+msgid "Set a Pull From on each one through a new version."
+msgstr "Set a Pull From on each one through a new version."
+
 #. placeholder {0}: summarizeList( job.materialsWithoutStorageUnit.map( (m) => m.description ) )
 msgid "set a Pull From storage unit on {0}"
 msgstr "set a Pull From storage unit on {0}"
@@ -23181,6 +23213,9 @@ msgstr "The working hours and calendars that drive scheduling"
 
 msgid "Their dates and splits are planned again from the lines."
 msgstr "Their dates and splits are planned again from the lines."
+
+msgid "Their next backflush will be refused until each material has a storage unit."
+msgstr "Their next backflush will be refused until each material has a storage unit."
 
 msgid "Theme"
 msgstr "Theme"

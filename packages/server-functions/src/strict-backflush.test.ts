@@ -151,6 +151,62 @@ databaseTest(
 );
 
 databaseTest(
+  "with negative stock allowed, strict backflush draws its own bin below zero",
+  async () => {
+    const f = await alwaysPostFixture();
+    try {
+      const shelfA = await storageUnit(f, "Shelf A");
+      const shelfB = await storageUnit(f, "Shelf B");
+      await stockBin(f, shelfA, 1);
+      await stockBin(f, shelfB, 10);
+      const job = await jobFixture(f);
+      await setMaterialBin(f, job.materialId, shelfA);
+      await setStrict(f, true);
+      await f.db
+        .updateTable("companySettings")
+        .set({ preventNegativeBackflush: false })
+        .where("id", "=", f.companyId)
+        .execute();
+
+      // Operation completion: all 2 from Shelf A (1 on hand → -1), none from B.
+      unwrap(
+        await issue(f.ctx, {
+          type: "jobOperation",
+          id: job.operationId,
+          quantity: 1
+        })
+      );
+      expect(await consumption(f, job.jobId)).toEqual([
+        { storageUnitId: shelfA, quantity: -2 }
+      ]);
+
+      // A missing bin is still refused: strict bins stay strict.
+      const second = await jobFixture(f, "2");
+      const missing = await issue(f.ctx, {
+        type: "jobOperation",
+        id: second.operationId,
+        quantity: 1
+      });
+      expect(missing.error?.message).toBe(
+        `${f.prefix}-PART has no Pull From storage unit on this job`
+      );
+
+      // Job completion (SQL) draws its own bin below zero too.
+      const third = await jobFixture(f, "3");
+      await setMaterialBin(f, third.materialId, shelfA);
+      await sql`SELECT backflush_job_materials(${third.jobId}, 1, ${f.companyId}, ${USER})`.execute(
+        f.db
+      );
+      expect(await consumption(f, third.jobId)).toEqual([
+        { storageUnitId: shelfA, quantity: -2 }
+      ]);
+    } finally {
+      await f.cleanup();
+    }
+  }
+);
+
+databaseTest(
   "with strict backflush off, a short bin still falls back to the fullest one",
   async () => {
     const f = await alwaysPostFixture();

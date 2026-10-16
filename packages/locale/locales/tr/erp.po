@@ -60,10 +60,6 @@ msgstr "(birden fazla Carbon hesabına eşleştirildi)"
 msgid "(not an Equity posting account)"
 msgstr "(Özkaynak muhasebeleştirme hesabı değildir)"
 
-#. placeholder {0}: methodsMissingPullFrom.count
-msgid "{0, plural, one {# active method has materials with no Pull From} other {# active methods have materials with no Pull From}}"
-msgstr "{0, plural, one {# aktif yöntemde Çekilecek Depo olmayan malzeme vardır} other {# aktif yöntemde Çekilecek Depo olmayan malzemeler vardır}}"
-
 #. placeholder {0}: check.count
 msgid "{0, plural, one {# blocking record} other {# blocking records}}"
 msgstr "{0, plural, one {# engelleme kaydı} other {# engelleme kaydı}}"
@@ -528,6 +524,9 @@ msgstr "{hiddenCount} daha: {hiddenNames}"
 msgid "{inserted} inserted, {updated} updated, {0} need fixing, {1} skipped."
 msgstr "{inserted} eklendi, {updated} güncellendi, {0} düzeltme gerekli, {1} atlandı."
 
+msgid "{jobsMissingStorageUnit, plural, one {# open job has materials with no storage unit} other {# open jobs have materials with no storage unit}}"
+msgstr "{jobsMissingStorageUnit, plural, one {# açık iş emirinin depolama birimi olmayan malzemeleri var} other {# açık iş emirlerinin depolama birimi olmayan malzemeleri var}}"
+
 msgid "{label} is used by documents, journals or default accounts, so it cannot be deleted."
 msgstr "{label} belgeler, muhasebe fişleri veya varsayılan hesaplar tarafından kullanıldığından silinemez."
 
@@ -554,6 +553,9 @@ msgstr "{maxSizeMB}MB sınırı"
 
 msgid "{memberCount, plural, one {# step} other {# steps}}"
 msgstr "{memberCount, plural, one {# adım} other {# adım}}"
+
+msgid "{methodsMissingPullFrom, plural, one {# active method has materials with no Pull From} other {# active methods have materials with no Pull From}}"
+msgstr "{methodsMissingPullFrom, plural, one {# aktif yöntemin çekme kaynağı olmayan malzemeleri var} other {# aktif yöntemlerin çekme kaynağı olmayan malzemeleri var}}"
 
 msgid "{mismatchCount} months with mismatched totals"
 msgstr "{mismatchCount} ay tutarları uyuşmazlığı"
@@ -724,6 +726,9 @@ msgstr "↩ {0} eski hale getirilen {1} kaynağından yönlendirildi"
 #. placeholder {0}: formatHours(delta)
 msgid "+{0}h"
 msgstr "+{0}s"
+
+msgid "+{more} more"
+msgstr "+{more} daha"
 
 msgid "<0>Add a supplier part</0> for this item to set a preferred supplier."
 msgstr "<0>Bu ürün için bir tedarikçi parçası ekleyin</0> tercih edilen tedarikçi ayarlamak için."
@@ -1438,6 +1443,9 @@ msgstr "Bir sevkiyatın takip numarası değişti"
 msgid "A short storage unit falls back to another storage unit with stock."
 msgstr "Yetersiz stoklu bir depolama birimi stok içeren başka bir depolama birimine geri döner."
 
+msgid "A short storage unit goes below zero, and the operation or job still completes."
+msgstr "Bir Depolama birimi sıfırın altına gidiyor ve Operasyon veya İş emri yine de tamamlanıyor."
+
 msgid "A short-term asset cannot run past 12 months from the commencement. End it and enter the extension as a new lease."
 msgstr "Kısa vadeli kıymet başlangıcından 12 aydan sonra devam edemez. Bunu bitirin ve uzantıyı yeni bir kiralama olarak girin."
 
@@ -1814,6 +1822,9 @@ msgstr "Aktif"
 
 msgid "Active Jobs"
 msgstr "Aktif İş emirleri"
+
+msgid "Active Methods Missing a Pull From"
+msgstr "Çekme Kaynağı Olmayan Aktif Yöntemler"
 
 msgid "Active Statuses"
 msgstr "Aktif Durumlar"
@@ -2617,6 +2628,9 @@ msgstr "Dış tedarikçi tarafından yapılan operasyon, bir taşeronluk satın 
 msgid "An operation on this job runs in this batch"
 msgstr "Bu işin bir operasyonu bu partide çalışıyor"
 
+msgid "An operation or job that would take its storage unit below zero is stopped until the stock is there."
+msgstr "Depolama birimini sıfırın altına alacak olan bir Operasyon veya İş emri, Stok gelene kadar durdurulur."
+
 msgid "An operation's position in its work center's queue — the order the floor picks work up. The engine numbers it from placement order (earliest projected start first); reordering cards on the Work Centers board overrides it without changing dates."
 msgstr "Bir operasyon'un iş merkezi'nin kuyruğundaki konumu — atölyenin işleri aldığı sıra. Motor, yerleştirme sırasından numaralandırır (en erken öngörülen başlangıç ilk); İş merkezleri panosundaki kartları yeniden sıralamak, tarihleri değiştirmeden bunu geçersiz kılar."
 
@@ -2789,6 +2803,9 @@ msgstr "Tüm iş merkezlerine uygulanır"
 
 msgid "Applies to characteristics without their own rule, and to the lot when this plan drives an inspection."
 msgstr "Kendi kuralı olmayan özelliklere ve bu kontrol planı bir muayene başlattığında lota uygulanır."
+
+msgid "Applies when strict backflush is on."
+msgstr "Katı Geriye dönük tüketim açık olduğunda geçerlidir."
 
 msgid "Apply"
 msgstr "Uygula"
@@ -3832,8 +3849,8 @@ msgstr "İzlenebilirliğe geri dön"
 msgid "Backflush"
 msgstr "Geriye dönük tüketim"
 
-msgid "Backflush each material only from the storage unit on its material line, and stop the operation or job when that storage unit does not have enough stock."
-msgstr "Her malzemeyi yalnızca malzeme satırındaki depolama biriminden geriye dönük tüket, ve bu depolama birimi yeterli stoka sahip olmadığında operasyonu veya iş emrini durdur."
+msgid "Backflush each material only from the storage unit on its material line, never from another storage unit."
+msgstr "Her Malzemeyi yalnızca kendi Malzeme satırındaki Depolama biriminden Geriye dönük tüketin, asla başka bir Depolama biriminden değil."
 
 msgid "Background"
 msgstr "Arka plan"
@@ -13264,6 +13281,12 @@ msgstr "Malzemeler dahil"
 msgid "Materials are not included"
 msgstr "Malzemeler dahil değil"
 
+msgid "Materials missing a Pull From"
+msgstr "Çekme kaynağı olmayan malzemeler"
+
+msgid "Materials with no storage unit"
+msgstr "Depolama birimi olmayan malzemeler"
+
 msgid "Matrix"
 msgstr "Matris"
 
@@ -15539,6 +15562,9 @@ msgstr "Açık İş emirleri"
 msgid "Open Jobs"
 msgstr "Açık İş Emirleri"
 
+msgid "Open Jobs Missing a Storage Unit"
+msgstr "Depolama Birimi Olmayan Açık İş Emirleri"
+
 msgid "Open menu"
 msgstr "Menüyü aç"
 
@@ -16825,6 +16851,9 @@ msgstr "Komutlar için '/' tuşuna basın"
 
 msgid "Prev"
 msgstr "Önceki"
+
+msgid "Prevent negative stock"
+msgstr "Negatif Stoku Engelle"
 
 msgid "Preventive action"
 msgstr "Önleyici eylem"
@@ -20255,6 +20284,9 @@ msgstr "Oturum Kilitli"
 msgid "Set a customer on this return to add from a shipment."
 msgstr "Sevkiyattan eklemek için bu iade işlemine bir müşteri belirleyin."
 
+msgid "Set a Pull From on each one through a new version."
+msgstr "Her biri için yeni bir sürüm üzerinden çekme kaynağı belirleyin."
+
 #. placeholder {0}: summarizeList( job.materialsWithoutStorageUnit.map( (m) => m.description ) )
 msgid "set a Pull From storage unit on {0}"
 msgstr "{0} için çekilecek bir depolama birimi ayarla"
@@ -23181,6 +23213,9 @@ msgstr "Çalışma saatleri ve planlama yöneten takvimler"
 
 msgid "Their dates and splits are planned again from the lines."
 msgstr "Tarihleri ve bölünüşleri satırlardan yeniden planlanır."
+
+msgid "Their next backflush will be refused until each material has a storage unit."
+msgstr "Her malzeme bir depolama birimine sahip olana kadar sonraki geriye dönük tüketim reddedilecektir."
 
 msgid "Theme"
 msgstr "Tema"
