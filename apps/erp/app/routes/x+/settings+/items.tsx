@@ -33,9 +33,7 @@ import { SettingsPage, SettingsPageHeading } from "~/components/SettingsPage";
 import SettingsSectionHeader from "~/components/SettingsSectionHeader";
 import { plmReleaseControl } from "~/modules/items";
 import {
-  getActiveMethodsMissingPullFrom,
   getCompanySettings,
-  getOpenJobsMissingStorageUnit,
   plmReleaseControlValidator,
   updateAllowLowercaseItemIdsSetting,
   updateBomExplorerReadableIdSetting,
@@ -45,6 +43,7 @@ import {
   updatePreventNegativeBackflushSetting,
   updateRequireBackflushStorageUnitSetting
 } from "~/modules/settings";
+import { getStrictBackflushGapCounts } from "~/modules/settings/settings.server";
 import { getDatabaseClient } from "~/services/database.server";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
@@ -73,34 +72,29 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   // Strict backflush leaves Active methods and released jobs as they are; the
   // card counts the ones with a gap and links to a drawer listing them all.
-  let methodsMissingPullFrom: number | null = null;
-  let jobsMissingStorageUnit: number | null = null;
+  // `gaps` is null while the setting is off; `gapsError` says the count failed,
+  // so the card never reads as clean when it could not look.
+  let gaps: { methods: number; jobs: number } | null = null;
+  let gapsError = false;
   if (companySettings.data.requireBackflushStorageUnit) {
-    const db = getDatabaseClient();
-    // One at a time: each read would otherwise take its own pooled connection.
-    const methods = await getActiveMethodsMissingPullFrom(db, companyId);
-    if (methods.error) {
-      logger.error("Failed to read methods missing a Pull From", {
+    const counts = await getStrictBackflushGapCounts(
+      getDatabaseClient(),
+      companyId
+    );
+    if (counts.error) {
+      logger.error("Failed to count strict backflush gaps", {
         companyId,
-        error: methods.error
+        error: counts.error
       });
+      gapsError = true;
     }
-    methodsMissingPullFrom = methods.data?.length ?? null;
-
-    const jobs = await getOpenJobsMissingStorageUnit(db, companyId);
-    if (jobs.error) {
-      logger.error("Failed to read open jobs missing a storage unit", {
-        companyId,
-        error: jobs.error
-      });
-    }
-    jobsMissingStorageUnit = jobs.data?.length ?? null;
+    gaps = counts.data;
   }
 
   return {
     companySettings: companySettings.data,
-    methodsMissingPullFrom,
-    jobsMissingStorageUnit
+    gaps,
+    gapsError
   };
 }
 
@@ -201,8 +195,10 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function ItemsSettingsRoute() {
   const { t } = useLingui();
-  const { companySettings, methodsMissingPullFrom, jobsMissingStorageUnit } =
-    useLoaderData<typeof loader>();
+  const { companySettings, gaps, gapsError } = useLoaderData<typeof loader>();
+  // Named for the Plural messages' placeholders.
+  const methodsMissingPullFrom = gaps?.methods ?? 0;
+  const jobsMissingStorageUnit = gaps?.jobs ?? 0;
   const fetcher = useFetcher<typeof action>();
 
   const releaseControlLabels: Record<
@@ -495,50 +491,56 @@ export default function ItemsSettingsRoute() {
                   </span>
                 </VStack>
                 <Switch
-                  checked={companySettings.preventNegativeBackflush ?? true}
+                  checked={companySettings.preventNegativeBackflush}
                   onCheckedChange={handlePreventNegativeBackflushToggle}
                   disabled={
                     isToggling || !companySettings.requireBackflushStorageUnit
                   }
                 />
               </HStack>
-              {methodsMissingPullFrom !== null &&
-                methodsMissingPullFrom > 0 && (
-                  <GapRow
-                    to={path.to.itemsSettingsMethodsMissingPullFrom}
-                    label={
-                      <Plural
-                        value={methodsMissingPullFrom}
-                        one="# active method has materials with no Pull From"
-                        other="# active methods have materials with no Pull From"
-                      />
-                    }
-                    description={
-                      <Trans>
-                        Set a Pull From on each one through a new version.
-                      </Trans>
-                    }
-                  />
-                )}
-              {jobsMissingStorageUnit !== null &&
-                jobsMissingStorageUnit > 0 && (
-                  <GapRow
-                    to={path.to.itemsSettingsJobsMissingStorageUnit}
-                    label={
-                      <Plural
-                        value={jobsMissingStorageUnit}
-                        one="# open job has materials with no storage unit"
-                        other="# open jobs have materials with no storage unit"
-                      />
-                    }
-                    description={
-                      <Trans>
-                        Their next backflush will be refused until each material
-                        has a storage unit.
-                      </Trans>
-                    }
-                  />
-                )}
+              {gapsError && (
+                <p className="w-full border-t pt-4 text-sm text-destructive">
+                  <Trans>
+                    Could not check for active methods and open jobs with gaps.
+                    Reload the page to try again.
+                  </Trans>
+                </p>
+              )}
+              {methodsMissingPullFrom > 0 && (
+                <GapRow
+                  to={path.to.itemsSettingsMethodsMissingPullFrom}
+                  label={
+                    <Plural
+                      value={methodsMissingPullFrom}
+                      one="# active method has materials with no Pull From"
+                      other="# active methods have materials with no Pull From"
+                    />
+                  }
+                  description={
+                    <Trans>
+                      Set a Pull From on each one through a new version.
+                    </Trans>
+                  }
+                />
+              )}
+              {jobsMissingStorageUnit > 0 && (
+                <GapRow
+                  to={path.to.itemsSettingsJobsMissingStorageUnit}
+                  label={
+                    <Plural
+                      value={jobsMissingStorageUnit}
+                      one="# open job has materials with no storage unit"
+                      other="# open jobs have materials with no storage unit"
+                    />
+                  }
+                  description={
+                    <Trans>
+                      Their next backflush will be refused until each material
+                      has a storage unit.
+                    </Trans>
+                  }
+                />
+              )}
             </VStack>
           </CardContent>
         </Card>

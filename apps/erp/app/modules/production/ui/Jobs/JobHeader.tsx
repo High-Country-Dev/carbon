@@ -84,6 +84,7 @@ import {
   useUser
 } from "~/hooks";
 import { useCompanySettings } from "~/hooks/useCompanySettings";
+import { usePullFromLocationIds } from "~/hooks/usePullFromLocationIds";
 import { useSuppliers } from "~/stores";
 import { generateBomIds } from "~/utils/bom";
 import { path } from "~/utils/path";
@@ -631,10 +632,19 @@ export function JobStartModal({
   const strictBackflush = companySettings?.requireBackflushStorageUnit === true;
   const [loading, setLoading] = useState(true);
   // Strict backflush: lines whose backflush would be refused. The release
-  // route refuses them too; showing them here saves a failed submit.
-  const [missingStorageUnits, setMissingStorageUnits] = useState<
+  // route refuses them too; showing them here saves a failed submit. They
+  // count only at a location that needs a Pull From — assumed while that list
+  // loads, so the dialog never offers a release the route refuses.
+  const pullFromLocationIds = usePullFromLocationIds();
+  const strictAtJobLocation =
+    strictBackflush &&
+    (pullFromLocationIds === null ||
+      (!!job?.locationId && pullFromLocationIds.includes(job.locationId)));
+  const [storageUnitGaps, setStorageUnitGaps] = useState<
     { id: string; description: string }[]
   >([]);
+  const [storageUnitCheckFailed, setStorageUnitCheckFailed] = useState(false);
+  const missingStorageUnits = strictAtJobLocation ? storageUnitGaps : [];
   const [missingOperationAssemblies, setMissingOperationAssemblies] = useState<
     { bomId: string; description: string }[]
   >([]);
@@ -691,7 +701,7 @@ export function JobStartModal({
               .eq("jobId", job.id!)
               .eq("companyId", job.companyId!)
               .is("storageUnitId", null)
-          : Promise.resolve({ data: [] })
+          : Promise.resolve({ data: [], error: null })
       ]);
 
     // Check for existing purchase order lines for outside operations
@@ -893,9 +903,10 @@ export function JobStartModal({
 
     flushSync(() => {
       setMissingOperationAssemblies(missingAssemblies);
-      setMissingStorageUnits(
+      setStorageUnitGaps(
         materialsWithoutStorageUnit(storageUnitLines.data ?? [])
       );
+      setStorageUnitCheckFailed(!!storageUnitLines.error);
 
       // Show the release UI whenever there are outside operations still needing handling,
       // whether or not they have a supplier yet
@@ -958,6 +969,7 @@ export function JobStartModal({
               <VStack>
                 {missingOperationAssemblies.length === 0 &&
                   missingStorageUnits.length === 0 &&
+                  !(strictAtJobLocation && storageUnitCheckFailed) &&
                   eachOutsideOperationHasASupplier && (
                     <p className="text-sm">
                       <Trans>
@@ -1099,6 +1111,21 @@ export function JobStartModal({
                     </AlertDescription>
                   </Alert>
                 )}
+                {strictAtJobLocation && storageUnitCheckFailed && (
+                  <Alert variant="destructive">
+                    <LuTriangleAlert />
+                    <AlertTitle>
+                      <Trans>Storage Units Not Checked</Trans>
+                    </AlertTitle>
+                    <AlertDescription>
+                      <Trans>
+                        Could not check the storage units of this job's
+                        materials. Close this dialog and open it again to try
+                        again.
+                      </Trans>
+                    </AlertDescription>
+                  </Alert>
+                )}
                 {missingStorageUnits.length > 0 && (
                   <Alert variant="warning">
                     <LuTriangleAlert />
@@ -1165,6 +1192,7 @@ export function JobStartModal({
                     fetcher.state !== "idle" ||
                     missingOperationAssemblies.length > 0 ||
                     missingStorageUnits.length > 0 ||
+                    (strictAtJobLocation && storageUnitCheckFailed) ||
                     !eachOutsideOperationHasASupplier
                   }
                   type="submit"

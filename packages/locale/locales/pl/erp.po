@@ -6051,6 +6051,12 @@ msgstr "Nie można analizować regionu: {0}"
 msgid "Could not build PDF. Try again."
 msgstr "Nie można było zbudować pliku PDF. Spróbuj ponownie."
 
+msgid "Could not check for active methods and open jobs with gaps. Reload the page to try again."
+msgstr "Nie można sprawdzić aktywnych metod i otwartych zleceń produkcyjnych z przerwami. Załaduj stronę ponownie, aby spróbować ponownie."
+
+msgid "Could not check the storage units of this job's materials. Close this dialog and open it again to try again."
+msgstr "Nie można sprawdzić jednostek magazynowych materiałów tego zlecenia produkcyjnego. Zamknij to okno dialogowe i otwórz je ponownie, aby spróbować ponownie."
+
 #. placeholder {0}: d.failed.length
 #. placeholder {1}: d.failed .map((f) => f.readableId) .join(", ")
 msgid "Could not dissolve {0}: {1} — production already recorded"
@@ -20287,9 +20293,11 @@ msgstr "Ustaw klienta na tym zwrocie, aby dodać z wysyłki."
 msgid "Set a Pull From on each one through a new version."
 msgstr "Ustaw Pull From dla każdego poprzez nową wersję."
 
-#. placeholder {0}: summarizeList( job.materialsWithoutStorageUnit.map( (m) => m.description ) )
-msgid "set a Pull From storage unit on {0}"
-msgstr "ustaw jednostkę magazynową do poboru dla {0}"
+msgid "set a Pull From storage unit on {names}"
+msgstr "ustaw jednostkę magazynową Pobierz z na {names}"
+
+msgid "set a Pull From storage unit on {names} and {more} more"
+msgstr "ustaw jednostkę magazynową Pobierz z na {names} i {more} więcej"
 
 msgid "Set a supplier on this return to add from a receipt."
 msgstr "Ustaw dostawcę w tym zwrocie, aby dodać z przyjęcia."
@@ -21329,6 +21337,9 @@ msgstr "jednostki magazynowania"
 
 msgid "Storage Units"
 msgstr "Jednostki magazynowe"
+
+msgid "Storage Units Not Checked"
+msgstr "Jednostki magazynowe nie sprawdzono"
 
 msgid "Store a fixed number of days on this item. Expiry start date is set on each batch or serial when it's created (or when the trigger process runs, if set)."
 msgstr "Przechowuj przez ustaloną liczbę dni na tym artykule. Data rozpoczęcia terminu ważności jest ustawiana na każdej partii produkcyjnej lub numerze seryjnym podczas jej utworzenia (lub gdy uruchomi się proces wyzwalający, jeśli ustawiony)."

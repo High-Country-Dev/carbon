@@ -462,10 +462,18 @@ async function completeBatch(
   // is written. Each member is checked on its own; two members drawing the
   // same bin can still fail in phase 2, which leaves the batch resumable.
   // A no-op when strict backflush is off.
-  const checker = ServerFnContext.system({ db, companyId, userId });
-  for (const m of members) {
+  // A completed batch skips the check, so a retry still gets the
+  // "already completed" answer from the transaction below.
+  const batchStatus = await db
+    .selectFrom("jobOperationBatch")
+    .select("status")
+    .where("id", "=", batchId)
+    .where("companyId", "=", companyId)
+    .executeTakeFirst();
+  const system = ServerFnContext.system({ db, companyId, userId });
+  for (const m of batchStatus?.status === "Completed" ? [] : members) {
     if (m.quantity <= 0) continue;
-    const check = await issue(checker, {
+    const check = await issue(system, {
       id: m.jobOperationId,
       type: "jobOperation",
       quantity: m.quantity,
@@ -727,7 +735,6 @@ async function completeBatch(
   // Phase 2 (post-commit, idempotent). Any throw leaves the batch Completing; a
   // retry re-runs these steps alone. Runs as the system: the batch completion
   // itself was authorized.
-  const system = ServerFnContext.system({ db, companyId, userId });
   for (const m of members) {
     if (m.quantity <= 0) continue;
     const issued = await issue(system, {
@@ -736,8 +743,12 @@ async function completeBatch(
       quantity: m.quantity
     });
     if (issued.error) {
-      throw new Error(
-        `Failed to issue materials for operation ${m.jobOperationId}: ${issued.error.message}`
+      // Keep the refusal's status: a strict backflush shortfall is a 409 the
+      // operator fixes by stocking the bin and completing again (which
+      // resumes), not a server error.
+      throw new ServerFnError(
+        `Failed to issue materials for operation ${m.jobOperationId}: ${issued.error.message}`,
+        issued.error instanceof ServerFnError ? issued.error.status : 500
       );
     }
   }

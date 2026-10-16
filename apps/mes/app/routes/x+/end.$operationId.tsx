@@ -20,6 +20,7 @@ import {
   insertProductionQuantity,
   isSerialEntityIncompleteForOperation
 } from "~/services/operations.service";
+import { checkStrictBackflush } from "~/services/quality.server";
 import { path } from "~/utils/path";
 
 const logger = getLogger("mes", "end-operation");
@@ -298,23 +299,18 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       // Strict backflush: refuse before the production quantity is recorded,
       // so a short storage unit never leaves units completed with no material
       // consumed. A no-op when strict backflush is off.
-      const check = await serverFns
-        .system({ db: getDatabaseClient(), companyId, userId })
-        .invoke("issue", {
-          id: operationId,
-          type: "jobOperation",
-          quantity: quantityToComplete,
-          dryRun: true
-        });
+      const check = await checkStrictBackflush({
+        jobOperationId: operationId,
+        quantity: quantityToComplete,
+        companyId,
+        userId
+      });
 
       if (check.error) {
         return redirect(
           path.to.operation(operationId),
           await flash(request, {
-            ...error(
-              check.error,
-              check.error.message || "Failed to issue materials"
-            ),
+            ...error(check.error, check.message!),
             flash: "error"
           })
         );
@@ -354,12 +350,14 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         });
 
       if (issued.error) {
+        // The units are recorded: say so, or the operator retries and records
+        // them twice.
         return redirect(
           path.to.operation(operationId),
           await flash(request, {
             ...error(
               issued.error,
-              issued.error.message || "Failed to issue materials"
+              `Units completed, but ${issued.error.message || "failed to issue materials"}`
             ),
             flash: "error"
           })

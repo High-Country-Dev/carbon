@@ -6051,6 +6051,12 @@ msgstr "領域を分析できませんでした: {0}"
 msgid "Could not build PDF. Try again."
 msgstr "PDFを作成できませんでした。もう一度お試しください。"
 
+msgid "Could not check for active methods and open jobs with gaps. Reload the page to try again."
+msgstr "有効な製法およびギャップのあるオープンな製造指図を確認できませんでした。ページをリロードして再度お試しください。"
+
+msgid "Could not check the storage units of this job's materials. Close this dialog and open it again to try again."
+msgstr "この製造指図の材料の保管ユニットを確認できませんでした。このダイアログをクローズして、もう一度開いて、再度お試しください。"
+
 #. placeholder {0}: d.failed.length
 #. placeholder {1}: d.failed .map((f) => f.readableId) .join(", ")
 msgid "Could not dissolve {0}: {1} — production already recorded"
@@ -20287,9 +20293,11 @@ msgstr "出荷から追加するにはこのリターンに得意先を設定し
 msgid "Set a Pull From on each one through a new version."
 msgstr "新しいバージョンで各々に引き出し元を設定してください。"
 
-#. placeholder {0}: summarizeList( job.materialsWithoutStorageUnit.map( (m) => m.description ) )
-msgid "set a Pull From storage unit on {0}"
-msgstr "{0} に抽出元保管ユニットを設定する"
+msgid "set a Pull From storage unit on {names}"
+msgstr "プルフロム保管ユニットを{names}に設定"
+
+msgid "set a Pull From storage unit on {names} and {more} more"
+msgstr "プルフロム保管ユニットを{names}およびその他{more}個に設定"
 
 msgid "Set a supplier on this return to add from a receipt."
 msgstr "この返品に仕入先を設定して入荷から追加"
@@ -21329,6 +21337,9 @@ msgstr "保管ユニット"
 
 msgid "Storage Units"
 msgstr "保管ユニット"
+
+msgid "Storage Units Not Checked"
+msgstr "保管ユニット未確認"
 
 msgid "Store a fixed number of days on this item. Expiry start date is set on each batch or serial when it's created (or when the trigger process runs, if set)."
 msgstr "このアイテムの使用期限を固定日数で管理します。各バッチまたはシリアルの使用期限開始日は、作成時（またはトリガープロセスが実行された場合）に設定されます。"

@@ -25,10 +25,7 @@ import { Hyperlink, Table } from "~/components";
 import { Enumerable } from "~/components/Enumerable";
 import JobStatus from "~/modules/production/ui/Jobs/JobStatus";
 import { path } from "~/utils/path";
-import type {
-  JobMissingStorageUnit,
-  MethodMissingPullFrom
-} from "../../settings.service";
+import type { JobMissingStorageUnit, MethodMissingPullFrom } from "../../types";
 
 // The make-method page of a method's item, by item type. Only Parts, Tools and
 // Services carry make methods with their own route.
@@ -68,20 +65,22 @@ function PartList({ parts, label }: { parts: string[]; label: string }) {
         </span>
       ))}
       {more > 0 && (
-        // Modal: the drawer's scroll lock blocks the wheel outside the drawer,
-        // and the popover renders in a portal outside it. A modal popover
-        // takes the lock itself, so its list scrolls.
-        <Popover modal>
+        <Popover>
           <PopoverTrigger asChild>
             <Button variant="link" size="sm" className="text-muted-foreground">
               {t`+${more} more`}
             </Button>
           </PopoverTrigger>
+          {/* Rendered outside the drawer, whose scroll lock swallows the
+              wheel and touch events: stop them here, or the list cannot
+              scroll (conventions-ui.md, "Popovers inside Drawers"). */}
           <PopoverContent
             align="start"
             collisionPadding={8}
             className="w-64 p-0"
             aria-label={label}
+            onWheel={(event) => event.stopPropagation()}
+            onTouchMove={(event) => event.stopPropagation()}
           >
             {/* A phone's sheet titles itself from aria-label. */}
             {!isPhone && (
@@ -92,7 +91,7 @@ function PartList({ parts, label }: { parts: string[]; label: string }) {
                 </span>
               </PopoverHeader>
             )}
-            <ul className="max-h-72 overflow-y-auto py-1 text-sm">
+            <ul className="max-h-72 overflow-y-auto py-1 text-sm scrollbar-thin scrollbar-track-transparent scrollbar-thumb-accent">
               {parts.map((part) => (
                 <li key={part} className="truncate px-4 py-1" title={part}>
                   {part}

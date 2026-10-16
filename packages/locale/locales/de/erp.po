@@ -6051,6 +6051,12 @@ msgstr "Region konnte nicht analysiert werden: {0}"
 msgid "Could not build PDF. Try again."
 msgstr "PDF konnte nicht erstellt werden. Versuchen Sie es erneut."
 
+msgid "Could not check for active methods and open jobs with gaps. Reload the page to try again."
+msgstr "Aktive Methoden und offene Fertigungsaufträge mit Lücken konnten nicht überprüft werden. Laden Sie die Seite neu, um es erneut zu versuchen."
+
+msgid "Could not check the storage units of this job's materials. Close this dialog and open it again to try again."
+msgstr "Die Lagereinheiten der Materialien dieses Fertigungsauftrags konnten nicht überprüft werden. Schließen Sie diesen Dialog und öffnen Sie ihn erneut, um es erneut zu versuchen."
+
 #. placeholder {0}: d.failed.length
 #. placeholder {1}: d.failed .map((f) => f.readableId) .join(", ")
 msgid "Could not dissolve {0}: {1} — production already recorded"
@@ -20287,9 +20293,11 @@ msgstr "Legen Sie einen Kunden für diese Rücksendung fest, um aus einer Liefer
 msgid "Set a Pull From on each one through a new version."
 msgstr "Legen Sie für jede eine Entnahme über eine neue Version fest."
 
-#. placeholder {0}: summarizeList( job.materialsWithoutStorageUnit.map( (m) => m.description ) )
-msgid "set a Pull From storage unit on {0}"
-msgstr "Entnahme-Lagereinheit für {0} festlegen"
+msgid "set a Pull From storage unit on {names}"
+msgstr "eine Lagereinheit zum Entnehmen auf {names} festlegen"
+
+msgid "set a Pull From storage unit on {names} and {more} more"
+msgstr "eine Lagereinheit zum Entnehmen auf {names} und {more} weitere festlegen"
 
 msgid "Set a supplier on this return to add from a receipt."
 msgstr "Wählen Sie einen Lieferanten für diese Rückgabe aus, um Positionen von einem Wareneingang hinzuzufügen."
@@ -21329,6 +21337,9 @@ msgstr "Lagereinheiten"
 
 msgid "Storage Units"
 msgstr "Lagereinheiten"
+
+msgid "Storage Units Not Checked"
+msgstr "Lagereinheiten nicht überprüft"
 
 msgid "Store a fixed number of days on this item. Expiry start date is set on each batch or serial when it's created (or when the trigger process runs, if set)."
 msgstr "Speichern Sie eine feste Anzahl von Tagen auf diesem Artikel. Das Verfallstartdatum wird auf jedem Los oder jeder Seriennummer gesetzt, wenn sie erstellt wird (oder wenn das Auslöseverfahren ausgeführt wird, falls festgelegt)."

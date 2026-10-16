@@ -6051,6 +6051,12 @@ msgstr "Не удалось проанализировать регион: {0}"
 msgid "Could not build PDF. Try again."
 msgstr "Не удалось создать PDF. Попробуйте еще раз."
 
+msgid "Could not check for active methods and open jobs with gaps. Reload the page to try again."
+msgstr "Не удалось проверить действующие методы и незакрытые производственные заказы на наличие разрывов. Перезагрузите страницу, чтобы повторить попытку."
+
+msgid "Could not check the storage units of this job's materials. Close this dialog and open it again to try again."
+msgstr "Не удалось проверить единицы хранения материалов этого производственного заказа. Закройте это диалоговое окно и откройте его снова, чтобы повторить попытку."
+
 #. placeholder {0}: d.failed.length
 #. placeholder {1}: d.failed .map((f) => f.readableId) .join(", ")
 msgid "Could not dissolve {0}: {1} — production already recorded"
@@ -20287,9 +20293,11 @@ msgstr "Укажите покупателя для этого возврата, 
 msgid "Set a Pull From on each one through a new version."
 msgstr "Установите источник для каждого из них через новую версию."
 
-#. placeholder {0}: summarizeList( job.materialsWithoutStorageUnit.map( (m) => m.description ) )
-msgid "set a Pull From storage unit on {0}"
-msgstr "установить единицу хранения для получения на {0}"
+msgid "set a Pull From storage unit on {names}"
+msgstr "установить единицу хранения вытягивания для {names}"
+
+msgid "set a Pull From storage unit on {names} and {more} more"
+msgstr "установить единицу хранения вытягивания для {names} и еще {more} наименований"
 
 msgid "Set a supplier on this return to add from a receipt."
 msgstr "Установите поставщика для этого возврата, чтобы добавить из поступления."
@@ -21329,6 +21337,9 @@ msgstr "единицы хранения"
 
 msgid "Storage Units"
 msgstr "Единицы хранения"
+
+msgid "Storage Units Not Checked"
+msgstr "Единицы хранения не проверены"
 
 msgid "Store a fixed number of days on this item. Expiry start date is set on each batch or serial when it's created (or when the trigger process runs, if set)."
 msgstr "Хранить фиксированное количество дней для этой номенклатуры. Дата начала срока годности устанавливается для каждой серии или серийного номера при его создании (или когда запускается процесс триггера, если установлен)."

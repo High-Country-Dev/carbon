@@ -6051,6 +6051,12 @@ msgstr "No se pudo analizar la región: {0}"
 msgid "Could not build PDF. Try again."
 msgstr "No se pudo crear el PDF. Intenta de nuevo."
 
+msgid "Could not check for active methods and open jobs with gaps. Reload the page to try again."
+msgstr "No se pudo verificar métodos activos y órdenes de trabajo abiertas con brechas. Recarga la página para volver a intentar."
+
+msgid "Could not check the storage units of this job's materials. Close this dialog and open it again to try again."
+msgstr "No se pudieron verificar las unidades de almacenamiento de los materiales de esta orden de trabajo. Cierra este diálogo y ábrelo de nuevo para volver a intentar."
+
 #. placeholder {0}: d.failed.length
 #. placeholder {1}: d.failed .map((f) => f.readableId) .join(", ")
 msgid "Could not dissolve {0}: {1} — production already recorded"
@@ -20287,9 +20293,11 @@ msgstr "Establezca un cliente en esta devolución para agregar desde un envío."
 msgid "Set a Pull From on each one through a new version."
 msgstr "Establezca un Extraer de en cada uno a través de una nueva versión."
 
-#. placeholder {0}: summarizeList( job.materialsWithoutStorageUnit.map( (m) => m.description ) )
-msgid "set a Pull From storage unit on {0}"
-msgstr "Configurar una unidad de almacenamiento de origen en {0}"
+msgid "set a Pull From storage unit on {names}"
+msgstr "establecer una unidad de almacenamiento de extracción para {names}"
+
+msgid "set a Pull From storage unit on {names} and {more} more"
+msgstr "establecer una unidad de almacenamiento de extracción para {names} y {more} más"
 
 msgid "Set a supplier on this return to add from a receipt."
 msgstr "Establecer un proveedor en esta devolución para agregar desde una recepción."
@@ -21329,6 +21337,9 @@ msgstr "unidades de almacenamiento"
 
 msgid "Storage Units"
 msgstr "Unidades de Almacenamiento"
+
+msgid "Storage Units Not Checked"
+msgstr "Unidades de almacenamiento sin verificar"
 
 msgid "Store a fixed number of days on this item. Expiry start date is set on each batch or serial when it's created (or when the trigger process runs, if set)."
 msgstr "Almacenar cantidad fija de días en este artículo. La fecha de inicio de caducidad se establece en cada lote de producción o serial cuando se crea (o cuando se ejecuta el proceso de desencadenador, si se configura)."

@@ -4,9 +4,12 @@
 
 import { describe, expect, it } from "vitest";
 import {
+  activationRefusalMessage,
   binShortfall,
   missingPullFromLocations,
   needsPullFrom,
+  pullFromStorageUnit,
+  strictBackflushLockKey,
   summarizeList
 } from "./strict-backflush.ts";
 
@@ -128,5 +131,70 @@ describe("summarizeList", () => {
 
   it("is empty for no entries", () => {
     expect(summarizeList([])).toBe("");
+  });
+});
+
+describe("pullFromStorageUnit", () => {
+  it("is the line's own bin when nothing was picked", () => {
+    expect(pullFromStorageUnit("SHELF-A", [])).toBe("SHELF-A");
+  });
+
+  it("is the bin a pick took the line from, once the line points at lineside", () => {
+    expect(
+      pullFromStorageUnit("LINESIDE", [
+        { storageUnitId: "SHELF-A", toStorageUnitId: "LINESIDE" }
+      ])
+    ).toBe("SHELF-A");
+  });
+
+  it("takes the oldest pick: a later list sources from the fullest bin", () => {
+    expect(
+      pullFromStorageUnit("LINESIDE", [
+        { storageUnitId: "SHELF-A", toStorageUnitId: "LINESIDE" },
+        { storageUnitId: "SHELF-B", toStorageUnitId: "LINESIDE" }
+      ])
+    ).toBe("SHELF-A");
+  });
+
+  it("ignores picks into another bin, and picks with no source", () => {
+    expect(
+      pullFromStorageUnit("SHELF-A", [
+        { storageUnitId: "SHELF-B", toStorageUnitId: "LINESIDE" },
+        { storageUnitId: null, toStorageUnitId: "SHELF-A" },
+        { storageUnitId: "SHELF-A", toStorageUnitId: "SHELF-A" }
+      ])
+    ).toBe("SHELF-A");
+  });
+
+  it("is null for a line with no bin", () => {
+    expect(
+      pullFromStorageUnit(null, [
+        { storageUnitId: "SHELF-A", toStorageUnitId: "LINESIDE" }
+      ])
+    ).toBeNull();
+  });
+});
+
+describe("strictBackflushLockKey", () => {
+  it("is the key SQL backflush_job_materials builds", () => {
+    // 'strict-backflush:' || company || ':' || bin || ':' || item
+    expect(strictBackflushLockKey("CO", "BIN", "ITEM")).toBe(
+      "strict-backflush:CO:BIN:ITEM"
+    );
+  });
+});
+
+describe("activationRefusalMessage", () => {
+  it("names the parts and caps the list", () => {
+    expect(activationRefusalMessage(["PART-1", "PART-2"])).toBe(
+      "Set a Pull From storage unit before you activate this version: PART-1; PART-2"
+    );
+    expect(
+      activationRefusalMessage(
+        Array.from({ length: 8 }, (_, index) => `PART-${index + 1}`)
+      )
+    ).toBe(
+      "Set a Pull From storage unit before you activate this version: PART-1; PART-2; PART-3; PART-4; PART-5; and 3 more"
+    );
   });
 });

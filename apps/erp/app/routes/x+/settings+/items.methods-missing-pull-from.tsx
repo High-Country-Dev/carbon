@@ -2,7 +2,9 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
+import { flash } from "@carbon/auth/session.server";
 import { getLogger } from "@carbon/logger";
 import {
   Drawer,
@@ -11,13 +13,12 @@ import {
   DrawerHeader,
   DrawerTitle
 } from "@carbon/react";
+import { redirect } from "@carbon/utils";
 import { Trans } from "@lingui/react/macro";
 import type { LoaderFunctionArgs } from "react-router";
 import { useLoaderData, useNavigate } from "react-router";
-import {
-  getActiveMethodsMissingPullFrom,
-  MethodsMissingPullFromTable
-} from "~/modules/settings";
+import { MethodsMissingPullFromTable } from "~/modules/settings";
+import { getActiveMethodsMissingPullFrom } from "~/modules/settings/settings.server";
 import { getDatabaseClient } from "~/services/database.server";
 import { path } from "~/utils/path";
 import { pageInMemory } from "~/utils/query";
@@ -40,12 +41,25 @@ export async function loader({ request }: LoaderFunctionArgs) {
       companyId,
       error: methods.error
     });
+    // An empty table would read as "nothing to fix".
+    throw redirect(
+      path.to.itemsSettings,
+      await flash(
+        request,
+        error(methods.error, "Failed to load the methods missing a Pull From")
+      )
+    );
   }
 
   const page = pageInMemory(
     methods.data ?? [],
     new URL(request.url).searchParams,
-    (method) => [method.readableId, method.name, ...method.materials]
+    (method) => [
+      method.readableId,
+      method.name,
+      ...method.materials,
+      ...method.locations
+    ]
   );
   return { methods: page.rows, count: page.count };
 }

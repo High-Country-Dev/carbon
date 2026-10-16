@@ -6051,6 +6051,12 @@ msgstr "Could not analyze region: {0}"
 msgid "Could not build PDF. Try again."
 msgstr "Could not build PDF. Try again."
 
+msgid "Could not check for active methods and open jobs with gaps. Reload the page to try again."
+msgstr "Could not check for active methods and open jobs with gaps. Reload the page to try again."
+
+msgid "Could not check the storage units of this job's materials. Close this dialog and open it again to try again."
+msgstr "Could not check the storage units of this job's materials. Close this dialog and open it again to try again."
+
 #. placeholder {0}: d.failed.length
 #. placeholder {1}: d.failed .map((f) => f.readableId) .join(", ")
 msgid "Could not dissolve {0}: {1} — production already recorded"
@@ -20287,9 +20293,11 @@ msgstr "Set a customer on this return to add from a shipment."
 msgid "Set a Pull From on each one through a new version."
 msgstr "Set a Pull From on each one through a new version."
 
-#. placeholder {0}: summarizeList( job.materialsWithoutStorageUnit.map( (m) => m.description ) )
-msgid "set a Pull From storage unit on {0}"
-msgstr "set a Pull From storage unit on {0}"
+msgid "set a Pull From storage unit on {names}"
+msgstr "set a Pull From storage unit on {names}"
+
+msgid "set a Pull From storage unit on {names} and {more} more"
+msgstr "set a Pull From storage unit on {names} and {more} more"
 
 msgid "Set a supplier on this return to add from a receipt."
 msgstr "Set a supplier on this return to add from a receipt."
@@ -21329,6 +21337,9 @@ msgstr "storage units"
 
 msgid "Storage Units"
 msgstr "Storage Units"
+
+msgid "Storage Units Not Checked"
+msgstr "Storage Units Not Checked"
 
 msgid "Store a fixed number of days on this item. Expiry start date is set on each batch or serial when it's created (or when the trigger process runs, if set)."
 msgstr "Store a fixed number of days on this item. Expiry start date is set on each batch or serial when it's created (or when the trigger process runs, if set)."

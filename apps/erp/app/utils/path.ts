@@ -268,6 +268,7 @@ export const path = {
       processes: `${api}/resources/processes`,
       productionKpi: (key: string) =>
         generatePath(`${api}/production/kpi/${key}`),
+      pullFromLocations: `${api}/items/pull-from-locations`,
       purchaseInvoice: (id: string) =>
         generatePath(`${api}/purchase-invoice/${id}`),
       purchaseOrderFinalize: (id: string) =>

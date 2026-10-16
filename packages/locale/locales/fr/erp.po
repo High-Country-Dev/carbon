@@ -6051,6 +6051,12 @@ msgstr "Impossible d'analyser la région : {0}"
 msgid "Could not build PDF. Try again."
 msgstr "Impossible de créer le PDF. Réessayez."
 
+msgid "Could not check for active methods and open jobs with gaps. Reload the page to try again."
+msgstr "Impossible de vérifier les méthodes actives et les ordres de fabrication ouverts avec des lacunes. Rechargez la page pour réessayer."
+
+msgid "Could not check the storage units of this job's materials. Close this dialog and open it again to try again."
+msgstr "Impossible de vérifier les unités de stockage des matériaux de cet ordre de fabrication. Fermez cette boîte de dialogue et ouvrez-la à nouveau pour réessayer."
+
 #. placeholder {0}: d.failed.length
 #. placeholder {1}: d.failed .map((f) => f.readableId) .join(", ")
 msgid "Could not dissolve {0}: {1} — production already recorded"
@@ -20287,9 +20293,11 @@ msgstr "Définissez un client sur ce retour pour ajouter à partir d'une expédi
 msgid "Set a Pull From on each one through a new version."
 msgstr "Définissez un Prélèvement depuis pour chacun via une nouvelle version."
 
-#. placeholder {0}: summarizeList( job.materialsWithoutStorageUnit.map( (m) => m.description ) )
-msgid "set a Pull From storage unit on {0}"
-msgstr "Définir une unité de stockage de prélèvement sur {0}"
+msgid "set a Pull From storage unit on {names}"
+msgstr "définir une unité de stockage Prélever de sur {names}"
+
+msgid "set a Pull From storage unit on {names} and {more} more"
+msgstr "définir une unité de stockage Prélever de sur {names} et {more} de plus"
 
 msgid "Set a supplier on this return to add from a receipt."
 msgstr "Définir un fournisseur sur ce retour pour ajouter à partir d'une réception."
@@ -21329,6 +21337,9 @@ msgstr "unités de stockage"
 
 msgid "Storage Units"
 msgstr "Unités de stockage"
+
+msgid "Storage Units Not Checked"
+msgstr "Unités de stockage non vérifiées"
 
 msgid "Store a fixed number of days on this item. Expiry start date is set on each batch or serial when it's created (or when the trigger process runs, if set)."
 msgstr "Stocker un nombre fixe de jours sur cet article. La date de début de péremption est définie sur chaque lot de production ou numéro de série lors de sa création (ou lorsque le processus déclencheur s'exécute, s'il est défini)."

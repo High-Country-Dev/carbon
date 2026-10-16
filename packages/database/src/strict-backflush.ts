@@ -6,7 +6,8 @@
 // .ai/specs/2026-10-14-strict-backflush.md). One rule for "which material
 // lines must name a Pull From storage unit", read by method activation
 // (`convert`), job release and the Settings → Items card, so the three can
-// never disagree about which lines count.
+// never disagree about which lines count. The backflush reads the location
+// test, the Pull From of a picked line and the lock key from here too.
 
 import type { Kysely, KyselyDatabase } from "./client.ts";
 import { round } from "./precision.ts";
@@ -59,10 +60,7 @@ export function missingPullFromLocations(
 // builds nothing; one with no storage unit has no bin a line could name (a
 // test lab at head office), so requiring one there would block activation
 // for good.
-export async function getPullFromLocations(
-  db: Kysely<KyselyDatabase>,
-  companyId: string
-): Promise<{ id: string; name: string }[]> {
+function pullFromLocations(db: Kysely<KyselyDatabase>, companyId: string) {
   return db
     .selectFrom("location")
     .where("location.companyId", "=", companyId)
@@ -85,10 +83,152 @@ export async function getPullFromLocations(
           .where("storageUnit.active", "=", true)
           .select("storageUnit.id")
       )
-    )
+    );
+}
+
+export async function getPullFromLocations(
+  db: Kysely<KyselyDatabase>,
+  companyId: string
+): Promise<{ id: string; name: string }[]> {
+  return pullFromLocations(db, companyId)
     .select(["location.id", "location.name"])
     .orderBy("location.name")
     .execute();
+}
+
+// Whether strict backflush applies at a job's location. Activation exempts
+// the other locations, so a backflush there must not refuse a line for a bin
+// it could never name.
+export async function isPullFromLocation(
+  db: Kysely<KyselyDatabase>,
+  companyId: string,
+  locationId: string
+): Promise<boolean> {
+  const row = await pullFromLocations(db, companyId)
+    .where("location.id", "=", locationId)
+    .select("location.id")
+    .executeTakeFirst();
+  return row !== undefined;
+}
+
+export type StrictBackflushSettings = {
+  strict: boolean;
+  /** Only meaningful while `strict`: refuse a short bin instead of letting it
+   *  go negative. */
+  preventNegative: boolean;
+};
+
+/**
+ * The company's strict backflush settings. With `locationId`, `strict` is also
+ * false at a location `getPullFromLocations` leaves out (no active work center
+ * or no active storage unit): activation never asked for a Pull From there.
+ */
+export async function getStrictBackflushSettings(
+  db: Kysely<KyselyDatabase>,
+  companyId: string,
+  locationId?: string | null
+): Promise<StrictBackflushSettings> {
+  const row = await db
+    .selectFrom("companySettings")
+    .where("id", "=", companyId)
+    .select(["requireBackflushStorageUnit", "preventNegativeBackflush"])
+    .executeTakeFirst();
+  const strict =
+    row?.requireBackflushStorageUnit === true &&
+    (!locationId || (await isPullFromLocation(db, companyId, locationId)));
+  return {
+    strict,
+    preventNegative: row?.preventNegativeBackflush !== false
+  };
+}
+
+/**
+ * The parts of a make method that block its activation: pulled, stocked lines
+ * with no Pull From at one of `getPullFromLocations`. One entry per part — the
+ * refusal names what to fix, not where. Read by the `convert` activation and
+ * the New Version route.
+ */
+export async function getMethodPartsMissingPullFrom(
+  db: Kysely<KyselyDatabase>,
+  args: { makeMethodId: string; companyId: string }
+): Promise<string[]> {
+  const { makeMethodId, companyId } = args;
+
+  // Two awaits, not `inOrder`: this module is bundled for the browser (the BoM
+  // badges read `needsPullFrom`), and `./rows` brings the Kysely runtime.
+  const lines = await db
+    .selectFrom("methodMaterial")
+    .innerJoin("item", "item.id", "methodMaterial.itemId")
+    .where("methodMaterial.makeMethodId", "=", makeMethodId)
+    .where("methodMaterial.companyId", "=", companyId)
+    .where("item.companyId", "=", companyId)
+    .select([
+      "methodMaterial.methodType",
+      "methodMaterial.itemType",
+      "methodMaterial.storageUnitIds",
+      "methodMaterial.order",
+      "item.id as itemId",
+      "item.itemTrackingType",
+      "item.readableIdWithRevision"
+    ])
+    .orderBy("methodMaterial.order")
+    .execute();
+  const locations = await getPullFromLocations(db, companyId);
+
+  const locationIds = locations.map((location) => location.id);
+  return [
+    ...new Set(
+      lines
+        .filter(needsPullFrom)
+        .filter(
+          (line) =>
+            missingPullFromLocations(line.storageUnitIds, locationIds).length >
+            0
+        )
+        .map((line) => line.readableIdWithRevision ?? line.itemId)
+    )
+  ];
+}
+
+export function activationRefusalMessage(parts: readonly string[]): string {
+  return `Set a Pull From storage unit before you activate this version: ${summarizeList(parts)}`;
+}
+
+export type PickLineBins = {
+  storageUnitId: string | null;
+  toStorageUnitId: string | null;
+};
+
+// The Pull From of a job material line. Posting a pick points the line at the
+// lineside bin it was picked to (`pointJobMaterialAtLineside`), so after a pick
+// `storageUnitId` no longer names the Pull From. The pick line still holds it:
+// the picking list generator sources a line from its Pull From. `pickLines`
+// must be oldest first — a later list for the same line is generated after the
+// pointer moved, and sources from the fullest warehouse bin instead. SQL
+// `backflush_job_materials` resolves the same way.
+export function pullFromStorageUnit(
+  storageUnitId: string | null,
+  pickLines: readonly PickLineBins[]
+): string | null {
+  if (!storageUnitId) return null;
+  const pick = pickLines.find(
+    (line) =>
+      line.toStorageUnitId === storageUnitId &&
+      line.storageUnitId !== null &&
+      line.storageUnitId !== storageUnitId
+  );
+  return pick?.storageUnitId ?? storageUnitId;
+}
+
+// The advisory lock key for strict draws on one bin and item. SQL
+// `backflush_job_materials` builds the same string; both lock with
+// `pg_advisory_xact_lock(hashtextextended(key, 0))`.
+export function strictBackflushLockKey(
+  companyId: string,
+  storageUnitId: string,
+  itemId: string
+): string {
+  return `strict-backflush:${companyId}:${storageUnitId}:${itemId}`;
 }
 
 // A refusal is shown as a toast, so it names only the first `limit` entries and

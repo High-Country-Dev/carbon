@@ -2985,7 +2985,9 @@ export type JobReleaseReadiness = {
 
 // Strict backflush (companySettings.requireBackflushStorageUnit): a job may not
 // be released while a pulled, stocked line has no storage unit, because its
-// backflush would be refused. Keyed by job id; empty while the setting is off.
+// backflush would be refused. Keyed by job id; empty while the setting is off,
+// and for a job at a location strict backflush skips (no active work center or
+// no active storage unit — `getPullFromLocations`).
 async function getMaterialsWithoutStorageUnit(
   client: SupabaseClient<Database>,
   jobIds: string[],
@@ -3007,7 +3009,7 @@ async function getMaterialsWithoutStorageUnit(
     client
       .from("jobMaterial")
       .select(
-        "id, jobId, description, methodType, itemType, storageUnitId, item(itemTrackingType, readableIdWithRevision)"
+        "id, jobId, description, methodType, itemType, storageUnitId, item(itemTrackingType, readableIdWithRevision), job(locationId)"
       )
       .in("jobId", batch)
       .eq("companyId", companyId)
@@ -3016,9 +3018,42 @@ async function getMaterialsWithoutStorageUnit(
   );
   if (lines.error) return { data: {}, error: lines.error };
 
+  const jobLocationIds = [
+    ...new Set(
+      (lines.data ?? []).flatMap((line) =>
+        line.job?.locationId ? [line.job.locationId] : []
+      )
+    )
+  ];
+  // The same test as getPullFromLocations, for these jobs' locations only:
+  // one row per location that has an active work center and storage unit.
+  const pullFromLocations =
+    jobLocationIds.length === 0
+      ? { data: [], error: null }
+      : await client
+          .from("location")
+          .select("id, workCenter!inner(id), storageUnit!inner(id)")
+          .in("id", jobLocationIds)
+          .eq("companyId", companyId)
+          .eq("workCenter.active", true)
+          .eq("storageUnit.active", true)
+          .limit(1, { referencedTable: "workCenter" })
+          .limit(1, { referencedTable: "storageUnit" });
+  if (pullFromLocations.error)
+    return { data: {}, error: pullFromLocations.error };
+  const strictLocationIds = new Set(
+    (pullFromLocations.data ?? []).map((location) => location.id)
+  );
+
   const byJob: Record<string, { id: string; description: string }[]> = {};
   for (const [jobId, jobLines] of Object.entries(
-    groupBy(lines.data ?? [], (line) => line.jobId)
+    groupBy(
+      (lines.data ?? []).filter(
+        (line) =>
+          line.job?.locationId && strictLocationIds.has(line.job.locationId)
+      ),
+      (line) => line.jobId
+    )
   )) {
     const missing = materialsWithoutStorageUnit(jobLines);
     if (missing.length > 0) byJob[jobId] = missing;

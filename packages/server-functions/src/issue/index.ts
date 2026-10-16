@@ -78,6 +78,8 @@ import {
   binCoverProblem,
   getStrictBackflushSettings,
   isStrictBackflush,
+  lockStrictBins,
+  resolvePullFromStorageUnits,
   strictBackflushRefusal
 } from "../lib/strict-backflush";
 import reschedule from "../reschedule";
@@ -135,7 +137,8 @@ async function issueJobOperationMaterials(
     postingStatus,
     accountDefaults,
     dimensionMap,
-    db
+    db,
+    dryRun = false
   }: {
     jobOperationId: string;
     quantity: number;
@@ -146,6 +149,9 @@ async function issueJobOperationMaterials(
     accountDefaults: ConsumeAccountDefaults;
     dimensionMap: Map<string, string>;
     db: Kysely<KyselyDatabase>;
+    // Stop after the strict backflush check: throw DryRunRollback before any
+    // ledger, cost or journal row is built (the caller rolls back).
+    dryRun?: boolean;
   }
 ) {
   const materialsToIssue = await trx
@@ -234,9 +240,26 @@ async function issueJobOperationMaterials(
   });
   const { strict, preventNegative } = await getStrictBackflushSettings(
     trx,
-    companyId
+    companyId,
+    job.locationId
   );
-  // Strict backflush: every material the bins cannot cover, refused together.
+  // Strict backflush: what no pick covers comes from each material's Pull
+  // From, and every material the bins cannot cover is refused together.
+  const pullFrom = strict
+    ? await resolvePullFromStorageUnits(trx, companyId, materialsToIssue)
+    : new Map<string, string | null>();
+  if (strict && preventNegative) {
+    await lockStrictBins(
+      trx,
+      companyId,
+      materialsToIssue
+        .filter((material) => itemIdIsTracked.get(material.itemId))
+        .map((material) => ({
+          storageUnitId: pullFrom.get(material.id),
+          itemId: material.itemId
+        }))
+    );
+  }
   const strictProblems: string[] = [];
   const takenShared: SharedTakes = new Map();
   for await (const material of materialsToIssue) {
@@ -294,16 +317,20 @@ async function issueJobOperationMaterials(
       // Strict backflush: what no pick covered comes from the material's own
       // storage unit only — no pick-method bin, no fullest bin — and a
       // missing or short bin refuses the whole completion.
+      const storageUnitId = pullFrom.get(material.id) ?? null;
       const problem = await binCoverProblem(trx, {
         companyId,
         itemId: material.itemId,
         locationId: job.locationId,
-        storageUnitId: material.storageUnitId,
+        storageUnitId,
         quantity: remaining,
         plannedRows: itemLedgerInserts,
-        preventNegative
+        preventNegative,
+        jobReadableId: job.jobId
       });
       if (problem) strictProblems.push(problem);
+      // Kept even when refused: a later material on the same bin then counts
+      // this need, so the refusal names every shortfall at once.
       itemLedgerInserts.push({
         entryType: "Consumption",
         documentType: "Job Consumption",
@@ -313,7 +340,7 @@ async function issueJobOperationMaterials(
         itemId: material.itemId,
         quantity: -remaining,
         locationId: job.locationId,
-        storageUnitId: material.storageUnitId,
+        storageUnitId,
         postingDate: today,
         createdBy: userId
       });
@@ -410,6 +437,7 @@ async function issueJobOperationMaterials(
   // Nothing above is committed until the transaction ends, so throwing here
   // rolls back every row this call wrote.
   if (strictProblems.length > 0) throw strictBackflushRefusal(strictProblems);
+  if (dryRun) throw new DryRunRollback();
 
   // Total material cost this call relieved from inventory into WIP — the
   // jobOperationScrap case posts its WIP→scrap journal from this figure so a
@@ -2091,8 +2119,10 @@ const issue = defineServerFn({
               postingStatus,
               accountDefaults,
               dimensionMap,
-              db
+              db,
+              dryRun
             });
+            // Reached on a dry run only when the operation had nothing to issue.
             if (dryRun) throw new DryRunRollback();
           });
         } catch (err) {
@@ -2984,7 +3014,8 @@ const issue = defineServerFn({
             trx
               .selectFrom("job")
               .where("id", "=", jobOperation?.jobId!)
-              .select("locationId")
+              .where("companyId", "=", companyId)
+              .select(["locationId", "jobId"])
               .executeTakeFirst(),
             trx
               .selectFrom("item")
@@ -3085,10 +3116,19 @@ const issue = defineServerFn({
                 // keeps the bin chosen above.
                 const strictSettings =
                   adjustmentType !== "Positive Adjmt." && remaining > 0
-                    ? await getStrictBackflushSettings(trx, companyId)
+                    ? await getStrictBackflushSettings(
+                        trx,
+                        companyId,
+                        job?.locationId
+                      )
                     : null;
                 if (strictSettings?.strict) {
-                  storageUnitId = material.storageUnitId;
+                  storageUnitId =
+                    (
+                      await resolvePullFromStorageUnits(trx, companyId, [
+                        material
+                      ])
+                    ).get(material.id) ?? null;
                   await assertBinCovers(trx, {
                     companyId,
                     itemId: material.itemId,
@@ -3096,7 +3136,8 @@ const issue = defineServerFn({
                     storageUnitId,
                     quantity: remaining,
                     plannedRows: itemLedgerInserts,
-                    preventNegative: strictSettings.preventNegative
+                    preventNegative: strictSettings.preventNegative,
+                    jobReadableId: job?.jobId ?? material.jobId
                   });
                 }
                 itemLedgerInserts.push({

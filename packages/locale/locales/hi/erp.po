@@ -6051,6 +6051,12 @@ msgstr "क्षेत्र का विश्लेषण नहीं क�
 msgid "Could not build PDF. Try again."
 msgstr "PDF नहीं बना सके। फिर से कोशिश करें।"
 
+msgid "Could not check for active methods and open jobs with gaps. Reload the page to try again."
+msgstr "सक्रिय विधियों और अंतराल वाले खुले जॉब की जांच नहीं कर सके। पृष्ठ को फिर से लोड करने का प्रयास करें।"
+
+msgid "Could not check the storage units of this job's materials. Close this dialog and open it again to try again."
+msgstr "इस जॉब की सामग्री की भंडारण इकाइयाँ जाँची नहीं जा सकीं। फिर से प्रयास करने के लिए इस संवाद को बंद करके दोबारा खोलें।"
+
 #. placeholder {0}: d.failed.length
 #. placeholder {1}: d.failed .map((f) => f.readableId) .join(", ")
 msgid "Could not dissolve {0}: {1} — production already recorded"
@@ -20287,9 +20293,11 @@ msgstr "शिपमेंट से जोड़ने के लिए इस 
 msgid "Set a Pull From on each one through a new version."
 msgstr "एक नए संस्करण के माध्यम से प्रत्येक पर Pull From निर्दिष्ट करें।"
 
-#. placeholder {0}: summarizeList( job.materialsWithoutStorageUnit.map( (m) => m.description ) )
-msgid "set a Pull From storage unit on {0}"
-msgstr "खींचने की भंडारण इकाई को {0} पर सेट करें"
+msgid "set a Pull From storage unit on {names}"
+msgstr "{names} पर खींचने की भंडारण इकाई सेट करें"
+
+msgid "set a Pull From storage unit on {names} and {more} more"
+msgstr "{names} और {more} अधिक पर खींचने की भंडारण इकाई सेट करें"
 
 msgid "Set a supplier on this return to add from a receipt."
 msgstr "प्राप्ति से जोड़ने के लिए इस रिटर्न पर एक आपूर्तिकर्ता सेट करें।"
@@ -21329,6 +21337,9 @@ msgstr "भंडारण इकाइयाँ"
 
 msgid "Storage Units"
 msgstr "भंडारण इकाइयाँ"
+
+msgid "Storage Units Not Checked"
+msgstr "भंडारण इकाइयाँ जाँची नहीं गईं"
 
 msgid "Store a fixed number of days on this item. Expiry start date is set on each batch or serial when it's created (or when the trigger process runs, if set)."
 msgstr "इस आइटम पर निश्चित संख्या के दिनों के लिए भंडारण करें। समाप्ति प्रारंभ तिथि प्रत्येक बैच या सीरीयल पर सेट की जाती है जब यह बनाया जाता है (या जब ट्रिगर प्रक्रिया चलती है, यदि सेट है)।"

@@ -6051,6 +6051,12 @@ msgstr "Não foi possível analisar a região: {0}"
 msgid "Could not build PDF. Try again."
 msgstr "Não foi possível criar o PDF. Tente novamente."
 
+msgid "Could not check for active methods and open jobs with gaps. Reload the page to try again."
+msgstr "Não foi possível verificar Métodos Ativos e Ordens de produção Abertas com lacunas. Recarregue a página para tentar novamente."
+
+msgid "Could not check the storage units of this job's materials. Close this dialog and open it again to try again."
+msgstr "Não foi possível verificar as Unidades de armazenamento dos materiais desta Ordem de produção. Feche este diálogo e abra-o novamente para tentar novamente."
+
 #. placeholder {0}: d.failed.length
 #. placeholder {1}: d.failed .map((f) => f.readableId) .join(", ")
 msgid "Could not dissolve {0}: {1} — production already recorded"
@@ -20287,9 +20293,11 @@ msgstr "Defina um cliente nesta devolução para adicionar de uma remessa."
 msgid "Set a Pull From on each one through a new version."
 msgstr "Defina uma origem em cada um através de uma nova versão."
 
-#. placeholder {0}: summarizeList( job.materialsWithoutStorageUnit.map( (m) => m.description ) )
-msgid "set a Pull From storage unit on {0}"
-msgstr "definir uma unidade de armazenamento de origem em {0}"
+msgid "set a Pull From storage unit on {names}"
+msgstr "definir uma Unidade de armazenamento de Puxar De em {names}"
+
+msgid "set a Pull From storage unit on {names} and {more} more"
+msgstr "definir uma Unidade de armazenamento de Puxar De em {names} e {more} mais"
 
 msgid "Set a supplier on this return to add from a receipt."
 msgstr "Defina um fornecedor nesta devolução para adicionar de um recebimento."
@@ -21329,6 +21337,9 @@ msgstr "unidades de armazenamento"
 
 msgid "Storage Units"
 msgstr "Unidades de Armazenamento"
+
+msgid "Storage Units Not Checked"
+msgstr "Unidades de armazenamento não verificadas"
 
 msgid "Store a fixed number of days on this item. Expiry start date is set on each batch or serial when it's created (or when the trigger process runs, if set)."
 msgstr "Armazene um número fixo de dias neste item. A data de início da validade é definida em cada lote ou série quando é criado (ou quando o processo de acionamento é executado, se configurado)."

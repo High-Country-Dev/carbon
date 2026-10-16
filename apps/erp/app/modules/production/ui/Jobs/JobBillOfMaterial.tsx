@@ -78,7 +78,7 @@ import {
   useUrlParams,
   useUser
 } from "~/hooks";
-import { useCompanySettings } from "~/hooks/useCompanySettings";
+import { usePullFromLocationIds } from "~/hooks/usePullFromLocationIds";
 import { ItemTrackingType } from "~/modules/items";
 import {
   MaterialRowDetails,
@@ -293,11 +293,15 @@ const JobBillOfMaterial = ({
   });
 
   const [storeItems] = useItems();
+  const jobData = useRouteData<{ job: Job }>(path.to.job(jobId));
   // Strict backflush: mark collapsed rows with no storage unit to backflush
-  // from — the same test as the open line's "No storage unit" badge.
-  const companySettings = useCompanySettings();
+  // from, when the job's location needs one — the test release refuses on.
+  const pullFromLocationIds = usePullFromLocationIds();
+  const jobLocationId = jobData?.job?.locationId;
   const missingPullFrom = (material: Material) =>
-    companySettings?.requireBackflushStorageUnit === true &&
+    pullFromLocationIds !== null &&
+    !!jobLocationId &&
+    pullFromLocationIds.includes(jobLocationId) &&
     !material.storageUnitId &&
     needsPullFrom({
       methodType: material.methodType ?? null,
@@ -311,8 +315,6 @@ const JobBillOfMaterial = ({
     checkedState,
     missingPullFrom
   ).sort((a, b) => a.data.order - b.data.order);
-
-  const jobData = useRouteData<{ job: Job }>(path.to.job(jobId));
   const isDisabled = ["Completed", "Cancelled"].includes(
     jobData?.job?.status ?? ""
   );
@@ -685,6 +687,11 @@ function MaterialForm({
     });
   };
 
+  const [changedItemTracking, setChangedItemTracking] = useState<{
+    itemId: string;
+    itemTrackingType: string | null;
+  } | null>(null);
+
   const onItemChange = async (itemId: string) => {
     if (!carbon) return;
     if (itemId === params.itemId) {
@@ -730,6 +737,10 @@ function MaterialForm({
       storageUnitId: pickMethod.data?.defaultStorageUnitId ?? "",
       itemReplenishmentSystem: item.data?.replenishmentSystem ?? "Buy"
     }));
+    setChangedItemTracking({
+      itemId,
+      itemTrackingType: item.data?.itemTrackingType ?? null
+    });
 
     if (item.data?.type) {
       setItemType(item.data.type as MethodItemType);
@@ -748,14 +759,21 @@ function MaterialForm({
 
   // Strict backflush: a pulled, stocked line is backflushed only from its own
   // storage unit, so "Default Storage Unit" would hide a line that will be
-  // refused at release and at backflush.
-  const companySettings = useCompanySettings();
+  // refused at release and at backflush. A changed item's tracking type comes
+  // from `onItemChange`, keyed by the item it was read for.
+  const pullFromLocationIds = usePullFromLocationIds();
+  const itemTrackingType =
+    changedItemTracking?.itemId === itemData.itemId
+      ? changedItemTracking.itemTrackingType
+      : (item.data.item?.itemTrackingType ?? null);
   const requiresPullFrom =
-    companySettings?.requireBackflushStorageUnit === true &&
+    pullFromLocationIds !== null &&
+    !!locationId &&
+    pullFromLocationIds.includes(locationId) &&
     needsPullFrom({
       methodType: itemData.methodType,
       itemType,
-      itemTrackingType: item.data.item?.itemTrackingType ?? null
+      itemTrackingType
     });
 
   const isTracked =

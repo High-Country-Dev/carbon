@@ -6051,6 +6051,12 @@ msgstr "无法分析区域：{0}"
 msgid "Could not build PDF. Try again."
 msgstr "无法生成 PDF。请重试。"
 
+msgid "Could not check for active methods and open jobs with gaps. Reload the page to try again."
+msgstr "无法检查启用方法和未结工单中的缺口。请重新加载页面重试。"
+
+msgid "Could not check the storage units of this job's materials. Close this dialog and open it again to try again."
+msgstr "无法检查此工单物料的存储单元。关闭此对话框并重新打开重试。"
+
 #. placeholder {0}: d.failed.length
 #. placeholder {1}: d.failed .map((f) => f.readableId) .join(", ")
 msgid "Could not dissolve {0}: {1} — production already recorded"
@@ -20287,9 +20293,11 @@ msgstr "在此退货上设置客户以从发货中添加。"
 msgid "Set a Pull From on each one through a new version."
 msgstr "通过新版本为每个物料设置拉取来源。"
 
-#. placeholder {0}: summarizeList( job.materialsWithoutStorageUnit.map( (m) => m.description ) )
-msgid "set a Pull From storage unit on {0}"
-msgstr "为 {0} 设置取货存储单元"
+msgid "set a Pull From storage unit on {names}"
+msgstr "在{names}上设置拉取存储单元"
+
+msgid "set a Pull From storage unit on {names} and {more} more"
+msgstr "在{names}和{more}个其他项目上设置拉取存储单元"
 
 msgid "Set a supplier on this return to add from a receipt."
 msgstr "为此退货指定供应商以从其收货中添加"
@@ -21329,6 +21337,9 @@ msgstr "存储单元"
 
 msgid "Storage Units"
 msgstr "存储单元"
+
+msgid "Storage Units Not Checked"
+msgstr "存储单元未检查"
 
 msgid "Store a fixed number of days on this item. Expiry start date is set on each batch or serial when it's created (or when the trigger process runs, if set)."
 msgstr "在此物料上存储固定天数。在创建每个生产批次或序列号时（或触发工艺运行时，如果已设置）设置有效期开始日期。"

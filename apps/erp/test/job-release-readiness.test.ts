@@ -23,7 +23,7 @@ function cappedClient(tables: Record<string, Record<string, unknown>[]>) {
     from: (table: string) => {
       let rows = tables[table] ?? [];
       const chain: Record<string, any> = {};
-      for (const method of ["select", "eq", "is", "order"]) {
+      for (const method of ["select", "eq", "is", "order", "limit"]) {
         chain[method] = () => chain;
       }
       chain.in = (column: string, values: string[]) => {
@@ -128,15 +128,20 @@ describe("getJobReleaseReadiness", () => {
     ]);
   });
 
-  it("lists pulled, stocked lines with no storage unit under strict backflush", async () => {
+  // `location` holds the locations the client returns as pull-from locations
+  // (an active work center and storage unit); the stand-in does not evaluate
+  // the embedded filters, so the table lists only those.
+  function strictReadinessTables(pullFromLocationIds: string[]) {
     const line = {
       jobId: "job-1",
       storageUnitId: null,
       methodType: "Pull from Inventory",
-      itemType: "Part"
+      itemType: "Part",
+      job: { locationId: "loc-plant" }
     };
-    const { client } = cappedClient({
+    return {
       companySettings: [{ requireBackflushStorageUnit: true }],
+      location: pullFromLocationIds.map((id) => ({ id })),
       job: [{ id: "job-1", jobId: "J000001", status: "Planned", item: null }],
       jobMakeMethod: [{ id: "root", jobId: "job-1" }],
       jobOperation: [
@@ -179,7 +184,11 @@ describe("getJobReleaseReadiness", () => {
           }
         }
       ]
-    });
+    };
+  }
+
+  it("lists pulled, stocked lines with no storage unit under strict backflush", async () => {
+    const { client } = cappedClient(strictReadinessTables(["loc-plant"]));
 
     const { data, error } = await getJobReleaseReadiness(
       client,
@@ -191,6 +200,20 @@ describe("getJobReleaseReadiness", () => {
     expect(data?.jobs[0]?.materialsWithoutStorageUnit).toEqual([
       { id: "jm-bolt", description: "BOLT-10" }
     ]);
+  });
+
+  it("skips a job at a location with no active work center or storage unit", async () => {
+    // Activation never asked for a Pull From there, so release must not.
+    const { client } = cappedClient(strictReadinessTables([]));
+
+    const { data, error } = await getJobReleaseReadiness(
+      client,
+      ["job-1"],
+      "company-1"
+    );
+
+    expect(error).toBeNull();
+    expect(data?.jobs[0]?.materialsWithoutStorageUnit).toEqual([]);
   });
 
   it("reads a whole page of jobs without one long id list", async () => {

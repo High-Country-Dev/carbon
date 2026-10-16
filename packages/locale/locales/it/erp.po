@@ -6051,6 +6051,12 @@ msgstr "Impossibile analizzare la regione: {0}"
 msgid "Could not build PDF. Try again."
 msgstr "Impossibile creare il PDF. Riprova."
 
+msgid "Could not check for active methods and open jobs with gaps. Reload the page to try again."
+msgstr "Non è stato possibile verificare i metodi attivi e gli ordini di produzione aperti con lacune. Ricaricare la pagina per riprovare."
+
+msgid "Could not check the storage units of this job's materials. Close this dialog and open it again to try again."
+msgstr "Non è stato possibile verificare le unità di stoccaggio dei materiali di questo ordine di produzione. Chiudere questa finestra di dialogo e aprirla di nuovo per riprovare."
+
 #. placeholder {0}: d.failed.length
 #. placeholder {1}: d.failed .map((f) => f.readableId) .join(", ")
 msgid "Could not dissolve {0}: {1} — production already recorded"
@@ -20287,9 +20293,11 @@ msgstr "Imposta un cliente su questo reso per aggiungere da una spedizione."
 msgid "Set a Pull From on each one through a new version."
 msgstr "Imposta un Pull From su ognuno tramite una nuova versione."
 
-#. placeholder {0}: summarizeList( job.materialsWithoutStorageUnit.map( (m) => m.description ) )
-msgid "set a Pull From storage unit on {0}"
-msgstr "Imposta un'Unità di stoccaggio di Prelevamento da su {0}"
+msgid "set a Pull From storage unit on {names}"
+msgstr "impostare un'unità di stoccaggio Preleva da su {names}"
+
+msgid "set a Pull From storage unit on {names} and {more} more"
+msgstr "impostare un'unità di stoccaggio Preleva da su {names} e {more} altri"
 
 msgid "Set a supplier on this return to add from a receipt."
 msgstr "Imposta un fornitore su questo reso per aggiungere da un'entrata merci."
@@ -21329,6 +21337,9 @@ msgstr "unità di stoccaggio"
 
 msgid "Storage Units"
 msgstr "Unità di Stoccaggio"
+
+msgid "Storage Units Not Checked"
+msgstr "Unità di stoccaggio non verificate"
 
 msgid "Store a fixed number of days on this item. Expiry start date is set on each batch or serial when it's created (or when the trigger process runs, if set)."
 msgstr "Archivia un numero fisso di giorni su questo articolo. La data di inizio della scadenza viene impostata su ogni lotto o seriale quando viene creato (o quando il processo di attivazione viene eseguito, se impostato)."

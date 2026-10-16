@@ -5,7 +5,10 @@
 "use client";
 import { useCarbon } from "@carbon/auth";
 import type { Database } from "@carbon/database";
-import { needsPullFrom } from "@carbon/database/strict-backflush";
+import {
+  missingPullFromLocations,
+  needsPullFrom
+} from "@carbon/database/strict-backflush";
 import { ValidatedForm } from "@carbon/form";
 import {
   Badge,
@@ -87,7 +90,7 @@ import {
 } from "~/components/SortableList";
 import { CompactEmpty } from "~/components/Table/components/Compact/CompactEmpty";
 import { usePermissions, useUrlParams, useUser } from "~/hooks";
-import { useCompanySettings } from "~/hooks/useCompanySettings";
+import { usePullFromLocationIds } from "~/hooks/usePullFromLocationIds";
 import type {
   MethodItemType,
   MethodType,
@@ -258,21 +261,18 @@ const BillOfMaterial = ({
     configurationRules?.map((rule) => [rule.field, rule]) ?? []
   );
 
-  // Strict backflush: mark collapsed rows with no Pull From at the user's
-  // location — the same test as the open line's "No storage unit" badge.
-  const companySettings = useCompanySettings();
-  const { defaults } = useUser();
+  // Strict backflush: mark collapsed rows with no Pull From at a location
+  // that needs one — the test activation refuses on (`convert`).
+  const pullFromLocationIds = usePullFromLocationIds();
   const missingPullFrom = (material: Material) =>
-    companySettings?.requireBackflushStorageUnit === true &&
-    !!defaults.locationId &&
+    pullFromLocationIds !== null &&
     needsPullFrom({
       methodType: material.methodType,
       itemType: material.itemType,
       itemTrackingType: material.item?.itemTrackingType ?? null
     }) &&
-    !(material.storageUnitIds as Record<string, string> | null)?.[
-      defaults.locationId
-    ];
+    missingPullFromLocations(material.storageUnitIds, pullFromLocationIds)
+      .length > 0;
 
   const materials = makeItems(
     items,
@@ -717,14 +717,26 @@ function MaterialForm({
   });
 
   // Strict backflush: a pulled, stocked line must name the storage unit it is
-  // backflushed from before its method version can be made active.
-  const companySettings = useCompanySettings();
+  // backflushed from, at the selected location when that location needs one,
+  // before its method version can be made active. A changed item's tracking
+  // type comes from `onItemChange`, keyed by the item it was read for.
+  const pullFromLocationIds = usePullFromLocationIds();
+  const [changedItemTracking, setChangedItemTracking] = useState<{
+    itemId: string;
+    itemTrackingType: string | null;
+  } | null>(null);
+  const itemTrackingType =
+    changedItemTracking?.itemId === itemData.itemId
+      ? changedItemTracking.itemTrackingType
+      : (item.data.item?.itemTrackingType ?? null);
   const requiresPullFrom =
-    companySettings?.requireBackflushStorageUnit === true &&
+    pullFromLocationIds !== null &&
+    !!locationId &&
+    pullFromLocationIds.includes(locationId) &&
     needsPullFrom({
       methodType: itemData.methodType,
       itemType,
-      itemTrackingType: item.data.item?.itemTrackingType ?? null
+      itemTrackingType
     });
 
   // methodType/sourcingType are read-only mirrors of the component item
@@ -794,6 +806,10 @@ function MaterialForm({
       requiresSerialTracking: item.data?.itemTrackingType === "Serial",
       itemReplenishmentSystem: item.data?.replenishmentSystem ?? "Buy"
     }));
+    setChangedItemTracking({
+      itemId,
+      itemTrackingType: item.data?.itemTrackingType ?? null
+    });
     if (item.data?.type) {
       setItemType(item.data.type as MethodItemType);
     }
@@ -1022,8 +1038,8 @@ function MaterialForm({
                   (s) => s.value === itemData.storageUnitIds[locationId ?? ""]
                 )?.label ??
                   (itemData.methodType === "Make to Order"
-                    ? "WIP"
-                    : "Default Storage Unit")}
+                    ? t`WIP`
+                    : t`Default Storage Unit`)}
               </Badge>
             )}
             <IconButton

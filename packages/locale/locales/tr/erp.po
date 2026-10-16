@@ -6051,6 +6051,12 @@ msgstr "Bölge analiz edilemedi: {0}"
 msgid "Could not build PDF. Try again."
 msgstr "PDF oluşturulamadı. Lütfen tekrar deneyin."
 
+msgid "Could not check for active methods and open jobs with gaps. Reload the page to try again."
+msgstr "Boşluğu olan Aktif Yöntemler ve Açık İş emirleri kontrol edilemedi. Sayfayı yenileyerek yeniden deneyin."
+
+msgid "Could not check the storage units of this job's materials. Close this dialog and open it again to try again."
+msgstr "Bu İş emrinin malzemelerin Depolama birimleri kontrol edilemedi. İletişim kutusunu kapatıp yeniden açmayı deneyin."
+
 #. placeholder {0}: d.failed.length
 #. placeholder {1}: d.failed .map((f) => f.readableId) .join(", ")
 msgid "Could not dissolve {0}: {1} — production already recorded"
@@ -20287,9 +20293,11 @@ msgstr "Sevkiyattan eklemek için bu iade işlemine bir müşteri belirleyin."
 msgid "Set a Pull From on each one through a new version."
 msgstr "Her biri için yeni bir sürüm üzerinden çekme kaynağı belirleyin."
 
-#. placeholder {0}: summarizeList( job.materialsWithoutStorageUnit.map( (m) => m.description ) )
-msgid "set a Pull From storage unit on {0}"
-msgstr "{0} için çekilecek bir depolama birimi ayarla"
+msgid "set a Pull From storage unit on {names}"
+msgstr "{names} için Çekme Depolama Birimi ayarla"
+
+msgid "set a Pull From storage unit on {names} and {more} more"
+msgstr "{names} ve {more} diğer için Çekme Depolama Birimi ayarla"
 
 msgid "Set a supplier on this return to add from a receipt."
 msgstr "Mal kabulünden eklemek için bu iade kaydında bir tedarikçi belirleyin."
@@ -21329,6 +21337,9 @@ msgstr "depolama birimleri"
 
 msgid "Storage Units"
 msgstr "Depolama Birimleri"
+
+msgid "Storage Units Not Checked"
+msgstr "Depolama Birimleri Kontrol Edilmedi"
 
 msgid "Store a fixed number of days on this item. Expiry start date is set on each batch or serial when it's created (or when the trigger process runs, if set)."
 msgstr "Bu öğe için sabit bir gün sayısı saklayın. Son kullanma tarihi başlangıç tarihi, her parti veya seri oluşturulduğunda (veya tetikleyici işlem ayarlanmışsa çalıştığında) belirlenir."

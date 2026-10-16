@@ -13,10 +13,12 @@ import type { Database } from "@carbon/database";
 import type { KyselyDatabase as DB } from "@carbon/database/client";
 import { inOrder } from "@carbon/database/rows";
 import {
+  activationRefusalMessage,
   binShortfall,
-  getPullFromLocations,
-  missingPullFromLocations,
-  needsPullFrom,
+  getMethodPartsMissingPullFrom,
+  getStrictBackflushSettings,
+  pullFromStorageUnit,
+  strictBackflushLockKey,
   summarizeList
 } from "@carbon/database/strict-backflush";
 import { getLogger } from "@carbon/logger";
@@ -28,27 +30,10 @@ const logger = getLogger("server-functions", "strict-backflush");
 
 type LedgerInsert = Database["public"]["Tables"]["itemLedger"]["Insert"];
 
-export type StrictBackflushSettings = {
-  strict: boolean;
-  /** Only meaningful while `strict`: refuse a short bin instead of letting it
-   *  go negative. */
-  preventNegative: boolean;
-};
-
-export async function getStrictBackflushSettings(
-  db: Kysely<DB>,
-  companyId: string
-): Promise<StrictBackflushSettings> {
-  const row = await db
-    .selectFrom("companySettings")
-    .where("id", "=", companyId)
-    .select(["requireBackflushStorageUnit", "preventNegativeBackflush"])
-    .executeTakeFirst();
-  return {
-    strict: row?.requireBackflushStorageUnit === true,
-    preventNegative: row?.preventNegativeBackflush !== false
-  };
-}
+export {
+  getStrictBackflushSettings,
+  type StrictBackflushSettings
+} from "@carbon/database/strict-backflush";
 
 export async function isStrictBackflush(
   db: Kysely<DB>,
@@ -61,12 +46,75 @@ type BinCoverArgs = {
   companyId: string;
   itemId: string;
   locationId: string;
+  /** The material's Pull From (`resolvePullFromStorageUnits`). */
   storageUnitId: string | null | undefined;
   quantity: number;
   plannedRows: LedgerInsert[];
   /** Refuse a short bin (true) or let it go negative (false). */
   preventNegative: boolean;
+  /** The job's readable id, for the missing-bin message. */
+  jobReadableId: string;
 };
+
+/**
+ * The Pull From of each material, by job material id. A pick points a line at
+ * lineside; `pullFromStorageUnit` recovers the bin it was picked from, so what
+ * no pick covered still comes from the Pull From.
+ */
+export async function resolvePullFromStorageUnits(
+  db: Kysely<DB>,
+  companyId: string,
+  materials: { id: string; storageUnitId: string | null }[]
+): Promise<Map<string, string | null>> {
+  const ids = materials.map((material) => material.id);
+  const pickLines =
+    ids.length === 0
+      ? []
+      : await db
+          .selectFrom("pickingListLine")
+          .where("companyId", "=", companyId)
+          .where("jobMaterialId", "in", ids)
+          .where("storageUnitId", "is not", null)
+          .select(["jobMaterialId", "storageUnitId", "toStorageUnitId"])
+          .orderBy("createdAt")
+          .orderBy("id")
+          .execute();
+  return new Map(
+    materials.map((material) => [
+      material.id,
+      pullFromStorageUnit(
+        material.storageUnitId,
+        pickLines.filter((line) => line.jobMaterialId === material.id)
+      )
+    ])
+  );
+}
+
+/**
+ * Takes the strict lock of every (bin, item) pair for the rest of the
+ * caller's transaction, in one fixed order (by key hash), so two completions
+ * drawing the same pairs cannot deadlock. SQL `backflush_job_materials` locks
+ * in the same order. Locks are re-entrant, so taking one twice is harmless.
+ */
+export async function lockStrictBins(
+  db: Kysely<DB>,
+  companyId: string,
+  pairs: { storageUnitId: string | null | undefined; itemId: string }[]
+): Promise<void> {
+  const keys = [
+    ...new Set(
+      pairs.flatMap((pair) =>
+        pair.storageUnitId
+          ? [strictBackflushLockKey(companyId, pair.storageUnitId, pair.itemId)]
+          : []
+      )
+    )
+  ];
+  if (keys.length === 0) return;
+  await sql`SELECT pg_advisory_xact_lock(k) FROM (SELECT DISTINCT hashtextextended(key, 0) AS k FROM unnest(${keys}::text[]) AS key ORDER BY k) AS locks`.execute(
+    db
+  );
+}
 
 /**
  * Refuses (409) when `storageUnitId` is missing or cannot cover `quantity`.
@@ -108,7 +156,7 @@ export async function binCoverProblem(
 
   if (!storageUnitId) {
     const item = await readItemName(db, itemId, companyId);
-    return `${item} has no Pull From storage unit on this job`;
+    return `${item} has no Pull From storage unit on job ${args.jobReadableId}`;
   }
 
   // Negative stock allowed: the material is drawn from its own bin whatever
@@ -116,11 +164,9 @@ export async function binCoverProblem(
   if (!args.preventNegative) return null;
 
   // Serialize strict draws on this bin and item until the caller's transaction
-  // ends, so two completions cannot both pass the check and overdraw it. SQL
-  // `backflush_job_materials` takes the same key.
-  await sql`SELECT pg_advisory_xact_lock(hashtextextended(${`strict-backflush:${companyId}:${storageUnitId}:${itemId}`}, 0))`.execute(
-    db
-  );
+  // ends, so two completions cannot both pass the check and overdraw it.
+  // A caller drawing several pairs locks them all first (`lockStrictBins`).
+  await lockStrictBins(db, companyId, [{ storageUnitId, itemId }]);
 
   const row = await db
     .selectFrom("itemLedger")
@@ -165,51 +211,10 @@ export async function assertMethodHasPullFrom(
   db: Kysely<DB>,
   args: { makeMethodId: string; companyId: string }
 ): Promise<void> {
-  const { makeMethodId, companyId } = args;
-
-  const [lines, locations] = await inOrder([
-    () =>
-      db
-        .selectFrom("methodMaterial")
-        .innerJoin("item", "item.id", "methodMaterial.itemId")
-        .where("methodMaterial.makeMethodId", "=", makeMethodId)
-        .where("methodMaterial.companyId", "=", companyId)
-        .select([
-          "methodMaterial.methodType",
-          "methodMaterial.itemType",
-          "methodMaterial.storageUnitIds",
-          "methodMaterial.order",
-          "item.id as itemId",
-          "item.itemTrackingType",
-          "item.readableIdWithRevision"
-        ])
-        .orderBy("methodMaterial.order")
-        .execute(),
-    () => getPullFromLocations(db, companyId)
-  ]);
-
-  const locationIds = locations.map((location) => location.id);
-
-  // One entry per part: the toast names what to fix, not where.
-  const parts = [
-    ...new Set(
-      lines
-        .filter(needsPullFrom)
-        .filter(
-          (line) =>
-            missingPullFromLocations(line.storageUnitIds, locationIds).length >
-            0
-        )
-        .map((line) => line.readableIdWithRevision ?? line.itemId)
-    )
-  ];
-
-  if (parts.length === 0) return;
-
-  const list = summarizeList(parts);
-  throw new InvalidInputError(
-    `Set a Pull From storage unit before you activate this version: ${list}`
-  );
+  const parts = await getMethodPartsMissingPullFrom(db, args);
+  if (parts.length > 0) {
+    throw new InvalidInputError(activationRefusalMessage(parts));
+  }
 }
 
 async function readItemName(

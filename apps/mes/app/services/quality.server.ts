@@ -580,28 +580,6 @@ export async function postBulkCompletion(
     return { error: null, message: null };
   }
 
-  // Strict backflush: refuse before the production quantity is recorded, so a
-  // short storage unit never leaves units completed with no material
-  // consumed. A no-op when strict backflush is off.
-  const check = await serverFns
-    .system({
-      db: getDatabaseClient(),
-      companyId: args.companyId,
-      userId: args.userId
-    })
-    .invoke("issue", {
-      id: state.jobOperationId,
-      type: "jobOperation",
-      quantity: args.quantity,
-      dryRun: true
-    });
-  if (check.error) {
-    return {
-      error: check.error,
-      message: check.error.message || "Failed to issue materials"
-    };
-  }
-
   const insertResult = await insertProductionQuantity(client, {
     jobOperationId: state.jobOperationId,
     quantity: args.quantity,
@@ -630,13 +608,49 @@ export async function postBulkCompletion(
       quantity: args.quantity
     });
   if (issued.error) {
+    // The units are recorded: say so, or the operator retries and records
+    // them twice.
     return {
       error: issued.error,
-      message:
-        issued.error.message || "Units completed, but failed to issue materials"
+      message: `Units completed, but ${issued.error.message || "failed to issue materials"}`
     };
   }
 
+  return { error: null, message: null };
+}
+
+/**
+ * Strict backflush: whether the operation's materials can be backflushed for
+ * `quantity` units — a dry run of `issue` `jobOperation`, rolled back. Call it
+ * before the first write of a completion (closing a lot, recording units), so a
+ * short storage unit refuses the whole action instead of leaving it half done.
+ * A no-op when strict backflush is off.
+ */
+export async function checkStrictBackflush(args: {
+  jobOperationId: string;
+  quantity: number;
+  companyId: string;
+  userId: string;
+}): Promise<{ error: unknown | null; message: string | null }> {
+  if (args.quantity <= 0) return { error: null, message: null };
+  const check = await serverFns
+    .system({
+      db: getDatabaseClient(),
+      companyId: args.companyId,
+      userId: args.userId
+    })
+    .invoke("issue", {
+      id: args.jobOperationId,
+      type: "jobOperation",
+      quantity: args.quantity,
+      dryRun: true
+    });
+  if (check.error) {
+    return {
+      error: check.error,
+      message: check.error.message || "Failed to issue materials"
+    };
+  }
   return { error: null, message: null };
 }
 
