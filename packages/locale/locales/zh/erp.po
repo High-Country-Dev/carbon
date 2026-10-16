@@ -8827,8 +8827,8 @@ msgstr "启用以在资产类别上配置特定于税收的折旧方法（例如
 msgid "Enable to generate IDs and descriptions for raw materials."
 msgstr "启用以为原材料生成ID和描述。"
 
-msgid "Enable to make receivers enter the quantity on each line instead of confirming the ordered amount."
-msgstr "启用此选项可让接收人在每一行输入数量，而不是确认订购数量。"
+msgid "Enable to make receivers enter the quantity on each line instead of confirming the quantity still to receive."
+msgstr "启用收货员在每一行输入实际收货数量，而不是仅确认待收货数量。"
 
 msgid "Enable to require an authenticator app before anyone can open this company."
 msgstr "启用以要求在任何人打开此公司之前使用身份验证器应用程序。"
@@ -8959,6 +8959,9 @@ msgstr "请输入 1 至 {0} 之间的数量。"
 
 msgid "Enter a reason to take the unit out of service"
 msgstr "输入停用该设备的原因"
+
+msgid "Enter a received quantity, or tick a unit, on at least one line."
+msgstr "请在至少一行上输入收货数量或勾选一个件。"
 
 msgid "Enter a web address, such as https://example.com"
 msgstr "请输入网址，例如 https://example.com"

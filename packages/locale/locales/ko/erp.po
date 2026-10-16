@@ -8827,8 +8827,8 @@ msgstr "자산 클래스에 세무 전용 감가상각 방법(예: MACRS, 가속
 msgid "Enable to generate IDs and descriptions for raw materials."
 msgstr "원자재에 대한 ID와 설명을 자동 생성하려면 활성화하세요."
 
-msgid "Enable to make receivers enter the quantity on each line instead of confirming the ordered amount."
-msgstr "각 라인의 발주 수량을 확인하는 대신 수령자가 수량을 입력하도록 하려면 활성화하세요"
+msgid "Enable to make receivers enter the quantity on each line instead of confirming the quantity still to receive."
+msgstr "각 라인에서 입고 대기 수량을 확인하는 대신 수량을 입력하도록 활성화합니다."
 
 msgid "Enable to require an authenticator app before anyone can open this company."
 msgstr "누구든 이 회사를 열기 전에 인증기 앱이 필요하려면 활성화합니다."
@@ -8959,6 +8959,9 @@ msgstr "1과 {0} 사이의 수량을 입력하세요."
 
 msgid "Enter a reason to take the unit out of service"
 msgstr "장비를 운영 중단하는 이유를 입력하세요"
+
+msgid "Enter a received quantity, or tick a unit, on at least one line."
+msgstr "최소한 하나의 라인에 수량을 입력하거나 개를 체크하세요."
 
 msgid "Enter a web address, such as https://example.com"
 msgstr "웹 주소를 입력하세요(예: https://example.com)"

@@ -8827,8 +8827,8 @@ msgstr "Включите, чтобы настроить налоговые ме�
 msgid "Enable to generate IDs and descriptions for raw materials."
 msgstr "Включите для создания идентификаторов и описаний для сырья."
 
-msgid "Enable to make receivers enter the quantity on each line instead of confirming the ordered amount."
-msgstr "Включите, чтобы получатели вводили количество на каждой строке вместо подтверждения заказанного объема."
+msgid "Enable to make receivers enter the quantity on each line instead of confirming the quantity still to receive."
+msgstr "Разрешить приемщикам вводить количество для каждой строки вместо подтверждения количества, ожидающего приемки."
 
 msgid "Enable to require an authenticator app before anyone can open this company."
 msgstr "Включите, чтобы требовать приложение-аутентификатор перед открытием этой организации."
@@ -8959,6 +8959,9 @@ msgstr "Введите количество от 1 до {0}."
 
 msgid "Enter a reason to take the unit out of service"
 msgstr "Введите причину вывода единицы из эксплуатации"
+
+msgid "Enter a received quantity, or tick a unit, on at least one line."
+msgstr "Введите полученное количество или отметьте единицу по крайней мере на одной строке."
 
 msgid "Enter a web address, such as https://example.com"
 msgstr "Введите веб-адрес, например https://example.com"

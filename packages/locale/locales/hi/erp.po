@@ -8827,8 +8827,8 @@ msgstr "परिसंपत्ति वर्गों पर कर-वि�
 msgid "Enable to generate IDs and descriptions for raw materials."
 msgstr "कच्चे माल के लिए ID और विवरण उत्पन्न करने के लिए सक्षम करें।"
 
-msgid "Enable to make receivers enter the quantity on each line instead of confirming the ordered amount."
-msgstr "प्राप्तकर्ताओं को प्रत्येक पंक्ति पर मात्रा दर्ज करने के लिए सक्षम करें, ऑर्डर की मात्रा की पुष्टि करने के बजाय।"
+msgid "Enable to make receivers enter the quantity on each line instead of confirming the quantity still to receive."
+msgstr "प्राप्तकर्ताओं को अभी प्राप्त करने के लिए मात्रा की पुष्टि करने के बजाय, प्रत्येक पंक्ति पर मात्रा दर्ज करने में सक्षम करें।"
 
 msgid "Enable to require an authenticator app before anyone can open this company."
 msgstr "कोई भी इस कंपनी को खोलने से पहले प्रमाणकर्ता ऐप की आवश्यकता होने के लिए सक्षम करें।"
@@ -8959,6 +8959,9 @@ msgstr "1 और {0} के बीच मात्रा दर्ज करे�
 
 msgid "Enter a reason to take the unit out of service"
 msgstr "इकाई को सेवा से बाहर निकालने का कारण दर्ज करें"
+
+msgid "Enter a received quantity, or tick a unit, on at least one line."
+msgstr "कम से कम एक पंक्ति पर एक प्राप्त मात्रा दर्ज करें, या एक इकाई को चिह्नित करें।"
 
 msgid "Enter a web address, such as https://example.com"
 msgstr "वेब पता दर्ज करें, जैसे https://example.com"

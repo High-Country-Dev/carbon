@@ -8827,8 +8827,8 @@ msgstr "Abilita la configurazione di Metodi di ammortamento specifici per le tas
 msgid "Enable to generate IDs and descriptions for raw materials."
 msgstr "Abilita per generare ID e descrizioni per le materie prime."
 
-msgid "Enable to make receivers enter the quantity on each line instead of confirming the ordered amount."
-msgstr "Abilita i riceventi a inserire la quantità su ogni riga invece di confermare la quantità ordinata."
+msgid "Enable to make receivers enter the quantity on each line instead of confirming the quantity still to receive."
+msgstr "Abilita i ricevitori a inserire la quantità su ogni riga invece di confermare la quantità da ricevere."
 
 msgid "Enable to require an authenticator app before anyone can open this company."
 msgstr "Attiva per richiedere un'app autenticatore prima che chiunque possa aprire questa azienda."
@@ -8959,6 +8959,9 @@ msgstr "Inserisci una quantità tra 1 e {0}."
 
 msgid "Enter a reason to take the unit out of service"
 msgstr "Inserisci un motivo per mettere l'unità fuori servizio"
+
+msgid "Enter a received quantity, or tick a unit, on at least one line."
+msgstr "Inserisci una quantità ricevuta o spunta un'unità su almeno una riga."
 
 msgid "Enter a web address, such as https://example.com"
 msgstr "Inserisci un indirizzo web, ad esempio https://example.com"

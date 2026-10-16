@@ -8827,8 +8827,8 @@ msgstr "Enable to configure tax-specific depreciation methods on asset classes (
 msgid "Enable to generate IDs and descriptions for raw materials."
 msgstr "Enable to generate IDs and descriptions for raw materials."
 
-msgid "Enable to make receivers enter the quantity on each line instead of confirming the ordered amount."
-msgstr "Enable to make receivers enter the quantity on each line instead of confirming the ordered amount."
+msgid "Enable to make receivers enter the quantity on each line instead of confirming the quantity still to receive."
+msgstr "Enable to make receivers enter the quantity on each line instead of confirming the quantity still to receive."
 
 msgid "Enable to require an authenticator app before anyone can open this company."
 msgstr "Enable to require an authenticator app before anyone can open this company."
@@ -8959,6 +8959,9 @@ msgstr "Enter a quantity between 1 and {0}."
 
 msgid "Enter a reason to take the unit out of service"
 msgstr "Enter a reason to take the unit out of service"
+
+msgid "Enter a received quantity, or tick a unit, on at least one line."
+msgstr "Enter a received quantity, or tick a unit, on at least one line."
 
 msgid "Enter a web address, such as https://example.com"
 msgstr "Enter a web address, such as https://example.com"

@@ -8827,8 +8827,8 @@ msgstr "Ermöglichen Sie die Konfiguration steuerlicher Abschreibungsmethoden f�
 msgid "Enable to generate IDs and descriptions for raw materials."
 msgstr "Aktivieren Sie diese Option, um IDs und Beschreibungen für Rohstoffe zu generieren."
 
-msgid "Enable to make receivers enter the quantity on each line instead of confirming the ordered amount."
-msgstr "Aktivieren Sie diese Option, um Empfänger die Menge auf jeder Position eingeben zu lassen, anstatt die bestellte Menge zu bestätigen."
+msgid "Enable to make receivers enter the quantity on each line instead of confirming the quantity still to receive."
+msgstr "Ermöglichen Sie Empfängern, die Menge in jeder Position einzugeben, anstatt die noch zu empfangende Menge zu bestätigen."
 
 msgid "Enable to require an authenticator app before anyone can open this company."
 msgstr "Aktivieren, um eine Authentifizierungs-App zu erfordern, bevor jemand dieses Unternehmen öffnen kann."
@@ -8959,6 +8959,9 @@ msgstr "Geben Sie eine Menge zwischen 1 und {0} ein."
 
 msgid "Enter a reason to take the unit out of service"
 msgstr "Geben Sie einen Grund an, um die Einheit außer Betrieb zu nehmen"
+
+msgid "Enter a received quantity, or tick a unit, on at least one line."
+msgstr "Geben Sie auf mindestens einer Position eine empfangene Menge ein oder wählen Sie eine Einheit."
 
 msgid "Enter a web address, such as https://example.com"
 msgstr "Geben Sie eine Webadresse ein, z. B. https://example.com"

@@ -8827,8 +8827,8 @@ msgstr "税固有の減価償却方法を資産クラスで設定するために
 msgid "Enable to generate IDs and descriptions for raw materials."
 msgstr "有効にして、原材料のIDと説明を生成します。"
 
-msgid "Enable to make receivers enter the quantity on each line instead of confirming the ordered amount."
-msgstr "発注済数量の確認ではなく、各明細で受け取り者が数量を入力するようにします。"
+msgid "Enable to make receivers enter the quantity on each line instead of confirming the quantity still to receive."
+msgstr "受け取り担当者が入荷待ち数量を確認する代わりに、各明細の数量を入力できるようにする。"
 
 msgid "Enable to require an authenticator app before anyone can open this company."
 msgstr "この会社を開く前に誰でも認証器アプリが必須となるように有効にします。"
@@ -8959,6 +8959,9 @@ msgstr "1～{0}の数量を入力してください。"
 
 msgid "Enter a reason to take the unit out of service"
 msgstr "ユニットを使用停止にする理由を入力"
+
+msgid "Enter a received quantity, or tick a unit, on at least one line."
+msgstr "少なくとも1つの明細で、受取数量を入力するか個をチェックしてください。"
 
 msgid "Enter a web address, such as https://example.com"
 msgstr "Webアドレスを入力してください（例: https://example.com）"

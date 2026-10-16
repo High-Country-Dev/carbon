@@ -1,6 +1,6 @@
 # Receipt Quantities Start at Zero
 
-Last tested: 2026-10-16
+Last tested: 2026-10-16 (re-run after review fixes)
 Routes: /x/settings/inventory, /x/purchase-order/<id>/details → Receive, /x/receipt/<id>/details
 
 ## Prerequisites
@@ -20,6 +20,8 @@ Routes: /x/settings/inventory, /x/purchase-order/<id>/details → Receive, /x/re
 - PO details → button "Receive" (first receipt) or "Receipts" dropdown → menuitem
   "New Receipt" (later receipts). Redirects to `/x/receipt/<id>/details`.
 - Verify: every line's Received textbox reads 0, Ordered/Outstanding unchanged, Post disabled.
+  Hovering Post shows "Enter a received quantity, or tick a unit, on at least one line."
+  (`agent-browser hover @<Post ref>`); entering a quantity enables Post and drops the tooltip.
 
 ### 3. Enter a quantity, post
 - `fill` the line's Received textbox, then click another textbox to blur (commits via

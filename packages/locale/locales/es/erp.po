@@ -8827,8 +8827,8 @@ msgstr "Habilitar para configurar métodos de depreciación específicos de impu
 msgid "Enable to generate IDs and descriptions for raw materials."
 msgstr "Habilitar para generar IDs y descripciones para materias primas."
 
-msgid "Enable to make receivers enter the quantity on each line instead of confirming the ordered amount."
-msgstr "Habilitar para que los receptores ingresen la cantidad en cada línea en lugar de confirmar la cantidad pedida."
+msgid "Enable to make receivers enter the quantity on each line instead of confirming the quantity still to receive."
+msgstr "Permitir que los receptores ingresen la cantidad en cada línea en lugar de confirmar la cantidad por recibir."
 
 msgid "Enable to require an authenticator app before anyone can open this company."
 msgstr "Habilitar para requerir una aplicación autenticadora antes de que alguien pueda abrir esta empresa."
@@ -8959,6 +8959,9 @@ msgstr "Ingrese una cantidad entre 1 y {0}."
 
 msgid "Enter a reason to take the unit out of service"
 msgstr "Ingrese una razón para retirar la unidad del servicio"
+
+msgid "Enter a received quantity, or tick a unit, on at least one line."
+msgstr "Ingresa una cantidad recibida, o marca una unidad, en al menos una línea."
 
 msgid "Enter a web address, such as https://example.com"
 msgstr "Ingrese una dirección web, por ejemplo https://example.com"

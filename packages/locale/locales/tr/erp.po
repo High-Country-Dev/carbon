@@ -8827,8 +8827,8 @@ msgstr "Varlık sınıfları için vergiye özgü amortisman yöntemlerini yapı
 msgid "Enable to generate IDs and descriptions for raw materials."
 msgstr "Hammaddeler için ID'ler ve açıklamalar oluşturmayı etkinleştir."
 
-msgid "Enable to make receivers enter the quantity on each line instead of confirming the ordered amount."
-msgstr "Alıcıların sipariş edilen miktarı onaylamak yerine her satırdaki miktarı girmelerini etkinleştirin."
+msgid "Enable to make receivers enter the quantity on each line instead of confirming the quantity still to receive."
+msgstr "Alıcıların her satırda miktarı girmelerini, Mal kabul bekleyen miktarını onaylamak yerine etkinleştirin."
 
 msgid "Enable to require an authenticator app before anyone can open this company."
 msgstr "Herhangi birinin bu şirketi açabilmesi için kimlik doğrulaması uygulaması gerektirmek için etkinleştirin."
@@ -8959,6 +8959,9 @@ msgstr "1 ile {0} arasında bir miktar girin."
 
 msgid "Enter a reason to take the unit out of service"
 msgstr "Üniteyi hizmet dışı bırakmak için bir neden girin"
+
+msgid "Enter a received quantity, or tick a unit, on at least one line."
+msgstr "En az bir satırda miktarı girin veya bir Adet'i işaretleyin."
 
 msgid "Enter a web address, such as https://example.com"
 msgstr "Bir web adresi girin, örneğin https://example.com"

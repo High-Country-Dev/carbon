@@ -240,21 +240,32 @@ export default function InventorySettingsRoute() {
     }
   }, [fetcher.data?.message, fetcher.data?.success]);
 
+  const toggleFetcher = useFetcher<typeof action>();
+
   const receiptQuantitiesStartAtZero = useSavedToggle(
-    fetcher,
+    toggleFetcher,
     "receiptQuantitiesStartAtZero",
     companySettings.receiptQuantitiesStartAtZero
   );
 
   const handleReceiptQuantitiesStartAtZeroToggle = useCallback(
     (checked: boolean) => {
-      fetcher.submit(
+      toggleFetcher.submit(
         { intent: "receiptQuantitiesStartAtZero", enabled: checked.toString() },
         { method: "POST" }
       );
     },
-    [fetcher]
+    [toggleFetcher]
   );
+
+  useEffect(() => {
+    if (toggleFetcher.data?.success === true && toggleFetcher?.data?.message) {
+      toast.success(toggleFetcher.data.message);
+    }
+    if (toggleFetcher.data?.success === false && toggleFetcher?.data?.message) {
+      toast.error(toggleFetcher.data.message);
+    }
+  }, [toggleFetcher.data?.message, toggleFetcher.data?.success]);
 
   return (
     <ScrollArea className="w-full h-[calc(100dvh-var(--topbar-height)-var(--content-inset))]">
@@ -347,7 +358,7 @@ export default function InventorySettingsRoute() {
                   ) : (
                     <Trans>
                       Enable to make receivers enter the quantity on each line
-                      instead of confirming the ordered amount.
+                      instead of confirming the quantity still to receive.
                     </Trans>
                   )}
                 </span>
@@ -355,7 +366,7 @@ export default function InventorySettingsRoute() {
               <Switch
                 checked={receiptQuantitiesStartAtZero}
                 onCheckedChange={handleReceiptQuantitiesStartAtZeroToggle}
-                disabled={fetcher.state !== "idle"}
+                disabled={toggleFetcher.state !== "idle"}
               />
             </HStack>
           </CardContent>
