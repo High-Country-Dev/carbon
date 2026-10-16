@@ -1571,6 +1571,18 @@ export async function updateReturnPickedMaterialTimingSetting(
     .eq("id", companyId);
 }
 
+/** @mcp update */
+export async function updateReceiptQuantitiesStartAtZeroSetting(
+  client: SupabaseClient<Database>,
+  companyId: string,
+  receiptQuantitiesStartAtZero: boolean
+) {
+  return client
+    .from("companySettings")
+    .update(sanitize({ receiptQuantitiesStartAtZero }))
+    .eq("id", companyId);
+}
+
 // ── Planning ownership + tolerance (spec §P1.3 / §P1.6) ────────────────────
 // The responsibleEmployee ladder's configurable rungs: company default →
 // per-location → per-(location, item group). The item-group tier is

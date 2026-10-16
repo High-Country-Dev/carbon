@@ -57,6 +57,22 @@ async function getFallbackLocationId(
   return location.data?.id ?? null;
 }
 
+// Blind receiving (`companySettings.receiptQuantitiesStartAtZero`): when on, a
+// new receipt's lines start at a received quantity of 0 rather than what is
+// still to receive, so the receiver enters what actually arrived and a line
+// nothing arrived for stays at 0.
+async function receiptQuantitiesStartAtZero(
+  db: Kysely<KyselyDatabase>,
+  companyId: string
+): Promise<boolean> {
+  const row = await db
+    .selectFrom("companySettings")
+    .select("receiptQuantitiesStartAtZero")
+    .where("id", "=", companyId)
+    .executeTakeFirst();
+  return row?.receiptQuantitiesStartAtZero === true;
+}
+
 export const createInput = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("nonConformanceTasks"),
@@ -1017,6 +1033,8 @@ const create = defineServerFn({
           return acc;
         }, {});
 
+        const startAtZero = await receiptQuantitiesStartAtZero(db, companyId);
+
         const receiptLineItems = purchaseOrderLines.data.reduce<
           ReceiptLineItem[]
         >((acc, d) => {
@@ -1046,7 +1064,9 @@ const create = defineServerFn({
             orderQuantity: d.purchaseQuantity * (d.conversionFactor ?? 1),
             outstandingQuantity:
               outstandingQuantity * (d.conversionFactor ?? 1),
-            receivedQuantity: outstandingQuantity * (d.conversionFactor ?? 1),
+            receivedQuantity: startAtZero
+              ? 0
+              : outstandingQuantity * (d.conversionFactor ?? 1),
             conversionFactor: d.conversionFactor ?? 1,
             requiresSerialTracking:
               serializedItems.has(d.itemId) && !isOutsideOperation,
@@ -1154,7 +1174,7 @@ const create = defineServerFn({
                 unreceivedFaLines.map((line) => ({
                   receiptId: receiptId,
                   purchaseOrderLineId: line.id,
-                  received: true,
+                  received: !startAtZero,
                   companyId,
                   createdBy: userId
                 }))
@@ -1234,6 +1254,8 @@ const create = defineServerFn({
           return acc;
         }, {});
 
+        const startAtZero = await receiptQuantitiesStartAtZero(db, companyId);
+
         const receiptLineItems = warehouseTransferLines.data.reduce<
           ReceiptLineItem[]
         >((acc, d) => {
@@ -1257,7 +1279,7 @@ const create = defineServerFn({
             storageUnitId: d.toStorageUnitId,
             requiresSerialTracking: serialTracking,
             requiresBatchTracking: batchTracking,
-            receivedQuantity: quantityToReceive,
+            receivedQuantity: startAtZero ? 0 : quantityToReceive,
             outstandingQuantity: quantityToReceive,
             unitPrice: 0, // Transfers don't have a unit price
             conversionFactor: 1,
@@ -1423,6 +1445,8 @@ const create = defineServerFn({
         if (hasReceipt && receipt.data!.status !== "Draft")
           throw new Error(`Cannot re-source a ${receipt.data!.status} receipt`);
 
+        const startAtZero = await receiptQuantitiesStartAtZero(db, companyId);
+
         const receiptLineItems = salesReturnOrderLines.data.reduce<
           ReceiptLineItem[]
         >((acc, d) => {
@@ -1441,7 +1465,7 @@ const create = defineServerFn({
             storageUnitId: defaultStorageUnitByItem.get(d.itemId) ?? null,
             requiresSerialTracking: serializedItems.has(d.itemId),
             requiresBatchTracking: batchItems.has(d.itemId),
-            receivedQuantity: outstanding,
+            receivedQuantity: startAtZero ? 0 : outstanding,
             outstandingQuantity: outstanding,
             // Cost is resolved at posting (original outbound cost / current /
             // zero-value reason) — never the line's credit-basis unitPrice.
@@ -1589,6 +1613,8 @@ const create = defineServerFn({
           return acc;
         }, {});
 
+        const startAtZero = await receiptQuantitiesStartAtZero(db, companyId);
+
         const receiptLineItems = warehouseTransferLines.data.reduce<
           ReceiptLineItem[]
         >((acc, d) => {
@@ -1611,7 +1637,7 @@ const create = defineServerFn({
             storageUnitId: d.toStorageUnitId,
             requiresSerialTracking: serialTracking,
             requiresBatchTracking: batchTracking,
-            receivedQuantity: quantityToReceive,
+            receivedQuantity: startAtZero ? 0 : quantityToReceive,
             outstandingQuantity: quantityToReceive,
             unitPrice: 0, // Transfers don't have a unit price
             conversionFactor: 1,

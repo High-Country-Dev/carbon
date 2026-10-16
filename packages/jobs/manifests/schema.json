@@ -1,11 +1,11 @@
 {
   "kind": "carbon-company-backup",
   "version": 1,
-  "schemaVersion": "20261015161847",
+  "schemaVersion": "20261016113742",
   "sourceCompanyId": "schema-baseline",
   "sourceCompanyGroupId": null,
   "sourceCompanyName": null,
-  "exportedAt": "2026-10-15T15:58:36.181Z",
+  "exportedAt": "2026-10-16T07:21:13.823Z",
   "exportedBy": "schema-baseline",
   "label": "schema baseline",
   "includeStorage": "none",
@@ -481,7 +481,8 @@
         "accountingActivatedBy",
         "leaseIncrementalBorrowingRate",
         "leaseShortTermExpedient",
-        "leaseReminderDays"
+        "leaseReminderDays",
+        "receiptQuantitiesStartAtZero"
       ]
     },
     {

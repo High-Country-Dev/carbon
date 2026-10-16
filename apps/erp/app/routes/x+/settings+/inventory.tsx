@@ -22,13 +22,16 @@ import {
   CardHeader,
   CardTitle,
   ChoiceSelect,
+  HStack,
   ScrollArea,
-  toast
+  Switch,
+  toast,
+  VStack
 } from "@carbon/react";
 import { redirect } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import {
   LuLayers,
   LuPackageCheck,
@@ -42,6 +45,7 @@ import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { useFetcher, useLoaderData } from "react-router";
 import { SettingsPage, SettingsPageHeading } from "~/components/SettingsPage";
 import SettingsSectionHeader from "~/components/SettingsSectionHeader";
+import { useSavedToggle } from "~/hooks/useSavedToggle";
 import {
   getCompanySettings,
   incompletePickingListPolicyValidator,
@@ -51,6 +55,7 @@ import {
   shelfLifeSettingsValidator,
   updateIncompletePickingListPolicySetting,
   updateKanbanOutputSetting,
+  updateReceiptQuantitiesStartAtZeroSetting,
   updateReturnPickedMaterialTimingSetting,
   updateShelfLifeSettings
 } from "~/modules/settings";
@@ -167,6 +172,24 @@ export async function action({ request }: ActionFunctionArgs) {
         message: "Picking list completion policy updated"
       };
 
+    case "receiptQuantitiesStartAtZero": {
+      const enabled = formData.get("enabled") === "true";
+      const result = await updateReceiptQuantitiesStartAtZeroSetting(
+        client,
+        companyId,
+        enabled
+      );
+      if (result.error)
+        return { success: false, message: result.error.message };
+
+      return {
+        success: true,
+        message: enabled
+          ? "Receipt quantities now start at zero"
+          : "Receipt quantities now start at the quantity to receive"
+      };
+    }
+
     case "returnPickedMaterialTiming":
       const returnTimingValidation = await validator(
         returnPickedMaterialTimingValidator
@@ -216,6 +239,22 @@ export default function InventorySettingsRoute() {
       toast.error(fetcher.data.message);
     }
   }, [fetcher.data?.message, fetcher.data?.success]);
+
+  const receiptQuantitiesStartAtZero = useSavedToggle(
+    fetcher,
+    "receiptQuantitiesStartAtZero",
+    companySettings.receiptQuantitiesStartAtZero
+  );
+
+  const handleReceiptQuantitiesStartAtZeroToggle = useCallback(
+    (checked: boolean) => {
+      fetcher.submit(
+        { intent: "receiptQuantitiesStartAtZero", enabled: checked.toString() },
+        { method: "POST" }
+      );
+    },
+    [fetcher]
+  );
 
   return (
     <ScrollArea className="w-full h-[calc(100dvh-var(--topbar-height)-var(--content-inset))]">
@@ -268,6 +307,58 @@ export default function InventorySettingsRoute() {
               </Submit>
             </CardFooter>
           </ValidatedForm>
+        </Card>
+
+        <SettingsSectionHeader>
+          <Trans>Receiving</Trans>
+        </SettingsSectionHeader>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              <Trans>Start Receipt Quantities at Zero</Trans>
+            </CardTitle>
+            <CardDescription>
+              <Trans>
+                Choose what a new receipt fills in as each line's received
+                quantity: what is still to receive, or zero so the receiver
+                enters what actually arrived.
+              </Trans>
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <HStack className="justify-between items-center">
+              <VStack className="items-start" spacing={1}>
+                <span className="font-medium">
+                  {receiptQuantitiesStartAtZero ? (
+                    <Trans>Received quantities start at zero</Trans>
+                  ) : (
+                    <Trans>
+                      Received quantities start at the quantity to receive
+                    </Trans>
+                  )}
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  {receiptQuantitiesStartAtZero ? (
+                    <Trans>
+                      Enter the quantity on each line that arrived. A line left
+                      at zero is not received when the receipt is posted.
+                    </Trans>
+                  ) : (
+                    <Trans>
+                      Enable to make receivers enter the quantity on each line
+                      instead of confirming the ordered amount.
+                    </Trans>
+                  )}
+                </span>
+              </VStack>
+              <Switch
+                checked={receiptQuantitiesStartAtZero}
+                onCheckedChange={handleReceiptQuantitiesStartAtZeroToggle}
+                disabled={fetcher.state !== "idle"}
+              />
+            </HStack>
+          </CardContent>
         </Card>
 
         <SettingsSectionHeader>
