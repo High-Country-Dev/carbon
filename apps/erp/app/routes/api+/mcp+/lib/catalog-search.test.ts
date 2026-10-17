@@ -7,6 +7,7 @@ import {
   collectFieldNames,
   createCatalogSearch,
   expandQueryTerm,
+  rerankByName,
   splitWords
 } from "@carbon/ee/mcp";
 import { describe, expect, test } from "vitest";
@@ -154,5 +155,92 @@ describe("catalog search", () => {
       b.matches.some((u) => u.name === t.name)
     );
     expect(overlap).toEqual([]);
+  });
+});
+
+describe("ranking by name", () => {
+  const top = async (query: string) =>
+    (await catalog.search({ query, limit: 3, offset: 0 })).matches.map(
+      (tool) => tool.name
+    );
+
+  test("an exact tool name comes first, with or without its module", async () => {
+    expect((await top("inventory_getInventoryItems"))[0]).toBe(
+      "inventory_getInventoryItems"
+    );
+    expect((await top("getInventoryItems"))[0]).toBe(
+      "inventory_getInventoryItems"
+    );
+  });
+
+  test("the tool whose name covers every query word beats repeated common words", async () => {
+    expect((await top("inventory items"))[0]).toBe(
+      "inventory_getInventoryItems"
+    );
+    expect((await top("get inventory items"))[0]).toBe(
+      "inventory_getInventoryItems"
+    );
+  });
+
+  test("a bare noun is a lookup: reads before writes", async () => {
+    expect((await top("bom"))[0]).toBe("items_getMethodMaterials");
+    expect((await top("jobs"))[0]).toBe("production_getJobs");
+  });
+
+  test("an action word picks that action, synonyms included", async () => {
+    expect((await top("delete customer"))[0]).toBe("sales_deleteCustomer");
+    expect((await top("create purchase order"))[0]).toBe(
+      "purchasing_insertPurchaseOrder"
+    );
+  });
+
+  test("industry phrases and plurals reach Carbon's names", async () => {
+    expect((await top("work orders"))[0]).toBe("production_getJobs");
+    expect((await top("vendors"))[0]).toBe("purchasing_getSuppliers");
+    for (const query of ["nonconformance items", "non-conformance items"]) {
+      expect(await top(query)).toContain("quality_getIssueItems");
+    }
+  });
+
+  test("a database-paged tool beats a List that reads the whole table", async () => {
+    expect((await top("list customers"))[0]).toBe("sales_getCustomers");
+    expect((await top("list sales orders"))[0]).toBe("sales_getSalesOrders");
+  });
+
+  test("filters still apply to an exact name", async () => {
+    const { matches } = await catalog.search({
+      query: "getInventoryItems",
+      module: "sales",
+      limit: 5,
+      offset: 0
+    });
+    expect(matches.map((t) => t.name)).not.toContain(
+      "inventory_getInventoryItems"
+    );
+  });
+});
+
+describe("rerankByName", () => {
+  const entry = (
+    name: string,
+    classification: ManifestEntry["classification"] = "READ"
+  ) => ({ ...tools[0]!, name, classification }) as ManifestEntry;
+  const actions = new Set(["get", "delete", "insert"]);
+
+  test("prefers the tighter name when coverage ties", () => {
+    const ranked = rerankByName(
+      "job",
+      [entry("production_getJobOperations"), entry("production_getJob")],
+      actions
+    );
+    expect(ranked.map((t) => t.name)).toEqual([
+      "production_getJob",
+      "production_getJobOperations"
+    ]);
+  });
+
+  test("keeps the BM25 order when the query has no usable words", () => {
+    const candidates = [entry("a_getX"), entry("b_getY")];
+    expect(rerankByName("the of", candidates, actions)).toBe(candidates);
   });
 });

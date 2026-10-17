@@ -4,8 +4,10 @@
 
 import {
   formatMcpResult,
+  MCP_MAX_CHARS,
   MCP_MAX_ROWS,
   pageMcpListResult,
+  projectFields,
   stripNulls
 } from "@carbon/ee/mcp";
 import { describe, expect, it } from "vitest";
@@ -41,23 +43,67 @@ describe("formatMcpResult", () => {
     expect(text).toBe('[{"id":"a"}]');
   });
 
-  it("caps rows at MCP_MAX_ROWS with an omission marker", () => {
+  it("caps rows at MCP_MAX_ROWS and names the next offset", () => {
     const rows = Array.from({ length: MCP_MAX_ROWS + 40 }, (_, i) => ({
       id: i
     }));
     const text = formatMcpResult(rows);
     expect(text).toContain('{"id":0}');
     expect(text).not.toContain(`{"id":${MCP_MAX_ROWS}}`);
-    expect(text).toContain("… 40 more rows omitted");
+    expect(text).toContain(
+      `(rows 1-${MCP_MAX_ROWS} of ${MCP_MAX_ROWS + 40}; next page: offset ${MCP_MAX_ROWS}, output capped`
+    );
   });
 
-  it("appends the count line when the read was paginated short", () => {
-    const text = formatMcpResult([{ id: "a" }], 240);
-    expect(text).toContain("(showing 1 of 240 rows)");
+  it("stops at the character budget but always returns one row", () => {
+    const wide = { id: 0, notes: "x".repeat(MCP_MAX_CHARS / 4) };
+    const rows = Array.from({ length: 10 }, (_, i) => ({ ...wide, id: i }));
+    const text = formatMcpResult(rows, 50, 20);
+    const body = text.slice(0, text.indexOf("\n"));
+    expect(JSON.parse(body)).toHaveLength(3);
+    expect(text).toContain("(rows 21-23 of 50; next page: offset 23");
+    expect(text).toContain("pass `fields`");
+
+    const huge = [{ notes: "x".repeat(MCP_MAX_CHARS * 2) }, { id: 1 }];
+    expect(formatMcpResult(huge)).toContain("(rows 1-1 of 2;");
   });
 
-  it("omits the count line when everything was returned", () => {
+  it("names the next offset when the read was paginated short", () => {
+    const text = formatMcpResult([{ id: "a" }], 240, 25);
+    expect(text).toBe(
+      '[{"id":"a"}]\n(rows 26-26 of 240; next page: offset 26)'
+    );
+  });
+
+  it("omits the footer when everything was returned", () => {
     expect(formatMcpResult([{ id: "a" }], 1)).toBe('[{"id":"a"}]');
+    expect(formatMcpResult([{ id: "b" }], 26, 25)).toBe('[{"id":"b"}]');
+  });
+
+  it("serializes a single object whole", () => {
+    expect(formatMcpResult({ id: "a", fax: null })).toBe('{"id":"a"}');
+  });
+});
+
+describe("projectFields", () => {
+  it("keeps only the named fields of each row", () => {
+    expect(
+      projectFields(
+        [
+          { id: "a", name: "A", wide: 1 },
+          { id: "b", wide: 2 }
+        ],
+        ["id", "name"]
+      )
+    ).toEqual([{ id: "a", name: "A" }, { id: "b" }]);
+    expect(projectFields({ id: "a", wide: 1 }, ["id"])).toEqual({ id: "a" });
+  });
+
+  it("passes data through when no fields are named", () => {
+    const rows = [{ id: "a" }];
+    expect(projectFields(rows, undefined)).toBe(rows);
+    expect(projectFields(rows, [])).toBe(rows);
+    expect(projectFields(["a", 1], ["id"])).toEqual(["a", 1]);
   });
 });
 
@@ -87,7 +133,7 @@ describe("pageMcpListResult", () => {
       offset: 0
     });
     expect(formatMcpResult(page, total)).toBe(
-      '[{"id":0}]\n(showing 1 of 10 rows)'
+      '[{"id":0}]\n(rows 1-1 of 10; next page: offset 1)'
     );
   });
 });

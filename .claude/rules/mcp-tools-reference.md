@@ -125,11 +125,21 @@ The procedure (`api+/v1+/lib/router.server.ts`) is the same one HTTP serves:
 ## Endpoint & transport
 
 - Route: `POST /api/mcp` (`api+/mcp+/_index.ts`). `loader` rejects non-POST (405);
-  `OPTIONS` → 204 with CORS. JSON-RPC over
-  `WebStandardStreamableHTTPServerTransport` (`enableJsonResponse: true`,
-  `sessionIdGenerator: undefined`: stateless).
-- A fresh server (`await createMcpServer(ctx, today, deps)`) is built per
-  request. It is async because it awaits `requireEntitlement("MCP")` first.
+  `OPTIONS` → 204 with CORS. The route authenticates, then makes one call:
+  `serveMcpRequest(request, ctx, today, deps)` (`@carbon/ee/mcp.server`, MCP
+  TypeScript SDK v2, `@modelcontextprotocol/server`). It awaits
+  `requireEntitlement("MCP")`, then builds a fresh server for the request.
+- Both protocol eras, one server definition. `isLegacyRequest` sends 2025-era
+  requests (every client's default `initialize` handshake) to
+  `WebStandardStreamableHTTPServerTransport` with `sessionIdGenerator:
+  undefined` and `enableJsonResponse: true`, the wiring SDK v1 had: the SDK's
+  own stateless fallback answers with SSE. 2026-07-28 requests go to
+  `createMcpHandler(factory, { legacy: "reject", maxSubscriptions: 0 })`.
+  `maxSubscriptions: 0` refuses `subscriptions/listen` in-band, because it holds
+  a stream open that a per-request serverless function cannot keep, and the tool
+  list never changes at runtime.
+- Pinned by `packages/ee/src/mcp/server.test.ts`: an SDK client over HTTP
+  against `serveMcpRequest` in each era.
 
 ## Public discovery endpoints (unauthenticated)
 
@@ -158,7 +168,7 @@ instance advertises its own endpoint. Never hard-code `app.carbon.ms`.
 `companyId` / `userId` always come from the credential, never from arguments.
 
 **Edition/plan gate.** MCP is a Business+ feature, locked inside the commercial
-engine: `createMcpServer` throws `EntitlementError`, which the route turns into
+engine: `serveMcpRequest` throws `EntitlementError`, which the route turns into
 a 402 (`makeMcpDisabledResponse`). One check covers both auth paths, the
 Community edition and Cloud Starter. The discovery endpoints are not gated.
 
@@ -169,9 +179,13 @@ operation is reached through them.
 
 | Tool | Purpose |
 |------|---------|
-| `search_tools` | Ranked discovery. Filters: `query`, `module` (substring), `classification`, `limit`/`offset`. |
+| `search_tools` | Ranked discovery. Filters: `query`, `module` (substring), `classification`, `limit` (default 10) / `offset`. |
 | `describe_tool` | The contract for one `name` or up to 10 `names`: description, permission, list marker, input and response schema. |
-| `call_tool` | Run a tool: `{ name, arguments }`. `arguments` may arrive as a JSON string. Parameters go flat, exactly as `describe_tool` lists them. |
+| `call_tool` | Run a tool: `{ name, arguments, fields? }`. `arguments` may arrive as a JSON string. Parameters go flat, exactly as `describe_tool` lists them. |
+
+An unknown name in `call_tool` or `describe_tool` is answered with the three
+closest tools from catalog search ("Did you mean: …"); `call_tool` does not
+dispatch it.
 
 ### Catalog search (`packages/ee/src/mcp/catalog-search.ts`)
 
@@ -182,12 +196,28 @@ the manifest.
   (1.5), input property names `fields` (0.5). Prefix expansion is on; a query
   with no match retries with `tolerance: 1`.
 - `SEARCH_ALIASES` expands domain abbreviations additively (`rma`, `po`,
-  `bom`, `shelf` → storage unit, …). `expandQueryTerm` adds each word's
-  inflection stem to the QUERY, never the index. The in-app agent's
-  `search_docs` (`doc-search.ts`) shares it.
+  `bom`, `nonconformance` → issue, `shelf` → storage unit, …), and
+  `PHRASE_ALIASES` multi-word terms (`work orders` → jobs, `non conformance` →
+  issue). `expandQueryTerm` adds each word's inflection stem to
+  the QUERY, never the index. The in-app agent's `search_docs`
+  (`doc-search.ts`) shares it.
+- BM25 only gathers candidates (top `RERANK_POOL`, 200). `rerankByName` orders
+  them by the tool NAME: query words it covers, then words matched in full
+  (an `ACTION_SYNONYMS` word such as create → insert, or every word of an
+  alias), then READ first when the query names no action, then fewer extra name
+  words, then a database-paged tool before a `get*List` that reads the whole
+  table, then BM25. An exact tool name, with or without its module, is put
+  first. BM25 alone ranked `inventory_getInventoryItems` tenth for its own name.
+  `stemInflection` leaves "materials" unstemmed, so `sameWord` also accepts a
+  plain -s/-es plural.
 - `module` keeps substring semantics; filter-only calls bypass the index.
 - One line per tool: `name [READ] (requiredParams, +N optional)`
-  (`formatParamSummary`, `describe-format.ts`).
+  (`formatParamSummary`, `describe-format.ts`), plus the description's first
+  paragraph when it says more than the name (`searchLineDescription`).
+- `describe_tool` prints input and response schemas as TypeScript types
+  (`formatSchemaType`): the manifest's schemas use only type, enum, anyOf,
+  properties, required, items and additionalProperties, so nothing is lost and
+  the text is under half the JSON Schema's size.
 - Server instructions: `packages/ee/src/mcp/instructions.ts`. `lib/manifest.ts`
   keeps its own copies of the meta-tool descriptions; keep them in sync by hand.
 - Pinned by `lib/catalog-search.test.ts` and `lib/describe-format.test.ts`.
@@ -197,9 +227,14 @@ the manifest.
 MCP text differs from the HTTP body on purpose; the other `callOperation`
 callers get the exact data.
 
-- Compact JSON with null fields omitted (the instructions say so). Top-level
-  arrays are capped at `MCP_MAX_ROWS` (100) with an "… N more rows omitted"
-  marker; a paged read short of its total appends `(showing R of C rows)`.
+- Compact JSON with null fields omitted (the instructions say so). A list
+  stops at `MCP_MAX_ROWS` (100) rows or `MCP_MAX_CHARS` (20,000) characters,
+  always with at least one row; any list short of its total ends with
+  `(rows A-B of TOTAL; next page: offset N)`. A `limit` above `MCP_MAX_ROWS` is
+  clamped before the call.
+- `call_tool.fields` (beside `arguments`, not inside them) keeps only those
+  top-level fields of each row (`projectFields`). A wide row is 50+ columns;
+  `limit: 1` plus `fields: ["id"]` is the cheap way to read a total.
 - **Paging splits on `paginates`**:
   - `paginates: true` (a `paged` service function): `call_tool` fills `limit`
     (`MCP_DEFAULT_LIMIT`, 25) and `offset` (0) when the caller leaves them out.
@@ -220,6 +255,16 @@ compared to, as a path into the tool's input; the few nothing can answer are in
 `read-tools.inputs.ts`. A `notFound` refusal counts as not-found, not a failure.
 It gates on `read-tools.baseline.json`, which stays empty unless a failure is
 knowingly accepted. Seed first (`pnpm db:seed:dev`). Not part of `pnpm test`.
+
+## The agent evaluation
+
+`apps/erp/test/mcp-eval/satellite.xml`: ten read-only, multi-hop questions in
+the mcp-builder skill's format, answered only through the three meta-tools,
+each with one answer checked by string comparison. The answers come from the
+satellite demo dataset (no dates or sequence ids), so they hold for any company
+seeded with it; the file's header names the traps it sets on purpose. Run it
+with that skill's `scripts/evaluation.py` and a `crbn_` key holding the view
+scopes. Not part of `pnpm test`.
 
 ## The 14 modules
 
