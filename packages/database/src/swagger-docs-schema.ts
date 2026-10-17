@@ -125374,7 +125374,7 @@ export default {
           type: "string"
         },
         billingCycle: {
-          enum: ["Calendar Month", "28 Days"],
+          enum: ["Calendar Month", "28 Days", "Monthly"],
           format: 'public."rentalBillingCycle"',
           type: "string"
         },
@@ -128328,7 +128328,7 @@ export default {
         },
         billingCycle: {
           default: "Calendar Month",
-          enum: ["Calendar Month", "28 Days"],
+          enum: ["Calendar Month", "28 Days", "Monthly"],
           format: 'public."rentalBillingCycle"',
           type: "string"
         },
