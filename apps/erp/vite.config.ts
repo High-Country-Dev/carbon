@@ -15,7 +15,69 @@ import optimizeLocales from "@react-aria/optimize-locales-plugin";
 import { reactRouter } from "@react-router/dev/vite";
 import tailwindcss from "@tailwindcss/vite";
 import path from "node:path";
-import { defineConfig, PluginOption } from "vite";
+import { defineConfig, PluginOption, type Rolldown } from "vite";
+
+/**
+ * Splits the production server build into one chunk per installed package
+ * (`vendor-<name>`) instead of one file holding every dependency. Vercel traces
+ * the server function with @vercel/nft after the build, and nft handles one
+ * huge module far worse than many small ones: the 35 MB single bundle took
+ * ~5 min and up to the full 8 GB of a build machine. Applied to every SSR
+ * environment, including the Vercel preset's `ssrBundle_*`, through
+ * `configEnvironment` so it merges over React Router's own entry.
+ */
+function splitServerVendors(): PluginOption {
+  const packageChunk = (id: string) => {
+    if (!id.includes("node_modules/")) {
+      // A workspace package, linked from `packages/<name>`.
+      return `carbon-${id.split("/packages/").pop()?.split("/")[0]}`;
+    }
+    const [scope, name] = (id.split("node_modules/").pop() ?? "").split("/");
+    return `vendor-${scope.startsWith("@") ? `${scope}+${name}` : scope}`;
+  };
+  return {
+    name: "carbon:split-server-vendors",
+    apply: "build",
+    configEnvironment(name) {
+      if (!name.startsWith("ssr")) return;
+      // Only modules the server loads at startup (reached from the entry by
+      // static imports) are grouped. A package chunk holding a module that is
+      // only reached through `import()` would load it eagerly: the browser-only
+      // devtools did, and threw on `window`. A cycle reads as lazy, which only
+      // leaves that module where Rolldown would put it.
+      const eager = new Map<string, boolean>();
+      const loadsAtStartup = (id: string, ctx: Rolldown.ChunkingContext): boolean => {
+        const known = eager.get(id);
+        if (known !== undefined) return known;
+        eager.set(id, false);
+        const info = ctx.getModuleInfo(id);
+        const result =
+          !!info &&
+          (info.isEntry ||
+            info.importers.some((importer) => loadsAtStartup(importer, ctx)));
+        eager.set(id, result);
+        return result;
+      };
+      return {
+        build: {
+          rolldownOptions: {
+            output: {
+              codeSplitting: {
+                groups: [
+                  {
+                    name: (id, ctx) =>
+                      loadsAtStartup(id, ctx) ? packageChunk(id) : null,
+                    test: /node_modules|\/packages\//,
+                  },
+                ],
+              },
+            },
+          },
+        },
+      };
+    },
+  };
+}
 
 export default defineConfig(({ command, isSsrBuild, mode }) => {
   applyDotenvToProcessEnv(mode, import.meta.dirname);
@@ -150,6 +212,7 @@ export default defineConfig(({ command, isSsrBuild, mode }) => {
       tailwindcss(),
       linguiWithoutIdQuery(lingui({ macroTransform: true })),
       reactRouter(),
+      splitServerVendors(),
       precompressedAssets({ command, mode }),
       // react-aria ships strings for ~34 locales; keep the ones the app translates.
       optimizeLocales.vite({ locales: getConfig().locales }),
