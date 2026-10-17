@@ -176,9 +176,36 @@ describe("call_tool keeps list output small", () => {
     expect(result.content).toEqual([
       {
         type: "text",
-        text: '[{"id":"cust_1","name":"Acme"}]\n(rows 41-41 of 300; next page: offset 41)'
+        text: "# sales_getCustomers.csv\r\nid,name\r\ncust_1,Acme\n(rows 41-41 of 300; next page: offset 41)"
       }
     ]);
+  });
+
+  it("passes the caller's limit through with truncate false", async () => {
+    callOperation.mockResolvedValueOnce({
+      success: true,
+      data: [{ id: "cust_1" }],
+      count: 300
+    });
+    const client = await connect(
+      { name: "sales_getCustomers", module: "sales", paginates: true },
+      true
+    );
+
+    await client.callTool({
+      name: "call_tool",
+      arguments: {
+        name: "sales_getCustomers",
+        arguments: { limit: 500 },
+        truncate: false
+      }
+    });
+
+    expect(callOperation).toHaveBeenCalledWith(
+      "sales_getCustomers",
+      expect.anything(),
+      { limit: 500, offset: 0 }
+    );
   });
 
   it("pages a full-set read at the boundary with the clamped limit", async () => {
@@ -200,8 +227,13 @@ describe("call_tool keeps list output small", () => {
     });
 
     const text = (result.content as { text: string }[])[0]!.text;
-    expect(text.startsWith('[{"id":200},')).toBe(true);
-    expect(text).not.toContain('"id":199');
+    const lines = text.split(/\r?\n/);
+    expect(lines.slice(0, 3)).toEqual([
+      "# sales_getCustomersList.csv",
+      "id",
+      "200"
+    ]);
+    expect(lines).not.toContain("199");
     expect(text).not.toContain("next page");
   });
 });
@@ -219,7 +251,7 @@ describe("serveMcpRequest", () => {
       arguments: { name: "sales_getCustomer", arguments: { customerId: "c" } }
     });
     expect(result.content).toEqual([
-      { type: "text", text: '[{"id":"cust_1"}]' }
+      { type: "text", text: "# sales_getCustomer.csv\r\nid\r\ncust_1" }
     ]);
     const { tools } = await client.listTools();
     expect(tools.map((tool) => tool.name).sort()).toEqual([
