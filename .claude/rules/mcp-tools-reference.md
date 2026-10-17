@@ -201,15 +201,18 @@ the manifest.
   issue). `expandQueryTerm` adds each word's inflection stem to
   the QUERY, never the index. The in-app agent's `search_docs`
   (`doc-search.ts`) shares it.
-- BM25 only gathers candidates (top `RERANK_POOL`, 200). `rerankByName` orders
-  them by the tool NAME: query words it covers, then words matched in full
-  (an `ACTION_SYNONYMS` word such as create → insert, or every word of an
-  alias), then READ first when the query names no action, then fewer extra name
-  words, then a database-paged tool before a `get*List` that reads the whole
-  table, then BM25. An exact tool name, with or without its module, is put
-  first. BM25 alone ranked `inventory_getInventoryItems` tenth for its own name.
-  `stemInflection` leaves "materials" unstemmed, so `sameWord` also accepts a
-  plain -s/-es plural.
+- BM25 finds the matches; `createNameComparator` orders them, applied as
+  zbsearch's `sortBy` to every hit before `limit`/`offset`, so paging and the
+  total stay native. Order: the exact tool name (with or without its module),
+  then query words the NAME covers, then words matched in full (an
+  `ACTION_SYNONYMS` word such as create → insert, or every word of an alias),
+  then READ first when the query names no action, then fewer extra name words,
+  then a database-paged tool before a `get*List` that reads the whole table,
+  then the BM25 score. BM25 alone ranked `inventory_getInventoryItems` tenth for
+  its own name, and no `relevance` (k, b) or `threshold` setting gets close:
+  measured 22/34 at best against 33/34. Pinning cannot hold the exact-name rule
+  because it matches the expanded term, not the query. `stemInflection` leaves
+  "materials" unstemmed, so `sameWord` also accepts a plain -s/-es plural.
 - `module` keeps substring semantics; filter-only calls bypass the index.
 - One line per tool: `name [READ] (requiredParams, +N optional)`
   (`formatParamSummary`, `describe-format.ts`), plus the description's first

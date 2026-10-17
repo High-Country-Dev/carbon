@@ -196,34 +196,37 @@ export function expandQueryTerm(query: string): string {
 }
 
 /**
- * Re-rank BM25 candidates by how well each tool's NAME answers the query. BM25
- * finds the right neighbourhood but scores repeated common words ("items",
- * "get") over the one exact tool: `inventory_getInventoryItems` ranked tenth
- * for its own name. Order, highest first:
+ * Order search hits by how well each tool's NAME answers the query. zbsearch
+ * applies it as `sortBy` to every BM25 hit before paging. BM25 alone scores
+ * repeated common words ("items", "get") over the one exact tool:
+ * `inventory_getInventoryItems` ranked tenth for its own name, and no
+ * `relevance` setting fixes that. Order, highest first:
  *
- * 1. query terms the name covers. A term is a query word, or a whole
+ * 1. the exact tool name, with or without its module ("getInventoryItems");
+ * 2. query terms the name covers. A term is a query word, or a whole
  *    PHRASE_ALIASES phrase ("work orders"), which then stands in for its words;
- * 2. of those, terms matched in full: the word itself, an ACTION_SYNONYMS
+ * 3. of those, terms matched in full: the word itself, an ACTION_SYNONYMS
  *    word ("create" → insert), every word of its alias ("po" → purchase order)
  *    or its phrase. A stem or part of an alias covers but is not full;
- * 3. with no action word in the query, READ tools first (a bare noun is a
+ * 4. with no action word in the query, READ tools first (a bare noun is a
  *    lookup);
- * 4. fewer name words the query did not ask for (getJob before
+ * 5. fewer name words the query did not ask for (getJob before
  *    getJobOperations for "job");
- * 5. a tool that pages in the database before a `get*List` that reads the
+ * 6. a tool that pages in the database before a `get*List` that reads the
  *    whole table on every call ("list customers" wants getCustomers, not
- *    getCustomersList);
- * 6. the BM25 order.
+ *    getCustomersList).
+ *
+ * Ties are left at 0 for the caller to break by BM25 score. Returns null when
+ * the query has no words to rank by, so the BM25 order stands.
  *
  * `actions` is the set of first words of the catalog's function names (get,
  * insert, post, …), so a query counts as naming an action only when the
  * catalog has one.
  */
-export function rerankByName(
+export function createNameComparator(
   query: string,
-  candidates: ManifestEntry[],
   actions: ReadonlySet<string>
-): ManifestEntry[] {
+): ((a: ManifestEntry, b: ManifestEntry) => number) | null {
   let words = [
     ...new Set(
       splitWords(query)
@@ -243,13 +246,14 @@ export function rerankByName(
     phrases.push(aliases);
     words = words.filter((word) => !keyWords.includes(word));
   }
-  if (words.length === 0 && phrases.length === 0) return candidates;
+  if (words.length === 0 && phrases.length === 0) return null;
 
+  const needle = query.trim().toLowerCase();
   const hasAction = words.some(
     (word) => actions.has(word) || word in ACTION_SYNONYMS
   );
 
-  const scored = candidates.map((tool, bm25Rank) => {
+  const rank = (tool: ManifestEntry) => {
     const separator = tool.name.indexOf("_");
     const tokens = splitWords(tool.name).split(" ");
     const tokenSet = new Set(tokens);
@@ -294,24 +298,43 @@ export function rerankByName(
     const moduleWords = new Set(
       splitWords(tool.name.slice(0, Math.max(separator, 0))).split(" ")
     );
-    const extra = tokens.filter(
-      (token) => !used.has(token) && !moduleWords.has(token) && token !== "get"
-    ).length;
-    const readFirst = !hasAction && tool.classification === "READ" ? 1 : 0;
-    const fullSet = !tool.paginates && tool.name.endsWith("List") ? 1 : 0;
-    return { tool, covered, full, readFirst, extra, fullSet, bm25Rank };
-  });
+    const name = tool.name.toLowerCase();
+    return {
+      exact: name === needle || name.slice(separator + 1) === needle ? 1 : 0,
+      covered,
+      full,
+      readFirst: !hasAction && tool.classification === "READ" ? 1 : 0,
+      extra: tokens.filter(
+        (token) =>
+          !used.has(token) && !moduleWords.has(token) && token !== "get"
+      ).length,
+      fullSet: !tool.paginates && tool.name.endsWith("List") ? 1 : 0
+    };
+  };
 
-  scored.sort(
-    (a, b) =>
-      b.covered - a.covered ||
-      b.full - a.full ||
-      b.readFirst - a.readFirst ||
-      a.extra - b.extra ||
-      a.fullSet - b.fullSet ||
-      a.bm25Rank - b.bm25Rank
-  );
-  return scored.map((entry) => entry.tool);
+  // A sort compares each hit many times; rank each tool once.
+  const ranks = new Map<string, ReturnType<typeof rank>>();
+  const rankOf = (tool: ManifestEntry) => {
+    let cached = ranks.get(tool.name);
+    if (!cached) {
+      cached = rank(tool);
+      ranks.set(tool.name, cached);
+    }
+    return cached;
+  };
+
+  return (a, b) => {
+    const x = rankOf(a);
+    const y = rankOf(b);
+    return (
+      y.exact - x.exact ||
+      y.covered - x.covered ||
+      y.full - x.full ||
+      y.readFirst - x.readFirst ||
+      x.extra - y.extra ||
+      x.fullSet - y.fullSet
+    );
+  };
 }
 
 /**
@@ -324,9 +347,6 @@ function sameWord(a: string, b: string): boolean {
   const [short, long] = a.length < b.length ? [a, b] : [b, a];
   return long === `${short}s` || long === `${short}es`;
 }
-
-/** How many BM25 hits the name re-rank reorders. */
-const RERANK_POOL = 200;
 
 export type CatalogSearchOptions = {
   query?: string;
@@ -383,15 +403,6 @@ async function buildIndex(tools: ManifestEntry[]) {
 
 export function createCatalogSearch(tools: ManifestEntry[]): CatalogSearch {
   const byName = new Map(tools.map((tool) => [tool.name, tool]));
-  const byLowerName = new Map(
-    tools.map((tool) => [tool.name.toLowerCase(), tool])
-  );
-  // "getJobs" without its module: every tool whose function part is that name.
-  const byFunction = new Map<string, ManifestEntry[]>();
-  for (const tool of tools) {
-    const fn = tool.name.slice(tool.name.indexOf("_") + 1).toLowerCase();
-    byFunction.set(fn, [...(byFunction.get(fn) ?? []), tool]);
-  }
   const actions = new Set(
     tools.map(
       (tool) =>
@@ -439,6 +450,8 @@ export function createCatalogSearch(tools: ManifestEntry[]): CatalogSearch {
     }
     if (classification) where.classification = { eq: classification };
 
+    const compare = createNameComparator(query!, actions);
+    const toolOf = (document: { name: string }) => byName.get(document.name)!;
     const params = {
       term,
       properties: ["name", "tokens", "description", "fields"] as (
@@ -449,8 +462,16 @@ export function createCatalogSearch(tools: ManifestEntry[]): CatalogSearch {
       )[],
       boost: { name: 4, tokens: 3, description: 1.5, fields: 0.5 },
       ...(Object.keys(where).length > 0 ? { where } : {}),
-      limit: Math.max(RERANK_POOL, offset + limit),
-      offset: 0
+      ...(compare
+        ? {
+            sortBy: (
+              [, scoreA, a]: [unknown, number, { name: string }],
+              [, scoreB, b]: [unknown, number, { name: string }]
+            ) => compare(toolOf(a), toolOf(b)) || scoreB - scoreA
+          }
+        : {}),
+      limit,
+      offset
     };
 
     const db = await getIndex();
@@ -461,31 +482,11 @@ export function createCatalogSearch(tools: ManifestEntry[]): CatalogSearch {
       results = await search(db, { ...params, tolerance: 1 });
     }
 
-    const passesFilters = (tool: ManifestEntry) =>
-      (!modules || modules.includes(tool.module)) &&
-      (!classification || tool.classification === classification);
-
-    // An exact tool name, with or without its module, always comes first.
-    const needle = query!.trim().toLowerCase();
-    const exactHits = (
-      byLowerName.has(needle)
-        ? [byLowerName.get(needle)!]
-        : (byFunction.get(needle) ?? [])
-    ).filter(passesFilters);
-
-    const hits = results.hits
-      .map((hit) => byName.get((hit.document as { name: string }).name))
-      .filter((tool): tool is ManifestEntry => tool !== undefined);
-    const ranked = [
-      ...exactHits,
-      ...rerankByName(query!, hits, actions).filter(
-        (tool) => !exactHits.includes(tool)
-      )
-    ];
-
     return {
-      matches: ranked.slice(offset, offset + limit),
-      total: Math.max(results.count, exactHits.length)
+      matches: results.hits.map((hit) =>
+        toolOf(hit.document as { name: string })
+      ),
+      total: results.count
     };
   }
 

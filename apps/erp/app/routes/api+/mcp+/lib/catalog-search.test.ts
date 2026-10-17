@@ -6,8 +6,8 @@ import type { ManifestEntry } from "@carbon/api";
 import {
   collectFieldNames,
   createCatalogSearch,
+  createNameComparator,
   expandQueryTerm,
-  rerankByName,
   splitWords
 } from "@carbon/ee/mcp";
 import { describe, expect, test } from "vitest";
@@ -220,7 +220,7 @@ describe("ranking by name", () => {
   });
 });
 
-describe("rerankByName", () => {
+describe("createNameComparator", () => {
   const entry = (
     name: string,
     classification: ManifestEntry["classification"] = "READ"
@@ -228,19 +228,25 @@ describe("rerankByName", () => {
   const actions = new Set(["get", "delete", "insert"]);
 
   test("prefers the tighter name when coverage ties", () => {
-    const ranked = rerankByName(
-      "job",
-      [entry("production_getJobOperations"), entry("production_getJob")],
-      actions
-    );
+    const compare = createNameComparator("job", actions)!;
+    const ranked = [
+      entry("production_getJobOperations"),
+      entry("production_getJob")
+    ].sort(compare);
     expect(ranked.map((t) => t.name)).toEqual([
       "production_getJob",
       "production_getJobOperations"
     ]);
   });
 
-  test("keeps the BM25 order when the query has no usable words", () => {
-    const candidates = [entry("a_getX"), entry("b_getY")];
-    expect(rerankByName("the of", candidates, actions)).toBe(candidates);
+  test("puts an exact name first, with or without its module", () => {
+    const compare = createNameComparator("getJob", actions)!;
+    expect(
+      compare(entry("production_getJob"), entry("production_getJobs"))
+    ).toBeLessThan(0);
+  });
+
+  test("leaves the BM25 order when the query has no usable words", () => {
+    expect(createNameComparator("the of", actions)).toBe(null);
   });
 });
