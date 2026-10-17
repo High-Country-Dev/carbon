@@ -91914,6 +91914,10 @@ export type Database = {
         Args: { p_company_id: string; p_cutoff_date: string }
         Returns: number
       }
+      delete_webhook_signing_secret: {
+        Args: { p_company_id: string; p_webhook_id: string }
+        Returns: undefined
+      }
       drop_audit_log_table: {
         Args: { p_company_id: string }
         Returns: undefined
@@ -94105,6 +94109,10 @@ export type Database = {
           userCount: number
         }[]
       }
+      get_webhook_signing_secret: {
+        Args: { p_company_id: string; p_webhook_id: string }
+        Returns: string
+      }
       getConsolidationRates: {
         Args: {
           p_company_group_id: string
@@ -94311,10 +94319,6 @@ export type Database = {
         Args: { p_company_id: string }
         Returns: undefined
       }
-      populate_sales_search_results: {
-        Args: { p_company_id: string }
-        Returns: undefined
-      }
       prevent_posted_purchase_invoice_deletion: {
         Args: { p_new: Json; p_old: Json; p_operation: string; p_table: string }
         Returns: undefined
@@ -94381,6 +94385,10 @@ export type Database = {
       reconcile_item_stock_quantities: { Args: never; Returns: undefined }
       resolve_shelf_life_start_for_receipt: {
         Args: { p_item_id: string; p_receipt_id: string }
+        Returns: string
+      }
+      rotate_webhook_signing_secret: {
+        Args: { p_company_id: string; p_webhook_id: string }
         Returns: string
       }
       save_inspection_document_atomic: {
