@@ -191,8 +191,6 @@ export async function action({ request }: ActionFunctionArgs) {
     const newTrackedEntityId = response.data?.newTrackedEntityId as
       | string
       | undefined;
-    // A refused completion (a strict backflush shortfall) rolled back: print
-    // nothing for it.
     if (response.error) {
       return data(
         {},
@@ -335,9 +333,6 @@ export async function action({ request }: ActionFunctionArgs) {
     // biome-ignore lint/correctness/noUnusedVariables: suppressed due to migration
     const { trackedEntityId, trackingType, ...d } = validation.data;
 
-    // Strict backflush: refuse before the production quantity is recorded, so
-    // a short storage unit never leaves units completed with no material
-    // consumed. A no-op when strict backflush is off.
     const check = await checkStrictBackflush({
       jobOperationId: validation.data.jobOperationId,
       quantity: validation.data.quantity,
@@ -383,8 +378,6 @@ export async function action({ request }: ActionFunctionArgs) {
       });
 
     if (issued.error) {
-      // The units are recorded: say so, or the operator retries and records
-      // them twice.
       return data(
         {},
         await flash(request, {

@@ -11,9 +11,6 @@ import { getDatabaseClient } from "~/services/database.server";
 
 const logger = getLogger("erp", "items-pull-from-locations");
 
-// Strict backflush: the locations a pulled line needs a Pull From at (an
-// active work center and an active storage unit). The BoM badges read it, so
-// they mark the same lines activation refuses.
 export async function loader({ request }: LoaderFunctionArgs) {
   const { companyId } = await requirePermissions(request, {});
   try {

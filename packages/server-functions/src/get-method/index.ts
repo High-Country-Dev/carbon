@@ -31,6 +31,7 @@ import {
   getNextRevisionSequence,
   getNextSequence
 } from "@carbon/database/sequence";
+import { getStrictBackflushSettings } from "@carbon/database/strict-backflush";
 import {
   buildConsumeFirstHops,
   buildConsumeFirstRules,
@@ -623,6 +624,13 @@ const getMethod = defineServerFn({
         const scrapPercentageByItemId = new Map<string, number>();
         const defaultStorageUnitByItemId = new Map<string, string>();
         const jobLocationId = job.locationId;
+        let fullestBinAllowed: boolean | undefined;
+        async function withFullestBin(reader: typeof db) {
+          fullestBinAllowed ??= !(
+            await getStrictBackflushSettings(reader, companyId, jobLocationId)
+          ).strict;
+          return fullestBinAllowed;
+        }
 
         const operationsByMakeMethodId = new Map<
           string,
@@ -671,22 +679,24 @@ const getMethod = defineServerFn({
           // Default storage units at the job's location — two set-based
           // queries instead of up to two per material (getStorageUnitId):
           // pickMethod default wins, else the bin with the highest on-hand
-          // quantity.
+          // quantity — never the fullest bin under strict backflush.
           if (jobLocationId) {
-            const ledgerTotals = await reader
-              .selectFrom("itemLedger")
-              .where("locationId", "=", jobLocationId)
-              .where("companyId", "=", companyId)
-              .where("itemId", "in", missing)
-              .where("storageUnitId", "is not", null)
-              .groupBy(["itemId", "storageUnitId"])
-              .select([
-                "itemId",
-                "storageUnitId",
-                (eb) => eb.fn.sum("quantity").as("totalQuantity")
-              ])
-              .having((eb) => eb.fn.sum("quantity"), ">", 0)
-              .execute();
+            const ledgerTotals = !(await withFullestBin(reader))
+              ? []
+              : await reader
+                  .selectFrom("itemLedger")
+                  .where("locationId", "=", jobLocationId)
+                  .where("companyId", "=", companyId)
+                  .where("itemId", "in", missing)
+                  .where("storageUnitId", "is not", null)
+                  .groupBy(["itemId", "storageUnitId"])
+                  .select([
+                    "itemId",
+                    "storageUnitId",
+                    (eb) => eb.fn.sum("quantity").as("totalQuantity")
+                  ])
+                  .having((eb) => eb.fn.sum("quantity"), ">", 0)
+                  .execute();
 
             const bestQuantityByItemId = new Map<string, number>();
             for (const row of ledgerTotals) {
@@ -8332,6 +8342,7 @@ function createItemDefaults(
   const scrapByItemId = new Map<string, number>();
   const binByItemId = new Map<string, string>();
   const loaded = new Set<string>();
+  let fullestBinAllowed: boolean | undefined;
 
   async function load(
     reader: Kysely<KyselyDatabase>,
@@ -8352,25 +8363,31 @@ function createItemDefaults(
       scrapByItemId.set(row.itemId, Number(row.scrapPercentage ?? 0));
     }
 
-    // The pick method's default bin wins, else the bin holding the most.
+    // The pick method's default bin wins, else the bin holding the most (never
+    // under strict backflush).
     if (locationId) {
-      const ledgerTotals = await reader
-        .selectFrom("itemLedger")
-        .where("locationId", "=", locationId)
-        .where("companyId", "=", companyId)
-        .where("itemId", "in", missing)
-        .where("storageUnitId", "is not", null)
-        .groupBy(["itemId", "storageUnitId"])
-        .select([
-          "itemId",
-          "storageUnitId",
-          (eb) => eb.fn.sum("quantity").as("totalQuantity")
-        ])
-        .having((eb) => eb.fn.sum("quantity"), ">", 0)
-        .orderBy("itemId")
-        .orderBy("totalQuantity", "desc")
-        .orderBy("storageUnitId")
-        .execute();
+      fullestBinAllowed ??= !(
+        await getStrictBackflushSettings(reader, companyId, locationId)
+      ).strict;
+      const ledgerTotals = !fullestBinAllowed
+        ? []
+        : await reader
+            .selectFrom("itemLedger")
+            .where("locationId", "=", locationId)
+            .where("companyId", "=", companyId)
+            .where("itemId", "in", missing)
+            .where("storageUnitId", "is not", null)
+            .groupBy(["itemId", "storageUnitId"])
+            .select([
+              "itemId",
+              "storageUnitId",
+              (eb) => eb.fn.sum("quantity").as("totalQuantity")
+            ])
+            .having((eb) => eb.fn.sum("quantity"), ">", 0)
+            .orderBy("itemId")
+            .orderBy("totalQuantity", "desc")
+            .orderBy("storageUnitId")
+            .execute();
       for (const row of ledgerTotals) {
         // Ordered by quantity: the first row for an item is its fullest bin.
         if (row.storageUnitId && !binByItemId.has(row.itemId)) {

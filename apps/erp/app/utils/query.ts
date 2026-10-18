@@ -259,12 +259,7 @@ export const filterOperatorLabels = Object.entries(filterOperators).map(
   })
 );
 
-/**
- * Search, sort and page a list held in memory, honouring the shared `Table`'s
- * URL parameters (`search`, `sort`, `limit`, `offset`). For lists computed in
- * TypeScript from a whole-company read (the strict backflush drawers), where
- * PostgREST cannot do the paging. Array values sort by their first entry.
- */
+// Array values sort by their first entry.
 export function pageInMemory<T extends Record<string, unknown>>(
   rows: T[],
   searchParams: URLSearchParams,

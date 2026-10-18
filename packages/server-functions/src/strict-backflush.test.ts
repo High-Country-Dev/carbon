@@ -2,11 +2,6 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
-// Strict backflush against the live database
-// (.ai/specs/2026-10-14-strict-backflush.md). With the setting on, a stocked
-// material is consumed only from its own storage unit and a missing or short
-// bin refuses the backflush; with it off, the old fallbacks still apply.
-
 import { sql } from "kysely";
 import { expect } from "vitest";
 import {
@@ -18,14 +13,14 @@ import {
   unwrap,
   workCenterFixture
 } from "./always-post-test-fixture";
+import getMethod from "./get-method";
 import issue from "./issue";
 import { assertMethodHasPullFrom } from "./lib/strict-backflush";
 import { databaseTest } from "./local-database-test-fixture";
 import postInventoryAdjustment from "./post-inventory-adjustment";
 
-// Strict backflush applies only at a location with an active work center and
-// an active storage unit. Every test creates its storage units; turning the
-// setting on adds the work center, unless the test is about its absence.
+// Strict backflush needs an active work center at the location; tests create
+// their own storage units.
 async function setStrict(
   f: Fixture,
   on: boolean,
@@ -39,9 +34,6 @@ async function setStrict(
   if (on && withWorkCenter) await workCenterFixture(f);
 }
 
-// Picks `quantity` of a job's material from `from` to `to` the way
-// post-picking does: a live pick line, the transfer in the ledger, and the
-// material pointed at the bin it was picked to.
 async function pick(
   f: Fixture,
   job: { jobId: string; materialId: string },
@@ -193,7 +185,6 @@ databaseTest(
       );
       expect(await consumption(f, job.jobId)).toEqual([]);
 
-      // Topped up, the same completion draws from Shelf A only.
       await stockBin(f, shelfA, 1);
       unwrap(
         await issue(f.ctx, {
@@ -254,7 +245,6 @@ databaseTest(
         .where("id", "=", f.companyId)
         .execute();
 
-      // Operation completion: all 2 from Shelf A (1 on hand → -1), none from B.
       unwrap(
         await issue(f.ctx, {
           type: "jobOperation",
@@ -266,7 +256,6 @@ databaseTest(
         { storageUnitId: shelfA, quantity: -2 }
       ]);
 
-      // A missing bin is still refused: strict bins stay strict.
       const second = await jobFixture(f, "2");
       const missing = await issue(f.ctx, {
         type: "jobOperation",
@@ -277,7 +266,6 @@ databaseTest(
         `${f.prefix}-PART has no Pull From storage unit on job J-2`
       );
 
-      // Job completion (SQL) draws its own bin below zero too.
       const third = await jobFixture(f, "3");
       await setMaterialBin(f, third.materialId, shelfA);
       await sql`SELECT backflush_job_materials(${third.jobId}, 1, ${f.companyId}, ${USER})`.execute(
@@ -328,7 +316,6 @@ databaseTest("a dry run reports the refusal and writes nothing", async () => {
     const job = await jobFixture(f);
     await setMaterialBin(f, job.materialId, shelfA);
 
-    // Off: a no-op, even though the bin is short.
     unwrap(
       await issue(f.ctx, {
         type: "jobOperation",
@@ -347,7 +334,6 @@ databaseTest("a dry run reports the refusal and writes nothing", async () => {
     });
     expect(short.error?.status).toBe(409);
 
-    // Covered: the dry run succeeds and rolls every write back.
     await stockBin(f, shelfA, 1);
     unwrap(
       await issue(f.ctx, {
@@ -468,7 +454,6 @@ databaseTest(
           .execute();
       });
 
-      // No location has a work center yet, so nothing needs a bin.
       await assertMethodHasPullFrom(f.db, {
         makeMethodId,
         companyId: f.companyId
@@ -509,8 +494,6 @@ databaseTest(
       await stockBin(f, shelfA, 4);
       await setStrict(f, true);
 
-      // Operation completion: the picked 1 from lineside, the other 1 from
-      // Shelf A — the bin the line was picked from, not lineside again.
       const job = await jobFixture(f);
       await setMaterialBin(f, job.materialId, shelfA);
       await pick(f, job, shelfA, lineside, 1);
@@ -528,7 +511,6 @@ databaseTest(
         ])
       );
 
-      // Job completion (SQL): the same split.
       const second = await jobFixture(f, "2");
       await setMaterialBin(f, second.materialId, shelfA);
       await pick(f, second, shelfA, lineside, 1);
@@ -552,9 +534,6 @@ databaseTest(
   async () => {
     const f = await alwaysPostFixture();
     try {
-      // Activation asks for no Pull From here, so the backflush must not
-      // refuse a line for missing one: the old fallback (the fullest bin)
-      // applies.
       const shelfB = await storageUnit(f, "Shelf B");
       await stockBin(f, shelfB, 10);
       await setStrict(f, true, { withWorkCenter: false });
@@ -589,11 +568,8 @@ databaseTest(
   async () => {
     const f = await alwaysPostFixture();
     try {
-      // Two lines of 2 on one bin holding 1: both are refused, and the
-      // second sees the first's need already drawn ("have 0"), so the
-      // refusal states the bin's whole shortfall at once. Without that, the
-      // second would read "have 1" and the user would fix it in two rounds.
-      // Holds in either order the loop visits the lines.
+      // Two lines of 2 on a bin holding 1: the second sees the first's need
+      // ("have 0"), in either loop order.
       const shelfA = await storageUnit(f, "Shelf A");
       await stockBin(f, shelfA, 1);
       await setStrict(f, true);
@@ -638,6 +614,105 @@ databaseTest(
         `Not enough ${f.prefix}-PART in ${f.prefix} Shelf A: need 2, have 0`
       );
       expect(await consumption(f, job.jobId)).toEqual([]);
+    } finally {
+      await f.cleanup();
+    }
+  }
+);
+
+async function jobLineBinFromBom(
+  f: Fixture,
+  key: string,
+  storageUnitIds: Record<string, string>
+): Promise<string | null> {
+  const makeMethodId = `${f.prefix}-make-method-${key}`;
+  const jobId = `${f.prefix}-bom-job-${key}`;
+  await seed(f, async (trx) => {
+    await trx
+      .insertInto("makeMethod")
+      .values({
+        id: makeMethodId,
+        itemId: f.assemblyId,
+        version: 100 + Number(key),
+        companyId: f.companyId,
+        createdBy: USER
+      })
+      .execute();
+    await trx
+      .insertInto("methodMaterial")
+      .values({
+        makeMethodId,
+        itemId: f.partId,
+        itemType: "Part",
+        methodType: "Pull from Inventory",
+        quantity: 2,
+        unitOfMeasureCode: "EA",
+        storageUnitIds,
+        companyId: f.companyId,
+        createdBy: USER
+      })
+      .execute();
+    await trx
+      .insertInto("job")
+      .values({
+        id: jobId,
+        jobId: `J-BOM-${key}`,
+        itemId: f.assemblyId,
+        quantity: 1,
+        unitOfMeasureCode: "EA",
+        locationId: f.locationId,
+        companyId: f.companyId,
+        createdBy: USER
+      })
+      .execute();
+  });
+  unwrap(
+    await getMethod(f.ctx, {
+      type: "itemToJob",
+      sourceId: f.assemblyId,
+      targetId: jobId,
+      versionId: makeMethodId
+    })
+  );
+  const line = await f.db
+    .selectFrom("jobMaterial")
+    .select("storageUnitId")
+    .where("jobId", "=", jobId)
+    .where("itemId", "=", f.partId)
+    .where("companyId", "=", f.companyId)
+    .executeTakeFirstOrThrow();
+  return line.storageUnitId;
+}
+
+databaseTest(
+  "under strict backflush, job creation never gives a line the fullest bin",
+  async () => {
+    const f = await alwaysPostFixture();
+    try {
+      const shelfA = await storageUnit(f, "Shelf A");
+      const shelfB = await storageUnit(f, "Shelf B");
+      await stockBin(f, shelfB, 10);
+
+      expect(await jobLineBinFromBom(f, "1", {})).toBe(shelfB);
+
+      await setStrict(f, true);
+      expect(await jobLineBinFromBom(f, "2", {})).toBeNull();
+
+      await f.db
+        .insertInto("pickMethod")
+        .values({
+          itemId: f.partId,
+          locationId: f.locationId,
+          defaultStorageUnitId: shelfA,
+          companyId: f.companyId,
+          createdBy: USER
+        })
+        .execute();
+      expect(await jobLineBinFromBom(f, "3", {})).toBe(shelfA);
+
+      expect(await jobLineBinFromBom(f, "4", { [f.locationId]: shelfB })).toBe(
+        shelfB
+      );
     } finally {
       await f.cleanup();
     }

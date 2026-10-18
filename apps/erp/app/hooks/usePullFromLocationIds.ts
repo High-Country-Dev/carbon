@@ -7,11 +7,7 @@ import type { loader } from "~/routes/api+/items.pull-from-locations";
 import { path } from "~/utils/path";
 import { useCompanySettings } from "./useCompanySettings";
 
-/**
- * Strict backflush: the locations a pulled line needs a Pull From at, or null
- * while the setting is off or the list is still loading (a badge shows
- * nothing until it is known).
- */
+/** Null while strict backflush is off or the list is loading. */
 export function usePullFromLocationIds(): string[] | null {
   const companySettings = useCompanySettings();
   const strict = companySettings?.requireBackflushStorageUnit === true;

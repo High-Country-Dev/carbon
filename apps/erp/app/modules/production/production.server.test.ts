@@ -26,14 +26,14 @@ vi.mock("./production.service", () => ({
   recalculateJobRequirements: vi.fn(),
   returnPickedRemaindersForJob: vi.fn(),
   runMRP: vi.fn(),
-  updateJobStatus: vi.fn()
+  writeJobStatus: vi.fn()
 }));
 
 import { cancelOpenPickingListsForJob } from "~/modules/inventory/inventory.service";
 import { cancelJob } from "./production.server";
 import {
   returnPickedRemaindersForJob,
-  updateJobStatus
+  writeJobStatus
 } from "./production.service";
 
 // cancelJob is the one cancel path (the job status route and planning's
@@ -60,8 +60,8 @@ describe("cancelJob", () => {
       events.push("cancelOpenPickingLists");
       return { error: null };
     }) as never);
-    vi.mocked(updateJobStatus).mockImplementation((async () => {
-      events.push("updateJobStatus");
+    vi.mocked(writeJobStatus).mockImplementation((async () => {
+      events.push("writeJobStatus");
       return { data: null, error: null, updated: true };
     }) as never);
   });
@@ -72,7 +72,7 @@ describe("cancelJob", () => {
     expect(events).toEqual([
       "returnPickedRemainders",
       "cancelOpenPickingLists",
-      "updateJobStatus"
+      "writeJobStatus"
     ]);
     expect(returnPickedRemaindersForJob).toHaveBeenCalledWith(
       expect.anything(),
@@ -84,7 +84,7 @@ describe("cancelJob", () => {
       companyId: "company-1",
       userId: "user-1"
     });
-    expect(updateJobStatus).toHaveBeenCalledWith(args.client, {
+    expect(writeJobStatus).toHaveBeenCalledWith(args.client, {
       id: "job-1",
       companyId: "company-1",
       status: "Cancelled",
@@ -104,7 +104,7 @@ describe("cancelJob", () => {
       "Cancel aborted: returning picked material failed"
     );
     expect(cancelOpenPickingListsForJob).not.toHaveBeenCalled();
-    expect(updateJobStatus).not.toHaveBeenCalled();
+    expect(writeJobStatus).not.toHaveBeenCalled();
   });
 
   it("stops before the status when the picking lists cannot be closed", async () => {
@@ -118,12 +118,12 @@ describe("cancelJob", () => {
       "Cancel aborted: its picking lists could not be closed"
     );
     expect(returnPickedRemaindersForJob).toHaveBeenCalledOnce();
-    expect(updateJobStatus).not.toHaveBeenCalled();
+    expect(writeJobStatus).not.toHaveBeenCalled();
   });
 
   it("reports a failed status update", async () => {
-    vi.mocked(updateJobStatus).mockImplementationOnce((async () => {
-      events.push("updateJobStatus");
+    vi.mocked(writeJobStatus).mockImplementationOnce((async () => {
+      events.push("writeJobStatus");
       return { data: null, error: new Error("update failed"), updated: false };
     }) as never);
 
@@ -133,7 +133,7 @@ describe("cancelJob", () => {
     expect(events).toEqual([
       "returnPickedRemainders",
       "cancelOpenPickingLists",
-      "updateJobStatus"
+      "writeJobStatus"
     ]);
   });
 
@@ -173,17 +173,17 @@ describe("cancelJob", () => {
       expect(events).toEqual([
         "returnPickedRemainders",
         "cancelOpenPickingLists",
-        "updateJobStatus"
+        "writeJobStatus"
       ]);
-      expect(updateJobStatus).toHaveBeenCalledWith(
+      expect(writeJobStatus).toHaveBeenCalledWith(
         client,
         expect.objectContaining({ fromStatuses: ["Draft", "Planned"] })
       );
     });
 
     it("refuses when the job moves on between the check and the write", async () => {
-      vi.mocked(updateJobStatus).mockImplementationOnce((async () => {
-        events.push("updateJobStatus");
+      vi.mocked(writeJobStatus).mockImplementationOnce((async () => {
+        events.push("writeJobStatus");
         return { data: [], error: null, updated: false };
       }) as never);
 

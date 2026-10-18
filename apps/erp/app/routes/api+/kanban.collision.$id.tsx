@@ -64,13 +64,16 @@ export async function action({ request, params }: ActionFunctionArgs) {
   if (kanbanUpdate.error) {
     return data(
       { success: false },
-      await flash(request, error("Failed to cancel job"))
+      await flash(
+        request,
+        error(kanbanUpdate.error, "Failed to remove the job from the kanban")
+      )
     );
   }
 
   return redirect(
     path.to.api.kanban(id),
-    await flash(request, success("Job cancelled"))
+    await flash(request, success("Job removed from the kanban"))
   );
 }
 

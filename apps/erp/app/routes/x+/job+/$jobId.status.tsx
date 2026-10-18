@@ -108,9 +108,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
       }
     }
 
-    // Releasing (the dialog, or a plain post of Ready on a Draft or Planned
-    // job — the API and MCP path): strict backflush refuses a pulled line with
-    // no storage unit on every path. Resuming a Paused job is not a release.
     if (
       shouldSchedule ||
       data?.status === "Draft" ||
@@ -268,7 +265,15 @@ export async function action({ request, params }: ActionFunctionArgs) {
     if (update.error) {
       throw redirect(
         requestReferrer(request) ?? path.to.job(id),
-        await flash(request, error(update.error, "Failed to update job status"))
+        await flash(
+          request,
+          error(
+            update.error,
+            update.error.code === "RELEASE_REFUSED"
+              ? update.error.message
+              : "Failed to update job status"
+          )
+        )
       );
     }
   }

@@ -2,19 +2,18 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
-import { notFound } from "@carbon/auth";
+import { error, notFound } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { getCarbonServiceRole } from "@carbon/auth/client.server";
 import { rejectCrossSiteNavigation } from "@carbon/auth/middleware/security.server";
+import { flash } from "@carbon/auth/session.server";
 import type { Database } from "@carbon/database";
 import { convertUnitPrice } from "@carbon/database/supplier-part-price";
-import { trigger } from "@carbon/jobs";
-import { trackWorkEvent } from "@carbon/lib/telemetry";
 import { getLogger } from "@carbon/logger";
 import { runLocationSchedule } from "@carbon/planning";
 import { Loading } from "@carbon/react";
 import { serverFns } from "@carbon/server-functions";
-import { datetime } from "@carbon/utils";
+import { datetime, redirect } from "@carbon/utils";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { Suspense } from "react";
 import type { LoaderFunctionArgs } from "react-router";
@@ -24,11 +23,13 @@ import { getDefaultStorageUnitForJob, getKanban } from "~/modules/inventory";
 import { getItemReplenishment, getSupplierPartPricing } from "~/modules/items";
 import {
   getActiveJobOperationByJobId,
+  getJobReleaseReadiness,
   insertJob,
-  runMRP,
   updateKanbanJob,
   upsertJobMethod
 } from "~/modules/production";
+import { releaseJobs } from "~/modules/production/production.server";
+import { jobReleaseBlockers } from "~/modules/production/ui/Jobs/job-release-logic";
 import {
   insertPurchaseOrder,
   upsertPurchaseOrderLine
@@ -43,6 +44,99 @@ import { path } from "~/utils/path";
 
 const logger = getLogger("erp", "kanban");
 
+async function releaseKanbanJob({
+  client,
+  jobId,
+  locationId,
+  companyId,
+  userId
+}: {
+  client: SupabaseClient<Database>;
+  jobId: string;
+  locationId: string;
+  companyId: string;
+  userId: string;
+}): Promise<{ released: boolean; message: string | null }> {
+  const job = await client
+    .from("job")
+    .select("jobId, quantity, scrapQuantity")
+    .eq("id", jobId)
+    .eq("companyId", companyId)
+    .single();
+  const readiness = await getJobReleaseReadiness(client, [jobId], companyId);
+  const ready = readiness.data?.jobs[0];
+  if (job.error || readiness.error || !ready) {
+    logger.error("Failed to check a kanban job for release", {
+      companyId,
+      jobId,
+      error: job.error ?? readiness.error
+    });
+    return {
+      released: false,
+      message: `${job.data?.jobId ?? "The job"} was created but could not be checked for release. Release it from the job.`
+    };
+  }
+
+  // No one at a kanban card can choose a purchase order, so unlike bulk
+  // release a supplier's Draft PO is reused rather than a blocker.
+  const blockers = jobReleaseBlockers(job.data, ready);
+  if (blockers.length > 0) {
+    return {
+      released: false,
+      message: `${job.data.jobId} was created but not released: ${blockers.join("; ")}`
+    };
+  }
+
+  const result = await releaseJobs({
+    client,
+    db: getDatabaseClient(),
+    jobIds: [jobId],
+    companyId,
+    userId,
+    purchaseOrdersBySupplierId: Object.fromEntries(
+      (readiness.data?.suppliers ?? []).map((supplier) => [
+        supplier.supplierId,
+        [...supplier.draftPurchaseOrders].sort((a, b) =>
+          b.purchaseOrderId.localeCompare(a.purchaseOrderId)
+        )[0]?.id ?? "new"
+      ])
+    ),
+    source: "kanban"
+  });
+  const released = result.releasedJobIds.includes(jobId);
+  if (result.error) {
+    logger.error("Failed to release a kanban job", {
+      companyId,
+      jobId,
+      error: result.error
+    });
+  }
+
+  // After the status is persisted: the scheduler only places released jobs.
+  if (released) {
+    try {
+      await runLocationSchedule({
+        db: getDatabaseClient(),
+        client,
+        locationId,
+        companyId,
+        userId
+      });
+    } catch (error) {
+      logger.error("Failed to schedule a kanban job", {
+        companyId,
+        jobId,
+        error
+      });
+    }
+  }
+
+  return {
+    released,
+    message: result.error ? `${job.data.jobId}: ${result.error}` : null
+  };
+}
+
 async function handleKanban({
   client,
   companyId,
@@ -55,7 +149,10 @@ async function handleKanban({
   companyGroupId: string;
   userId: string;
   id: string;
-}): Promise<{ data: string; error: null } | { data: null; error: string }> {
+}): Promise<
+  | { data: string; error: null; message?: string }
+  | { data: null; error: string }
+> {
   const kanban = await getKanban(client, id, companyId);
 
   if (kanban.error || !kanban.data) {
@@ -156,48 +253,20 @@ async function handleKanban({
       };
     }
 
-    if (!upsertMethod.error && kanban.data.autoRelease) {
-      await Promise.all([
-        trigger("recalculate", {
-          type: "jobRequirements",
-          id,
-          companyId,
-          userId
-        }),
-        runMRP(serviceRole, getDatabaseClient(), {
-          type: "job",
-          id,
-          companyId,
-          userId
-        }),
-        runLocationSchedule({
-          db: getDatabaseClient(),
-          client: serviceRole,
-          locationId: kanban.data.locationId!,
-          companyId,
-          userId
-        }),
-        serviceRole
-          .from("job")
-          .update({
-            status: "Ready" as const
-          })
-          .eq("id", id)
-      ]);
-
-      // This path writes job.status directly, so it never reaches
-      // updateJobStatus and its raiseMoment. The job was just created above,
-      // so the prior status is always Draft.
-      trackWorkEvent("job_released", {
-        companyId,
-        userId,
-        jobId: id,
-        priorStatus: "Draft",
-        source: "kanban"
-      });
-    } else if (upsertMethod.error) {
+    if (upsertMethod.error) {
       logger.error("Kanban operation failed", { error: upsertMethod.error });
     }
+
+    const release =
+      !upsertMethod.error && kanban.data.autoRelease
+        ? await releaseKanbanJob({
+            client: serviceRole,
+            jobId: id,
+            locationId: kanban.data.locationId!,
+            companyId,
+            userId
+          })
+        : { released: false, message: null };
 
     const jobId = id;
     let redirectUrl = path.to.job(jobId);
@@ -208,7 +277,11 @@ async function handleKanban({
       companyId
     );
 
-    if (operation && kanban.data.autoRelease) {
+    if (release.message) {
+      return { data: redirectUrl, error: null, message: release.message };
+    }
+
+    if (operation && release.released) {
       let operationId = operation.id;
       if (kanban.data.autoStartJob) {
         let setupTime = operation.setupTime;
@@ -432,7 +505,22 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const { id } = params;
   if (!id) throw notFound("id not found");
 
-  return await handleKanban({ client, companyId, companyGroupId, userId, id });
+  const result = await handleKanban({
+    client,
+    companyId,
+    companyGroupId,
+    userId,
+    id
+  });
+  // A redirect, not data(): the root's flash middleware clears a flash set on
+  // this request.
+  if ("message" in result && result.message && result.data) {
+    throw redirect(
+      result.data,
+      await flash(request, error(null, result.message))
+    );
+  }
+  return result;
 }
 
 export default function KanbanRedirectRoute() {

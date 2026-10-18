@@ -208,9 +208,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
     );
   }
 
-  // Strict backflush: completion and scrap both backflush the operation's
-  // materials. Refuse before the lot closes — a closed lot cannot be
-  // dispositioned again, so a refusal after it would strand the units.
+  // Strict backflush: refuse before the lot closes; a closed lot cannot be
+  // dispositioned again.
   const backflushCheck = await checkStrictBackflush({
     jobOperationId: state.jobOperationId,
     quantity: completionQuantity + (scrapReasonId ? scrapTotal : 0),

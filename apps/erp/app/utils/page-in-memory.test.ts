@@ -4,8 +4,7 @@
 
 import { describe, expect, it, vi } from "vitest";
 
-// @carbon/auth's barrel pulls in a Lingui macro plain vitest cannot run (see
-// query.test.ts). Only the URL number parser is used here, so stand it in.
+// @carbon/auth's barrel runs a Lingui macro plain vitest cannot (query.test.ts).
 vi.mock("@carbon/auth", () => ({
   badRequest: vi.fn(),
   parseNumberFromUrlParam: (

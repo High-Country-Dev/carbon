@@ -457,13 +457,9 @@ async function completeBatch(
   // inside the transaction: freshly sliced on the first attempt, re-loaded on resume.
   let glEvents: { id: string; postedToGL: boolean }[] = [];
 
-  // Strict backflush: phase 2 issues each member's materials after phase 1 has
-  // committed, so a short storage unit is refused here first, before anything
-  // is written. Each member is checked on its own; two members drawing the
-  // same bin can still fail in phase 2, which leaves the batch resumable.
-  // A no-op when strict backflush is off.
-  // A completed batch skips the check, so a retry still gets the
-  // "already completed" answer from the transaction below.
+  // Strict backflush: refuse before phase 1 writes, since phase 2 issues after
+  // it commits. A completed batch skips this, so a retry still gets the
+  // "already completed" answer.
   const batchStatus = await db
     .selectFrom("jobOperationBatch")
     .select("status")
@@ -743,9 +739,7 @@ async function completeBatch(
       quantity: m.quantity
     });
     if (issued.error) {
-      // Keep the refusal's status: a strict backflush shortfall is a 409 the
-      // operator fixes by stocking the bin and completing again (which
-      // resumes), not a server error.
+      // Keep a strict backflush refusal's 409; completing again resumes.
       throw new ServerFnError(
         `Failed to issue materials for operation ${m.jobOperationId}: ${issued.error.message}`,
         issued.error instanceof ServerFnError ? issued.error.status : 500

@@ -294,8 +294,6 @@ const JobBillOfMaterial = ({
 
   const [storeItems] = useItems();
   const jobData = useRouteData<{ job: Job }>(path.to.job(jobId));
-  // Strict backflush: mark collapsed rows with no storage unit to backflush
-  // from, when the job's location needs one — the test release refuses on.
   const pullFromLocationIds = usePullFromLocationIds();
   const jobLocationId = jobData?.job?.locationId;
   const missingPullFrom = (material: Material) =>
@@ -757,10 +755,6 @@ function MaterialForm({
   const locationId = routeData?.job?.locationId ?? undefined;
   const storageUnits = useStorageUnits(locationId);
 
-  // Strict backflush: a pulled, stocked line is backflushed only from its own
-  // storage unit, so "Default Storage Unit" would hide a line that will be
-  // refused at release and at backflush. A changed item's tracking type comes
-  // from `onItemChange`, keyed by the item it was read for.
   const pullFromLocationIds = usePullFromLocationIds();
   const itemTrackingType =
     changedItemTracking?.itemId === itemData.itemId

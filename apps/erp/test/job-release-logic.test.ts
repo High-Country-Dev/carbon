@@ -4,6 +4,7 @@
 
 import { describe, expect, it } from "vitest";
 import {
+  jobReleaseBlockers,
   jobReleaseProblems,
   materialsWithoutStorageUnit,
   makeMethodsMissingOperations,
@@ -140,6 +141,48 @@ describe("jobReleaseProblems", () => {
       "choose a supplier for Heat Treat on the job",
       "Paint has no supplier",
       "set a Pull From storage unit on BOLT-10; NUT-10"
+    ]);
+  });
+});
+
+describe("jobReleaseBlockers", () => {
+  const ready = {
+    manufacturingBlocked: false,
+    missingAssemblies: [],
+    outsideOperationsWithoutSupplier: [],
+    materialsWithoutStorageUnit: []
+  };
+
+  it("lets a job with something to make and nothing to fix through", () => {
+    expect(jobReleaseBlockers({ quantity: 30, scrapQuantity: 0 }, ready)).toEqual(
+      []
+    );
+  });
+
+  it("refuses a job with nothing to make", () => {
+    expect(jobReleaseBlockers({ quantity: 0, scrapQuantity: 0 }, ready)).toEqual([
+      "nothing to make"
+    ]);
+    expect(
+      jobReleaseBlockers({ quantity: null, scrapQuantity: null }, ready)
+    ).toEqual(["nothing to make"]);
+  });
+
+  it("lets a scrap-only job through", () => {
+    expect(jobReleaseBlockers({ quantity: 0, scrapQuantity: 2 }, ready)).toEqual(
+      []
+    );
+  });
+
+  it("adds every release problem after it, including a missing storage unit", () => {
+    expect(
+      jobReleaseBlockers(
+        { quantity: 0, scrapQuantity: 0 },
+        { ...ready, materialsWithoutStorageUnit: [{ description: "MAT-KAPTON" }] }
+      )
+    ).toEqual([
+      "nothing to make",
+      "set a Pull From storage unit on MAT-KAPTON"
     ]);
   });
 });

@@ -608,8 +608,6 @@ export async function postBulkCompletion(
       quantity: args.quantity
     });
   if (issued.error) {
-    // The units are recorded: say so, or the operator retries and records
-    // them twice.
     return {
       error: issued.error,
       message: `Units completed, but ${issued.error.message || "failed to issue materials"}`
@@ -619,13 +617,8 @@ export async function postBulkCompletion(
   return { error: null, message: null };
 }
 
-/**
- * Strict backflush: whether the operation's materials can be backflushed for
- * `quantity` units — a dry run of `issue` `jobOperation`, rolled back. Call it
- * before the first write of a completion (closing a lot, recording units), so a
- * short storage unit refuses the whole action instead of leaving it half done.
- * A no-op when strict backflush is off.
- */
+/** Strict backflush dry run of the operation's backflush. Call it before a
+ *  completion's first write; a no-op when the setting is off. */
 export async function checkStrictBackflush(args: {
   jobOperationId: string;
   quantity: number;

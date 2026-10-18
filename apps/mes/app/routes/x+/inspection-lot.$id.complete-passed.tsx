@@ -107,8 +107,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
         `Passed units (${candidates.length}) exceed the operation's remaining quantity (${state.opRemaining}) — quantities were already recorded from the actions menu`
       );
     }
-    // Strict backflush: refuse before the first unit completes, not after
-    // some of them.
     const backflushCheck = await checkStrictBackflush({
       jobOperationId: state.jobOperationId,
       quantity: candidates.length,
@@ -157,7 +155,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
     return fail(null, "No passed units to complete");
   }
 
-  // Strict backflush: refuse before the production quantity is recorded.
   const backflushCheck = await checkStrictBackflush({
     jobOperationId: state.jobOperationId,
     quantity,

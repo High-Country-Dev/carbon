@@ -880,15 +880,9 @@ export async function getSyncOperationReadableIds(
   return Object.fromEntries(results.flat());
 }
 
-// Strict backflush leaves Active methods and released jobs as they are. The
-// Settings → Items card counts the ones with a gap, and its drawers list them.
-// Both read the same query, so a count and its drawer cannot disagree. The
-// filters are the SQL form of `needsPullFrom` (@carbon/database/strict-backflush;
-// a null tracking type counts as stocked there too), so a count is one
-// statement — the card re-runs on every drawer search, sort and page. Kysely,
-// not PostgREST: a company's lines can pass the 1000-row cap.
+// Strict backflush gaps. Each count and its drawer list share one query, the
+// SQL form of `needsPullFrom`, so they cannot disagree.
 
-// Active BoM lines with no Pull From at one of `locationIds`.
 function methodLinesMissingPullFrom(
   db: Kysely<KyselyDatabase>,
   companyId: string,
@@ -918,9 +912,6 @@ function methodLinesMissingPullFrom(
     );
 }
 
-// Lines on open jobs that the job's next backflush would refuse: no storage
-// unit, stocked, not batch or serial (their issue flow is unchanged), still
-// something to issue, at a location where strict backflush applies.
 function jobLinesMissingStorageUnit(
   db: Kysely<KyselyDatabase>,
   companyId: string,

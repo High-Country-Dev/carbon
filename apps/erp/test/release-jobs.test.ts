@@ -32,13 +32,13 @@ vi.mock("../app/modules/production/production.service", () => ({
   getJobReleaseReadiness: vi.fn(),
   recalculateJobRequirements: vi.fn(async () => ({ data: null, error: null })),
   runMRP: vi.fn(async () => ({ data: null, error: null })),
-  updateJobStatus: vi.fn(async () => ({ error: null, updated: true }))
+  writeJobStatus: vi.fn(async () => ({ error: null, updated: true }))
 }));
 
 import {
   recalculateJobRequirements,
   runMRP,
-  updateJobStatus
+  writeJobStatus
 } from "../app/modules/production/production.service";
 import {
   planDraftJob,
@@ -81,7 +81,7 @@ describe("releaseJobs", () => {
   });
 
   it("flips only a job still Draft or Planned, and stops when it is not", async () => {
-    vi.mocked(updateJobStatus).mockResolvedValueOnce({
+    vi.mocked(writeJobStatus).mockResolvedValueOnce({
       error: null,
       updated: false
     } as any);
@@ -89,7 +89,7 @@ describe("releaseJobs", () => {
       "job-1",
       "job-2"
     ]);
-    expect(vi.mocked(updateJobStatus).mock.calls[0]?.[1]).toMatchObject({
+    expect(vi.mocked(writeJobStatus).mock.calls[0]?.[1]).toMatchObject({
       status: "Ready",
       fromStatuses: ["Draft", "Planned"]
     });
@@ -130,7 +130,7 @@ describe("planDraftJob", () => {
       order.push("recalculate");
       return { data: null, error: null } as any;
     });
-    vi.mocked(updateJobStatus).mockImplementationOnce(async () => {
+    vi.mocked(writeJobStatus).mockImplementationOnce(async () => {
       order.push("flip");
       return { error: null, updated: true } as any;
     });
@@ -141,7 +141,7 @@ describe("planDraftJob", () => {
 
     expect(await plan()).toEqual({ updated: true });
     expect(order).toEqual(["recalculate", "flip", "mrp"]);
-    expect(vi.mocked(updateJobStatus).mock.calls[0]?.[1]).toMatchObject({
+    expect(vi.mocked(writeJobStatus).mock.calls[0]?.[1]).toMatchObject({
       status: "Planned",
       fromStatuses: ["Draft"]
     });
@@ -156,12 +156,12 @@ describe("planDraftJob", () => {
     const result = await plan();
     expect(result.updated).toBe(false);
     expect(result.error).toBeTruthy();
-    expect(updateJobStatus).not.toHaveBeenCalled();
+    expect(writeJobStatus).not.toHaveBeenCalled();
     expect(runMRP).not.toHaveBeenCalled();
   });
 
   it("runs no MRP when the job is no longer Draft", async () => {
-    vi.mocked(updateJobStatus).mockResolvedValueOnce({
+    vi.mocked(writeJobStatus).mockResolvedValueOnce({
       error: null,
       updated: false
     } as any);

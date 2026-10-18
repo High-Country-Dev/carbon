@@ -261,8 +261,6 @@ const BillOfMaterial = ({
     configurationRules?.map((rule) => [rule.field, rule]) ?? []
   );
 
-  // Strict backflush: mark collapsed rows with no Pull From at a location
-  // that needs one — the test activation refuses on (`convert`).
   const pullFromLocationIds = usePullFromLocationIds();
   const missingPullFrom = (material: Material) =>
     pullFromLocationIds !== null &&
@@ -716,10 +714,6 @@ function MaterialForm({
       item.data.item?.replenishmentSystem ?? replenishmentSystem ?? "Buy"
   });
 
-  // Strict backflush: a pulled, stocked line must name the storage unit it is
-  // backflushed from, at the selected location when that location needs one,
-  // before its method version can be made active. A changed item's tracking
-  // type comes from `onItemChange`, keyed by the item it was read for.
   const pullFromLocationIds = usePullFromLocationIds();
   const [changedItemTracking, setChangedItemTracking] = useState<{
     itemId: string;

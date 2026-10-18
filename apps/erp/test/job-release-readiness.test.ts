@@ -128,9 +128,7 @@ describe("getJobReleaseReadiness", () => {
     ]);
   });
 
-  // `location` holds the locations the client returns as pull-from locations
-  // (an active work center and storage unit); the stand-in does not evaluate
-  // the embedded filters, so the table lists only those.
+  // `location`: the pull-from locations (the stand-in ignores embed filters).
   function strictReadinessTables(pullFromLocationIds: string[]) {
     const line = {
       jobId: "job-1",
@@ -165,7 +163,6 @@ describe("getJobReleaseReadiness", () => {
             readableIdWithRevision: "BOLT-10"
           }
         },
-        // Built in the job, not pulled.
         {
           ...line,
           id: "jm-sub",
@@ -173,7 +170,6 @@ describe("getJobReleaseReadiness", () => {
           description: "Bracket",
           item: { itemTrackingType: "Inventory", readableIdWithRevision: "B-1" }
         },
-        // Holds no stock, so nothing is backflushed.
         {
           ...line,
           id: "jm-labor",
@@ -203,7 +199,6 @@ describe("getJobReleaseReadiness", () => {
   });
 
   it("skips a job at a location with no active work center or storage unit", async () => {
-    // Activation never asked for a Pull From there, so release must not.
     const { client } = cappedClient(strictReadinessTables([]));
 
     const { data, error } = await getJobReleaseReadiness(

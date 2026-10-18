@@ -2,12 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
-// Strict backflush (companySettings.requireBackflushStorageUnit,
-// .ai/specs/2026-10-14-strict-backflush.md): a stocked material is consumed
-// only from its own storage unit, never another bin. A missing bin refuses the
-// backflush; a short bin refuses it only while preventNegativeBackflush is on —
-// with it off the bin is drawn below zero. The SQL job-completion backflush
-// (`backflush_job_materials`) enforces the same rules.
+// SQL `backflush_job_materials` mirrors these rules.
 
 import type { Database } from "@carbon/database";
 import type { KyselyDatabase as DB } from "@carbon/database/client";
@@ -46,21 +41,13 @@ type BinCoverArgs = {
   companyId: string;
   itemId: string;
   locationId: string;
-  /** The material's Pull From (`resolvePullFromStorageUnits`). */
   storageUnitId: string | null | undefined;
   quantity: number;
   plannedRows: LedgerInsert[];
-  /** Refuse a short bin (true) or let it go negative (false). */
   preventNegative: boolean;
-  /** The job's readable id, for the missing-bin message. */
   jobReadableId: string;
 };
 
-/**
- * The Pull From of each material, by job material id. A pick points a line at
- * lineside; `pullFromStorageUnit` recovers the bin it was picked from, so what
- * no pick covered still comes from the Pull From.
- */
 export async function resolvePullFromStorageUnits(
   db: Kysely<DB>,
   companyId: string,
@@ -90,12 +77,8 @@ export async function resolvePullFromStorageUnits(
   );
 }
 
-/**
- * Takes the strict lock of every (bin, item) pair for the rest of the
- * caller's transaction, in one fixed order (by key hash), so two completions
- * drawing the same pairs cannot deadlock. SQL `backflush_job_materials` locks
- * in the same order. Locks are re-entrant, so taking one twice is harmless.
- */
+/** Locks every (bin, item) pair in key-hash order, as the SQL does, so two
+ *  completions cannot deadlock. */
 export async function lockStrictBins(
   db: Kysely<DB>,
   companyId: string,
@@ -116,11 +99,7 @@ export async function lockStrictBins(
   );
 }
 
-/**
- * Refuses (409) when `storageUnitId` is missing or cannot cover `quantity`.
- * `plannedRows` are the ledger rows this backflush has built but not yet
- * written — their draws on the same item and bin are subtracted first.
- */
+/** `plannedRows`: ledger rows built but not yet written. */
 export async function assertBinCovers(
   db: Kysely<DB>,
   args: BinCoverArgs
@@ -129,13 +108,8 @@ export async function assertBinCovers(
   if (problem) throw strictBackflushRefusal([problem]);
 }
 
-// A shortfall reads "Not enough X in BIN: need n, have m" — long enough that
-// three of them fill a toast.
 const SHORTFALLS_SHOWN = 3;
 
-/** One refusal for every material the backflush cannot cover, so the
- *  material controller fixes them all before the operator retries. The toast
- *  names the first few and counts the rest; the log keeps the full list. */
 export function strictBackflushRefusal(problems: string[]): ServerFnError {
   if (problems.length > SHORTFALLS_SHOWN) {
     logger.warn("Strict backflush refused", { problems });
@@ -143,11 +117,6 @@ export function strictBackflushRefusal(problems: string[]): ServerFnError {
   return new ServerFnError(summarizeList(problems, SHORTFALLS_SHOWN), 409);
 }
 
-/**
- * Why `storageUnitId` cannot cover `quantity` — a missing bin, or a short one
- * while `preventNegative` — or null when it can. Takes the bin's lock whenever
- * it checks the quantity (see below).
- */
 export async function binCoverProblem(
   db: Kysely<DB>,
   args: BinCoverArgs
@@ -159,13 +128,10 @@ export async function binCoverProblem(
     return `${item} has no Pull From storage unit on job ${args.jobReadableId}`;
   }
 
-  // Negative stock allowed: the material is drawn from its own bin whatever
-  // that bin holds, so there is nothing to check or serialize.
   if (!args.preventNegative) return null;
 
-  // Serialize strict draws on this bin and item until the caller's transaction
-  // ends, so two completions cannot both pass the check and overdraw it.
-  // A caller drawing several pairs locks them all first (`lockStrictBins`).
+  // Held until the caller's transaction ends, so two completions cannot both
+  // pass the check and overdraw the bin.
   await lockStrictBins(db, companyId, [{ storageUnitId, itemId }]);
 
   const row = await db
@@ -202,11 +168,6 @@ export async function binCoverProblem(
   return `Not enough ${item} in ${storageUnit?.name ?? storageUnitId}: need ${round(quantity)}, have ${have}`;
 }
 
-/**
- * Refuses (400) to activate a make method while a pulled, stocked line has no
- * Pull From storage unit at one of `getPullFromLocations` (an active work
- * center and an active storage unit).
- */
 export async function assertMethodHasPullFrom(
   db: Kysely<DB>,
   args: { makeMethodId: string; companyId: string }

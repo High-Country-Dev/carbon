@@ -42,9 +42,8 @@ export async function action({ request, params }: ActionFunctionArgs) {
   // spinning fresh method versions at Done and never stages/reserves a pending
   // revision, so there is nothing for an open CO to lock against.
 
-  // A single Draft version becomes Active as the new one is created. Strict
-  // backflush refuses that activation the way the Activate action does
-  // (`convert` methodVersionToActive), before anything is written.
+  // Making the current version Active is an activation: refuse it as `convert`
+  // does.
   if (validation.data.activeVersionId) {
     const db = getDatabaseClient();
     const { strict } = await getStrictBackflushSettings(db, companyId);

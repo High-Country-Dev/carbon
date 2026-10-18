@@ -296,9 +296,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         }
       }
     } else {
-      // Strict backflush: refuse before the production quantity is recorded,
-      // so a short storage unit never leaves units completed with no material
-      // consumed. A no-op when strict backflush is off.
       const check = await checkStrictBackflush({
         jobOperationId: operationId,
         quantity: quantityToComplete,
@@ -350,8 +347,6 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         });
 
       if (issued.error) {
-        // The units are recorded: say so, or the operator retries and records
-        // them twice.
         return redirect(
           path.to.operation(operationId),
           await flash(request, {

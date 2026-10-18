@@ -177,7 +177,6 @@ describe("pullFromStorageUnit", () => {
 
 describe("strictBackflushLockKey", () => {
   it("is the key SQL backflush_job_materials builds", () => {
-    // 'strict-backflush:' || company || ':' || bin || ':' || item
     expect(strictBackflushLockKey("CO", "BIN", "ITEM")).toBe(
       "strict-backflush:CO:BIN:ITEM"
     );

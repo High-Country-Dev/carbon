@@ -15,7 +15,7 @@ vi.mock("@carbon/lib/telemetry", () => ({
 }));
 
 import { raiseMoment } from "@carbon/lib/workflows";
-import { updateJobStatus } from "../app/modules/production/production.service";
+import { writeJobStatus } from "../app/modules/production/production.service";
 
 // A job row behind a chainable client stand-in. The UPDATE applies its `in`
 // filter on the status, as the database would, and returns the rows it changed.
@@ -46,7 +46,7 @@ function clientWith(job: { id: string; status: string }) {
 }
 
 const release = (client: any) =>
-  updateJobStatus(client, {
+  writeJobStatus(client, {
     id: "job-1",
     companyId: "company-1",
     status: "Ready",
@@ -56,7 +56,7 @@ const release = (client: any) =>
 
 beforeEach(() => vi.clearAllMocks());
 
-describe("updateJobStatus with fromStatuses", () => {
+describe("writeJobStatus with fromStatuses", () => {
   it("flips a job that is still waiting for release", async () => {
     const { client, calls } = clientWith({ id: "job-1", status: "Planned" });
     const result = await release(client);
@@ -75,7 +75,7 @@ describe("updateJobStatus with fromStatuses", () => {
 
   it("flips without a guard when no statuses are given", async () => {
     const { client, calls } = clientWith({ id: "job-1", status: "Cancelled" });
-    const result = await updateJobStatus(client, {
+    const result = await writeJobStatus(client, {
       id: "job-1",
       companyId: "company-1",
       status: "Ready",

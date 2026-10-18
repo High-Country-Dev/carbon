@@ -149,8 +149,7 @@ async function issueJobOperationMaterials(
     accountDefaults: ConsumeAccountDefaults;
     dimensionMap: Map<string, string>;
     db: Kysely<KyselyDatabase>;
-    // Stop after the strict backflush check: throw DryRunRollback before any
-    // ledger, cost or journal row is built (the caller rolls back).
+    // Throw DryRunRollback after the strict check, before any ledger row.
     dryRun?: boolean;
   }
 ) {
@@ -243,8 +242,6 @@ async function issueJobOperationMaterials(
     companyId,
     job.locationId
   );
-  // Strict backflush: what no pick covers comes from each material's Pull
-  // From, and every material the bins cannot cover is refused together.
   const pullFrom = strict
     ? await resolvePullFromStorageUnits(trx, companyId, materialsToIssue)
     : new Map<string, string | null>();
@@ -314,9 +311,6 @@ async function issueJobOperationMaterials(
     }
 
     if (remaining > 0 && strict && itemIdIsTracked.get(material.itemId)) {
-      // Strict backflush: what no pick covered comes from the material's own
-      // storage unit only — no pick-method bin, no fullest bin — and a
-      // missing or short bin refuses the whole completion.
       const storageUnitId = pullFrom.get(material.id) ?? null;
       const problem = await binCoverProblem(trx, {
         companyId,
@@ -329,8 +323,7 @@ async function issueJobOperationMaterials(
         jobReadableId: job.jobId
       });
       if (problem) strictProblems.push(problem);
-      // Kept even when refused: a later material on the same bin then counts
-      // this need, so the refusal names every shortfall at once.
+      // Kept when refused, so a later material on the bin counts this need.
       itemLedgerInserts.push({
         entryType: "Consumption",
         documentType: "Job Consumption",
@@ -434,8 +427,6 @@ async function issueJobOperationMaterials(
       .execute();
   }
 
-  // Nothing above is committed until the transaction ends, so throwing here
-  // rolls back every row this call wrote.
   if (strictProblems.length > 0) throw strictBackflushRefusal(strictProblems);
   if (dryRun) throw new DryRunRollback();
 
@@ -973,7 +964,6 @@ const logger = getLogger("server-functions", "issue");
 
 type ItemLedgerInsert = Database["public"]["Tables"]["itemLedger"]["Insert"];
 
-// Thrown at the end of a dry-run transaction so Kysely rolls every write back.
 class DryRunRollback extends Error {}
 
 /** Each `type` adds its own fields (`newTrackedEntityId`, `readableId`, …). */
@@ -998,9 +988,6 @@ export const issueInput = z.discriminatedUnion("type", [
     type: z.literal("jobOperation"),
     quantity: z.number(),
     id: z.string(),
-    // Strict backflush: run the issue and roll it back, so a caller that
-    // records the production quantity first can refuse before it writes
-    // anything. A no-op when strict backflush is off.
     dryRun: z.boolean().optional()
   }),
   z.object({
@@ -3111,9 +3098,6 @@ const issue = defineServerFn({
                 }
               }
               if (item?.itemTrackingType === "Inventory" && remaining !== 0) {
-                // Strict backflush: a consuming issue takes what no pick
-                // covered from the material's own storage unit only. A return
-                // keeps the bin chosen above.
                 const strictSettings =
                   adjustmentType !== "Positive Adjmt." && remaining > 0
                     ? await getStrictBackflushSettings(

@@ -27,8 +27,6 @@ import JobStatus from "~/modules/production/ui/Jobs/JobStatus";
 import { path } from "~/utils/path";
 import type { JobMissingStorageUnit, MethodMissingPullFrom } from "../../types";
 
-// The make-method page of a method's item, by item type. Only Parts, Tools and
-// Services carry make methods with their own route.
 export function makeMethodPath(method: {
   itemId: string;
   itemType: string;
@@ -48,9 +46,6 @@ export function makeMethodPath(method: {
 
 const PARTS_SHOWN = 3;
 
-// A list of part IDs in one cell. An ID never breaks across lines. Past the
-// first few, "+N more" opens the whole list in a scrolling popover (a sheet on
-// a phone). The drawer's search and the CSV download cover every ID too.
 function PartList({ parts, label }: { parts: string[]; label: string }) {
   const { t } = useLingui();
   const { isPhone } = useViewport();
@@ -71,9 +66,8 @@ function PartList({ parts, label }: { parts: string[]; label: string }) {
               {t`+${more} more`}
             </Button>
           </PopoverTrigger>
-          {/* Rendered outside the drawer, whose scroll lock swallows the
-              wheel and touch events: stop them here, or the list cannot
-              scroll (conventions-ui.md, "Popovers inside Drawers"). */}
+          {/* Portaled outside the drawer: stop the events its scroll lock
+              would swallow. */}
           <PopoverContent
             align="start"
             collisionPadding={8}

@@ -2,18 +2,9 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
-// Strict backflush (companySettings.requireBackflushStorageUnit,
-// .ai/specs/2026-10-14-strict-backflush.md). One rule for "which material
-// lines must name a Pull From storage unit", read by method activation
-// (`convert`), job release and the Settings → Items card, so the three can
-// never disagree about which lines count. The backflush reads the location
-// test, the Pull From of a picked line and the lock key from here too.
-
 import type { Kysely, KyselyDatabase } from "./client.ts";
 import { round } from "./precision.ts";
 
-// The item types a backflush consumes (`issueJobOperationMaterials`, SQL
-// `backflush_job_materials`). Tools and services are never consumed.
 export const PULLED_ITEM_TYPES = ["Material", "Part", "Consumable"] as const;
 
 export type PullFromLine = {
@@ -22,11 +13,7 @@ export type PullFromLine = {
   itemTrackingType: string | null;
 };
 
-// A line is pulled from a bin when it is not built in the job (Make to Order)
-// and its item holds stock. Purchase to Order lines count: the goods are
-// received into a bin and backflushed from it. Batch and serial lines count
-// too — the operator scans the unit, but planning and picking still read the
-// line's bin.
+// Purchase to Order, batch and serial lines count: each is consumed from a bin.
 export function needsPullFrom(line: PullFromLine): boolean {
   if (line.methodType === "Make to Order") return false;
   if (
@@ -38,9 +25,7 @@ export function needsPullFrom(line: PullFromLine): boolean {
   return line.itemTrackingType !== "Non-Inventory";
 }
 
-// `methodMaterial.storageUnitIds` maps locationId → storageUnitId. An empty
-// string is what the BoM editor writes when a bin is cleared, so it counts as
-// missing.
+// The BoM editor writes an empty string when a bin is cleared.
 export function missingPullFromLocations(
   storageUnitIds: unknown,
   locationIds: readonly string[]
@@ -55,11 +40,8 @@ export function missingPullFromLocations(
   });
 }
 
-// The locations a pulled line needs a Pull From at: each one with an active
-// work center AND an active storage unit. A location with no work center
-// builds nothing; one with no storage unit has no bin a line could name (a
-// test lab at head office), so requiring one there would block activation
-// for good.
+// An active work center AND an active storage unit: a location with no storage
+// unit has no bin a line could name.
 function pullFromLocations(db: Kysely<KyselyDatabase>, companyId: string) {
   return db
     .selectFrom("location")
@@ -96,9 +78,6 @@ export async function getPullFromLocations(
     .execute();
 }
 
-// Whether strict backflush applies at a job's location. Activation exempts
-// the other locations, so a backflush there must not refuse a line for a bin
-// it could never name.
 export async function isPullFromLocation(
   db: Kysely<KyselyDatabase>,
   companyId: string,
@@ -113,16 +92,11 @@ export async function isPullFromLocation(
 
 export type StrictBackflushSettings = {
   strict: boolean;
-  /** Only meaningful while `strict`: refuse a short bin instead of letting it
-   *  go negative. */
   preventNegative: boolean;
 };
 
-/**
- * The company's strict backflush settings. With `locationId`, `strict` is also
- * false at a location `getPullFromLocations` leaves out (no active work center
- * or no active storage unit): activation never asked for a Pull From there.
- */
+/** With `locationId`, `strict` is false at a location `getPullFromLocations`
+ *  leaves out. */
 export async function getStrictBackflushSettings(
   db: Kysely<KyselyDatabase>,
   companyId: string,
@@ -142,20 +116,14 @@ export async function getStrictBackflushSettings(
   };
 }
 
-/**
- * The parts of a make method that block its activation: pulled, stocked lines
- * with no Pull From at one of `getPullFromLocations`. One entry per part — the
- * refusal names what to fix, not where. Read by the `convert` activation and
- * the New Version route.
- */
 export async function getMethodPartsMissingPullFrom(
   db: Kysely<KyselyDatabase>,
   args: { makeMethodId: string; companyId: string }
 ): Promise<string[]> {
   const { makeMethodId, companyId } = args;
 
-  // Two awaits, not `inOrder`: this module is bundled for the browser (the BoM
-  // badges read `needsPullFrom`), and `./rows` brings the Kysely runtime.
+  // Not `inOrder`: this module is bundled for the browser, and `./rows` brings
+  // the Kysely runtime.
   const lines = await db
     .selectFrom("methodMaterial")
     .innerJoin("item", "item.id", "methodMaterial.itemId")
@@ -199,13 +167,9 @@ export type PickLineBins = {
   toStorageUnitId: string | null;
 };
 
-// The Pull From of a job material line. Posting a pick points the line at the
-// lineside bin it was picked to (`pointJobMaterialAtLineside`), so after a pick
-// `storageUnitId` no longer names the Pull From. The pick line still holds it:
-// the picking list generator sources a line from its Pull From. `pickLines`
-// must be oldest first — a later list for the same line is generated after the
-// pointer moved, and sources from the fullest warehouse bin instead. SQL
-// `backflush_job_materials` resolves the same way.
+// A pick points the line at lineside, so its Pull From is the source of its
+// oldest pick line into that bin (a later list sources from the fullest bin).
+// `pickLines` must be oldest first. SQL `backflush_job_materials` matches.
 export function pullFromStorageUnit(
   storageUnitId: string | null,
   pickLines: readonly PickLineBins[]
@@ -220,9 +184,7 @@ export function pullFromStorageUnit(
   return pick?.storageUnitId ?? storageUnitId;
 }
 
-// The advisory lock key for strict draws on one bin and item. SQL
-// `backflush_job_materials` builds the same string; both lock with
-// `pg_advisory_xact_lock(hashtextextended(key, 0))`.
+// SQL `backflush_job_materials` builds the same key.
 export function strictBackflushLockKey(
   companyId: string,
   storageUnitId: string,
@@ -231,9 +193,6 @@ export function strictBackflushLockKey(
   return `strict-backflush:${companyId}:${storageUnitId}:${itemId}`;
 }
 
-// A refusal is shown as a toast, so it names only the first `limit` entries and
-// counts the rest. A 20-line BoM otherwise produced a 900-character toast that
-// ran off the screen and faded before it could be read.
 export const MESSAGE_LIST_LIMIT = 5;
 
 export function summarizeList(
@@ -244,9 +203,7 @@ export function summarizeList(
   return `${entries.slice(0, limit).join("; ")}; and ${entries.length - limit} more`;
 }
 
-// What the bin cannot cover. `alreadyDrawn` is what earlier rows of the same
-// backflush take from this bin before they are written, so two materials of
-// one operation sharing a bin cannot both count the same stock.
+// `alreadyDrawn`: what earlier, unwritten rows of this backflush take from the bin.
 export function binShortfall({
   onHand,
   alreadyDrawn,

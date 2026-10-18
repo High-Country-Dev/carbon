@@ -631,10 +631,8 @@ export function JobStartModal({
   const companySettings = useCompanySettings();
   const strictBackflush = companySettings?.requireBackflushStorageUnit === true;
   const [loading, setLoading] = useState(true);
-  // Strict backflush: lines whose backflush would be refused. The release
-  // route refuses them too; showing them here saves a failed submit. They
-  // count only at a location that needs a Pull From — assumed while that list
-  // loads, so the dialog never offers a release the route refuses.
+  // Assumed to apply while the locations load, so the dialog never offers a
+  // release the route refuses.
   const pullFromLocationIds = usePullFromLocationIds();
   const strictAtJobLocation =
     strictBackflush &&

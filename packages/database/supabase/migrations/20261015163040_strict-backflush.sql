@@ -1,16 +1,8 @@
 -- Strict backflush (.ai/specs/2026-10-14-strict-backflush.md).
 --
--- companySettings.requireBackflushStorageUnit turns it on (off by default).
--- companySettings.preventNegativeBackflush (on by default) decides what a
--- short bin does under it: refuse, or let the bin go negative.
--- backflush_job_materials is copied from its live definition
--- (20261009010412_job-costing-always-post.sql) with one change: when strict
--- backflush is on at the job's location, a stocked material is consumed only
--- from its Pull From — a missing bin raises, and a short bin raises only while
--- preventNegativeBackflush is on — instead of falling back to the pick
--- method's bin or the fullest bin. A picked line is drawn from its lineside
--- bin first and the rest from its Pull From. With strict backflush off the
--- function is unchanged.
+-- backflush_job_materials is copied from
+-- 20261009010412_job-costing-always-post.sql; with strict backflush off it is
+-- unchanged.
 
 ALTER TABLE "companySettings"
   ADD COLUMN IF NOT EXISTS "requireBackflushStorageUnit" BOOLEAN NOT NULL DEFAULT false;
@@ -93,10 +85,6 @@ BEGIN
 
   v_ratio := p_quantity_complete / v_job_quantity;
 
-  -- Strict backflush (.ai/specs/2026-10-14-strict-backflush.md): a stocked
-  -- material is consumed only from its own storage unit. A short bin refuses
-  -- the whole completion while preventNegativeBackflush is on; with it off the
-  -- bin is drawn below zero instead of drawing from another bin.
   SELECT COALESCE("requireBackflushStorageUnit", false),
          COALESCE("preventNegativeBackflush", true)
   INTO v_strict, v_prevent_negative
@@ -105,9 +93,7 @@ BEGIN
   v_strict := COALESCE(v_strict, false);
   v_prevent_negative := COALESCE(v_prevent_negative, true);
 
-  -- Strict backflush applies only where activation asks for a Pull From: a
-  -- location with an active work center and an active storage unit
-  -- (getPullFromLocations in @carbon/database/strict-backflush).
+  -- Only where activation asks for a Pull From (getPullFromLocations).
   v_strict := v_strict
     AND EXISTS (
       SELECT 1 FROM "workCenter"
@@ -122,10 +108,8 @@ BEGIN
         AND active = true
     );
 
-  -- Lock every Pull From this completion may draw, in one order (by key hash),
-  -- before the first draw: two completions drawing the same bins then cannot
-  -- deadlock. lockStrictBins in @carbon/server-functions locks in the same
-  -- order with the same keys.
+  -- Lock in key-hash order before the first draw, as lockStrictBins does, so
+  -- two completions cannot deadlock.
   IF v_strict AND v_prevent_negative THEN
     FOR v_lock_key IN
       SELECT DISTINCT hashtextextended(
@@ -187,8 +171,6 @@ BEGIN
     IF v_strict AND COALESCE(v_material."itemTrackingType", 'Inventory') <> 'Non-Inventory' THEN
       v_issue_total := v_material_qty_to_issue;
 
-      -- Every material the bins cannot cover is collected and refused together
-      -- after the loop, so the material controller sees them all at once.
       IF v_material."storageUnitId" IS NULL THEN
         v_strict_problems := v_strict_problems || format(
           '%s has no Pull From storage unit on job %s',
@@ -197,9 +179,8 @@ BEGIN
         CONTINUE;
       END IF;
 
-      -- A pick points the line at the lineside bin it was picked to. The
-      -- oldest pick line into that bin still names the Pull From
-      -- (pullFromStorageUnit in @carbon/database/strict-backflush).
+      -- A pick points the line at lineside; the oldest pick line into it names
+      -- the Pull From (pullFromStorageUnit).
       v_pull_from := COALESCE((
         SELECT pll."storageUnitId"
         FROM "pickingListLine" pll
@@ -212,8 +193,6 @@ BEGIN
         LIMIT 1
       ), v_material."storageUnitId");
 
-      -- A picked line: what was picked is drawn from lineside first, up to
-      -- what the bin holds.
       IF v_pull_from <> v_material."storageUnitId" THEN
         SELECT COALESCE(SUM(quantity), 0) INTO v_bin_on_hand
         FROM "itemLedger"
@@ -243,12 +222,8 @@ BEGIN
         END IF;
       END IF;
 
-      -- The rest comes from the Pull From only. A short Pull From is refused
-      -- only while negative stock is prevented; with it allowed, the material
-      -- is drawn from its Pull From even below zero. A refused material still
-      -- writes its row below (the function raises before anything commits),
-      -- so a later material on the same bin counts this need too. The lock
-      -- was taken before the loop.
+      -- A refused material still writes its row (the function raises before
+      -- commit), so a later material on the bin counts this need.
       v_material_storage_unit_id := v_pull_from;
 
       IF v_material_qty_to_issue > 0 AND v_prevent_negative THEN
@@ -276,7 +251,7 @@ BEGIN
         END IF;
       END IF;
     ELSE
-    -- Resolve storage unit (strict backflush off: the pre-existing fallbacks)
+    -- Resolve storage unit
     v_material_storage_unit_id := v_material."storageUnitId";
 
     IF v_material_storage_unit_id IS NULL AND v_material."defaultStorageUnit" THEN
@@ -329,7 +304,6 @@ BEGIN
     v_issue_total := v_material_qty_to_issue;
     END IF;
 
-    -- Strict: a picked line can be covered by lineside alone.
     IF v_material_qty_to_issue > 0 THEN
       INSERT INTO "itemLedger" (
         "entryType", "documentType", "documentId", "companyId",
@@ -350,9 +324,6 @@ BEGIN
     WHERE id = v_material.id;
   END LOOP;
 
-  -- The refusal is shown as a toast: name the first three shortfalls and
-  -- count the rest (strictBackflushRefusal in @carbon/server-functions does
-  -- the same), so a long BoM cannot produce a wall of text.
   IF array_length(v_strict_problems, 1) > 3 THEN
     RAISE EXCEPTION '%; and % more',
       array_to_string(v_strict_problems[1:3], '; '),

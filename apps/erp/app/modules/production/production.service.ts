@@ -46,7 +46,8 @@ import {
 } from "@carbon/viewer";
 import { isPlanFlagged } from "@carbon/viewer/steps";
 import { parseDate } from "@internationalized/date";
-import type { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { PostgrestError } from "@supabase/supabase-js";
 import type { ExpressionBuilder } from "kysely";
 import { sql } from "kysely";
 import { nanoid } from "nanoid";
@@ -124,6 +125,7 @@ import type {
   JobMaterialSupplyJobLine
 } from "./types";
 import {
+  jobReleaseBlockers,
   makeMethodsMissingOperations,
   materialsWithoutStorageUnit,
   outsideOperationsNeedingPurchaseOrders,
@@ -2971,8 +2973,6 @@ export type JobReleaseReadiness = {
     }[];
     // The suppliers this job's outside operations go on a purchase order for.
     supplierIds: string[];
-    // Strict backflush: pulled, stocked lines with no storage unit to
-    // backflush from. Always empty while the setting is off.
     materialsWithoutStorageUnit: { id: string; description: string }[];
   }[];
   // Suppliers whose outside operations release will put on a purchase order,
@@ -2983,11 +2983,6 @@ export type JobReleaseReadiness = {
   }[];
 };
 
-// Strict backflush (companySettings.requireBackflushStorageUnit): a job may not
-// be released while a pulled, stocked line has no storage unit, because its
-// backflush would be refused. Keyed by job id; empty while the setting is off,
-// and for a job at a location strict backflush skips (no active work center or
-// no active storage unit — `getPullFromLocations`).
 async function getMaterialsWithoutStorageUnit(
   client: SupabaseClient<Database>,
   jobIds: string[],
@@ -3025,8 +3020,6 @@ async function getMaterialsWithoutStorageUnit(
       )
     )
   ];
-  // The same test as getPullFromLocations, for these jobs' locations only:
-  // one row per location that has an active work center and storage unit.
   const pullFromLocations =
     jobLocationIds.length === 0
       ? { data: [], error: null }
@@ -3286,21 +3279,80 @@ export async function getJobReleaseReadiness(
   };
 }
 
+type JobStatusUpdate = {
+  id: string;
+  companyId: string;
+  status: (typeof jobStatus)[number];
+  assignee?: string | null;
+  updatedBy: string;
+  // Flip only from one of these statuses. A release reads the status, then
+  // runs for a while (recalculate, MRP) before it writes; a job someone
+  // cancelled in between must not come back as Ready. `updated` is false
+  // when the row no longer matched.
+  fromStatuses?: (typeof jobStatus)[number][];
+};
+
+/** Refuses a Draft or Planned → Ready release that fails `jobReleaseBlockers`,
+ *  so the API cannot release a job the app would not. */
 /** @mcp update */
 export async function updateJobStatus(
   client: SupabaseClient<Database>,
-  params: {
-    id: string;
-    companyId: string;
-    status: (typeof jobStatus)[number];
-    assignee?: string | null;
-    updatedBy: string;
-    // Flip only from one of these statuses. A release reads the status, then
-    // runs for a while (recalculate, MRP) before it writes; a job someone
-    // cancelled in between must not come back as Ready. `updated` is false
-    // when the row no longer matched.
-    fromStatuses?: (typeof jobStatus)[number][];
+  params: JobStatusUpdate
+) {
+  if (params.status === "Ready") {
+    const refusal = await jobReleaseRefusal(
+      client,
+      params.id,
+      params.companyId
+    );
+    if (refusal) {
+      return {
+        data: null,
+        error: new PostgrestError({
+          message: refusal,
+          details: "",
+          hint: "",
+          code: "RELEASE_REFUSED"
+        }),
+        updated: false
+      };
+    }
   }
+  return writeJobStatus(client, params);
+}
+
+async function jobReleaseRefusal(
+  client: SupabaseClient<Database>,
+  id: string,
+  companyId: string
+): Promise<string | null> {
+  const job = await client
+    .from("job")
+    .select("jobId, status, quantity, scrapQuantity")
+    .eq("id", id)
+    .eq("companyId", companyId)
+    .maybeSingle();
+  if (job.error) return "The job could not be checked for release";
+  if (!job.data) return null;
+  if (job.data.status !== "Draft" && job.data.status !== "Planned") return null;
+
+  const readiness = await getJobReleaseReadiness(client, [id], companyId);
+  const ready = readiness.data?.jobs[0];
+  if (readiness.error || !ready)
+    return "The job could not be checked for release";
+
+  const blockers = jobReleaseBlockers(job.data, ready);
+  return blockers.length > 0
+    ? `${job.data.jobId} cannot be released: ${blockers.join("; ")}`
+    : null;
+}
+
+/** The status write with no release check, for a caller that already checked.
+ *  Not an MCP tool: the API must go through `updateJobStatus`. */
+export async function writeJobStatus(
+  client: SupabaseClient<Database>,
+  params: JobStatusUpdate,
+  { source = "erp" }: { source?: JobSource } = {}
 ) {
   const { id, companyId, status, assignee, updatedBy, fromStatuses } = params;
 
@@ -3349,7 +3401,7 @@ export async function updateJobStatus(
         userId: updatedBy,
         jobId: id,
         priorStatus: prior.data.status,
-        source: "erp"
+        source
       });
     } else if (status === "Paused") {
       await raiseMoment("production.jobHeld", {
@@ -11017,9 +11069,6 @@ export async function completeOperation(
     }
   }
 
-  // Strict backflush: refuse before the production quantity is recorded, so a
-  // short storage unit never leaves units completed with no material
-  // consumed. A no-op when strict backflush is off.
   const check = await serverFns
     .as({ client, db, companyId, userId })
     .invoke("issue", {

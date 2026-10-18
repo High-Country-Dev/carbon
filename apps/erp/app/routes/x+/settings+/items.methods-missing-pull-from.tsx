@@ -25,8 +25,6 @@ import { pageInMemory } from "~/utils/query";
 
 const logger = getLogger("erp", "settings-items");
 
-// Strict backflush: every Active method with a material that has no Pull From,
-// searchable and paged — the settings card only counts them.
 export async function loader({ request }: LoaderFunctionArgs) {
   const { companyId } = await requirePermissions(request, {
     view: "settings"

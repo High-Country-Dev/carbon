@@ -6,6 +6,7 @@ import { getCarbonServiceRole } from "@carbon/auth/client.server";
 import type { Database } from "@carbon/database";
 import type { Kysely, KyselyDatabase } from "@carbon/database/client";
 import { ASSEMBLER_SERVICE_URL } from "@carbon/env";
+import type { JobSource } from "@carbon/lib/telemetry";
 import { getLogger } from "@carbon/logger";
 import { serverFns } from "@carbon/server-functions";
 import { datetime, getErrorMessage } from "@carbon/utils";
@@ -18,7 +19,7 @@ import {
   recalculateJobRequirements,
   returnPickedRemaindersForJob,
   runMRP,
-  updateJobStatus
+  writeJobStatus
 } from "./production.service";
 import { jobReleaseProblems } from "./ui/Jobs/job-release-logic";
 
@@ -156,7 +157,7 @@ export async function planDraftJob({
     };
   }
 
-  const flipped = await updateJobStatus(client, {
+  const flipped = await writeJobStatus(client, {
     id: jobId,
     companyId,
     status: "Planned",
@@ -200,7 +201,8 @@ export async function releaseJobs({
   jobIds,
   companyId,
   userId,
-  purchaseOrdersBySupplierId
+  purchaseOrdersBySupplierId,
+  source = "erp"
 }: {
   client: SupabaseClient<Database>;
   db: Kysely<KyselyDatabase>;
@@ -208,6 +210,7 @@ export async function releaseJobs({
   companyId: string;
   userId: string;
   purchaseOrdersBySupplierId: Record<string, string>;
+  source?: JobSource;
 }): Promise<{
   error: string | null;
   purchaseOrdersBySupplierId: Record<string, string>;
@@ -249,13 +252,17 @@ export async function releaseJobs({
     // Only a job still waiting for release flips: the caller checked the
     // status before the recalculation and MRP above, and someone may have
     // cancelled or released it since.
-    const update = await updateJobStatus(client, {
-      id,
-      companyId,
-      status: "Ready",
-      updatedBy: userId,
-      fromStatuses: ["Draft", "Planned"]
-    });
+    const update = await writeJobStatus(
+      client,
+      {
+        id,
+        companyId,
+        status: "Ready",
+        updatedBy: userId,
+        fromStatuses: ["Draft", "Planned"]
+      },
+      { source }
+    );
     if (update.error) return fail("The job could not be released");
     if (!update.updated) {
       return fail("The job is no longer Draft or Planned");
@@ -378,7 +385,7 @@ export async function cancelJob({
     };
   }
 
-  const update = await updateJobStatus(client, {
+  const update = await writeJobStatus(client, {
     id: jobId,
     companyId,
     status: "Cancelled",

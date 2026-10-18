@@ -70,10 +70,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
       )
     );
 
-  // Strict backflush leaves Active methods and released jobs as they are; the
-  // card counts the ones with a gap and links to a drawer listing them all.
-  // `gaps` is null while the setting is off; `gapsError` says the count failed,
-  // so the card never reads as clean when it could not look.
   let gaps: { methods: number; jobs: number } | null = null;
   let gapsError = false;
   if (companySettings.data.requireBackflushStorageUnit) {
@@ -466,9 +462,6 @@ export default function ItemsSettingsRoute() {
                   disabled={isToggling}
                 />
               </HStack>
-              {/* Only meaningful under strict backflush: without it a short
-                  bin falls back to another storage unit and never goes
-                  negative from a backflush. */}
               <HStack className="justify-between items-center w-full border-t pt-4">
                 <VStack className="items-start" spacing={1}>
                   <span className="font-medium">
@@ -638,8 +631,6 @@ export default function ItemsSettingsRoute() {
   );
 }
 
-// One gap in strict backflush coverage: the count, what it means, and a way to
-// see every entry (a searchable drawer — a long list does not fit a card).
 function GapRow({
   to,
   label,

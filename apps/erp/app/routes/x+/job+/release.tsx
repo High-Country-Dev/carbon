@@ -12,7 +12,7 @@ import type { ActionFunctionArgs } from "react-router";
 import { z } from "zod";
 import { getJobReleaseReadiness } from "~/modules/production";
 import { releaseJobs } from "~/modules/production/production.server";
-import { jobReleaseProblems } from "~/modules/production/ui/Jobs/job-release-logic";
+import { jobReleaseBlockers } from "~/modules/production/ui/Jobs/job-release-logic";
 import { getDatabaseClient } from "~/services/database.server";
 
 const logger = getLogger("erp", "job-release");
@@ -107,11 +107,7 @@ export async function action({ request }: ActionFunctionArgs) {
     const ready = readinessByJobId.get(job.id);
     const problems = ready
       ? [
-          // The job page disables Release for the same job.
-          ...(job.quantity === 0 && job.scrapQuantity === 0
-            ? ["nothing to make"]
-            : []),
-          ...jobReleaseProblems(ready),
+          ...jobReleaseBlockers(job, ready),
           ...(ready.supplierIds.some((id) =>
             suppliersWithDraftPurchaseOrders.has(id)
           )

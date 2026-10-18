@@ -98,9 +98,6 @@ export function MaterialRowTitle({
   itemType?: string | null;
   supersessionMode?: Parameters<typeof ItemLifecycleBadge>[0]["mode"];
   hasRules?: boolean;
-  /** Strict backflush: the line has no storage unit to backflush from. Shown
-   *  on the collapsed row so a long BoM's gaps are found without opening
-   *  every line. */
   missingPullFrom?: boolean;
 }) {
   return (

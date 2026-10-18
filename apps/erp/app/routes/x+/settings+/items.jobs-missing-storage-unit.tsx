@@ -25,8 +25,6 @@ import { pageInMemory } from "~/utils/query";
 
 const logger = getLogger("erp", "settings-items");
 
-// Strict backflush: every open job with a material that has no storage unit,
-// searchable and paged — the settings card only counts them.
 export async function loader({ request }: LoaderFunctionArgs) {
   const { companyId } = await requirePermissions(request, {
     view: "settings"

@@ -46,8 +46,7 @@ export function BatchReleaseModal({
   onClose: () => void;
 }) {
   const { t } = useLingui();
-  // The first few parts, then a count — a whole translated sentence either
-  // way, so the "and N more" is translated too.
+  // A whole translated sentence, so "and N more" is translated too.
   const storageUnitReason = (materials: { description: string }[]) => {
     const names = materials
       .slice(0, MESSAGE_LIST_LIMIT)

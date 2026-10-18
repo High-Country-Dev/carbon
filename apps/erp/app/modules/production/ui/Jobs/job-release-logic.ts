@@ -120,7 +120,6 @@ export function jobReleaseProblems(job: {
         ? `choose a supplier for ${op.description} on the job`
         : `${op.description} has no supplier`
     ),
-    // Strict backflush: these lines' backflush would be refused.
     ...(job.materialsWithoutStorageUnit.length > 0
       ? [
           `set a Pull From storage unit on ${summarizeList(
@@ -128,6 +127,19 @@ export function jobReleaseProblems(job: {
           )}`
         ]
       : [])
+  ];
+}
+
+// Refuses a release that has no dialog: bulk release, a kanban scan, the API.
+export function jobReleaseBlockers(
+  job: { quantity: number | null; scrapQuantity: number | null },
+  readiness: Parameters<typeof jobReleaseProblems>[0]
+): string[] {
+  return [
+    ...(Number(job.quantity ?? 0) === 0 && Number(job.scrapQuantity ?? 0) === 0
+      ? ["nothing to make"]
+      : []),
+    ...jobReleaseProblems(readiness)
   ];
 }
 
@@ -143,9 +155,6 @@ export type StorageUnitLine = {
   } | null;
 };
 
-// Strict backflush: the pulled, stocked lines with no storage unit to
-// backflush from, one entry per part — a part used on two lines needs the
-// same fix, so naming it twice only lengthens the message.
 export function materialsWithoutStorageUnit(
   lines: StorageUnitLine[]
 ): { id: string; description: string }[] {

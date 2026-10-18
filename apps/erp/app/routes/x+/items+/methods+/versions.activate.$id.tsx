@@ -96,8 +96,6 @@ export async function action({ request, params }: ActionFunctionArgs) {
       companyId,
       error: update.error
     });
-    // A refusal the user can fix (strict backflush: a line with no Pull From)
-    // carries its own message; a data-layer failure arrives with none.
     return {
       success: false,
       message: update.error.message || "Failed to activate method version"
