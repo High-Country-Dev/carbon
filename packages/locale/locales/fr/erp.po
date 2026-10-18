@@ -24014,6 +24014,9 @@ msgstr "ce bon de commande"
 msgid "This Quarter"
 msgstr "Ce trimestre"
 
+msgid "This receipt has no lines. Choose a source document to add them."
+msgstr "Cette réception n'a pas de lignes. Choisissez un document d'origine pour les ajouter."
+
 msgid "This removes the PDF. Employees will see the written content instead."
 msgstr "Cela supprime le PDF. Les employés verront le contenu écrit à la place."
 

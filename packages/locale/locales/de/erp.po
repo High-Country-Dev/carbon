@@ -24014,6 +24014,9 @@ msgstr "diese Bestellung"
 msgid "This Quarter"
 msgstr "Dieses Quartal"
 
+msgid "This receipt has no lines. Choose a source document to add them."
+msgstr "Dieser Wareneingang hat keine Positionen. Wählen Sie zum Hinzufügen einen Ursprungsbeleg."
+
 msgid "This removes the PDF. Employees will see the written content instead."
 msgstr "Dies entfernt das PDF. Mitarbeiter sehen stattdessen den schriftlichen Inhalt."
 

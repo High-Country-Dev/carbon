@@ -24014,6 +24014,9 @@ msgstr "此采购订单"
 msgid "This Quarter"
 msgstr "本季度"
 
+msgid "This receipt has no lines. Choose a source document to add them."
+msgstr "此收货单没有行。请选择源单据以添加行。"
+
 msgid "This removes the PDF. Employees will see the written content instead."
 msgstr "这将移除 PDF。员工将改为查看书面内容。"
 

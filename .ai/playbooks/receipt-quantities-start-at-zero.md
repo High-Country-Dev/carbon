@@ -1,6 +1,6 @@
 # Receipt Quantities Start at Zero
 
-Last tested: 2026-10-16 (re-run after review fixes)
+Last tested: 2026-10-18 (after main's #1937 service-function refactor)
 Routes: /x/settings/inventory, /x/purchase-order/<id>/details → Receive, /x/receipt/<id>/details
 
 ## Prerequisites
@@ -39,6 +39,10 @@ Routes: /x/settings/inventory, /x/purchase-order/<id>/details → Receive, /x/re
 - Fixed asset: the asset checkbox under "Fixed Assets" starts unticked.
 
 ## Selector Notes
+- If another agent shares the machine, run every command with `agent-browser --session <name>`;
+  on the default session two agents' commands interleave and hang.
+- The PO/RMA "Receive" button reopens an existing Draft receipt for that source. To test a
+  fresh receipt, delete the Draft first (receipt ⋯ → Delete Receipt → Delete).
 - Receipt line quantity inputs are unlabeled textboxes in line order; the first
   textbox on the page is External Reference — handy blur target.
 - PO line modal: requestSubmit the Save inside `[role=dialog]`, not the first Save on the

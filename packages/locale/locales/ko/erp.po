@@ -24014,6 +24014,9 @@ msgstr "이 발주서"
 msgid "This Quarter"
 msgstr "이번 분기"
 
+msgid "This receipt has no lines. Choose a source document to add them."
+msgstr "이 입고에는 항목이 없습니다. 추가하려면 원본 문서를 선택하십시오."
+
 msgid "This removes the PDF. Employees will see the written content instead."
 msgstr "이렇게 하면 PDF가 제거됩니다. 직원들은 대신 작성된 콘텐츠를 보게 됩니다."
 
