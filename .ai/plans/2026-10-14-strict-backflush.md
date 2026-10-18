@@ -99,7 +99,7 @@ pnpm --filter @carbon/database exec vitest run src/strict-backflush.test.ts
 
 **Depends on:** 3
 **Files:**
-- Create: `packages/server-functions/src/lib/strict-backflush.ts`
+- Create: `packages/server-functions/src/lib/strict-backflush.ts` (since the 2026-10-19 merge with main: `apps/erp/app/modules/shared/strict-backflush.ts`)
 - Modify: `packages/server-functions/src/issue/index.ts` — `issueJobOperationMaterials`, the `partToOperation` planned-material branch, the `jobOperation` input and case
 
 **Steps:**
@@ -185,7 +185,7 @@ pnpm --filter erp exec vitest run test/job-release-logic.test.ts test/job-releas
 
 **Depends on:** 3
 **Files:**
-- Modify: `apps/erp/app/modules/settings/settings.service.ts` — `updateRequireBackflushStorageUnitSetting(client, companyId, enabled)` and `getActiveMethodsMissingPullFrom(db, companyId)`
+- Modify: `apps/erp/app/modules/settings/settings.service.ts` — `updateRequireBackflushStorageUnitSetting(client, companyId, enabled)` and `getActiveMethodsMissingPullFrom(db, companyId)` (since the 2026-10-19 merge with main: the toggle is a field of `updateItemsSettings`)
 - Modify: `apps/erp/app/routes/x+/settings+/items.tsx` — intent `requireBackflushStorageUnit`, loader count, the card
 - Copy from (precedent): the "BoM Explorer" card and `updateBomExplorerReadableIdSetting` in the same files
 

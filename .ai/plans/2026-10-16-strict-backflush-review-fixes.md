@@ -22,7 +22,7 @@
 ## Tasks
 
 ### A. Picks and the Pull From (Must fix 1)
-- [x] A1. Add `resolvePullFromStorageUnit` to `packages/server-functions/src/lib/strict-backflush.ts` (D1).
+- [x] A1. Add `resolvePullFromStorageUnit` to `packages/server-functions/src/lib/strict-backflush.ts` (D1). (Since the 2026-10-19 merge with main: `apps/erp/app/modules/shared/strict-backflush.ts`.)
 - [x] A2. Use it in `issueJobOperationMaterials` and in `partToOperation`.
 - [x] A3. In the migration, apply D1 and D2 to `backflush_job_materials`.
 - [x] A4. Add live-database tests: a partial pick at operation completion and at job completion.

@@ -94,9 +94,12 @@ export function resolveOperationSupplier(
 
 // What stands between a job and release, in words. A release with no dialog to
 // settle these in (bulk job release, batch release) refuses the job and names
-// them; the job's own Release dialog is where they are fixed.
+// them; the job's own Release dialog is where they are fixed. A kanban scan
+// refuses the same way.
 export function jobReleaseProblems(job: {
   manufacturingBlocked: boolean;
+  nothingToMake?: boolean;
+  makeToAssetError?: string | null;
   missingAssemblies: { description: string }[];
   outsideOperationsWithoutSupplier: {
     description: string;
@@ -105,7 +108,9 @@ export function jobReleaseProblems(job: {
   materialsWithoutStorageUnit: { description: string }[];
 }): string[] {
   return [
+    ...(job.nothingToMake ? ["nothing to make"] : []),
     ...(job.manufacturingBlocked ? ["manufacturing is blocked"] : []),
+    ...(job.makeToAssetError ? [job.makeToAssetError] : []),
     ...(job.missingAssemblies.length > 0
       ? [
           `no operations on ${job.missingAssemblies
@@ -127,19 +132,6 @@ export function jobReleaseProblems(job: {
           )}`
         ]
       : [])
-  ];
-}
-
-// Refuses a release that has no dialog: bulk release, a kanban scan, the API.
-export function jobReleaseBlockers(
-  job: { quantity: number | null; scrapQuantity: number | null },
-  readiness: Parameters<typeof jobReleaseProblems>[0]
-): string[] {
-  return [
-    ...(Number(job.quantity ?? 0) === 0 && Number(job.scrapQuantity ?? 0) === 0
-      ? ["nothing to make"]
-      : []),
-    ...jobReleaseProblems(readiness)
   ];
 }
 

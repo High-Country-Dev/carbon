@@ -65,3 +65,14 @@ Bugs found and fixed:
 - `crbn up --no-hibernate` left a stale `asleep` marker in place, and the dev servers held every request for 120 s. `crbn up` now clears it for its own stack.
 
 Noted, not changed: an API key without Purchasing view gets "has no supplier" for an outside operation, because the check reads with the caller's permissions.
+
+## Merge with main (2026-10-19)
+
+Main moved the server functions into the ERP modules and unpublished `updateJobStatus`. The merge changed these names:
+
+| Before | After |
+|---|---|
+| D1: `updateJobStatus` guard, `RELEASE_REFUSED` | Removed. The API's release is main's `releaseJobs` (`production_releaseJobs`), which runs `jobReleaseProblems`. `updateJobStatus` is not published. |
+| D2: `writeJobStatus` | Removed. Main's `updateJobStatus` is the unpublished write. Its `source` option carries the kanban telemetry. |
+| D3: `releaseKanbanJob` in `api+/kanban.$id.tsx`, `jobReleaseBlockers` | A closure inside `scanKanban` (`inventory.server.ts`). It runs `jobReleaseProblems` (main's readiness includes "nothing to make"), then `releaseCheckedJobs` with `source: "kanban"`. |
+| D5: `withFullestBin` in `packages/server-functions/src/get-method` | `getMethod` in `production.service.ts`. |
