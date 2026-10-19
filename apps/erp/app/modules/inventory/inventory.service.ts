@@ -10629,10 +10629,14 @@ export async function postReceipt(
           }
         }
 
+        // A line received at 0 must not touch its PO line or outside processing operation.
         const receiptLinesByPurchaseOrderLineId = receiptLines.data.reduce<
           Record<string, Database["public"]["Tables"]["receiptLine"]["Row"][]>
         >((acc, receiptLine) => {
-          if (receiptLine.lineId) {
+          if (
+            receiptLine.lineId &&
+            Number(receiptLine.receivedQuantity) !== 0
+          ) {
             acc[receiptLine.lineId] = [
               ...(acc[receiptLine.lineId] ?? []),
               receiptLine
@@ -10779,6 +10783,9 @@ export async function postReceipt(
               receiptLine?.receivedQuantity == null
                 ? 0
                 : receiptLine.receivedQuantity;
+            // A line received at 0 writes no ledger row, so its entities stay as they are.
+            if (receiptLine && safeReceivedQuantity === 0) return acc;
+
             const quantity = receiptLine?.requiresSerialTracking
               ? 1
               : safeReceivedQuantity || itemTracking.quantity;
@@ -11056,6 +11063,8 @@ export async function postReceipt(
             normalQuantity: normalQty,
             normalCost: normalPortionCost
           } = receiptLineCosts[index]!;
+          if (receivedQuantity === 0) continue;
+
           const itemTrackingType =
             receiptJournalLines[index]!.itemTrackingType ?? "Inventory";
           const isNegativeReceipt = receivedQuantity < 0;

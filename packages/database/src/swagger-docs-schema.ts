@@ -102409,6 +102409,9 @@ export default {
             $ref: "#/parameters/rowFilter.companySettings.preventNegativeBackflush"
           },
           {
+            $ref: "#/parameters/rowFilter.companySettings.receiptQuantitiesStartAtZero"
+          },
+          {
             $ref: "#/parameters/select"
           },
           {
@@ -102687,6 +102690,9 @@ export default {
             $ref: "#/parameters/rowFilter.companySettings.preventNegativeBackflush"
           },
           {
+            $ref: "#/parameters/rowFilter.companySettings.receiptQuantitiesStartAtZero"
+          },
+          {
             $ref: "#/parameters/preferReturn"
           }
         ],
@@ -102917,6 +102923,9 @@ export default {
           },
           {
             $ref: "#/parameters/rowFilter.companySettings.preventNegativeBackflush"
+          },
+          {
+            $ref: "#/parameters/rowFilter.companySettings.receiptQuantitiesStartAtZero"
           },
           {
             $ref: "#/parameters/body.companySettings"
@@ -166782,7 +166791,8 @@ export default {
         "leaseIncrementalBorrowingRate",
         "leaseShortTermExpedient",
         "leaseReminderDays",
-        "preventNegativeBackflush"
+        "preventNegativeBackflush",
+        "receiptQuantitiesStartAtZero"
       ],
       properties: {
         id: {
@@ -167178,6 +167188,11 @@ export default {
         },
         preventNegativeBackflush: {
           default: true,
+          format: "boolean",
+          type: "boolean"
+        },
+        receiptQuantitiesStartAtZero: {
+          default: false,
           format: "boolean",
           type: "boolean"
         }
@@ -222777,6 +222792,12 @@ export default {
     },
     "rowFilter.companySettings.preventNegativeBackflush": {
       name: "preventNegativeBackflush",
+      required: false,
+      in: "query",
+      type: "string"
+    },
+    "rowFilter.companySettings.receiptQuantitiesStartAtZero": {
+      name: "receiptQuantitiesStartAtZero",
       required: false,
       in: "query",
       type: "string"
