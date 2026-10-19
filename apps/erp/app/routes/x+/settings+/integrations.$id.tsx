@@ -1163,12 +1163,10 @@ async function installIntegration({ request, params }: ActionFunctionArgs) {
       email
     })
   ) {
-    return data(
-      {},
-      await flash(
-        request,
-        error(null, `${integration.name} isn't available yet.`)
-      )
+    // The connect route's refusal: the integrations page resolves the code to
+    // translated copy (`integration-errors.ts`).
+    throw redirect(
+      `${path.to.integrations}?integration=${integrationId}&error=coming-soon`
     );
   }
 

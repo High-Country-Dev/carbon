@@ -12057,7 +12057,7 @@ msgid "Issues"
 msgstr "問題"
 
 msgid "It is coming soon. Contact Carbon to have it set up for your company."
-msgstr ""
+msgstr "近日公開予定です。会社向けに設定するには Carbon にお問い合わせください。"
 
 msgid "It will stop running until you publish a version again. Nothing is deleted."
 msgstr "バージョンを再度公開するまで実行は停止します。削除されるものはありません。"
@@ -23863,7 +23863,7 @@ msgid "this inspection plan"
 msgstr "この検査計画"
 
 msgid "This integration isn't available yet"
-msgstr ""
+msgstr "この連携はまだご利用いただけません"
 
 #. placeholder {0}: company?.name ?? "Carbon"
 msgid "This invitation to join {0} has expired. You can request a new invite to be sent to your email."
