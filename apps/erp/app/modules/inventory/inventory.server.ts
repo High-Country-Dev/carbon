@@ -3495,7 +3495,7 @@ export const scanKanban = defineServiceFn({
         try {
           await runLocationSchedule({
             db: ctx.asSystem.pg,
-            client,
+            client: serviceRole,
             locationId,
             companyId,
             userId
