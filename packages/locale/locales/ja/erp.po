@@ -9741,6 +9741,9 @@ msgstr "行を追加できませんでした"
 msgid "Failed to apply pricing rules"
 msgstr "価格ルールの適用に失敗しました"
 
+msgid "Failed to check the batch's jobs"
+msgstr "バッチの製造指図を確認できませんでした"
+
 msgid "Failed to convert image"
 msgstr "画像の変換に失敗しました"
 

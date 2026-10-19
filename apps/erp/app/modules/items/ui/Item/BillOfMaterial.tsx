@@ -57,12 +57,7 @@ import {
   LuTrash,
   LuTruck
 } from "react-icons/lu";
-import {
-  useFetcher,
-  useFetchers,
-  useParams,
-  useSearchParams
-} from "react-router";
+import { useFetchers, useParams, useSearchParams } from "react-router";
 import type { z } from "zod";
 import { MethodIcon, SourcingTypeIcon } from "~/components";
 import { ConfigurationEditor } from "~/components/Configurator/ConfigurationEditor";
@@ -99,6 +94,8 @@ import type {
   MethodType,
   SourcingType
 } from "~/modules/shared/types";
+import type { action as updateMaterialAction } from "~/routes/x+/items+/methods+/material.$id";
+import type { action as createMaterialAction } from "~/routes/x+/items+/methods+/material.new";
 import type { Item as ItemType } from "~/stores";
 import { useItems } from "~/stores";
 import { path } from "~/utils/path";
@@ -207,7 +204,7 @@ const BillOfMaterial = ({
 
   const [items] = useItems();
   const itemName = getItemById(items, makeMethod.itemId)?.name;
-  const fetcher = useFetcher<{}>();
+  const fetcher = useAction();
   const deleteMaterialFetcher = useAction();
   const [searchParams] = useSearchParams();
 
@@ -654,11 +651,21 @@ function MaterialForm({
 }) {
   const { t } = useLingui();
   const { carbon } = useCarbon();
-  const methodMaterialFetcher = useFetcher<{
-    id: string;
-    success: boolean;
-    message: string;
-  }>();
+  const methodMaterialFetcher = useAction<
+    typeof createMaterialAction | typeof updateMaterialAction
+  >({
+    onSuccess: (data) => {
+      // A refused save returns `{ id: null }` and flashes its own error.
+      if (!data.id) return;
+      // The saved row replaces the temporary one when the page reloads.
+      setTemporaryItems((prev) => {
+        const { [item.id]: _, ...rest } = prev;
+        return rest;
+      });
+      if ("message" in data) toast.success(data.message);
+      onSubmit();
+    }
+  });
   const params = useParams();
   const parentItemId = propParentItemId ?? params.itemId;
   const { company, defaults } = useUser();
@@ -681,22 +688,6 @@ function MaterialForm({
   });
   const sourcingDisclosure = useDisclosure();
   const backflushDisclosure = useDisclosure();
-
-  useEffect(() => {
-    // Remove from temporary items after successful submission
-    if (methodMaterialFetcher.data && methodMaterialFetcher.data.id) {
-      // Clear temporary item after successful save
-      setTemporaryItems((prev) => {
-        const { [item.id]: _, ...rest } = prev;
-        return rest;
-      });
-
-      if (methodMaterialFetcher.data.success) {
-        toast.success(methodMaterialFetcher.data.message);
-      }
-      onSubmit();
-    }
-  }, [item.id, methodMaterialFetcher.data, setTemporaryItems, onSubmit]);
 
   const [itemType, setItemType] = useState<MethodItemType>(item.data.itemType);
   const [itemData, setItemData] = useState<{

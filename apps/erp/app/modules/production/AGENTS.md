@@ -117,7 +117,7 @@ pnpm --filter erp test
   |---|---|
   | `releaseJobs` (Release dialog, bulk release, planning, API/MCP) | `jobReleaseProblems` per job, then `releaseCheckedJobs` |
   | Batch release (`releaseBatchMemberJobs`) | `jobReleaseProblems`, all-or-nothing, then `releaseCheckedJobs` |
-  | Kanban scan with `autoRelease` (`scanKanban`, `inventory.server.ts`) | `jobReleaseProblems`, then `releaseCheckedJobs` (`source: "kanban"`; outside operations go on the supplier's newest Draft PO, else a new one — no one is there to choose), then `runLocationSchedule`. A refused job stays Draft and linked to the kanban; the route redirects to the job with a flash naming the problems, and MES is not opened |
+  | Kanban scan with `autoRelease` (`scanKanban`, `inventory.server.ts`) | `jobReleaseProblems`, then `releaseCheckedJobs` as the system on behalf of the scanner (`source: "kanban"`; outside operations go on the supplier's newest Draft PO, else a new one — no one is there to choose), then `runLocationSchedule`. A refused job stays Draft and linked to the kanban; the route redirects to the job with a flash naming the problems, and MES is not opened |
 
   `resumeJob` (Paused → Ready) is not a release. `updateJobStatus` is not published, so the API cannot set Ready without the checks. No SQL function sets a job to Ready (the SQL writes of `'Ready'` are on `jobOperation`). A new path to Ready must run `jobReleaseProblems` before `releaseCheckedJobs`.
 - `getJobMaterialsWithQuantityOnHand` — BOM with on-hand for shortfall visibility

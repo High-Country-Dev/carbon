@@ -9741,6 +9741,9 @@ msgstr "Nie udało się dodać wierszy"
 msgid "Failed to apply pricing rules"
 msgstr "Nie udało się zastosować reguł cenowych"
 
+msgid "Failed to check the batch's jobs"
+msgstr "Nie udało się sprawdzić zleceń partii produkcyjnej"
+
 msgid "Failed to convert image"
 msgstr "Nie udało się przekonwertować obrazu."
 

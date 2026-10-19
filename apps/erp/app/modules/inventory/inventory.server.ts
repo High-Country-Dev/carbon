@@ -46,6 +46,7 @@ import {
   upsertPurchaseOrderLine
 } from "~/modules/purchasing/purchasing.service";
 import { recordSalesRuleOutcome } from "~/modules/sales/sales.service";
+import { systemContext } from "~/modules/service-context.server";
 import {
   getCompanySettings,
   getNextSequence
@@ -3412,7 +3413,14 @@ export const scanKanban = defineServiceFn({
         };
       }
 
-      const result = await releaseCheckedJobs(ctx, {
+      // As the system, like the job it releases: the scanner may not hold
+      // production update, and the status write runs on the caller's client.
+      const system = systemContext({
+        companyId,
+        companyGroupId: ctx.company.groupId,
+        onBehalfOf: userId
+      });
+      const result = await releaseCheckedJobs(system, {
         jobIds: [jobId],
         purchaseOrdersBySupplierId: Object.fromEntries(
           (readiness.data?.suppliers ?? []).map((supplier) => [

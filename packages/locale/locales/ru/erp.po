@@ -9741,6 +9741,9 @@ msgstr "Ошибка при добавлении строк"
 msgid "Failed to apply pricing rules"
 msgstr "Не удалось применить правила ценообразования"
 
+msgid "Failed to check the batch's jobs"
+msgstr "Не удалось проверить производственные заказы серии"
+
 msgid "Failed to convert image"
 msgstr "Ошибка преобразования изображения"
 

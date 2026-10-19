@@ -9741,6 +9741,9 @@ msgstr "添加行失败"
 msgid "Failed to apply pricing rules"
 msgstr "无法应用定价规则"
 
+msgid "Failed to check the batch's jobs"
+msgstr "无法检查生产批次的工单"
+
 msgid "Failed to convert image"
 msgstr "图像转换失败"
 

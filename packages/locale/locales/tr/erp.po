@@ -9741,6 +9741,9 @@ msgstr "Satırlar ekleme başarısız oldu"
 msgid "Failed to apply pricing rules"
 msgstr "Fiyatlandırma kuralları uygulanamadı"
 
+msgid "Failed to check the batch's jobs"
+msgstr "Partinin iş emirleri kontrol edilemedi"
+
 msgid "Failed to convert image"
 msgstr "Resim dönüştürme başarısız oldu"
 

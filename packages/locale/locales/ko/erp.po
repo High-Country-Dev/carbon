@@ -9741,6 +9741,9 @@ msgstr "라인 추가 실패"
 msgid "Failed to apply pricing rules"
 msgstr "가격 규칙을 적용하지 못했습니다"
 
+msgid "Failed to check the batch's jobs"
+msgstr "배치의 작업 지시를 확인하지 못했습니다"
+
 msgid "Failed to convert image"
 msgstr "이미지 전환 실패"
 

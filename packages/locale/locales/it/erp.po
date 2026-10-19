@@ -9741,6 +9741,9 @@ msgstr "Impossibile aggiungere righe"
 msgid "Failed to apply pricing rules"
 msgstr "Impossibile applicare le regole di prezzo"
 
+msgid "Failed to check the batch's jobs"
+msgstr "Impossibile controllare gli ordini di produzione nel lotto"
+
 msgid "Failed to convert image"
 msgstr "Conversione immagine non riuscita"
 

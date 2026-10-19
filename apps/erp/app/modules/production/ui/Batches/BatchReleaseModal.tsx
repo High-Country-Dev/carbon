@@ -3,6 +3,7 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { MESSAGE_LIST_LIMIT } from "@carbon/database/strict-backflush";
+import { useLoaderQuery } from "@carbon/query";
 import {
   Alert,
   AlertDescription,
@@ -20,7 +21,7 @@ import {
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useEffect, useState } from "react";
 import { LuShoppingCart, LuTriangleAlert } from "react-icons/lu";
-import { Link, useFetcher } from "react-router";
+import { Link } from "react-router";
 import Select from "~/components/Select";
 import SupplierAvatar from "~/components/SupplierAvatar";
 import { path } from "~/utils/path";
@@ -57,22 +58,19 @@ export function BatchReleaseModal({
       ? t`set a Pull From storage unit on ${names} and ${more} more`
       : t`set a Pull From storage unit on ${names}`;
   };
-  const readinessFetcher = useFetcher<
-    JobReleaseReadiness | { error: string }
-  >();
   const [purchaseOrders, setPurchaseOrders] = useState<Record<string, string>>(
     {}
   );
 
-  const url = path.to.api.batchReleaseReadiness(target);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: load once per target
-  useEffect(() => {
-    readinessFetcher.load(url);
-  }, [url]);
-
-  const result = readinessFetcher.data;
-  const readiness = result && "jobs" in result ? result : null;
-  const loadError = result && "error" in result ? result.error : null;
+  // `staleTime: 0`: the checks are read again each time the modal opens.
+  const readinessQuery = useLoaderQuery<JobReleaseReadiness>(
+    path.to.api.batchReleaseReadiness(target),
+    { staleTime: 0 }
+  );
+  const readiness = readinessQuery.data ?? null;
+  const loadError = readinessQuery.isError
+    ? t`Failed to check the batch's jobs`
+    : null;
 
   useEffect(() => {
     if (!readiness) return;
