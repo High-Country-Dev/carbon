@@ -31,6 +31,7 @@ DECLARE
   v_storage_unit_name TEXT;
   v_strict_problems TEXT[] := '{}';
   v_pull_from TEXT;
+  v_lineside RECORD;
   v_lineside_take NUMERIC;
   v_issue_total NUMERIC;
   v_lock_key BIGINT;
@@ -193,11 +194,34 @@ BEGIN
         LIMIT 1
       ), v_material."storageUnitId");
 
-      IF v_pull_from <> v_material."storageUnitId" THEN
+      -- Every storage unit this material's live picks went to, most staged
+      -- first (getPickedBudgets), not only the line's latest one.
+      FOR v_lineside IN
+        SELECT dest.id
+        FROM (
+          SELECT pll."toStorageUnitId" AS id,
+            SUM(GREATEST(COALESCE(pll."quantityPicked", 0) - COALESCE(pll."quantityReturned", 0), 0)) AS staged
+          FROM "pickingListLine" pll
+          JOIN "pickingList" pl ON pl.id = pll."pickingListId"
+          WHERE pll."jobMaterialId" = v_material.id
+            AND pll."companyId" = p_company_id
+            AND pll.status <> 'Cancelled'
+            AND pl.status <> 'Cancelled'
+            AND pll."toStorageUnitId" IS NOT NULL
+          GROUP BY pll."toStorageUnitId"
+          UNION ALL
+          SELECT v_material."storageUnitId", 0
+        ) dest
+        WHERE dest.id <> v_pull_from
+        GROUP BY dest.id
+        ORDER BY SUM(dest.staged) DESC, dest.id
+      LOOP
+        EXIT WHEN v_material_qty_to_issue <= 0;
+
         SELECT COALESCE(SUM(quantity), 0) INTO v_bin_on_hand
         FROM "itemLedger"
         WHERE "itemId" = v_material."itemId"
-          AND "storageUnitId" = v_material."storageUnitId"
+          AND "storageUnitId" = v_lineside.id
           AND "locationId" = v_job_location_id
           AND "companyId" = p_company_id
           AND "trackedEntityId" IS NULL;
@@ -211,16 +235,16 @@ BEGIN
           ) VALUES (
             'Consumption', 'Job Consumption', p_job_id, p_company_id,
             v_material."itemId", -v_lineside_take,
-            v_job_location_id, v_material."storageUnitId", p_user_id
+            v_job_location_id, v_lineside.id, p_user_id
           );
 
           v_bf_item_ids := v_bf_item_ids || v_material."itemId";
           v_bf_quantities := v_bf_quantities || v_lineside_take;
-          v_bf_storage_unit_ids := v_bf_storage_unit_ids || v_material."storageUnitId";
+          v_bf_storage_unit_ids := v_bf_storage_unit_ids || v_lineside.id;
 
           v_material_qty_to_issue := v_material_qty_to_issue - v_lineside_take;
         END IF;
-      END IF;
+      END LOOP;
 
       -- A refused material still writes its row (the function raises before
       -- commit), so a later material on the bin counts this need.

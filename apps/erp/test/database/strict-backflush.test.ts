@@ -63,13 +63,14 @@ async function pick(
   job: { jobId: string; materialId: string },
   from: string,
   to: string,
-  quantity: number
+  quantity: number,
+  listKey = "PL"
 ) {
   await seed(f, async (trx) => {
     const list = await trx
       .insertInto("pickingList")
       .values({
-        pickingListId: `${job.jobId}-PL`,
+        pickingListId: `${job.jobId}-${listKey}`,
         locationId: f.locationId,
         companyId: f.companyId,
         createdBy: USER
@@ -579,6 +580,36 @@ databaseTest(
         byBin([
           { storageUnitId: lineside, quantity: -1 },
           { storageUnitId: shelfA, quantity: -1 }
+        ])
+      );
+    } finally {
+      await f.cleanup();
+    }
+  }
+);
+
+databaseTest(
+  "the SQL job-completion backflush draws every lineside bin the material was picked to",
+  async () => {
+    const f = await alwaysPostFixture();
+    try {
+      const shelfA = await storageUnit(f, "Shelf A");
+      const linesideOne = await storageUnit(f, "Lineside 1");
+      const linesideTwo = await storageUnit(f, "Lineside 2");
+      await stockBin(f, shelfA, 2);
+      await setStrict(f, true);
+
+      const job = await jobFixture(f);
+      await setMaterialBin(f, job.materialId, shelfA);
+      await pick(f, job, shelfA, linesideOne, 1, "PL-1");
+      await pick(f, job, shelfA, linesideTwo, 1, "PL-2");
+      await sql`SELECT backflush_job_materials(${job.jobId}, 1, ${f.companyId}, ${USER})`.execute(
+        f.db
+      );
+      expect(byBin(await consumption(f, job.jobId))).toEqual(
+        byBin([
+          { storageUnitId: linesideOne, quantity: -1 },
+          { storageUnitId: linesideTwo, quantity: -1 }
         ])
       );
     } finally {
