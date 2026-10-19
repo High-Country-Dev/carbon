@@ -111,6 +111,7 @@ import {
   getProviderDimensionTargets,
   getSyncOperationReadableIds,
   invalidateIntegrationHealthCache,
+  isIntegrationInstallWithheld,
   upsertCompanyIntegration
 } from "~/modules/settings/settings.service";
 import { IntegrationForm, SyncActivity } from "~/modules/settings/ui";
@@ -1129,9 +1130,12 @@ export async function action(args: ActionFunctionArgs) {
  */
 async function installIntegration({ request, params }: ActionFunctionArgs) {
   assertIsPost(request);
-  const { client, companyId, userId } = await requirePermissions(request, {
-    update: "settings"
-  });
+  const { client, companyId, userId, email } = await requirePermissions(
+    request,
+    {
+      update: "settings"
+    }
+  );
 
   const { id: integrationId } = params;
   if (!integrationId) throw new Error("Integration ID not found");
@@ -1151,6 +1155,22 @@ async function installIntegration({ request, params }: ActionFunctionArgs) {
   const integration = availableIntegrations.find((i) => i.id === integrationId);
 
   if (!integration) throw new Error("Integration not found");
+
+  if (
+    await isIntegrationInstallWithheld(client, {
+      companyId,
+      integrationId,
+      email
+    })
+  ) {
+    return data(
+      {},
+      await flash(
+        request,
+        error(null, `${integration.name} isn't available yet.`)
+      )
+    );
+  }
 
   const validation = await validator(
     // integration.schema is a union across all integrations (incl. a

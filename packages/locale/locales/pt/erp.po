@@ -12056,6 +12056,9 @@ msgstr "Data de Emissão"
 msgid "Issues"
 msgstr "Problemas"
 
+msgid "It is coming soon. Contact Carbon to have it set up for your company."
+msgstr ""
+
 msgid "It will stop running until you publish a version again. Nothing is deleted."
 msgstr "Ele parará de ser executado até que você publique uma versão novamente. Nada é excluído."
 
@@ -23858,6 +23861,9 @@ msgstr "Estas informações serão visíveis para todos os usuários, portanto, 
 
 msgid "this inspection plan"
 msgstr "este plano de inspeção"
+
+msgid "This integration isn't available yet"
+msgstr ""
 
 #. placeholder {0}: company?.name ?? "Carbon"
 msgid "This invitation to join {0} has expired. You can request a new invite to be sent to your email."
