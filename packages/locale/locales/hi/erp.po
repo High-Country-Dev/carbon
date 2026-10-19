@@ -15693,6 +15693,9 @@ msgstr "एक बार"
 msgid "Only Draft procedures are editable. Create a new version to change an Active or Archived procedure."
 msgstr "केवल ड्राफ्ट कार्यविधियाँ संपादन योग्य हैं। सक्रिय या संग्रहीत कार्यविधि को बदलने के लिए एक नया संस्करण बनाएँ।"
 
+msgid "Only employees can post receipts."
+msgstr "केवल कर्मचारी प्राप्ति पोस्ट कर सकते हैं।"
+
 msgid "Only empty, open periods can be deleted."
 msgstr "केवल खाली, खुली अवधियों को हटाया जा सकता है।"
 

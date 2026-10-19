@@ -15693,6 +15693,9 @@ msgstr "Unique"
 msgid "Only Draft procedures are editable. Create a new version to change an Active or Archived procedure."
 msgstr "Seules les procédures en brouillon sont modifiables. Créez une nouvelle version pour modifier une procédure active ou archivée."
 
+msgid "Only employees can post receipts."
+msgstr "Seuls les employés peuvent comptabiliser les réceptions."
+
 msgid "Only empty, open periods can be deleted."
 msgstr "Seules les périodes vides et ouvertes peuvent être supprimées."
 

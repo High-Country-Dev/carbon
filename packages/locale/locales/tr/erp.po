@@ -15693,6 +15693,9 @@ msgstr "Tek Seferlik"
 msgid "Only Draft procedures are editable. Create a new version to change an Active or Archived procedure."
 msgstr "Yalnızca Taslak prosedürler düzenlenebilir. Aktif veya Arşivlenmiş bir prosedürü değiştirmek için yeni bir sürüm oluşturun."
 
+msgid "Only employees can post receipts."
+msgstr "Yalnızca çalışanlar mal kabul muhasebeleştirebilir."
+
 msgid "Only empty, open periods can be deleted."
 msgstr "Yalnızca boş, açık dönemler silinebilir."
 

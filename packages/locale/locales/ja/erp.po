@@ -15693,6 +15693,9 @@ msgstr "1回限り"
 msgid "Only Draft procedures are editable. Create a new version to change an Active or Archived procedure."
 msgstr "下書きの手順書のみが編集可能です。有効またはアーカイブ済の手順書を変更するには、新しいバージョンを作成してください。"
 
+msgid "Only employees can post receipts."
+msgstr "従業員のみが入荷を転記することができます。"
+
 msgid "Only empty, open periods can be deleted."
 msgstr "空のオープン期間のみ削除できます。"
 

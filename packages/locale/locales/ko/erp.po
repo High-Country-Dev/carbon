@@ -15693,6 +15693,9 @@ msgstr "일회성"
 msgid "Only Draft procedures are editable. Create a new version to change an Active or Archived procedure."
 msgstr "초안 절차서만 편집 가능합니다. 활성 또는 보관됨 절차서를 변경하려면 새로운 버전을 생성하세요."
 
+msgid "Only employees can post receipts."
+msgstr "직원만 입고를 전기할 수 있습니다."
+
 msgid "Only empty, open periods can be deleted."
 msgstr "비어있는 열린 기간만 삭제할 수 있습니다."
 

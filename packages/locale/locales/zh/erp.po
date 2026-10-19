@@ -15693,6 +15693,9 @@ msgstr "一次性"
 msgid "Only Draft procedures are editable. Create a new version to change an Active or Archived procedure."
 msgstr "仅草稿程序文件可编辑。创建新版本以更改启用或已归档程序文件。"
 
+msgid "Only employees can post receipts."
+msgstr "只有员工才能过账收货。"
+
 msgid "Only empty, open periods can be deleted."
 msgstr "仅可删除空的、未结会计期间。"
 

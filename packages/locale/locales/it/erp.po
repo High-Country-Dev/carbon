@@ -15693,6 +15693,9 @@ msgstr "Una tantum"
 msgid "Only Draft procedures are editable. Create a new version to change an Active or Archived procedure."
 msgstr "Solo le procedure in bozza sono modificabili. Crea una nuova versione per modificare una procedura attiva o archiviata."
 
+msgid "Only employees can post receipts."
+msgstr "Solo i dipendenti possono registrare entrate merci."
+
 msgid "Only empty, open periods can be deleted."
 msgstr "Solo i periodi aperti e vuoti possono essere eliminati."
 

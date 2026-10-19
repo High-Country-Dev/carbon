@@ -15693,6 +15693,9 @@ msgstr "Einmalig"
 msgid "Only Draft procedures are editable. Create a new version to change an Active or Archived procedure."
 msgstr "Nur Verfahrensanweisungen im Entwurf sind bearbeitbar. Erstellen Sie eine neue Version, um eine aktive oder archivierte Verfahrensanweisung zu ändern."
 
+msgid "Only employees can post receipts."
+msgstr "Nur Mitarbeiter können Wareneingänge buchen."
+
 msgid "Only empty, open periods can be deleted."
 msgstr "Nur leere, offene Perioden können gelöscht werden."
 

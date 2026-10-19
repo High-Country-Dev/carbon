@@ -15693,6 +15693,9 @@ msgstr "De una sola vez"
 msgid "Only Draft procedures are editable. Create a new version to change an Active or Archived procedure."
 msgstr "Solo se pueden editar los procedimientos en Borrador. Crear una nueva versión para cambiar un procedimiento Activo o Archivado."
 
+msgid "Only employees can post receipts."
+msgstr "Solo los empleados pueden contabilizar recepciones."
+
 msgid "Only empty, open periods can be deleted."
 msgstr "Solo se pueden eliminar los períodos vacíos y abiertos."
 

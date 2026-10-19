@@ -76,6 +76,8 @@ const ReceiptHeader = () => {
     receiptLines.length > 0 ||
     (routeData?.fixedAssetLines ?? []).length > 0 ||
     (routeData?.rentalLines ?? []).length > 0;
+  const isEmployee = permissions.is("employee");
+  const postDisabled = !canPost || !isEmployee;
 
   const hasTrackingLabels = (routeData?.receiptLineTracking ?? []).length > 0;
 
@@ -192,20 +194,22 @@ const ReceiptHeader = () => {
               // other hint.
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <span tabIndex={canPost ? undefined : 0}>
+                  <span tabIndex={postDisabled ? 0 : undefined}>
                     <Button
                       variant="primary"
                       onClick={postModal.onOpen}
-                      isDisabled={!canPost || !permissions.is("employee")}
+                      isDisabled={postDisabled}
                       leftIcon={<LuCheckCheck />}
                     >
                       <Trans>Post</Trans>
                     </Button>
                   </span>
                 </TooltipTrigger>
-                {!canPost && (
+                {postDisabled && (
                   <TooltipContent>
-                    {hasAnyLine ? (
+                    {!isEmployee ? (
+                      <Trans>Only employees can post receipts.</Trans>
+                    ) : hasAnyLine ? (
                       <Trans>
                         Enter a received quantity, or tick a unit, on at least
                         one line.

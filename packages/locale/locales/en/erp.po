@@ -15693,6 +15693,9 @@ msgstr "One-time"
 msgid "Only Draft procedures are editable. Create a new version to change an Active or Archived procedure."
 msgstr "Only Draft procedures are editable. Create a new version to change an Active or Archived procedure."
 
+msgid "Only employees can post receipts."
+msgstr "Only employees can post receipts."
+
 msgid "Only empty, open periods can be deleted."
 msgstr "Only empty, open periods can be deleted."
 

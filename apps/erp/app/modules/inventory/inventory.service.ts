@@ -10238,10 +10238,16 @@ export async function postReceipt(
           }
         }
 
+        // A line received at 0 is left out: nothing arrived for it, so its
+        // purchase order line keeps its received date and an outside
+        // processing operation keeps its status.
         const receiptLinesByPurchaseOrderLineId = receiptLines.data.reduce<
           Record<string, Database["public"]["Tables"]["receiptLine"]["Row"][]>
         >((acc, receiptLine) => {
-          if (receiptLine.lineId) {
+          if (
+            receiptLine.lineId &&
+            Number(receiptLine.receivedQuantity) !== 0
+          ) {
             acc[receiptLine.lineId] = [
               ...(acc[receiptLine.lineId] ?? []),
               receiptLine
@@ -10388,6 +10394,11 @@ export async function postReceipt(
               receiptLine?.receivedQuantity == null
                 ? 0
                 : receiptLine.receivedQuantity;
+            // An entity left on a line received at 0 stays as it is: it
+            // has no item ledger row, so making it Available would create
+            // stock that was never received.
+            if (receiptLine && safeReceivedQuantity === 0) return acc;
+
             const quantity = receiptLine?.requiresSerialTracking
               ? 1
               : safeReceivedQuantity || itemTracking.quantity;

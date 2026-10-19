@@ -149,6 +149,25 @@ databaseTest(
         .where("companyId", "=", f.companyId)
         .execute();
 
+      // A batch entered on the second line before its quantity went back to 0.
+      const leftOnZeroLine = await f.db
+        .insertInto("trackedEntity")
+        .values({
+          quantity: 10,
+          status: "On Hold",
+          sourceDocument: "Item",
+          sourceDocumentId: f.partId,
+          attributes: {
+            Receipt: receipt.id,
+            "Receipt Line": lines[1]!.id,
+            "Batch Number": `${f.prefix}-LOT`
+          },
+          companyId: f.companyId,
+          createdBy: USER
+        })
+        .returning("id")
+        .executeTakeFirstOrThrow();
+
       unwrap(
         await invokePosting(
           handlesOf(f.ctx),
@@ -166,9 +185,10 @@ databaseTest(
         .execute();
       expect(ledger.map((row) => Number(row.quantity))).toEqual([4]);
 
+      // The line nothing arrived for keeps no received date.
       const purchaseOrderLines = await f.db
         .selectFrom("purchaseOrderLine")
-        .select(["id", "quantityReceived", "receivedComplete"])
+        .select(["id", "quantityReceived", "receivedComplete", "receivedDate"])
         .where("purchaseOrderId", "=", purchaseOrderId)
         .where("companyId", "=", f.companyId)
         .orderBy("id")
@@ -176,12 +196,22 @@ databaseTest(
       expect(
         purchaseOrderLines.map((l) => [
           Number(l.quantityReceived),
-          l.receivedComplete
+          l.receivedComplete,
+          l.receivedDate !== null
         ])
       ).toEqual([
-        [4, false],
-        [0, false]
+        [4, false, true],
+        [0, false, false]
       ]);
+
+      // An entity on the zero line is not released into stock it never had.
+      const entity = await f.db
+        .selectFrom("trackedEntity")
+        .select(["status", "quantity"])
+        .where("id", "=", leftOnZeroLine.id)
+        .where("companyId", "=", f.companyId)
+        .executeTakeFirstOrThrow();
+      expect([entity.status, Number(entity.quantity)]).toEqual(["On Hold", 10]);
     } finally {
       await f.cleanup();
     }
