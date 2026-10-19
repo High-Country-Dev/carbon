@@ -20707,6 +20707,11 @@ async function itemDerivedJobMaterialFields(opts: {
   lineStorageUnitId?: string;
 }) {
   const { trx, companyId, itemId, locationId, lineStorageUnitId } = opts;
+  const { strict } = await getStrictBackflushSettings(
+    trx,
+    companyId,
+    locationId
+  );
 
   const [item, replenishment, storageUnitId] = await Promise.all([
     readItemWithCost(trx, itemId, companyId),
@@ -20716,7 +20721,7 @@ async function itemDerivedJobMaterialFields(opts: {
       .where("itemId", "=", itemId)
       .where("companyId", "=", companyId)
       .executeTakeFirst(),
-    getStorageUnitId(trx, itemId, locationId, lineStorageUnitId)
+    getStorageUnitId(trx, itemId, locationId, lineStorageUnitId, !strict)
   ]);
 
   if (!item) return null;
@@ -24009,30 +24014,26 @@ async function completeBatch(
   let glEvents: { id: string; postedToGL: boolean }[] = [];
 
   // Strict backflush: refuse before phase 1 writes, since phase 2 issues after
-  // it commits. A completed batch skips this, so a retry still gets the
-  // "already completed" answer.
+  // it commits. Every member is checked in one dry run, so members sharing a
+  // bin are held to their combined demand. A completed batch skips this, so a
+  // retry still gets the "already completed" answer.
   const batchStatus = await db
     .selectFrom("jobOperationBatch")
     .select("status")
     .where("id", "=", batchId)
     .where("companyId", "=", companyId)
     .executeTakeFirst();
-  const system = { db, companyId, userId };
-  for (const m of batchStatus?.status === "Completed" ? [] : members) {
-    if (m.quantity <= 0) continue;
-    const check = await invokePosting(
-      system,
-      "issue",
-      {
+  if (batchStatus?.status !== "Completed") {
+    await inventoryPostings.dryRunJobOperationIssues(db, {
+      companyId,
+      userId,
+      operations: members.map((m) => ({
         id: m.jobOperationId,
-        type: "jobOperation",
-        quantity: m.quantity,
-        dryRun: true
-      },
-      inventoryPostings.issueMaterial
-    );
-    if (check.error) throw check.error;
+        quantity: m.quantity
+      }))
+    });
   }
+  const system = { db, companyId, userId };
 
   await db.transaction().execute(async (trx) => {
     const batch = await trx

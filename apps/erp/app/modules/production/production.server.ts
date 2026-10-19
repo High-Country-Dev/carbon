@@ -25,7 +25,8 @@ import { z } from "zod";
 import {
   cancelOpenPickingListsForJob,
   issueMaterial,
-  mergeTrackedEntities
+  mergeTrackedEntities,
+  serverFnFailure
 } from "~/modules/inventory/inventory.service";
 import { getDefaultStorageUnitForJob } from "~/modules/inventory/inventory.utils";
 import {
@@ -2871,15 +2872,11 @@ export const completeOperation = defineServiceFn({
     const check = await invokePosting(
       ctx,
       "issue",
-      { type: "jobOperation", id: operationId, quantity, dryRun: true },
+      { type: "jobOperationDryRun", id: operationId, quantity },
       issueMaterial
     );
     if (check.error) {
-      return ctx.error(
-        check.error.status === 409 ? "conflict" : "internal",
-        check.error.message,
-        check.error
-      );
+      return serverFnFailure(ctx, check.error, check.error.message);
     }
 
     const recorded = await createProductionQuantity(ctx, {

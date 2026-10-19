@@ -4,6 +4,7 @@
 
 import {
   type CarbonError,
+  createServiceContext,
   defineServiceFn
 } from "@carbon/api/service-fn.server";
 import { paged, payload, run, unwrap } from "@carbon/api/service-tools.server";
@@ -46,7 +47,6 @@ import {
   upsertPurchaseOrderLine
 } from "~/modules/purchasing/purchasing.service";
 import { recordSalesRuleOutcome } from "~/modules/sales/sales.service";
-import { systemContext } from "~/modules/service-context.server";
 import {
   getCompanySettings,
   getNextSequence
@@ -3373,7 +3373,8 @@ export type KanbanScan =
   /**
    * The job it made. `operationId` is its first operation when the kanban
    * releases the job; `startAs` how to start it when the kanban starts it.
-   * `message` says why an auto-release job was not released.
+   * `message` says why the job was not released, or that its method could
+   * not be copied.
    */
   | {
       type: "job";
@@ -3393,8 +3394,8 @@ export type KanbanScan =
  * after the item's lead time, copies the item's method and links the job to
  * the kanban; with auto-release it runs the release checks, then releases the
  * job (`releaseCheckedJobs`) and runs the location's schedule. A job that
- * fails the checks stays Draft and `message` names the problems. A kanban
- * that already has a job is a
+ * fails the checks, or whose method could not be copied, stays Draft and
+ * `message` names the problems. A kanban that already has a job is a
  * collision. Buy: adds a line to the supplier's open Draft or Planned purchase
  * order, or a new Draft one, priced from the supplier part in the order's
  * currency. Transfer: releases a stock transfer to the kanban's storage unit
@@ -3418,9 +3419,9 @@ export const scanKanban = defineServiceFn({
     }
     const card = kanban.data;
 
-    /** A kanban job's auto-release: the release checks, then the release. No one
-     *  at a kanban card can choose a purchase order, so unlike `releaseJobs` a
-     *  supplier's newest Draft PO is reused rather than a blocker. */
+    /** No one at a kanban card can choose a purchase order, so unlike
+     *  `releaseJobs` a supplier's newest Draft PO is reused rather than a
+     *  blocker. */
     async function releaseKanbanJob(
       jobId: string,
       locationId: string
@@ -3459,10 +3460,13 @@ export const scanKanban = defineServiceFn({
 
       // As the system, like the job it releases: the scanner may not hold
       // production update, and the status write runs on the caller's client.
-      const system = systemContext({
-        companyId,
-        companyGroupId: ctx.company.groupId,
-        onBehalfOf: userId
+      const system = createServiceContext({
+        actor: { type: "system", onBehalfOf: userId },
+        company: ctx.company,
+        caller: serviceRole,
+        system: () => serviceRole,
+        pg: () => ctx.asSystem.pg,
+        kv: () => ctx.kv
       });
       const result = await releaseCheckedJobs(system, {
         jobIds: [jobId],
@@ -3552,10 +3556,10 @@ export const scanKanban = defineServiceFn({
         },
         { skipMethod: true, skipRecalculate: true, source: "kanban" }
       );
-      const jobId = createdJob.data?.id;
-      if (createdJob.error || !jobId) {
+      if (createdJob.error || !createdJob.data) {
         return ctx.error("internal", "Failed to create job", createdJob.error);
       }
+      const jobId = createdJob.data.id;
 
       const [method, associated] = await Promise.all([
         upsertJobMethod(serviceRole, ctx.asSystem.pg, "itemToJob", {
@@ -3583,8 +3587,12 @@ export const scanKanban = defineServiceFn({
       if (method.error) {
         logger.error("Kanban operation failed", { error: method.error });
       }
-      const release =
-        !method.error && card.autoRelease
+      const release = method.error
+        ? {
+            released: false,
+            message: `${createdJob.data.jobId} was created, but its method could not be copied. Use Get Method on the job before releasing it.`
+          }
+        : card.autoRelease
           ? await releaseKanbanJob(jobId, card.locationId!)
           : { released: false, message: null };
 

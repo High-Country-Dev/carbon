@@ -15797,7 +15797,9 @@ export async function getStorageUnitId(
   trx: Transaction<DB>,
   itemId: string,
   locationId: string,
-  storageUnitId?: string
+  storageUnitId?: string,
+  /** False under strict backflush: the fullest bin is a guess, not a choice. */
+  allowFullestBin = true
 ): Promise<string | undefined> {
   if (storageUnitId) return storageUnitId;
 
@@ -15809,6 +15811,7 @@ export async function getStorageUnitId(
     .executeTakeFirst();
 
   if (pickMethod?.defaultStorageUnitId) return pickMethod.defaultStorageUnitId;
+  if (!allowFullestBin) return undefined;
 
   const storageUnitWithHighestQuantity =
     await getStorageUnitWithHighestQuantity(trx, itemId, locationId);

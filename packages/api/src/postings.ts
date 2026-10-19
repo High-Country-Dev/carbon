@@ -30,8 +30,14 @@ export const issueInput = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("jobOperation"),
     quantity: z.number(),
-    id: z.string(),
-    dryRun: z.boolean().optional()
+    id: z.string()
+  }),
+  // The strict backflush check of a "jobOperation" issue, with no writes. Its
+  // own type, so an ERP that predates it refuses it rather than issuing.
+  z.object({
+    type: z.literal("jobOperationDryRun"),
+    quantity: z.number(),
+    id: z.string()
   }),
   z.object({
     type: z.literal("jobOperationBatchComplete"),
@@ -554,6 +560,7 @@ export const MES_POSTINGS = {
     "convertEntity",
     "jobOperation",
     "jobOperationBatchComplete",
+    "jobOperationDryRun",
     "jobOperationScrap",
     "jobOperationSerialComplete",
     "maintenanceDispatchInventory",

@@ -627,9 +627,8 @@ export async function checkStrictBackflush(args: {
     { companyId: args.companyId, userId: args.userId },
     {
       id: args.jobOperationId,
-      type: "jobOperation",
-      quantity: args.quantity,
-      dryRun: true
+      type: "jobOperationDryRun",
+      quantity: args.quantity
     }
   );
   if (check.error) {

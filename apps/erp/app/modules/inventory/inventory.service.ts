@@ -18798,7 +18798,11 @@ export async function postInventoryAdjustment(
 }
 type ItemLedgerInsert = Database["public"]["Tables"]["itemLedger"]["Insert"];
 
-class DryRunRollback extends Error {}
+class DryRunRollback extends Error {
+  constructor(readonly plannedRows: ItemLedgerInsert[] = []) {
+    super("Dry run");
+  }
+}
 
 export const postPickingPermission = {} satisfies PermissionRule<
   z.output<typeof postPickingInput>
@@ -20840,7 +20844,8 @@ async function issueJobOperationMaterials(
     accountDefaults,
     dimensionMap,
     db,
-    dryRun = false
+    dryRun = false,
+    plannedElsewhere = []
   }: {
     jobOperationId: string;
     quantity: number;
@@ -20853,6 +20858,9 @@ async function issueJobOperationMaterials(
     db: Kysely<KyselyDatabase>;
     // Throw DryRunRollback after the strict check, before any ledger row.
     dryRun?: boolean;
+    // Rows earlier operations of the same dry run plan to draw, so operations
+    // sharing a bin are checked against their combined demand.
+    plannedElsewhere?: ItemLedgerInsert[];
   }
 ) {
   const materialsToIssue = await trx
@@ -20947,7 +20955,8 @@ async function issueJobOperationMaterials(
   const pullFrom = strict
     ? await resolvePullFromStorageUnits(trx, companyId, materialsToIssue)
     : new Map<string, string | null>();
-  if (strict && preventNegative) {
+  // A dry run's locks would end with its rollback; the real issue takes them.
+  if (strict && preventNegative && !dryRun) {
     await lockStrictBins(
       trx,
       companyId,
@@ -21020,9 +21029,10 @@ async function issueJobOperationMaterials(
         locationId: job.locationId,
         storageUnitId,
         quantity: remaining,
-        plannedRows: itemLedgerInserts,
+        plannedRows: [...plannedElsewhere, ...itemLedgerInserts],
         preventNegative,
-        jobReadableId: job.jobId
+        jobReadableId: job.jobId,
+        lock: !dryRun
       });
       if (problem) strictProblems.push(problem);
       // Kept when refused, so a later material on the bin counts this need.
@@ -21130,7 +21140,7 @@ async function issueJobOperationMaterials(
   }
 
   if (strictProblems.length > 0) throw strictBackflushRefusal(strictProblems);
-  if (dryRun) throw new DryRunRollback();
+  if (dryRun) throw new DryRunRollback(itemLedgerInserts);
 
   // Total material cost this call relieved from inventory into WIP — the
   // jobOperationScrap case posts its WIP→scrap journal from this figure so a
@@ -22568,6 +22578,7 @@ export const issueMaterialPermission = {
     jobCompleteMakeToOrder: {},
     jobOperation: { update: "production" },
     jobOperationBatchComplete: { update: "production" },
+    jobOperationDryRun: { update: "production" },
     jobOperationBatchOutput: { update: "production" },
     jobOperationSerialComplete: { update: "production" },
     jobOperationScrap: { update: "production" },
@@ -22588,6 +22599,61 @@ export const issueMaterialPermission = {
  * Issues material and records production against jobs, operations, tracked
  * entities and maintenance dispatches, per `type`.
  */
+/**
+ * The strict backflush check of issuing each operation's materials, with no
+ * writes. The operations are checked together, so two that draw the same Pull
+ * From bin are refused when their combined demand exceeds it. Throws the 409
+ * refusal; a no-op when strict backflush is off.
+ */
+export async function dryRunJobOperationIssues(
+  db: Kysely<KyselyDatabase>,
+  args: {
+    companyId: string;
+    userId: string;
+    operations: { id: string; quantity: number }[];
+  }
+): Promise<void> {
+  const { companyId, userId } = args;
+  const operations = args.operations.filter((op) => op.quantity > 0);
+  if (operations.length === 0) return;
+  if (!(await isStrictBackflush(db, companyId))) return;
+
+  const { accountDefaults, dimensionMap } = await loadConsumeAccountingContext(
+    db,
+    companyId
+  );
+  try {
+    await db.transaction().execute(async (trx) => {
+      const postingStatus = await journalPostingStatus(trx, companyId);
+      const planned: ItemLedgerInsert[] = [];
+      for (const op of operations) {
+        try {
+          await issueJobOperationMaterials(trx, {
+            jobOperationId: op.id,
+            quantity: op.quantity,
+            companyId,
+            userId,
+            postingStatus,
+            accountDefaults,
+            dimensionMap,
+            db,
+            dryRun: true,
+            plannedElsewhere: planned
+          });
+        } catch (err) {
+          if (!(err instanceof DryRunRollback)) throw err;
+          planned.push(...err.plannedRows);
+        }
+      }
+      // The material loop writes `quantityIssued` before the dry-run exit, so
+      // the transaction must never commit.
+      throw new DryRunRollback();
+    });
+  } catch (err) {
+    if (!(err instanceof DryRunRollback)) throw err;
+  }
+}
+
 export async function issueMaterial(
   ctx: ServiceContext,
   raw: z.input<typeof issueInput>
@@ -22608,35 +22674,35 @@ export async function issueMaterial(
 
   switch (validatedPayload.type) {
     case "jobOperation": {
-      const { id, companyId, quantity, userId, dryRun } = validatedPayload;
-
-      if (dryRun && !(await isStrictBackflush(db, companyId))) break;
+      const { id, companyId, quantity, userId } = validatedPayload;
 
       const { accountDefaults, dimensionMap } =
         await loadConsumeAccountingContext(db, companyId);
 
-      try {
-        await db.transaction().execute(async (trx) => {
-          // Provisional before the company's accounting cutover, Posted after it.
-          const postingStatus = await journalPostingStatus(trx, companyId);
-          await issueJobOperationMaterials(trx, {
-            jobOperationId: id,
-            quantity,
-            companyId,
-            userId,
-            postingStatus,
-            accountDefaults,
-            dimensionMap,
-            db,
-            dryRun
-          });
-          // Reached on a dry run only when the operation had nothing to issue.
-          if (dryRun) throw new DryRunRollback();
+      await db.transaction().execute(async (trx) => {
+        // Provisional before the company's accounting cutover, Posted after it.
+        const postingStatus = await journalPostingStatus(trx, companyId);
+        await issueJobOperationMaterials(trx, {
+          jobOperationId: id,
+          quantity,
+          companyId,
+          userId,
+          postingStatus,
+          accountDefaults,
+          dimensionMap,
+          db
         });
-      } catch (err) {
-        if (!(err instanceof DryRunRollback)) throw err;
-      }
+      });
 
+      break;
+    }
+    case "jobOperationDryRun": {
+      const { id, companyId, quantity, userId } = validatedPayload;
+      await dryRunJobOperationIssues(db, {
+        companyId,
+        userId,
+        operations: [{ id, quantity }]
+      });
       break;
     }
     case "jobOperationBatchComplete": {

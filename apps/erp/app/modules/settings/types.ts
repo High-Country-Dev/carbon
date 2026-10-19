@@ -59,7 +59,6 @@ export type MethodMissingPullFrom = {
   readableId: string;
   name: string;
   version: number;
-  /** The pulled, stocked materials on this version with a gap. */
   materials: string[];
   /** The locations at least one of those materials has no Pull From at. */
   locations: string[];
@@ -72,6 +71,5 @@ export type JobMissingStorageUnit = {
   status: Database["public"]["Enums"]["jobStatus"];
   readableId: string | null;
   locationName: string | null;
-  /** The materials the backflush would refuse: no storage unit. */
   materials: string[];
 };

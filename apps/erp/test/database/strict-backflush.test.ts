@@ -5,6 +5,7 @@
 import { sql } from "kysely";
 import { expect } from "vitest";
 import {
+  dryRunJobOperationIssues,
   issueMaterial,
   postInventoryAdjustment as postInventoryAdjustmentBody
 } from "../../app/modules/inventory/inventory.service";
@@ -331,6 +332,43 @@ databaseTest(
   }
 );
 
+databaseTest(
+  "a batch dry run holds operations that share a bin to their combined demand",
+  async () => {
+    const f = await alwaysPostFixture();
+    try {
+      const shelfA = await storageUnit(f, "Shelf A");
+      await stockBin(f, shelfA, 3);
+      const first = await jobFixture(f, "1");
+      const second = await jobFixture(f, "2");
+      await setMaterialBin(f, first.materialId, shelfA);
+      await setMaterialBin(f, second.materialId, shelfA);
+      await setStrict(f, true);
+
+      const check = (operationIds: string[]) =>
+        dryRunJobOperationIssues(f.db, {
+          companyId: f.companyId,
+          userId: USER,
+          operations: operationIds.map((id) => ({ id, quantity: 1 }))
+        });
+
+      // Each needs 2 of the 3 on the shelf: alone each fits, together not.
+      await check([first.operationId]);
+      await check([second.operationId]);
+      await expect(
+        check([first.operationId, second.operationId])
+      ).rejects.toMatchObject({
+        status: 409,
+        message: `Not enough ${f.prefix}-PART in ${f.prefix} Shelf A: need 2, have 1`
+      });
+      expect(await consumption(f, first.jobId)).toEqual([]);
+      expect(await consumption(f, second.jobId)).toEqual([]);
+    } finally {
+      await f.cleanup();
+    }
+  }
+);
+
 databaseTest("a dry run reports the refusal and writes nothing", async () => {
   const f = await alwaysPostFixture();
   try {
@@ -341,29 +379,26 @@ databaseTest("a dry run reports the refusal and writes nothing", async () => {
 
     unwrap(
       await issue(f.ctx, {
-        type: "jobOperation",
+        type: "jobOperationDryRun",
         id: job.operationId,
-        quantity: 1,
-        dryRun: true
+        quantity: 1
       })
     );
 
     await setStrict(f, true);
     const short = await issue(f.ctx, {
-      type: "jobOperation",
+      type: "jobOperationDryRun",
       id: job.operationId,
-      quantity: 1,
-      dryRun: true
+      quantity: 1
     });
     expect(short.error?.status).toBe(409);
 
     await stockBin(f, shelfA, 1);
     unwrap(
       await issue(f.ctx, {
-        type: "jobOperation",
+        type: "jobOperationDryRun",
         id: job.operationId,
-        quantity: 1,
-        dryRun: true
+        quantity: 1
       })
     );
     expect(await consumption(f, job.jobId)).toEqual([]);

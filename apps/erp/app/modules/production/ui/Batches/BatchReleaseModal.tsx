@@ -62,7 +62,6 @@ export function BatchReleaseModal({
     {}
   );
 
-  // `staleTime: 0`: the checks are read again each time the modal opens.
   const readinessQuery = useLoaderQuery<JobReleaseReadiness>(
     path.to.api.batchReleaseReadiness(target),
     { staleTime: 0 }

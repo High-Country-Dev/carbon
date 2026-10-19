@@ -46,6 +46,8 @@ type BinCoverArgs = {
   plannedRows: LedgerInsert[];
   preventNegative: boolean;
   jobReadableId: string;
+  /** False in a dry run: its lock would end with its rollback. */
+  lock?: boolean;
 };
 
 export async function resolvePullFromStorageUnits(
@@ -132,7 +134,9 @@ export async function binCoverProblem(
 
   // Held until the caller's transaction ends, so two completions cannot both
   // pass the check and overdraw the bin.
-  await lockStrictBins(db, companyId, [{ storageUnitId, itemId }]);
+  if (args.lock !== false) {
+    await lockStrictBins(db, companyId, [{ storageUnitId, itemId }]);
+  }
 
   const row = await db
     .selectFrom("itemLedger")
