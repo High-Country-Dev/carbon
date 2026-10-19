@@ -2,10 +2,6 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
-// Blind receiving against the live database: with
-// `companySettings.receiptQuantitiesStartAtZero` on, a purchase-order receipt's
-// lines start at 0, and posting it books only the lines that were received.
-
 import { expect } from "vitest";
 import { postReceipt } from "../../app/modules/inventory/inventory.service";
 import {
@@ -22,7 +18,6 @@ import {
 import { handlesOf } from "./fixtures/handles";
 import { databaseTest } from "./fixtures/local-database";
 
-/** A purchase order with two lines of 10 of the fixture's part. */
 async function purchaseOrderWithTwoLines(f: Fixture): Promise<string> {
   const purchaseOrderId = `${f.prefix}-po-blind`;
   await seed(f, async (trx) => {
@@ -141,7 +136,6 @@ databaseTest(
         [0, 10]
       ]);
 
-      // The receiver counts 4 on the first line; nothing arrived for the second.
       await f.db
         .updateTable("receiptLine")
         .set({ receivedQuantity: 4 })
@@ -185,7 +179,6 @@ databaseTest(
         .execute();
       expect(ledger.map((row) => Number(row.quantity))).toEqual([4]);
 
-      // The line nothing arrived for keeps no received date.
       const purchaseOrderLines = await f.db
         .selectFrom("purchaseOrderLine")
         .select(["id", "quantityReceived", "receivedComplete", "receivedDate"])
@@ -204,7 +197,6 @@ databaseTest(
         [0, false, false]
       ]);
 
-      // An entity on the zero line is not released into stock it never had.
       const entity = await f.db
         .selectFrom("trackedEntity")
         .select(["status", "quantity"])

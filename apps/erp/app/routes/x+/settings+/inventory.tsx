@@ -137,8 +137,6 @@ export default function InventorySettingsRoute() {
     }
   });
 
-  // The switch saves on change through its own fetcher, so saving another
-  // card cannot cancel it or disable it.
   const toggleFetcher = useAction<typeof action>({
     onSuccess: ({ data }) => {
       if (data?.receiptQuantitiesStartAtZero === undefined) return;

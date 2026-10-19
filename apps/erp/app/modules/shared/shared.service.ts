@@ -10031,10 +10031,6 @@ async function getFallbackLocationId(
   return location.data?.id ?? null;
 }
 
-// Blind receiving (`companySettings.receiptQuantitiesStartAtZero`): when on, a
-// new receipt's lines start at a received quantity of 0 rather than what is
-// still to receive, so the receiver enters what actually arrived and a line
-// nothing arrived for stays at 0.
 async function receiptQuantitiesStartAtZero(
   db: Kysely<KyselyDatabase>,
   companyId: string

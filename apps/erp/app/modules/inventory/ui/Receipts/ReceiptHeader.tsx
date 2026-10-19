@@ -187,11 +187,7 @@ const ReceiptHeader = () => {
                 </Button>
               ))}
             {!isPosted && !isVoided && (
-              // A disabled button fires no pointer events and takes no focus,
-              // so the span is the trigger, focusable only while it explains
-              // the disabled button. Every line can start at 0 (receipt
-              // quantities start at zero), which leaves Post disabled with no
-              // other hint.
+              // A disabled button gets no pointer events or focus, so the span is the trigger.
               <Tooltip>
                 <TooltipTrigger asChild>
                   <span tabIndex={postDisabled ? 0 : undefined}>
