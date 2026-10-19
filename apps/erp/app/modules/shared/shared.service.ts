@@ -72,6 +72,7 @@ import type { AccountType } from "@carbon/database/ledger";
 import { accountTypeFromClass, isAccountClass } from "@carbon/database/ledger";
 import { equals } from "@carbon/database/precision";
 import { quoteToOrderPriceTrace } from "@carbon/database/price-trace";
+import { releaseReceiptSerialEntities } from "@carbon/database/receipt-serials";
 import type * as rows from "@carbon/database/rows";
 import type * as rowsModule from "@carbon/database/rows";
 import {
@@ -128,6 +129,7 @@ import {
   debit,
   deriveRate,
   EPSILON,
+  escapeLike,
   generateLeasePayments,
   getReadableIdWithRevision,
   getRemainingQuantityToInvoice,
@@ -138,7 +140,7 @@ import {
   round,
   settleQuantity,
   type TrackedEntityBin,
-  unchecked
+  textToTiptap
 } from "@carbon/utils";
 import {
   type CalendarDate,
@@ -183,6 +185,7 @@ import {
   setGenericQueryFilters
 } from "~/utils/query";
 import type { CustomFieldsTableType } from "../settings/types";
+import type { assignableTables } from "./shared.models";
 import { assertMethodHasPullFrom, isStrictBackflush } from "./strict-backflush";
 import type { ItemModelUpload } from "./types";
 
@@ -452,14 +455,16 @@ export async function getCustomerPortals(
   companyId: string,
   args?: GenericQueryFilters & { search: string | null }
 ) {
+  // Joined for the search, which matches the customer's name. Every portal
+  // has its customer (the form requires one), so the inner join drops none.
   let query = client
     .from("externalLink")
-    .select("*", { count: LIST_COUNT })
+    .select("*, customer!inner(id)", { count: LIST_COUNT })
     .eq("companyId", companyId)
     .eq("documentType", "Customer");
 
   if (args?.search) {
-    query = query.ilike("customer.name", `%${args.search}%`);
+    query = query.ilike("customer.name", `%${escapeLike(args.search)}%`);
   }
 
   if (args) {
@@ -794,19 +799,61 @@ export async function assign(
   client: SupabaseClient<Database>,
   args: {
     id: string;
-    table: string;
+    companyId: string;
+    table: (typeof assignableTables)[number];
     assignee: string;
   }
 ) {
-  const { id, table, assignee } = args;
+  const { id, companyId, table, assignee } = args;
+  // Every assignable table has `id`, `companyId` and `assignee`; one stands in
+  // for the union.
+  return client
+    .from(table as "job")
+    .update({ assignee: assignee || null })
+    .eq("id", id)
+    .eq("companyId", companyId)
+    .select("id");
+}
 
-  return (
-    client
-      // @ts-expect-error
-      .from(table)
-      .update(unchecked({ assignee: assignee ? assignee : null }))
-      .eq(unchecked("id"), id)
-  );
+/**
+ * The stored work instruction for plain text. Empty text is `{}`, as the
+ * editor stores it: the column is NOT NULL, so `null` refused every clear.
+ */
+export function workInstructionFromText(text: string) {
+  return text.trim() ? textToTiptap(text) : {};
+}
+
+/**
+ * Replaces one operation's work instruction, as the caller. The text becomes
+ * the editor's document (`textToTiptap`); empty text clears it. An id the
+ * caller cannot see, or of another company, is `notFound`.
+ */
+export async function setOperationWorkInstruction(
+  ctx: ServiceContext,
+  table: "jobOperation" | "methodOperation" | "quoteOperation",
+  id: string,
+  text: string
+) {
+  const updated = await ctx.asCaller.supabase
+    .from(table as "jobOperation")
+    .update({
+      workInstruction: workInstructionFromText(text),
+      updatedBy: ctx.auditUserId,
+      updatedAt: datetime.timestamp()
+    })
+    .eq("id", id)
+    .eq("companyId", ctx.company.id)
+    .select("id")
+    .maybeSingle();
+  if (updated.error) {
+    return ctx.error(
+      "internal",
+      "Failed to save the work instruction",
+      updated.error
+    );
+  }
+  if (!updated.data) return ctx.error("notFound", "Operation not found");
+  return { id: updated.data.id };
 }
 
 export async function getCustomFieldsCacheKey(args?: {
@@ -11524,11 +11571,11 @@ export async function createDocument(
           trackedEntities.data?.length
         ) {
           // TODO: update the Receipt Line and Index attributes to point to the new line
-          await trx
-            .deleteFrom("trackedEntity")
-            .where("id", "in", trackedEntities.data?.map((d) => d.id) ?? [])
-            .where("companyId", "=", companyId)
-            .execute();
+          await releaseReceiptSerialEntities(
+            trx,
+            companyId,
+            trackedEntities.data.map((d) => d.id)
+          );
         }
 
         const newReceiptLineRows = await trx
