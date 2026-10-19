@@ -152,7 +152,10 @@ the service-role client + Kysely `db.transaction()`, and branch on `sourceDocume
   ticked unit through `returnRentalUnit` and moves its `fixedAsset.locationId` to the receipt's
   location; `returnRentalUnit` in `sales.service.ts`), and `Sales Return Order`
   (customer RMA re-entry at original outbound cost, entities to On Hold). The PO, transfer and RMA branches skip a
-  line received at 0 — it books no `itemLedger`, cost layer or journal line. PO path: inserts `itemLedger`
+  line received at 0 — it books no `itemLedger`, cost layer or journal line. In the PO path a line
+  received at 0 is also left out of `receiptLinesByPurchaseOrderLineId` (its PO line keeps its
+  `receivedDate`, an outside-processing operation its status) and out of `trackedEntityUpdates` (a
+  batch or serial still on it is not set Available and gets no Receive activity). PO path: inserts `itemLedger`
   (entry types `Positive/Negative Adjmt.` by sign), GR/IR + inventory `journalLine`s for every
   company (the journal is Provisional before the accounting cutover, Posted after it), advances PO line `quantityReceived`/`receivedComplete` and PO `status`,
   flips tracked entities to `Available` (**`On Hold` if the item has a Receipt-usage inspection
