@@ -12107,6 +12107,9 @@ msgstr "Düzenlenme Tarihi"
 msgid "Issues"
 msgstr "Sorunlar"
 
+msgid "It is coming soon. Contact Carbon to have it set up for your company."
+msgstr "Yakında kullanıma sunulacak. Şirketiniz için kurulması için Carbon ile iletişime geçin."
+
 msgid "It will stop running until you publish a version again. Nothing is deleted."
 msgstr "Yeniden bir sürüm yayınlayana kadar çalışmayı durdurur. Hiçbir şey silinmez."
 
@@ -23981,6 +23984,9 @@ msgstr "Bu bilgi tüm kullanıcılara görünür olacak, bu nedenle paylaştığ
 
 msgid "this inspection plan"
 msgstr "bu kontrol planı"
+
+msgid "This integration isn't available yet"
+msgstr "Bu entegrasyon henüz kullanılamıyor"
 
 #. placeholder {0}: company?.name ?? "Carbon"
 msgid "This invitation to join {0} has expired. You can request a new invite to be sent to your email."

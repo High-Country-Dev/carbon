@@ -11,6 +11,7 @@ import type {
   ServiceContext
 } from "@carbon/api/service-fn.server";
 import {
+  CarbonEdition,
   CONTROLLED_ENVIRONMENT,
   SUPABASE_INTERNAL_URL,
   SUPABASE_URL,
@@ -87,6 +88,7 @@ import type {
   StandardFieldWriter
 } from "@carbon/ee";
 import {
+  integrations as availableIntegrations,
   bomLineItemType,
   CUSTOM_FIELD_TYPE_LABELS,
   changeNoticeDescriptionJson,
@@ -185,6 +187,7 @@ import {
   patchOnshapeOAuthGrant,
   patchOnshapeSettings
 } from "@carbon/ee/onshape.server";
+import { isIntegrationComingSoon } from "@carbon/ee/plan";
 import { companyHasFeature } from "@carbon/ee/plan.server";
 import { patchRampSettings } from "@carbon/ee/ramp.server";
 import { resolveCapabilities } from "@carbon/ee/sync";
@@ -574,6 +577,41 @@ export async function getIntegration(
     .eq("id", id)
     .eq("companyId", companyId)
     .maybeSingle();
+}
+
+const integrationInstallLogger = getLogger("erp", "settings", "integrations");
+
+/**
+ * Whether a new install is refused: an `internalOnly` integration this user
+ * sees as "Coming soon" (`isIntegrationComingSoon`), in a company that does not
+ * have it installed. A failed read refuses.
+ */
+export async function isIntegrationInstallWithheld(
+  client: SupabaseClient<Database>,
+  {
+    companyId,
+    integrationId,
+    email
+  }: { companyId: string; integrationId: string; email: string }
+): Promise<boolean> {
+  const integration = availableIntegrations.find((i) => i.id === integrationId);
+  if (
+    !integration ||
+    !isIntegrationComingSoon(integration, { edition: CarbonEdition, email })
+  ) {
+    return false;
+  }
+
+  const existing = await getIntegration(client, integrationId, companyId);
+  if (existing.error) {
+    integrationInstallLogger.error("Failed to read the integration install", {
+      companyId,
+      integrationId,
+      error: existing.error
+    });
+    return true;
+  }
+  return existing.data?.active !== true;
 }
 
 export async function getIntegrations(

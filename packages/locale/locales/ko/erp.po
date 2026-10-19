@@ -12107,6 +12107,9 @@ msgstr "출고일"
 msgid "Issues"
 msgstr "이슈"
 
+msgid "It is coming soon. Contact Carbon to have it set up for your company."
+msgstr "곧 제공될 예정입니다. 회사에 설정하려면 Carbon에 문의하세요."
+
 msgid "It will stop running until you publish a version again. Nothing is deleted."
 msgstr "다시 버전을 게시할 때까지 실행이 중지됩니다. 삭제된 내용은 없습니다."
 
@@ -23981,6 +23984,9 @@ msgstr "이 정보는 모든 사용자에게 표시되므로 공유할 내용을
 
 msgid "this inspection plan"
 msgstr "이 검사 계획"
+
+msgid "This integration isn't available yet"
+msgstr "이 연동은 아직 사용할 수 없습니다"
 
 #. placeholder {0}: company?.name ?? "Carbon"
 msgid "This invitation to join {0} has expired. You can request a new invite to be sent to your email."

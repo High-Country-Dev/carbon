@@ -12107,6 +12107,9 @@ msgstr "签发日期"
 msgid "Issues"
 msgstr "问题"
 
+msgid "It is coming soon. Contact Carbon to have it set up for your company."
+msgstr "即将推出。请联系 Carbon 为您的公司进行设置。"
+
 msgid "It will stop running until you publish a version again. Nothing is deleted."
 msgstr "它将停止运行，直到您再次发布版本。不会删除任何内容。"
 
@@ -23981,6 +23984,9 @@ msgstr "此信息将对所有用户可见，请谨慎分享。"
 
 msgid "this inspection plan"
 msgstr "这个检验计划"
+
+msgid "This integration isn't available yet"
+msgstr "此集成尚不可用"
 
 #. placeholder {0}: company?.name ?? "Carbon"
 msgid "This invitation to join {0} has expired. You can request a new invite to be sent to your email."

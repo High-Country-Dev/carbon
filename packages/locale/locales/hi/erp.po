@@ -12107,6 +12107,9 @@ msgstr "जारी तारीख"
 msgid "Issues"
 msgstr "समस्याएं"
 
+msgid "It is coming soon. Contact Carbon to have it set up for your company."
+msgstr "यह जल्द ही आ रहा है। इसे अपनी कंपनी के लिए सेट अप करवाने के लिए Carbon से संपर्क करें।"
+
 msgid "It will stop running until you publish a version again. Nothing is deleted."
 msgstr "यह तब तक चलना बंद कर देगा जब तक आप फिर से एक संस्करण प्रकाशित नहीं करते। कुछ भी हटाया नहीं गया है।"
 
@@ -23981,6 +23984,9 @@ msgstr "यह जानकारी सभी उपयोगकर्ताओ
 
 msgid "this inspection plan"
 msgstr "इस निरीक्षण योजना"
+
+msgid "This integration isn't available yet"
+msgstr "यह एकीकरण अभी उपलब्ध नहीं है"
 
 #. placeholder {0}: company?.name ?? "Carbon"
 msgid "This invitation to join {0} has expired. You can request a new invite to be sent to your email."
