@@ -814,6 +814,14 @@ export async function assign(
 }
 
 /**
+ * The stored work instruction for plain text. Empty text is `{}`, as the
+ * editor stores it: the column is NOT NULL, so `null` refused every clear.
+ */
+export function workInstructionFromText(text: string) {
+  return text.trim() ? textToTiptap(text) : {};
+}
+
+/**
  * Replaces one operation's work instruction, as the caller. The text becomes
  * the editor's document (`textToTiptap`); empty text clears it. An id the
  * caller cannot see, or of another company, is `notFound`.
@@ -827,7 +835,7 @@ export async function setOperationWorkInstruction(
   const updated = await ctx.asCaller.supabase
     .from(table as "jobOperation")
     .update({
-      workInstruction: text.trim() ? textToTiptap(text) : null,
+      workInstruction: workInstructionFromText(text),
       updatedBy: ctx.auditUserId,
       updatedAt: datetime.timestamp()
     })
