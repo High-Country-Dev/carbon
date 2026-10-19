@@ -772,10 +772,9 @@ export function AssemblyView({
   // with NO step link are unassigned ("General") and show on the FIRST step only — loose
   // untracked parts are backflushed when the unit's first step is recorded, so that's
   // where the operator sees and handles them; repeating them on every step just buries
-  // the step-specific parts. A General part attached to another operation of the method
-  // belongs to that operation's first step, where its backflush runs. Quantity and issuing
-  // live on the jobMaterial (the part), so a part on several assigned steps never
-  // multiplies the requirement.
+  // the step-specific parts. A General part on another operation shows on that
+  // operation's first step instead. Quantity and issuing live on the jobMaterial (the
+  // part), so a part on several assigned steps never multiplies the requirement.
   const stepNumberById = new Map(steps.map((s, i) => [s.id, i + 1] as const));
   const allMaterials: any[] = materials?.materials ?? [];
   const isGeneralMaterial = (m: any) =>

@@ -2,7 +2,6 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
-/** An untracked job material the step-record backflush may issue. */
 export type StepBackflushMaterial = {
   id: string;
   itemId: string;
@@ -25,10 +24,8 @@ export type StepBackflushIssue = {
 };
 
 /**
- * Whether an operation owns a loose (step-unassigned) part: the part is on this
- * operation, or on no operation at all. A part attached to another operation of
- * the same make method is that operation's, the same attribution the completion
- * backflush (`issueJobOperationMaterials`, by `jobOperationId`) uses.
+ * A loose part belongs to its own operation, or to any operation when it has
+ * none, as the completion backflush attributes it.
  */
 export function ownsLooseMaterial(
   material: Pick<StepBackflushMaterial, "jobOperationId">,
@@ -76,7 +73,6 @@ export function planStepBackflush(args: {
     linkQuantities.set(link.jobMaterialId, quantities);
   }
 
-  // Units (index) that have recorded each of the operation's steps.
   const unitsByStep = new Map<string, Set<number>>();
   for (const r of args.records) {
     const set = unitsByStep.get(r.jobOperationStepId) ?? new Set<number>();
@@ -88,8 +84,6 @@ export function planStepBackflush(args: {
   for (const material of args.materials) {
     const perUnit = material.quantity ?? 0;
     if (perUnit <= 0) continue;
-    // Owning steps: the material's assigned steps (scoped to this operation), or
-    // the first step when it's loose and this operation owns it.
     const owning = ownedSteps.get(material.id);
     const isLoose = !owning || owning.size === 0;
     if (isLoose && !ownsLooseMaterial(material, args.operationId)) continue;
@@ -100,21 +94,13 @@ export function planStepBackflush(args: {
     const hasSplitQuantities = triggerStepIds.some(
       (id) => (quantities?.get(id) ?? null) !== null
     );
-    // Distinct units that recorded at least one owning step — the line-level
-    // requirement bound: a material can never owe more than units × per-unit.
     const units = new Set<number>();
     for (const id of triggerStepIds) {
       for (const idx of unitsByStep.get(id) ?? []) units.add(idx);
     }
     let target: number;
     if (hasSplitQuantities) {
-      // The line is SPLIT across steps (5 screws at step 1, 5 at step 2): each
-      // owning step consumes its own share as it is recorded, so the target is
-      // the per-step sum. A link left without an explicit quantity falls back
-      // to the full per-unit quantity for its step. The sum is capped at the
-      // line-level bound — the BOM line is the source of truth, so shares that
-      // over-allocate the line (2 + 10 on a 5-quantity line) must not issue
-      // more stock than the line requires.
+      // A link with no quantity of its own takes the full per-unit quantity.
       target = Math.min(
         triggerStepIds.reduce(
           (sum, id) =>
@@ -125,8 +111,6 @@ export function planStepBackflush(args: {
         units.size * perUnit
       );
     } else {
-      // Unsplit: distinct units counted once, so the requirement never
-      // multiplies across a material's several owning steps.
       target = units.size * perUnit;
     }
     const delta = target - (material.quantityIssued ?? 0);

@@ -1389,20 +1389,8 @@ export async function getJobMaterialsByOperationId(
  * built one at a time; an untracked (not serial/batch) part is consumed as the
  * step that "owns" it is recorded, so recording that step issues one unit's worth
  * automatically instead of making the operator issue it by hand (tracked parts
- * still require a scan). Step ownership:
- *   • A step-assigned part (jobMaterialStep) is owned by its assigned step(s) and
- *     issues when any of those steps is recorded for a unit.
- *   • A loose part (no step assignment) is owned by its operation's FIRST step —
- *     that's where the operator sees it. A loose part attached to another
- *     operation of the same make method waits for that operation's first step,
- *     as the completion backflush attributes it (`planStepBackflush`).
- * Idempotent by construction: per material the target is
- * (distinct units that recorded an owning step) × per-unit quantity, and only the
- * shortfall vs quantityIssued is issued — re-records, undo/redo, manual issues,
- * and the completion-time backflush (backflush_job_materials, which tops up to
- * completed × per-unit) can all overlap without double-issuing. A part assigned to
- * several steps is still counted once per unit, so its requirement never
- * multiplies. Eligibility mirrors backflush_job_materials (Material/Part/Consumable,
+ * still require a scan). `planStepBackflush` decides which step owns a part and
+ * how much to issue. Eligibility mirrors backflush_job_materials (Material/Part/Consumable,
  * not Make to Order, untracked). Issue failures (e.g. insufficient stock) are
  * collected, not thrown — the part simply stays unissued and manually issuable.
  */
@@ -1452,8 +1440,6 @@ export async function backflushUntrackedMaterialsOnStepRecord(
     return { error: materials.error };
   }
 
-  // Step ownership: materialId → the step ids it's assigned to (empty = loose),
-  // plus each link's per-step quantity (NULL = the full BOM line quantity).
   // Falls back to the bare links against a pre-migration schema.
   let stepLinks = await client
     .from("jobMaterialStep")
@@ -1473,8 +1459,6 @@ export async function backflushUntrackedMaterialsOnStepRecord(
   }
   if (stepLinks.error) return { error: stepLinks.error };
 
-  // Units (index) that have recorded each of the operation's steps, so we can
-  // count distinct started units per material from its owning step(s).
   const records = await client
     .from("jobOperationStepRecord")
     .select("jobOperationStepId, index")

@@ -34,8 +34,6 @@ describe("planStepBackflush", () => {
   });
 
   it("does not issue a loose part that belongs to another operation", () => {
-    // A two-operation method: the resin is on operation 2. Recording operation
-    // 1's first step must not consume it; operation 2 owns it.
     const issues = planStepBackflush({
       operationId: "op-1",
       stepIds: ["s1"],
