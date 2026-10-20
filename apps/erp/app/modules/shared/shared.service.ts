@@ -190,7 +190,12 @@ import {
   setGenericQueryFilters
 } from "~/utils/query";
 import type { CustomFieldsTableType } from "../settings/types";
-import type { assignableTables } from "./shared.models";
+import {
+  type assignableTables,
+  methodItemType,
+  operationTypes,
+  toTiptapDoc
+} from "./shared.models";
 import { assertMethodHasPullFrom, isStrictBackflush } from "./strict-backflush";
 import type { ItemModelUpload } from "./types";
 
@@ -3092,7 +3097,10 @@ type ItemInfo = {
   defaultMethodType: string | null;
   sourcingType: string | null;
   revisionStatus: string | null;
+  unitOfMeasureCode: string | null;
 };
+
+type ProcessInfo = { name: string; processType: string | null };
 
 type RowIssue = { row: number; reason: string };
 
@@ -3133,15 +3141,24 @@ const normalizeOperationType = (value: string): string =>
 // rows) and the standard importer in index.ts — NOT a human CSV line number.
 const rowOf = (index: number) => index;
 
-// Plain text → minimal tiptap doc for a step's rich-text description.
-function plainTextToTiptap(value: string): Record<string, unknown> {
-  const t = (value ?? "").trim();
-  if (!t) return {};
-  return {
-    type: "doc",
-    content: [{ type: "paragraph", content: [{ type: "text", text: t }] }]
-  };
+// A step's rich-text description, converted as the step editor converts it.
+function stepDescription(value: string): Record<string, unknown> {
+  return value ? toTiptapDoc(value) : {};
 }
+
+// A List step's options: pipe-separated, blanks dropped.
+const listValues = (s: string | undefined): string[] =>
+  text(s)
+    .split("|")
+    .map((v) => v.trim())
+    .filter(Boolean);
+
+// A number cell that must hold 0 or more when it is filled in.
+const negative = (s: string | undefined) => {
+  if (text(s) === "") return false;
+  const n = num(s);
+  return n === undefined || n < 0;
+};
 
 function normalizeRowType(
   raw: string | undefined,
@@ -3286,7 +3303,8 @@ export async function importMethods(
         "type",
         "defaultMethodType",
         "sourcingType",
-        "revisionStatus"
+        "revisionStatus",
+        "unitOfMeasureCode"
       ])
       .where("companyId", "=", companyId)
       .where("readableId", "in", Array.from(readableIds))
@@ -3299,7 +3317,8 @@ export async function importMethods(
           type: r.type,
           defaultMethodType: r.defaultMethodType ?? null,
           sourcingType: r.sourcingType ?? null,
-          revisionStatus: r.revisionStatus ?? null
+          revisionStatus: r.revisionStatus ?? null,
+          unitOfMeasureCode: r.unitOfMeasureCode ?? null
         });
       }
     }
@@ -3315,12 +3334,27 @@ export async function importMethods(
   const releaseControl = (settings?.plmReleaseControl ??
     "enforce") as ReleaseControl;
 
-  const { map: processMap, ambiguous: processAmbiguous } = await nameMap(
-    db,
-    "process",
-    companyId,
-    processNames
-  );
+  // A process also gives an operation its default type and description, as
+  // the Bill of Process editor fills them in when a process is picked.
+  const processMap = new Map<string, string>();
+  const processAmbiguous = new Set<string>();
+  const processById = new Map<string, ProcessInfo>();
+  if (processNames.size > 0) {
+    const rows = await db
+      .selectFrom("process")
+      .select(["id", "name", "processType"])
+      .where("companyId", "=", companyId)
+      .execute();
+    for (const r of rows) {
+      const lower = r.name.toLowerCase();
+      if (processMap.has(lower)) processAmbiguous.add(lower);
+      else processMap.set(lower, r.id);
+      processById.set(r.id, {
+        name: r.name,
+        processType: r.processType ?? null
+      });
+    }
+  }
   const { map: workCenterMap, ambiguous: workCenterAmbiguous } = await nameMap(
     db,
     "workCenter",
@@ -3366,6 +3400,7 @@ export async function importMethods(
       fileCreatedParts,
       processMap,
       processAmbiguous,
+      processById,
       workCenterMap,
       workCenterAmbiguous,
       uomSet
@@ -3382,6 +3417,7 @@ export async function importMethods(
         userId,
         itemMap,
         processMap,
+        processById,
         workCenterMap,
         supplierMap,
         releaseControl
@@ -3418,7 +3454,7 @@ export async function importMethods(
 
 async function nameMap(
   db: Kysely<KyselyDatabase>,
-  table: "process" | "workCenter",
+  table: "workCenter",
   companyId: string,
   names: Set<string>
 ): Promise<{ map: Map<string, string>; ambiguous: Set<string> }> {
@@ -3443,11 +3479,26 @@ async function nameMap(
 // validation (pure, given the resolved lookups)
 // ---------------------------------------------------------------------------
 
+// The operation type a BOP row gets: its own, else its process's type, as the
+// Bill of Process editor fills it in when a process is picked.
+function operationTypeFor(
+  record: Rec,
+  processId: string | undefined,
+  processById: Map<string, ProcessInfo>
+): string {
+  return (
+    normalizeOperationType(text(record.operationType)) ||
+    (processId ? processById.get(processId)?.processType : null) ||
+    "Process"
+  );
+}
+
 type Lookups = {
   itemMap: Map<string, ItemInfo>;
   fileCreatedParts: Set<string>;
   processMap: Map<string, string>;
   processAmbiguous: Set<string>;
+  processById: Map<string, ProcessInfo>;
   workCenterMap: Map<string, string>;
   workCenterAmbiguous: Set<string>;
   uomSet: Set<string>;
@@ -3477,7 +3528,15 @@ function validateGroup(
     }
   }
 
-  for (const bucket of g.versions.values()) {
+  for (const [version, bucket] of g.versions) {
+    const versionNumber = num(version);
+    if (text(version) && (versionNumber === undefined || versionNumber <= 0)) {
+      errors.push({
+        row: rowOf(firstIndexOf(bucket)),
+        reason: `Make Method Version "${version}" is not a version number`
+      });
+    }
+
     // Op No uniqueness within the parent.
     const opNos = new Set<string>();
     for (const e of bucket.bop) {
@@ -3531,18 +3590,49 @@ function validateGroup(
         }
       }
 
-      // In-house operations need time units.
-      const opType =
-        normalizeOperationType(text(e.record.operationType)) || "Process";
-      if (opType !== "Outside Processing") {
-        if (
-          !text(e.record.setupUnit) ||
-          !text(e.record.laborUnit) ||
-          !text(e.record.machineUnit)
-        ) {
+      // The Bill of Process editor's rules: in-house operations need setup and
+      // labor units, a Process operation also a machine unit, and an
+      // Inspection operation an Inspection Plan, which a CSV cannot carry.
+      const opType = operationTypeFor(
+        e.record,
+        lk.processMap.get(proc),
+        lk.processById
+      );
+      if (!(operationTypes as readonly string[]).includes(opType)) {
+        errors.push({
+          row: rowOf(e.index),
+          reason: `Op ${opNo}: Invalid Operation Type "${opType}"`
+        });
+      } else if (opType === "Inspection") {
+        errors.push({
+          row: rowOf(e.index),
+          reason: `Op ${opNo}: an Inspection operation needs an Inspection Plan; add it in the app`
+        });
+      } else if (opType !== "Outside Processing") {
+        const missing = [
+          !text(e.record.setupUnit) && "Setup",
+          !text(e.record.laborUnit) && "Labor",
+          opType === "Process" && !text(e.record.machineUnit) && "Machine"
+        ].filter(Boolean);
+        if (missing.length > 0) {
           errors.push({
             row: rowOf(e.index),
-            reason: `Op ${opNo}: In-house operations require Setup, Labor, and Machine units`
+            reason: `Op ${opNo}: ${opType} operations require ${missing.join(", ")} units`
+          });
+        }
+      }
+      for (const [field, label] of [
+        ["setupTime", "Setup Time"],
+        ["laborTime", "Labor Time"],
+        ["machineTime", "Machine Time"],
+        ["operationMinimumCost", "Minimum Cost"],
+        ["operationUnitCost", "Unit Cost"],
+        ["operationLeadTime", "Lead Time"]
+      ] as const) {
+        if (negative(e.record[field])) {
+          errors.push({
+            row: rowOf(e.index),
+            reason: `Op ${opNo}: ${label} must be a number of 0 or more`
           });
         }
       }
@@ -3559,16 +3649,32 @@ function validateGroup(
         continue;
       }
       const compKey = key(componentId, text(e.record.componentRevision));
-      if (!lk.itemMap.has(compKey) && !lk.fileCreatedParts.has(compKey)) {
+      const compLabel = `${componentId} rev ${text(e.record.componentRevision) || "0"}`;
+      // A part this file creates is a Part; anything else must already exist.
+      const compType = lk.fileCreatedParts.has(compKey)
+        ? "Part"
+        : lk.itemMap.get(compKey)?.type;
+      if (!compType) {
         errors.push({
           row: rowOf(e.index),
-          reason: `Material ${componentId} rev ${text(e.record.componentRevision) || "0"} not found`
+          reason: `Material ${compLabel} not found`
+        });
+      } else if (compKey === parentKey) {
+        errors.push({
+          row: rowOf(e.index),
+          reason: `Material ${compLabel} is the part itself; an item cannot be added to its own BOM`
+        });
+      } else if (!(methodItemType as readonly string[]).includes(compType)) {
+        errors.push({
+          row: rowOf(e.index),
+          reason: `Material ${compLabel} is a ${compType}; a BOM line takes a Part, Material or Consumable`
         });
       }
-      if (num(e.record.quantity) === undefined) {
+      const quantity = num(e.record.quantity);
+      if (quantity === undefined || quantity < 0) {
         errors.push({
           row: rowOf(e.index),
-          reason: "BOM row has an invalid Quantity"
+          reason: "BOM row Quantity must be a number of 0 or more"
         });
       }
       const uom = text(e.record.unitOfMeasureCode);
@@ -3596,16 +3702,40 @@ function validateGroup(
           reason: `Invalid Step Type "${stepType}"`
         });
       }
-      if (stepType === "Measurement" && !text(e.record.stepUnitOfMeasureCode)) {
+      const stepUom = text(e.record.stepUnitOfMeasureCode);
+      if (stepType === "Measurement" && !stepUom) {
         errors.push({
           row: rowOf(e.index),
           reason: "Measurement step requires a Step Unit of Measure"
         });
+      } else if (stepUom && !lk.uomSet.has(stepUom)) {
+        errors.push({
+          row: rowOf(e.index),
+          reason: `Step Unit of Measure "${stepUom}" not found`
+        });
       }
-      if (stepType === "List" && !text(e.record.stepListValues)) {
+      if (
+        stepType === "List" &&
+        listValues(e.record.stepListValues).length === 0
+      ) {
         errors.push({
           row: rowOf(e.index),
           reason: "List step requires Step List Values"
+        });
+      }
+      const min = num(e.record.stepMinValue);
+      const max = num(e.record.stepMaxValue);
+      if (negative(e.record.stepMinValue) || negative(e.record.stepMaxValue)) {
+        errors.push({
+          row: rowOf(e.index),
+          reason:
+            "Step Min Value and Step Max Value must be numbers of 0 or more"
+        });
+      } else if (min !== undefined && max !== undefined && max < min) {
+        errors.push({
+          row: rowOf(e.index),
+          reason:
+            "Step Max Value must be greater than or equal to Step Min Value"
         });
       }
     }
@@ -3618,17 +3748,27 @@ function validateGroup(
         });
       } else {
         const toolKey = key(toolId, text(e.record.toolRevision));
-        if (!lk.itemMap.has(toolKey) && !lk.fileCreatedParts.has(toolKey)) {
+        const toolLabel = `${toolId} rev ${text(e.record.toolRevision) || "0"}`;
+        const toolType = lk.fileCreatedParts.has(toolKey)
+          ? "Part"
+          : lk.itemMap.get(toolKey)?.type;
+        if (!toolType) {
           errors.push({
             row: rowOf(e.index),
-            reason: `Tool ${toolId} rev ${text(e.record.toolRevision) || "0"} not found`
+            reason: `Tool ${toolLabel} not found`
+          });
+        } else if (toolType !== "Tool") {
+          errors.push({
+            row: rowOf(e.index),
+            reason: `Tool ${toolLabel} is a ${toolType}, not a Tool`
           });
         }
       }
-      if (num(e.record.toolQuantity) === undefined) {
+      const toolQuantity = num(e.record.toolQuantity);
+      if (toolQuantity === undefined || toolQuantity <= 0) {
         errors.push({
           row: rowOf(e.index),
-          reason: "TOOL row has an invalid Quantity"
+          reason: "TOOL row Quantity must be a number above 0"
         });
       }
     }
@@ -3829,6 +3969,7 @@ async function writeGroup(
     userId: string;
     itemMap: Map<string, ItemInfo>;
     processMap: Map<string, string>;
+    processById: Map<string, ProcessInfo>;
     workCenterMap: Map<string, string>;
     supplierMap: Map<string, string>;
     releaseControl: ReleaseControl;
@@ -3956,6 +4097,16 @@ async function writeGroup(
         createdIds.set(method.version, makeMethodId);
       }
 
+      // Imports into one version run one at a time: a second import waits
+      // here, then reads what the first wrote and skips it.
+      await trx
+        .selectFrom("makeMethod")
+        .select("id")
+        .where("id", "=", makeMethodId)
+        .where("companyId", "=", companyId)
+        .forUpdate()
+        .execute();
+
       const existingMaterials = await trx
         .selectFrom("methodMaterial")
         .select(["itemId", "order"])
@@ -4062,10 +4213,15 @@ async function writeGroup(
               sourcingType,
               materialMakeMethodId,
               quantity: num(r.quantity) ?? 1,
-              unitOfMeasureCode: text(r.unitOfMeasureCode) || "EA",
+              // The BOM editor starts a line in the material's own unit.
+              unitOfMeasureCode:
+                text(r.unitOfMeasureCode) ||
+                component.unitOfMeasureCode ||
+                "EA",
               order,
               kit: bool(r.kit),
               storageUnitIds,
+              customFields: {},
               companyId,
               createdBy: userId,
               createdAt: now()
@@ -4086,9 +4242,8 @@ async function writeGroup(
       const bopByIndex = new Map(bucket.bop.map((e) => [e.index, e.record]));
       for (const { index, opNo, order } of opPlan.insert) {
         const r = bopByIndex.get(index)!;
-        const opType =
-          normalizeOperationType(text(r.operationType)) || "Process";
         const processId = ctx.processMap.get(text(r.process).toLowerCase())!;
+        const opType = operationTypeFor(r, processId, ctx.processById);
         const workCenterId = text(r.workCenter)
           ? ctx.workCenterMap.get(text(r.workCenter).toLowerCase())
           : undefined;
@@ -4113,7 +4268,11 @@ async function writeGroup(
               operationType: opType,
               processId,
               workCenterId,
-              description: text(r.operationDescription),
+              // The editor names a new operation after its process.
+              description:
+                text(r.operationDescription) ||
+                ctx.processById.get(processId)?.name ||
+                "",
               setupUnit: text(r.setupUnit) || undefined,
               setupTime: num(r.setupTime) ?? 0,
               laborUnit: text(r.laborUnit) || undefined,
@@ -4125,6 +4284,7 @@ async function writeGroup(
               operationUnitCost: num(r.operationUnitCost),
               operationLeadTime: num(r.operationLeadTime),
               workInstruction: {},
+              customFields: {},
               companyId,
               createdBy: userId,
               createdAt: now()
@@ -4168,7 +4328,7 @@ async function writeGroup(
             {
               operationId,
               name,
-              description: plainTextToTiptap(text(r.stepDescription)),
+              description: stepDescription(text(r.stepDescription)),
               type: stepType,
               required: bool(r.stepRequired),
               sortOrder,
@@ -4179,12 +4339,7 @@ async function writeGroup(
               minValue: num(r.stepMinValue),
               maxValue: num(r.stepMaxValue),
               listValues:
-                stepType === "List" && text(r.stepListValues)
-                  ? text(r.stepListValues)
-                      .split("|")
-                      .map((v) => v.trim())
-                      .filter(Boolean)
-                  : undefined,
+                stepType === "List" ? listValues(r.stepListValues) : undefined,
               companyId,
               createdBy: userId,
               createdAt: now()
@@ -4299,7 +4454,8 @@ async function resolveItem(
       "type",
       "defaultMethodType",
       "sourcingType",
-      "revisionStatus"
+      "revisionStatus",
+      "unitOfMeasureCode"
     ])
     .where("companyId", "=", companyId)
     .where("readableId", "=", readableId)
@@ -4314,7 +4470,8 @@ async function resolveItem(
     type: row.type,
     defaultMethodType: row.defaultMethodType ?? null,
     sourcingType: row.sourcingType ?? null,
-    revisionStatus: row.revisionStatus ?? null
+    revisionStatus: row.revisionStatus ?? null,
+    unitOfMeasureCode: row.unitOfMeasureCode ?? null
   };
   itemMap.set(k, info);
   return info;

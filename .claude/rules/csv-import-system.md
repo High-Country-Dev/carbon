@@ -274,13 +274,39 @@ continue.
   it (they may reference it with no BOP row). A step with the same name, a tool
   with the same item and a parameter with the same key are skipped. Every skip
   goes to `skipped`, so re-running a file writes nothing.
-- BOM lines copy `methodType` / `sourcingType` / `materialMakeMethodId` /
-  `storageUnitIds` from the component item, as `upsertMethodMaterial` does.
+- **Rows match the editors' rows.** BOM lines copy `methodType` /
+  `sourcingType` / `materialMakeMethodId` / `storageUnitIds` from the component
+  item, as `upsertMethodMaterial` does, and take the component's unit when the
+  file has none. A blank Operation Type takes the process's `processType` and a
+  blank description the process's name, as BillOfProcess `onProcessChange`
+  fills them. Step descriptions go through `toTiptapDoc`, as the step form's
+  validator does. `customFields` is `{}` on lines and operations, as the
+  routes' `setCustomFields` writes it.
+  `apps/erp/test/database/method-import-parity.test.ts` builds one method
+  through the editors' validators and building blocks and one through the
+  import, and compares every column but ids and timestamps.
+- **Refusals match the editors' validators** (`methodMaterialValidator`,
+  `methodOperationValidator`, `operationStepValidator`,
+  `operationToolValidator`): a BOM line must be a Part, Material or Consumable
+  and not the part itself, with quantity 0 or more; a TOOL row's item must be a
+  Tool, with quantity above 0; times, costs and lead time are 0 or more; a
+  Process operation needs setup, labor and machine units, an Assembly operation
+  setup and labor; step min and max are 0 or more, max at least min; a List
+  step needs one non-blank option; a Make Method Version must be a positive
+  number. An Inspection operation is refused, because
+  `methodOperationValidator` requires an Inspection Plan and a CSV has no
+  column for one. Pinned by `method-import-guards.test.ts`.
+- **Concurrency.** `writeGroup` locks the target `makeMethod` row
+  (`FOR UPDATE`) before it reads the version's lines, so two imports of one
+  file write each line once.
 - Known gaps: a sub-assembly created by a `PART` row must come before its parent
   in the file (parts are written in order of first appearance); a `PART` row
-  does not write the Unique ID mapping; an unmapped BOM unit of measure is `EA`;
-  the Supplier Process column is unused; a non-numeric Make Method Version
-  becomes 1.
+  does not write the Unique ID mapping; the Supplier Process column is unused;
+  an Op No matches an operation in the same file by exact text ("1.0" is not
+  "1"), but an existing operation by number; items are looked up by readable id
+  and revision only, so a readable id shared by two item types resolves to
+  either; the import needs only `update: parts`, while the editors' create
+  routes need `create: parts`.
 
 > The models also include `customerStatus` / `customerType` field-mapping entries (used by
 > creatable lookups), but only the tables above appear in `importPermissions`.

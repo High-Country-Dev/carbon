@@ -1,0 +1,210 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+// Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
+// including ports, remain AGPLv3; serving them over a network requires releasing their source.
+
+// The method import refuses what the BOM and Bill of Process editors refuse,
+// and two imports of one file at the same time write each line once. Runs
+// against the local database; skips without one.
+
+import { afterEach, describe, expect } from "vitest";
+import {
+  connectLocalTestDatabase,
+  databaseTest
+} from "./fixtures/local-database";
+import {
+  type MethodImportFixture,
+  methodImportFixture
+} from "./fixtures/method-import";
+
+type Rows = Record<string, string>[];
+
+const bom = (
+  parentId: string,
+  componentId: string,
+  quantity: string,
+  extra: Record<string, string> = {}
+) => ({ rowType: "BOM", parentId, componentId, quantity, ...extra });
+
+const bop = (
+  parentId: string,
+  opNo: string,
+  extra: Record<string, string> = {}
+) => ({
+  rowType: "BOP",
+  parentId,
+  opNo,
+  process: "Machining",
+  setupUnit: "Total Minutes",
+  laborUnit: "Minutes/Piece",
+  machineUnit: "Minutes/Piece",
+  ...extra
+});
+
+// Each file and the reasons the import gives for it. ASSY, SUB and COMP-2
+// start with empty Draft methods, and none of them may change.
+const REFUSALS: Array<[string, Rows, string[]]> = [
+  [
+    "the part itself as a BOM line",
+    [bom("ASSY", "ASSY", "1")],
+    [
+      "Material ASSY rev 0 is the part itself; an item cannot be added to its own BOM"
+    ]
+  ],
+  [
+    "a service and a tool as BOM lines",
+    [bom("ASSY", "SVC", "1"), bom("ASSY", "TOOL-1", "1")],
+    [
+      "Material SVC rev 0 is a Service; a BOM line takes a Part, Material or Consumable",
+      "Material TOOL-1 rev 0 is a Tool; a BOM line takes a Part, Material or Consumable"
+    ]
+  ],
+  [
+    "a negative quantity",
+    [bom("ASSY", "COMP-1", "-3")],
+    ["BOM row Quantity must be a number of 0 or more"]
+  ],
+  [
+    "a part as a tool, with quantity 0",
+    [
+      bop("COMP-2", "10"),
+      {
+        rowType: "TOOL",
+        parentId: "COMP-2",
+        opNo: "10",
+        toolId: "COMP-1",
+        toolQuantity: "0"
+      }
+    ],
+    [
+      "Tool COMP-1 rev 0 is a Part, not a Tool",
+      "TOOL row Quantity must be a number above 0"
+    ]
+  ],
+  [
+    "a negative time, a minimum above the maximum and an empty list",
+    [
+      bop("SUB", "10", { setupTime: "-5" }),
+      {
+        rowType: "STEP",
+        parentId: "SUB",
+        opNo: "10",
+        stepName: "Gauge",
+        stepType: "Measurement",
+        stepUnitOfMeasureCode: "EA",
+        stepMinValue: "10",
+        stepMaxValue: "2"
+      },
+      {
+        rowType: "STEP",
+        parentId: "SUB",
+        opNo: "10",
+        stepName: "Pick",
+        stepType: "List",
+        stepListValues: "|"
+      }
+    ],
+    [
+      "Op 10: Setup Time must be a number of 0 or more",
+      "Step Max Value must be greater than or equal to Step Min Value",
+      "List step requires Step List Values"
+    ]
+  ],
+  [
+    "an Inspection operation, from its process's type",
+    [bop("SUB", "10", { process: "Final Check" })],
+    [
+      "Op 10: an Inspection operation needs an Inspection Plan; add it in the app"
+    ]
+  ],
+  [
+    "a version that is not a number",
+    [bom("ASSY", "COMP-1", "1", { makeMethodVersion: "abc" })],
+    ['Make Method Version "abc" is not a version number']
+  ]
+];
+
+describe("method import guards", () => {
+  let f: MethodImportFixture | undefined;
+  afterEach(async () => {
+    await f?.cleanup();
+    f = undefined;
+    // Deleting the scratch company cascades through every company table.
+  }, 60_000);
+
+  const rowCounts = async () => {
+    const count = async (
+      table: "methodMaterial" | "methodOperation" | "methodOperationStep"
+    ) =>
+      Number(
+        (
+          await f!.db
+            .selectFrom(table)
+            .select((eb) => eb.fn.countAll().as("count"))
+            .where("companyId", "=", f!.companyId)
+            .executeTakeFirstOrThrow()
+        ).count
+      );
+    return {
+      materials: await count("methodMaterial"),
+      operations: await count("methodOperation"),
+      steps: await count("methodOperationStep")
+    };
+  };
+
+  databaseTest(
+    "refuses the rows the editors refuse and writes nothing",
+    async () => {
+      f = await methodImportFixture();
+      for (const [, rows, reasons] of REFUSALS) {
+        const table = rows.some((r) => r.rowType !== "BOM")
+          ? "operations"
+          : "bom";
+        const summary = await f.run(table, rows);
+        expect(summary.errors.map((e) => e.reason)).toEqual(reasons);
+        expect(summary.updated).toBe(0);
+      }
+      expect(await rowCounts()).toEqual({
+        materials: 0,
+        operations: 0,
+        steps: 0
+      });
+    }
+  );
+
+  databaseTest(
+    "a BOM line without a unit takes the material's own unit",
+    async () => {
+      f = await methodImportFixture();
+      const summary = await f.run("bom", [bom("TWIN", "MAT-YD", "2")]);
+      expect(summary.errors).toEqual([]);
+      const line = await f.db
+        .selectFrom("methodMaterial")
+        .select("unitOfMeasureCode")
+        .where("makeMethodId", "=", await f.methodOf("TWIN"))
+        .executeTakeFirstOrThrow();
+      expect(line.unitOfMeasureCode).toBe("YD");
+    }
+  );
+
+  databaseTest(
+    "two imports of one file at the same time write each line once",
+    async () => {
+      f = await methodImportFixture();
+      const second = await connectLocalTestDatabase();
+      try {
+        const rows = [bom("ASSY", "COMP-1", "1"), bom("ASSY", "COMP-2", "2")];
+        const [a, b] = await Promise.all([
+          f.run("bom", rows),
+          f.run("bom", rows, second)
+        ]);
+        expect(a.errors).toEqual([]);
+        expect(b.errors).toEqual([]);
+        expect(a.updated + b.updated).toBe(1);
+        expect(a.skipped.length + b.skipped.length).toBe(2);
+        expect((await rowCounts()).materials).toBe(2);
+      } finally {
+        await second.destroy();
+      }
+    }
+  );
+});

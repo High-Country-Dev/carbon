@@ -283,7 +283,8 @@ describe("method import onto an existing method", () => {
   afterEach(async () => {
     await f?.cleanup();
     f = undefined;
-  });
+    // Deleting the scratch company cascades through every company table.
+  }, 60_000);
 
   databaseTest(
     "appends BOM lines after the existing ones and skips materials already on it",

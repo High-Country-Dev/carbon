@@ -55,8 +55,30 @@ operations that are already on the target version.
 - Updates to existing lines (quantity, unit, times) and deletes.
 - A new version that copies another version.
 - The other findings from the PR #911 review: same-file sub-assembly order,
-  Unique ID not written by Parts with Methods, BOM unit default `EA`, the unused
-  Supplier Process column, and a non-numeric version that becomes 1.
+  Unique ID not written by Parts with Methods, and the unused Supplier Process
+  column.
+
+## Hardening after a break-it pass
+
+An adversarial pass on the local stack found these problems. Each fix makes the
+import match the BOM and Bill of Process editors.
+
+| Problem | Fix |
+|---|---|
+| Two imports of one file at the same time wrote every line twice. | `writeGroup` locks the target `makeMethod` row before it reads the lines. |
+| A BOM line with no unit was stored in `EA`, even for a material stocked in yards. | The line takes the material's unit, as the BOM editor does. |
+| A service or a tool was accepted as a BOM line, a part as a tool, and the part as its own line. | The import refuses them, as the editors' validators and item pickers do. |
+| A negative quantity, time or cost, a tool quantity of 0, a step max below its min and an empty List step were accepted. | The import refuses them with the editors' rules. |
+| A blank Operation Type became Process and a blank description stayed empty. | They take the process's type and name. The wizard no longer presets Process. |
+| An Inspection operation was created with no Inspection Plan, which the editor never allows. | The import refuses Inspection operations. |
+| A non-numeric Make Method Version became version 1. | The import refuses it. |
+| `customFields` was null where the editors write `{}`. | The import writes `{}`. |
+
+The parity test (`method-import-parity.test.ts`) and the guards test
+(`method-import-guards.test.ts`) pin the fixes.
+
+Open for a decision: the method imports need only `update: parts`, but the
+editors' create routes need `create: parts`.
 
 ## Steps
 
