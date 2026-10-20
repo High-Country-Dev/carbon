@@ -874,7 +874,11 @@ function ProcedureStepForm({
                 </>
               )}
               {type === "List" && (
-                <ArrayInput name="listValues" label={t`List Options`} />
+                <ArrayInput
+                  name="listValues"
+                  label={t`List Options`}
+                  isRequired
+                />
               )}
             </VStack>
           </DrawerBody>

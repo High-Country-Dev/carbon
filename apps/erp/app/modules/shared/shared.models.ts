@@ -277,6 +277,16 @@ export const optionalTiptapDoc = z
   // omits `notes` stops compiling.
   .optional();
 
+/**
+ * A List step's options. Blank rows (the empty row "Add option" leaves) are
+ * dropped before the step's refine runs, so a trailing empty row never blocks a
+ * save and is never stored.
+ */
+export const stepListValues = z
+  .array(z.string())
+  .transform((values) => values.filter((value) => value.trim() !== ""))
+  .optional();
+
 export const operationStepValidator = z
   .object({
     id: zfd.text(z.string().optional()),
@@ -292,7 +302,7 @@ export const operationStepValidator = z
     unitOfMeasureCode: zfd.text(z.string().optional()),
     minValue: zfd.numeric(z.number().min(0).optional()),
     maxValue: zfd.numeric(z.number().min(0).optional()),
-    listValues: z.array(z.string()).optional(),
+    listValues: stepListValues,
     sortOrder: zfd.numeric(z.number().min(0).optional())
   })
   .refine(
@@ -310,17 +320,13 @@ export const operationStepValidator = z
   .refine(
     (data) => {
       if (data.type === "List") {
-        return (
-          Array.isArray(data.listValues) &&
-          data.listValues.length > 0 &&
-          data.listValues.every((option) => option.trim() !== "")
-        );
+        return Array.isArray(data.listValues) && data.listValues.length > 0;
       }
       return true;
     },
     {
       message: "List options are required",
-      path: ["listOptions"]
+      path: ["listValues"]
     }
   )
   .refine(
