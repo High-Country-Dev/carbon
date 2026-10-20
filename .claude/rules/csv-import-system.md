@@ -269,9 +269,12 @@ continue.
   that part is rolled back too.
 - **Append, not fill** (`planMaterialAppend`, `planOperationAppend`): new BOM
   lines are ordered after the highest existing line; a material already on the
-  version is skipped. An Op No equal to an existing operation's `order` names
-  that operation: the BOP row is skipped and STEP / TOOL / PARAM rows attach to
-  it (they may reference it with no BOP row). A step with the same name, a tool
+  version is skipped. An Op No is the operation's `order`, so it must be a
+  number of 0 or more, and Op Nos compare by value (`opKey`: "10", "10.0" and
+  "010" are one). An Op No equal to an existing operation's `order` names that
+  operation: the BOP row is skipped and STEP / TOOL / PARAM rows attach to it
+  (they may reference it with no BOP row). A non-numeric Op No was refused
+  because a re-run could not find its operation again and would add it twice. A step with the same name, a tool
   with the same item and a parameter with the same key are skipped. Every skip
   goes to `skipped`, so re-running a file writes nothing.
 - **Rows match the editors' rows.** BOM lines copy `methodType` /
@@ -299,11 +302,14 @@ continue.
 - **Concurrency.** `writeGroup` locks the target `makeMethod` row
   (`FOR UPDATE`) before it reads the version's lines, so two imports of one
   file write each line once.
+- **Change notice locks are read before any transaction** (`loadChangeNoticeLocks`):
+  `getChangeNoticeEngineeringLock` checks pending approvals through a separate
+  service-role request, which must not run while a part's transaction is open.
+  A Draft whose notice was linked after that read is refused.
 - Known gaps: a sub-assembly created by a `PART` row must come before its parent
   in the file (parts are written in order of first appearance); a `PART` row
   does not write the Unique ID mapping; the Supplier Process column is unused;
-  an Op No matches an operation in the same file by exact text ("1.0" is not
-  "1"), but an existing operation by number; items are looked up by readable id
+  items are looked up by readable id
   and revision only, so a readable id shared by two item types resolves to
   either; the import needs only `update: parts`, while the editors' create
   routes need `create: parts`.

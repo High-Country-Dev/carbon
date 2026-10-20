@@ -73,6 +73,8 @@ import match the BOM and Bill of Process editors.
 | An Inspection operation was created with no Inspection Plan, which the editor never allows. | The import refuses Inspection operations. |
 | A non-numeric Make Method Version became version 1. | The import refuses it. |
 | `customFields` was null where the editors write `{}`. | The import writes `{}`. |
+| CodeRabbit: a non-numeric Op No never matched an existing operation, so a re-run added it again, and its fallback order could collide with a numeric Op No. | Op No must be a number. Op Nos compare by value. |
+| CodeRabbit: the change notice approval check ran a separate request while a part's transaction was open. | The import reads every change notice lock before any transaction. |
 
 The parity test (`method-import-parity.test.ts`) and the guards test
 (`method-import-guards.test.ts`) pin the fixes.

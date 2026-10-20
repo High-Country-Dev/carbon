@@ -117,6 +117,14 @@ const REFUSALS: Array<[string, Rows, string[]]> = [
     ]
   ],
   [
+    "an Op No that is not a number, and one Op No given twice",
+    [bop("SUB", "Deburr"), bop("SUB", "10"), bop("SUB", "10.0")],
+    [
+      'BOP row Op No "Deburr" must be a number of 0 or more',
+      'Duplicate Op No "10.0" for SUB rev 0'
+    ]
+  ],
+  [
     "a version that is not a number",
     [bom("ASSY", "COMP-1", "1", { makeMethodVersion: "abc" })],
     ['Make Method Version "abc" is not a version number']
@@ -183,6 +191,65 @@ describe("method import guards", () => {
         .where("makeMethodId", "=", await f.methodOf("TWIN"))
         .executeTakeFirstOrThrow();
       expect(line.unitOfMeasureCode).toBe("YD");
+    }
+  );
+
+  databaseTest(
+    "an Op No written another way names the same operation on a re-run",
+    async () => {
+      f = await methodImportFixture();
+      const step = (opNo: string) => ({
+        rowType: "STEP",
+        parentId: "SUB",
+        opNo,
+        stepName: "Deburr"
+      });
+      const first = await f.run("operations", [bop("SUB", "10"), step("10")]);
+      expect(first.errors).toEqual([]);
+      const again = await f.run("operations", [bop("SUB", "010"), step("10.0")]);
+      expect(again.errors).toEqual([]);
+      expect(again.updated).toBe(0);
+      expect(again.skipped).toHaveLength(2);
+      expect(await rowCounts()).toEqual({
+        materials: 0,
+        operations: 1,
+        steps: 1
+      });
+    }
+  );
+
+  databaseTest(
+    "refuses a Draft held by a change notice in Implementation",
+    async () => {
+      f = await methodImportFixture();
+      const changeOrderId = `${f.companyId}-notice`;
+      await f.db
+        .insertInto("changeOrder")
+        .values({
+          id: changeOrderId,
+          changeOrderId: "CN-TEST",
+          name: "Test notice",
+          openDate: "2026-10-21",
+          status: "Implementation",
+          companyId: f.companyId,
+          createdBy: "system"
+        })
+        .execute();
+      await f.db
+        .updateTable("makeMethod")
+        .set({ changeOrderId })
+        .where("id", "=", await f.methodOf("ASSY"))
+        .where("companyId", "=", f.companyId)
+        .execute();
+      const summary = await f.run("bom", [bom("ASSY", "COMP-1", "1")]);
+      expect(summary.errors).toEqual([
+        {
+          row: 0,
+          reason:
+            "Part ASSY rev 0: This change notice is being implemented, so its changes are locked. Reopen it to make changes."
+        }
+      ]);
+      expect((await rowCounts()).materials).toBe(0);
     }
   );
 

@@ -10,6 +10,7 @@ import { describe, expect, it } from "vitest";
 import { LOCKED_REVISION_MESSAGE } from "~/modules/items/items.service";
 import {
   methodImportRefusal,
+  opKey,
   pickMethodImportTarget,
   planMaterialAppend,
   planOperationAppend
@@ -155,22 +156,36 @@ describe("planMaterialAppend", () => {
 describe("planOperationAppend", () => {
   const partLabel = "P-1 rev 0";
 
-  it("orders new operations by Op No, else by position, on an empty version", () => {
+  it("orders new operations by their Op No on an empty version", () => {
     const plan = planOperationAppend({
       bop: [
         { index: 0, opNo: "10" },
-        { index: 1, opNo: "B" }
+        { index: 1, opNo: "2" }
       ],
-      children: [{ index: 2, opNo: "B", rowType: "STEP" }],
+      children: [{ index: 2, opNo: "2.0", rowType: "STEP" }],
       existing: [],
       partLabel
     });
     expect(plan.insert).toEqual([
       { index: 0, opNo: "10", order: 10 },
-      { index: 1, opNo: "B", order: 2 }
+      { index: 1, opNo: "2", order: 2 }
     ]);
     expect(plan.errors).toEqual([]);
     expect(plan.existingIdByOpNo.size).toBe(0);
+  });
+
+  it("refuses an Op No that is not a number", () => {
+    const plan = planOperationAppend({
+      bop: [{ index: 0, opNo: "Deburr" }],
+      children: [{ index: 1, opNo: "Deburr", rowType: "STEP" }],
+      existing: [{ id: "op-1", order: 1 }],
+      partLabel
+    });
+    expect(plan.insert).toEqual([]);
+    expect(plan.errors).toEqual([
+      { row: 0, reason: 'Op No "Deburr" must be a number' },
+      { row: 1, reason: 'Op No "Deburr" must be a number' }
+    ]);
   });
 
   it("matches an Op No to the existing operation with that order", () => {
@@ -191,17 +206,23 @@ describe("planOperationAppend", () => {
     expect(plan.existingIdByOpNo.get("1")).toBe("op-1");
   });
 
-  it("places a non-numeric Op No after the existing operations", () => {
+  it("matches Op Nos by value, not by text", () => {
     const plan = planOperationAppend({
-      bop: [{ index: 0, opNo: "Deburr" }],
-      children: [],
+      bop: [{ index: 0, opNo: "01" }],
+      children: [
+        { index: 1, opNo: "1.0", rowType: "STEP" },
+        { index: 2, opNo: "2.00", rowType: "PARAM" }
+      ],
       existing: [
         { id: "op-1", order: 1 },
-        { id: "op-2", order: 20 }
+        { id: "op-2", order: 2 }
       ],
       partLabel
     });
-    expect(plan.insert).toEqual([{ index: 0, opNo: "Deburr", order: 21 }]);
+    expect(plan.errors).toEqual([]);
+    expect(plan.skipped).toEqual([{ index: 0, opNo: "01" }]);
+    expect(plan.existingIdByOpNo.get(opKey("1.0"))).toBe("op-1");
+    expect(plan.existingIdByOpNo.get(opKey("2"))).toBe("op-2");
   });
 
   it("attaches child rows to an existing operation with no BOP row", () => {

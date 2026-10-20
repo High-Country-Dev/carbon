@@ -3334,6 +3334,17 @@ export async function importMethods(
   const releaseControl = (settings?.plmReleaseControl ??
     "enforce") as ReleaseControl;
 
+  // Change notice locks, read before any part's transaction opens: the
+  // pending-approval check behind them is a separate request.
+  const changeNoticeLocks = await loadChangeNoticeLocks(
+    db,
+    companyId,
+    [...groups.values()].flatMap((g) => {
+      const parent = itemMap.get(key(g.readableId, g.revision));
+      return parent ? [parent.id] : [];
+    })
+  );
+
   // A process also gives an operation its default type and description, as
   // the Bill of Process editor fills them in when a process is picked.
   const processMap = new Map<string, string>();
@@ -3420,7 +3431,8 @@ export async function importMethods(
         processById,
         workCenterMap,
         supplierMap,
-        releaseControl
+        releaseControl,
+        changeNoticeLocks
       });
       // Lines already on the method are skipped, never written twice. Benign:
       // not something the user needs to fix, so a skip, not an error.
@@ -3537,24 +3549,34 @@ function validateGroup(
       });
     }
 
-    // Op No uniqueness within the parent.
-    const opNos = new Set<string>();
+    // An Op No is the operation's order, so it is a number and Op Nos compare
+    // by value: "10" and "10.0" name one operation. A re-run can only find an
+    // operation it wrote before by that number.
+    const opNoIssue = (e: Entry, rowType: string) => {
+      const opNo = text(e.record.opNo);
+      const order = num(opNo);
+      if (!opNo) return `${rowType} row is missing Op No`;
+      if (order === undefined || order < 0) {
+        return `${rowType} row Op No "${opNo}" must be a number of 0 or more`;
+      }
+      return null;
+    };
+    const opNos = new Set<number>();
     for (const e of bucket.bop) {
       const opNo = text(e.record.opNo);
-      if (!opNo) {
-        errors.push({
-          row: rowOf(e.index),
-          reason: "BOP row is missing Op No"
-        });
+      const issue = opNoIssue(e, "BOP");
+      if (issue) {
+        errors.push({ row: rowOf(e.index), reason: issue });
         continue;
       }
-      if (opNos.has(opNo)) {
+      const order = num(opNo)!;
+      if (opNos.has(order)) {
         errors.push({
           row: rowOf(e.index),
           reason: `Duplicate Op No "${opNo}" for ${partLabel}`
         });
       }
-      opNos.add(opNo);
+      opNos.add(order);
 
       // process required + resolvable
       const proc = text(e.record.process).toLowerCase();
@@ -3688,6 +3710,16 @@ function validateGroup(
 
     // A STEP / TOOL / PARAM row's Op No may name an operation already on the
     // method, so writeGroup resolves it once the target version is known.
+    for (const [rows, rowType] of [
+      [bucket.step, "STEP"],
+      [bucket.tool, "TOOL"],
+      [bucket.param, "PARAM"]
+    ] as const) {
+      for (const e of rows) {
+        const issue = opNoIssue(e, rowType);
+        if (issue) errors.push({ row: rowOf(e.index), reason: issue });
+      }
+    }
     for (const e of bucket.step) {
       if (!text(e.record.stepName)) {
         errors.push({
@@ -3876,12 +3908,20 @@ export function planMaterialAppend(args: {
   return { insert, skipped };
 }
 
+/** An Op No as one key per number: "10", "10.0" and "010" are the same. */
+export const opKey = (opNo: string): string => {
+  const order = num(opNo);
+  return order === undefined ? opNo : String(order);
+};
+
 /**
  * How a version's BOP rows and the STEP / TOOL / PARAM rows that reference
- * them map onto the operations already on it. An Op No equal to an existing
- * operation's order names that operation: its BOP row is skipped and its
- * children attach to it. Any other BOP row is a new operation, ordered by its
- * Op No when that is a number, else after the existing operations.
+ * them map onto the operations already on it. An Op No is the operation's
+ * order. An Op No equal to an existing operation's order names that
+ * operation: its BOP row is skipped and its children attach to it. Any other
+ * BOP row is a new operation at that order. An Op No that is not a number is
+ * refused: nothing could find the operation again on a re-run.
+ * `existingIdByOpNo` is keyed by `opKey`.
  */
 export function planOperationAppend(args: {
   bop: Array<{ index: number; opNo: string }>;
@@ -3904,17 +3944,13 @@ export function planOperationAppend(args: {
     ids.push(op.id);
     idsByOrder.set(Number(op.order), ids);
   }
-  const highest = args.existing.reduce(
-    (max, op) => Math.max(max, Number(op.order)),
-    0
-  );
-  const matching = (opNo: string) => {
-    const order = num(opNo);
-    return order === undefined ? [] : (idsByOrder.get(order) ?? []);
-  };
   const ambiguous = (index: number, opNo: string, count: number) => ({
     row: rowOf(index),
     reason: `Op No "${opNo}" matches ${count} operations on ${args.partLabel}`
+  });
+  const notANumber = (index: number, opNo: string) => ({
+    row: rowOf(index),
+    reason: `Op No "${opNo}" must be a number`
   });
 
   const insert: Array<{ index: number; opNo: string; order: number }> = [];
@@ -3923,29 +3959,35 @@ export function planOperationAppend(args: {
   const errors: RowIssue[] = [];
 
   for (const { index, opNo } of args.bop) {
-    const ids = matching(opNo);
+    const order = num(opNo);
+    if (order === undefined) {
+      errors.push(notANumber(index, opNo));
+      continue;
+    }
+    const ids = idsByOrder.get(order) ?? [];
     if (ids.length > 1) {
       errors.push(ambiguous(index, opNo, ids.length));
     } else if (ids.length === 1) {
       skipped.push({ index, opNo });
-      existingIdByOpNo.set(opNo, ids[0]!);
+      existingIdByOpNo.set(opKey(opNo), ids[0]!);
     } else {
-      insert.push({
-        index,
-        opNo,
-        order: num(opNo) ?? highest + insert.length + 1
-      });
+      insert.push({ index, opNo, order });
     }
   }
 
-  const fileOpNos = new Set(args.bop.map((b) => b.opNo));
+  const fileOrders = new Set(args.bop.map((b) => num(b.opNo)));
   for (const { index, opNo, rowType } of args.children) {
-    if (fileOpNos.has(opNo)) continue;
-    const ids = matching(opNo);
+    const order = num(opNo);
+    if (order === undefined) {
+      errors.push(notANumber(index, opNo));
+      continue;
+    }
+    if (fileOrders.has(order)) continue;
+    const ids = idsByOrder.get(order) ?? [];
     if (ids.length > 1) {
       errors.push(ambiguous(index, opNo, ids.length));
     } else if (ids.length === 1) {
-      existingIdByOpNo.set(opNo, ids[0]!);
+      existingIdByOpNo.set(opKey(opNo), ids[0]!);
     } else {
       errors.push({
         row: rowOf(index),
@@ -3973,6 +4015,7 @@ async function writeGroup(
     workCenterMap: Map<string, string>;
     supplierMap: Map<string, string>;
     releaseControl: ReleaseControl;
+    changeNoticeLocks: Map<string, string | null>;
   }
 ): Promise<{ wroteAny: boolean; skipped: RowIssue[] }> {
   const { companyId, userId } = ctx;
@@ -4072,7 +4115,7 @@ async function writeGroup(
         status: method.status,
         version: method.version,
         changeNoticeLock: method.changeOrderId
-          ? await changeNoticeLockFor(trx, companyId, method.changeOrderId)
+          ? changeNoticeLockOf(ctx.changeNoticeLocks, method.changeOrderId)
           : null,
         revisionStatus,
         releaseControl: ctx.releaseControl
@@ -4292,7 +4335,7 @@ async function writeGroup(
           ])
           .returning(["id"])
           .execute();
-        opIdByNo.set(opNo, inserted[0]!.id);
+        opIdByNo.set(opKey(opNo), inserted[0]!.id);
         wroteAny = true;
       }
 
@@ -4310,7 +4353,7 @@ async function writeGroup(
       for (const e of bucket.step) {
         const r = e.record;
         const opNo = text(r.opNo);
-        const operationId = opIdByNo.get(opNo)!;
+        const operationId = opIdByNo.get(opKey(opNo))!;
         const name = text(r.stepName);
         if (children.stepNames.get(operationId)?.has(name)) {
           skipped.push({
@@ -4352,7 +4395,7 @@ async function writeGroup(
       for (const e of bucket.tool) {
         const r = e.record;
         const opNo = text(r.opNo);
-        const operationId = opIdByNo.get(opNo)!;
+        const operationId = opIdByNo.get(opKey(opNo))!;
         const tool = await resolveItem(
           trx,
           companyId,
@@ -4386,7 +4429,7 @@ async function writeGroup(
       for (const e of bucket.param) {
         const r = e.record;
         const opNo = text(r.opNo);
-        const operationId = opIdByNo.get(opNo)!;
+        const operationId = opIdByNo.get(opKey(opNo))!;
         const paramKey = text(r.paramKey);
         if (children.paramKeys.get(operationId)?.has(paramKey)) {
           skipped.push({
@@ -4501,20 +4544,45 @@ async function currentMakeMethodId(
   return rows[0]!.id;
 }
 
-// Why the change notice that owns a Draft locks it, or null: the check
-// checkRevisionLock runs before every BOM and BOP write.
-async function changeNoticeLockFor(
-  trx: Transaction<KyselyDatabase>,
+// Why each change notice that owns a Draft of these items locks it, or null:
+// the check checkRevisionLock runs before every BOM and BOP write.
+async function loadChangeNoticeLocks(
+  db: Kysely<KyselyDatabase>,
   companyId: string,
+  itemIds: string[]
+): Promise<Map<string, string | null>> {
+  if (itemIds.length === 0) return new Map();
+  const notices = await db
+    .selectFrom("makeMethod")
+    .innerJoin("changeOrder", "changeOrder.id", "makeMethod.changeOrderId")
+    .select(["changeOrder.id", "changeOrder.status"])
+    .distinct()
+    .where("makeMethod.itemId", "in", itemIds)
+    .where("makeMethod.companyId", "=", companyId)
+    .where("changeOrder.companyId", "=", companyId)
+    .execute();
+  return new Map(
+    await Promise.all(
+      notices.map(
+        async (notice) =>
+          [
+            notice.id,
+            await getChangeNoticeEngineeringLock(notice.id, notice.status)
+          ] as const
+      )
+    )
+  );
+}
+
+// A Draft whose change notice was not read before the import (it was linked
+// while the import ran) is refused rather than written unchecked.
+function changeNoticeLockOf(
+  locks: Map<string, string | null>,
   changeOrderId: string
-): Promise<string | null> {
-  const notice = await trx
-    .selectFrom("changeOrder")
-    .select(["status"])
-    .where("id", "=", changeOrderId)
-    .where("companyId", "=", companyId)
-    .executeTakeFirst();
-  return getChangeNoticeEngineeringLock(changeOrderId, notice?.status ?? null);
+): string | null {
+  return locks.has(changeOrderId)
+    ? (locks.get(changeOrderId) ?? null)
+    : "its change notice changed while the import ran. Run the import again";
 }
 
 // A new Draft version of the part's make method; never auto-activated.
