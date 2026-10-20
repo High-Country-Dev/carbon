@@ -248,6 +248,40 @@ and resolved to ids by the FieldMappings enum-mapping step (fetchers on
 `materialSubstance` / `materialForm`), so parents must already exist — an unresolved
 parent is an `errors` row. New rows get a DB-generated `xid()` id.
 
+### Method imports (append to the target version)
+
+`bom`, `operations` and `partWithMethod` are handled by `importMethods`
+(`shared.service.ts`). Rows carry a Row Type (`PART`, `BOM`, `BOP`, `STEP`,
+`TOOL`, `PARAM`; blank means `BOM` in the `bom` file) and name their parent part
+(`parentId` + `parentRevision`). The import groups rows by parent part, validates
+each group (`validateGroup`, pure), then writes each part in its own Kysely
+transaction (`writeGroup`): a part with any error writes nothing, other parts
+continue.
+
+- **Target version** (`pickMethodImportTarget`): a blank Make Method Version
+  targets the highest non-archived version that existed before the import; an
+  explicit one targets that version, created as a Draft when missing.
+- **Refusals** (`methodImportRefusal`), the same rules as the BOM and BOP
+  editors: the target must be a Draft; a Draft owned by a change notice follows
+  `getChangeNoticeEngineeringLock`; a Production revision follows
+  `plmReleaseControl` through `getLockVerdict`. A refusal throws
+  `MethodImportRefused` inside the transaction, so a Draft the file created for
+  that part is rolled back too.
+- **Append, not fill** (`planMaterialAppend`, `planOperationAppend`): new BOM
+  lines are ordered after the highest existing line; a material already on the
+  version is skipped. An Op No equal to an existing operation's `order` names
+  that operation: the BOP row is skipped and STEP / TOOL / PARAM rows attach to
+  it (they may reference it with no BOP row). A step with the same name, a tool
+  with the same item and a parameter with the same key are skipped. Every skip
+  goes to `skipped`, so re-running a file writes nothing.
+- BOM lines copy `methodType` / `sourcingType` / `materialMakeMethodId` /
+  `storageUnitIds` from the component item, as `upsertMethodMaterial` does.
+- Known gaps: a sub-assembly created by a `PART` row must come before its parent
+  in the file (parts are written in order of first appearance); a `PART` row
+  does not write the Unique ID mapping; an unmapped BOM unit of measure is `EA`;
+  the Supplier Process column is unused; a non-numeric Make Method Version
+  becomes 1.
+
 > The models also include `customerStatus` / `customerType` field-mapping entries (used by
 > creatable lookups), but only the tables above appear in `importPermissions`.
 

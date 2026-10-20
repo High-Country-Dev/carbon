@@ -1,0 +1,76 @@
+# Method import: append to existing methods
+
+The BOM, Operations and Parts with Methods CSV imports (`importMethods`,
+`apps/erp/app/modules/shared/shared.service.ts`) write a make method version
+only when it has no materials and no operations. So a file cannot add BOM lines
+or a bill of process to a part that already has a BOM. If a user imports a BOM
+and then imports Operations for the same parts, the second import skips every
+part.
+
+This change makes the import append to the target version. The import becomes
+the bulk form of the add buttons in the BOM and Bill of Process editors. A
+re-run of a file stays safe: the import skips and reports the lines and
+operations that are already on the target version.
+
+## Behavior
+
+- Target version
+  - Explicit Make Method Version: that version. The import creates it as a
+    Draft when it does not exist (unchanged).
+  - Blank: the highest non-archived version. Before this change, blank
+    preferred the Active version, which the editors never change.
+- Refusals. The import checks these per part before it writes. A refused part
+  gets one error and writes nothing. Other parts continue.
+  - The target version is not a Draft. The editors are read-only on any other
+    status (`BillOfMaterial.tsx`, `BillOfProcess.tsx`:
+    `makeMethod.status !== "Draft"`).
+  - The target version belongs to a change notice whose engineering content is
+    locked. `checkRevisionLock` applies the same check
+    (`getChangeNoticeEngineeringLock`) to every BOM and BOP mutation route.
+  - The item is a released (Production) revision and `plmReleaseControl` is
+    `enforce` (`getLockVerdict`).
+- BOM lines
+  - The import orders new lines after the highest existing line
+    (`max(order) + 1`, as `onAddItem` in `BillOfMaterial.tsx`).
+  - The import skips and reports a line whose material item is already on the
+    target version. Lines repeated inside one file are all written (unchanged).
+- Operations
+  - An Op No equal to the order of an existing operation refers to that
+    operation. The import skips and reports the BOP row. STEP, TOOL and PARAM
+    rows with that Op No attach to the existing operation.
+  - If two existing operations have that order, the row is an error.
+  - A new numeric Op No becomes the order of the new operation (unchanged).
+  - A new non-numeric Op No goes after the highest existing or assigned order.
+  - A STEP, TOOL or PARAM row can reference an existing operation with no BOP
+    row in the file.
+- Steps, tools and parameters on an existing operation
+  - The import skips and reports a step with the same name, a tool with the
+    same tool item, and a parameter with the same key.
+  - The import sorts new steps after the highest existing step.
+- Counts: a part counts as inserted (new part) or updated (existing part) when
+  the import writes at least one row for it. Each skipped line is listed.
+
+## Out of scope
+
+- Updates to existing lines (quantity, unit, times) and deletes.
+- A new version that copies another version.
+- The other findings from the PR #911 review: same-file sub-assembly order,
+  Unique ID not written by Parts with Methods, BOM unit default `EA`, the unused
+  Supplier Process column, and a non-numeric version that becomes 1.
+
+## Steps
+
+- [x] Export `getChangeNoticeEngineeringLock` from `items.service.ts`.
+- [x] `importMethods`: load `plmReleaseControl` once; add `revisionStatus` to the
+      item lookup.
+- [x] `writeGroup`: replace the fill-if-empty gate with target resolution,
+      refusals, existing-state reads and append writes.
+- [x] Move the STEP/TOOL/PARAM Op No check from the pure validation into the
+      transaction, where existing operations are known.
+- [x] Pure helpers for the append decisions, with unit tests.
+- [x] Database test (`apps/erp/test/database/method-import-append.test.ts`, 6 cases, pass on the local stack): append BOM lines, add
+      operations to a part with a BOM, attach steps to an existing operation,
+      re-run writes nothing, Active and locked targets refused.
+- [x] Update `.claude/rules/csv-import-system.md` and the import docs.
+- [x] Scoped typecheck, Biome, unit tests.
+- [x] Browser check on the local stack: BOM and Operations imports, then the Operations file again (4 rows skipped, nothing written).

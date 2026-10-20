@@ -9445,7 +9445,7 @@ type ChangeNoticeEditScope = "engineering" | "workflow";
 // approval request can only be pending at Engineering Complete (approval gates
 // the move to Implementation), so only that stage pays for the lookup;
 // approvalRequest is service-role only.
-async function getChangeNoticeEngineeringLock(
+export async function getChangeNoticeEngineeringLock(
   changeNoticeId: string,
   status: string | null | undefined
 ): Promise<string | null> {
