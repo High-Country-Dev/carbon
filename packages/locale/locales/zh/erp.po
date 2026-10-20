@@ -4821,6 +4821,9 @@ msgstr "变更通知"
 msgid "Change notices could not be loaded, so new versions and revisions are blocked. Reload to try again."
 msgstr "无法加载变更通知，因此新版本和修订版被阻止。重新加载以重试。"
 
+msgid "Change notices could not be loaded, so the active version cannot be changed. Reload to try again."
+msgstr "无法加载变更通知，因此无法更改有效版本。重新加载以重试。"
+
 msgid "Change order"
 msgstr "变更单"
 
@@ -15858,8 +15861,14 @@ msgstr "未结维护工单"
 msgid "Open in Carbon"
 msgstr "在 Carbon 中打开"
 
+msgid "Open in change notice {ids}. Release it to change the active version."
+msgstr "打开于变更通知 {ids}。下达它以更改有效版本。"
+
 msgid "Open in change notice {ids}. Release it to create new versions or revisions."
 msgstr "打开于变更通知 {ids}。下达它来创建新版本或修订版。"
+
+msgid "Open in change notices {ids}. Release them to change the active version."
+msgstr "打开于变更通知 {ids}。下达它们以更改有效版本。"
 
 msgid "Open in change notices {ids}. Release them to create new versions or revisions."
 msgstr "打开于变更通知 {ids}。下达它们来创建新版本或修订版。"

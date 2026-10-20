@@ -4821,6 +4821,9 @@ msgstr "Zawiadomienia o zmianie"
 msgid "Change notices could not be loaded, so new versions and revisions are blocked. Reload to try again."
 msgstr "Zawiadomienia o zmianie nie mogły być załadowane, więc nowe wersje i rewizje są zablokowane. Załaduj ponownie, aby spróbować ponownie."
 
+msgid "Change notices could not be loaded, so the active version cannot be changed. Reload to try again."
+msgstr "Zawiadomienia o zmianie nie mogły być załadowane, więc nie można zmienić aktywnej wersji. Załaduj ponownie, aby spróbować ponownie."
+
 msgid "Change order"
 msgstr "Zlecenie zmiany"
 
@@ -15858,8 +15861,14 @@ msgstr "Otwarte zlecenia utrzymania ruchu"
 msgid "Open in Carbon"
 msgstr "Otwórz w Carbon"
 
+msgid "Open in change notice {ids}. Release it to change the active version."
+msgstr "Otwarte w zawiadomieniu o zmianie {ids}. Zwolnij to, aby zmienić aktywną wersję."
+
 msgid "Open in change notice {ids}. Release it to create new versions or revisions."
 msgstr "Otwarte w zawiadomieniu o zmianie {ids}. Zwolnij to aby utworzyć nowe wersje lub rewizje."
+
+msgid "Open in change notices {ids}. Release them to change the active version."
+msgstr "Otwarte w zawiadomieniach o zmianie {ids}. Zwolnij je, aby zmienić aktywną wersję."
 
 msgid "Open in change notices {ids}. Release them to create new versions or revisions."
 msgstr "Otwarte w zawiadomieniach o zmianie {ids}. Zwolnij je aby utworzyć nowe wersje lub rewizje."

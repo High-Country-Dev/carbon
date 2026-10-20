@@ -322,6 +322,11 @@ const MakeMethodTools = ({
                         <ItemChangeNoticeLock
                           changeNotices={openChangeNotices}
                           isLocked={isChangeNoticeLocked}
+                          reason={
+                            <ActiveVersionLockReason
+                              changeNotices={openChangeNotices}
+                            />
+                          }
                         >
                           <DropdownMenuItem
                             disabled={
@@ -771,6 +776,9 @@ function DraftMethodNotice({
             changeNotices={lock.changeNotices}
             isLocked={lock.isLocked}
             className="w-fit"
+            reason={
+              <ActiveVersionLockReason changeNotices={lock.changeNotices} />
+            }
           >
             <Button
               size="sm"
@@ -785,6 +793,36 @@ function DraftMethodNotice({
         </div>
       </AlertDescription>
     </Alert>
+  );
+}
+
+// Why the active version can't change: the lock's default wording is about
+// creating new versions, which is not what Make Active does.
+function ActiveVersionLockReason({
+  changeNotices
+}: {
+  changeNotices: ChangeNoticeForItem[];
+}) {
+  const ids = changeNotices.map((co) => co.changeOrderId).join(", ");
+  if (changeNotices.length === 0) {
+    return (
+      <Trans>
+        Change notices could not be loaded, so the active version cannot be
+        changed. Reload to try again.
+      </Trans>
+    );
+  }
+  if (changeNotices.length === 1) {
+    return (
+      <Trans>
+        Open in change notice {ids}. Release it to change the active version.
+      </Trans>
+    );
+  }
+  return (
+    <Trans>
+      Open in change notices {ids}. Release them to change the active version.
+    </Trans>
   );
 }
 

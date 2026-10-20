@@ -4821,6 +4821,9 @@ msgstr "変更通知"
 msgid "Change notices could not be loaded, so new versions and revisions are blocked. Reload to try again."
 msgstr "変更通知を読み込めませんでした。新しいバージョンとリビジョンはブロックされています。再度読み込んでください。"
 
+msgid "Change notices could not be loaded, so the active version cannot be changed. Reload to try again."
+msgstr "変更通知を読み込めませんでした。アクティブバージョンは変更できません。再度読み込んでください。"
+
 msgid "Change order"
 msgstr "変更指示"
 
@@ -15858,8 +15861,14 @@ msgstr "オープン保全指示"
 msgid "Open in Carbon"
 msgstr "Carbonで開く"
 
+msgid "Open in change notice {ids}. Release it to change the active version."
+msgstr "変更通知{ids}で開いています。アクティブバージョンを変更するには、それをリリースしてください。"
+
 msgid "Open in change notice {ids}. Release it to create new versions or revisions."
 msgstr "変更通知{ids}で開いています。新しいバージョンまたはリビジョンを作成するには、それをリリースしてください。"
+
+msgid "Open in change notices {ids}. Release them to change the active version."
+msgstr "変更通知{ids}で開いています。アクティブバージョンを変更するには、それらをリリースしてください。"
 
 msgid "Open in change notices {ids}. Release them to create new versions or revisions."
 msgstr "変更通知{ids}で開いています。新しいバージョンまたはリビジョンを作成するには、それらをリリースしてください。"

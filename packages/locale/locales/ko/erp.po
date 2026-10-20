@@ -4821,6 +4821,9 @@ msgstr "변경 통지"
 msgid "Change notices could not be loaded, so new versions and revisions are blocked. Reload to try again."
 msgstr "변경 통지를 로드할 수 없으므로 새 버전과 리비전이 차단되었습니다. 다시 시도하려면 새로 고침하십시오."
 
+msgid "Change notices could not be loaded, so the active version cannot be changed. Reload to try again."
+msgstr "변경 통지를 로드할 수 없으므로 활성 버전을 변경할 수 없습니다. 다시 시도하려면 새로 고침하십시오."
+
 msgid "Change order"
 msgstr "변경 오더"
 
@@ -15858,8 +15861,14 @@ msgstr "미결 유지보수 지시"
 msgid "Open in Carbon"
 msgstr "Carbon에서 열기"
 
+msgid "Open in change notice {ids}. Release it to change the active version."
+msgstr "변경 통지 {ids}에서 열기. 활성 버전을 변경하려면 릴리스하세요."
+
 msgid "Open in change notice {ids}. Release it to create new versions or revisions."
 msgstr "변경 통지 {ids}에서 열기. 새로운 버전 또는 리비전을 생성하려면 릴리스하세요."
+
+msgid "Open in change notices {ids}. Release them to change the active version."
+msgstr "변경 통지 {ids}에서 열기. 활성 버전을 변경하려면 릴리스하세요."
 
 msgid "Open in change notices {ids}. Release them to create new versions or revisions."
 msgstr "변경 통지 {ids}에서 열기. 새로운 버전 또는 리비전을 생성하려면 릴리스하세요."

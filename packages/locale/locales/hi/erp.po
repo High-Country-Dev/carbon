@@ -4821,6 +4821,9 @@ msgstr "परिवर्तन सूचनाएं"
 msgid "Change notices could not be loaded, so new versions and revisions are blocked. Reload to try again."
 msgstr "परिवर्तन सूचना को लोड नहीं किया जा सका, इसलिए नए संस्करण और रिवीजन अवरुद्ध हैं। पुनः प्रयास करने के लिए फिर से लोड करें।"
 
+msgid "Change notices could not be loaded, so the active version cannot be changed. Reload to try again."
+msgstr "परिवर्तन सूचना को लोड नहीं किया जा सका, इसलिए सक्रिय संस्करण नहीं बदला जा सकता। पुनः प्रयास करने के लिए फिर से लोड करें।"
+
 msgid "Change order"
 msgstr "परिवर्तन आदेश"
 
@@ -15858,8 +15861,14 @@ msgstr "खुले रखरखाव कार्य"
 msgid "Open in Carbon"
 msgstr "Carbon में खोलें"
 
+msgid "Open in change notice {ids}. Release it to change the active version."
+msgstr "परिवर्तन सूचना {ids} में खुला है। सक्रिय संस्करण बदलने के लिए इसे जारी करें।"
+
 msgid "Open in change notice {ids}. Release it to create new versions or revisions."
 msgstr "परिवर्तन सूचना {ids} में खुला है। नए संस्करण या रिवीजन बनाने के लिए इसे जारी करें।"
+
+msgid "Open in change notices {ids}. Release them to change the active version."
+msgstr "परिवर्तन सूचनाओं {ids} में खुले हैं। सक्रिय संस्करण बदलने के लिए उन्हें जारी करें।"
 
 msgid "Open in change notices {ids}. Release them to create new versions or revisions."
 msgstr "परिवर्तन सूचनाओं {ids} में खुले हैं। नए संस्करण या रिवीजन बनाने के लिए उन्हें जारी करें।"

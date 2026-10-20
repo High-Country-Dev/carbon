@@ -4821,6 +4821,9 @@ msgstr "Änderungsmitteilungen"
 msgid "Change notices could not be loaded, so new versions and revisions are blocked. Reload to try again."
 msgstr "Änderungsmitteilungen konnten nicht geladen werden, sodass neue Versionen und Revisionen blockiert sind. Zum erneuten Versuch neu laden."
 
+msgid "Change notices could not be loaded, so the active version cannot be changed. Reload to try again."
+msgstr "Änderungsmitteilungen konnten nicht geladen werden, sodass die aktive Version nicht geändert werden kann. Zum erneuten Versuch neu laden."
+
 msgid "Change order"
 msgstr "Änderungsauftrag"
 
@@ -15858,8 +15861,14 @@ msgstr "Instandhaltungsaufträge öffnen"
 msgid "Open in Carbon"
 msgstr "In Carbon öffnen"
 
+msgid "Open in change notice {ids}. Release it to change the active version."
+msgstr "In Änderungsmitteilung {ids} offen. Geben Sie sie frei, um die aktive Version zu ändern."
+
 msgid "Open in change notice {ids}. Release it to create new versions or revisions."
 msgstr "In Änderungsmitteilung {ids} offen. Geben Sie sie frei, um neue Versionen oder Revisionen zu erstellen."
+
+msgid "Open in change notices {ids}. Release them to change the active version."
+msgstr "In Änderungsmitteilungen {ids} offen. Geben Sie sie frei, um die aktive Version zu ändern."
 
 msgid "Open in change notices {ids}. Release them to create new versions or revisions."
 msgstr "In Änderungsmitteilungen {ids} offen. Geben Sie sie frei, um neue Versionen oder Revisionen zu erstellen."
