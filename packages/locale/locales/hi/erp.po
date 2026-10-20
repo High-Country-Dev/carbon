@@ -14274,6 +14274,9 @@ msgstr "नया मुद्दा"
 msgid "New Item Group"
 msgstr "नया आइटम समूह"
 
+msgid "New jobs use version {activeVersion}"
+msgstr "नए जॉब संस्करण {activeVersion} का उपयोग करते हैं"
+
 msgid "New Kanban"
 msgstr "नया कानबन"
 
@@ -26712,6 +26715,9 @@ msgstr "हाँ, आईडी अपडेट करें"
 
 msgid "You"
 msgstr "आप"
+
+msgid "You are editing draft version {draftVersion}. Its changes reach new jobs once it is the Active version."
+msgstr "आप ड्राफ्ट संस्करण {draftVersion} संपादित कर रहे हैं। इसके बदलाव नए जॉब तक तभी पहुँचते हैं जब यह सक्रिय संस्करण हो।"
 
 msgid "You belong to more than one company. Pick where to work."
 msgstr "आप एक से अधिक कंपनी से संबंधित हैं। चुनें कि कहां काम करना है।"

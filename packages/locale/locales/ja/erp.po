@@ -14274,6 +14274,9 @@ msgstr "新しい問題"
 msgid "New Item Group"
 msgstr "新しいアイテムグループ"
 
+msgid "New jobs use version {activeVersion}"
+msgstr "新しい製造指図はバージョン {activeVersion} を使用します"
+
 msgid "New Kanban"
 msgstr "新規かんばん"
 
@@ -26712,6 +26715,9 @@ msgstr "はい、IDを更新"
 
 msgid "You"
 msgstr "あなた"
+
+msgid "You are editing draft version {draftVersion}. Its changes reach new jobs once it is the Active version."
+msgstr "下書きバージョン {draftVersion} を編集しています。変更は、このバージョンが有効になった後の新しい製造指図に反映されます。"
 
 msgid "You belong to more than one company. Pick where to work."
 msgstr "複数の会社に属しています。作業する会社を選択してください。"

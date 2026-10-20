@@ -14274,6 +14274,9 @@ msgstr "새 이슈"
 msgid "New Item Group"
 msgstr "새 품목 그룹"
 
+msgid "New jobs use version {activeVersion}"
+msgstr "새 작업 지시는 버전 {activeVersion}을(를) 사용합니다"
+
 msgid "New Kanban"
 msgstr "새 칸반"
 
@@ -26712,6 +26715,9 @@ msgstr "예, ID 업데이트"
 
 msgid "You"
 msgstr "나"
+
+msgid "You are editing draft version {draftVersion}. Its changes reach new jobs once it is the Active version."
+msgstr "초안 버전 {draftVersion}을(를) 편집하고 있습니다. 변경 사항은 이 버전이 활성 버전이 된 후 새 작업 지시에 반영됩니다."
 
 msgid "You belong to more than one company. Pick where to work."
 msgstr "둘 이상의 회사에 속해 있습니다. 작업할 회사를 선택하세요."

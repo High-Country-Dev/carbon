@@ -14274,6 +14274,9 @@ msgstr "Nowy Problem"
 msgid "New Item Group"
 msgstr "Nowa Grupa Pozycji"
 
+msgid "New jobs use version {activeVersion}"
+msgstr "Nowe zlecenia produkcyjne używają wersji {activeVersion}"
+
 msgid "New Kanban"
 msgstr "Nowy Kanban"
 
@@ -26712,6 +26715,9 @@ msgstr "Tak, Aktualizuj identyfikatory"
 
 msgid "You"
 msgstr "Ty"
+
+msgid "You are editing draft version {draftVersion}. Its changes reach new jobs once it is the Active version."
+msgstr "Edytujesz wersję roboczą {draftVersion}. Jej zmiany trafią do nowych zleceń produkcyjnych, gdy stanie się wersją aktywną."
 
 msgid "You belong to more than one company. Pick where to work."
 msgstr "Należysz do więcej niż jednej firmy. Wybierz, gdzie chcesz pracować."

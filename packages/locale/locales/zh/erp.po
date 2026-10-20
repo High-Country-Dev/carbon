@@ -14274,6 +14274,9 @@ msgstr "新问题"
 msgid "New Item Group"
 msgstr "新建项目组"
 
+msgid "New jobs use version {activeVersion}"
+msgstr "新工单使用版本 {activeVersion}"
+
 msgid "New Kanban"
 msgstr "新看板"
 
@@ -26712,6 +26715,9 @@ msgstr "是的，更新 ID"
 
 msgid "You"
 msgstr "你"
+
+msgid "You are editing draft version {draftVersion}. Its changes reach new jobs once it is the Active version."
+msgstr "您正在编辑草稿版本 {draftVersion}。其更改将在它成为启用版本后应用于新工单。"
 
 msgid "You belong to more than one company. Pick where to work."
 msgstr "您属于多个公司。选择在哪个公司工作。"
