@@ -66,9 +66,12 @@ export interface SyncOnshapeElementInput {
   assetBaseName?: string; // filename base (e.g. item part number); falls back to Onshape name
 }
 
-const POLL_MAX_ATTEMPTS = 40;
+// About an hour: a large assembly's STEP export can take Onshape far longer
+// than a few minutes. Each wait is a step.sleep, so a long budget holds
+// nothing; the 30 s cap keeps a slow export's polls off the yearly API quota.
+const POLL_MAX_ATTEMPTS = 125;
 const POLL_INITIAL_DELAY_MS = 2000;
-const POLL_MAX_DELAY_MS = 15000;
+const POLL_MAX_DELAY_MS = 30000;
 
 // Size caps — the SAME limits Carbon enforces on manual uploads (CadModel.tsx /
 // document upload), since synced assets land in the same buckets. The raw model
