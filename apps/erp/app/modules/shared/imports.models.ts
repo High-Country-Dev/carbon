@@ -334,9 +334,9 @@ const methodBomFields = {
     required: false,
     type: "enum",
     enumData: {
-      description: "The unit of measure of the component (default EA)",
-      fetcher: unitOfMeasureFetcher,
-      default: "EA"
+      description:
+        "The unit of measure of the component. Blank takes the component's own unit",
+      fetcher: unitOfMeasureFetcher
     }
   },
   kit: {

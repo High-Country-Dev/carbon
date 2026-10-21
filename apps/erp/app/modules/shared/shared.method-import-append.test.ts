@@ -8,6 +8,7 @@
 
 import { describe, expect, it } from "vitest";
 import { LOCKED_REVISION_MESSAGE } from "~/modules/items/items.service";
+import { fieldMappings } from "./imports.models";
 import {
   methodImportRefusal,
   opKey,
@@ -21,6 +22,23 @@ const method = (
   status: string,
   changeOrderId: string | null = null
 ) => ({ id: `mm-${version}`, version, status, changeOrderId });
+
+describe("wizard defaults", () => {
+  // The wizard writes an enum's Default into every blank or unmapped cell, so
+  // a preset here would replace the material's unit and the process's type.
+  it("presets no BOM unit and no operation type", () => {
+    for (const table of ["bom", "partWithMethod"] as const) {
+      expect(
+        fieldMappings[table].unitOfMeasureCode.enumData
+      ).not.toHaveProperty("default");
+    }
+    for (const table of ["operations", "partWithMethod"] as const) {
+      expect(fieldMappings[table].operationType.enumData).not.toHaveProperty(
+        "default"
+      );
+    }
+  });
+});
 
 describe("pickMethodImportTarget", () => {
   it("targets the highest non-archived version when the version is blank", () => {

@@ -282,7 +282,10 @@ continue.
   item, as `upsertMethodMaterial` does, and take the component's unit when the
   file has none. A blank Operation Type takes the process's `processType` and a
   blank description the process's name, as BillOfProcess `onProcessChange`
-  fills them. Step descriptions go through `toTiptapDoc`, as the step form's
+  fills them. The wizard presets no Default for the BOM Unit of Measure or the
+  Operation Type (`fieldMappings` in `imports.models.ts`): an enum Default
+  fills every blank and unmapped cell before the import runs, so a preset
+  would replace these fallbacks. Step descriptions go through `toTiptapDoc`, as the step form's
   validator does. `customFields` is `{}` on lines and operations, as the
   routes' `setCustomFields` writes it.
   `apps/erp/test/database/method-import-parity.test.ts` builds one method
