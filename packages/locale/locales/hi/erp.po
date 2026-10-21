@@ -14034,6 +14034,15 @@ msgstr "MRP एक मौजूदा आदेश को स्थानां�
 msgid "Multiple jobs can run on this process at the same time — e.g. a laser table, furnace, or plating bath"
 msgstr "एक ही समय में इस प्रक्रिया पर कई जॉब चल सकती हैं — उदाहरण के लिए, एक लेजर टेबल, फर्नेस, या प्लेटिंग बाथ"
 
+msgid "Must be at least {minValue} {unitLabel}"
+msgstr "कम से कम {minValue} {unitLabel} होना चाहिए"
+
+msgid "Must be at most {maxValue} {unitLabel}"
+msgstr "अधिकतम {maxValue} {unitLabel} होना चाहिए"
+
+msgid "Must be between {minValue} and {maxValue} {unitLabel}"
+msgstr "{minValue} और {maxValue} {unitLabel} के बीच होना चाहिए"
+
 msgid "Must be in the same location"
 msgstr "एक ही स्थान में होना चाहिए"
 

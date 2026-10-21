@@ -14034,6 +14034,15 @@ msgstr "MRP sugiere mover una orden existente solo cuando su fecha está desfasa
 msgid "Multiple jobs can run on this process at the same time — e.g. a laser table, furnace, or plating bath"
 msgstr "Múltiples Órdenes de trabajo pueden ejecutarse en este Proceso simultáneamente — por ejemplo, una mesa láser, horno o baño de galvanoplastia"
 
+msgid "Must be at least {minValue} {unitLabel}"
+msgstr "Debe ser al menos {minValue} {unitLabel}"
+
+msgid "Must be at most {maxValue} {unitLabel}"
+msgstr "Debe ser como máximo {maxValue} {unitLabel}"
+
+msgid "Must be between {minValue} and {maxValue} {unitLabel}"
+msgstr "Debe estar entre {minValue} y {maxValue} {unitLabel}"
+
 msgid "Must be in the same location"
 msgstr "Debe estar en la misma ubicación"
 

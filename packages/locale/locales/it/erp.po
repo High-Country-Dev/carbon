@@ -14034,6 +14034,15 @@ msgstr "MRP suggerisce di spostare un ordine esistente solo quando la sua data d
 msgid "Multiple jobs can run on this process at the same time — e.g. a laser table, furnace, or plating bath"
 msgstr "Più ordini di produzione possono essere eseguiti su questo processo contemporaneamente — ad esempio, un tavolo laser, un forno o un bagno di galvanica"
 
+msgid "Must be at least {minValue} {unitLabel}"
+msgstr "Deve essere almeno {minValue} {unitLabel}"
+
+msgid "Must be at most {maxValue} {unitLabel}"
+msgstr "Deve essere al massimo {maxValue} {unitLabel}"
+
+msgid "Must be between {minValue} and {maxValue} {unitLabel}"
+msgstr "Deve essere compreso tra {minValue} e {maxValue} {unitLabel}"
+
 msgid "Must be in the same location"
 msgstr "Deve essere nella stessa posizione"
 

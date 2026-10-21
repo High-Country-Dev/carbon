@@ -1106,11 +1106,11 @@ msgstr "Дополнительные действия"
 msgid "Move column: {0}"
 msgstr "Переместить столбец: {0}"
 
-msgid "Must be < {maxValue} {unitOfMeasureCode}"
-msgstr "Должно быть < {maxValue} {unitOfMeasureCode}"
+msgid "Must be at least {minValue} {unitOfMeasureCode}"
+msgstr "Должно быть не менее {minValue} {unitOfMeasureCode}"
 
-msgid "Must be > {minValue} {unitOfMeasureCode}"
-msgstr "Должно быть > {minValue} {unitOfMeasureCode}"
+msgid "Must be at most {maxValue} {unitOfMeasureCode}"
+msgstr "Должно быть не более {maxValue} {unitOfMeasureCode}"
 
 msgid "Must be between {minValue} and {maxValue} {unitOfMeasureCode}"
 msgstr "Должно быть между {minValue} и {maxValue} {unitOfMeasureCode}"

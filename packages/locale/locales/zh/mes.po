@@ -1106,11 +1106,11 @@ msgstr "更多选项"
 msgid "Move column: {0}"
 msgstr "移动列：{0}"
 
-msgid "Must be < {maxValue} {unitOfMeasureCode}"
-msgstr "必须小于 {maxValue} {unitOfMeasureCode}"
+msgid "Must be at least {minValue} {unitOfMeasureCode}"
+msgstr "必须不小于 {minValue} {unitOfMeasureCode}"
 
-msgid "Must be > {minValue} {unitOfMeasureCode}"
-msgstr "必须大于 {minValue} {unitOfMeasureCode}"
+msgid "Must be at most {maxValue} {unitOfMeasureCode}"
+msgstr "必须不大于 {maxValue} {unitOfMeasureCode}"
 
 msgid "Must be between {minValue} and {maxValue} {unitOfMeasureCode}"
 msgstr "必须在 {minValue} 到 {maxValue} {unitOfMeasureCode} 之间"
