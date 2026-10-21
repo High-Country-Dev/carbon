@@ -139,12 +139,13 @@ const MakeMethodTools = ({
     makeMethods.find((m) => m.id === activeMethodId) ?? makeMethods[0];
 
   // New jobs take the Active version over any Draft (`activeMakeMethods`), so
-  // edits to a Draft reach them only once it is made Active.
+  // edits to a Draft reach them only once it is made Active. Like that view,
+  // take the highest Active version if more than one is Active.
   const liveMethod =
     activeMethod.status === "Draft"
-      ? makeMethods.find(
-          (m) => m.status === "Active" && m.id !== activeMethod.id
-        )
+      ? makeMethods
+          .filter((m) => m.status === "Active" && m.id !== activeMethod.id)
+          .sort((a, b) => b.version - a.version)[0]
       : undefined;
 
   const maxVersion = Math.max(...makeMethods.map((m) => m.version));
