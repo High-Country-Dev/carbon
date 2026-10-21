@@ -4101,25 +4101,44 @@ async function writeGroup(
 
     for (const [version, bucket] of g.versions) {
       const target = pickMethodImportTarget(methods, version);
-      const method =
-        "method" in target
-          ? target.method
-          : {
-              id: "",
-              version: target.createVersion,
-              status: "Draft",
-              changeOrderId: null
-            };
+      const methodVersion =
+        "method" in target ? target.method.version : target.createVersion;
+      let makeMethodId =
+        "method" in target ? target.method.id : createdIds.get(methodVersion);
+      if (!makeMethodId) {
+        makeMethodId = await insertDraftMakeMethod(
+          trx,
+          parentItemId,
+          methodVersion,
+          companyId,
+          userId
+        );
+        createdIds.set(methodVersion, makeMethodId);
+      }
 
-      const refusal = methodImportRefusal({
-        status: method.status,
-        version: method.version,
-        changeNoticeLock: method.changeOrderId
-          ? changeNoticeLockOf(ctx.changeNoticeLocks, method.changeOrderId)
-          : null,
-        revisionStatus,
-        releaseControl: ctx.releaseControl
-      });
+      // Imports into one version run one at a time: a second import waits
+      // here, then reads what the first wrote and skips it. The refusal reads
+      // the locked row, so it sees an editor that activated the Draft or
+      // linked it to a change notice after the read above. A refused part
+      // rolls back, with any version created for it.
+      const locked = await trx
+        .selectFrom("makeMethod")
+        .select(["status", "changeOrderId"])
+        .where("id", "=", makeMethodId)
+        .where("companyId", "=", companyId)
+        .forUpdate()
+        .executeTakeFirst();
+      const refusal = locked
+        ? methodImportRefusal({
+            status: locked.status,
+            version: methodVersion,
+            changeNoticeLock: locked.changeOrderId
+              ? changeNoticeLockOf(ctx.changeNoticeLocks, locked.changeOrderId)
+              : null,
+            revisionStatus,
+            releaseControl: ctx.releaseControl
+          })
+        : `make method version ${methodVersion} was deleted while the import ran. Run the import again`;
       if (refusal) {
         issues.push({
           row: rowOf(firstIndexOf(bucket)),
@@ -4127,28 +4146,6 @@ async function writeGroup(
         });
         continue;
       }
-
-      let makeMethodId = method.id || createdIds.get(method.version);
-      if (!makeMethodId) {
-        makeMethodId = await insertDraftMakeMethod(
-          trx,
-          parentItemId,
-          method.version,
-          companyId,
-          userId
-        );
-        createdIds.set(method.version, makeMethodId);
-      }
-
-      // Imports into one version run one at a time: a second import waits
-      // here, then reads what the first wrote and skips it.
-      await trx
-        .selectFrom("makeMethod")
-        .select("id")
-        .where("id", "=", makeMethodId)
-        .where("companyId", "=", companyId)
-        .forUpdate()
-        .execute();
 
       const existingMaterials = await trx
         .selectFrom("methodMaterial")

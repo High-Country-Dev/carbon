@@ -6,6 +6,7 @@
 // and two imports of one file at the same time write each line once. Runs
 // against the local database; skips without one.
 
+import { sql } from "kysely";
 import { afterEach, describe, expect } from "vitest";
 import {
   connectLocalTestDatabase,
@@ -17,6 +18,23 @@ import {
 } from "./fixtures/method-import";
 
 type Rows = Record<string, string>[];
+
+// Resolves once another session of this database waits on a row lock.
+async function waitForLockWait(
+  db: Awaited<ReturnType<typeof connectLocalTestDatabase>>
+) {
+  for (let attempt = 0; attempt < 200; attempt++) {
+    const { rows } = await sql<{ waiting: number }>`
+      SELECT count(*)::int AS waiting FROM pg_stat_activity
+      WHERE datname = current_database()
+        AND pid <> pg_backend_pid()
+        AND wait_event_type = 'Lock'
+        AND query ILIKE '%for update%'`.execute(db);
+    if (rows[0]!.waiting > 0) return;
+    await new Promise((resolve) => setTimeout(resolve, 25));
+  }
+  throw new Error("The import never waited for the row lock");
+}
 
 const bom = (
   parentId: string,
@@ -250,6 +268,54 @@ describe("method import guards", () => {
         }
       ]);
       expect((await rowCounts()).materials).toBe(0);
+    }
+  );
+
+  databaseTest(
+    "refuses a Draft an editor activates while the import waits for it",
+    async () => {
+      f = await methodImportFixture();
+      const companyId = f.companyId;
+      const makeMethodId = await f.methodOf("ASSY");
+      const editor = await connectLocalTestDatabase();
+      const watcher = await connectLocalTestDatabase();
+      let commit = () => {};
+      const committed = new Promise<void>((resolve) => {
+        commit = resolve;
+      });
+      let holding = () => {};
+      const held = new Promise<void>((resolve) => {
+        holding = resolve;
+      });
+      // The editor activates the Draft and keeps its row lock until commit.
+      const activate = editor.transaction().execute(async (trx) => {
+        await trx
+          .updateTable("makeMethod")
+          .set({ status: "Active" })
+          .where("id", "=", makeMethodId)
+          .where("companyId", "=", companyId)
+          .execute();
+        holding();
+        await committed;
+      });
+      try {
+        await held;
+        // The import reads the version as a Draft, then waits for the lock.
+        const run = f.run("bom", [bom("ASSY", "COMP-1", "1")]);
+        await waitForLockWait(watcher);
+        commit();
+        await activate;
+        const summary = await run;
+        expect(summary.errors.map((e) => e.reason)).toEqual([
+          "Part ASSY rev 0: make method version 1 is Active, and only a Draft version can change. Create a new version, then set Make Method Version to it"
+        ]);
+        expect((await rowCounts()).materials).toBe(0);
+      } finally {
+        commit();
+        await activate.catch(() => {});
+        await editor.destroy();
+        await watcher.destroy();
+      }
     }
   );
 

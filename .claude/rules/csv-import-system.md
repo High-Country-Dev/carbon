@@ -301,7 +301,10 @@ continue.
   column for one. Pinned by `method-import-guards.test.ts`.
 - **Concurrency.** `writeGroup` locks the target `makeMethod` row
   (`FOR UPDATE`) before it reads the version's lines, so two imports of one
-  file write each line once.
+  file write each line once. The refusals read the status and change notice
+  of the locked row, so a Draft an editor activates or links to a notice
+  while the import waits is refused. A version the import created for a
+  refused part rolls back with it.
 - **Change notice locks are read before any transaction** (`loadChangeNoticeLocks`):
   `getChangeNoticeEngineeringLock` checks pending approvals through a separate
   service-role request, which must not run while a part's transaction is open.
