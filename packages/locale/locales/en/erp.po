@@ -64,6 +64,10 @@ msgstr "(not an Equity posting account)"
 msgid "{0, plural, one {# blocking record} other {# blocking records}}"
 msgstr "{0, plural, one {# blocking record} other {# blocking records}}"
 
+#. placeholder {0}: added.materials
+msgid "{0, plural, one {# BOM line} other {# BOM lines}}"
+msgstr "{0, plural, one {# BOM line} other {# BOM lines}}"
+
 #. placeholder {0}: memberIds.length
 msgid "{0, plural, one {# component in this group} other {# components in this group}}"
 msgstr "{0, plural, one {# component in this group} other {# components in this group}}"
@@ -80,6 +84,14 @@ msgstr "{0, plural, one {# day short} other {# days short}}"
 msgid "{0, plural, one {# operation has no time standards} other {# operations have no time standards}}"
 msgstr "{0, plural, one {# operation has no time standards} other {# operations have no time standards}}"
 
+#. placeholder {0}: added.operations
+msgid "{0, plural, one {# operation} other {# operations}}"
+msgstr "{0, plural, one {# operation} other {# operations}}"
+
+#. placeholder {0}: added.parameters
+msgid "{0, plural, one {# parameter} other {# parameters}}"
+msgstr "{0, plural, one {# parameter} other {# parameters}}"
+
 #. placeholder {0}: issues.length
 msgid "{0, plural, one {# record needs attention} other {# records need attention}}"
 msgstr "{0, plural, one {# record needs attention} other {# records need attention}}"
@@ -91,6 +103,14 @@ msgstr "{0, plural, one {# row links to data outside this company, so a safety c
 #. placeholder {0}: totalScopeRows( exportRun.violationRowsByTable )
 msgid "{0, plural, one {# row links to data outside this company, so it can't be backed up. Skipping it backs up everything else.} other {# rows link to data outside this company, so they can't be backed up. Skipping them backs up everything else.}}"
 msgstr "{0, plural, one {# row links to data outside this company, so it can't be backed up. Skipping it backs up everything else.} other {# rows link to data outside this company, so they can't be backed up. Skipping them backs up everything else.}}"
+
+#. placeholder {0}: added.steps
+msgid "{0, plural, one {# step} other {# steps}}"
+msgstr "{0, plural, one {# step} other {# steps}}"
+
+#. placeholder {0}: added.tools
+msgid "{0, plural, one {# tool} other {# tools}}"
+msgstr "{0, plural, one {# tool} other {# tools}}"
 
 #. placeholder {0}: item.demandAccumulationPeriod
 msgid "{0, plural, one {# week} other {# weeks}}"
@@ -521,6 +541,9 @@ msgstr "{documentTypeLabel} approval rule"
 msgid "{done} of {total} phases complete"
 msgstr "{done} of {total} phases complete"
 
+msgid "{errors, plural, one {# row needs fixing} other {# rows need fixing}}"
+msgstr "{errors, plural, one {# row needs fixing} other {# rows need fixing}}"
+
 msgid "{errors} failed"
 msgstr "{errors} failed"
 
@@ -538,6 +561,9 @@ msgstr "{hidden, plural, one {And # more record.} other {And # more records.}}"
 
 msgid "{hiddenCount} more: {hiddenNames}"
 msgstr "{hiddenCount} more: {hiddenNames}"
+
+msgid "{inserted, plural, one {# part created} other {# parts created}}"
+msgstr "{inserted, plural, one {# part created} other {# parts created}}"
 
 #. placeholder {0}: errors.length
 #. placeholder {1}: skipped.length
@@ -675,6 +701,9 @@ msgstr "{sectionLineCount} lines"
 msgid "{selectedCount} selected"
 msgstr "{selectedCount} selected"
 
+msgid "{skipped, plural, one {# row skipped} other {# rows skipped}}"
+msgstr "{skipped, plural, one {# row skipped} other {# rows skipped}}"
+
 msgid "{stale} changed since the page loaded"
 msgstr "{stale} changed since the page loaded"
 
@@ -725,6 +754,9 @@ msgstr "{unread} unread"
 
 msgid "{unschedulableCount} can't be scheduled"
 msgstr "{unschedulableCount} can't be scheduled"
+
+msgid "{updated, plural, one {# part updated} other {# parts updated}}"
+msgstr "{updated, plural, one {# part updated} other {# parts updated}}"
 
 msgid "{uploadedFileName} uploaded — fields filled from the document."
 msgstr "{uploadedFileName} uploaded — fields filled from the document."
@@ -2290,6 +2322,9 @@ msgstr "Added for this customer"
 
 msgid "Added to the unit price for the chosen values, before discounts and markups. Use a negative amount for a credit."
 msgstr "Added to the unit price for the chosen values, before discounts and markups. Use a negative amount for a credit."
+
+msgid "Added:"
+msgstr "Added:"
 
 msgid "Adding demo records"
 msgstr "Adding demo records"
@@ -15052,6 +15087,9 @@ msgstr "No part ID"
 
 msgid "No parts"
 msgstr "No parts"
+
+msgid "No parts changed."
+msgstr "No parts changed."
 
 msgid "No passkeys registered yet."
 msgstr "No passkeys registered yet."

@@ -118,6 +118,8 @@ Import handles validation failures per row. Invalid rows are reported while vali
 - **errors** — rows you should fix and re-import (missing required data), each with its row number, a reason, and the original cell values.
 - **skipped** — rows intentionally not written (in-file duplicates, already-existing), same shape.
 
+A BOM, Operations, or Parts with Methods import counts **parts** as inserted and updated, and also reports how many BOM lines, operations, steps, tools, and parameters it added. The results read, for example, "4 parts updated. Added: 6 BOM lines. 0 rows need fixing, 2 rows skipped."
+
 Because the results carry each failed row's original cells, the wizard's results view shows you exactly which rows to fix without re-parsing your file. A hard failure (the file can't be downloaded, or an unexpected database error) is the only case that fails the whole import and returns an error message instead of a per-row report.
 
 <Callout type="warn" title="Import bypasses row-level security by design">

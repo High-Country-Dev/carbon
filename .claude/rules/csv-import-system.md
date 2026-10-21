@@ -277,6 +277,12 @@ continue.
   because a re-run could not find its operation again and would add it twice. A step with the same name, a tool
   with the same item and a parameter with the same key are skipped. Every skip
   goes to `skipped`, so re-running a file writes nothing.
+- **Results count parts, then rows.** `inserted` and `updated` count parts.
+  The summary also carries `added` (`MethodRowsAdded`, `modules/shared/types.ts`):
+  the BOM lines, operations, steps, tools and parameters written. `importCsvFile`
+  returns it (null for every other table), and `ImportResultsModal`
+  (`MethodImportCounts`) and the `ImportCSVModal` toast name the parts, then
+  the rows.
 - **Rows match the editors' rows.** BOM lines copy `methodType` /
   `sourcingType` / `materialMakeMethodId` / `storageUnitIds` from the component
   item, as `upsertMethodMaterial` does, and take the component's unit when the

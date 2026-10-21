@@ -5,6 +5,7 @@
 import { createServiceContext } from "@carbon/api/service-fn.server";
 import { sql } from "kysely";
 import { importMethods } from "../../../app/modules/shared/shared.service";
+import type { MethodRowsAdded } from "../../../app/modules/shared/types";
 import { connectLocalTestDatabase } from "./local-database";
 import { localServiceRoleClient } from "./local-supabase";
 
@@ -218,7 +219,8 @@ export async function methodImportFixture() {
         inserted: 0,
         updated: 0,
         errors: [] as Array<{ row: number; reason: string }>,
-        skipped: [] as Array<{ row: number; reason: string }>
+        skipped: [] as Array<{ row: number; reason: string }>,
+        added: undefined as MethodRowsAdded | undefined
       };
       await importMethods(on, {
         table,

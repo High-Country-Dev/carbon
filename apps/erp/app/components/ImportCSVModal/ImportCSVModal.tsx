@@ -12,6 +12,7 @@ import {
   type fieldMappings,
   importSchemas
 } from "~/modules/shared/imports.models";
+import type { MethodRowsAdded } from "~/modules/shared/types";
 import type { action } from "~/routes/x+/shared+/import.$tableId";
 import { path } from "~/utils/path";
 import { AnimatedSizeContainer } from "../AnimatedSizeContainer";
@@ -40,10 +41,20 @@ export const ImportCSVModal = ({ table, onClose }: ImportCSVModalProps) => {
   const fetcher = useAction<typeof action>({
     onSuccess: (result) => {
       if (!("data" in result) || !result.data) return;
-      const { inserted, updated, errors, skipped } = result.data;
+      const { inserted, updated, errors, skipped, added } = result.data;
       // The results modal renders next (see the early return below); just
       // surface a quick toast summary here.
-      if (errors.length > 0) {
+      if (added) {
+        const message = methodImportMessage({
+          inserted,
+          updated,
+          errors: errors.length,
+          skipped: skipped.length,
+          added
+        });
+        if (errors.length > 0 || skipped.length > 0) toast.info(message);
+        else toast.success(message);
+      } else if (errors.length > 0) {
         toast.info(
           `Imported ${inserted}, updated ${updated} — ${errors.length} row(s) need fixing.`
         );
@@ -116,6 +127,7 @@ export const ImportCSVModal = ({ table, onClose }: ImportCSVModalProps) => {
         updated={imported.updated}
         errors={imported.errors}
         skipped={imported.skipped}
+        added={imported.added}
         columns={fileColumns}
         onClose={onClose}
       />
@@ -196,3 +208,42 @@ export const ImportCSVModal = ({ table, onClose }: ImportCSVModalProps) => {
     </Modal>
   );
 };
+
+// Method imports: inserted and updated count parts, the rest count rows.
+function methodImportMessage(counts: {
+  inserted: number;
+  updated: number;
+  errors: number;
+  skipped: number;
+  added: MethodRowsAdded;
+}) {
+  const { added } = counts;
+  const parts = [
+    counts.inserted > 0 ? `created ${counts.inserted} part(s)` : null,
+    counts.updated > 0 ? `updated ${counts.updated} part(s)` : null
+  ]
+    .filter(Boolean)
+    .join(", ");
+  const rows = (
+    [
+      [added.materials, "BOM line"],
+      [added.operations, "operation"],
+      [added.steps, "step"],
+      [added.tools, "tool"],
+      [added.parameters, "parameter"]
+    ] as const
+  )
+    .filter(([count]) => count > 0)
+    .map(([count, label]) => `${count} ${label}(s)`)
+    .join(", ");
+  const outcome =
+    counts.errors > 0
+      ? ` — ${counts.errors} row(s) need fixing`
+      : counts.skipped > 0
+        ? `, skipped ${counts.skipped} row(s)`
+        : "";
+  const message = rows
+    ? `${parts}: added ${rows}${outcome}.`
+    : `${parts || "no parts changed"}${outcome}.`;
+  return message.charAt(0).toUpperCase() + message.slice(1);
+}

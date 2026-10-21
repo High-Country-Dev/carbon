@@ -11,6 +11,7 @@ import { sql } from "kysely";
 import { afterEach, describe, expect } from "vitest";
 import { LOCKED_REVISION_MESSAGE } from "../../app/modules/items/items.service";
 import { importMethods } from "../../app/modules/shared/shared.service";
+import type { MethodRowsAdded } from "../../app/modules/shared/types";
 import {
   connectLocalTestDatabase,
   databaseTest
@@ -150,7 +151,8 @@ async function fixture() {
         inserted: 0,
         updated: 0,
         errors: [] as Array<{ row: number; reason: string }>,
-        skipped: [] as Array<{ row: number; reason: string }>
+        skipped: [] as Array<{ row: number; reason: string }>,
+        added: undefined as MethodRowsAdded | undefined
       };
       await importMethods(db, {
         table,
@@ -298,6 +300,13 @@ describe("method import onto an existing method", () => {
 
       expect(summary.errors).toEqual([]);
       expect(summary.updated).toBe(1);
+      expect(summary.added).toEqual({
+        materials: 2,
+        operations: 0,
+        steps: 0,
+        tools: 0,
+        parameters: 0
+      });
       expect(summary.skipped).toEqual([
         {
           row: 0,
@@ -326,6 +335,13 @@ describe("method import onto an existing method", () => {
 
       expect(summary.errors).toEqual([]);
       expect(summary.updated).toBe(1);
+      expect(summary.added).toEqual({
+        materials: 0,
+        operations: 1,
+        steps: 2,
+        tools: 0,
+        parameters: 0
+      });
       expect(summary.skipped).toEqual([
         {
           row: 2,
@@ -362,10 +378,24 @@ describe("method import onto an existing method", () => {
     const first = await f.run("partWithMethod", rows);
     expect(first.errors).toEqual([]);
     expect(first.updated).toBe(1);
+    expect(first.added).toEqual({
+      materials: 1,
+      operations: 1,
+      steps: 1,
+      tools: 0,
+      parameters: 1
+    });
 
     const second = await f.run("partWithMethod", rows);
     expect(second.errors).toEqual([]);
     expect(second.updated).toBe(0);
+    expect(second.added).toEqual({
+      materials: 0,
+      operations: 0,
+      steps: 0,
+      tools: 0,
+      parameters: 0
+    });
     expect(second.skipped.map((s) => s.row)).toEqual([0, 1, 2, 3]);
     expect(await f.materials()).toHaveLength(2);
     expect(await f.operations()).toHaveLength(2);

@@ -64,6 +64,10 @@ msgstr "(Özkaynak muhasebeleştirme hesabı değildir)"
 msgid "{0, plural, one {# blocking record} other {# blocking records}}"
 msgstr "{0, plural, one {# engelleme kaydı} other {# engelleme kaydı}}"
 
+#. placeholder {0}: added.materials
+msgid "{0, plural, one {# BOM line} other {# BOM lines}}"
+msgstr ""
+
 #. placeholder {0}: memberIds.length
 msgid "{0, plural, one {# component in this group} other {# components in this group}}"
 msgstr "{0, plural, one {# bileşen bu grupta} other {# bileşen bu grupta}}"
@@ -80,6 +84,14 @@ msgstr "{0, plural, one {# gün gecikme} other {# gün gecikme}}"
 msgid "{0, plural, one {# operation has no time standards} other {# operations have no time standards}}"
 msgstr "{0, plural, one {# operasyon için zaman standardı yok} other {# operasyon için zaman standardı yok}}"
 
+#. placeholder {0}: added.operations
+msgid "{0, plural, one {# operation} other {# operations}}"
+msgstr ""
+
+#. placeholder {0}: added.parameters
+msgid "{0, plural, one {# parameter} other {# parameters}}"
+msgstr ""
+
 #. placeholder {0}: issues.length
 msgid "{0, plural, one {# record needs attention} other {# records need attention}}"
 msgstr "{0, plural, one {# kayıt dikkat gerektiriyor} other {# kayıt dikkat gerektiriyor}}"
@@ -91,6 +103,14 @@ msgstr "{0, plural, one {# satır bu şirketin dışındaki verilere bağlantı 
 #. placeholder {0}: totalScopeRows( exportRun.violationRowsByTable )
 msgid "{0, plural, one {# row links to data outside this company, so it can't be backed up. Skipping it backs up everything else.} other {# rows link to data outside this company, so they can't be backed up. Skipping them backs up everything else.}}"
 msgstr "{0, plural, one {# satır bu şirketin dışındaki verilere bağlantı kuruyor, bu nedenle yedeklenemez. Bunu atlayarak diğer her şeyi yedekleyebilirsiniz.} other {# satır bu şirketin dışındaki verilere bağlantı kuruyor, bu nedenle yedeklenemez. Bunları atlayarak diğer her şeyi yedekleyebilirsiniz.}}"
+
+#. placeholder {0}: added.steps
+msgid "{0, plural, one {# step} other {# steps}}"
+msgstr ""
+
+#. placeholder {0}: added.tools
+msgid "{0, plural, one {# tool} other {# tools}}"
+msgstr ""
 
 #. placeholder {0}: item.demandAccumulationPeriod
 msgid "{0, plural, one {# week} other {# weeks}}"
@@ -521,6 +541,9 @@ msgstr "{documentTypeLabel} onay kuralı"
 msgid "{done} of {total} phases complete"
 msgstr "{done} / {total} aşama tamamlandı"
 
+msgid "{errors, plural, one {# row needs fixing} other {# rows need fixing}}"
+msgstr ""
+
 msgid "{errors} failed"
 msgstr ""
 
@@ -538,6 +561,9 @@ msgstr "{hidden, plural, one {Ve # daha fazla kayıt.} other {Ve # daha fazla ka
 
 msgid "{hiddenCount} more: {hiddenNames}"
 msgstr "{hiddenCount} daha: {hiddenNames}"
+
+msgid "{inserted, plural, one {# part created} other {# parts created}}"
+msgstr ""
 
 #. placeholder {0}: errors.length
 #. placeholder {1}: skipped.length
@@ -675,6 +701,9 @@ msgstr "{sectionLineCount} satır"
 msgid "{selectedCount} selected"
 msgstr "{selectedCount} seçildi"
 
+msgid "{skipped, plural, one {# row skipped} other {# rows skipped}}"
+msgstr ""
+
 msgid "{stale} changed since the page loaded"
 msgstr ""
 
@@ -725,6 +754,9 @@ msgstr "{unread} okunmamış"
 
 msgid "{unschedulableCount} can't be scheduled"
 msgstr "{unschedulableCount} planlanmıyor"
+
+msgid "{updated, plural, one {# part updated} other {# parts updated}}"
+msgstr ""
 
 msgid "{uploadedFileName} uploaded — fields filled from the document."
 msgstr "{uploadedFileName} yüklendi — alanlar belgeden dolduruldu."
@@ -2290,6 +2322,9 @@ msgstr "Bu müşteri için eklendi"
 
 msgid "Added to the unit price for the chosen values, before discounts and markups. Use a negative amount for a credit."
 msgstr "Seçilen değerler için birim fiyata eklenir, iskontolar ve marjlar öncesi. İndirim için negatif tutar kullanın."
+
+msgid "Added:"
+msgstr ""
 
 msgid "Adding demo records"
 msgstr "Demo kayıtları ekleniyor"
@@ -15052,6 +15087,9 @@ msgstr "Parça kimliği yok"
 
 msgid "No parts"
 msgstr "Parça yok"
+
+msgid "No parts changed."
+msgstr ""
 
 msgid "No passkeys registered yet."
 msgstr "Henüz hiçbir geçiş anahtarı kaydedilmedi."

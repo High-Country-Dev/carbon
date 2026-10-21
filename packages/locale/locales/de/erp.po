@@ -64,6 +64,10 @@ msgstr "(kein Eigenkapital-Buchungskonto)"
 msgid "{0, plural, one {# blocking record} other {# blocking records}}"
 msgstr "{0, plural, one {# blockierter Datensatz} other {# blockierte Datensätze}}"
 
+#. placeholder {0}: added.materials
+msgid "{0, plural, one {# BOM line} other {# BOM lines}}"
+msgstr ""
+
 #. placeholder {0}: memberIds.length
 msgid "{0, plural, one {# component in this group} other {# components in this group}}"
 msgstr "{0, plural, one {# Komponente in dieser Gruppe} other {# Komponenten in dieser Gruppe}}"
@@ -80,6 +84,14 @@ msgstr "{0, plural, one {# Tag zu kurz} other {# Tage zu kurz}}"
 msgid "{0, plural, one {# operation has no time standards} other {# operations have no time standards}}"
 msgstr "{0, plural, one {# Arbeitsgang hat keine Zeitstandards} other {# Arbeitsgänge haben keine Zeitstandards}}"
 
+#. placeholder {0}: added.operations
+msgid "{0, plural, one {# operation} other {# operations}}"
+msgstr ""
+
+#. placeholder {0}: added.parameters
+msgid "{0, plural, one {# parameter} other {# parameters}}"
+msgstr ""
+
 #. placeholder {0}: issues.length
 msgid "{0, plural, one {# record needs attention} other {# records need attention}}"
 msgstr "{0, plural, one {# Datensatz benötigt Aufmerksamkeit} other {# Datensätze benötigen Aufmerksamkeit}}"
@@ -91,6 +103,14 @@ msgstr "{0, plural, one {# Zeile verweist auf Daten außerhalb dieses Unternehme
 #. placeholder {0}: totalScopeRows( exportRun.violationRowsByTable )
 msgid "{0, plural, one {# row links to data outside this company, so it can't be backed up. Skipping it backs up everything else.} other {# rows link to data outside this company, so they can't be backed up. Skipping them backs up everything else.}}"
 msgstr "{0, plural, one {# Zeile verweist auf Daten außerhalb dieses Unternehmens, daher kann sie nicht gesichert werden. Wenn Sie sie überspringen, wird alles andere gesichert.} other {# Zeilen verweisen auf Daten außerhalb dieses Unternehmens, daher können sie nicht gesichert werden. Wenn Sie sie überspringen, wird alles andere gesichert.}}"
+
+#. placeholder {0}: added.steps
+msgid "{0, plural, one {# step} other {# steps}}"
+msgstr ""
+
+#. placeholder {0}: added.tools
+msgid "{0, plural, one {# tool} other {# tools}}"
+msgstr ""
 
 #. placeholder {0}: item.demandAccumulationPeriod
 msgid "{0, plural, one {# week} other {# weeks}}"
@@ -521,6 +541,9 @@ msgstr "{documentTypeLabel} Genehmigungsregel"
 msgid "{done} of {total} phases complete"
 msgstr "{done} von {total} Phasen abgeschlossen"
 
+msgid "{errors, plural, one {# row needs fixing} other {# rows need fixing}}"
+msgstr ""
+
 msgid "{errors} failed"
 msgstr ""
 
@@ -538,6 +561,9 @@ msgstr "{hidden, plural, one {Und # weiterer Datensatz.} other {Und # weitere Da
 
 msgid "{hiddenCount} more: {hiddenNames}"
 msgstr "{hiddenCount} weitere: {hiddenNames}"
+
+msgid "{inserted, plural, one {# part created} other {# parts created}}"
+msgstr ""
 
 #. placeholder {0}: errors.length
 #. placeholder {1}: skipped.length
@@ -675,6 +701,9 @@ msgstr "{sectionLineCount} Positionen"
 msgid "{selectedCount} selected"
 msgstr "{selectedCount} ausgewählt"
 
+msgid "{skipped, plural, one {# row skipped} other {# rows skipped}}"
+msgstr ""
+
 msgid "{stale} changed since the page loaded"
 msgstr ""
 
@@ -725,6 +754,9 @@ msgstr "{unread} ungelesen"
 
 msgid "{unschedulableCount} can't be scheduled"
 msgstr "{unschedulableCount} können nicht eingeplant werden"
+
+msgid "{updated, plural, one {# part updated} other {# parts updated}}"
+msgstr ""
 
 msgid "{uploadedFileName} uploaded — fields filled from the document."
 msgstr "{uploadedFileName} hochgeladen — Felder wurden aus dem Dokument ausgefüllt."
@@ -2290,6 +2322,9 @@ msgstr "Für diesen Kunden hinzugefügt"
 
 msgid "Added to the unit price for the chosen values, before discounts and markups. Use a negative amount for a credit."
 msgstr "Wird zum Einzelpreis für die ausgewählten Werte hinzugefügt, vor Rabatten und Zuschlägen. Verwenden Sie einen negativen Betrag für eine Gutschrift."
+
+msgid "Added:"
+msgstr ""
 
 msgid "Adding demo records"
 msgstr "Demo-Datensätze werden hinzugefügt"
@@ -15052,6 +15087,9 @@ msgstr "Keine Teile-ID"
 
 msgid "No parts"
 msgstr "Keine Teile"
+
+msgid "No parts changed."
+msgstr ""
 
 msgid "No passkeys registered yet."
 msgstr "Noch keine Passkeys registriert."

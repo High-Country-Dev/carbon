@@ -19,9 +19,10 @@ import {
   TabsList,
   TabsTrigger
 } from "@carbon/react";
-import { Trans, useLingui } from "@lingui/react/macro";
-import { useState } from "react";
+import { Plural, Trans, useLingui } from "@lingui/react/macro";
+import { Fragment, type ReactNode, useState } from "react";
 import { LuCircleCheck, LuCircleX, LuDownload, LuInfo } from "react-icons/lu";
+import type { MethodRowsAdded } from "~/modules/shared/types";
 
 // A row the importer did not insert/update. `values` holds the original CSV cells
 // (keyed by the user's headers) exactly as the server parsed them — so the modal
@@ -40,6 +41,8 @@ type ImportResultsModalProps = {
   errors: RowIssue[];
   // Rows intentionally not written (duplicates, already-existing) — informational.
   skipped: RowIssue[];
+  // Method imports only: inserted and updated count parts there.
+  added?: MethodRowsAdded | null;
   columns: string[];
   onClose: () => void;
 };
@@ -52,6 +55,7 @@ export const ImportResultsModal = ({
   updated,
   errors,
   skipped,
+  added,
   columns,
   onClose
 }: ImportResultsModalProps) => {
@@ -95,7 +99,15 @@ export const ImportResultsModal = ({
             <Trans>Import results</Trans>
           </ModalTitle>
           <ModalDescription>
-            {allClean ? (
+            {added ? (
+              <MethodImportCounts
+                inserted={inserted}
+                updated={updated}
+                errors={errors.length}
+                skipped={skipped.length}
+                added={added}
+              />
+            ) : allClean ? (
               <Trans>
                 All rows imported — {inserted} inserted, {updated} updated.
               </Trans>
@@ -225,3 +237,77 @@ export const ImportResultsModal = ({
     </Modal>
   );
 };
+
+// Method imports write many rows per part: name the parts, then the rows.
+function MethodImportCounts({
+  inserted,
+  updated,
+  errors,
+  skipped,
+  added
+}: {
+  inserted: number;
+  updated: number;
+  errors: number;
+  skipped: number;
+  added: MethodRowsAdded;
+}) {
+  const parts = [
+    inserted > 0 && (
+      <Plural value={inserted} one="# part created" other="# parts created" />
+    ),
+    updated > 0 && (
+      <Plural value={updated} one="# part updated" other="# parts updated" />
+    )
+  ].filter(Boolean) as ReactNode[];
+  const rows = [
+    added.materials > 0 && (
+      <Plural value={added.materials} one="# BOM line" other="# BOM lines" />
+    ),
+    added.operations > 0 && (
+      <Plural value={added.operations} one="# operation" other="# operations" />
+    ),
+    added.steps > 0 && (
+      <Plural value={added.steps} one="# step" other="# steps" />
+    ),
+    added.tools > 0 && (
+      <Plural value={added.tools} one="# tool" other="# tools" />
+    ),
+    added.parameters > 0 && (
+      <Plural value={added.parameters} one="# parameter" other="# parameters" />
+    )
+  ].filter(Boolean) as ReactNode[];
+  const list = (nodes: ReactNode[]) =>
+    nodes.map((node, i) => (
+      <Fragment key={i}>
+        {i > 0 && ", "}
+        {node}
+      </Fragment>
+    ));
+
+  return (
+    <>
+      {parts.length > 0 ? (
+        <>{list(parts)}.</>
+      ) : (
+        <Trans>No parts changed.</Trans>
+      )}{" "}
+      {rows.length > 0 && (
+        <>
+          <Trans>Added:</Trans> {list(rows)}.{" "}
+        </>
+      )}
+      {(errors > 0 || skipped > 0) && (
+        <>
+          <Plural
+            value={errors}
+            one="# row needs fixing"
+            other="# rows need fixing"
+          />
+          ,{" "}
+          <Plural value={skipped} one="# row skipped" other="# rows skipped" />.
+        </>
+      )}
+    </>
+  );
+}

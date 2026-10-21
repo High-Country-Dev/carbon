@@ -49,6 +49,8 @@ operations that are already on the target version.
   - The import sorts new steps after the highest existing step.
 - Counts: a part counts as inserted (new part) or updated (existing part) when
   the import writes at least one row for it. Each skipped line is listed.
+  `added` gives the rows written by kind, and the results dialog and the toast
+  show it.
 
 ## Out of scope
 
@@ -76,6 +78,8 @@ import match the BOM and Bill of Process editors.
 | CodeRabbit: a non-numeric Op No never matched an existing operation, so a re-run added it again, and its fallback order could collide with a numeric Op No. | Op No must be a number. Op Nos compare by value. |
 | CodeRabbit: the change notice approval check ran a separate request while a part's transaction was open. | The import reads every change notice lock before any transaction. |
 | CodeRabbit: the status check read the version before the row lock, so a Draft activated in that gap was still written. | The refusals read the locked row. |
+| The BOM wizard preset EA as the Unit of Measure, so a blank unit never reached the import's fallback to the material's unit. | The wizard presets no BOM unit. |
+| The results said "4 updated" for 4 parts and 6 BOM lines, and counted skipped rows in the same sentence. | Method imports also return the rows added by kind (`added`). The results dialog and the toast name the parts, then the rows. |
 
 The parity test (`method-import-parity.test.ts`) and the guards test
 (`method-import-guards.test.ts`) pin the fixes.

@@ -197,7 +197,7 @@ import {
   toTiptapDoc
 } from "./shared.models";
 import { assertMethodHasPullFrom, isStrictBackflush } from "./strict-backflush";
-import type { ItemModelUpload } from "./types";
+import type { ItemModelUpload, MethodRowsAdded } from "./types";
 
 const logger = getLogger("erp", "shared");
 
@@ -2323,6 +2323,9 @@ type Summary = {
   updated: number;
   errors: Array<{ row: number; reason: string }>;
   skipped: Array<{ row: number; reason: string }>;
+  // Method imports only: the rows written, by kind. Inserted and updated
+  // count parts there, so the results name the rows separately.
+  added?: MethodRowsAdded;
 };
 
 // Company-scoped configuration lookups: small, flat, name-keyed tables a
@@ -3187,6 +3190,8 @@ export async function importMethods(
   }
 ): Promise<void> {
   const { table, mappedRecords, companyId, userId, summary } = args;
+  const added = noMethodRowsAdded();
+  summary.added = added;
 
   // 1. classify + group by parent part ------------------------------------
   const groups = new Map<string, Group>();
@@ -3437,7 +3442,8 @@ export async function importMethods(
       // Lines already on the method are skipped, never written twice. Benign:
       // not something the user needs to fix, so a skip, not an error.
       for (const s of result.skipped) summary.skipped.push(s);
-      if (result.wroteAny) {
+      addMethodRows(added, result.added);
+      if (Object.values(result.added).some((n) => n > 0)) {
         // A new part counts as imported; an existing part as updated.
         if (g.partRow) summary.inserted++;
         else summary.updated++;
@@ -4017,13 +4023,13 @@ async function writeGroup(
     releaseControl: ReleaseControl;
     changeNoticeLocks: Map<string, string | null>;
   }
-): Promise<{ wroteAny: boolean; skipped: RowIssue[] }> {
+): Promise<{ added: MethodRowsAdded; skipped: RowIssue[] }> {
   const { companyId, userId } = ctx;
   const now = () => datetime.timestamp();
   const partLabel = `${g.readableId} rev ${g.revision}`;
 
   return await db.transaction().execute(async (trx) => {
-    let wroteAny = false;
+    const added = noMethodRowsAdded();
     const skipped: RowIssue[] = [];
     const issues: RowIssue[] = [];
 
@@ -4268,7 +4274,7 @@ async function writeGroup(
             } as never
           ])
           .execute();
-        wroteAny = true;
+        added.materials += 1;
       }
 
       // --- operations (BOP), keyed by Op No ---
@@ -4333,7 +4339,7 @@ async function writeGroup(
           .returning(["id"])
           .execute();
         opIdByNo.set(opKey(opNo), inserted[0]!.id);
-        wroteAny = true;
+        added.operations += 1;
       }
 
       // --- steps / tools / parameters per operation ---
@@ -4386,7 +4392,7 @@ async function writeGroup(
             } as never
           ])
           .execute();
-        wroteAny = true;
+        added.steps += 1;
       }
 
       for (const e of bucket.tool) {
@@ -4420,7 +4426,7 @@ async function writeGroup(
             } as never
           ])
           .execute();
-        wroteAny = true;
+        added.tools += 1;
       }
 
       for (const e of bucket.param) {
@@ -4448,12 +4454,12 @@ async function writeGroup(
             } as never
           ])
           .execute();
-        wroteAny = true;
+        added.parameters += 1;
       }
     }
 
     if (issues.length > 0) throw new MethodImportRefused(issues);
-    return { wroteAny, skipped };
+    return { added, skipped };
   });
 }
 
@@ -4569,6 +4575,16 @@ async function loadChangeNoticeLocks(
       )
     )
   );
+}
+
+function noMethodRowsAdded(): MethodRowsAdded {
+  return { materials: 0, operations: 0, steps: 0, tools: 0, parameters: 0 };
+}
+
+function addMethodRows(total: MethodRowsAdded, part: MethodRowsAdded) {
+  for (const kind of Object.keys(total) as Array<keyof MethodRowsAdded>) {
+    total[kind] += part[kind];
+  }
 }
 
 // A Draft whose change notice was not read before the import (it was linked
@@ -6446,7 +6462,8 @@ export async function importCsvTable(
     // Rows the user should fix and re-import (validation / missing required data).
     errors: [] as Array<{ row: number; reason: string }>,
     // Rows intentionally not written (duplicates, already-existing) — informational.
-    skipped: [] as Array<{ row: number; reason: string }>
+    skipped: [] as Array<{ row: number; reason: string }>,
+    added: undefined as MethodRowsAdded | undefined
   };
 
   const acceptedRows = await rejectForeignReferences(
@@ -8479,7 +8496,8 @@ export async function importCsvTable(
     inserted: summary.inserted,
     updated: summary.updated,
     errors: withValues(summary.errors),
-    skipped: withValues(summary.skipped)
+    skipped: withValues(summary.skipped),
+    added: summary.added ?? null
   };
 }
 
