@@ -308,7 +308,10 @@ continue.
   number. An Inspection operation is refused, because
   `methodOperationValidator` requires an Inspection Plan and a CSV has no
   column for one. Pinned by `method-import-guards.test.ts`.
-- **Concurrency.** `writeGroup` locks the target `makeMethod` row
+- **Concurrency.** `writeGroup` locks the part's `item` row (`FOR NO KEY
+  UPDATE`, so rows that reference the item can still be written) before it
+  reads the versions, so two imports that create the same new version create
+  it once. It then locks the target `makeMethod` row
   (`FOR UPDATE`) before it reads the version's lines, so two imports of one
   file write each line once. The refusals read the status and change notice
   of the locked row, so a Draft an editor activates or links to a notice

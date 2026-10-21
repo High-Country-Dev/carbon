@@ -4090,6 +4090,18 @@ async function writeGroup(
       revisionStatus = parent.revisionStatus;
     }
 
+    // Imports of one part run one at a time from here, so a second import
+    // reads the version the first created instead of creating it again.
+    // NO KEY UPDATE leaves rows that reference the item (jobs, quote lines,
+    // other BOMs) free to be written meanwhile.
+    await trx
+      .selectFrom("item")
+      .select("id")
+      .where("id", "=", parentItemId)
+      .where("companyId", "=", companyId)
+      .forNoKeyUpdate()
+      .execute();
+
     const methods: MakeMethodVersion[] =
       g.versions.size === 0
         ? []

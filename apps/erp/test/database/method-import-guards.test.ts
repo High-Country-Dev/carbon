@@ -320,6 +320,38 @@ describe("method import guards", () => {
   );
 
   databaseTest(
+    "two imports that create the same version at the same time create it once",
+    async () => {
+      f = await methodImportFixture();
+      const second = await connectLocalTestDatabase();
+      try {
+        const rows = [
+          bom("ASSY", "COMP-1", "1", { makeMethodVersion: "2" }),
+          bom("ASSY", "COMP-2", "2", { makeMethodVersion: "2" })
+        ];
+        const [a, b] = await Promise.all([
+          f.run("bom", rows),
+          f.run("bom", rows, second)
+        ]);
+        expect([...a.errors, ...b.errors]).toEqual([]);
+        expect(a.updated + b.updated).toBe(1);
+        expect(a.skipped.length + b.skipped.length).toBe(2);
+        const versions = await f.db
+          .selectFrom("makeMethod")
+          .select("version")
+          .where("itemId", "=", f.itemId("ASSY"))
+          .where("companyId", "=", f.companyId)
+          .orderBy("version")
+          .execute();
+        expect(versions.map((v) => Number(v.version))).toEqual([1, 2]);
+        expect((await rowCounts()).materials).toBe(2);
+      } finally {
+        await second.destroy();
+      }
+    }
+  );
+
+  databaseTest(
     "two imports of one file at the same time write each line once",
     async () => {
       f = await methodImportFixture();
