@@ -16928,6 +16928,9 @@ msgstr "Épingler {0}"
 msgid "Pin or unpin"
 msgstr "Épingler ou dépingler"
 
+msgid "Pinch or scroll to zoom · drag to pan · double-tap to reset"
+msgstr "Pincez ou faites défiler pour zoomer · faites glisser pour déplacer · touchez deux fois pour réinitialiser"
+
 msgid "Pinned"
 msgstr "Épinglé"
 
@@ -18527,6 +18530,9 @@ msgstr "Réduit"
 
 msgid "Reference"
 msgstr "Référence"
+
+msgid "Reference image"
+msgstr "Image de référence"
 
 msgid "Refresh"
 msgstr "Actualiser"
@@ -25724,6 +25730,9 @@ msgstr "Afficher les clients"
 
 msgid "View Employees"
 msgstr "Afficher les employés"
+
+msgid "View full size"
+msgstr "Afficher en taille réelle"
 
 msgid "View History"
 msgstr "Afficher l'historique"

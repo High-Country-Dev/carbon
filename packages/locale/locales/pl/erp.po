@@ -16928,6 +16928,9 @@ msgstr "Przypnij {0}"
 msgid "Pin or unpin"
 msgstr "Przypnij lub odepnij"
 
+msgid "Pinch or scroll to zoom · drag to pan · double-tap to reset"
+msgstr "Zsuń palce lub przewiń, aby powiększyć · przeciągnij, aby przesunąć · stuknij dwukrotnie, aby zresetować"
+
 msgid "Pinned"
 msgstr "Przypięte"
 
@@ -18527,6 +18530,9 @@ msgstr "Ulgowa"
 
 msgid "Reference"
 msgstr "Odniesienie"
+
+msgid "Reference image"
+msgstr "Obraz referencyjny"
 
 msgid "Refresh"
 msgstr "Odśwież"
@@ -25724,6 +25730,9 @@ msgstr "Wyświetl Klientów"
 
 msgid "View Employees"
 msgstr "Wyświetl pracowników"
+
+msgid "View full size"
+msgstr "Pokaż w pełnym rozmiarze"
 
 msgid "View History"
 msgstr "Wyświetl historię"
