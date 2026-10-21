@@ -282,7 +282,10 @@ continue.
   the BOM lines, operations, steps, tools and parameters written. `importCsvFile`
   returns it (null for every other table), and `ImportResultsModal`
   (`MethodImportCounts`) and the `ImportCSVModal` toast name the parts, then
-  the rows.
+  the rows. A PART row counts as inserted only when it created the part
+  (`xmax = 0` on the item upsert). For a part that exists, the upsert keeps
+  the part's fields, so the PART row is listed as skipped and the part counts
+  as updated only when its method rows were written.
 - **Rows match the editors' rows.** BOM lines copy `methodType` /
   `sourcingType` / `materialMakeMethodId` / `storageUnitIds` from the component
   item, as `upsertMethodMaterial` does, and take the component's unit when the

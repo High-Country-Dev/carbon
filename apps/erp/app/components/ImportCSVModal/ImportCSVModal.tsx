@@ -238,7 +238,9 @@ function methodImportMessage(counts: {
     .join(", ");
   const outcome =
     counts.errors > 0
-      ? ` — ${counts.errors} row(s) need fixing`
+      ? ` — ${counts.errors} row(s) need fixing${
+          counts.skipped > 0 ? `, ${counts.skipped} skipped` : ""
+        }`
       : counts.skipped > 0
         ? `, skipped ${counts.skipped} row(s)`
         : "";

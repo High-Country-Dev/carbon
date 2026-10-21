@@ -79,6 +79,8 @@ import match the BOM and Bill of Process editors.
 | CodeRabbit: the change notice approval check ran a separate request while a part's transaction was open. | The import reads every change notice lock before any transaction. |
 | CodeRabbit: the status check read the version before the row lock, so a Draft activated in that gap was still written. | The refusals read the locked row. |
 | CodeRabbit: two imports that created the same new version at once both inserted it, and the second failed on the unique constraint. | `writeGroup` locks the part's item row (`FOR NO KEY UPDATE`) before it reads the versions. |
+| CodeRabbit: a PART row for a part that exists counted it as inserted. | A PART row counts as inserted only when it created the part. For an existing part it is listed as skipped. |
+| CodeRabbit: the toast dropped the skipped count when rows also needed fixing. | The toast gives both counts. |
 | The BOM wizard preset EA as the Unit of Measure, so a blank unit never reached the import's fallback to the material's unit. | The wizard presets no BOM unit. |
 | The results said "4 updated" for 4 parts and 6 BOM lines, and counted skipped rows in the same sentence. | Method imports also return the rows added by kind (`added`). The results dialog and the toast name the parts, then the rows. |
 

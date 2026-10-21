@@ -320,6 +320,42 @@ describe("method import guards", () => {
   );
 
   databaseTest(
+    "counts a part as created only when its PART row created it",
+    async () => {
+      f = await methodImportFixture();
+      const part = {
+        rowType: "PART",
+        readableId: "NEW-1",
+        name: "New assembly"
+      };
+      const line = (componentId: string) => ({
+        rowType: "BOM",
+        parentId: "NEW-1",
+        componentId,
+        quantity: "2"
+      });
+
+      const created = await f.run("partWithMethod", [part, line("COMP-1")]);
+      expect(created.errors).toEqual([]);
+      expect([created.inserted, created.updated]).toEqual([1, 0]);
+      expect(created.skipped).toEqual([]);
+
+      const again = await f.run("partWithMethod", [part, line("COMP-1")]);
+      expect(again.errors).toEqual([]);
+      expect([again.inserted, again.updated]).toEqual([0, 0]);
+      expect(again.skipped.map((s) => s.reason)).toEqual([
+        "Part NEW-1 rev 0 already exists; its PART row changes nothing",
+        "Material COMP-1 rev 0 is already on the BOM of NEW-1 rev 0; skipped"
+      ]);
+
+      const more = await f.run("partWithMethod", [part, line("COMP-2")]);
+      expect(more.errors).toEqual([]);
+      expect([more.inserted, more.updated]).toEqual([0, 1]);
+      expect(more.added?.materials).toBe(1);
+    }
+  );
+
+  databaseTest(
     "two imports that create the same version at the same time create it once",
     async () => {
       f = await methodImportFixture();

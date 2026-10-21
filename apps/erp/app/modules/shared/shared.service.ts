@@ -3443,13 +3443,11 @@ export async function importMethods(
       // not something the user needs to fix, so a skip, not an error.
       for (const s of result.skipped) summary.skipped.push(s);
       addMethodRows(added, result.added);
-      if (Object.values(result.added).some((n) => n > 0)) {
-        // A new part counts as imported; an existing part as updated.
-        if (g.partRow) summary.inserted++;
-        else summary.updated++;
-      } else if (g.partRow) {
-        // A PART row with no BOM/BOP rows — only the part itself was created.
-        summary.inserted++;
+      // A part its PART row created counts as inserted; a part that existed
+      // counts as updated when the import wrote rows into its method.
+      if (result.createdPart) summary.inserted++;
+      else if (Object.values(result.added).some((n) => n > 0)) {
+        summary.updated++;
       }
     } catch (err) {
       if (err instanceof MethodImportRefused) {
@@ -4023,7 +4021,11 @@ async function writeGroup(
     releaseControl: ReleaseControl;
     changeNoticeLocks: Map<string, string | null>;
   }
-): Promise<{ added: MethodRowsAdded; skipped: RowIssue[] }> {
+): Promise<{
+  added: MethodRowsAdded;
+  skipped: RowIssue[];
+  createdPart: boolean;
+}> {
   const { companyId, userId } = ctx;
   const now = () => datetime.timestamp();
   const partLabel = `${g.readableId} rev ${g.revision}`;
@@ -4036,6 +4038,7 @@ async function writeGroup(
     // Resolve (or create) the parent item.
     let parentItemId: string;
     let revisionStatus: string | null;
+    let createdPart = false;
     if (g.partRow) {
       const r = g.partRow.record;
       const inserted = await trx
@@ -4064,10 +4067,24 @@ async function writeGroup(
             updatedBy: userId
           } as never)
         )
-        .returning(["id", "revisionStatus"])
+        // xmax is 0 on a row this statement inserted, not on one it updated.
+        .returning([
+          "id",
+          "revisionStatus",
+          sql<boolean>`xmax = 0`.as("created")
+        ])
         .execute();
       parentItemId = inserted[0]!.id;
       revisionStatus = inserted[0]!.revisionStatus ?? null;
+      createdPart = inserted[0]!.created;
+      if (!createdPart) {
+        // The upsert keeps the existing part's fields, so the row writes
+        // nothing; its BOM and BOP rows still apply.
+        skipped.push({
+          row: rowOf(g.partRow.index),
+          reason: `Part ${partLabel} already exists; its PART row changes nothing`
+        });
+      }
 
       // The makeMethod Draft v1 is created by the AFTER INSERT trigger on item.
       // The part row links to the item by readableId (part.id = item.readableId).
@@ -4471,7 +4488,7 @@ async function writeGroup(
     }
 
     if (issues.length > 0) throw new MethodImportRefused(issues);
-    return { added, skipped };
+    return { added, skipped, createdPart };
   });
 }
 
