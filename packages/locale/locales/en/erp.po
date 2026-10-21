@@ -26744,6 +26744,9 @@ msgstr "Write-off of stock scrapped or returned via inspection rejects and NCR d
 msgid "Writing an asset's value down over its life — a monthly batch you create, review as a draft, then post."
 msgstr "Writing an asset's value down over its life — a monthly batch you create, review as a draft, then post."
 
+msgid "Written with a warning"
+msgstr "Written with a warning"
+
 msgid "Wrote the missing journal of 1 document"
 msgstr "Wrote the missing journal of 1 document"
 

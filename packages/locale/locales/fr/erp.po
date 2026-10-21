@@ -26744,6 +26744,9 @@ msgstr "Passage en perte du stock mis au rebut ou retourné par les rejets de co
 msgid "Writing an asset's value down over its life — a monthly batch you create, review as a draft, then post."
 msgstr "Réduire progressivement la valeur d'un bien sur sa durée de vie — un lot mensuel que vous créez, examinez en tant que brouillon, puis comptabilisez."
 
+msgid "Written with a warning"
+msgstr ""
+
 msgid "Wrote the missing journal of 1 document"
 msgstr ""
 

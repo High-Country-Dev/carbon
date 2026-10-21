@@ -26744,6 +26744,9 @@ msgstr "Ausbuchung von Bestand, der über Prüfungsablehnungen und NCR-Verwendun
 msgid "Writing an asset's value down over its life — a monthly batch you create, review as a draft, then post."
 msgstr "Den Wert eines Vermögenswerts über seine Lebensdauer abschreiben — ein monatlicher Batch, den Sie erstellen, als Entwurf überprüfen und dann buchen."
 
+msgid "Written with a warning"
+msgstr ""
+
 msgid "Wrote the missing journal of 1 document"
 msgstr ""
 

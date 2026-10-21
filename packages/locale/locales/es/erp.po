@@ -26744,6 +26744,9 @@ msgstr "Cancelación contable de existencias desperdiciadas o devueltas a travé
 msgid "Writing an asset's value down over its life — a monthly batch you create, review as a draft, then post."
 msgstr "Reducir el valor de un activo a lo largo de su vida útil — un lote mensual que crea, revisa como borrador y luego contabiliza."
 
+msgid "Written with a warning"
+msgstr ""
+
 msgid "Wrote the missing journal of 1 document"
 msgstr ""
 

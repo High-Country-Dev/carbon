@@ -26744,6 +26744,9 @@ msgstr "Baixa contábil de estoque refugado ou devolvido via rejeições de insp
 msgid "Writing an asset's value down over its life — a monthly batch you create, review as a draft, then post."
 msgstr "Reduzir o valor de um ativo ao longo de sua vida útil — um lote mensal que você cria, revisa como rascunho e depois contabiliza."
 
+msgid "Written with a warning"
+msgstr ""
+
 msgid "Wrote the missing journal of 1 document"
 msgstr ""
 

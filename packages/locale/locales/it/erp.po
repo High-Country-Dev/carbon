@@ -26744,6 +26744,9 @@ msgstr "Stralcio della giacenza scartata o restituita tramite rifiuti di control
 msgid "Writing an asset's value down over its life — a monthly batch you create, review as a draft, then post."
 msgstr "Ammortamento del valore di un bene nel corso della sua vita — un lotto mensile che crei, rivedi come bozza, poi registri."
 
+msgid "Written with a warning"
+msgstr ""
+
 msgid "Wrote the missing journal of 1 document"
 msgstr ""
 

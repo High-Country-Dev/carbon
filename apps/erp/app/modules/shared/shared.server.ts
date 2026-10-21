@@ -288,6 +288,7 @@ export const importCsvFile = defineServiceFn({
       errors?: RowIssue[];
       skipped?: RowIssue[];
       added?: MethodRowsAdded | null;
+      warnings?: string[];
     };
     return {
       inserted: summary.inserted ?? 0,
@@ -295,7 +296,9 @@ export const importCsvFile = defineServiceFn({
       errors: summary.errors ?? [],
       skipped: summary.skipped ?? [],
       // Method imports only: inserted and updated count parts there.
-      added: summary.added ?? null
+      added: summary.added ?? null,
+      // Method imports only: parts written under a release-control warning.
+      warnings: summary.warnings ?? []
     };
   }
 });

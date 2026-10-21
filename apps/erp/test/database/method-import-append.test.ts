@@ -152,7 +152,8 @@ async function fixture() {
         updated: 0,
         errors: [] as Array<{ row: number; reason: string }>,
         skipped: [] as Array<{ row: number; reason: string }>,
-        added: undefined as MethodRowsAdded | undefined
+        added: undefined as MethodRowsAdded | undefined,
+        warnings: undefined as string[] | undefined
       };
       await importMethods(db, {
         table,
@@ -460,7 +461,14 @@ describe("method import onto an existing method", () => {
       await f.setReleaseControl("warn");
       const accepted = await f.run("bom", rows);
       expect(accepted.errors).toEqual([]);
+      expect(accepted.warnings).toEqual([
+        `Part ASSY rev 0: ${LOCKED_REVISION_MESSAGE}`
+      ]);
       expect(await f.materials()).toHaveLength(2);
+
+      // A re-run writes nothing, so there is nothing to warn about.
+      const rerun = await f.run("bom", rows);
+      expect(rerun.warnings).toEqual([]);
     }
   );
 

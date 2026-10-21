@@ -260,13 +260,19 @@ continue.
 
 - **Target version** (`pickMethodImportTarget`): a blank Make Method Version
   targets the highest non-archived version that existed before the import; an
-  explicit one targets that version, created as a Draft when missing.
-- **Refusals** (`methodImportRefusal`), the same rules as the BOM and BOP
-  editors: the target must be a Draft; a Draft owned by a change notice follows
-  `getChangeNoticeEngineeringLock`; a Production revision follows
-  `plmReleaseControl` through `getLockVerdict`. A refusal throws
-  `MethodImportRefused` inside the transaction, so a Draft the file created for
-  that part is rolled back too.
+  explicit one targets that version, created as a Draft when missing. An
+  explicit version must be above 0 with at most 2 decimals
+  (`methodVersionIssue`): `makeMethod.version` is `NUMERIC(10, 2)`, so Postgres
+  would store 1.555 as 1.56 and a re-run could not find it again.
+- **Locks** (`methodImportLock`, which returns the editors' `LockCheck`), the
+  same rules as the BOM and BOP editors: the target must be a Draft; a Draft
+  owned by a change notice follows the notice's engineering lock; a Production
+  revision follows `plmReleaseControl` through `getLockVerdict`. A refusal
+  throws `MethodImportRefused` inside the transaction, so a Draft the file
+  created for that part is rolled back too. Under release control "warn" the
+  import writes, as the editors do, and returns the lock's message in
+  `warnings` for each part it wrote rows into; `ImportResultsModal` shows them
+  in a warning alert.
 - **Append, not fill** (`planMaterialAppend`, `planOperationAppend`): new BOM
   lines are ordered after the highest existing line; a material already on the
   version is skipped. An Op No is the operation's `order`, so it must be a
@@ -307,23 +313,27 @@ continue.
   Tool, with quantity above 0; times, costs and lead time are 0 or more; a
   Process operation needs setup, labor and machine units, an Assembly operation
   setup and labor; step min and max are 0 or more, max at least min; a List
-  step needs one non-blank option; a Make Method Version must be a positive
-  number. An Inspection operation is refused, because
+  step needs one non-blank option; a Make Method Version must be above 0 with
+  at most 2 decimals. An Inspection operation is refused, because
   `methodOperationValidator` requires an Inspection Plan and a CSV has no
   column for one. Pinned by `method-import-guards.test.ts`.
 - **Concurrency.** `writeGroup` locks the part's `item` row (`FOR NO KEY
   UPDATE`, so rows that reference the item can still be written) before it
   reads the versions, so two imports that create the same new version create
   it once. It then locks the target `makeMethod` row
-  (`FOR UPDATE`) before it reads the version's lines, so two imports of one
-  file write each line once. The refusals read the status and change notice
-  of the locked row, so a Draft an editor activates or links to a notice
+  (`FOR NO KEY UPDATE`) before it reads the version's lines, so two imports of
+  one file write each line once. Not `FOR UPDATE`: that also blocks the
+  `KEY SHARE` lock the `materialMakeMethodId` foreign key takes, so every BOM
+  line elsewhere pointing at this method would wait for the import. The
+  refusals read the status and change notice of the locked row, so a Draft an editor activates or links to a notice
   while the import waits is refused. A version the import created for a
   refused part rolls back with it.
 - **Change notice locks are read before any transaction** (`loadChangeNoticeLocks`):
-  `getChangeNoticeEngineeringLock` checks pending approvals through a separate
-  service-role request, which must not run while a part's transaction is open.
-  A Draft whose notice was linked after that read is refused.
+  `getChangeNoticeEngineeringLocks` (`items.service.ts`) reads pending approvals
+  for every notice in one service-role request (`pendingApprovalDocumentIds`,
+  `@carbon/ee/approvals.server`), which must not run while a part's
+  transaction is open. A Draft whose notice was linked after that read is
+  refused.
 - Known gaps: a sub-assembly created by a `PART` row must come before its parent
   in the file (parts are written in order of first appearance); a `PART` row
   does not write the Unique ID mapping; the Supplier Process column is unused;
@@ -348,8 +358,9 @@ every other field is a column mapping) and calls `importCsvFile` (`shared.server
 3. Validates `columnMappings` against `importSchemas[table]` (required fields mapped).
 4. Calls `importCsv(ctx, { table, filePath, columnMappings, enumMappings })`
    (quote tables go through `importQuotes` instead).
-5. Returns `{ inserted, updated, skipped, errors }`; `ImportCSVModal` reads it from the
-   result's `data`.
+5. Returns `{ inserted, updated, skipped, errors, added, warnings }` (`added` is null
+   and `warnings` empty for all but the method imports); `ImportCSVModal` reads it
+   from the result's `data`.
 
 The lookup values an import creates on the fly (`api+/csv+/create-lookup.tsx`) are
 `createImportLookups` (`shared.server.ts`), gated on `create` of the lookup's module.

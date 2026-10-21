@@ -10,7 +10,8 @@ import { describe, expect, it } from "vitest";
 import { LOCKED_REVISION_MESSAGE } from "~/modules/items/items.service";
 import { fieldMappings } from "./imports.models";
 import {
-  methodImportRefusal,
+  methodImportLock,
+  methodVersionIssue,
   opKey,
   pickMethodImportTarget,
   planMaterialAppend,
@@ -77,7 +78,25 @@ describe("pickMethodImportTarget", () => {
   });
 });
 
-describe("methodImportRefusal", () => {
+describe("methodVersionIssue", () => {
+  it("accepts a blank version and numbers above 0 with up to 2 decimals", () => {
+    for (const version of ["", " ", "1", "2", "1.5", "1.25", "1.50", "1.000"]) {
+      expect(methodVersionIssue(version)).toBeNull();
+    }
+  });
+
+  // makeMethod.version is NUMERIC(10, 2): 1.555 is stored as 1.56, and a
+  // re-run of the same file would then create 1.555 again and collide.
+  it("refuses what the version column cannot keep as written", () => {
+    for (const version of ["abc", "0", "-1", "1.555", "1e1", "1,5"]) {
+      expect(methodVersionIssue(version)).toBe(
+        `Make Method Version "${version}" must be a number above 0 with at most 2 decimals`
+      );
+    }
+  });
+});
+
+describe("methodImportLock", () => {
   const base = {
     status: "Draft",
     version: 2,
@@ -87,33 +106,42 @@ describe("methodImportRefusal", () => {
   };
 
   it("allows a Draft on an unreleased revision", () => {
-    expect(methodImportRefusal(base)).toBeNull();
+    expect(methodImportLock(base)).toEqual({ ok: true, warn: false });
   });
 
   it("refuses a version that is not a Draft", () => {
-    expect(methodImportRefusal({ ...base, status: "Active" })).toMatch(
+    const active = methodImportLock({ ...base, status: "Active" });
+    expect(active.ok).toBe(false);
+    expect("message" in active && active.message).toMatch(
       /^make method version 2 is Active, and only a Draft version can change/
     );
-    expect(methodImportRefusal({ ...base, status: "Archived" })).toMatch(
-      /is Archived/
-    );
+    const archived = methodImportLock({ ...base, status: "Archived" });
+    expect("message" in archived && archived.message).toMatch(/is Archived/);
   });
 
   it("refuses a Draft that a locked change notice holds", () => {
     expect(
-      methodImportRefusal({ ...base, changeNoticeLock: "Locked notice" })
-    ).toBe("Locked notice");
+      methodImportLock({ ...base, changeNoticeLock: "Locked notice" })
+    ).toEqual({ ok: false, warn: false, message: "Locked notice" });
   });
 
   it("follows release control on a released revision", () => {
     const released = { ...base, revisionStatus: "Production" };
-    expect(methodImportRefusal(released)).toBe(LOCKED_REVISION_MESSAGE);
-    expect(
-      methodImportRefusal({ ...released, releaseControl: "warn" })
-    ).toBeNull();
-    expect(
-      methodImportRefusal({ ...released, releaseControl: "off" })
-    ).toBeNull();
+    expect(methodImportLock(released)).toEqual({
+      ok: false,
+      warn: false,
+      message: LOCKED_REVISION_MESSAGE
+    });
+    // The editors write under "warn" and show the message; so does the import.
+    expect(methodImportLock({ ...released, releaseControl: "warn" })).toEqual({
+      ok: true,
+      warn: true,
+      message: LOCKED_REVISION_MESSAGE
+    });
+    expect(methodImportLock({ ...released, releaseControl: "off" })).toEqual({
+      ok: true,
+      warn: false
+    });
   });
 });
 

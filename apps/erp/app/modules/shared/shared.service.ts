@@ -169,8 +169,9 @@ import {
   changeNoticeLockedMessage
 } from "~/modules/items/items.models";
 import {
-  getChangeNoticeEngineeringLock,
+  getChangeNoticeEngineeringLocks,
   getLockVerdict,
+  type LockCheck,
   type ReleaseControl
 } from "~/modules/items/items.service";
 import { getMethod } from "~/modules/production/production.service";
@@ -2504,6 +2505,8 @@ type Summary = {
   // Method imports only: the rows written, by kind. Inserted and updated
   // count parts there, so the results name the rows separately.
   added?: MethodRowsAdded;
+  // Method imports only: parts written under a release-control warning.
+  warnings?: string[];
 };
 
 // Company-scoped configuration lookups: small, flat, name-keyed tables a
@@ -3334,12 +3337,27 @@ const listValues = (s: string | undefined): string[] =>
     .map((v) => v.trim())
     .filter(Boolean);
 
-// A number cell that must hold 0 or more when it is filled in.
-const negative = (s: string | undefined) => {
+// A filled-in number cell that is not a number of 0 or more. Blank passes.
+const notZeroOrMore = (s: string | undefined) => {
   if (text(s) === "") return false;
   const n = num(s);
   return n === undefined || n < 0;
 };
+
+/**
+ * Why a Make Method Version cell is not a version number, or null. Blank
+ * passes. `makeMethod.version` keeps 2 decimals: Postgres would round 1.555
+ * to 1.56, and a re-run of the file could not find that version again.
+ */
+export function methodVersionIssue(version: string): string | null {
+  const value = version.trim();
+  if (!value) return null;
+  const n = num(value);
+  if (n === undefined || n <= 0 || !/^\d+(\.\d{1,2}0*)?$/.test(value)) {
+    return `Make Method Version "${value}" must be a number above 0 with at most 2 decimals`;
+  }
+  return null;
+}
 
 function normalizeRowType(
   raw: string | undefined,
@@ -3369,7 +3387,9 @@ export async function importMethods(
 ): Promise<void> {
   const { table, mappedRecords, companyId, userId, summary } = args;
   const added = noMethodRowsAdded();
+  const warnings: string[] = [];
   summary.added = added;
+  summary.warnings = warnings;
 
   // 1. classify + group by parent part ------------------------------------
   const groups = new Map<string, Group>();
@@ -3621,12 +3641,11 @@ export async function importMethods(
       // not something the user needs to fix, so a skip, not an error.
       for (const s of result.skipped) summary.skipped.push(s);
       addMethodRows(added, result.added);
+      warnings.push(...result.warnings);
       // A part its PART row created counts as inserted; a part that existed
       // counts as updated when the import wrote rows into its method.
       if (result.createdPart) summary.inserted++;
-      else if (Object.values(result.added).some((n) => n > 0)) {
-        summary.updated++;
-      }
+      else if (totalMethodRows(result.added) > 0) summary.updated++;
     } catch (err) {
       if (err instanceof MethodImportRefused) {
         for (const issue of err.issues) summary.errors.push(issue);
@@ -3723,12 +3742,9 @@ function validateGroup(
   }
 
   for (const [version, bucket] of g.versions) {
-    const versionNumber = num(version);
-    if (text(version) && (versionNumber === undefined || versionNumber <= 0)) {
-      errors.push({
-        row: rowOf(firstIndexOf(bucket)),
-        reason: `Make Method Version "${version}" is not a version number`
-      });
+    const versionIssue = methodVersionIssue(version);
+    if (versionIssue) {
+      errors.push({ row: rowOf(firstIndexOf(bucket)), reason: versionIssue });
     }
 
     // An Op No is the operation's order, so it is a number and Op Nos compare
@@ -3833,7 +3849,7 @@ function validateGroup(
         ["operationUnitCost", "Unit Cost"],
         ["operationLeadTime", "Lead Time"]
       ] as const) {
-        if (negative(e.record[field])) {
+        if (notZeroOrMore(e.record[field])) {
           errors.push({
             row: rowOf(e.index),
             reason: `Op ${opNo}: ${label} must be a number of 0 or more`
@@ -3939,7 +3955,10 @@ function validateGroup(
       }
       const min = num(e.record.stepMinValue);
       const max = num(e.record.stepMaxValue);
-      if (negative(e.record.stepMinValue) || negative(e.record.stepMaxValue)) {
+      if (
+        notZeroOrMore(e.record.stepMinValue) ||
+        notZeroOrMore(e.record.stepMaxValue)
+      ) {
         errors.push({
           row: rowOf(e.index),
           reason:
@@ -4028,38 +4047,43 @@ export function pickMethodImportTarget(
   if (!version.trim()) {
     const current = methods
       .filter((m) => m.status !== "Archived")
-      .sort((a, b) => Number(b.version) - Number(a.version))[0];
+      .sort((a, b) => b.version - a.version)[0];
     if (current) return { method: current };
     const highest = methods.reduce((max, m) => Math.max(max, m.version), 0);
     return { createVersion: highest + 1 };
   }
   const versionNumber = num(version) ?? 1;
-  const existing = methods.find((m) => Number(m.version) === versionNumber);
+  const existing = methods.find((m) => m.version === versionNumber);
   return existing ? { method: existing } : { createVersion: versionNumber };
 }
 
 /**
- * Why the import may not write into a make method version, or null. The same
- * rules as the BOM and BOP editors: only a Draft is editable, a change notice
- * past engineering locks its Draft, and a released (Production) revision
- * follows release control.
+ * Whether the import may write into a make method version, with the same rules
+ * and verdict as the BOM and BOP editors: only a Draft is editable, a change
+ * notice past engineering locks its Draft, and a released (Production)
+ * revision follows release control, which refuses, warns or allows.
  */
-export function methodImportRefusal(args: {
+export function methodImportLock(args: {
   status: string;
   version: number;
   changeNoticeLock: string | null;
   revisionStatus: string | null;
   releaseControl: ReleaseControl;
-}): string | null {
+}): LockCheck {
   if (args.status !== "Draft") {
-    return `make method version ${args.version} is ${args.status}, and only a Draft version can change. Create a new version, then set Make Method Version to it`;
+    return {
+      ok: false,
+      warn: false,
+      message: `make method version ${args.version} is ${args.status}, and only a Draft version can change. Create a new version, then set Make Method Version to it`
+    };
   }
-  if (args.changeNoticeLock) return args.changeNoticeLock;
-  const verdict = getLockVerdict({
+  if (args.changeNoticeLock) {
+    return { ok: false, warn: false, message: args.changeNoticeLock };
+  }
+  return getLockVerdict({
     isLocked: args.revisionStatus === "Production",
     releaseControl: args.releaseControl
   });
-  return verdict.ok ? null : verdict.message;
 }
 
 /**
@@ -4202,6 +4226,7 @@ async function writeGroup(
 ): Promise<{
   added: MethodRowsAdded;
   skipped: RowIssue[];
+  warnings: string[];
   createdPart: boolean;
 }> {
   const { companyId, userId } = ctx;
@@ -4212,6 +4237,7 @@ async function writeGroup(
     const added = noMethodRowsAdded();
     const skipped: RowIssue[] = [];
     const issues: RowIssue[] = [];
+    const warnings = new Set<string>();
 
     // Resolve (or create) the parent item.
     let parentItemId: string;
@@ -4333,16 +4359,17 @@ async function writeGroup(
       // here, then reads what the first wrote and skips it. The refusal reads
       // the locked row, so it sees an editor that activated the Draft or
       // linked it to a change notice after the read above. A refused part
-      // rolls back, with any version created for it.
+      // rolls back, with any version created for it. NO KEY UPDATE leaves
+      // BOM lines elsewhere that point at this method free to be written.
       const locked = await trx
         .selectFrom("makeMethod")
         .select(["status", "changeOrderId"])
         .where("id", "=", makeMethodId)
         .where("companyId", "=", companyId)
-        .forUpdate()
+        .forNoKeyUpdate()
         .executeTakeFirst();
-      const refusal = locked
-        ? methodImportRefusal({
+      const lock: LockCheck = locked
+        ? methodImportLock({
             status: locked.status,
             version: methodVersion,
             changeNoticeLock: locked.changeOrderId
@@ -4351,14 +4378,19 @@ async function writeGroup(
             revisionStatus,
             releaseControl: ctx.releaseControl
           })
-        : `make method version ${methodVersion} was deleted while the import ran. Run the import again`;
-      if (refusal) {
+        : {
+            ok: false,
+            warn: false,
+            message: `make method version ${methodVersion} was deleted while the import ran. Run the import again`
+          };
+      if (!lock.ok) {
         issues.push({
           row: rowOf(firstIndexOf(bucket)),
-          reason: `Part ${partLabel}: ${refusal}`
+          reason: `Part ${partLabel}: ${lock.message}`
         });
         continue;
       }
+      const addedBefore = totalMethodRows(added);
 
       const existingMaterials = await trx
         .selectFrom("methodMaterial")
@@ -4663,10 +4695,16 @@ async function writeGroup(
           .execute();
         added.parameters += 1;
       }
+
+      // The editors write into a released revision under release control
+      // "warn" and say so; the import says so for each part it wrote into.
+      if (lock.warn && totalMethodRows(added) > addedBefore) {
+        warnings.add(`Part ${partLabel}: ${lock.message}`);
+      }
     }
 
     if (issues.length > 0) throw new MethodImportRefused(issues);
-    return { added, skipped, createdPart };
+    return { added, skipped, warnings: [...warnings], createdPart };
   });
 }
 
@@ -4771,22 +4809,15 @@ async function loadChangeNoticeLocks(
     .where("makeMethod.companyId", "=", companyId)
     .where("changeOrder.companyId", "=", companyId)
     .execute();
-  return new Map(
-    await Promise.all(
-      notices.map(
-        async (notice) =>
-          [
-            notice.id,
-            await getChangeNoticeEngineeringLock(notice.id, notice.status)
-          ] as const
-      )
-    )
-  );
+  return getChangeNoticeEngineeringLocks(companyId, notices);
 }
 
 function noMethodRowsAdded(): MethodRowsAdded {
   return { materials: 0, operations: 0, steps: 0, tools: 0, parameters: 0 };
 }
+
+const totalMethodRows = (added: MethodRowsAdded) =>
+  Object.values(added).reduce((sum, n) => sum + n, 0);
 
 function addMethodRows(total: MethodRowsAdded, part: MethodRowsAdded) {
   for (const kind of Object.keys(total) as Array<keyof MethodRowsAdded>) {
@@ -6670,7 +6701,8 @@ export async function importCsvTable(
     errors: [] as Array<{ row: number; reason: string }>,
     // Rows intentionally not written (duplicates, already-existing) — informational.
     skipped: [] as Array<{ row: number; reason: string }>,
-    added: undefined as MethodRowsAdded | undefined
+    added: undefined as MethodRowsAdded | undefined,
+    warnings: undefined as string[] | undefined
   };
 
   const acceptedRows = await rejectForeignReferences(
@@ -8704,7 +8736,8 @@ export async function importCsvTable(
     updated: summary.updated,
     errors: withValues(summary.errors),
     skipped: withValues(summary.skipped),
-    added: summary.added ?? null
+    added: summary.added ?? null,
+    warnings: summary.warnings ?? []
   };
 }
 

@@ -5,6 +5,9 @@
 import { downloadText } from "@carbon/files";
 import { CSV_CONTENT_TYPE, encodeCsvTable } from "@carbon/files/csv";
 import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
   Button,
   Count,
   cn,
@@ -21,7 +24,13 @@ import {
 } from "@carbon/react";
 import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import { Fragment, type ReactNode, useState } from "react";
-import { LuCircleCheck, LuCircleX, LuDownload, LuInfo } from "react-icons/lu";
+import {
+  LuCircleCheck,
+  LuCircleX,
+  LuDownload,
+  LuInfo,
+  LuTriangleAlert
+} from "react-icons/lu";
 import type { MethodRowsAdded } from "~/modules/shared/types";
 
 // A row the importer did not insert/update. `values` holds the original CSV cells
@@ -43,6 +52,8 @@ type ImportResultsModalProps = {
   skipped: RowIssue[];
   // Method imports only: inserted and updated count parts there.
   added?: MethodRowsAdded | null;
+  // Method imports only: parts written under a release-control warning.
+  warnings?: string[];
   columns: string[];
   onClose: () => void;
 };
@@ -56,6 +67,7 @@ export const ImportResultsModal = ({
   errors,
   skipped,
   added,
+  warnings = [],
   columns,
   onClose
 }: ImportResultsModalProps) => {
@@ -120,6 +132,21 @@ export const ImportResultsModal = ({
           </ModalDescription>
         </ModalHeader>
         <ModalBody className="min-w-0">
+          {warnings.length > 0 && (
+            <Alert variant="warning" className="mb-4">
+              <LuTriangleAlert />
+              <AlertTitle>
+                <Trans>Written with a warning</Trans>
+              </AlertTitle>
+              <AlertDescription>
+                <ul className="list-disc pl-4">
+                  {warnings.map((warning) => (
+                    <li key={warning}>{warning}</li>
+                  ))}
+                </ul>
+              </AlertDescription>
+            </Alert>
+          )}
           {allClean ? (
             <div className="flex flex-col items-center justify-center gap-2 py-10 text-center">
               <LuCircleCheck className="h-8 w-8 text-emerald-500" />

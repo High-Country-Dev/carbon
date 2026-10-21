@@ -26744,6 +26744,9 @@ msgstr "検査却下およびNCR処置によってスクラップされたまた
 msgid "Writing an asset's value down over its life — a monthly batch you create, review as a draft, then post."
 msgstr "資産の価値を耐用年数にわたって減額する―毎月作成し、下書きとしてレビューしてから転記するバッチです。"
 
+msgid "Written with a warning"
+msgstr ""
+
 msgid "Wrote the missing journal of 1 document"
 msgstr ""
 

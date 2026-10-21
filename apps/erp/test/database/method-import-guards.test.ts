@@ -145,7 +145,16 @@ const REFUSALS: Array<[string, Rows, string[]]> = [
   [
     "a version that is not a number",
     [bom("ASSY", "COMP-1", "1", { makeMethodVersion: "abc" })],
-    ['Make Method Version "abc" is not a version number']
+    [
+      'Make Method Version "abc" must be a number above 0 with at most 2 decimals'
+    ]
+  ],
+  [
+    "a version with more decimals than the column keeps",
+    [bom("ASSY", "COMP-1", "1", { makeMethodVersion: "1.555" })],
+    [
+      'Make Method Version "1.555" must be a number above 0 with at most 2 decimals'
+    ]
   ]
 ];
 
