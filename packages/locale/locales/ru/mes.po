@@ -272,6 +272,9 @@ msgstr "Назад"
 msgid "Back to batch"
 msgstr "Вернуться к серии"
 
+msgid "Back to ERP"
+msgstr "Вернуться в ERP"
+
 msgid "Background"
 msgstr "Фон"
 
@@ -299,12 +302,6 @@ msgstr "итого серии"
 
 msgid "Behind target by {daysBehindTarget} day(s)"
 msgstr "Отставание на {daysBehindTarget} дн."
-
-#. placeholder {0}: step.minValue
-#. placeholder {1}: step.maxValue
-#. placeholder {2}: step.unitOfMeasureCode ?? ""
-msgid "Between {0} and {1} {2}"
-msgstr "Между {0} и {1} {2}"
 
 #. placeholder {0}: column.blockingDispatchReadableId
 msgid "Blocked by {0}"
@@ -1470,6 +1467,9 @@ msgstr "Закрепить или открепить"
 msgid "Pin Out"
 msgstr "Выход по PIN"
 
+msgid "Pinch or scroll to zoom · drag to pan · double-tap to reset"
+msgstr "Сведите пальцы или прокрутите для масштабирования · перетащите для перемещения · коснитесь дважды для сброса"
+
 msgid "Planned"
 msgstr "Плановое"
 
@@ -1582,6 +1582,9 @@ msgstr "Записать частичный результат"
 
 msgid "Recorded"
 msgstr "Записано"
+
+msgid "Reference image"
+msgstr "Справочное изображение"
 
 msgid "Registration failed"
 msgstr "Регистрация не удалась"

@@ -9432,6 +9432,9 @@ msgstr "Her 3 saatte bir"
 msgid "Every account default is set"
 msgstr "Her hesap varsayılanı ayarlandı"
 
+msgid "Every account is mapped"
+msgstr "Tüm hesaplar eşlendi"
+
 msgid "Every asset needs a payment row before activating."
 msgstr "Etkinleştirmeden önce her varlığın bir ödeme satırı olmalıdır."
 
@@ -9467,6 +9470,9 @@ msgstr "Her satır faturaladığı şeyi muhasebeleştirir."
 
 msgid "Every match"
 msgstr "Her eşleşme"
+
+msgid "Every posted journal line in a period"
+msgstr "Bir dönemdeki tüm kayıtlı yevmiye satırları"
 
 msgid "Every required action has already been added."
 msgstr "Gerekli olan tüm eylemler zaten eklendi."
@@ -13355,6 +13361,9 @@ msgstr "Hesap planınızı sağlayıcının hesap planına eşleyin. Muhasebele�
 msgid "Map your current process, systems, and data"
 msgstr "Mevcut sürecinizi, sistemlerinizi ve verilerinizi eşleyin"
 
+msgid "Mapped"
+msgstr "Eşlenmiş"
+
 #. placeholder {0}: data.mapped
 #. placeholder {1}: data.totalComponents
 msgid "Mapped {0} of {1} components to the bill of materials"
@@ -14620,6 +14629,9 @@ msgstr "Hiçbir yetkinlik eklenmedi"
 
 msgid "No Access"
 msgstr "Erişim Yok"
+
+msgid "No accounts are mapped yet"
+msgstr "Henüz eşlenmiş hesap yok"
 
 msgid "No accounts match your search"
 msgstr "Aramanızla eşleşen hesap yok"
@@ -16954,6 +16966,9 @@ msgstr "Sabitle {0}"
 msgid "Pin or unpin"
 msgstr "Sabitle veya kaldır"
 
+msgid "Pinch or scroll to zoom · drag to pan · double-tap to reset"
+msgstr "Yakınlaştırmak için kıstırın veya kaydırın · kaydırmak için sürükleyin · sıfırlamak için iki kez dokunun"
+
 msgid "Pinned"
 msgstr "Sabitlenmiş"
 
@@ -18553,6 +18568,9 @@ msgstr "Gevşetilmiş"
 
 msgid "Reference"
 msgstr "Referans"
+
+msgid "Reference image"
+msgstr "Referans görseli"
 
 msgid "Refresh"
 msgstr "Yenile"
@@ -25130,6 +25148,9 @@ msgstr "Kilidi Aç"
 msgid "Unlock with passkey"
 msgstr "Geçiş Anahtarı ile Kilit Aç"
 
+msgid "Unmapped"
+msgstr "Eşlenmemiş"
+
 msgid "Unmapped dimension values"
 msgstr "Eşlenmemiş boyut değerleri"
 
@@ -25747,6 +25768,9 @@ msgstr "Müşterileri Görüntüle"
 
 msgid "View Employees"
 msgstr "Çalışanları Görüntüle"
+
+msgid "View full size"
+msgstr "Tam boyutta görüntüle"
 
 msgid "View History"
 msgstr "Geçmişi Görüntüle"

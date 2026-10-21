@@ -272,6 +272,9 @@ msgstr "Geri"
 msgid "Back to batch"
 msgstr "Partiye geri dön"
 
+msgid "Back to ERP"
+msgstr "ERP'ye geri dön"
+
 msgid "Background"
 msgstr "Arka plan"
 
@@ -299,12 +302,6 @@ msgstr "parti toplamı"
 
 msgid "Behind target by {daysBehindTarget} day(s)"
 msgstr "Hedeften {daysBehindTarget} gün geride"
-
-#. placeholder {0}: step.minValue
-#. placeholder {1}: step.maxValue
-#. placeholder {2}: step.unitOfMeasureCode ?? ""
-msgid "Between {0} and {1} {2}"
-msgstr "{0} ile {1} arasında {2}"
 
 #. placeholder {0}: column.blockingDispatchReadableId
 msgid "Blocked by {0}"
@@ -1470,6 +1467,9 @@ msgstr "Sabitle veya sabitliği kaldır"
 msgid "Pin Out"
 msgstr "Çıkış Yap"
 
+msgid "Pinch or scroll to zoom · drag to pan · double-tap to reset"
+msgstr "Yakınlaştırmak için kıstırın veya kaydırın · kaydırmak için sürükleyin · sıfırlamak için iki kez dokunun"
+
 msgid "Planned"
 msgstr "Planlı"
 
@@ -1582,6 +1582,9 @@ msgstr "Kısmi Kaydı"
 
 msgid "Recorded"
 msgstr "Kaydedildi"
+
+msgid "Reference image"
+msgstr "Referans görseli"
 
 msgid "Registration failed"
 msgstr "Kayıt başarısız"

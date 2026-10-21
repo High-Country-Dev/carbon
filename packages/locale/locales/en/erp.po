@@ -9432,6 +9432,9 @@ msgstr "Every 3 hours"
 msgid "Every account default is set"
 msgstr "Every account default is set"
 
+msgid "Every account is mapped"
+msgstr "Every account is mapped"
+
 msgid "Every asset needs a payment row before activating."
 msgstr "Every asset needs a payment row before activating."
 
@@ -9467,6 +9470,9 @@ msgstr "Every line recognizes what it bills."
 
 msgid "Every match"
 msgstr "Every match"
+
+msgid "Every posted journal line in a period"
+msgstr "Every posted journal line in a period"
 
 msgid "Every required action has already been added."
 msgstr "Every required action has already been added."
@@ -13355,6 +13361,9 @@ msgstr "Map your chart of accounts to the provider's. Posting-default and expens
 msgid "Map your current process, systems, and data"
 msgstr "Map your current process, systems, and data"
 
+msgid "Mapped"
+msgstr "Mapped"
+
 #. placeholder {0}: data.mapped
 #. placeholder {1}: data.totalComponents
 msgid "Mapped {0} of {1} components to the bill of materials"
@@ -14620,6 +14629,9 @@ msgstr "No abilities added"
 
 msgid "No Access"
 msgstr "No Access"
+
+msgid "No accounts are mapped yet"
+msgstr "No accounts are mapped yet"
 
 msgid "No accounts match your search"
 msgstr "No accounts match your search"
@@ -16954,6 +16966,9 @@ msgstr "Pin {0}"
 msgid "Pin or unpin"
 msgstr "Pin or unpin"
 
+msgid "Pinch or scroll to zoom · drag to pan · double-tap to reset"
+msgstr "Pinch or scroll to zoom · drag to pan · double-tap to reset"
+
 msgid "Pinned"
 msgstr "Pinned"
 
@@ -18553,6 +18568,9 @@ msgstr "Reduced"
 
 msgid "Reference"
 msgstr "Reference"
+
+msgid "Reference image"
+msgstr "Reference image"
 
 msgid "Refresh"
 msgstr "Refresh"
@@ -25130,6 +25148,9 @@ msgstr "Unlock"
 msgid "Unlock with passkey"
 msgstr "Unlock with passkey"
 
+msgid "Unmapped"
+msgstr "Unmapped"
+
 msgid "Unmapped dimension values"
 msgstr "Unmapped dimension values"
 
@@ -25747,6 +25768,9 @@ msgstr "View Customers"
 
 msgid "View Employees"
 msgstr "View Employees"
+
+msgid "View full size"
+msgstr "View full size"
 
 msgid "View History"
 msgstr "View History"

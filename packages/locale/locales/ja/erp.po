@@ -9432,6 +9432,9 @@ msgstr "3時間ごと"
 msgid "Every account default is set"
 msgstr "すべてのアカウントのデフォルトが設定されています"
 
+msgid "Every account is mapped"
+msgstr "すべての勘定がマッピング済みです"
+
 msgid "Every asset needs a payment row before activating."
 msgstr "有効化する前に、すべての資産が支払明細を必要とします。"
 
@@ -9467,6 +9470,9 @@ msgstr "すべての明細は請求する金額を認識しています。"
 
 msgid "Every match"
 msgstr "すべてのマッチ"
+
+msgid "Every posted journal line in a period"
+msgstr "期間内のすべての転記済み仕訳明細"
 
 msgid "Every required action has already been added."
 msgstr "すべての必須アクションが既に追加されています。"
@@ -13355,6 +13361,9 @@ msgstr "勘定科目表をプロバイダーの表にマップしてください
 msgid "Map your current process, systems, and data"
 msgstr "現在のプロセス、システム、データをマップする"
 
+msgid "Mapped"
+msgstr "マッピング済み"
+
 #. placeholder {0}: data.mapped
 #. placeholder {1}: data.totalComponents
 msgid "Mapped {0} of {1} components to the bill of materials"
@@ -14620,6 +14629,9 @@ msgstr "スキルが追加されていません"
 
 msgid "No Access"
 msgstr "アクセスなし"
+
+msgid "No accounts are mapped yet"
+msgstr "まだマッピングされた勘定はありません"
 
 msgid "No accounts match your search"
 msgstr "検索に一致するアカウントがありません"
@@ -16954,6 +16966,9 @@ msgstr "{0}をピン留"
 msgid "Pin or unpin"
 msgstr "ピン留めまたはピン留め解除"
 
+msgid "Pinch or scroll to zoom · drag to pan · double-tap to reset"
+msgstr "ピンチまたはスクロールで拡大縮小 · ドラッグで移動 · ダブルタップでリセット"
+
 msgid "Pinned"
 msgstr "ピン留め"
 
@@ -18553,6 +18568,9 @@ msgstr "ゆるい検査"
 
 msgid "Reference"
 msgstr "参照"
+
+msgid "Reference image"
+msgstr "参照画像"
 
 msgid "Refresh"
 msgstr "更新"
@@ -25130,6 +25148,9 @@ msgstr "ロック解除"
 msgid "Unlock with passkey"
 msgstr "パスキーでロック解除"
 
+msgid "Unmapped"
+msgstr "未マッピング"
+
 msgid "Unmapped dimension values"
 msgstr "マップされていないディメンション値"
 
@@ -25747,6 +25768,9 @@ msgstr "得意先を表示"
 
 msgid "View Employees"
 msgstr "従業員を表示"
+
+msgid "View full size"
+msgstr "フルサイズで表示"
 
 msgid "View History"
 msgstr "履歴を表示"
