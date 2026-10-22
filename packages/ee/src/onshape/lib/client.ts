@@ -177,12 +177,20 @@ function configurationQuery(configuration?: string | null): string {
 export class OnshapeApiError extends Error {
   status?: number;
   retryAfterSeconds?: number;
+  /** The `message` of Onshape's error body, when it sent one. */
+  onshapeMessage?: string;
 
-  constructor(message: string, status?: number, retryAfterSeconds?: number) {
+  constructor(
+    message: string,
+    status?: number,
+    retryAfterSeconds?: number,
+    onshapeMessage?: string
+  ) {
     super(message);
     this.name = "OnshapeApiError";
     this.status = status;
     this.retryAfterSeconds = retryAfterSeconds;
+    this.onshapeMessage = onshapeMessage;
   }
 }
 
@@ -217,6 +225,11 @@ export class OnshapeClient {
       // indefinitely (e.g. webhook reconcile during the settings-save request).
       timeout: 60_000
     });
+  }
+
+  /** The Onshape origin this client calls, e.g. `https://cad.onshape.com`. */
+  get apiOrigin(): string {
+    return this.baseUrl;
   }
 
   private getAuthHeaders(): Record<string, string> {
@@ -338,14 +351,18 @@ export class OnshapeClient {
         return new OnshapeApiError(`Onshape request failed: ${error.message}`);
       }
       const parsedRetryAfter = Number(error.response?.headers?.["retry-after"]);
+      const data = error.response?.data as unknown;
+      const onshapeMessage =
+        data && typeof data === "object"
+          ? (data as { message?: unknown }).message
+          : undefined;
       return new OnshapeApiError(
         `Onshape API error (${status}): ${
-          typeof error.response?.data === "string"
-            ? error.response.data
-            : JSON.stringify(error.response?.data)
+          typeof data === "string" ? data : JSON.stringify(data)
         }`,
         status,
-        Number.isFinite(parsedRetryAfter) ? parsedRetryAfter : undefined
+        Number.isFinite(parsedRetryAfter) ? parsedRetryAfter : undefined,
+        typeof onshapeMessage === "string" ? onshapeMessage : undefined
       );
     }
     return error instanceof Error ? error : new Error(String(error));

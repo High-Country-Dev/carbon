@@ -10,7 +10,8 @@ class OnshapeApiError extends Error {
   constructor(
     message: string,
     public status?: number,
-    public retryAfterSeconds?: number
+    public retryAfterSeconds?: number,
+    public onshapeMessage?: string
   ) {
     super(message);
   }
@@ -85,6 +86,33 @@ describe("onshapeFailure", () => {
     expect(failure.status).toBe(502);
     expect(failure.body.error).toMatch(/HTTP 500/);
     expect(failure.body.error).not.toMatch(/stack|secret/);
+  });
+
+  it("puts Onshape's own message in the diagnostics, never its raw body", () => {
+    const failure = onshapeFailure(
+      new OnshapeApiError(
+        'Onshape API error (403): {"message":"Access denied","stack":"secret"}',
+        403,
+        undefined,
+        "Access denied"
+      ),
+      "bom"
+    );
+    expect(failure.body.diagnostics).toEqual({
+      read: "bom",
+      onshapeStatus: 403,
+      onshapeMessage: "Access denied",
+      transport: null
+    });
+    expect(JSON.stringify(failure.body)).not.toMatch(/stack|secret/);
+  });
+
+  it("describes a call that got no response", () => {
+    expect(onshapeFailure(timeout).body.diagnostics).toMatchObject({
+      onshapeStatus: null,
+      onshapeMessage: null,
+      transport: "Onshape request failed: timeout of 60000ms exceeded"
+    });
   });
 
   it("handles a non-Onshape throw", () => {
