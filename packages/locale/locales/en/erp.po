@@ -8429,6 +8429,9 @@ msgstr "e.g. MI"
 msgid "e.g. Suite 200"
 msgstr "e.g. Suite 200"
 
+msgid "e.g. Suspected counterfeit, wrong part, damaged in transit"
+msgstr "e.g. Suspected counterfeit, wrong part, damaged in transit"
+
 msgid "e.g. the first 3 to 4 weeks"
 msgstr "e.g. the first 3 to 4 weeks"
 
@@ -11695,6 +11698,15 @@ msgstr "Inspection"
 msgid "Inspection · {itemReadableId}"
 msgstr "Inspection · {itemReadableId}"
 
+#. placeholder {0}: inspection.inspectionId
+msgid "Inspection {0}"
+msgstr "Inspection {0}"
+
+#. placeholder {0}: inspection.inspectionId
+#. placeholder {1}: inspection.status
+msgid "Inspection {0} · {1}"
+msgstr "Inspection {0} · {1}"
+
 msgid "Inspection document"
 msgstr "Inspection document"
 
@@ -14738,6 +14750,14 @@ msgstr "No changes yet."
 
 msgid "No changes yet. Once the lease is active, Modify is in the header and Terminate and Purchase are on each asset's page."
 msgstr "No changes yet. Once the lease is active, Modify is in the header and Terminate and Purchase are on each asset's page."
+
+#. placeholder {0}: lotEntities.length
+msgid "No characteristic has failed, so say why the lot is rejected. All {0} entities will be marked Rejected."
+msgstr "No characteristic has failed, so say why the lot is rejected. All {0} entities will be marked Rejected."
+
+#. placeholder {0}: inspection.lotSize
+msgid "No characteristic has failed, so say why the lot is rejected. The entire lot of {0} will be rejected."
+msgstr "No characteristic has failed, so say why the lot is rejected. The entire lot of {0} will be rejected."
 
 msgid "No charges. Mileage, damage, delivery or cleaning charges ride the next invoice."
 msgstr "No charges. Mileage, damage, delivery or cleaning charges ride the next invoice."
@@ -18303,6 +18323,9 @@ msgstr "Realized Exchange Loss"
 msgid "Reason"
 msgstr "Reason"
 
+msgid "Reason (optional)"
+msgstr "Reason (optional)"
+
 msgid "Reason Account"
 msgstr "Reason Account"
 
@@ -19194,6 +19217,12 @@ msgstr "Requires Action"
 
 msgid "Requires Adjustment"
 msgstr "Requires Adjustment"
+
+msgid "Requires inspection"
+msgstr "Requires inspection"
+
+msgid "Requires inspection. A lot opens when the receipt posts."
+msgstr "Requires inspection. A lot opens when the receipt posts."
 
 msgid "Requires Repair"
 msgstr "Requires Repair"

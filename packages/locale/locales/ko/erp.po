@@ -8429,6 +8429,9 @@ msgstr "예: MI"
 msgid "e.g. Suite 200"
 msgstr "예: Suite 200"
 
+msgid "e.g. Suspected counterfeit, wrong part, damaged in transit"
+msgstr "예: 위조품 의심, 잘못된 부품, 운송 중 파손"
+
 msgid "e.g. the first 3 to 4 weeks"
 msgstr "예: 처음 3~4주"
 
@@ -11695,6 +11698,15 @@ msgstr "검사"
 msgid "Inspection · {itemReadableId}"
 msgstr "검사 · {itemReadableId}"
 
+#. placeholder {0}: inspection.inspectionId
+msgid "Inspection {0}"
+msgstr "검사 {0}"
+
+#. placeholder {0}: inspection.inspectionId
+#. placeholder {1}: inspection.status
+msgid "Inspection {0} · {1}"
+msgstr "검사 {0} · {1}"
+
 msgid "Inspection document"
 msgstr "검사 문서"
 
@@ -14738,6 +14750,14 @@ msgstr "아직 변경사항이 없습니다."
 
 msgid "No changes yet. Once the lease is active, Modify is in the header and Terminate and Purchase are on each asset's page."
 msgstr "변경 사항이 없습니다. 리스가 활성화되면 수정은 헤더에 있고 종료와 구매는 각 자산 페이지에 있습니다."
+
+#. placeholder {0}: lotEntities.length
+msgid "No characteristic has failed, so say why the lot is rejected. All {0} entities will be marked Rejected."
+msgstr "불합격된 특성이 없으므로 로트를 거부하는 사유를 입력하세요. {0}개 엔터티가 모두 거부됨으로 표시됩니다."
+
+#. placeholder {0}: inspection.lotSize
+msgid "No characteristic has failed, so say why the lot is rejected. The entire lot of {0} will be rejected."
+msgstr "불합격된 특성이 없으므로 로트를 거부하는 사유를 입력하세요. {0}개 로트 전체가 거부됩니다."
 
 msgid "No charges. Mileage, damage, delivery or cleaning charges ride the next invoice."
 msgstr "요금이 없습니다. 주행 거리, 손상, 배송 또는 청소 요금은 다음 송장에 포함됩니다."
@@ -18303,6 +18323,9 @@ msgstr "실현 환차손"
 msgid "Reason"
 msgstr "사유"
 
+msgid "Reason (optional)"
+msgstr "사유(선택)"
+
 msgid "Reason Account"
 msgstr "사유 계정"
 
@@ -19194,6 +19217,12 @@ msgstr "조치 필요"
 
 msgid "Requires Adjustment"
 msgstr "조정 필요"
+
+msgid "Requires inspection"
+msgstr "검사 필요"
+
+msgid "Requires inspection. A lot opens when the receipt posts."
+msgstr "검사가 필요합니다. 입고를 전기하면 로트가 생성됩니다."
 
 msgid "Requires Repair"
 msgstr "수리 필요"

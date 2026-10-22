@@ -8429,6 +8429,9 @@ msgstr "z.B. MI"
 msgid "e.g. Suite 200"
 msgstr "z.B. Suite 200"
 
+msgid "e.g. Suspected counterfeit, wrong part, damaged in transit"
+msgstr "z. B. Verdacht auf Fälschung, falsches Teil, Transportschaden"
+
 msgid "e.g. the first 3 to 4 weeks"
 msgstr "z.B. die ersten 3 bis 4 Wochen"
 
@@ -11695,6 +11698,15 @@ msgstr "Prüfung"
 msgid "Inspection · {itemReadableId}"
 msgstr "Prüfung · {itemReadableId}"
 
+#. placeholder {0}: inspection.inspectionId
+msgid "Inspection {0}"
+msgstr "Prüfung {0}"
+
+#. placeholder {0}: inspection.inspectionId
+#. placeholder {1}: inspection.status
+msgid "Inspection {0} · {1}"
+msgstr "Prüfung {0} · {1}"
+
 msgid "Inspection document"
 msgstr "Prüfungsdokument"
 
@@ -14738,6 +14750,14 @@ msgstr "Noch keine Änderungen."
 
 msgid "No changes yet. Once the lease is active, Modify is in the header and Terminate and Purchase are on each asset's page."
 msgstr "Keine Änderungen vorhanden. Sobald der Mietvertrag aktiv ist, befindet sich Ändern im Header und Beenden und Kaufen auf der Seite jedes Vermögenswerts."
+
+#. placeholder {0}: lotEntities.length
+msgid "No characteristic has failed, so say why the lot is rejected. All {0} entities will be marked Rejected."
+msgstr "Kein Merkmal ist fehlgeschlagen, geben Sie daher an, warum das Los abgelehnt wird. Alle {0} Einheiten werden als abgelehnt markiert."
+
+#. placeholder {0}: inspection.lotSize
+msgid "No characteristic has failed, so say why the lot is rejected. The entire lot of {0} will be rejected."
+msgstr "Kein Merkmal ist fehlgeschlagen, geben Sie daher an, warum das Los abgelehnt wird. Das gesamte Los von {0} wird abgelehnt."
 
 msgid "No charges. Mileage, damage, delivery or cleaning charges ride the next invoice."
 msgstr "Keine Gebühren. Kilometer-, Schaden-, Liefer- und Reinigungsgebühren werden der nächsten Rechnung hinzugefügt."
@@ -18303,6 +18323,9 @@ msgstr "Realisierter Wechselkursverlust"
 msgid "Reason"
 msgstr "Grund"
 
+msgid "Reason (optional)"
+msgstr "Grund (optional)"
+
 msgid "Reason Account"
 msgstr "Grund-Konto"
 
@@ -19194,6 +19217,12 @@ msgstr "Erfordert Maßnahmen"
 
 msgid "Requires Adjustment"
 msgstr "Erfordert Korrektur"
+
+msgid "Requires inspection"
+msgstr "Erfordert Prüfung"
+
+msgid "Requires inspection. A lot opens when the receipt posts."
+msgstr "Erfordert Prüfung. Beim Buchen des Belegs wird ein Los eröffnet."
 
 msgid "Requires Repair"
 msgstr "Reparatur erforderlich"

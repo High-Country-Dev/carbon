@@ -8429,6 +8429,9 @@ msgstr "例：MI"
 msgid "e.g. Suite 200"
 msgstr "例：Suite 200"
 
+msgid "e.g. Suspected counterfeit, wrong part, damaged in transit"
+msgstr "例: 偽造品の疑い、部品違い、輸送中の破損"
+
 msgid "e.g. the first 3 to 4 weeks"
 msgstr "例：最初の3～4週間"
 
@@ -11695,6 +11698,15 @@ msgstr "検査"
 msgid "Inspection · {itemReadableId}"
 msgstr "検査·{itemReadableId}"
 
+#. placeholder {0}: inspection.inspectionId
+msgid "Inspection {0}"
+msgstr "検査 {0}"
+
+#. placeholder {0}: inspection.inspectionId
+#. placeholder {1}: inspection.status
+msgid "Inspection {0} · {1}"
+msgstr "検査 {0} · {1}"
+
 msgid "Inspection document"
 msgstr "検査文書"
 
@@ -14738,6 +14750,14 @@ msgstr "まだ変更がありません。"
 
 msgid "No changes yet. Once the lease is active, Modify is in the header and Terminate and Purchase are on each asset's page."
 msgstr "変更がまだありません。リースが有効になると、「修正」はヘッダーに、「終了」と「購入」は各資産のページにあります。"
+
+#. placeholder {0}: lotEntities.length
+msgid "No characteristic has failed, so say why the lot is rejected. All {0} entities will be marked Rejected."
+msgstr "不合格の特性がないため、ロットを却下する理由を入力してください。{0}件のエンティティすべてが却下済みになります。"
+
+#. placeholder {0}: inspection.lotSize
+msgid "No characteristic has failed, so say why the lot is rejected. The entire lot of {0} will be rejected."
+msgstr "不合格の特性がないため、ロットを却下する理由を入力してください。{0}のロット全体が却下されます。"
 
 msgid "No charges. Mileage, damage, delivery or cleaning charges ride the next invoice."
 msgstr "請求がありません。走行距離、損傷、配送、クリーニング料金は次の請求書に含まれます。"
@@ -18303,6 +18323,9 @@ msgstr "実現為替損失"
 msgid "Reason"
 msgstr "理由"
 
+msgid "Reason (optional)"
+msgstr "理由(任意)"
+
 msgid "Reason Account"
 msgstr "理由アカウント"
 
@@ -19194,6 +19217,12 @@ msgstr "対応が必要"
 
 msgid "Requires Adjustment"
 msgstr "調整が必要"
+
+msgid "Requires inspection"
+msgstr "検査が必要"
+
+msgid "Requires inspection. A lot opens when the receipt posts."
+msgstr "検査が必要です。領収書の転記時にロットが作成されます。"
 
 msgid "Requires Repair"
 msgstr "修理が必要"
