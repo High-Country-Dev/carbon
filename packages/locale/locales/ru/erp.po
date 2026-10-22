@@ -64,6 +64,10 @@ msgstr "(не счет проведения собственного капит�
 msgid "{0, plural, one {# blocking record} other {# blocking records}}"
 msgstr "{0, plural, one {# блокирующая запись} other {# блокирующие записи}}"
 
+#. placeholder {0}: added.materials
+msgid "{0, plural, one {# BOM line} other {# BOM lines}}"
+msgstr ""
+
 #. placeholder {0}: memberIds.length
 msgid "{0, plural, one {# component in this group} other {# components in this group}}"
 msgstr "{0, plural, one {# компонент в этой группе} other {# компонентов в этой группе}}"
@@ -80,6 +84,14 @@ msgstr "{0, plural, one {# день недостатка} few {# дня недо
 msgid "{0, plural, one {# operation has no time standards} other {# operations have no time standards}}"
 msgstr "{0, plural, one {# операция не имеет временных нормативов} few {# операции не имеют временных нормативов} many {# операций не имеют временных нормативов} other {# операций не имеют временных нормативов}}"
 
+#. placeholder {0}: added.operations
+msgid "{0, plural, one {# operation} other {# operations}}"
+msgstr ""
+
+#. placeholder {0}: added.parameters
+msgid "{0, plural, one {# parameter} other {# parameters}}"
+msgstr ""
+
 #. placeholder {0}: issues.length
 msgid "{0, plural, one {# record needs attention} other {# records need attention}}"
 msgstr "{0, plural, one {# запись требует внимания} other {# записей требуют внимания}}"
@@ -91,6 +103,14 @@ msgstr "{0, plural, one {# строка связана с данными вне 
 #. placeholder {0}: totalScopeRows( exportRun.violationRowsByTable )
 msgid "{0, plural, one {# row links to data outside this company, so it can't be backed up. Skipping it backs up everything else.} other {# rows link to data outside this company, so they can't be backed up. Skipping them backs up everything else.}}"
 msgstr "{0, plural, one {# строка связана с данными вне этой организации, поэтому она не может быть зарезервирована. Пропуск позволит зарезервировать все остальное.} other {# строк связаны с данными вне этой организации, поэтому они не могут быть зарезервированы. Пропуск позволит зарезервировать все остальное.}}"
+
+#. placeholder {0}: added.steps
+msgid "{0, plural, one {# step} other {# steps}}"
+msgstr ""
+
+#. placeholder {0}: added.tools
+msgid "{0, plural, one {# tool} other {# tools}}"
+msgstr ""
 
 #. placeholder {0}: item.demandAccumulationPeriod
 msgid "{0, plural, one {# week} other {# weeks}}"
@@ -521,6 +541,9 @@ msgstr "{documentTypeLabel} правило утверждения"
 msgid "{done} of {total} phases complete"
 msgstr "{done} из {total} этапов завершено"
 
+msgid "{errors, plural, one {# row needs fixing} other {# rows need fixing}}"
+msgstr ""
+
 msgid "{errors} failed"
 msgstr ""
 
@@ -538,6 +561,9 @@ msgstr "{hidden, plural, one {Еще # запись.} other {Еще # запис
 
 msgid "{hiddenCount} more: {hiddenNames}"
 msgstr "{hiddenCount} еще: {hiddenNames}"
+
+msgid "{inserted, plural, one {# part created} other {# parts created}}"
+msgstr ""
 
 #. placeholder {0}: errors.length
 #. placeholder {1}: skipped.length
@@ -675,6 +701,9 @@ msgstr "{sectionLineCount} строк"
 msgid "{selectedCount} selected"
 msgstr "{selectedCount} выбрано"
 
+msgid "{skipped, plural, one {# row skipped} other {# rows skipped}}"
+msgstr ""
+
 msgid "{stale} changed since the page loaded"
 msgstr ""
 
@@ -725,6 +754,9 @@ msgstr "{unread} непрочитанных"
 
 msgid "{unschedulableCount} can't be scheduled"
 msgstr "{unschedulableCount} не может быть спланировано"
+
+msgid "{updated, plural, one {# part updated} other {# parts updated}}"
+msgstr ""
 
 msgid "{uploadedFileName} uploaded — fields filled from the document."
 msgstr "Файл {uploadedFileName} загружен — поля заполнены из документа."
@@ -2290,6 +2322,9 @@ msgstr "Добавлено для этого покупателя"
 
 msgid "Added to the unit price for the chosen values, before discounts and markups. Use a negative amount for a credit."
 msgstr "Добавляется к цене за единицу для выбранных значений, до скидок и надбавок. Используйте отрицательную сумму для кредита."
+
+msgid "Added:"
+msgstr ""
 
 msgid "Adding demo records"
 msgstr "Добавление демо-записей"
@@ -15068,6 +15103,9 @@ msgstr "Нет ID детали"
 msgid "No parts"
 msgstr "Нет деталей"
 
+msgid "No parts changed."
+msgstr ""
+
 msgid "No passkeys registered yet."
 msgstr "Ключи доступа еще не зарегистрированы."
 
@@ -26729,6 +26767,9 @@ msgstr "Списание запасов, забракованных или во�
 
 msgid "Writing an asset's value down over its life — a monthly batch you create, review as a draft, then post."
 msgstr "Уменьшение стоимости актива в течение его жизни — ежемесячная серия, которую вы создаете, рассматриваете как черновик, затем проводите."
+
+msgid "Written with a warning"
+msgstr ""
 
 msgid "Wrote the missing journal of 1 document"
 msgstr ""

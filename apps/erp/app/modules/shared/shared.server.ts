@@ -61,6 +61,7 @@ import {
 import { assignableTables, noteFields, noteTables } from "./shared.models";
 import * as service from "./shared.service";
 import { invokeCreate } from "./shared.service";
+import type { MethodRowsAdded } from "./types";
 
 const logger = getLogger("erp", "shared");
 // ── Operations ──────────────────────────────────────────────────────────────
@@ -286,12 +287,18 @@ export const importCsvFile = defineServiceFn({
       updated?: number;
       errors?: RowIssue[];
       skipped?: RowIssue[];
+      added?: MethodRowsAdded | null;
+      warnings?: string[];
     };
     return {
       inserted: summary.inserted ?? 0,
       updated: summary.updated ?? 0,
       errors: summary.errors ?? [],
-      skipped: summary.skipped ?? []
+      skipped: summary.skipped ?? [],
+      // Method imports only: inserted and updated count parts there.
+      added: summary.added ?? null,
+      // Method imports only: parts written under a release-control warning.
+      warnings: summary.warnings ?? []
     };
   }
 });
