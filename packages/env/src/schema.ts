@@ -253,6 +253,12 @@ export const schema = define({
     description: "Sign-in attempts allowed per window (5)",
     type: number
   },
+  TRUSTED_PROXIES: {
+    group: "auth",
+    description:
+      "Proxies in front of the app that append to X-Forwarded-For (1); 2 behind an ALB and Traefik",
+    type: number
+  },
   BOT_PROTECTION: {
     group: "auth",
     description: "Login bot check: botid or turnstile",
