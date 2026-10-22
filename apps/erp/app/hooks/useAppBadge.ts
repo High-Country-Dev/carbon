@@ -36,8 +36,14 @@ export function useAppBadge({ userId }: { userId: string }) {
   const latest = useRef(0);
 
   const recount = useCallback(async () => {
-    if (!carbon || !companyIds) return;
+    if (!carbon) return;
     const run = ++latest.current;
+    // No company left to count (the last employee membership was removed):
+    // nothing is unread, and the bump above discards a recount still running.
+    if (!companyIds) {
+      setAppBadge(0);
+      return;
+    }
     const { count, error } = await carbon
       .from("notification")
       .select("id", { count: "exact", head: true })

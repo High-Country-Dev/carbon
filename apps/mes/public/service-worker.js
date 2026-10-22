@@ -92,7 +92,12 @@ function saveAsset(event, cache, response, { trim = false } = {}) {
     cache
       .put(event.request, response.clone())
       .then(() => (trim ? trimAssets(cache) : undefined))
-      .catch(() => undefined)
+      .catch((error) => {
+        console.warn("Failed to cache asset", {
+          path: new URL(event.request.url).pathname,
+          error
+        });
+      })
   );
 }
 
