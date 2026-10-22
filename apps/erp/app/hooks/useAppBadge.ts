@@ -1,0 +1,81 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+// Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
+// including ports, remain AGPLv3; serving them over a network requires releasing their source.
+
+import { getLogger } from "@carbon/logger";
+import { useTopic } from "@carbon/query";
+import { useCarbon, useRouteData } from "@carbon/react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
+import { path } from "~/utils/path";
+
+const logger = getLogger("erp", "useappbadge");
+
+// A bulk change (mark all read) broadcasts once per row; count once.
+const RECOUNT_DELAY_MS = 500;
+
+// Sets or clears the installed app's icon badge. Only an installed app shows
+// one; elsewhere the call is missing or does nothing.
+export function setAppBadge(count: number) {
+  if (typeof navigator === "undefined" || !("setAppBadge" in navigator)) {
+    return;
+  }
+  const result =
+    count > 0 ? navigator.setAppBadge(count) : navigator.clearAppBadge();
+  // Refused (Safari without notification permission): no badge is fine.
+  result.catch(() => undefined);
+}
+
+// The installed app's icon badge: the user's unread notifications in every
+// company they work in. The bell counts one company; the icon stands for the
+// whole app, and a push from any company sets it the same way (send-push
+// "count-unread"). Recounted whenever the user's notifications change — the
+// topic carries every company's rows.
+export function useAppBadge({ userId }: { userId: string }) {
+  const { carbon } = useCarbon();
+  const shell = useRouteData<{
+    companies: { companyId: string | null; role: string | null }[];
+  }>(path.to.authenticatedRoot);
+  // A string, so a revalidation that returns the same companies is no change.
+  const companyIds = useMemo(
+    () =>
+      (shell?.companies ?? [])
+        .flatMap((company) =>
+          company.role === "employee" && company.companyId
+            ? [company.companyId]
+            : []
+        )
+        .join(","),
+    [shell?.companies]
+  );
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const recount = useCallback(async () => {
+    if (!carbon || !companyIds) return;
+    const { count, error } = await carbon
+      .from("notification")
+      .select("id", { count: "exact", head: true })
+      .eq("userId", userId)
+      .in("companyId", companyIds.split(","))
+      .is("readAt", null)
+      .is("digestedInto", null);
+    if (error) {
+      logger.warn("Failed to count unread notifications for the badge", {
+        error
+      });
+      return;
+    }
+    setAppBadge(count ?? 0);
+  }, [carbon, companyIds, userId]);
+
+  useEffect(() => {
+    recount();
+    return () => {
+      if (timer.current) clearTimeout(timer.current);
+    };
+  }, [recount]);
+
+  useTopic(`user:${userId}:notification`, () => {
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(recount, RECOUNT_DELAY_MS);
+  });
+}
