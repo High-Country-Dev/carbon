@@ -60,7 +60,7 @@ function isHashedAsset(url) {
 function isPublicFile(url) {
   return (
     url.pathname.startsWith("/icons/") ||
-    /^\/(carbon-[\w-]+|apple-touch-icon)\.(png|svg)$/.test(url.pathname) ||
+    /^\/(carbon-[\w-]+|apple-touch-icon|icon(-maskable)?-\d+)\.(png|svg)$/.test(url.pathname) ||
     url.pathname === "/site.webmanifest"
   );
 }
