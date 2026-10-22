@@ -6,24 +6,13 @@ import { getLogger } from "@carbon/logger";
 import { useTopic } from "@carbon/query";
 import { useCarbon, useRouteData } from "@carbon/react";
 import { useCallback, useEffect, useMemo, useRef } from "react";
+import { employeeCompanyIds, setAppBadge } from "~/utils/app-badge";
 import { path } from "~/utils/path";
 
 const logger = getLogger("erp", "useappbadge");
 
 // A bulk change (mark all read) broadcasts once per row; count once.
 const RECOUNT_DELAY_MS = 500;
-
-// Sets or clears the installed app's icon badge. Only an installed app shows
-// one; elsewhere the call is missing or does nothing.
-export function setAppBadge(count: number) {
-  if (typeof navigator === "undefined" || !("setAppBadge" in navigator)) {
-    return;
-  }
-  const result =
-    count > 0 ? navigator.setAppBadge(count) : navigator.clearAppBadge();
-  // Refused (Safari without notification permission): no badge is fine.
-  result.catch(() => undefined);
-}
 
 // The installed app's icon badge: the user's unread notifications in every
 // company they work in. The bell counts one company; the icon stands for the
@@ -37,14 +26,7 @@ export function useAppBadge({ userId }: { userId: string }) {
   }>(path.to.authenticatedRoot);
   // A string, so a revalidation that returns the same companies is no change.
   const companyIds = useMemo(
-    () =>
-      (shell?.companies ?? [])
-        .flatMap((company) =>
-          company.role === "employee" && company.companyId
-            ? [company.companyId]
-            : []
-        )
-        .join(","),
+    () => employeeCompanyIds(shell?.companies ?? []).join(","),
     [shell?.companies]
   );
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);

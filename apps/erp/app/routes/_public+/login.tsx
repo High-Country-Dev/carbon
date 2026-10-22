@@ -68,8 +68,8 @@ import type {
   MetaFunction
 } from "react-router";
 import { data, useFetcher, useLoaderData, useSearchParams } from "react-router";
-import { setAppBadge } from "~/hooks/useAppBadge";
 import type { Result } from "~/types";
+import { setAppBadge } from "~/utils/app-badge";
 import { path } from "~/utils/path";
 
 export const meta: MetaFunction = () => {

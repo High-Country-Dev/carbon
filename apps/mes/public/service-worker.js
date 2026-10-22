@@ -11,7 +11,7 @@
 // when this file changes: bump SHELL_CACHE whenever offline.html changes, or
 // browsers keep the old page. The asset cache has its own version: build files
 // are named by their content, so an offline.html change keeps them.
-const SHELL_CACHE = "mes-shell-v4";
+const SHELL_CACHE = "mes-shell-v5";
 const ASSET_CACHE = "mes-assets-v1";
 const OFFLINE_URL = "/offline.html";
 
@@ -135,7 +135,7 @@ function fallbackOfflinePage() {
     '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Offline | Carbon</title>' +
     '<body style="margin:0;min-height:100vh;display:grid;place-items:center;font-family:system-ui,sans-serif;text-align:center">' +
     "<main><h1 style=\"font-size:1.25rem\">You're offline</h1><p>Carbon reloads the page when the connection is back.</p></main>" +
-    '<script>addEventListener("online",()=>location.reload());setInterval(()=>navigator.onLine&&fetch("/offline.html",{method:"HEAD",cache:"no-store"}).then(()=>location.reload(),()=>{}),10000)</script>';
+    '<script>addEventListener("online",()=>location.reload());setInterval(()=>navigator.onLine&&fetch("/health",{cache:"no-store"}).then(r=>r.ok&&location.reload(),()=>{}),10000)</script>';
   return new Response(html, {
     headers: { "Content-Type": "text/html; charset=utf-8" }
   });

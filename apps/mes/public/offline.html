@@ -148,15 +148,15 @@
 
       // "online" never fires when the device kept its network but Carbon
       // could not be reached (the server, or the internet behind the Wi-Fi):
-      // ask Carbon itself every few seconds. offline.html is a static file, so
-      // the check costs the server nothing; the service workers pass it
-      // straight to the network.
-      // Not at its own address: there it is not standing in for a page, and
-      // the check would succeed and reload it forever.
+      // ask Carbon itself every few seconds. /health answers 200 only once
+      // the app and its database are up (503 while the database is down), so
+      // a static file a CDN still serves cannot reload this into an error.
+      // The service workers pass it straight to the network. Not at its own
+      // address: there it stands in for no page, and would reload forever.
       setInterval(() => {
         if (!navigator.onLine || location.pathname === "/offline.html") return;
-        fetch("/offline.html", { method: "HEAD", cache: "no-store" }).then(
-          () => location.reload(),
+        fetch("/health", { cache: "no-store" }).then(
+          (response) => response.ok && location.reload(),
           () => undefined
         );
       }, 10000);
