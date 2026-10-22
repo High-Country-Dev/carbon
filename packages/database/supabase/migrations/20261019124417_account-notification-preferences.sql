@@ -12,20 +12,38 @@
 ALTER TABLE "notificationPreference" ALTER COLUMN "companyId" DROP NOT NULL;
 
 -- NULLS NOT DISTINCT, so a user has at most one account-level row per
--- (channel, topic); the upsert's ON CONFLICT relies on it.
-ALTER TABLE "notificationPreference"
-  DROP CONSTRAINT "notificationPreference_userId_companyId_channel_topic_key";
-ALTER TABLE "notificationPreference"
-  ADD CONSTRAINT "notificationPreference_userId_companyId_channel_topic_key"
-  UNIQUE NULLS NOT DISTINCT ("userId", "companyId", "channel", "topic");
+-- (channel, topic); the upsert's ON CONFLICT relies on it. Replaced only while
+-- the constraint is still the old one, and dropped and added in one block, so
+-- a retry over committed partial state neither fails nor leaves the table
+-- without it.
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint c
+    JOIN pg_index i ON i.indexrelid = c.conindid
+    WHERE c.conrelid = 'public."notificationPreference"'::regclass
+      AND c.conname = 'notificationPreference_userId_companyId_channel_topic_key'
+      AND i.indnullsnotdistinct
+  ) THEN
+    ALTER TABLE "notificationPreference"
+      DROP CONSTRAINT IF EXISTS "notificationPreference_userId_companyId_channel_topic_key";
+    ALTER TABLE "notificationPreference"
+      ADD CONSTRAINT "notificationPreference_userId_companyId_channel_topic_key"
+      UNIQUE NULLS NOT DISTINCT ("userId", "companyId", "channel", "topic");
+  END IF;
+END
+$$;
 
--- Each user keeps the switch they flipped last, from whichever company.
+-- Each user keeps the switch they flipped last, from whichever company. An
+-- account-level row already there (a retry, or a toggle since) is kept.
 INSERT INTO "notificationPreference" ("userId", "companyId", "channel", "topic", "enabled", "updatedAt")
 SELECT DISTINCT ON ("userId", "channel")
   "userId", NULL, "channel", "topic", "enabled", "updatedAt"
 FROM "notificationPreference"
 WHERE "topic" = 'changelog' AND "companyId" IS NOT NULL
-ORDER BY "userId", "channel", "updatedAt" DESC, "id" DESC;
+ORDER BY "userId", "channel", "updatedAt" DESC, "id" DESC
+ON CONFLICT ON CONSTRAINT "notificationPreference_userId_companyId_channel_topic_key" DO NOTHING;
 
 DELETE FROM "notificationPreference"
 WHERE "topic" = 'changelog' AND "companyId" IS NOT NULL;
