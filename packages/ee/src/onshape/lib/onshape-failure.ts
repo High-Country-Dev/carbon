@@ -30,6 +30,8 @@ export type OnshapeRead = "bom" | "other";
  */
 export type OnshapeFailureDiagnostics = {
   read: OnshapeRead;
+  /** The Onshape origin Carbon called, from `OnshapeApiError.apiOrigin`. */
+  onshapeApi: string | null;
   onshapeStatus: number | null;
   onshapeMessage: string | null;
   /** No response at all: the client's own description (timeout, network). */
@@ -47,6 +49,8 @@ export function onshapeFailure(
   const message = error instanceof Error ? error.message : String(error);
   const diagnostics: OnshapeFailureDiagnostics = {
     read,
+    onshapeApi:
+      typeof apiError?.apiOrigin === "string" ? apiError.apiOrigin : null,
     onshapeStatus: status ?? null,
     onshapeMessage:
       typeof apiError?.onshapeMessage === "string"

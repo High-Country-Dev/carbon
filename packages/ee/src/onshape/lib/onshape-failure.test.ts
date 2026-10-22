@@ -11,7 +11,8 @@ class OnshapeApiError extends Error {
     message: string,
     public status?: number,
     public retryAfterSeconds?: number,
-    public onshapeMessage?: string
+    public onshapeMessage?: string,
+    public apiOrigin?: string
   ) {
     super(message);
   }
@@ -94,12 +95,14 @@ describe("onshapeFailure", () => {
         'Onshape API error (403): {"message":"Access denied","stack":"secret"}',
         403,
         undefined,
-        "Access denied"
+        "Access denied",
+        "https://cad.onshape.com"
       ),
       "bom"
     );
     expect(failure.body.diagnostics).toEqual({
       read: "bom",
+      onshapeApi: "https://cad.onshape.com",
       onshapeStatus: 403,
       onshapeMessage: "Access denied",
       transport: null
@@ -113,6 +116,12 @@ describe("onshapeFailure", () => {
       onshapeMessage: null,
       transport: "Onshape request failed: timeout of 60000ms exceeded"
     });
+  });
+
+  it("leaves the origin empty when the throw did not come from the client", () => {
+    expect(onshapeFailure(new Error("boom")).body.diagnostics.onshapeApi).toBe(
+      null
+    );
   });
 
   it("handles a non-Onshape throw", () => {

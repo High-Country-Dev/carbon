@@ -692,30 +692,69 @@ async function copyText(text: string): Promise<boolean> {
 }
 
 /**
+ * The panel URL parameters a report carries: the ones the action URL asks
+ * Onshape to fill, plus `server`. Raw values, so an unfilled `{$elementId}`
+ * shows; any other parameter is left out.
+ */
+const REPORTED_PANEL_PARAMS = [
+  "documentId",
+  "wv",
+  "wvId",
+  "elementId",
+  "partNumber",
+  "revision",
+  "nodeId",
+  "occurrencePath",
+  "configuration",
+  "companyId",
+  "userId",
+  "locale",
+  "clientId",
+  "server"
+] as const satisfies readonly (keyof OnshapePanelContext | "server")[];
+
+function reportedPanelParams(search: string): Record<string, string> {
+  const params = new URLSearchParams(search);
+  const reported: Record<string, string> = {};
+  for (const name of REPORTED_PANEL_PARAMS) {
+    const value = params.get(name);
+    if (value !== null) reported[name] = value;
+  }
+  return reported;
+}
+
+/**
  * What Carbon asked Onshape and what it answered, plus the panel's own URL
  * parameters, so a failure can be reported as it happened. Never a token.
  */
 function PanelDiagnostics({ diagnostics }: { diagnostics: unknown }) {
   const [open, setOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const [report] = useState(() =>
-    JSON.stringify(
-      {
-        capturedAt: datetime.timestamp(),
-        carbonHost: typeof window === "undefined" ? null : window.location.host,
-        panel:
-          typeof window === "undefined"
-            ? {}
-            : Object.fromEntries(new URLSearchParams(window.location.search)),
-        details: diagnostics
-      },
-      null,
-      2
-    )
+  // The report last copied: a new review's diagnostics read "Copy details" again.
+  const [copiedReport, setCopiedReport] = useState<string | null>(null);
+  // Keyed on content, so a re-render with equal diagnostics keeps capturedAt.
+  const details = JSON.stringify(diagnostics ?? null);
+  const report = useMemo(
+    () =>
+      JSON.stringify(
+        {
+          capturedAt: datetime.timestamp(),
+          carbonHost:
+            typeof window === "undefined" ? null : window.location.host,
+          panel:
+            typeof window === "undefined"
+              ? {}
+              : reportedPanelParams(window.location.search),
+          details: JSON.parse(details) as unknown
+        },
+        null,
+        2
+      ),
+    [details]
   );
+  const copied = copiedReport === report;
   const copy = async () => {
     if (await copyText(report)) {
-      setCopied(true);
+      setCopiedReport(report);
     } else {
       // Nothing could write the clipboard: show the text to select instead.
       setOpen(true);

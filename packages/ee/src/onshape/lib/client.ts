@@ -179,18 +179,22 @@ export class OnshapeApiError extends Error {
   retryAfterSeconds?: number;
   /** The `message` of Onshape's error body, when it sent one. */
   onshapeMessage?: string;
+  /** The Onshape origin the failed call went to. */
+  apiOrigin?: string;
 
   constructor(
     message: string,
     status?: number,
     retryAfterSeconds?: number,
-    onshapeMessage?: string
+    onshapeMessage?: string,
+    apiOrigin?: string
   ) {
     super(message);
     this.name = "OnshapeApiError";
     this.status = status;
     this.retryAfterSeconds = retryAfterSeconds;
     this.onshapeMessage = onshapeMessage;
+    this.apiOrigin = apiOrigin;
   }
 }
 
@@ -348,7 +352,13 @@ export class OnshapeClient {
       // own message (e.g. "timeout of 60000ms exceeded") instead of the useless
       // "Onshape API error (undefined): undefined".
       if (status === undefined) {
-        return new OnshapeApiError(`Onshape request failed: ${error.message}`);
+        return new OnshapeApiError(
+          `Onshape request failed: ${error.message}`,
+          undefined,
+          undefined,
+          undefined,
+          this.baseUrl
+        );
       }
       const parsedRetryAfter = Number(error.response?.headers?.["retry-after"]);
       const data = error.response?.data as unknown;
@@ -362,7 +372,8 @@ export class OnshapeClient {
         }`,
         status,
         Number.isFinite(parsedRetryAfter) ? parsedRetryAfter : undefined,
-        typeof onshapeMessage === "string" ? onshapeMessage : undefined
+        typeof onshapeMessage === "string" ? onshapeMessage : undefined,
+        this.baseUrl
       );
     }
     return error instanceof Error ? error : new Error(String(error));
