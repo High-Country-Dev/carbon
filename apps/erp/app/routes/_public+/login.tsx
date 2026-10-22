@@ -39,7 +39,12 @@ import { getUserByEmail } from "@carbon/auth/users.server";
 import { sendVerificationCode } from "@carbon/auth/verification.server";
 import { isSsoEnabled, isSsoRequiredForEmail } from "@carbon/ee/sso.server";
 import { Hidden, Input, Submit, ValidatedForm, validator } from "@carbon/form";
-import { AccountLockout, Ratelimit, redis } from "@carbon/kv";
+import {
+  AccountLockout,
+  maxAttemptsForRateLimit,
+  Ratelimit,
+  redis
+} from "@carbon/kv";
 import { getLogger } from "@carbon/logger";
 import {
   Alert,
@@ -141,7 +146,10 @@ export async function action({ request }: ActionFunctionArgs) {
   // hammering one account to spam magic links / probe existence, is bounded per
   // account. The reply is deliberately GENERIC (never reveals whether the
   // account exists) to avoid user enumeration.
-  const lockout = new AccountLockout({ redis });
+  const lockout = new AccountLockout({
+    redis,
+    maxAttempts: maxAttemptsForRateLimit(RATE_LIMIT)
+  });
   const LOCKED_MESSAGE =
     "For your security, sign-in for this account is temporarily paused. Please try again later.";
 

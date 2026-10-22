@@ -33,7 +33,12 @@ import {
 import { getUserByEmail } from "@carbon/auth/users.server";
 import { isSsoEnabled, isSsoRequiredForEmail } from "@carbon/ee/sso.server";
 import { Hidden, Input, Submit, ValidatedForm, validator } from "@carbon/form";
-import { AccountLockout, Ratelimit, redis } from "@carbon/kv";
+import {
+  AccountLockout,
+  maxAttemptsForRateLimit,
+  Ratelimit,
+  redis
+} from "@carbon/kv";
 import { getLogger } from "@carbon/logger";
 import {
   Alert,
@@ -144,7 +149,10 @@ export async function action({ request }: ActionFunctionArgs) {
   // Per-account lockout (NIST 800-171 3.1.8) — layered ON TOP of the IP limit
   // above, keyed by the normalized email. Rejects with a GENERIC message that
   // never reveals whether the account exists (avoids user enumeration).
-  const lockout = new AccountLockout({ redis });
+  const lockout = new AccountLockout({
+    redis,
+    maxAttempts: maxAttemptsForRateLimit(RATE_LIMIT)
+  });
   const LOCKED_MESSAGE =
     "For your security, sign-in for this account is temporarily paused. Please try again later.";
 
