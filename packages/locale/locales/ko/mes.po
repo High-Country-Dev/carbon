@@ -1106,11 +1106,11 @@ msgstr "추가 옵션"
 msgid "Move column: {0}"
 msgstr "열 이동: {0}"
 
-msgid "Must be < {maxValue} {unitOfMeasureCode}"
-msgstr "{maxValue} {unitOfMeasureCode} 미만이어야 합니다"
+msgid "Must be at least {minValue} {unitOfMeasureCode}"
+msgstr "{minValue} {unitOfMeasureCode} 이상이어야 합니다"
 
-msgid "Must be > {minValue} {unitOfMeasureCode}"
-msgstr "{minValue} {unitOfMeasureCode} 초과여야 합니다"
+msgid "Must be at most {maxValue} {unitOfMeasureCode}"
+msgstr "{maxValue} {unitOfMeasureCode} 이하여야 합니다"
 
 msgid "Must be between {minValue} and {maxValue} {unitOfMeasureCode}"
 msgstr "{minValue}에서 {maxValue} {unitOfMeasureCode} 사이여야 합니다"

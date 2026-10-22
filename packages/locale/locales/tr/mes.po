@@ -1106,14 +1106,14 @@ msgstr "Daha fazla seçenek"
 msgid "Move column: {0}"
 msgstr "Sütunu taşı: {0}"
 
-msgid "Must be < {maxValue} {unitOfMeasureCode}"
-msgstr "Küçük olmalı < {maxValue} {unitOfMeasureCode}"
+msgid "Must be at least {minValue} {unitOfMeasureCode}"
+msgstr "En az {minValue} {unitOfMeasureCode} olmalıdır"
 
-msgid "Must be > {minValue} {unitOfMeasureCode}"
-msgstr "Küçük olmalı > {minValue} {unitOfMeasureCode}"
+msgid "Must be at most {maxValue} {unitOfMeasureCode}"
+msgstr "En fazla {maxValue} {unitOfMeasureCode} olmalıdır"
 
 msgid "Must be between {minValue} and {maxValue} {unitOfMeasureCode}"
-msgstr "Aralması gereken değer {minValue} ile {maxValue} arasındadır"
+msgstr "{minValue} ile {maxValue} {unitOfMeasureCode} arasında olmalıdır"
 
 msgid "My Hours"
 msgstr "Saatlik Çalışmalarım"

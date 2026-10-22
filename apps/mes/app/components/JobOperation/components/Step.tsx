@@ -101,7 +101,8 @@ export function hasStepDescription(
 }
 
 // The limits a Measurement must fall within, in its unit, as the step lists
-// and the record windows state them.
+// and the record windows state them. Both limits are inclusive: a value equal
+// to either one passes.
 export function useMeasurementLimits(step: {
   minValue: number | null;
   maxValue: number | null;
@@ -113,8 +114,10 @@ export function useMeasurementLimits(step: {
   if (minValue !== null && maxValue !== null) {
     return t`Must be between ${minValue} and ${maxValue} ${unitOfMeasureCode}`;
   }
-  if (minValue !== null) return t`Must be > ${minValue} ${unitOfMeasureCode}`;
-  if (maxValue !== null) return t`Must be < ${maxValue} ${unitOfMeasureCode}`;
+  if (minValue !== null)
+    return t`Must be at least ${minValue} ${unitOfMeasureCode}`;
+  if (maxValue !== null)
+    return t`Must be at most ${maxValue} ${unitOfMeasureCode}`;
   return null;
 }
 

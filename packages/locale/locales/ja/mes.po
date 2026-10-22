@@ -1106,11 +1106,11 @@ msgstr "その他のオプション"
 msgid "Move column: {0}"
 msgstr "カラムを移動: {0}"
 
-msgid "Must be < {maxValue} {unitOfMeasureCode}"
-msgstr "{maxValue} {unitOfMeasureCode} 未満である必要があります"
+msgid "Must be at least {minValue} {unitOfMeasureCode}"
+msgstr "{minValue} {unitOfMeasureCode} 以上である必要があります"
 
-msgid "Must be > {minValue} {unitOfMeasureCode}"
-msgstr "{minValue} {unitOfMeasureCode} より大きい必要があります"
+msgid "Must be at most {maxValue} {unitOfMeasureCode}"
+msgstr "{maxValue} {unitOfMeasureCode} 以下である必要があります"
 
 msgid "Must be between {minValue} and {maxValue} {unitOfMeasureCode}"
 msgstr "{minValue} から {maxValue} {unitOfMeasureCode} の間である必要があります"

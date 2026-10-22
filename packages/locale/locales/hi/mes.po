@@ -1106,11 +1106,11 @@ msgstr "अधिक विकल्प"
 msgid "Move column: {0}"
 msgstr "कॉलम को स्थानांतरित करें: {0}"
 
-msgid "Must be < {maxValue} {unitOfMeasureCode}"
-msgstr "{maxValue} {unitOfMeasureCode} से कम होना चाहिए"
+msgid "Must be at least {minValue} {unitOfMeasureCode}"
+msgstr "कम से कम {minValue} {unitOfMeasureCode} होना चाहिए"
 
-msgid "Must be > {minValue} {unitOfMeasureCode}"
-msgstr "{minValue} से अधिक होना चाहिए {unitOfMeasureCode}"
+msgid "Must be at most {maxValue} {unitOfMeasureCode}"
+msgstr "अधिकतम {maxValue} {unitOfMeasureCode} होना चाहिए"
 
 msgid "Must be between {minValue} and {maxValue} {unitOfMeasureCode}"
 msgstr "{minValue} और {maxValue} के बीच होना चाहिए {unitOfMeasureCode}"

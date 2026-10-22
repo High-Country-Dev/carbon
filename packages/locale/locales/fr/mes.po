@@ -1106,11 +1106,11 @@ msgstr "Plus d'options"
 msgid "Move column: {0}"
 msgstr "Déplacer la colonne : {0}"
 
-msgid "Must be < {maxValue} {unitOfMeasureCode}"
-msgstr "Doit être < {maxValue} {unitOfMeasureCode}"
+msgid "Must be at least {minValue} {unitOfMeasureCode}"
+msgstr "Doit être d'au moins {minValue} {unitOfMeasureCode}"
 
-msgid "Must be > {minValue} {unitOfMeasureCode}"
-msgstr "Doit être > {minValue} {unitOfMeasureCode}"
+msgid "Must be at most {maxValue} {unitOfMeasureCode}"
+msgstr "Doit être d'au plus {maxValue} {unitOfMeasureCode}"
 
 msgid "Must be between {minValue} and {maxValue} {unitOfMeasureCode}"
 msgstr "Doit être entre {minValue} et {maxValue} {unitOfMeasureCode}"
