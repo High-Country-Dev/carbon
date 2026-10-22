@@ -73,23 +73,43 @@ async function trimAssets(cache) {
   }
 }
 
-async function cacheFirst(request) {
-  const cache = await caches.open(ASSET_CACHE);
-  const cached = await cache.match(request);
-  if (cached) return cached;
-  const response = await fetch(request);
-  if (response.ok) {
-    await cache.put(request, response.clone());
-    await trimAssets(cache);
+// The cache only ever speeds a response up: a cache that cannot be opened,
+// or a write that fails (storage full, or a 206 partial response, which
+// cache.put refuses), still serves the file from the network.
+async function openAssetCache() {
+  try {
+    return await caches.open(ASSET_CACHE);
+  } catch {
+    return null;
   }
+}
+
+// Saves a complete response in the background; the response itself is
+// returned without waiting for the write.
+function saveAsset(event, cache, response, { trim = false } = {}) {
+  if (!cache || response.status !== 200) return;
+  event.waitUntil(
+    cache
+      .put(event.request, response.clone())
+      .then(() => (trim ? trimAssets(cache) : undefined))
+      .catch(() => undefined)
+  );
+}
+
+async function cacheFirst(event) {
+  const cache = await openAssetCache();
+  const cached = await cache?.match(event.request).catch(() => undefined);
+  if (cached) return cached;
+  const response = await fetch(event.request);
+  saveAsset(event, cache, response, { trim: true });
   return response;
 }
 
 async function staleWhileRevalidate(event) {
-  const cache = await caches.open(ASSET_CACHE);
-  const cached = await cache.match(event.request);
-  const refresh = fetch(event.request).then(async (response) => {
-    if (response.ok) await cache.put(event.request, response.clone());
+  const cache = await openAssetCache();
+  const cached = await cache?.match(event.request).catch(() => undefined);
+  const refresh = fetch(event.request).then((response) => {
+    saveAsset(event, cache, response);
     return response;
   });
   if (cached) {
@@ -151,7 +171,7 @@ self.addEventListener("fetch", (event) => {
   if (request.mode === "navigate") {
     event.respondWith(navigate(event));
   } else if (isHashedAsset(url)) {
-    event.respondWith(cacheFirst(request));
+    event.respondWith(cacheFirst(event));
   } else if (isPublicFile(url)) {
     event.respondWith(staleWhileRevalidate(event));
   }

@@ -30,9 +30,14 @@ export function useAppBadge({ userId }: { userId: string }) {
     [shell?.companies]
   );
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Only the latest recount may set the badge: an older query that finishes
+  // last would restore a stale count, and one still running at unmount (sign
+  // out) would undo the login page's clear.
+  const latest = useRef(0);
 
   const recount = useCallback(async () => {
     if (!carbon || !companyIds) return;
+    const run = ++latest.current;
     const { count, error } = await carbon
       .from("notification")
       .select("id", { count: "exact", head: true })
@@ -40,6 +45,7 @@ export function useAppBadge({ userId }: { userId: string }) {
       .in("companyId", companyIds.split(","))
       .is("readAt", null)
       .is("digestedInto", null);
+    if (run !== latest.current) return;
     if (error) {
       logger.warn("Failed to count unread notifications for the badge", {
         error
@@ -53,6 +59,7 @@ export function useAppBadge({ userId }: { userId: string }) {
     recount();
     return () => {
       if (timer.current) clearTimeout(timer.current);
+      latest.current++;
     };
   }, [recount]);
 
