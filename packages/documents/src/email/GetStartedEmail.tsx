@@ -14,6 +14,7 @@ import {
 } from "react-email";
 import { Button } from "./components/Button";
 import { Logo } from "./components/Logo";
+import { flatCardOnPhones } from "./components/notificationStyles";
 import {
   EmailThemeProvider,
   getEmailInlineStyles,
@@ -27,13 +28,7 @@ interface Props {
 }
 
 const getStartedStyles = `
-  .gs-body {
-    background-color: #f5f5f7;
-    background-image: linear-gradient(180deg, #f5f5f7 0%, #ececef 100%);
-  }
   .gs-card {
-    background-color: #ffffff;
-    background-image: linear-gradient(180deg, #ffffff 0%, #fbfbfc 100%);
     border-color: #e5e7eb !important;
   }
   .gs-divider {
@@ -52,6 +47,7 @@ const getStartedStyles = `
   .gs-chevron {
     color: #9ca3af !important;
   }
+${flatCardOnPhones("gs-card")}
 `;
 
 interface ResourceProps {
@@ -191,10 +187,6 @@ export const GetStartedEmail = ({
     >
       <Body
         className={`my-auto mx-auto font-sans gs-body ${themeClasses.body}`}
-        style={{
-          backgroundColor: "#f5f5f7",
-          backgroundImage: "linear-gradient(180deg, #f5f5f7 0%, #ececef 100%)"
-        }}
       >
         <Container
           className={`my-[40px] mx-auto p-[36px] max-w-[560px] rounded-[16px] gs-card ${themeClasses.container}`}
@@ -203,8 +195,7 @@ export const GetStartedEmail = ({
             borderWidth: 1,
             borderColor: "#e5e7eb",
             borderRadius: 16,
-            backgroundColor: "#ffffff",
-            backgroundImage: "linear-gradient(180deg, #ffffff 0%, #fbfbfc 100%)"
+            backgroundColor: "#ffffff"
           }}
         >
           <Logo />
