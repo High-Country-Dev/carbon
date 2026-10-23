@@ -14,6 +14,7 @@ import {
   operationTypes,
   procedureStepType,
   standardFactorType,
+  stepListValues,
   toTiptapDoc
 } from "../shared/shared.models";
 import type {
@@ -987,7 +988,7 @@ export const procedureStepValidator = z
     unitOfMeasureCode: zfd.text(z.string().optional()),
     minValue: zfd.numeric(z.number().min(0).optional()),
     maxValue: zfd.numeric(z.number().min(0).optional()),
-    listValues: z.array(z.string()).optional(),
+    listValues: stepListValues,
     sortOrder: zfd.numeric(z.number().min(0).optional())
   })
   .refine(
@@ -1005,17 +1006,13 @@ export const procedureStepValidator = z
   .refine(
     (data) => {
       if (data.type === "List") {
-        return (
-          !!data.listValues &&
-          data.listValues.length > 0 &&
-          data.listValues.every((option) => option.trim() !== "")
-        );
+        return !!data.listValues && data.listValues.length > 0;
       }
       return true;
     },
     {
       message: "List options are required",
-      path: ["listOptions"]
+      path: ["listValues"]
     }
   )
   .refine(
@@ -1567,7 +1564,7 @@ const assemblyInstructionStepFields = z.object({
   unitOfMeasureCode: zfd.text(z.string().optional()),
   minValue: zfd.numeric(z.number().min(0).optional()),
   maxValue: zfd.numeric(z.number().min(0).optional()),
-  listValues: z.array(z.string()).optional(),
+  listValues: stepListValues,
   componentNodeIds: jsonField(z.array(z.string()).optional()),
   motion: jsonField(motionSchema.optional()),
   camera: jsonField(cameraSchema.nullable().optional()),
@@ -1588,11 +1585,7 @@ function refineAssemblyInstructionStep(
   }
   if (
     data.type === "List" &&
-    !(
-      Array.isArray(data.listValues) &&
-      data.listValues.length > 0 &&
-      data.listValues.every((option) => option.trim() !== "")
-    )
+    !(Array.isArray(data.listValues) && data.listValues.length > 0)
   ) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,

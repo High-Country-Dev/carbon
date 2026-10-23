@@ -4856,6 +4856,9 @@ msgstr "Avisos de Cambio"
 msgid "Change notices could not be loaded, so new versions and revisions are blocked. Reload to try again."
 msgstr "No se pudieron cargar los avisos de cambio, por lo que las nuevas versiones y revisiones están bloqueadas. Recarga para intentar de nuevo."
 
+msgid "Change notices could not be loaded, so the active version cannot be changed. Reload to try again."
+msgstr "No se pudieron cargar los avisos de cambio, por lo que no se puede cambiar la versión activa. Recarga para intentar de nuevo."
+
 msgid "Change order"
 msgstr "Orden de cambio"
 
@@ -14342,6 +14345,9 @@ msgstr "Nuevo Problema"
 msgid "New Item Group"
 msgstr "Nuevo Grupo de Artículos"
 
+msgid "New jobs use version {activeVersion}"
+msgstr "Las nuevas órdenes de trabajo usan la versión {activeVersion}"
+
 msgid "New Kanban"
 msgstr "Nuevo Kanban"
 
@@ -15940,8 +15946,14 @@ msgstr "Órdenes de mantenimiento abiertas"
 msgid "Open in Carbon"
 msgstr "Abrir en Carbon"
 
+msgid "Open in change notice {ids}. Release it to change the active version."
+msgstr "Abierto en aviso de cambio {ids}. Libérelo para cambiar la versión activa."
+
 msgid "Open in change notice {ids}. Release it to create new versions or revisions."
 msgstr "Abierto en aviso de cambio {ids}. Libérelo para crear nuevas versiones o revisiones."
+
+msgid "Open in change notices {ids}. Release them to change the active version."
+msgstr "Abierto en avisos de cambio {ids}. Libérelos para cambiar la versión activa."
 
 msgid "Open in change notices {ids}. Release them to create new versions or revisions."
 msgstr "Abierto en avisos de cambio {ids}. Libérelos para crear nuevas versiones o revisiones."
@@ -26851,6 +26863,9 @@ msgstr "Sí, Actualizar IDs"
 
 msgid "You"
 msgstr "Tú"
+
+msgid "You are editing draft version {draftVersion}. Its changes reach new jobs once it is the Active version."
+msgstr "Está editando la versión borrador {draftVersion}. Sus cambios llegan a las nuevas órdenes de trabajo cuando sea la versión activa."
 
 msgid "You belong to more than one company. Pick where to work."
 msgstr "Perteneces a más de una empresa. Elige dónde trabajar."

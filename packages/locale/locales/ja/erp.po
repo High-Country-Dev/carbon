@@ -4856,6 +4856,9 @@ msgstr "変更通知"
 msgid "Change notices could not be loaded, so new versions and revisions are blocked. Reload to try again."
 msgstr "変更通知を読み込めませんでした。新しいバージョンとリビジョンはブロックされています。再度読み込んでください。"
 
+msgid "Change notices could not be loaded, so the active version cannot be changed. Reload to try again."
+msgstr "変更通知を読み込めませんでした。アクティブバージョンは変更できません。再度読み込んでください。"
+
 msgid "Change order"
 msgstr "変更指示"
 
@@ -14342,6 +14345,9 @@ msgstr "新しい問題"
 msgid "New Item Group"
 msgstr "新しいアイテムグループ"
 
+msgid "New jobs use version {activeVersion}"
+msgstr "新しい製造指図はバージョン {activeVersion} を使用します"
+
 msgid "New Kanban"
 msgstr "新規かんばん"
 
@@ -15940,8 +15946,14 @@ msgstr "オープン保全指示"
 msgid "Open in Carbon"
 msgstr "Carbonで開く"
 
+msgid "Open in change notice {ids}. Release it to change the active version."
+msgstr "変更通知{ids}で開いています。アクティブバージョンを変更するには、それをリリースしてください。"
+
 msgid "Open in change notice {ids}. Release it to create new versions or revisions."
 msgstr "変更通知{ids}で開いています。新しいバージョンまたはリビジョンを作成するには、それをリリースしてください。"
+
+msgid "Open in change notices {ids}. Release them to change the active version."
+msgstr "変更通知{ids}で開いています。アクティブバージョンを変更するには、それらをリリースしてください。"
 
 msgid "Open in change notices {ids}. Release them to create new versions or revisions."
 msgstr "変更通知{ids}で開いています。新しいバージョンまたはリビジョンを作成するには、それらをリリースしてください。"
@@ -26851,6 +26863,9 @@ msgstr "はい、IDを更新"
 
 msgid "You"
 msgstr "あなた"
+
+msgid "You are editing draft version {draftVersion}. Its changes reach new jobs once it is the Active version."
+msgstr "下書きバージョン {draftVersion} を編集しています。変更は、このバージョンが有効になった後の新しい製造指図に反映されます。"
 
 msgid "You belong to more than one company. Pick where to work."
 msgstr "複数の会社に属しています。作業する会社を選択してください。"

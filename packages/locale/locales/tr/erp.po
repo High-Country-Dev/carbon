@@ -4856,6 +4856,9 @@ msgstr "Değişiklik Bildirimleri"
 msgid "Change notices could not be loaded, so new versions and revisions are blocked. Reload to try again."
 msgstr "Değişiklik Bildirimleri yüklenemedi, bu nedenle yeni sürümler ve revizyonlar engellendi. Tekrar denemek için sayfayı yeniden yükleyin."
 
+msgid "Change notices could not be loaded, so the active version cannot be changed. Reload to try again."
+msgstr "Değişiklik Bildirimleri yüklenemedi, bu nedenle etkin sürüm değiştirilemez. Tekrar denemek için sayfayı yeniden yükleyin."
+
 msgid "Change order"
 msgstr "Değişim emri"
 
@@ -14342,6 +14345,9 @@ msgstr "Yeni Sorun"
 msgid "New Item Group"
 msgstr "Yeni Ürün Grubu"
 
+msgid "New jobs use version {activeVersion}"
+msgstr "Yeni iş emirleri {activeVersion} sürümünü kullanır"
+
 msgid "New Kanban"
 msgstr "Yeni Kanban"
 
@@ -15940,8 +15946,14 @@ msgstr "Açık Bakım emirleri"
 msgid "Open in Carbon"
 msgstr "Carbon'da Aç"
 
+msgid "Open in change notice {ids}. Release it to change the active version."
+msgstr "Değişiklik bildirimi {ids} içinde aç. Etkin sürümü değiştirmek için serbest bırak."
+
 msgid "Open in change notice {ids}. Release it to create new versions or revisions."
 msgstr "Değişiklik bildirimi {ids} içinde aç. Yeni sürümler veya revizyonlar oluşturmak için serbest bırak."
+
+msgid "Open in change notices {ids}. Release them to change the active version."
+msgstr "Değişiklik bildirimleri {ids} içinde aç. Etkin sürümü değiştirmek için serbest bırak."
 
 msgid "Open in change notices {ids}. Release them to create new versions or revisions."
 msgstr "Değişiklik bildirimleri {ids} içinde aç. Yeni sürümler veya revizyonlar oluşturmak için serbest bırak."
@@ -26851,6 +26863,9 @@ msgstr "Evet, Kimlikleri Güncelle"
 
 msgid "You"
 msgstr "Sen"
+
+msgid "You are editing draft version {draftVersion}. Its changes reach new jobs once it is the Active version."
+msgstr "Taslak sürüm {draftVersion} düzenleniyor. Değişiklikleri, bu sürüm aktif sürüm olduğunda yeni iş emirlerine yansır."
 
 msgid "You belong to more than one company. Pick where to work."
 msgstr "Birden fazla şirkete bağlısınız. Nerede çalışmak istediğinizi seçin."

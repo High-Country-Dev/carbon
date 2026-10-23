@@ -4856,6 +4856,9 @@ msgstr "Change Notices"
 msgid "Change notices could not be loaded, so new versions and revisions are blocked. Reload to try again."
 msgstr "Change notices could not be loaded, so new versions and revisions are blocked. Reload to try again."
 
+msgid "Change notices could not be loaded, so the active version cannot be changed. Reload to try again."
+msgstr "Change notices could not be loaded, so the active version cannot be changed. Reload to try again."
+
 msgid "Change order"
 msgstr "Change order"
 
@@ -14342,6 +14345,9 @@ msgstr "New Issue"
 msgid "New Item Group"
 msgstr "New Item Group"
 
+msgid "New jobs use version {activeVersion}"
+msgstr "New jobs use version {activeVersion}"
+
 msgid "New Kanban"
 msgstr "New Kanban"
 
@@ -15940,8 +15946,14 @@ msgstr "Open Dispatches"
 msgid "Open in Carbon"
 msgstr "Open in Carbon"
 
+msgid "Open in change notice {ids}. Release it to change the active version."
+msgstr "Open in change notice {ids}. Release it to change the active version."
+
 msgid "Open in change notice {ids}. Release it to create new versions or revisions."
 msgstr "Open in change notice {ids}. Release it to create new versions or revisions."
+
+msgid "Open in change notices {ids}. Release them to change the active version."
+msgstr "Open in change notices {ids}. Release them to change the active version."
 
 msgid "Open in change notices {ids}. Release them to create new versions or revisions."
 msgstr "Open in change notices {ids}. Release them to create new versions or revisions."
@@ -26851,6 +26863,9 @@ msgstr "Yes, Update IDs"
 
 msgid "You"
 msgstr "You"
+
+msgid "You are editing draft version {draftVersion}. Its changes reach new jobs once it is the Active version."
+msgstr "You are editing draft version {draftVersion}. Its changes reach new jobs once it is the Active version."
 
 msgid "You belong to more than one company. Pick where to work."
 msgstr "You belong to more than one company. Pick where to work."

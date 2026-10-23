@@ -4856,6 +4856,9 @@ msgstr "Извещения об изменении"
 msgid "Change notices could not be loaded, so new versions and revisions are blocked. Reload to try again."
 msgstr "Извещения об изменении не удалось загрузить, поэтому новые версии и ревизии заблокированы. Перезагрузите, чтобы повторить попытку."
 
+msgid "Change notices could not be loaded, so the active version cannot be changed. Reload to try again."
+msgstr "Извещения об изменении не удалось загрузить, поэтому активную версию нельзя изменить. Перезагрузите, чтобы повторить попытку."
+
 msgid "Change order"
 msgstr "Приказ об изменении"
 
@@ -14342,6 +14345,9 @@ msgstr "Новая проблема"
 msgid "New Item Group"
 msgstr "Новая группа товаров"
 
+msgid "New jobs use version {activeVersion}"
+msgstr "Новые производственные заказы используют версию {activeVersion}"
+
 msgid "New Kanban"
 msgstr "Новый канбан"
 
@@ -15940,8 +15946,14 @@ msgstr "Открыть Заявки на техобслуживание"
 msgid "Open in Carbon"
 msgstr "Открыть в Carbon"
 
+msgid "Open in change notice {ids}. Release it to change the active version."
+msgstr "Открыть в Извещении об изменении {ids}. Запустите его в работу, чтобы изменить активную версию."
+
 msgid "Open in change notice {ids}. Release it to create new versions or revisions."
 msgstr "Открыть в Извещении об изменении {ids}. Запустите его в работу, чтобы создать новые версии или ревизии."
+
+msgid "Open in change notices {ids}. Release them to change the active version."
+msgstr "Открыть в Извещениях об изменении {ids}. Запустите их в работу, чтобы изменить активную версию."
 
 msgid "Open in change notices {ids}. Release them to create new versions or revisions."
 msgstr "Открыть в Извещениях об изменении {ids}. Запустите их в работу, чтобы создать новые версии или ревизии."
@@ -26851,6 +26863,9 @@ msgstr "Да, обновить ID"
 
 msgid "You"
 msgstr "Вы"
+
+msgid "You are editing draft version {draftVersion}. Its changes reach new jobs once it is the Active version."
+msgstr "Вы редактируете черновую версию {draftVersion}. Её изменения попадут в новые производственные заказы, когда она станет активной версией."
 
 msgid "You belong to more than one company. Pick where to work."
 msgstr "Вы принадлежите более чем одной организации. Выберите, где работать."

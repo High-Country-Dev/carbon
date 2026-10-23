@@ -4856,6 +4856,9 @@ msgstr "Zawiadomienia o zmianie"
 msgid "Change notices could not be loaded, so new versions and revisions are blocked. Reload to try again."
 msgstr "Zawiadomienia o zmianie nie mogły być załadowane, więc nowe wersje i rewizje są zablokowane. Załaduj ponownie, aby spróbować ponownie."
 
+msgid "Change notices could not be loaded, so the active version cannot be changed. Reload to try again."
+msgstr "Zawiadomienia o zmianie nie mogły być załadowane, więc nie można zmienić aktywnej wersji. Załaduj ponownie, aby spróbować ponownie."
+
 msgid "Change order"
 msgstr "Zlecenie zmiany"
 
@@ -14342,6 +14345,9 @@ msgstr "Nowy Problem"
 msgid "New Item Group"
 msgstr "Nowa Grupa Pozycji"
 
+msgid "New jobs use version {activeVersion}"
+msgstr "Nowe zlecenia produkcyjne używają wersji {activeVersion}"
+
 msgid "New Kanban"
 msgstr "Nowy Kanban"
 
@@ -15940,8 +15946,14 @@ msgstr "Otwarte zlecenia utrzymania ruchu"
 msgid "Open in Carbon"
 msgstr "Otwórz w Carbon"
 
+msgid "Open in change notice {ids}. Release it to change the active version."
+msgstr "Otwarte w zawiadomieniu o zmianie {ids}. Zwolnij to, aby zmienić aktywną wersję."
+
 msgid "Open in change notice {ids}. Release it to create new versions or revisions."
 msgstr "Otwarte w zawiadomieniu o zmianie {ids}. Zwolnij to aby utworzyć nowe wersje lub rewizje."
+
+msgid "Open in change notices {ids}. Release them to change the active version."
+msgstr "Otwarte w zawiadomieniach o zmianie {ids}. Zwolnij je, aby zmienić aktywną wersję."
 
 msgid "Open in change notices {ids}. Release them to create new versions or revisions."
 msgstr "Otwarte w zawiadomieniach o zmianie {ids}. Zwolnij je aby utworzyć nowe wersje lub rewizje."
@@ -26851,6 +26863,9 @@ msgstr "Tak, Aktualizuj identyfikatory"
 
 msgid "You"
 msgstr "Ty"
+
+msgid "You are editing draft version {draftVersion}. Its changes reach new jobs once it is the Active version."
+msgstr "Edytujesz wersję roboczą {draftVersion}. Jej zmiany trafią do nowych zleceń produkcyjnych, gdy stanie się wersją aktywną."
 
 msgid "You belong to more than one company. Pick where to work."
 msgstr "Należysz do więcej niż jednej firmy. Wybierz, gdzie chcesz pracować."

@@ -4856,6 +4856,9 @@ msgstr "变更通知"
 msgid "Change notices could not be loaded, so new versions and revisions are blocked. Reload to try again."
 msgstr "无法加载变更通知，因此新版本和修订版被阻止。重新加载以重试。"
 
+msgid "Change notices could not be loaded, so the active version cannot be changed. Reload to try again."
+msgstr "无法加载变更通知，因此无法更改有效版本。重新加载以重试。"
+
 msgid "Change order"
 msgstr "变更单"
 
@@ -14342,6 +14345,9 @@ msgstr "新问题"
 msgid "New Item Group"
 msgstr "新建项目组"
 
+msgid "New jobs use version {activeVersion}"
+msgstr "新工单使用版本 {activeVersion}"
+
 msgid "New Kanban"
 msgstr "新看板"
 
@@ -15940,8 +15946,14 @@ msgstr "未结维护工单"
 msgid "Open in Carbon"
 msgstr "在 Carbon 中打开"
 
+msgid "Open in change notice {ids}. Release it to change the active version."
+msgstr "打开于变更通知 {ids}。下达它以更改有效版本。"
+
 msgid "Open in change notice {ids}. Release it to create new versions or revisions."
 msgstr "打开于变更通知 {ids}。下达它来创建新版本或修订版。"
+
+msgid "Open in change notices {ids}. Release them to change the active version."
+msgstr "打开于变更通知 {ids}。下达它们以更改有效版本。"
 
 msgid "Open in change notices {ids}. Release them to create new versions or revisions."
 msgstr "打开于变更通知 {ids}。下达它们来创建新版本或修订版。"
@@ -26851,6 +26863,9 @@ msgstr "是的，更新 ID"
 
 msgid "You"
 msgstr "你"
+
+msgid "You are editing draft version {draftVersion}. Its changes reach new jobs once it is the Active version."
+msgstr "您正在编辑草稿版本 {draftVersion}。其更改将在它成为启用版本后应用于新工单。"
 
 msgid "You belong to more than one company. Pick where to work."
 msgstr "您属于多个公司。选择在哪个公司工作。"

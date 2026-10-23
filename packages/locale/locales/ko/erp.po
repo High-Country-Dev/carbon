@@ -4856,6 +4856,9 @@ msgstr "변경 통지"
 msgid "Change notices could not be loaded, so new versions and revisions are blocked. Reload to try again."
 msgstr "변경 통지를 로드할 수 없으므로 새 버전과 리비전이 차단되었습니다. 다시 시도하려면 새로 고침하십시오."
 
+msgid "Change notices could not be loaded, so the active version cannot be changed. Reload to try again."
+msgstr "변경 통지를 로드할 수 없으므로 활성 버전을 변경할 수 없습니다. 다시 시도하려면 새로 고침하십시오."
+
 msgid "Change order"
 msgstr "변경 오더"
 
@@ -14342,6 +14345,9 @@ msgstr "새 이슈"
 msgid "New Item Group"
 msgstr "새 품목 그룹"
 
+msgid "New jobs use version {activeVersion}"
+msgstr "새 작업 지시는 버전 {activeVersion}을(를) 사용합니다"
+
 msgid "New Kanban"
 msgstr "새 칸반"
 
@@ -15940,8 +15946,14 @@ msgstr "미결 유지보수 지시"
 msgid "Open in Carbon"
 msgstr "Carbon에서 열기"
 
+msgid "Open in change notice {ids}. Release it to change the active version."
+msgstr "변경 통지 {ids}에서 열기. 활성 버전을 변경하려면 릴리스하세요."
+
 msgid "Open in change notice {ids}. Release it to create new versions or revisions."
 msgstr "변경 통지 {ids}에서 열기. 새로운 버전 또는 리비전을 생성하려면 릴리스하세요."
+
+msgid "Open in change notices {ids}. Release them to change the active version."
+msgstr "변경 통지 {ids}에서 열기. 활성 버전을 변경하려면 릴리스하세요."
 
 msgid "Open in change notices {ids}. Release them to create new versions or revisions."
 msgstr "변경 통지 {ids}에서 열기. 새로운 버전 또는 리비전을 생성하려면 릴리스하세요."
@@ -26851,6 +26863,9 @@ msgstr "예, ID 업데이트"
 
 msgid "You"
 msgstr "나"
+
+msgid "You are editing draft version {draftVersion}. Its changes reach new jobs once it is the Active version."
+msgstr "초안 버전 {draftVersion}을(를) 편집하고 있습니다. 변경 사항은 이 버전이 활성 버전이 된 후 새 작업 지시에 반영됩니다."
 
 msgid "You belong to more than one company. Pick where to work."
 msgstr "둘 이상의 회사에 속해 있습니다. 작업할 회사를 선택하세요."
