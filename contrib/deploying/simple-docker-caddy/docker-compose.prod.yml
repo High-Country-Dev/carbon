@@ -82,6 +82,9 @@ services:
       SESSION_SECRET: __SESSION_SECRET__
       INNGEST_SIGNING_KEY: __INNGEST_SIGNING_KEY__
       INNGEST_EVENT_KEY: __INNGEST_EVENT_KEY__
+      # The SDK falls back to Inngest Cloud without this: self-sync 401s and app
+      # events (email, notifications) never reach the self-hosted server.
+      INNGEST_BASE_URL: http://inngest:8288
       RESEND_API_KEY: __RESEND_API_KEY__
       SMTP_HOST: ${GOTRUE_SMTP_HOST:-}
       SMTP_PORT: ${GOTRUE_SMTP_PORT:-587}
@@ -131,6 +134,7 @@ services:
       SESSION_SECRET: __SESSION_SECRET__
       INNGEST_SIGNING_KEY: __INNGEST_SIGNING_KEY__
       INNGEST_EVENT_KEY: __INNGEST_EVENT_KEY__
+      INNGEST_BASE_URL: http://inngest:8288
     volumes:
       - *shim
     healthcheck:
