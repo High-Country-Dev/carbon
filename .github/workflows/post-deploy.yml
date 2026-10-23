@@ -15,12 +15,9 @@ on:
 permissions:
   contents: read
 
-# Several ERP projects finish within moments of each other, and each run
-# syncs every workspace: one at a time, and a newer one replaces a run
-# still waiting.
-concurrency:
-  group: post-deploy
-  cancel-in-progress: false
+# No concurrency group: GitHub takes a run's slot before its job `if`, so
+# a skipped run (an MES or docs deploy) replaced the AWS deploy's waiting
+# one. Runs may overlap; both steps are idempotent.
 
 jobs:
   sync:
