@@ -16027,6 +16027,9 @@ msgstr "Otwórz integrację Ramp i spróbuj połączyć się ponownie, aby doko�
 msgid "Open the Setup Map"
 msgstr "Otwórz mapę konfiguracji"
 
+msgid "Open this link in the browser where you asked to sign in, or enter the 6-digit code from the email there."
+msgstr ""
+
 msgid "Open transactions"
 msgstr "Otwarte transakcje"
 
@@ -21373,11 +21376,17 @@ msgstr "Wyświetlane użytkownikowi, gdy ta reguła się nie powiedzie."
 msgid "Shuffle"
 msgstr "Przetasuj"
 
+msgid "Sign in here instead"
+msgstr ""
+
 msgid "Sign in to Carbon"
 msgstr "Zaloguj się do Carbon"
 
 msgid "Sign in with biometrics instead of a magic link. Passkeys are secured by Face ID, Touch ID, or your device PIN."
 msgstr "Zaloguj się za pomocą biometrii zamiast linku magicznego. Klucze dostępu są zabezpieczone za pomocą Face ID, Touch ID lub numeru PIN urządzenia."
+
+msgid "Sign in with code"
+msgstr ""
 
 msgid "Sign in with Google"
 msgstr "Zaloguj się za pomocą Google"
@@ -21396,6 +21405,9 @@ msgstr "Wyloguj sie"
 
 msgid "Sign out instead"
 msgstr "Zamiast tego wyloguj się"
+
+msgid "Sign-in code"
+msgstr ""
 
 msgid "Sign-off review before moving to the next step"
 msgstr "Przegląd zatwierdzający przed przejściem do następnego kroku"
@@ -26097,14 +26109,14 @@ msgstr "Automatycznie dopasowaliśmy każdą kolumnę. Przejrzyj wartości poni�
 msgid "We triage and fix issues fast while your team settles in"
 msgstr "Szybko triażujemy i naprawiamy problemy, podczas gdy Twój zespół się adaptuje"
 
+msgid "We've emailed you a sign-in link and a 6-digit code. Follow the link, or enter the code here."
+msgstr ""
+
 msgid "We've sent a verification code to {email}"
 msgstr "Wysłaliśmy kod weryfikacyjny na adres {email}"
 
 msgid "We've sent a verification code to {signupEmail}"
 msgstr "Wysłaliśmy kod weryfikacyjny na {signupEmail}"
-
-msgid "We've sent you a magic link to sign in to your account."
-msgstr "Wysłaliśmy Ci magiczny link, aby zalogować się na Twoje konto."
 
 msgid "Webhook"
 msgstr "Webhook"

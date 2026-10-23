@@ -16027,6 +16027,9 @@ msgstr "Ramp entegrasyonunu açın ve kurulumu tamamlamak için yeniden bağlanm
 msgid "Open the Setup Map"
 msgstr "Kurulum Haritasını Aç"
 
+msgid "Open this link in the browser where you asked to sign in, or enter the 6-digit code from the email there."
+msgstr ""
+
 msgid "Open transactions"
 msgstr "Açık işlemler"
 
@@ -21373,11 +21376,17 @@ msgstr "Bu kural başarısız olduğunda kullanıcıya gösterilir."
 msgid "Shuffle"
 msgstr "Karıştır"
 
+msgid "Sign in here instead"
+msgstr ""
+
 msgid "Sign in to Carbon"
 msgstr "Carbon'a giriş yapın"
 
 msgid "Sign in with biometrics instead of a magic link. Passkeys are secured by Face ID, Touch ID, or your device PIN."
 msgstr "Sihirli bağlantı yerine biyometrik kimlik doğrulama ile oturum açın. Geçiş Anahtarları Face ID, Touch ID veya cihaz PIN'iniz tarafından korunur."
+
+msgid "Sign in with code"
+msgstr ""
 
 msgid "Sign in with Google"
 msgstr "Google ile giriş yap"
@@ -21396,6 +21405,9 @@ msgstr "Oturumu Kapat"
 
 msgid "Sign out instead"
 msgstr "Bunun yerine Oturumu Kapat"
+
+msgid "Sign-in code"
+msgstr ""
 
 msgid "Sign-off review before moving to the next step"
 msgstr "Bir sonraki adıma geçmeden önce onay incelemesi"
@@ -26097,14 +26109,14 @@ msgstr "Her sütunu otomatik olarak eşleştirdik. Devam etmeden önce aşağıd
 msgid "We triage and fix issues fast while your team settles in"
 msgstr "Sorunları hızlı bir şekilde sınıflandırıp çözeriz ve ekibiniz sisteme alışırken yanınızdayız"
 
+msgid "We've emailed you a sign-in link and a 6-digit code. Follow the link, or enter the code here."
+msgstr ""
+
 msgid "We've sent a verification code to {email}"
 msgstr "Doğrulama kodunu {email} adresine gönderdik"
 
 msgid "We've sent a verification code to {signupEmail}"
 msgstr "Doğrulama kodunu {signupEmail}'e gönderdik"
-
-msgid "We've sent you a magic link to sign in to your account."
-msgstr "Hesabınıza giriş yapmak için size bir sihirli bağlantı gönderdik."
 
 msgid "Webhook"
 msgstr "Webhook"

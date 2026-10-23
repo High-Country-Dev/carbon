@@ -16027,6 +16027,9 @@ msgstr "打开 Ramp 集成，然后重新连接以完成配置。"
 msgid "Open the Setup Map"
 msgstr "打开设置地图"
 
+msgid "Open this link in the browser where you asked to sign in, or enter the 6-digit code from the email there."
+msgstr ""
+
 msgid "Open transactions"
 msgstr "未结交易"
 
@@ -21373,11 +21376,17 @@ msgstr "当此规则失败时向用户显示。"
 msgid "Shuffle"
 msgstr "随机"
 
+msgid "Sign in here instead"
+msgstr ""
+
 msgid "Sign in to Carbon"
 msgstr "登录 Carbon"
 
 msgid "Sign in with biometrics instead of a magic link. Passkeys are secured by Face ID, Touch ID, or your device PIN."
 msgstr "使用生物识别而不是魔法链接登录。通行密钥由 Face ID、Touch ID 或您的设备 PIN 保护。"
+
+msgid "Sign in with code"
+msgstr ""
 
 msgid "Sign in with Google"
 msgstr "用 Google 登录"
@@ -21396,6 +21405,9 @@ msgstr "登出"
 
 msgid "Sign out instead"
 msgstr "改为登出"
+
+msgid "Sign-in code"
+msgstr ""
 
 msgid "Sign-off review before moving to the next step"
 msgstr "在进入下一步骤前进行签署评审"
@@ -26097,14 +26109,14 @@ msgstr "我们自动匹配了每一列。继续前请查看下面的值。"
 msgid "We triage and fix issues fast while your team settles in"
 msgstr "在您的班组适应期间，我们快速分类和修复问题"
 
+msgid "We've emailed you a sign-in link and a 6-digit code. Follow the link, or enter the code here."
+msgstr ""
+
 msgid "We've sent a verification code to {email}"
 msgstr "我们已向 {email} 发送了验证码"
 
 msgid "We've sent a verification code to {signupEmail}"
 msgstr "我们已向 {signupEmail} 发送了验证码"
-
-msgid "We've sent you a magic link to sign in to your account."
-msgstr "我们已向您发送了一个魔法链接以登录您的账户。"
 
 msgid "Webhook"
 msgstr "Webhook"
