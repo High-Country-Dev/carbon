@@ -119,15 +119,11 @@ export const CONTROLLED_ENVIRONMENT = parseBoolean(itarEnvironment, false);
 
 export const MAINTENANCE_MODE = parseBoolean(getEnv("MAINTENANCE_MODE"), false);
 
-// A sign-in link completes only in the browser that asked for it. Mail
-// security sandboxes (Microsoft Defender) open links in a real browser and
-// press the page's button; without this they spend the one-time token, and
-// the person's own click finds it used. Elsewhere the email's code still
-// works. Server-only, like the other auth switches.
-export const MAGIC_LINK_SAME_BROWSER = parseBoolean(
-  getEnv("MAGIC_LINK_SAME_BROWSER"),
-  false
-);
+// "single": one customer owns this deployment and everything in it (BYOC, a
+// self-hosted install), so the server's own settings, such as its mail, are
+// theirs to share across their companies. Anything else, unset included, is
+// Carbon Cloud's "multi": many customers, one server.
+export const SINGLE_TENANT = getEnv("TENANT_TYPE") === "single";
 
 export const SYSTEM_STATUS_URL = getEnv("SYSTEM_STATUS_URL");
 

@@ -118,6 +118,12 @@ export const schema = define({
     description: "true for an ITAR / controlled deployment",
     browser: true
   },
+  TENANT_TYPE: {
+    group: "core",
+    type: z.enum(["single", "multi"]),
+    description:
+      "single for a deployment one customer owns (BYOC, self-hosted); multi (default) for Carbon Cloud"
+  },
   MAINTENANCE_MODE: {
     group: "core",
     description: "true answers every request except /health with a 503"
@@ -237,11 +243,6 @@ export const schema = define({
     description: "signs the session cookie",
     secret: true,
     required: "error"
-  },
-  MAGIC_LINK_SAME_BROWSER: {
-    group: "auth",
-    description:
-      "true: a sign-in link completes only in the browser that asked for it; needs DOMAIN, ignored without it (false)"
   },
   AUTH_COOKIE_SUFFIX: {
     group: "auth",

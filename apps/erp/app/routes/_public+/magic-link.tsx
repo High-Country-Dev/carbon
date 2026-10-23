@@ -2,11 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
-import {
-  CONTROLLED_ENVIRONMENT,
-  MAGIC_LINK_SAME_BROWSER,
-  SUPABASE_URL
-} from "@carbon/auth";
+import { CONTROLLED_ENVIRONMENT, SUPABASE_URL } from "@carbon/auth";
 import { isSignInBrowser } from "@carbon/auth/sign-in-browser.server";
 import { Button, Heading } from "@carbon/react";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -19,15 +15,15 @@ import {
 } from "react-router";
 
 /**
- * Whether this page may offer to spend the link's token. With
- * MAGIC_LINK_SAME_BROWSER, only in the browser that asked for the email:
+ * Whether this page may offer to spend the link's token: only in the
+ * browser that asked for the email (sign-in-browser.server.ts), because
  * mail security sandboxes (Microsoft Defender) open the link in a real
  * browser and press its button, and the person then finds it used. Nothing
  * here spends anything — the token is only used by the button.
  */
 export async function loader({ request }: LoaderFunctionArgs) {
   return {
-    sameBrowser: !MAGIC_LINK_SAME_BROWSER || (await isSignInBrowser(request))
+    sameBrowser: await isSignInBrowser(request)
   };
 }
 
@@ -43,8 +39,21 @@ export default function ConfirmMagicLink() {
     return null;
   }
 
+  // The app that asked for the email: the link carries Auth's RedirectTo,
+  // its /callback. Anything else (Auth's bare Site URL when it refused the
+  // app's address, an older email without it) finishes here instead. Auth's
+  // /verify redirects only to its allow list either way.
+  const redirectTo = (() => {
+    const asked = params.get("redirect_to");
+    try {
+      if (asked && new URL(asked).pathname === "/callback") return asked;
+    } catch {
+      // not a URL
+    }
+    return `${window?.location.origin}/callback`;
+  })();
   const getConfirmationURL = (token: string) => {
-    return `${SUPABASE_URL}/auth/v1/verify?token=${token}&type=magiclink&redirect_to=${window?.location.origin}/callback`;
+    return `${SUPABASE_URL}/auth/v1/verify?token=${token}&type=magiclink&redirect_to=${encodeURIComponent(redirectTo)}`;
   };
 
   return (
