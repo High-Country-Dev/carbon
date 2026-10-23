@@ -11,6 +11,7 @@ import {
   Button,
   cn,
   IconButton,
+  ImageZoomViewer,
   Label,
   Tooltip,
   TooltipContent,
@@ -196,6 +197,9 @@ export function SlidesEditor({
   const { t } = useLingui();
   const [annotatingIndex, setAnnotatingIndex] = useState<number | null>(null);
   const annotating = annotatingIndex == null ? null : slides[annotatingIndex];
+  // The image slide open full size. A model slide has no image to enlarge.
+  const [viewingIndex, setViewingIndex] = useState<number | null>(null);
+  const viewing = viewingIndex == null ? null : slides[viewingIndex];
   const models = useSlideModels(slides);
   const containerRef = useRef<HTMLDivElement>(null);
   const isHidden = isDisabled && slides.length === 0;
@@ -341,16 +345,26 @@ export function SlidesEditor({
                     </div>
                   ) : (
                     <>
-                      <img
-                        src={
-                          slide.imagePath ? getPrivateUrl(slide.imagePath) : ""
-                        }
-                        alt={slide.caption ?? "Slide"}
-                        className={cn(
-                          "w-full rounded-md bg-muted/40 object-contain",
-                          SLIDE_IMAGE_HEIGHT
-                        )}
-                      />
+                      <button
+                        type="button"
+                        aria-label={t`View full size`}
+                        title={t`View full size`}
+                        className="block w-full cursor-zoom-in rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        onClick={() => setViewingIndex(index)}
+                      >
+                        <img
+                          src={
+                            slide.imagePath
+                              ? getPrivateUrl(slide.imagePath)
+                              : ""
+                          }
+                          alt={slide.caption ?? "Slide"}
+                          className={cn(
+                            "w-full rounded-md bg-muted/40 object-contain",
+                            SLIDE_IMAGE_HEIGHT
+                          )}
+                        />
+                      </button>
                       {/* Read-only pin preview so an annotated slide reads at a glance. */}
                       <SlidePinOverlay pins={pins} />
                     </>
@@ -402,6 +416,14 @@ export function SlidesEditor({
           })}
         </div>
       )}
+
+      <ImageZoomViewer
+        open={!!viewing?.imagePath && !viewing.modelUploadId}
+        src={viewing?.imagePath ? getPrivateUrl(viewing.imagePath) : null}
+        caption={viewing?.caption}
+        annotations={viewing?.annotations ?? []}
+        onClose={() => setViewingIndex(null)}
+      />
 
       {annotating?.imagePath && annotatingIndex != null && (
         <SlideAnnotator

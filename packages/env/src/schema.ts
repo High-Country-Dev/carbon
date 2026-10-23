@@ -128,6 +128,11 @@ export const schema = define({
       "URL of a JSON document with the latest version and an announcement",
     type: url
   },
+  INTEGRATION_EARLY_ACCESS_USER_IDS: {
+    group: "core",
+    description:
+      "Comma-separated user ids that can install Coming soon integrations on Cloud"
+  },
   DEFAULT_LANGUAGE: {
     group: "core",
     description: "Default UI language (en)",
@@ -233,6 +238,11 @@ export const schema = define({
     secret: true,
     required: "error"
   },
+  MAGIC_LINK_SAME_BROWSER: {
+    group: "auth",
+    description:
+      "true: a sign-in link completes only in the browser that asked for it; needs DOMAIN, ignored without it (false)"
+  },
   AUTH_COOKIE_SUFFIX: {
     group: "auth",
     description:
@@ -246,6 +256,12 @@ export const schema = define({
   RATE_LIMIT: {
     group: "auth",
     description: "Sign-in attempts allowed per window (5)",
+    type: number
+  },
+  TRUSTED_PROXIES: {
+    group: "auth",
+    description:
+      "Proxies in front of the app that append to X-Forwarded-For (1); 2 behind an ALB and Traefik",
     type: number
   },
   BOT_PROTECTION: {
