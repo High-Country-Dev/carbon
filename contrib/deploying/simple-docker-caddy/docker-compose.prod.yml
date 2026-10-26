@@ -86,7 +86,10 @@ services:
       # events (email, notifications) never reach the self-hosted server.
       INNGEST_BASE_URL: http://inngest:8288
       RESEND_API_KEY: __RESEND_API_KEY__
-      SMTP_HOST: ${GOTRUE_SMTP_HOST:-}
+      # App mail (documents to suppliers/customers, invites) is off unless ERP_SMTP_HOST is
+      # set; sign-in codes go through GoTrue's own GOTRUE_SMTP_* and keep working. Staging
+      # holds a client's real contacts, so the app must not mail them by accident.
+      SMTP_HOST: ${ERP_SMTP_HOST:-}
       SMTP_PORT: ${GOTRUE_SMTP_PORT:-587}
       SMTP_USER: ${GOTRUE_SMTP_USER:-}
       SMTP_PASSWORD: __SMTP_PASSWORD__
