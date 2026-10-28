@@ -268,6 +268,7 @@ export function StartStopButton({
   isTrackedActivity,
   trackedEntityId,
   batchId,
+  onStop,
   ...props
 }: ComponentProps<"button"> & {
   eventType: (typeof productionEventType)[number];
@@ -281,6 +282,9 @@ export function StartStopButton({
   // When set, the start/stop event is tagged as part of this batch — sliced per
   // member at batch completion, and cost posting is deferred until then.
   batchId?: string;
+  // When set, pressing stop calls this instead of ending the event: the
+  // close-out modal asks its questions and does the stop itself.
+  onStop?: () => void;
 }) {
   const fetcher = useFetcher<ProductionEvent>();
 
@@ -374,7 +378,8 @@ export function StartStopButton({
         <PauseButton
           ref={startStopRef}
           disabled={fetcher.state !== "idle"}
-          type="submit"
+          type={onStop ? "button" : "submit"}
+          onClick={onStop}
         />
       ) : (
         <PlayButton

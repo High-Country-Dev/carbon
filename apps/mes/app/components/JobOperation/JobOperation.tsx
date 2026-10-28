@@ -140,6 +140,7 @@ import type {
   TrackedInput
 } from "~/services/types";
 import { useItems } from "~/stores";
+import { missingRequiredSteps, requiresCloseOut } from "~/utils/closeOut";
 import { makeDurations } from "~/utils/durations";
 import { useOrigin } from "~/utils/origin";
 import { getPrivateUrl, getRawModelUrl, path } from "~/utils/path";
@@ -148,6 +149,7 @@ import { MesAppBar } from "../MesAppBar";
 import { BatchCompleteModal } from "./components/BatchCompleteModal";
 import { BatchOverview } from "./components/BatchOverview";
 import { OperationChat } from "./components/Chat";
+import { CloseOutModal } from "./components/CloseOutModal";
 import {
   Controls,
   IconButtonWithTooltip,
@@ -337,6 +339,7 @@ export const JobOperation = ({
   const attributeRecordDeleteModal = useDisclosure();
   const maintenanceModal = useDisclosure();
   const qualityIssueModal = useDisclosure();
+  const closeOutModal = useDisclosure();
   const [activeStep, setActiveStep] = useState(
     parentIsSerial ? serialIndex : 0
   );
@@ -2615,6 +2618,14 @@ export const JobOperation = ({
                   }
                   trackedEntityId={trackedEntityId}
                   batchId={batch?.id}
+                  onStop={
+                    requiresCloseOut({
+                      type: eventType as (typeof productionEventType)[number],
+                      isBatched
+                    })
+                      ? closeOutModal.onOpen
+                      : undefined
+                  }
                 />
                 {/* What the big button will do, or what is running — the dock
                     only; the rail and the phone bar stay icon-sized. */}
@@ -2891,18 +2902,57 @@ export const JobOperation = ({
           </Await>
         </Suspense>
       )}
+      {closeOutModal.isOpen &&
+        (eventType === "Labor" || eventType === "Machine") &&
+        (eventType === "Labor"
+          ? laborProductionEvent
+          : machineProductionEvent) && (
+          <Suspense key={`close-out-modal-${operationId}`}>
+            <Await resolve={procedure}>
+              {(resolvedProcedure) => (
+                <CloseOutModal
+                  eventType={eventType}
+                  event={
+                    (eventType === "Labor"
+                      ? laborProductionEvent
+                      : machineProductionEvent)!
+                  }
+                  operation={operation}
+                  setupProductionEvent={setupProductionEvent}
+                  laborProductionEvent={laborProductionEvent}
+                  machineProductionEvent={machineProductionEvent}
+                  parentIsSerial={!!parentIsSerial}
+                  parentIsBatch={!!parentIsBatch}
+                  trackedEntityId={trackedEntityId}
+                  trackedEntityReadableId={
+                    trackedEntities.find(
+                      (entity) => entity.id === trackedEntityId
+                    )?.readableId ?? undefined
+                  }
+                  missingSteps={missingRequiredSteps(
+                    resolvedProcedure.attributes
+                  ).map((step) => step.name)}
+                  onReviewSteps={() => {
+                    closeOutModal.onClose();
+                    setActiveTab("procedure");
+                  }}
+                  onClose={closeOutModal.onClose}
+                />
+              )}
+            </Await>
+          </Suspense>
+        )}
       {finishModal.isOpen && (
         <Suspense key={`finish-modal-${operationId}`}>
           <Await resolve={procedure}>
             {(resolvedProcedure) => {
-              const { attributes } = resolvedProcedure;
-              const allStepsRecorded = attributes.every(
-                (a) => a.jobOperationStepRecord !== null
-              );
+              const missingSteps = missingRequiredSteps(
+                resolvedProcedure.attributes
+              ).map((step) => step.name);
               return (
                 <QuantityModal
                   type="finish"
-                  allStepsRecorded={allStepsRecorded}
+                  missingSteps={missingSteps}
                   laborProductionEvent={laborProductionEvent}
                   machineProductionEvent={machineProductionEvent}
                   operation={operation}

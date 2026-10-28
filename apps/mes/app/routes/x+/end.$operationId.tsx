@@ -11,6 +11,7 @@ import { evaluateLinesForSurface, isBlocked } from "@carbon/ee/rules.server";
 import { getLogger } from "@carbon/logger";
 import { redirect } from "@carbon/utils";
 import type { LoaderFunctionArgs } from "react-router";
+import { getRequiredStepsRefusal } from "~/services/closeOut.server";
 import { erpPosting } from "~/services/erp";
 import {
   finishJobOperation,
@@ -121,6 +122,21 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const isTrackedEntity =
     jobMakeMethod.data.requiresSerialTracking ||
     jobMakeMethod.data.requiresBatchTracking;
+
+  // A scan that closes the operation is held by unrecorded required steps,
+  // like every other way of finishing it.
+  if (willBeFinished) {
+    const stepsRefusal = await getRequiredStepsRefusal(serviceRole, {
+      operationId,
+      companyId
+    });
+    if (stepsRefusal) {
+      return redirect(
+        path.to.operation(operationId),
+        await flash(request, error(null, stepsRefusal))
+      );
+    }
+  }
 
   // Business-rule pre-flight on operationFinish. Only fires when this scan
   // actually closes the operation (`willBeFinished`); transient quantity

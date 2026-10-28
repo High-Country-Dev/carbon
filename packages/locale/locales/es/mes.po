@@ -63,6 +63,10 @@ msgstr "{0} de {1} completados"
 msgid "{0} of {1} completed"
 msgstr "{0} de {1} completados"
 
+#. placeholder {0}: operation.quantityComplete
+msgid "{0} of {targetQuantity} completed"
+msgstr ""
+
 #. placeholder {0}: rows.length
 msgid "{0} queued"
 msgstr "{0} en cola"
@@ -109,6 +113,9 @@ msgstr "🚨 Atención: el {0} su cuenta se trasladará a erp.try.carbon.ms"
 
 msgid "A previous completion did not finish. Retrying resumes the remaining steps — quantities are not double-counted."
 msgstr "Una finalización anterior no se completó. Reintentar reanuda los pasos restantes — las cantidades no se duplican."
+
+msgid "A replacement serial number will be created."
+msgstr ""
 
 msgid "About"
 msgstr "Acerca de"
@@ -201,6 +208,10 @@ msgstr "Asignar unidades fallidas"
 
 msgid "Allocate units"
 msgstr "Asignar unidades"
+
+#. placeholder {0}: operation.itemReadableId
+msgid "Answer both questions to log your time on {0}."
+msgstr ""
 
 msgid "Appearance"
 msgstr "Apariencia"
@@ -546,6 +557,9 @@ msgstr "Descripción"
 msgid "Details"
 msgstr "Detalles"
 
+msgid "Did you scrap anything?"
+msgstr ""
+
 msgid "Dismiss"
 msgstr "Descartar"
 
@@ -769,6 +783,12 @@ msgstr "Finalizar la configuración de su cuenta"
 msgid "Finish with material unpicked?"
 msgstr "¿Finalizar con material sin recoger?"
 
+msgid "Finished"
+msgstr ""
+
+msgid "Finishing marks the operation done with fewer than planned. Log completed parts first if you made more."
+msgstr ""
+
 #. placeholder {0}: formatRelativeTime( convertDateStringToIsoString(batchFacts.dueDate) )
 msgid "First due {0}"
 msgstr "Primer vencimiento {0}"
@@ -799,6 +819,9 @@ msgstr "Volver a la operación"
 
 msgid "Go to onboarding"
 msgstr "Ir a la incorporación"
+
+msgid "Go to steps"
+msgstr ""
 
 msgid "Heading {level}"
 msgstr "Encabezado {level}"
@@ -879,6 +902,9 @@ msgstr "es"
 msgid "is any of"
 msgstr "es cualquiera de"
 
+msgid "Is this operation finished?"
+msgstr ""
+
 msgid "Issue"
 msgstr "Emitir"
 
@@ -924,11 +950,17 @@ msgstr "Mantener navegación abierta"
 msgid "Keep picking"
 msgstr "Continuar picking"
 
+msgid "Keep running"
+msgstr ""
+
 msgid "Keyboard shortcuts"
 msgstr "Atajos de teclado"
 
 msgid "Kit"
 msgstr "Kit"
+
+msgid "labor"
+msgstr ""
 
 msgid "Labor"
 msgstr "Mano de obra"
@@ -1022,6 +1054,9 @@ msgstr "Números de lote faltantes"
 
 msgid "Lot tracked"
 msgstr "Lote rastreado"
+
+msgid "machine"
+msgstr ""
 
 msgid "Machine"
 msgstr "Máquina"
@@ -1237,6 +1272,9 @@ msgstr "No se requieren muestras."
 
 msgid "No scheduled time"
 msgstr "Sin tiempo programado"
+
+msgid "No scrap"
+msgstr ""
 
 msgid "No serial numbers"
 msgstr "Sin números de serie"
@@ -1580,6 +1618,10 @@ msgstr "Solo registrar"
 msgid "Record Partial"
 msgstr "Registrar Parcial"
 
+#. placeholder {0}: missingSteps.join(", ")
+msgid "Record these steps before marking the operation done: {0}"
+msgstr ""
+
 msgid "Recorded"
 msgstr "Registrado"
 
@@ -1627,6 +1669,9 @@ msgstr "Requiere un código de 6 dígitos de una aplicación autenticadora al in
 
 msgid "Required"
 msgstr "Requerido"
+
+msgid "Required steps are not recorded"
+msgstr ""
 
 msgid "Reset"
 msgstr "Restablecer"
@@ -1945,6 +1990,18 @@ msgstr "Pasos"
 msgid "Steps are missing"
 msgstr "Faltan pasos"
 
+msgid "Still in progress"
+msgstr ""
+
+msgid "Stop {workType} timer"
+msgstr ""
+
+msgid "Stop and finish"
+msgstr ""
+
+msgid "Stop timer"
+msgstr ""
+
 msgid "Storage Unit"
 msgstr "Unidad de Almacenamiento"
 
@@ -2262,6 +2319,9 @@ msgstr "Escribir una nota…"
 
 msgid "Yes"
 msgstr "Sí"
+
+msgid "Yes, log scrap"
+msgstr ""
 
 msgid "You've been clocked in for {hoursElapsed} hours. Did you forget to clock out?"
 msgstr "Ha estado fichado durante {hoursElapsed} horas. ¿Olvidó fichar salida?"

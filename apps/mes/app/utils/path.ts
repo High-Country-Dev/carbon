@@ -58,6 +58,7 @@ export const path = {
     batchDetail: (id: string) => `${getAppUrl()}${x}/production/batches/${id}`,
     batchRecord: (id: string) => generatePath(`${x}/batch/${id}/record`),
     callback: "/callback",
+    closeOut: `${x}/close-out`,
     companySwitch: (companyId: string) =>
       generatePath(`${x}/company/switch/${companyId}`),
     complete: `${x}/complete`,
