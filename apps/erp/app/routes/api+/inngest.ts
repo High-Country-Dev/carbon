@@ -17,9 +17,22 @@ import { callOperation } from "./v1+/lib/call.server";
 
 const logger = getLogger("erp", "inngest");
 
+// Functions this deployment doesn't serve: comma-separated ids in
+// INNGEST_SKIP_FUNCTIONS, e.g. the scheduled sweeps of integrations it never
+// connects. Inngest Cloud bills every scheduled run, used or not.
+const skippedFunctionIds = new Set(
+  (process.env.INNGEST_SKIP_FUNCTIONS ?? "")
+    .split(",")
+    .map((id) => id.trim())
+    .filter(Boolean)
+);
+const servedFunctions = functions.filter(
+  (fn) => !skippedFunctionIds.has(fn.id())
+);
+
 const handler = serve({
   client: inngest,
-  functions,
+  functions: servedFunctions,
   // Enable streaming for long-running functions on Vercel
   streaming: "allow",
   serveHost: process.env.INNGEST_SERVE_HOST || process.env.ERP_URL
@@ -27,7 +40,7 @@ const handler = serve({
 
 // As Inngest addresses them: `<app>-<function>`, plus the failure handler's.
 const functionIds = new Set(
-  functions.flatMap((fn) => {
+  servedFunctions.flatMap((fn) => {
     const id = fn.id(inngest.id);
     return [id, `${id}-failure`];
   })
