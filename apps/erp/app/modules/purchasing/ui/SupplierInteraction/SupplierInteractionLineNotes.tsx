@@ -6,23 +6,15 @@ import { useCarbon } from "@carbon/auth";
 import type { JSONContent } from "@carbon/react";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-  HStack,
-  RichTextView,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
   useDebounce
 } from "@carbon/react";
-import { Editor } from "@carbon/react/Editor";
 import { getLocalTimeZone, today } from "@internationalized/date";
-import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
+import NotesSections from "~/components/NotesSections";
 import { useImageUpload, usePermissions, useUser } from "~/hooks";
 
 const SupplierInteractionLineNotes = ({
@@ -50,7 +42,6 @@ const SupplierInteractionLineNotes = ({
   const { carbon } = useCarbon();
   const permissions = usePermissions();
   const isEmployee = permissions.is("employee");
-  const [tab, setTab] = useState(isEmployee ? "internal" : "external");
   const [internalNotes, setInternalNotes] = useState(
     initialInternalNotes ?? {}
   );
@@ -90,81 +81,49 @@ const SupplierInteractionLineNotes = ({
     true
   );
 
+  const showExternal = [
+    "purchasingRfqLine",
+    "supplierQuoteLine",
+    "purchaseOrderLine"
+  ].includes(table);
+
   if (!id) return null;
 
   return (
     <>
       <Card>
-        <Tabs value={tab} onValueChange={setTab}>
-          <HStack className="w-full justify-between">
-            <CardHeader>
-              <CardTitle>{title}</CardTitle>
-              <CardDescription>
-                {subTitle ? `${subTitle} - ` : ""}
-                {tab === "internal" ? "Internal Notes" : "External Notes"}
-              </CardDescription>
-            </CardHeader>
-            <CardAction>
-              {[
-                "purchasingRfqLine",
-                "supplierQuoteLine",
-                "purchaseOrderLine"
-              ].includes(table) &&
-                isEmployee && (
-                  <TabsList>
-                    <TabsTrigger value="internal">
-                      <Trans>Internal</Trans>
-                    </TabsTrigger>
-                    <TabsTrigger value="external">
-                      <Trans>External</Trans>
-                    </TabsTrigger>
-                  </TabsList>
-                )}
-            </CardAction>
-          </HStack>
-          <CardContent>
-            <TabsContent value="internal">
-              {!isReadOnly && permissions.can("update", "purchasing") ? (
-                <Editor
-                  initialValue={(internalNotes ?? {}) as JSONContent}
-                  onUpload={onUploadImage}
-                  onChange={(value) => {
-                    setInternalNotes(value);
-                    onUpdateInternalNotes(value);
-                  }}
-                />
-              ) : (
-                <RichTextView
-                  content={internalNotes as JSONContent}
-                  empty={<Trans>No internal notes</Trans>}
-                />
-              )}
-            </TabsContent>
-            {[
-              "purchasingRfqLine",
-              "supplierQuoteLine",
-              "purchaseOrderLine"
-            ].includes(table) && (
-              <TabsContent value="external">
-                {!isReadOnly && permissions.can("update", "purchasing") ? (
-                  <Editor
-                    initialValue={(externalNotes ?? {}) as JSONContent}
-                    onUpload={onUploadImage}
-                    onChange={(value) => {
+        <CardHeader>
+          <CardTitle>{title}</CardTitle>
+          {subTitle && <CardDescription>{subTitle}</CardDescription>}
+        </CardHeader>
+        <CardContent>
+          <NotesSections
+            isEditable={!isReadOnly && permissions.can("update", "purchasing")}
+            onUploadImage={onUploadImage}
+            external={
+              showExternal
+                ? {
+                    content: externalNotes as JSONContent,
+                    onChange: (value) => {
                       setExternalNotes(value);
                       onUpdateExternalNotes(value);
-                    }}
-                  />
-                ) : (
-                  <RichTextView
-                    content={externalNotes as JSONContent}
-                    empty={<Trans>No external notes</Trans>}
-                  />
-                )}
-              </TabsContent>
-            )}
-          </CardContent>
-        </Tabs>
+                    }
+                  }
+                : undefined
+            }
+            internal={
+              isEmployee
+                ? {
+                    content: internalNotes as JSONContent,
+                    onChange: (value) => {
+                      setInternalNotes(value);
+                      onUpdateInternalNotes(value);
+                    }
+                  }
+                : undefined
+            }
+          />
+        </CardContent>
       </Card>
     </>
   );

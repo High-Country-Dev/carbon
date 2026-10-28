@@ -9760,9 +9760,6 @@ msgstr "외부 링크"
 msgid "External notes"
 msgstr "외부 메모"
 
-msgid "External Notes"
-msgstr "외부 메모"
-
 msgid "External Ref."
 msgstr "외부 참조"
 
@@ -11819,9 +11816,6 @@ msgid "Internal Delta"
 msgstr "내부 변경사항"
 
 msgid "Internal notes"
-msgstr "내부 메모"
-
-msgid "Internal Notes"
 msgstr "내부 메모"
 
 msgid "Into"

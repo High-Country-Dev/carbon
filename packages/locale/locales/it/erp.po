@@ -9760,9 +9760,6 @@ msgstr "Collegamento esterno"
 msgid "External notes"
 msgstr "note esterne"
 
-msgid "External Notes"
-msgstr "Note esterne"
-
 msgid "External Ref."
 msgstr "Rif. Esterno"
 
@@ -11820,9 +11817,6 @@ msgstr "Delta Interno"
 
 msgid "Internal notes"
 msgstr "note interne"
-
-msgid "Internal Notes"
-msgstr "Note interne"
 
 msgid "Into"
 msgstr "In"

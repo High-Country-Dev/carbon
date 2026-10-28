@@ -9760,9 +9760,6 @@ msgstr "外部链接"
 msgid "External notes"
 msgstr "外部备注"
 
-msgid "External Notes"
-msgstr "外部备注"
-
 msgid "External Ref."
 msgstr "外部参考"
 
@@ -11819,9 +11816,6 @@ msgid "Internal Delta"
 msgstr "内部差异"
 
 msgid "Internal notes"
-msgstr "内部备注"
-
-msgid "Internal Notes"
 msgstr "内部备注"
 
 msgid "Into"

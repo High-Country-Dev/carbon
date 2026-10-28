@@ -9760,9 +9760,6 @@ msgstr "Внешняя ссылка"
 msgid "External notes"
 msgstr "Внешние примечания"
 
-msgid "External Notes"
-msgstr "Внешние примечания"
-
 msgid "External Ref."
 msgstr "Внешняя ссылка"
 
@@ -11819,9 +11816,6 @@ msgid "Internal Delta"
 msgstr "Внутренняя разница"
 
 msgid "Internal notes"
-msgstr "Внутренние примечания"
-
-msgid "Internal Notes"
 msgstr "Внутренние примечания"
 
 msgid "Into"
