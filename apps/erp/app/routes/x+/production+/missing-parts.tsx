@@ -132,7 +132,7 @@ export default function JobsMissingPartsRoute() {
               </Trans>
             </p>
           </VStack>
-          <HStack className="gap-2">
+          <HStack className="flex-wrap gap-2">
             <Badge variant="red">{t`${jobsMissingParts} jobs short now`}</Badge>
             <Badge variant="yellow">{t`${atRiskJobs} jobs at risk`}</Badge>
             <Button
@@ -302,7 +302,7 @@ function PartRow({
             <VStack spacing={0}>
               <Link
                 to={path.to.part(line.itemId)}
-                className="font-medium hover:underline"
+                className="whitespace-nowrap font-medium hover:underline"
                 onClick={(e) => e.stopPropagation()}
               >
                 {part.item.readableId}
