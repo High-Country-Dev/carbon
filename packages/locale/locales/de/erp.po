@@ -9795,9 +9795,6 @@ msgstr "Externer Link"
 msgid "External notes"
 msgstr "Externe Notizen"
 
-msgid "External Notes"
-msgstr "Externe Notizen"
-
 msgid "External Ref."
 msgstr "Externe Ref."
 
@@ -11857,9 +11854,6 @@ msgid "Internal Delta"
 msgstr "Interne Differenz"
 
 msgid "Internal notes"
-msgstr "Interne Notizen"
-
-msgid "Internal Notes"
 msgstr "Interne Notizen"
 
 msgid "Into"

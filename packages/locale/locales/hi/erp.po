@@ -9795,9 +9795,6 @@ msgstr "बाहरी लिंक"
 msgid "External notes"
 msgstr "बाहरी नोट्स"
 
-msgid "External Notes"
-msgstr "बाहरी नोट्स"
-
 msgid "External Ref."
 msgstr "बाहरी संदर्भ"
 
@@ -11857,9 +11854,6 @@ msgid "Internal Delta"
 msgstr "आंतरिक अंतर"
 
 msgid "Internal notes"
-msgstr "आंतरिक नोट्स"
-
-msgid "Internal Notes"
 msgstr "आंतरिक नोट्स"
 
 msgid "Into"

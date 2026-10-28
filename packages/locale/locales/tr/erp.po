@@ -9795,9 +9795,6 @@ msgstr "Harici bağlantı"
 msgid "External notes"
 msgstr "Harici notlar"
 
-msgid "External Notes"
-msgstr "Harici Notlar"
-
 msgid "External Ref."
 msgstr "Harici Referans"
 
@@ -11858,9 +11855,6 @@ msgstr "Dahili Fark"
 
 msgid "Internal notes"
 msgstr "Dahili notlar"
-
-msgid "Internal Notes"
-msgstr "Dahili Notlar"
 
 msgid "Into"
 msgstr "İçine"

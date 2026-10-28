@@ -9795,9 +9795,6 @@ msgstr "社外リンク"
 msgid "External notes"
 msgstr "社外メモ"
 
-msgid "External Notes"
-msgstr "社外メモ"
-
 msgid "External Ref."
 msgstr "社外参照"
 
@@ -11857,9 +11854,6 @@ msgid "Internal Delta"
 msgstr "社内差異"
 
 msgid "Internal notes"
-msgstr "社内メモ"
-
-msgid "Internal Notes"
 msgstr "社内メモ"
 
 msgid "Into"

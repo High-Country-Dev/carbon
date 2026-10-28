@@ -6,22 +6,15 @@ import { useCarbon } from "@carbon/auth";
 import type { JSONContent } from "@carbon/react";
 import {
   Card,
-  CardAction,
   CardContent,
   CardHeader,
   CardTitle,
-  HStack,
-  RichTextView,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
   useDebounce
 } from "@carbon/react";
-import { Editor } from "@carbon/react/Editor";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
+import NotesSections from "~/components/NotesSections";
 import { useImageUpload, usePermissions, useUser } from "~/hooks";
 
 const ShipmentNotes = ({
@@ -36,7 +29,6 @@ const ShipmentNotes = ({
   const { id: userId } = useUser();
   const { carbon } = useCarbon();
   const permissions = usePermissions();
-  const [tab, setTab] = useState("internal");
   const [internalNotes, setInternalNotes] = useState(
     initialInternalNotes ?? {}
   );
@@ -81,61 +73,31 @@ const ShipmentNotes = ({
   return (
     <>
       <Card>
-        <Tabs value={tab} onValueChange={setTab}>
-          <HStack className="w-full justify-between">
-            <CardHeader>
-              <CardTitle>
-                <Trans>Shipping Notes</Trans>
-              </CardTitle>
-            </CardHeader>
-            <CardAction>
-              <TabsList>
-                <TabsTrigger value="internal">
-                  <Trans>Internal</Trans>
-                </TabsTrigger>
-                <TabsTrigger value="external">
-                  <Trans>External</Trans>
-                </TabsTrigger>
-              </TabsList>
-            </CardAction>
-          </HStack>
-          <CardContent>
-            <TabsContent value="internal">
-              {permissions.can("update", "inventory") ? (
-                <Editor
-                  initialValue={(internalNotes ?? {}) as JSONContent}
-                  onUpload={onUploadImage}
-                  onChange={(value) => {
-                    setInternalNotes(value);
-                    onUpdateInternalNotes(value);
-                  }}
-                />
-              ) : (
-                <RichTextView
-                  content={internalNotes as JSONContent}
-                  empty={<Trans>No internal notes</Trans>}
-                />
-              )}
-            </TabsContent>
-            <TabsContent value="external">
-              {permissions.can("update", "inventory") ? (
-                <Editor
-                  initialValue={(externalNotes ?? {}) as JSONContent}
-                  onUpload={onUploadImage}
-                  onChange={(value) => {
-                    setExternalNotes(value);
-                    onUpdateExternalNotes(value);
-                  }}
-                />
-              ) : (
-                <RichTextView
-                  content={externalNotes as JSONContent}
-                  empty={<Trans>No external notes</Trans>}
-                />
-              )}
-            </TabsContent>
-          </CardContent>
-        </Tabs>
+        <CardHeader>
+          <CardTitle>
+            <Trans>Shipping Notes</Trans>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <NotesSections
+            isEditable={permissions.can("update", "inventory")}
+            onUploadImage={onUploadImage}
+            external={{
+              content: externalNotes as JSONContent,
+              onChange: (value) => {
+                setExternalNotes(value);
+                onUpdateExternalNotes(value);
+              }
+            }}
+            internal={{
+              content: internalNotes as JSONContent,
+              onChange: (value) => {
+                setInternalNotes(value);
+                onUpdateInternalNotes(value);
+              }
+            }}
+          />
+        </CardContent>
       </Card>
     </>
   );
