@@ -491,6 +491,7 @@ msgstr "{assetCount} Assets"
 
 msgid "{atRiskJobs} jobs at risk"
 msgstr "{atRiskJobs} jobs at risk"
+
 msgid "{BRAND_NAME}"
 msgstr "{BRAND_NAME}"
 
