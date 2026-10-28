@@ -21,7 +21,7 @@ import {
   HStack,
   PrefetchLink
 } from "@carbon/react";
-import { isInternalEmail, redirect } from "@carbon/utils";
+import { BRAND_NAME, isInternalEmail, redirect } from "@carbon/utils";
 import { type ReactNode, useState } from "react";
 import {
   LuBot,
@@ -286,8 +286,7 @@ export default function OnboardingIndustry() {
           {
             value: "import" as const,
             title: "Restore from a backup",
-            description:
-              "Set up from a backup of another Carbon company environment",
+            description: `Set up from a backup of another ${BRAND_NAME} company environment`,
             icon: <LuUpload className="h-5 w-5" />
           }
         ]
@@ -311,7 +310,8 @@ export default function OnboardingIndustry() {
           <CardHeader>
             <CardTitle>Restore from a backup</CardTitle>
             <CardDescription>
-              Upload a Carbon backup and we'll set up your new company from it.
+              Upload a {BRAND_NAME} backup and we'll set up your new company
+              from it.
             </CardDescription>
           </CardHeader>
           <OnboardingCardContent>
@@ -337,7 +337,7 @@ export default function OnboardingIndustry() {
                     Choose your backup file
                   </span>
                   <span className="text-xs text-muted-foreground">
-                    A Carbon backup (.carbon.tar.gz)
+                    A {BRAND_NAME} backup (.carbon.tar.gz)
                   </span>
                 </>
               )}

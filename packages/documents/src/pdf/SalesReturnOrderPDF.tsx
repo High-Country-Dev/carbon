@@ -4,6 +4,7 @@
 
 import type { Database } from "@carbon/database";
 import type { JSONContent } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Fragment } from "react";
 import type { DocumentTemplate, ResolvedSection } from "../template";
 import {
@@ -134,7 +135,7 @@ const SalesReturnOrderPDF = ({
       theme={theme}
       title={title}
       meta={{
-        author: meta?.author ?? "Carbon",
+        author: meta?.author ?? BRAND_NAME,
         keywords: meta?.keywords ?? "rma, return merchandise authorization",
         subject: meta?.subject ?? "Return Merchandise Authorization"
       }}

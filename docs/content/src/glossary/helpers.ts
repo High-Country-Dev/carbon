@@ -64,13 +64,22 @@ export function hasEntry(id: string): boolean {
  * (the docs Next.js site, server-side logs); ERP/MES UI should resolve through
  * `i18n._(entry.term)` so the user sees the active locale. */
 export function getTermText(entry: GlossaryEntry): string {
-  return entry.term.message ?? "";
+  return sourceText(entry.term);
 }
 
 /** Source English of a glossary entry's definition. See `getTermText` for when
  * to use this vs. `i18n._(entry.definition)`. */
 export function getDefinitionText(entry: GlossaryEntry): string {
-  return entry.definition.message ?? "";
+  return sourceText(entry.definition);
+}
+
+/** A descriptor's source English with its `{name}` placeholders (BRAND_NAME)
+ * filled from the values the `msg` macro recorded. */
+function sourceText(descriptor: GlossaryEntry["definition"]): string {
+  const values = (descriptor.values ?? {}) as Record<string, unknown>;
+  return (descriptor.message ?? "").replace(/\{(\w+)\}/g, (match, name) =>
+    name in values ? String(values[name]) : match
+  );
 }
 
 /** Every canonical entry tagged with its slug, in insertion order. Aliases are

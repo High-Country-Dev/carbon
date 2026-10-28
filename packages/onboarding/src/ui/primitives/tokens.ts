@@ -6,6 +6,7 @@
 // label change lands everywhere at once (previously these maps were re-declared
 // in RolesView, BoardTable, etc.). Adding an owner/status = one entry here.
 
+import { BRAND_NAME } from "@carbon/utils";
 import type { MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 import type { Owner, TaskValue } from "../../types";
@@ -19,7 +20,7 @@ export interface OwnerToken {
 
 export const OWNER_TOKENS: Record<Owner, OwnerToken> = {
   carbon: {
-    label: msg`Carbon`,
+    label: msg`${BRAND_NAME}`,
     variant: "blue"
   },
   you: {

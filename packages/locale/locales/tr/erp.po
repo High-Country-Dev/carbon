@@ -54,8 +54,8 @@ msgstr "(pasif hesap)"
 msgid "(Inactive)"
 msgstr "(Pasif)"
 
-msgid "(mapped to more than one Carbon account)"
-msgstr "(birden fazla Carbon hesabına eşleştirildi)"
+msgid "(mapped to more than one {BRAND_NAME} account)"
+msgstr "(birden fazla {BRAND_NAME} hesabına eşleştirildi)"
 
 msgid "(not an Equity posting account)"
 msgstr "(Özkaynak muhasebeleştirme hesabı değildir)"
@@ -120,8 +120,8 @@ msgid "{0, plural, one {# week} other {# weeks}}"
 msgstr "{0, plural, one {# hafta} other {# hafta}}"
 
 #. placeholder {0}: check.count
-msgid "{0, plural, one {Complete or cancel the # job that took costs before Carbon recorded them.} other {Complete or cancel the # jobs that took costs before Carbon recorded them.}}"
-msgstr "{0, plural, one {Carbon maliyetleri kaydetmeden önce maliyet oluşan # iş emrini tamamla veya iptal et.} other {Carbon maliyetleri kaydetmeden önce maliyet oluşan # iş emirlerini tamamla veya iptal et.}}"
+msgid "{0, plural, one {Complete or cancel the # job that took costs before {BRAND_NAME} recorded them.} other {Complete or cancel the # jobs that took costs before {BRAND_NAME} recorded them.}}"
+msgstr "{0, plural, one {{BRAND_NAME} maliyetleri kaydetmeden önce maliyet oluşan # iş emrini tamamla veya iptal et.} other {{BRAND_NAME} maliyetleri kaydetmeden önce maliyet oluşan # iş emirlerini tamamla veya iptal et.}}"
 
 #. placeholder {0}: Number(lease.assetCount)
 msgid "{0, plural, one {for # asset} other {for # assets}}"
@@ -434,8 +434,8 @@ msgid "{0}-Year"
 msgstr "{0}-Yıl"
 
 #. placeholder {0}: blocker.description
-msgid "{0}: the payment due {dueDate} is marked paid outside Carbon, but nothing would relieve it from the lease liability. Set Invoice From on or before {dueDate} so it is invoiced."
-msgstr "{0}: {dueDate}'de vadesi gelen ödeme Carbon dışında ödenen olarak işaretlenmiş, ancak kiralama yükümlülüğünden bunu hiçbir şey hafifletmez. {dueDate}'de veya öncesinde Fatura Kaynağını ayarlayın, böylece faturalanır."
+msgid "{0}: the payment due {dueDate} is marked paid outside {BRAND_NAME}, but nothing would relieve it from the lease liability. Set Invoice From on or before {dueDate} so it is invoiced."
+msgstr "{0}: {dueDate}'de vadesi gelen ödeme {BRAND_NAME} dışında ödenen olarak işaretlenmiş, ancak kiralama yükümlülüğünden bunu hiçbir şey hafifletmez. {dueDate}'de veya öncesinde Fatura Kaynağını ayarlayın, böylece faturalanır."
 
 #. placeholder {0}: line.description
 msgid "{0}: the treatment cannot be worked out. {message}"
@@ -483,14 +483,90 @@ msgstr "{apOverduePct}% borçlar"
 msgid "{arOverduePct}% of receivables"
 msgstr "{arOverduePct}% alacakların"
 
-msgid "{asset}: the payment due {dueDate} is Skipped (paid outside Carbon), so nothing would take it off the lease liability. Set Invoice From on or before {dueDate}."
-msgstr "{asset}: {dueDate}'de vadesi gelen ödeme Atlandı (Carbon dışında ödendi), bu nedenle kiralama yükümlülüğünden bunu almaz. {dueDate}'de veya öncesinde Fatura Kaynağını ayarlayın."
+msgid "{asset}: the payment due {dueDate} is Skipped (paid outside {BRAND_NAME}), so nothing would take it off the lease liability. Set Invoice From on or before {dueDate}."
+msgstr "{asset}: {dueDate}'de vadesi gelen ödeme Atlandı ({BRAND_NAME} dışında ödendi), bu nedenle kiralama yükümlülüğünden bunu almaz. {dueDate}'de veya öncesinde Fatura Kaynağını ayarlayın."
 
 msgid "{assetCount} Assets"
 msgstr "{assetCount} Sabit Kıymet"
 
 msgid "{atRiskJobs} jobs at risk"
 msgstr ""
+
+msgid "{BRAND_NAME}"
+msgstr ""
+
+msgid "{BRAND_NAME} + you"
+msgstr "{BRAND_NAME} + siz"
+
+msgid "{BRAND_NAME} account"
+msgstr "{BRAND_NAME} hesabı"
+
+msgid "{BRAND_NAME} column"
+msgstr "{BRAND_NAME} sütunu"
+
+msgid "{BRAND_NAME} is configured the way your company runs, your data is loaded, and your team is confident using it. When that's true, you're ready to go live."
+msgstr "{BRAND_NAME}, şirketinizin çalışma şekline göre yapılandırılmış, verileriniz yüklenmiş ve ekibiniz bunu kullanmakta kendinden emin. Bu doğru olduğunda, canlı yayına geçmeye hazırsınız."
+
+msgid "{BRAND_NAME} leads"
+msgstr "{BRAND_NAME} yönetir"
+
+msgid "{BRAND_NAME} only"
+msgstr "Yalnızca {BRAND_NAME}"
+
+msgid "{BRAND_NAME} opens this account from its open items. The amount here is only compared on Migration Clearing."
+msgstr "{BRAND_NAME} bu hesabı açık kalemleri üzerinden açar. Buradaki tutar yalnızca Migration Clearing'de karşılaştırılır."
+
+msgid "{BRAND_NAME} Posted"
+msgstr "{BRAND_NAME} Kaydedildi"
+
+msgid "{BRAND_NAME} posts every document dated on or after this day. Choose the first day of the current period or of one of the 3 periods before it."
+msgstr "{BRAND_NAME} bu günün tarihli veya sonrasındaki her belgeyi muhasebeleştirir. Mevcut dönemin ilk gününü veya önceki 3 dönemden birinin ilk gününü seçin."
+
+msgid "{BRAND_NAME} posts the opening journal, posts every journal dated on or after the cutover date, and closes the periods before it."
+msgstr "{BRAND_NAME} açılış muhasebe fişini muhasebeleştirir, devir tarihinin tarihli veya sonrasındaki her muhasebe fişini muhasebeleştirir ve önceki dönemleri kapatır."
+
+msgid "{BRAND_NAME} starts every company on its default chart. Import your own chart now, before the trial balance, which matches accounts by number. The import needs two files: your chart, and the default accounts template filled with your account numbers. To keep{BRAND_NAME}'s chart, continue."
+msgstr ""
+
+msgid "{BRAND_NAME} value"
+msgstr "{BRAND_NAME} değeri"
+
+msgid "{BRAND_NAME} Value"
+msgstr "{BRAND_NAME} Değeri"
+
+#. placeholder {0}: unmapped.length
+msgid "{BRAND_NAME} will use AI to guess a provider account for each of your {0} unmapped accounts. Suggestions are a starting point — you can review them before anything is saved."
+msgstr "{BRAND_NAME}, {0} eşleştirilmemiş hesaplarınızın her biri için bir sağlayıcı hesabını tahmin etmek için yapay zeka kullanacaktır. Öneriler bir başlangıç noktasıdır — her şey kaydedilmeden önce bunları gözden geçirebilirsiniz."
+
+msgid "{BRAND_NAME} writes their journals when you enable accounting, with today's accounts and costs."
+msgstr "{BRAND_NAME}, muhasebe'yi etkinleştirdiğinizde, bugünün hesapları ve maliyetleriyle bunların muhasebe fişlerini yazar."
+
+msgid "{BRAND_NAME}-only"
+msgstr "Yalnızca {BRAND_NAME}"
+
+msgid "{BRAND_NAME}-only · fill in real targets for this customer. They see the values, locked."
+msgstr "Yalnızca {BRAND_NAME} · bu müşteri için gerçek hedefleri doldurun. Değerleri kilitli olarak görürler."
+
+msgid "{BRAND_NAME}-only · the customer sees this text, locked."
+msgstr "{BRAND_NAME}-only · müşteri bu metni görür, kilitli."
+
+msgid "{BRAND_NAME}'s default passwordless sign-in: an emailed one-time link that signs you in when opened, with no password to remember or leak."
+msgstr "{BRAND_NAME}'un varsayılan parolasız oturum açma: e-postayla gönderilen, açıldığında sizi oturum açan ve hatırlanması veya sızması gereken bir parola olmayan tek kullanımlık bir bağlantı."
+
+msgid "{BRAND_NAME}'s name for a bill of material and bill of process (routing): the components plus the operations that make a part."
+msgstr "{BRAND_NAME}'ın ürün ağacı ve operasyon listesi (rota) için adı: bir parçayı yapan bileşenler artı operasyonlar."
+
+msgid "{BRAND_NAME}'s planning run nets supply against demand and explodes methods, surfacing shortfalls — but it creates no orders itself."
+msgstr "{BRAND_NAME}'un planlama çalışması arz ve talep tarafından net ve açılı yöntemler, eksikleri ortaya çıkarır — ancak kendi başına siparişler oluşturmaz."
+
+msgid "{BRAND_NAME}'s production order — one job builds a quantity of one item from its own copied method and routing."
+msgstr "{BRAND_NAME}'ın üretim emri — bir iş emri, kopyalanan yöntem ve rotasından bir stok kartının miktarını oluşturur."
+
+msgid "{BRAND_NAME}'s shop-floor app where operators run operations, report quantities, issue material, and log time against released jobs in real time."
+msgstr "{BRAND_NAME}'ın operatörlerin operasyonları çalıştırdığı, miktarları rapor ettiği, malzemeyi çıkış yaptığı ve serbest bırakılmış iş emirlerine karşı zamanı gerçek zamanlı olarak kaydettiği atölye uygulaması."
+
+msgid "{BRAND_NAME}'s single record for anything with a part number — Part, Material, Tool, Service, Consumable, or Fixture — that jobs, methods, orders, and inventory all point at."
+msgstr "{BRAND_NAME}'ın bir parça numarası olan her şey için — Parça, Malzeme, Takım, Hizmet, Sarf malzemesi veya Bağlama aparatı — iş emirleri, yöntemler, siparişler ve envanterin işaret ettiği tek stok kartı."
 
 msgid "{chainLabel}. Consider pointing this part directly at the final successor."
 msgstr "{chainLabel}. Bu parçayı doğrudan nihai ardıla yönlendirmeyi düşünün."
@@ -540,8 +616,8 @@ msgstr "{created} oluşturuldu, {updated} güncellendi."
 msgid "{days}d"
 msgstr "{days}g"
 
-msgid "{delegatedTo} posts this to your ledger, so Carbon doesn't push it. Your saved choice is kept in case that changes."
-msgstr "{delegatedTo} bunu muhasebe defterinize gönderir, bu nedenle Carbon onu göndermez. Kaydedilen seçiminiz değişmesi durumunda korunur."
+msgid "{delegatedTo} posts this to your ledger, so {BRAND_NAME} doesn't push it. Your saved choice is kept in case that changes."
+msgstr "{delegatedTo} bunu muhasebe defterinize gönderir, bu nedenle {BRAND_NAME} onu göndermez. Kaydedilen seçiminiz değişmesi durumunda korunur."
 
 msgid "{discount} off"
 msgstr "{discount} indirim"
@@ -596,8 +672,8 @@ msgstr "{label} belgeler, muhasebe fişleri veya varsayılan hesaplar tarafında
 msgid "{leadTime, plural, one {# day} other {# days}}"
 msgstr "{leadTime, plural, one {# gün} other {# gün}}"
 
-msgid "{legacyDocumentCount, plural, one {# document posted before Carbon kept journals has no journal.} other {# documents posted before Carbon kept journals have no journal.}}"
-msgstr "{legacyDocumentCount, plural, one {# belge Carbon muhasebe fişi tutmaya başlamadan önce muhasebeleştirilmiş ve muhasebe fişi kaydı yok.} other {# belgeler Carbon muhasebe fişi tutmaya başlamadan önce muhasebeleştirilmiş ve muhasebe fişi kaydı yok.}}"
+msgid "{legacyDocumentCount, plural, one {# document posted before {BRAND_NAME} kept journals has no journal.} other {# documents posted before {BRAND_NAME} kept journals have no journal.}}"
+msgstr "{legacyDocumentCount, plural, one {# belge {BRAND_NAME} muhasebe fişi tutmaya başlamadan önce muhasebeleştirilmiş ve muhasebe fişi kaydı yok.} other {# belgeler {BRAND_NAME} muhasebe fişi tutmaya başlamadan önce muhasebeleştirilmiş ve muhasebe fişi kaydı yok.}}"
 
 msgid "{linesCount, plural, one {# line} other {# lines}}"
 msgstr "{linesCount, plural, one {# satır} other {# satırlar}}"
@@ -733,8 +809,8 @@ msgstr "{state} · {syncedAgo} eşitlendi"
 msgid "{termMonths, plural, one {# month} other {# months}}"
 msgstr "{termMonths, plural, one {# ay} other {# ay}}"
 
-msgid "{total} phases to get your company live on Carbon. Each one ends at a checkpoint."
-msgstr "{total} aşama şirketinizi Carbon'da canlı hale getirmek için. Her biri bir kontrol noktasında sona erer."
+msgid "{total} phases to get your company live on {BRAND_NAME}. Each one ends at a checkpoint."
+msgstr "{total} aşama şirketinizi {BRAND_NAME}'da canlı hale getirmek için. Her biri bir kontrol noktasında sona erer."
 
 msgid "{total} phases to go live"
 msgstr "{total} aşama canlı yayına alınacak"
@@ -981,6 +1057,9 @@ msgstr "90G"
 msgid "A \"must match\" rule on this process blocks these from sharing a batch"
 msgstr "Bu operasyon üzerinde \"eşleşmeli\" kuralı bunların bir partide paylaşılmasını engeller"
 
+msgid "A {BRAND_NAME}-run data migration — you load your own data"
+msgstr "Bir {BRAND_NAME} tarafından yönetilen veri taşıması — kendi verilerinizi yüklersiniz"
+
 msgid "A 3D model the operator can turn around"
 msgstr "Operatörün döndürebileceği 3D model"
 
@@ -989,9 +1068,6 @@ msgstr "Operatör oluşturulduğunda bir 4 haneli PIN oluşturulur."
 
 msgid "A batch needs at least one operation. To break up the whole batch, use Dissolve instead."
 msgstr "Bir parti en az bir operasyon gerektirir. Bütün partiyi ayırmak için bunun yerine Çöz'ü kullanın."
-
-msgid "A Carbon-run data migration — you load your own data"
-msgstr "Bir Carbon tarafından yönetilen veri taşıması — kendi verilerinizi yüklersiniz"
 
 msgid "A change notice tracks a controlled engineering or manufacturing change through review and implementation."
 msgstr "Değişiklik bildirimi, kontrollü bir mühendislik veya üretim değişikliğini inceleme ve uygulama aşamalarından takip eder."
@@ -1074,8 +1150,8 @@ msgstr "Bir müşterinin durumu değiştirildi"
 msgid "A customer's type changes"
 msgstr "Bir müşterinin türü değiştirildi"
 
-msgid "A date on a contract moved into Carbon mid-term: billing periods that end on or before it were invoiced elsewhere, so they read Billed Externally and are never invoiced."
-msgstr "Bir sözleşmenin Carbon'a ortasında taşındığı bir tarih: bunu içinde veya daha önce sona eren faturalama dönemleri başka yerde faturalandırıldığı için Harici Olarak Faturalandırıldı olarak görünür ve hiçbir zaman faturalandırılmaz."
+msgid "A date on a contract moved into {BRAND_NAME} mid-term: billing periods that end on or before it were invoiced elsewhere, so they read Billed Externally and are never invoiced."
+msgstr "Bir sözleşmenin {BRAND_NAME}'a ortasında taşındığı bir tarih: bunu içinde veya daha önce sona eren faturalama dönemleri başka yerde faturalandırıldığı için Harici Olarak Faturalandırıldı olarak görünür ve hiçbir zaman faturalandırılmaz."
 
 msgid "A dated change to an active contract, with a reason and a contract type: changed lines end and their replacements start from the change date, prorated by day, or from the next billing period."
 msgstr "Aktif bir sözleşmeye tarihli bir değişiklik, bir neden ve sözleşme türü ile: değiştirilen satırlar sona erer ve değiştirilenleri değişiklik tarihinden başlar, gün bazında orantılı olarak veya sonraki faturalama döneminden."
@@ -1194,8 +1270,8 @@ msgstr "Siparişe göre üretim bileşeni, ana ürünün yapısı içinde kendi 
 msgid "A Make to Order component whose parts are issued together into the parent job — no separate build."
 msgstr "Siparişe göre üretim bileşeni, parçaları ana iş emrine birlikte verilen — ayrı yapı yoktur."
 
-msgid "A managed cloud-hosted version of Carbon"
-msgstr "Carbon'ın yönetilen bulut barındırılan sürümü"
+msgid "A managed cloud-hosted version of {BRAND_NAME}"
+msgstr "{BRAND_NAME}'ın yönetilen bulut barındırılan sürümü"
 
 msgid "A managed version with all the advanced features"
 msgstr "Tüm gelişmiş özellikleri içeren yönetilen bir sürüm"
@@ -1233,8 +1309,8 @@ msgstr "Aynı uzunluktaki yeni bir dönem bu biter biterse başlar."
 msgid "A non-cash document that settles an invoice against a reason account: a credit lowers what's owed, a debit raises it."
 msgstr "Bir faturayı bir sebep hesabına karşı ödeyen nakitsiz bir belge: alacak, borçlu olunan tutarı azaltır, borç artırır."
 
-msgid "A non-conformance shared with a supplier over a login-free /share/scar link, so they can respond to the issue and update its tasks from outside Carbon."
-msgstr "Bir tedarikçi ile login olmadan erişilebilir bir /share/scar bağlantısı üzerinden paylaşılan bir uygunsuzluk; tedarikçi soruna yanıt verebilir ve görevleri Carbon dışından güncelleyebilir."
+msgid "A non-conformance shared with a supplier over a login-free /share/scar link, so they can respond to the issue and update its tasks from outside {BRAND_NAME}."
+msgstr "Bir tedarikçi ile login olmadan erişilebilir bir /share/scar bağlantısı üzerinden paylaşılan bir uygunsuzluk; tedarikçi soruna yanıt verebilir ve görevleri {BRAND_NAME} dışından güncelleyebilir."
 
 msgid "A non-taxable surcharge (e.g. recoverable expenses like permit fees) added to the line; excluded from the tax base."
 msgstr "Vergilendirilmeyen bir ek ücret (örneğin izin ücretleri gibi geri alınabilir giderler) satıra eklenir ve vergi matrahından hariç tutulur."
@@ -1257,8 +1333,8 @@ msgstr "Operatörün bu adımda gördüğü bir fotoğraf veya PDF"
 msgid "A physical pull signal — a printed card or QR code living with the stock — that raises a purchase order or a job the moment it's scanned to refill a bin."
 msgstr "Stoğun yanında yaşayan basılı kart veya QR kodu olan, göz doldurmak için taranması anında satın alma siparişi veya iş emri oluşturan fiziksel çekme sinyali."
 
-msgid "A point in one of Carbon's own flows that a workflow can watch — a job released, a quote accepted, a shipment posted — as opposed to a raw field change; it hands the workflow the records involved by id."
-msgstr "Carbon'un kendi akışlarından birinde, bir iş akışı tarafından izlenebilir — bir iş serbest bırakıldı, bir teklif kabul edildi, bir sevkiyat nakledildi — ham alan değişimine karşın; iş akışına söz konusu kayıtları id'ye göre teslim eder."
+msgid "A point in one of {BRAND_NAME}'s own flows that a workflow can watch — a job released, a quote accepted, a shipment posted — as opposed to a raw field change; it hands the workflow the records involved by id."
+msgstr "{BRAND_NAME}'un kendi akışlarından birinde, bir iş akışı tarafından izlenebilir — bir iş serbest bırakıldı, bir teklif kabul edildi, bir sevkiyat nakledildi — ham alan değişimine karşın; iş akışına söz konusu kayıtları id'ye göre teslim eder."
 
 msgid "A posted accounting entry: a header plus balanced debit and credit lines against GL accounts."
 msgstr "Muhasebeleştirilmiş muhasebe girdisi: başlık artı muhasebe hesaplarına karşı dengeli borç ve alacak satırları."
@@ -1482,8 +1558,8 @@ msgstr "Satış teklif talebi (RFQ), bir dizi parça ve miktar üzerinde fiyatla
 msgid "A sales RFQ (a customer asks you to quote) or a purchasing RFQ (you ask suppliers); both feed the opportunity thread."
 msgstr "Bir satış RFQ (müşteri sizi alıntı yapmak için ister) veya satın alma RFQ (siz tedarikçileri istersiniz); her ikisi de fırsat ipliğini besler."
 
-msgid "A scoped secret sent on the carbon-key request header that authenticates programmatic calls to Carbon, carrying its own permissions and rate limit rather than a user session's."
-msgstr "Carbon'a programlı çağrıları doğrulayan carbon-key istek başlığında gönderilen kapsamlı bir gizli anahtar; bir kullanıcı oturumunun yerine kendi izinleri ve hız sınırını taşır."
+msgid "A scoped secret sent on the carbon-key request header that authenticates programmatic calls to {BRAND_NAME}, carrying its own permissions and rate limit rather than a user session's."
+msgstr "{BRAND_NAME}'a programlı çağrıları doğrulayan carbon-key istek başlığında gönderilen kapsamlı bir gizli anahtar; bir kullanıcı oturumunun yerine kendi izinleri ve hız sınırını taşır."
 
 msgid "A separate schedule for tax reporting when tax rules require a method different from book depreciation."
 msgstr "Vergi kuralları defter amortismanından farklı bir yöntem gerektirdiğinde vergi raporlaması için ayrı bir zaman çizelgesi."
@@ -2647,8 +2723,8 @@ msgstr "Bir mühendislik değişikliği: yöntemleri taslak üzerinde revize edi
 msgid "An Enterprise sign-in method where everyone on a company's registered email domains authenticates through the company's own SAML identity provider instead of a magic link, so IT grants and revokes access centrally."
 msgstr "Bir kurumsal oturum açma yöntemi; Şirketin kayıtlı e-posta alanlarındaki herkes, kendi SAML kimlik sağlayıcısı üzerinden sihirli bir bağlantı yerine kimlik doğrulaması yapar, böylece BT merkezi olarak erişimi verir ve iptal eder."
 
-msgid "An https request Carbon sends to a system of yours when a workflow reaches that step, carrying whatever headers and body you configured."
-msgstr "Bir iş akışı bu adıma ulaştığında Carbon'un sisteminize gönderdiği bir https isteği, yapılandırdığınız başlıkları ve gövdeyi taşır."
+msgid "An https request {BRAND_NAME} sends to a system of yours when a workflow reaches that step, carrying whatever headers and body you configured."
+msgstr "Bir iş akışı bu adıma ulaştığında {BRAND_NAME}'un sisteminize gönderdiği bir https isteği, yapılandırdığınız başlıkları ve gövdeyi taşır."
 
 msgid "An integration or a custom change — the small slice that's actually custom."
 msgstr "Bir entegrasyon veya özel bir değişiklik — aslında özel olan küçük dilim."
@@ -2883,8 +2959,8 @@ msgstr "API Anahtarı"
 msgid "API Keys"
 msgstr "API Anahtarları"
 
-msgid "API keys for programmatic access to your Carbon data."
-msgstr "Carbon verilerinize programatik erişim için API anahtarları."
+msgid "API keys for programmatic access to your {BRAND_NAME} data."
+msgstr "{BRAND_NAME} verilerinize programatik erişim için API anahtarları."
 
 msgid "API, webhooks, and integrations"
 msgstr "API, webhook'lar ve entegrasyonlar"
@@ -3896,8 +3972,8 @@ msgstr "Otomatikleştir"
 msgid "Automate quality flags and notifications"
 msgstr "Kalite bayraklarını ve bildirimleri otomatikleştir"
 
-msgid "Automate your business processes with event-driven workflows that trigger actions when things happen in Carbon."
-msgstr "Karbon'da olaylar meydana geldiğinde işlemleri tetikleyen olay temelli iş akışları ile iş süreçlerinizi otomatikleştirin."
+msgid "Automate your business processes with event-driven workflows that trigger actions when things happen in {BRAND_NAME}."
+msgstr ""
 
 msgid "Automatic"
 msgstr "Otomatik"
@@ -4340,8 +4416,8 @@ msgstr "Bonus amortisman %"
 msgid "Book a call to discuss guided implementation"
 msgstr "Rehberli uygulamayı tartışmak için bir çağrı ayarlayın"
 
-msgid "Book a call with Carbon"
-msgstr "Carbon ile bir çağrı ayarlayın"
+msgid "Book a call with {BRAND_NAME}"
+msgstr "{BRAND_NAME} ile bir çağrı ayarlayın"
 
 msgid "Book Depreciation"
 msgstr "Defter Amortismanı"
@@ -4364,8 +4440,8 @@ msgstr "Bu sürümün düzenlenebilir bir kopyasını oluşturun, değiştirebil
 msgid "Breadcrumb"
 msgstr "Sayfa Yolu"
 
-msgid "Bring in your parts, BOMs, Bill of Process, and costing — with Carbon's import tools, CSV, or LLM help."
-msgstr "Parçalarınızı, BOM'ları, Operasyon listesini ve maliyetlendirmeyi getirin — Carbon'ın içe aktarma araçları, CSV veya LLM yardımıyla."
+msgid "Bring in your parts, BOMs, Bill of Process, and costing — with {BRAND_NAME}'s import tools, CSV, or LLM help."
+msgstr "Parçalarınızı, BOM'ları, Operasyon listesini ve maliyetlendirmeyi getirin — {BRAND_NAME}'ın içe aktarma araçları, CSV veya LLM yardımıyla."
 
 msgid "Browse library"
 msgstr "Kütüphaneyi göz at"
@@ -4520,8 +4596,8 @@ msgstr "Kalibrasyonlar"
 msgid "Call an outside URL"
 msgstr "Harici bir URL çağır"
 
-msgid "Called a method in Carbon — the components plus operations that produce a part."
-msgstr "Carbon'da bir yöntem olarak adlandırılır — bir parçayı oluşturan bileşenler artı operasyonlar."
+msgid "Called a method in {BRAND_NAME} — the components plus operations that produce a part."
+msgstr "{BRAND_NAME}'da bir yöntem olarak adlandırılır — bir parçayı oluşturan bileşenler artı operasyonlar."
 
 msgid "Camera"
 msgstr "Kamera"
@@ -4692,15 +4768,6 @@ msgstr "Varlığı Aktifleştir"
 msgid "Caption"
 msgstr "Başlık"
 
-msgid "Carbon"
-msgstr "Karbon"
-
-msgid "Carbon + you"
-msgstr "Carbon + siz"
-
-msgid "Carbon account"
-msgstr "Carbon hesabı"
-
 msgid "Carbon client is not available"
 msgstr "Carbon istemcisi kullanılamıyor"
 
@@ -4709,76 +4776,6 @@ msgstr "Carbon istemcisi kullanılamıyor"
 
 msgid "Carbon client not found"
 msgstr "Carbon istemcisi bulunamadı"
-
-msgid "Carbon column"
-msgstr "Carbon sütunu"
-
-msgid "Carbon is configured the way your company runs, your data is loaded, and your team is confident using it. When that's true, you're ready to go live."
-msgstr "Carbon, şirketinizin çalışma şekline göre yapılandırılmış, verileriniz yüklenmiş ve ekibiniz bunu kullanmakta kendinden emin. Bu doğru olduğunda, canlı yayına geçmeye hazırsınız."
-
-msgid "Carbon leads"
-msgstr "Carbon yönetir"
-
-msgid "Carbon Logo"
-msgstr "Carbon Logosu"
-
-msgid "Carbon only"
-msgstr "Yalnızca Carbon"
-
-msgid "Carbon opens this account from its open items. The amount here is only compared on Migration Clearing."
-msgstr "Carbon bu hesabı açık kalemleri üzerinden açar. Buradaki tutar yalnızca Migration Clearing'de karşılaştırılır."
-
-msgid "Carbon Posted"
-msgstr "Carbon Kaydedildi"
-
-msgid "Carbon posts every document dated on or after this day. Choose the first day of the current period or of one of the 3 periods before it."
-msgstr "Carbon bu günün tarihli veya sonrasındaki her belgeyi muhasebeleştirir. Mevcut dönemin ilk gününü veya önceki 3 dönemden birinin ilk gününü seçin."
-
-msgid "Carbon posts the opening journal, posts every journal dated on or after the cutover date, and closes the periods before it."
-msgstr "Carbon açılış muhasebe fişini muhasebeleştirir, devir tarihinin tarihli veya sonrasındaki her muhasebe fişini muhasebeleştirir ve önceki dönemleri kapatır."
-
-msgid "Carbon starts every company on its default chart. Import your own chart now, before the trial balance, which matches accounts by number. The import needs two files: your chart, and the default accounts template filled with your account numbers. To keep Carbon's chart, continue."
-msgstr "Carbon her şirketi varsayılan hesap planıyla başlatır. Kendi hesap planınızı şimdi içe aktarın; muhasebe deneme bakiyesinden önce (hesaplar numarasına göre eşleştirilir). İçe aktarma iki dosya gerektirir: hesap planınız ve varsayılan hesaplar şablonu, hesap numaralarınız ile doldurulmuş. Carbon'un hesap planını tutmak için devam edin."
-
-msgid "Carbon value"
-msgstr "Carbon değeri"
-
-msgid "Carbon Value"
-msgstr "Carbon Değeri"
-
-#. placeholder {0}: unmapped.length
-msgid "Carbon will use AI to guess a provider account for each of your {0} unmapped accounts. Suggestions are a starting point — you can review them before anything is saved."
-msgstr "Carbon, {0} eşleştirilmemiş hesaplarınızın her biri için bir sağlayıcı hesabını tahmin etmek için yapay zeka kullanacaktır. Öneriler bir başlangıç noktasıdır — her şey kaydedilmeden önce bunları gözden geçirebilirsiniz."
-
-msgid "Carbon writes their journals when you enable accounting, with today's accounts and costs."
-msgstr "Carbon, muhasebe'yi etkinleştirdiğinizde, bugünün hesapları ve maliyetleriyle bunların muhasebe fişlerini yazar."
-
-msgid "Carbon-only"
-msgstr "Yalnızca Carbon"
-
-msgid "Carbon-only · fill in real targets for this customer. They see the values, locked."
-msgstr "Yalnızca Carbon · bu müşteri için gerçek hedefleri doldurun. Değerleri kilitli olarak görürler."
-
-msgid "Carbon-only · the customer sees this text, locked."
-msgstr "Carbon-only · müşteri bu metni görür, kilitli."
-
-msgid "Carbon's default passwordless sign-in: an emailed one-time link that signs you in when opened, with no password to remember or leak."
-msgstr "Carbon'un varsayılan parolasız oturum açma: e-postayla gönderilen, açıldığında sizi oturum açan ve hatırlanması veya sızması gereken bir parola olmayan tek kullanımlık bir bağlantı."
-
-msgid "Carbon's name for a bill of material and bill of process (routing): the components plus the operations that make a part."
-msgstr "Carbon'ın ürün ağacı ve operasyon listesi (rota) için adı: bir parçayı yapan bileşenler artı operasyonlar."
-
-msgid "Carbon's planning run nets supply against demand and explodes methods, surfacing shortfalls — but it creates no orders itself."
-msgstr "Carbon'un planlama çalışması arz ve talep tarafından net ve açılı yöntemler, eksikleri ortaya çıkarır — ancak kendi başına siparişler oluşturmaz."
-
-msgid "Carbon's production order — one job builds a quantity of one item from its own copied method and routing."
-msgstr "Carbon'ın üretim emri — bir iş emri, kopyalanan yöntem ve rotasından bir stok kartının miktarını oluşturur."
-
-msgid "Carbon's shop-floor app where operators run operations, report quantities, issue material, and log time against released jobs in real time."
-msgstr "Carbon'ın operatörlerin operasyonları çalıştırdığı, miktarları rapor ettiği, malzemeyi çıkış yaptığı ve serbest bırakılmış iş emirlerine karşı zamanı gerçek zamanlı olarak kaydettiği atölye uygulaması."
-
-msgid "Carbon's single record for anything with a part number — Part, Material, Tool, Service, Consumable, or Fixture — that jobs, methods, orders, and inventory all point at."
-msgstr "Carbon'ın bir parça numarası olan her şey için — Parça, Malzeme, Takım, Hizmet, Sarf malzemesi veya Bağlama aparatı — iş emirleri, yöntemler, siparişler ve envanterin işaret ettiği tek stok kartı."
 
 msgid "Card Holder"
 msgstr "Kart Sahibi"
@@ -5044,8 +5041,8 @@ msgstr "Başka bir dosya seç"
 msgid "Choose avatar"
 msgstr "Avatar seç"
 
-msgid "Choose how Carbon reaches you."
-msgstr "Carbon'un sizi nasıl bulacağını seçin."
+msgid "Choose how {BRAND_NAME} reaches you."
+msgstr "{BRAND_NAME}'un sizi nasıl bulacağını seçin."
 
 msgid "Choose how to add lines to this return."
 msgstr "Bu iade için satırları nasıl ekleyeceğinizi seçin."
@@ -5478,11 +5475,11 @@ msgstr "Yapılandırıcı"
 msgid "Configure"
 msgstr "Yapılandır"
 
+msgid "Configure {BRAND_NAME}"
+msgstr "{BRAND_NAME}'ı Yapılandır"
+
 msgid "Configure {label}"
 msgstr "{label} yapılandır"
-
-msgid "Configure Carbon"
-msgstr "Carbon'ı Yapılandır"
 
 msgid "Configure default accounts for cash and bank transactions"
 msgstr "Nakit ve banka işlemleri için varsayılan hesapları yapılandırın"
@@ -5619,8 +5616,8 @@ msgstr "Çatışma nedeni"
 msgid "Connect"
 msgstr "Bağlan"
 
-msgid "Connect Carbon to your accounting, project management, and CAD tools and much more."
-msgstr "Carbon'ı muhasebe, proje yönetimi ve CAD araçlarınızla ve çok daha fazlasıyla bağlayın."
+msgid "Connect {BRAND_NAME} to your accounting, project management, and CAD tools and much more."
+msgstr "{BRAND_NAME}'ı muhasebe, proje yönetimi ve CAD araçlarınızla ve çok daha fazlasıyla bağlayın."
 
 msgid "Connect Jira issue"
 msgstr "Jira sorununu bağla"
@@ -6955,11 +6952,11 @@ msgstr "Özelleştir"
 msgid "Customize the layout of your PDF documents — reorder sections, hide what you don't need, and add your own blocks."
 msgstr "PDF belgelerinizin düzenini özelleştirin — bölümleri yeniden sıralayın, ihtiyacınız olmayanları gizleyin ve kendi bloklarınızı ekleyin."
 
-msgid "Cut over to Carbon and freeze the old system"
-msgstr "Carbon'a geçiş yapın ve eski sistemi dondurun"
+msgid "Cut over to {BRAND_NAME} and freeze the old system"
+msgstr "{BRAND_NAME}'a geçiş yapın ve eski sistemi dondurun"
 
-msgid "Cut over, freeze the old system, and confirm you're live on Carbon."
-msgstr "Geçiş yapın, eski sistemi dondurun ve Carbon'da canlı olduğunuzu doğrulayın."
+msgid "Cut over, freeze the old system, and confirm you're live on {BRAND_NAME}."
+msgstr "Geçiş yapın, eski sistemi dondurun ve {BRAND_NAME}'da canlı olduğunuzu doğrulayın."
 
 msgid "Cutover checklist"
 msgstr "Geçiş kontrol listesi"
@@ -8176,14 +8173,14 @@ msgstr "Belgeler"
 msgid "Documents and activity"
 msgstr "Belgeler ve aktivite"
 
-msgid "Documents Posted Before Carbon Kept Journals"
-msgstr "Carbon Muhasebe Fişi Tutmadan Önce Muhasebeleştirilmiş Belgeler"
+msgid "Documents Posted Before {BRAND_NAME} Kept Journals"
+msgstr "{BRAND_NAME} Muhasebe Fişi Tutmadan Önce Muhasebeleştirilmiş Belgeler"
 
-msgid "Documents posted before Carbon kept journals have no journal."
-msgstr "Carbon muhasebe fişi tutmadan önce muhasebeleştirilmiş belgelerin muhasebe fişi yoktur."
+msgid "Documents posted before {BRAND_NAME} kept journals have no journal."
+msgstr "{BRAND_NAME} muhasebe fişi tutmadan önce muhasebeleştirilmiş belgelerin muhasebe fişi yoktur."
 
-msgid "Documents pushes invoices, bills and payments as native provider documents; their journals are recorded as covered by the document. It also pulls payments recorded in the provider back into Carbon, closing the matching invoice or bill and posting a Carbon GL journal. Off records them as deliberately excluded."
-msgstr "Belgeler, faturaları, fatura bedelleri ve ödemeleri yerel sağlayıcı belgeleri olarak gönderir; muhasebe fişleri belge tarafından kapsandığı olarak kaydedilir. Ayrıca sağlayıcıda kaydedilen ödemeleri Carbon'a geri çeker, eşleşen faturayı kapatır ve bir Carbon Büyük defter muhasebe fişi muhasebeleştirir. Kapalı, bunları kasıtlı olarak dışarıda bırakılanlar olarak kaydeder."
+msgid "Documents pushes invoices, bills and payments as native provider documents; their journals are recorded as covered by the document. It also pulls payments recorded in the provider back into {BRAND_NAME}, closing the matching invoice or bill and posting a{BRAND_NAME} GL journal. Off records them as deliberately excluded."
+msgstr ""
 
 msgid "Documents you open will show up here for quick access."
 msgstr "Açtığınız belgeler hızlı erişim için burada görünecektir."
@@ -8246,8 +8243,8 @@ msgstr "PDF'i İndir"
 msgid "Download template"
 msgstr "Şablon indir"
 
-msgid "Download the template. Each row is a default account Carbon posts to. In Account Number, enter the number of the account in your chart that takes it. Carbon updates the default account to match."
-msgstr "Şablonu indir. Her satır, Carbon'un muhasebeleştirdiği varsayılan bir hesaptır. Hesap Numarası'nda, bunu alan hesap planınızdaki hesabın numarasını girin. Carbon varsayılan hesabı eşleştirecek şekilde günceller."
+msgid "Download the template. Each row is a default account {BRAND_NAME} posts to. In Account Number, enter the number of the account in your chart that takes it. {BRAND_NAME} updates the default account to match."
+msgstr "Şablonu indir. Her satır, {BRAND_NAME}'un muhasebeleştirdiği varsayılan bir hesaptır. Hesap Numarası'nda, bunu alan hesap planınızdaki hesabın numarasını girin. {BRAND_NAME} varsayılan hesabı eşleştirecek şekilde günceller."
 
 msgid "Draft"
 msgstr "Taslak"
@@ -9024,8 +9021,8 @@ msgstr "Bu eğitime atanan çalışanlar açabilir. İçerik, kılavuz ve sorula
 msgid "Employees can no longer open this training."
 msgstr "Çalışanlar artık bu eğitimi açamaz."
 
-msgid "Employees complete a training in Carbon"
-msgstr "Çalışanlar Carbon'da eğitimi tamamlarlar"
+msgid "Employees complete a training in {BRAND_NAME}"
+msgstr "Çalışanlar {BRAND_NAME}'da eğitimi tamamlarlar"
 
 msgid "Empty"
 msgstr "Boş"
@@ -9343,8 +9340,8 @@ msgstr "Kur çevrimi düzeltmeleri (CTA) için özkaynak hesabı"
 msgid "Equity account that offsets the opening balances when accounting is set up. It must total zero."
 msgstr "Muhasebe kurulduğunda açılış bakiyelerini dengelemek için özkaynak hesabı. Toplam sıfır olması gerekir."
 
-msgid "Equity account the opening journal posts against when accounting is set up; it holds any difference between the prior trial balance and Carbon's records, and must total zero before you can enable."
-msgstr "Muhasebe kurulduğunda açılış fişinin muhasebeleştirildiği Özkaynak hesabı; eski deneme bakiyesi ile Carbon'ın kayıtları arasındaki farkı tutar ve etkinleştirebilmek için sıfıra eşit olmalıdır."
+msgid "Equity account the opening journal posts against when accounting is set up; it holds any difference between the prior trial balance and {BRAND_NAME}'s records, and must total zero before you can enable."
+msgstr "Muhasebe kurulduğunda açılış fişinin muhasebeleştirildiği Özkaynak hesabı; eski deneme bakiyesi ile {BRAND_NAME}'ın kayıtları arasındaki farkı tutar ve etkinleştirebilmek için sıfıra eşit olmalıdır."
 
 msgid "Error"
 msgstr "Hata"
@@ -9500,8 +9497,8 @@ msgstr "Şirket kapsamındaki tüm kayıtlar. Kimlik bilgileri, entegrasyon beli
 msgid "Every condition must match"
 msgstr "Her koşul eşleşmelidir"
 
-msgid "Every delivery carries a Carbon-Signature header signed with this secret. Verify it to know a request came from Carbon."
-msgstr "Her teslimat bu sır ile imzalanmış bir Carbon-Signature başlığı taşır. Carbon'dan geldiğini bilmek için bunu doğrulayın."
+msgid "Every delivery carries a Carbon-Signature header signed with this secret. Verify it to know a request came from {BRAND_NAME}."
+msgstr "Her teslimat bu sır ile imzalanmış bir {BRAND_NAME}-Signature başlığı taşır. {BRAND_NAME}'dan geldiğini bilmek için bunu doğrulayın."
 
 msgid "Every in-scope test passes in your configured system, with your data."
 msgstr "Kapsamdaki her test, yapılandırılmış sisteminizde, verilerinizle geçer."
@@ -9777,8 +9774,8 @@ msgstr "CSV'yi dışa aktar"
 msgid "Export Lines to CSV"
 msgstr "Satırları CSV'ye Dışa Aktar"
 
-msgid "Export your chart from your current system as a CSV, one row per account, with its number, name, class, type and group, or start from the template of the current chart. Carbon keeps only the accounts in this file."
-msgstr "Hesap planınızı mevcut sisteminizden CSV olarak dışa aktarın; her hesap için numarası, adı, sınıfı, türü ve grubuyla bir satır olsun ya da mevcut hesap planının şablonuyla başlayın. Carbon yalnızca bu dosyadaki hesapları tutar."
+msgid "Export your chart from your current system as a CSV, one row per account, with its number, name, class, type and group, or start from the template of the current chart. {BRAND_NAME} keeps only the accounts in this file."
+msgstr "Hesap planınızı mevcut sisteminizden CSV olarak dışa aktarın; her hesap için numarası, adı, sınıfı, türü ve grubuyla bir satır olsun ya da mevcut hesap planının şablonuyla başlayın. {BRAND_NAME} yalnızca bu dosyadaki hesapları tutar."
 
 msgid "Extended Price"
 msgstr "Genelletilmiş Fiyat"
@@ -9810,8 +9807,8 @@ msgstr "Harici Referans"
 msgid "External training"
 msgstr "Harici Eğitim"
 
-msgid "Extra fields to capture data Carbon doesn't track by default"
-msgstr "Carbon'ın varsayılan olarak izlemediği verileri yakalamak için ekstra alanlar"
+msgid "Extra fields to capture data {BRAND_NAME} doesn't track by default"
+msgstr "{BRAND_NAME}'ın varsayılan olarak izlemediği verileri yakalamak için ekstra alanlar"
 
 msgid "Extra hours on the whole day"
 msgstr "Bütün gün boyunca ekstra saatler"
@@ -10767,8 +10764,8 @@ msgstr "Oluşturulan Kimlikler etkinleştirilmiş"
 msgid "Generating suggestions…"
 msgstr "Öneriler oluşturuluyor…"
 
-msgid "Get live on Carbon: one system running quoting, purchasing, the shop floor, inventory, and finance, replacing the current tools."
-msgstr "Carbon'da canlı yayına geçin: alıntı alma, satın alma, atölye tabanı, envanter ve finansmanı çalıştıran ve mevcut araçları değiştiren tek bir sistem."
+msgid "Get live on {BRAND_NAME}: one system running quoting, purchasing, the shop floor, inventory, and finance, replacing the current tools."
+msgstr "{BRAND_NAME}'da canlı yayına geçin: alıntı alma, satın alma, atölye tabanı, envanter ve finansmanı çalıştıran ve mevcut araçları değiştiren tek bir sistem."
 
 msgid "Get Method"
 msgstr "Yöntemi getir"
@@ -10779,14 +10776,14 @@ msgstr "Başlayın"
 msgid "Get Started"
 msgstr "Başlayın"
 
-msgid "Get your Carbon notifications as they happen."
-msgstr "Carbon bildirimlerinizi gerçekleştikleri anda alın."
+msgid "Get your {BRAND_NAME} notifications as they happen."
+msgstr "{BRAND_NAME} bildirimlerinizi gerçekleştikleri anda alın."
 
 msgid "Gets the summary for every agreement"
 msgstr "Her anlaşmanın özetini alır"
 
-msgid "Getting around Carbon"
-msgstr "Carbon'da Gezinme"
+msgid "Getting around {BRAND_NAME}"
+msgstr "{BRAND_NAME}'da Gezinme"
 
 msgid "Getting set up"
 msgstr "Kurulum yapılıyor"
@@ -10966,8 +10963,8 @@ msgstr "Başlangıç Tarihi"
 msgid "Go-live timing holds if each gate is cleared on schedule"
 msgstr "Canlı yayına geçiş zamanlaması, her kapı zamanında açılırsa geçerli kalır"
 
-msgid "Going live on Carbon"
-msgstr "Carbon'da canlı yayına geçme"
+msgid "Going live on {BRAND_NAME}"
+msgstr "{BRAND_NAME}'da canlı yayına geçme"
 
 msgid "Good afternoon, {name}."
 msgstr "İyi öğleden sonralar, {name}."
@@ -11194,14 +11191,17 @@ msgstr "Saat/1000 Parça"
 msgid "Hours/Piece"
 msgstr "Saat/Adet"
 
+msgid "How {BRAND_NAME} looks in this browser."
+msgstr "{BRAND_NAME}'un bu tarayıcıda nasıl göründüğü."
+
 msgid "How a batchable process runs its grouped work: Sequential runs parts one after another on one machine (a saw or laser table), while Simultaneous runs them together in a single load (a furnace, oven, or plating bath)."
 msgstr "Gruplanabilir bir işlemin çalışması: Ardışık, parçaları bir makine üzerinde birbir ardına çalıştırır (testere veya lazer masası gibi), Eşzamanlı ise bunları tek bir yükte birlikte çalıştırır (fırın, fırın veya elektroliz banyosu gibi)."
 
 msgid "How a contract line earns its revenue over its revenue dates: Daily, the same amount every day, or Even Period, the same amount every calendar month with partial months prorated by days."
 msgstr "Bir sözleşme satırının hasılatını gelir tarihlerine göre nasıl kazandığı: Günlük, her gün aynı tutar veya Eşit Dönem, her takvim ayında aynı tutar (kısmi aylar gün sayısıyla orantılı)."
 
-msgid "How a contract or an amendment is classified for recurring-revenue reporting: New Sales, Existing, Expansion, Reactivation, or Contraction. Carbon suggests it and you can change it."
-msgstr "Bir sözleşme veya değişikliğin yinelenen gelir raporlaması için nasıl sınıflandırıldığı: Yeni Satış, Mevcut, Genişleme, Reaktivasyon veya Daralma. Carbon bunu önerir ve siz bunu değiştirebilirsiniz."
+msgid "How a contract or an amendment is classified for recurring-revenue reporting: New Sales, Existing, Expansion, Reactivation, or Contraction. {BRAND_NAME} suggests it and you can change it."
+msgstr "Bir sözleşme veya değişikliğin yinelenen gelir raporlaması için nasıl sınıflandırıldığı: Yeni Satış, Mevcut, Genişleme, Reaktivasyon veya Daralma. {BRAND_NAME} bunu önerir ve siz bunu değiştirebilirsiniz."
 
 msgid "How a rental agreement cuts billing periods from its start date: Monthly cuts one month from the start date's day (a start on the 7th bills the 7th to the 6th), Calendar Month (Monthly, aligned to calendar periods) cuts calendar months, and 28 Days cuts consecutive 28-day periods. Each unit bills one rate at its own frequency for the whole days, weeks, or months a period covers; a monthly rate in a part period is prorated by days."
 msgstr "Bir kiralama anlaşmasının başlangıç tarihinden faturalandırma dönemlerini nasıl kestiği: Aylık, başlangıç tarihinin gününden bir ayı keser (7. gün başlangıçlı bir anlaşma 7'den 6'sına kadarını faturalandırır), Takvim Ayı (Aylık, takvim dönemleriyle uyumlu) takvim aylarını keser, ve 28 Gün ardışık 28 günlük dönemleri keser. Her dönem, kendi frekansıyla bir oranı, dönemin kapsadığı tamamlanmış gün, hafta veya aylar için faturalandırır; kısmi bir dönemde aylık oran güne orantılı olarak hesaplanır."
@@ -11220,9 +11220,6 @@ msgstr "Bir öğenin birim maliyeti nasıl değerlendirilir: Standart, Ortalama,
 
 msgid "How are these hours calculated?"
 msgstr "Bu saatler nasıl hesaplanır?"
-
-msgid "How Carbon looks in this browser."
-msgstr "Carbon'un bu tarayıcıda nasıl göründüğü."
 
 msgid "How coverage is worked out"
 msgstr "Kapasite nasıl hesaplanır"
@@ -11347,8 +11344,8 @@ msgstr "Nasıl Çalışıyoruz"
 msgid "How will you use {integrationName}?"
 msgstr "{integrationName} uygulamasını nasıl kullanacaksınız?"
 
-msgid "How your company's process maps to Carbon"
-msgstr "Şirketinizin süreç haritası Carbon'a nasıl eşlenir"
+msgid "How your company's process maps to {BRAND_NAME}"
+msgstr "Şirketinizin süreç haritası {BRAND_NAME}'a nasıl eşlenir"
 
 msgid "How your quotes, orders, and invoices look when they go out"
 msgstr "Teklifleriniz, siparişleriniz ve faturalarınız gönderildiğinde nasıl göründüğü"
@@ -12210,8 +12207,8 @@ msgstr "Düzenlenme Tarihi"
 msgid "Issues"
 msgstr "Sorunlar"
 
-msgid "It is coming soon. Contact Carbon to have it set up for your company."
-msgstr "Yakında kullanıma sunulacak. Şirketiniz için kurulması için Carbon ile iletişime geçin."
+msgid "It is coming soon. Contact {BRAND_NAME} to have it set up for your company."
+msgstr "Yakında kullanıma sunulacak. Şirketiniz için kurulması için {BRAND_NAME} ile iletişime geçin."
 
 msgid "It will stop running until you publish a version again. Nothing is deleted."
 msgstr "Yeniden bir sürüm yayınlayana kadar çalışmayı durdurur. Hiçbir şey silinmez."
@@ -12985,8 +12982,8 @@ msgstr "Linear sorununu bağla"
 msgid "link outside company"
 msgstr "şirket dışı bağlantı"
 
-msgid "Link this Carbon customer to one of them, or create a separate Stripe customer."
-msgstr "Bu Carbon müşterisini bunlardan birine bağlayın veya ayrı bir Stripe müşterisi oluşturun."
+msgid "Link this {BRAND_NAME} customer to one of them, or create a separate Stripe customer."
+msgstr "Bu {BRAND_NAME} müşterisini bunlardan birine bağlayın veya ayrı bir Stripe müşterisi oluşturun."
 
 msgid "Link to sales order line"
 msgstr "Satış siparişi satırına bağla"
@@ -13025,8 +13022,8 @@ msgstr "Liste Görünümü"
 msgid "Lists are wired into both {0} and {1}, so this step cannot tell which one to repeat over. Leave a list on only one of them."
 msgstr "Listeler hem {0} hem de {1} öğelerine bağlıdır, bu nedenle bu adım hangisinin üzerinde tekrarlanacağını belirleyemez. Listeyi yalnızca birine bırakın."
 
-msgid "Live on Carbon"
-msgstr "Carbon'da Canlı"
+msgid "Live on {BRAND_NAME}"
+msgstr "{BRAND_NAME}'da Canlı"
 
 msgid "Live reloading"
 msgstr "Canlı yeniden yükleniyor"
@@ -13064,8 +13061,8 @@ msgstr "Ürün detayları yükleniyor..."
 msgid "Loading returnable lines..."
 msgstr "İadesine uygun satırlar yükleniyor..."
 
-msgid "Loading your own data with Carbon's import tools"
-msgstr "Carbon'ın içe aktarma araçlarıyla kendi verilerinizi yükleme"
+msgid "Loading your own data with {BRAND_NAME}'s import tools"
+msgstr "{BRAND_NAME}'ın içe aktarma araçlarıyla kendi verilerinizi yükleme"
 
 msgid "Loading..."
 msgstr "Yükleniyor..."
@@ -13375,8 +13372,8 @@ msgstr "Şirketiniz için kimlik doğrulama ve oturum açma gereksinimlerini yö
 msgid "Manage how shelf life is tracked, computed, and enforced across inventory."
 msgstr "Envanterdeki raf ömrünün nasıl izlendiğini, hesaplandığını ve uygulandığını yönetin."
 
-msgid "Manage how you sign in to Carbon."
-msgstr "Carbon'a nasıl giriş yapacağınızı yönetin."
+msgid "Manage how you sign in to {BRAND_NAME}."
+msgstr "{BRAND_NAME}'a nasıl giriş yapacağınızı yönetin."
 
 msgid "Manage Ownership"
 msgstr "Sahipliği Yönet"
@@ -15136,8 +15133,8 @@ msgstr "Bu lokasyonda sonraki {horizon} gün içinde tamamlanması beklenen sat�
 msgid "No open jobs for sales orders at this location."
 msgstr "Bu lokasyonda satış siparişleri için açık iş emri yok."
 
-msgid "No open jobs with costs from before Carbon recorded them"
-msgstr "Carbon'un kaydetmesinden önceki maliyetleri olan açık iş emri yok"
+msgid "No open jobs with costs from before {BRAND_NAME} recorded them"
+msgstr "{BRAND_NAME}'un kaydetmesinden önceki maliyetleri olan açık iş emri yok"
 
 msgid "No open lines. Add a service to amend."
 msgstr "Açık satır yok. Değişiklik için bir hizmet ekleyin."
@@ -15675,8 +15672,8 @@ msgstr "Bildirim Türü"
 msgid "Notifications"
 msgstr "Bildirimler"
 
-msgid "Notifications are blocked for Carbon in this browser's site settings."
-msgstr "Bu tarayıcının site ayarlarında Carbon için bildirimler engellendi."
+msgid "Notifications are blocked for {BRAND_NAME} in this browser's site settings."
+msgstr "Bu tarayıcının site ayarlarında {BRAND_NAME} için bildirimler engellendi."
 
 msgid "Notify"
 msgstr "Bildir"
@@ -15757,11 +15754,11 @@ msgstr "Açık"
 msgid "On {sentDate}"
 msgstr "{sentDate} tarihinde"
 
-msgid "On a control account, Carbon opens the balance from its own open items, inventory and fixed assets. The trial balance must agree: every difference stays on Migration Clearing, which must total zero. Open an account to see its items, and ignore an invoice the prior system already settled. Apply to Trial Balance sets each control account to Carbon's total and puts what is left on Retained Earnings."
-msgstr "Bir kontrol hesabında, Carbon kendi açık stok kartlarından, envanterinden ve sabit kıymetlerinden bakiye açar. Deneme mizanı uyumlu olmalıdır: her fark Geçiş Takas hesabında kalır ve toplamı sıfır olmalıdır. Stok kartlarını görmek için bir hesabı açın ve önceki sistem tarafından zaten kapatılan bir faturayı yoksayın. Deneme Mizanı'na Uygula işlemi her kontrol hesabını Carbon'un toplamına ayarlar ve kalanı Dağıtılmamış kârlar hesabına koyar."
+msgid "On a control account, {BRAND_NAME} opens the balance from its own open items, inventory and fixed assets. The trial balance must agree: every difference stays on Migration Clearing, which must total zero. Open an account to see its items, and ignore an invoice the prior system already settled. Apply to Trial Balance sets each control account to {BRAND_NAME}'s total and puts what is left on Retained Earnings."
+msgstr "Bir kontrol hesabında, {BRAND_NAME} kendi açık stok kartlarından, envanterinden ve sabit kıymetlerinden bakiye açar. Deneme mizanı uyumlu olmalıdır: her fark Geçiş Takas hesabında kalır ve toplamı sıfır olmalıdır. Stok kartlarını görmek için bir hesabı açın ve önceki sistem tarafından zaten kapatılan bir faturayı yoksayın. Deneme Mizanı'na Uygula işlemi her kontrol hesabını {BRAND_NAME}'un toplamına ayarlar ve kalanı Dağıtılmamış kârlar hesabına koyar."
 
-msgid "On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, Carbon creates a Released stock transfer for the kanban quantity."
-msgstr "Transfer kanban'ında To depolama birimi için minimum miktar. Eldeki + açık gelen transferler bunun altına düştüğünde, Carbon kanban miktarı için Serbest bırakıldı stok transferi oluşturur."
+msgid "On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, {BRAND_NAME} creates a Released stock transfer for the kanban quantity."
+msgstr "Transfer kanban'ında To depolama birimi için minimum miktar. Eldeki + açık gelen transferler bunun altına düştüğünde, {BRAND_NAME} kanban miktarı için Serbest bırakıldı stok transferi oluşturur."
 
 msgid "On cutover day, work the checklist below in order. Acceptance tests come from your in-scope requirements. Support details are at the bottom."
 msgstr "Geçiş gününde, aşağıdaki kontrol listesini sırayla çalışın. Kabul testleri kapsam içi gerekliliklerinizden gelir. Destek ayrıntıları altta yer alır."
@@ -15850,8 +15847,8 @@ msgstr "Kirada Olan Günler"
 msgid "On-time delivery"
 msgstr "Zamanında teslimat"
 
-msgid "Onboard your agent to Carbon"
-msgstr "Aracınızı Carbon'a dahil edin"
+msgid "Onboard your agent to {BRAND_NAME}"
+msgstr "Aracınızı {BRAND_NAME}'a dahil edin"
 
 msgid "Once a day"
 msgstr "Günde bir kez"
@@ -15882,8 +15879,8 @@ msgstr "Her fatura için bir satır, her satır için bir sütun. Bir tarihi vey
 msgid "One row per month, one column per line. Each line recognizes exactly what its invoices bill."
 msgstr "Her ay için bir satır, her satır için bir sütun. Her satır, faturalarının faturalandırdığını tam olarak tanır."
 
-msgid "One serial unit or one batch that Carbon follows individually, carrying its own status and attributes such as an expiry date."
-msgstr "Carbon tarafından bireysel takip edilen bir seri adet veya bir parti, son kullanma tarihi gibi kendi durumu ve öznitelikleri taşıyan."
+msgid "One serial unit or one batch that {BRAND_NAME} follows individually, carrying its own status and attributes such as an expiry date."
+msgstr "{BRAND_NAME} tarafından bireysel takip edilen bir seri adet veya bir parti, son kullanma tarihi gibi kendi durumu ve öznitelikleri taşıyan."
 
 msgid "One set of numbers"
 msgstr "Tek bir sayı seti"
@@ -16017,8 +16014,8 @@ msgstr "Açılış Tarihi"
 msgid "Open Dispatches"
 msgstr "Açık Bakım emirleri"
 
-msgid "Open in Carbon"
-msgstr "Carbon'da Aç"
+msgid "Open in {BRAND_NAME}"
+msgstr "{BRAND_NAME}'da Aç"
 
 msgid "Open in change notice {ids}. Release it to change the active version."
 msgstr "Değişiklik bildirimi {ids} içinde aç. Etkin sürümü değiştirmek için serbest bırak."
@@ -16137,8 +16134,8 @@ msgstr "Açılış"
 msgid "Opening an operation starts its timer, so time is tracked from the moment work begins."
 msgstr "Bir operasyonu açmak zamanlayıcısını başlatır, böylece zaman çalışma başladığı andan itibaren izlenir."
 
-msgid "Opening balance of depreciation already booked before this asset was added to Carbon (use 0 for new acquisitions)."
-msgstr "Bu varlık Carbon'a eklenmeden önce zaten deftere geçirilmiş amortismanın açılış bakiyesi (yeni satın almalar için 0 kullanın)."
+msgid "Opening balance of depreciation already booked before this asset was added to {BRAND_NAME} (use 0 for new acquisitions)."
+msgstr "Bu varlık {BRAND_NAME}'a eklenmeden önce zaten deftere geçirilmiş amortismanın açılış bakiyesi (yeni satın almalar için 0 kullanın)."
 
 msgid "Opening balances as of"
 msgstr "Açılış bakiyesi"
@@ -16578,8 +16575,8 @@ msgstr "Ödenen Tutar:"
 msgid "Paid Date"
 msgstr "Ödeme Tarihi"
 
-msgid "Paid outside Carbon"
-msgstr "Carbon dışında ödendi"
+msgid "Paid outside {BRAND_NAME}"
+msgstr "{BRAND_NAME} dışında ödendi"
 
 msgid "Paid up front; record it as a payment once received"
 msgstr "Peşin ödenen; alındığında bir ödeme olarak kaydedin"
@@ -16820,8 +16817,8 @@ msgstr "Ödemeler"
 msgid "Payments and credits applied to this invoice. Applied amounts and FX are in company base currency. Click a row to open the source document."
 msgstr "Bu faturaya uygulanan ödemeler ve alacaklar. Uygulanan tutarlar ve kur farkları şirketin temel para birimi cinsindendir. Kaynak belgeyi açmak için bir satıra tıklayın."
 
-msgid "Payments due before this date were paid outside Carbon"
-msgstr "Bu tarihten önce vadesi gelen ödemeler Carbon dışında ödendi"
+msgid "Payments due before this date were paid outside {BRAND_NAME}"
+msgstr "Bu tarihten önce vadesi gelen ödemeler {BRAND_NAME} dışında ödendi"
 
 msgid "Pays the deposit held for this document back out of customer prepayments."
 msgstr "Bu belge için tutulan depozitöyü müşteri avanslarından geri öde."
@@ -16958,11 +16955,11 @@ msgstr "Atama için kullanılabilecek fiziksel yazıcılar."
 msgid "Pick"
 msgstr "Topla"
 
+msgid "Pick a {BRAND_NAME} dimension and the provider target it posts to. Auto-create adds missing provider options by name at push time."
+msgstr "Bir {BRAND_NAME} boyutu ve gönderdiği sağlayıcı hedefini seçin. Otomatik oluştur, gönderim sırasında eksik sağlayıcı seçeneklerini ada göre ekler."
+
 msgid "Pick a batchable process, filter the eligible operations by their material, and select the ones to run together."
 msgstr "Toplu işlenebilir bir işlem seçin, uygun operasyonları malzemelerine göre filtreleyin ve birlikte çalıştırmak istediğiniz olanları seçin."
-
-msgid "Pick a Carbon dimension and the provider target it posts to. Auto-create adds missing provider options by name at push time."
-msgstr "Bir Carbon boyutu ve gönderdiği sağlayıcı hedefini seçin. Otomatik oluştur, gönderim sırasında eksik sağlayıcı seçeneklerini ada göre ekler."
 
 msgid "Pick a column to sort by"
 msgstr "Sıralamak için bir sütun seçin"
@@ -17739,11 +17736,11 @@ msgstr "Özellikler"
 msgid "Property"
 msgstr "Özellik"
 
-msgid "Proposed matches where the Carbon account number equals the provider account code exactly."
-msgstr "Carbon hesap numarasının sağlayıcı hesap koduyla tam olarak eşleştiği önerilen eşleşmeler."
+msgid "Proposed matches where the {BRAND_NAME} account number equals the provider account code exactly."
+msgstr "{BRAND_NAME} hesap numarasının sağlayıcı hesap koduyla tam olarak eşleştiği önerilen eşleşmeler."
 
-msgid "Proposed matches where the Carbon dimension value's name equals a provider option name exactly."
-msgstr "Carbon boyut değerinin adı sağlayıcı seçeneğinin adıyla tamamen eşleştiği önerilen eşlemeler."
+msgid "Proposed matches where the {BRAND_NAME} dimension value's name equals a provider option name exactly."
+msgstr "{BRAND_NAME} boyut değerinin adı sağlayıcı seçeneğinin adıyla tamamen eşleştiği önerilen eşlemeler."
 
 msgid "Protect the go-live date"
 msgstr "Go-live tarihini koruyun"
@@ -17763,8 +17760,8 @@ msgstr "Her bir e-posta etki alanının sahipliğini kanıtlayın - SAML SSO otu
 msgid "Provide process knowledge and inputs"
 msgstr "Süreç bilgisi ve girdileri sağlayın"
 
-msgid "Provide these URLs to your identity provider (Okta, Entra ID, Google Workspace, etc.) when registering Carbon as a SAML application."
-msgstr "Carbon'u bir SAML uygulaması olarak kaydederken bu URL'leri kimlik sağlayıcınıza (Okta, Entra ID, Google Workspace, vb.) sağlayın."
+msgid "Provide these URLs to your identity provider (Okta, Entra ID, Google Workspace, etc.) when registering {BRAND_NAME} as a SAML application."
+msgstr "{BRAND_NAME}'u bir SAML uygulaması olarak kaydederken bu URL'leri kimlik sağlayıcınıza (Okta, Entra ID, Google Workspace, vb.) sağlayın."
 
 msgid "Provider"
 msgstr "Sağlayıcı"
@@ -17797,8 +17794,8 @@ msgstr "Sürüm {0} yayınlanmış mı?"
 msgid "Published"
 msgstr "Yayınlandı"
 
-msgid "Published by Carbon"
-msgstr "Carbon tarafından yayınlandı"
+msgid "Published by {BRAND_NAME}"
+msgstr "{BRAND_NAME} tarafından yayınlandı"
 
 msgid "Published Version"
 msgstr "Yayınlanan Sürüm"
@@ -18286,8 +18283,8 @@ msgstr "bunu erken ve açık bir şekilde dile getir. 2. haftada adı konulan bi
 msgid "Ramp"
 msgstr "Ramp"
 
-msgid "Ramp allows only one. Disconnect the other system in Ramp, or connect Carbon again choosing \"Another system posts my ledger\"."
-msgstr "Ramp yalnızca birine izin verir. Diğer sistemi Ramp'ta bağlantısını kesin veya \"Başka bir sistem muhasebe defterimi gönderir\" seçeneğini belirleyerek Carbon'u yeniden bağlayın."
+msgid "Ramp allows only one. Disconnect the other system in Ramp, or connect {BRAND_NAME} again choosing \"Another system posts my ledger\"."
+msgstr "Ramp yalnızca birine izin verir. Diğer sistemi Ramp'ta bağlantısını kesin veya \"Başka bir sistem muhasebe defterimi gönderir\" seçeneğini belirleyerek {BRAND_NAME}'u yeniden bağlayın."
 
 msgid "Ramp authorized the connection but saving it failed. Try connecting again."
 msgstr "Ramp bağlantıyı yetkilendirdi ancak kaydetme başarısız oldu. Yeniden bağlanmayı deneyin."
@@ -18367,8 +18364,8 @@ msgstr "Yeniden etkinleştir"
 msgid "Reactivation"
 msgstr "Yeniden Etkinleştirme"
 
-msgid "Read this through — what Carbon will and won't do for your setup. When it looks right, mark it agreed below."
-msgstr "Bunu okuyun — Carbon'un kurulumunuz için neler yapacağını ve yapmayacağını öğrenin. Doğru görünüyorsa, aşağıda kabul ettiğinizi işaretleyin."
+msgid "Read this through — what {BRAND_NAME} will and won't do for your setup. When it looks right, mark it agreed below."
+msgstr "Bunu okuyun — {BRAND_NAME}'un kurulumunuz için neler yapacağını ve yapmayacağını öğrenin. Doğru görünüyorsa, aşağıda kabul ettiğinizi işaretleyin."
 
 msgid "Read this through. When it's right, sign off at the bottom. It's the statement your commercial agreement points to, with no prices or legal terms here."
 msgstr "Bunu baştan sona oku. Doğru olduğunda, altta imzala. Bu, ticari anlaşmanın işaret ettiği beyan olup, burada fiyat veya yasal şart yoktur."
@@ -18608,8 +18605,8 @@ msgstr "Uzlaştır"
 msgid "Reconciliation found discrepancies with the provider"
 msgstr "Mutabakat sağlayıcıyla tutarsızlıklar buldu"
 
-msgid "Reconciling a purchase order against what was received and invoiced — implicit in Carbon, via the line quantities and GR/IR balance."
-msgstr "Satın alma siparişinin alınan ve faturalandırılana karşı uzlaştırması — Carbon'da satır miktarları ve GR/IR bakiyesi aracılığıyla örtük olarak yapılır."
+msgid "Reconciling a purchase order against what was received and invoiced — implicit in {BRAND_NAME}, via the line quantities and GR/IR balance."
+msgstr "Satın alma siparişinin alınan ve faturalandırılana karşı uzlaştırması — {BRAND_NAME}'da satır miktarları ve GR/IR bakiyesi aracılığıyla örtük olarak yapılır."
 
 msgid "Reconfigure"
 msgstr "Yeniden Yapılandır"
@@ -19156,8 +19153,8 @@ msgstr "{inputLabel} içindeki her öğe için bir kez tekrarlanır"
 msgid "Replace"
 msgstr "Değiştir"
 
-msgid "Replace Carbon's default chart with your own, before you set up accounting"
-msgstr "Muhasebeleştirmeyi kurmadan önce Carbon'un varsayılan hesap planını kendinizle değiştirin"
+msgid "Replace {BRAND_NAME}'s default chart with your own, before you set up accounting"
+msgstr "Muhasebeleştirmeyi kurmadan önce {BRAND_NAME}'un varsayılan hesap planını kendinizle değiştirin"
 
 msgid "Replace chart"
 msgstr "Hesap planını değiştir"
@@ -19781,8 +19778,8 @@ msgstr ""
 msgid "RFQs"
 msgstr "Teklif Talepleri"
 
-msgid "Ride Carbon dimensions along on pushed journals. Each slot maps one Carbon dimension to one provider analytics target; the value mapping below pairs individual dimension values with provider options."
-msgstr "Carbon Boyutlarını gönderilen Muhasebe fişlerine katın. Her yuva bir Carbon Boyutunu bir sağlayıcı analitik hedefine eşler; aşağıdaki değer eşlemesi bireysel Boyut değerlerini sağlayıcı seçenekleriyle eşleştirir."
+msgid "Ride {BRAND_NAME} dimensions along on pushed journals. Each slot maps one {BRAND_NAME} dimension to one provider analytics target; the value mapping below pairs individual dimension values with provider options."
+msgstr "{BRAND_NAME} Boyutlarını gönderilen Muhasebe fişlerine katın. Her yuva bir {BRAND_NAME} Boyutunu bir sağlayıcı analitik hedefine eşler; aşağıdaki değer eşlemesi bireysel Boyut değerlerini sağlayıcı seçenekleriyle eşleştirir."
 
 #. placeholder {0}: certification.docVersion
 msgid "Rider v{0}"
@@ -20843,8 +20840,8 @@ msgstr "Davet Gönder"
 msgid "Send RFQ to Suppliers"
 msgstr "Tedarikçilere RFQ Gönder"
 
-msgid "Send to Carbon"
-msgstr "Carbon'a Gönder"
+msgid "Send to {BRAND_NAME}"
+msgstr "{BRAND_NAME}'a Gönder"
 
 msgid "Send Via"
 msgstr "Gönderim Yolu"
@@ -20981,6 +20978,9 @@ msgstr "Hizmetler"
 msgid "Session locked"
 msgstr "Oturum Kilitli"
 
+msgid "Set {BRAND_NAME} up around how your company runs: sites, parts, BOMs, Bill of Process, and the flows you use."
+msgstr "{BRAND_NAME}'u şirketinizin nasıl çalıştığına göre kurun: lokasyonlar, parçalar, BOM'lar, Operasyon listesi ve kullandığınız iş akışları."
+
 msgid "Set a customer on this return to add from a shipment."
 msgstr "Sevkiyattan eklemek için bu iade işlemine bir müşteri belirleyin."
 
@@ -21001,9 +21001,6 @@ msgstr "Hedef belirle"
 
 msgid "Set at activation"
 msgstr "Etkinleştirmede ayarlanır"
-
-msgid "Set Carbon up around how your company runs: sites, parts, BOMs, Bill of Process, and the flows you use."
-msgstr "Carbon'u şirketinizin nasıl çalıştığına göre kurun: lokasyonlar, parçalar, BOM'lar, Operasyon listesi ve kullandığınız iş akışları."
 
 msgid "Set Clock Out"
 msgstr "İş bitişi ayarla"
@@ -21087,8 +21084,8 @@ msgstr "Bu öğenin envanterde muhasebeleştirildiği değeri ayarlar. Fark, env
 msgid "Settings"
 msgstr "Ayarlar"
 
-msgid "Settled in the system that kept the books before the cutover. Carbon leaves them out of its totals and marks them Paid on the day before the cutover when you set up accounting."
-msgstr "Kesme tarihinden önceki muhasebe sisteminde çözümlendi. Carbon onları toplam tutarlarından dışarıda bırakır ve muhasebeleştirmeyi ayarladığınızda kesme tarihinin bir gün öncesinde Ödendi olarak işaretler."
+msgid "Settled in the system that kept the books before the cutover.{BRAND_NAME} leaves them out of its totals and marks them Paid on the day before the cutover when you set up accounting."
+msgstr ""
 
 msgid "Setup"
 msgstr "Kurulum"
@@ -21483,8 +21480,8 @@ msgstr "Karıştır"
 msgid "Sign in here instead"
 msgstr ""
 
-msgid "Sign in to Carbon"
-msgstr "Carbon'a giriş yapın"
+msgid "Sign in to {BRAND_NAME}"
+msgstr "{BRAND_NAME}'a giriş yapın"
 
 msgid "Sign in with biometrics instead of a magic link. Passkeys are secured by Face ID, Touch ID, or your device PIN."
 msgstr "Sihirli bağlantı yerine biyometrik kimlik doğrulama ile oturum açın. Geçiş Anahtarları Face ID, Touch ID veya cihaz PIN'iniz tarafından korunur."
@@ -21619,8 +21616,8 @@ msgstr "Satıldı"
 msgid "Solutions Engineer"
 msgstr "Çözüm Mühendisi"
 
-msgid "Some balances have no Carbon account"
-msgstr "Bazı bakiyeler Carbon hesabına sahip değil"
+msgid "Some balances have no {BRAND_NAME} account"
+msgstr "Bazı bakiyeler {BRAND_NAME} hesabına sahip değil"
 
 msgid "Some lines are invoiced for more or less than they total. Fix the amounts before confirming."
 msgstr "Bazı satırlar, toplamından daha fazla veya daha az fatura kesilmiş. Onaylamadan önce tutarları düzeltin."
@@ -21796,8 +21793,8 @@ msgstr "Barındırma hizmetini ayarlayın (bulut veya kendi barındırılan)"
 msgid "Standard"
 msgstr "Standart"
 
-msgid "Standard cloud Carbon fits how your company runs"
-msgstr "Standart bulut Carbon, şirketinizin nasıl çalıştığına uygun"
+msgid "Standard cloud {BRAND_NAME} fits how your company runs"
+msgstr "Standart bulut {BRAND_NAME}, şirketinizin nasıl çalıştığına uygun"
 
 msgid "Standard Cost Variances"
 msgstr "Standart Maliyet Sapmaları"
@@ -22119,17 +22116,17 @@ msgstr "Stripe zaten bu e-posta adresine sahip bir müşteriye sahip"
 msgid "Stripe Due Date"
 msgstr "Stripe Son Tarihi"
 
-msgid "Stripe emails the invoice to the customer, so an address is required. This will also be saved to the contact in Carbon."
-msgstr "Stripe faturayı müşteriye e-postayla gönderir, bu nedenle bir adres gereklidir. Bu, Carbon'daki ilgili kişiye de kaydedilecek."
+msgid "Stripe emails the invoice to the customer, so an address is required. This will also be saved to the contact in {BRAND_NAME}."
+msgstr "Stripe faturayı müşteriye e-postayla gönderir, bu nedenle bir adres gereklidir. Bu, {BRAND_NAME}'daki ilgili kişiye de kaydedilecek."
 
-msgid "Stripe emails the invoices to the customer, so an address is required. It is also saved to the contract's invoice contact in Carbon, if it has one."
-msgstr "Stripe faturaları müşteriye e-posta gönderir, bu nedenle bir adres gereklidir. Ayrıca, varsa Carbon'daki sözleşmenin fatura ilgili kişisine kaydedilir."
+msgid "Stripe emails the invoices to the customer, so an address is required. It is also saved to the contract's invoice contact in {BRAND_NAME}, if it has one."
+msgstr "Stripe faturaları müşteriye e-posta gönderir, bu nedenle bir adres gereklidir. Ayrıca, varsa {BRAND_NAME}'daki sözleşmenin fatura ilgili kişisine kaydedilir."
 
-msgid "Stripe has no customer for this Carbon customer yet. Confirming will create one on your connected account."
-msgstr "Stripe'ın henüz bu Carbon müşterisi için bir müşterisi yok. Onay vermek, bağlantılı hesabınızda bir tane oluşturacaktır."
+msgid "Stripe has no customer for this {BRAND_NAME} customer yet. Confirming will create one on your connected account."
+msgstr "Stripe'ın henüz bu {BRAND_NAME} müşterisi için bir müşterisi yok. Onay vermek, bağlantılı hesabınızda bir tane oluşturacaktır."
 
-msgid "Stripe has no customer for this Carbon customer yet. Posting will create one on your connected account."
-msgstr "Bu Carbon müşterisi için Stripe'da henüz müşteri yok. Muhasebeleştirme, bağlı hesabınızda bir tane oluşturacak."
+msgid "Stripe has no customer for this {BRAND_NAME} customer yet. Posting will create one on your connected account."
+msgstr "Bu {BRAND_NAME} müşterisi için Stripe'da henüz müşteri yok. Muhasebeleştirme, bağlı hesabınızda bir tane oluşturacak."
 
 msgid "Structure"
 msgstr "Yapı"
@@ -22660,8 +22657,8 @@ msgstr "Bu öğeyi üretmek için tüketilen malzemelerdeki en kısa kalan raf �
 msgid "taken"
 msgstr "alındı"
 
-msgid "Taken outside Carbon. You mark each employee complete."
-msgstr "Carbon dışında alınmış. Her çalışanı tamamlandı olarak işaretlersiniz."
+msgid "Taken outside {BRAND_NAME}. You mark each employee complete."
+msgstr "{BRAND_NAME} dışında alınmış. Her çalışanı tamamlandı olarak işaretlersiniz."
 
 msgid "Takes Effect"
 msgstr "Yürürlüğe Girer"
@@ -22929,8 +22926,20 @@ msgstr "\"{0}\" aşaması tamamlandı — \"{1}\" denetim noktası geçti."
 msgid "The {0} phases to go live, each ending at a checkpoint. Tick off each task as you complete it."
 msgstr "{0} aşamayı canlı yayına almak için, her biri bir kontrol noktasında sona eriyor. Her görevi tamamladıkça işaretleyin."
 
-msgid "The accent color used across Carbon."
-msgstr "Carbon'da kullanılan vurgu rengi."
+msgid "The {BRAND_NAME} user currently responsible for working this record, set per record and independent of ownership fields like Account Manager or Sales Person."
+msgstr "Bu kaydı işlemekten şu anda sorumlu olan {BRAND_NAME} kullanıcısı, kayıt başına ayarlanır ve Hesap Yöneticisi veya Satış Temsilcisi gibi sahiplik alanlarından bağımsızdır."
+
+msgid "The {BRAND_NAME} user responsible for this customer relationship; emails and reminders about this customer route to them."
+msgstr "Bu müşteri ilişkisinden sorumlu {BRAND_NAME} kullanıcısı; bu müşteri hakkında e-postalar ve hatırlatmalar onlara yönlendirilir."
+
+msgid "The {BRAND_NAME} user responsible for this supplier relationship; emails and reminders about this supplier route to them."
+msgstr "Bu tedarikçi ilişkisinden sorumlu {BRAND_NAME} kullanıcısı; bu tedarikçi hakkında e-postalar ve hatırlatmalar onlara yönlendirilir."
+
+msgid "The {BRAND_NAME} user who owns this RFQ; supplier responses and reminders route to them."
+msgstr "Bu RFQ'ya sahip olan {BRAND_NAME} kullanıcısı; tedarikçi yanıtları ve hatırlatmalar onlara yönlendirilir."
+
+msgid "The accent color used across {BRAND_NAME}."
+msgstr "{BRAND_NAME}'da kullanılan vurgu rengi."
 
 msgid "The account picked for {account} is no longer in the chart."
 msgstr "{account} için seçilen hesap artık hesap planında değildir."
@@ -22938,8 +22947,8 @@ msgstr "{account} için seçilen hesap artık hesap planında değildir."
 msgid "The accounting dimension that categorizes items for reporting and analysis."
 msgstr "Raporlama ve analiz için öğeleri kategorize eden muhasebe boyutu."
 
-msgid "The accounts Carbon posts to automatically"
-msgstr "Carbon'ın otomatik olarak deftere naklettiği hesaplar"
+msgid "The accounts {BRAND_NAME} posts to automatically"
+msgstr "{BRAND_NAME}'ın otomatik olarak deftere naklettiği hesaplar"
 
 msgid "The action that copies a saved method (its materials, operations, and work instructions) onto a job or quote line."
 msgstr "Kayıtlı bir yöntemi (malzemeleri, operasyonları ve iş talimatlarını) bir iş veya teklif satırına kopyalayan eylem."
@@ -23002,26 +23011,14 @@ msgstr "Maliyetleri takip ettiğiniz gruplar"
 msgid "The capital assets you own and depreciate"
 msgstr "Sahip olduğunuz ve amortiye ettiğiniz sabit kıymetler"
 
-msgid "The Carbon user currently responsible for working this record, set per record and independent of ownership fields like Account Manager or Sales Person."
-msgstr "Bu kaydı işlemekten şu anda sorumlu olan Carbon kullanıcısı, kayıt başına ayarlanır ve Hesap Yöneticisi veya Satış Temsilcisi gibi sahiplik alanlarından bağımsızdır."
-
-msgid "The Carbon user responsible for this customer relationship; emails and reminders about this customer route to them."
-msgstr "Bu müşteri ilişkisinden sorumlu Carbon kullanıcısı; bu müşteri hakkında e-postalar ve hatırlatmalar onlara yönlendirilir."
-
-msgid "The Carbon user responsible for this supplier relationship; emails and reminders about this supplier route to them."
-msgstr "Bu tedarikçi ilişkisinden sorumlu Carbon kullanıcısı; bu tedarikçi hakkında e-postalar ve hatırlatmalar onlara yönlendirilir."
-
-msgid "The Carbon user who owns this RFQ; supplier responses and reminders route to them."
-msgstr "Bu RFQ'ya sahip olan Carbon kullanıcısı; tedarikçi yanıtları ve hatırlatmalar onlara yönlendirilir."
-
 msgid "The carrier and service a shipment goes out on, supplying the tracking-URL template that turns a tracking number into a link and the account freight charges post to."
 msgstr "Sevkiyatın çıktığı taşıyıcı ve hizmet, izleme numarasını bir bağlantıya dönüştüren izleme URL şablonunu ve hesap nakliye masraflarını sağlar."
 
 msgid "The carrier that delivers goods from this supplier, when different from the supplier itself (e.g. supplier sells, FedEx ships)."
 msgstr "Bu tedarikçiden malları teslim eden, tedarikçinin kendisinden farklı olduğunda nakliyeci (örn. tedarikçi satar, FedEx gönderir)."
 
-msgid "The carrier's tracking-page URL with {trackingNumber} as a placeholder — Carbon substitutes the actual number when generating links on shipments."
-msgstr "Nakliyecinin {trackingNumber} yer tutucu ile izleme sayfası URL'si — Carbon, sevkiyatlardaki bağlantıları oluştururken gerçek numarayı yerine koyar."
+msgid "The carrier's tracking-page URL with {trackingNumber} as a placeholder — {BRAND_NAME} substitutes the actual number when generating links on shipments."
+msgstr "Nakliyecinin {trackingNumber} yer tutucu ile izleme sayfası URL'si — {BRAND_NAME}, sevkiyatlardaki bağlantıları oluştururken gerçek numarayı yerine koyar."
 
 msgid "The carriers and methods you ship orders with"
 msgstr "Siparişleri göndermek için kullandığınız nakliyeciler ve yöntemler"
@@ -23086,8 +23083,8 @@ msgstr "Sözleşme bitiş tarihinde biter ve faturalama durur."
 msgid "The contract ends on the end date and does not renew. Planned invoices after it are removed."
 msgstr "Sözleşme bitiş tarihinde sona erer ve yenilenmez. Bundan sonraki planlanan faturalar kaldırılır."
 
-msgid "The contract's invoices will be billed to the Stripe customer already linked to this Carbon customer. To change its details, edit it in the Stripe dashboard."
-msgstr "Sözleşmenin faturaları, bu Carbon müşterisine zaten bağlı olan Stripe müşterisine faturalanacaktır. Ayrıntılarını değiştirmek için Stripe panosunda düzenleyin."
+msgid "The contract's invoices will be billed to the Stripe customer already linked to this {BRAND_NAME} customer. To change its details, edit it in the Stripe dashboard."
+msgstr "Sözleşmenin faturaları, bu {BRAND_NAME} müşterisine zaten bağlı olan Stripe müşterisine faturalanacaktır. Ayrıntılarını değiştirmek için Stripe panosunda düzenleyin."
 
 msgid "The contractor's expected weekly availability; scheduling uses this as the upper bound when assigning this contractor to operations across the week."
 msgstr "Taşeronun beklenen haftalık kullanılabilirliği; planlama bu taşeronun haftasındaki operasyonlara atanırken bunu üst sınır olarak kullanır."
@@ -23267,8 +23264,8 @@ msgstr "Yüklediğiniz dosya ve yaptığınız eşleştirmeler kaybolacak."
 msgid "the first 3 to 4 weeks"
 msgstr "ilk 3 ila 4 hafta"
 
-msgid "The first day a company keeps its books in Carbon, set once when accounting is set up and never changed; from then on every posting writes a Posted journal."
-msgstr "Şirketin Carbon'da muhasebe tutmaya başladığı ilk gün; muhasebe kurulduğunda bir kez ayarlanır ve değiştirilmez; bundan sonra her Muhasebeleştirme Muhasebeleştirildi bir Muhasebe fişi oluşturur."
+msgid "The first day a company keeps its books in {BRAND_NAME}, set once when accounting is set up and never changed; from then on every posting writes a Posted journal."
+msgstr "Şirketin {BRAND_NAME}'da muhasebe tutmaya başladığı ilk gün; muhasebe kurulduğunda bir kez ayarlanır ve değiştirilmez; bundan sonra her Muhasebeleştirme Muhasebeleştirildi bir Muhasebe fişi oluşturur."
 
 msgid "The first day of a lease month (day {commencementDay}) where a payment period starts, after the last posted lease run"
 msgstr "Kiralama ayının ilk günü (gün {commencementDay}) — son muhasebeleştirilmiş kiralama çalıştırmasından sonra ödeme döneminin başladığı gün"
@@ -23339,11 +23336,11 @@ msgstr "İş akışının webhook adımının gönderdiği https adresi — düz
 msgid "The human-readable document number (like J000001 or ECO-000001) minted from a sequence and stored on the record, distinct from its internal id."
 msgstr "Bir Numaralandırmadan oluşturulan ve kayıt üzerine saklanan (J000001 veya ECO-000001 gibi) insan tarafından okunabilen Belge numarası, dahili id'sinden farklı."
 
-msgid "The identifier the customer uses for this part on their POs; Carbon resolves it to our internal Part ID on order import."
-msgstr "Müşterinin bu Parça için PO'larında kullandığı tanımlayıcı; Carbon, sipariş içe aktarılırken bunu bizim dahili Parça Kimliğine çözer."
+msgid "The identifier the customer uses for this part on their POs; {BRAND_NAME} resolves it to our internal Part ID on order import."
+msgstr "Müşterinin bu Parça için PO'larında kullandığı tanımlayıcı; {BRAND_NAME}, sipariş içe aktarılırken bunu bizim dahili Parça Kimliğine çözer."
 
-msgid "The identifier the supplier uses for this part on their quotes and invoices; Carbon resolves it to our internal Part ID."
-msgstr "Tedarikçinin bu parça için alıntı ve faturalarında kullandığı tanımlayıcı; Carbon bunu dahili Parça Kimliğimize çözümler."
+msgid "The identifier the supplier uses for this part on their quotes and invoices; {BRAND_NAME} resolves it to our internal Part ID."
+msgstr "Tedarikçinin bu parça için alıntı ve faturalarında kullandığı tanımlayıcı; {BRAND_NAME} bunu dahili Parça Kimliğimize çözümler."
 
 msgid "The immediate nonconformance task that quarantines affected stock or work before the root cause is known."
 msgstr "Kök neden bilinmeden etkilenen Stok veya işi karantinaya alan hemen yapılan Uygunsuzluk Görevi."
@@ -23381,8 +23378,8 @@ msgstr "o gün vadesi olan iş saatleri (çalışmanın çalıştığı günü d
 msgid "The job whose operation this outside-processing line covers; the line's receipt closes the operation against this job."
 msgstr "Bu dış işleme satırının kapsadığı işlem, işi; satırın alındığı bu işi karşı operasyonu kapatır."
 
-msgid "The job's position in its location's schedule queue — a fractional number Carbon computes from the due date and deadline type, not a Low/High rating."
-msgstr "İşin konumunun planlama kuyruğundaki konumu — Carbon'un son tarih ve deadline türünden hesapladığı kesirli bir sayı, Düşük/Yüksek bir puanlama değil."
+msgid "The job's position in its location's schedule queue — a fractional number {BRAND_NAME} computes from the due date and deadline type, not a Low/High rating."
+msgstr "İşin konumunun planlama kuyruğundaki konumu — {BRAND_NAME}'un son tarih ve deadline türünden hesapladığı kesirli bir sayı, Düşük/Yüksek bir puanlama değil."
 
 msgid "The job's work-in-progress balance moves to this asset now, and completing the job sweeps the rest. Only open jobs that are not linked to a sales order or another asset are listed."
 msgstr "İş emrinin devam eden işlerin bakiyesi şimdi bu varlığa aktarılır ve işi tamamlamak geri kalanını taşır. Yalnızca satış siparişi veya başka bir varlıkla bağlantılı olmayan açık işler listelenir."
@@ -23491,8 +23488,8 @@ msgstr "Makine hâlâ çalışıyor. Bu süreyi makine durduktan sonra atayın."
 msgid "The machines, cells, and stations your work runs through"
 msgstr "Çalışmanızın geçtiği makineler, hücreler ve istasyonlar"
 
-msgid "The master data to set up when first configuring Carbon, grouped by module. Mark each one configured as you go."
-msgstr "Carbon'ı ilk kez yapılandırırken ayarlanacak ana veriler, modüle göre gruplandırılmış. Her birini yapılandırıldığında işaretleyin."
+msgid "The master data to set up when first configuring {BRAND_NAME}, grouped by module. Mark each one configured as you go."
+msgstr "{BRAND_NAME}'ı ilk kez yapılandırırken ayarlanacak ana veriler, modüle göre gruplandırılmış. Her birini yapılandırıldığında işaretleyin."
 
 msgid "The material is purchased from a supplier for that specific order, rather than made or pulled from stock."
 msgstr "Malzeme, yapılmak veya stoktan çekilmek yerine, bu belirli sipariş için bir tedarikçiden satın alınır."
@@ -23620,11 +23617,11 @@ msgstr "Bu adımın bileşenlerinin oynatma sırasında yerlerine gitmesi için 
 msgid "The payment from the effective date. Escalation still steps up on each anniversary of the commencement"
 msgstr "Yürürlüğe giriş tarihinden itibaren ödeme. Artış başlamanın her yıldönümünde hala adım adım artar"
 
-msgid "The people on the Carbon side who will run your implementation, and how to reach them."
-msgstr "Carbon tarafındaki uygulamanızı yönetecek Personel ve onlara ulaşmanız için nasıl yapılır."
+msgid "The people on the {BRAND_NAME} side who will run your implementation, and how to reach them."
+msgstr "{BRAND_NAME} tarafındaki uygulamanızı yönetecek Personel ve onlara ulaşmanız için nasıl yapılır."
 
-msgid "The people on your team and their access to Carbon"
-msgstr "Ekibinizdeki Personel ve Carbon'a olan erişimleri"
+msgid "The people on your team and their access to {BRAND_NAME}"
+msgstr "Ekibinizdeki Personel ve {BRAND_NAME}'a olan erişimleri"
 
 msgid "The per-company counter behind a document type's readable number, assembling the prefix, the zero-padded next value, and the suffix, and advancing as each document is created."
 msgstr "Belge türünün okunabilir numarasını oluşturan, şirket başına sayaç; ön ek, sıfırla dolgulu sonraki değer ve son eki birleştirerek, her belge oluşturulduğunda ilerler."
@@ -23754,8 +23751,8 @@ msgstr "Kalan {0} {1} artık beklenmeyecektir. Sipariş edilen arz ve MRP bunu s
 msgid "The request body sent verbatim with a JSON content type after workflow variables inside it are substituted, on the methods that carry one."
 msgstr "İş akışı değişkenleri yerine konulduktan sonra JSON içerik türü ile sözcük sözcük gönderilen istek gövdesi, bunu destekleyen yöntemler üzerinde."
 
-msgid "The residual WIP a job has left at close, swept to a Production Variance account — the only variance Carbon books for a job."
-msgstr "Bir iş emrinin kapatıldığında bıraktığı artık yarı mamul, Üretim Sapması hesabına aktarılan — Carbon'un bir iş emri için kaydedebileceği tek sapma."
+msgid "The residual WIP a job has left at close, swept to a Production Variance account — the only variance {BRAND_NAME} books for a job."
+msgstr "Bir iş emrinin kapatıldığında bıraktığı artık yarı mamul, Üretim Sapması hesabına aktarılan — {BRAND_NAME}'un bir iş emri için kaydedebileceği tek sapma."
 
 msgid "The response from Onshape was missing required parameters. Check the private app's redirect URL, then save the integration settings again."
 msgstr "Onshape'ten gelen yanıt gerekli parametreleri içermiyordu. Özel uygulamanın yeniden yönlendirme URL'sini kontrol edin, ardından entegrasyon ayarlarını yeniden kaydedin."
@@ -23913,8 +23910,8 @@ msgstr "Bu RFQ'yu alan tedarikçiler; her biri kendi fiyatlandırmaları ile yan
 msgid "The surface finishes available on your materials"
 msgstr "Malzemelerinizde kullanılabilir yüzey bitişleri"
 
-msgid "The system a company uses to manage its people's logins — Okta, Entra ID, or Google Workspace — which vouches for who someone is when they sign in to Carbon via SSO."
-msgstr "Bir Şirketi Personel giriş kimlik doğrulaması için kullandığı Sistem — Okta, Entra ID veya Google Workspace — birisi SSO aracılığıyla Carbon'a giriş yaptığında kimliğini doğrular."
+msgid "The system a company uses to manage its people's logins — Okta, Entra ID, or Google Workspace — which vouches for who someone is when they sign in to {BRAND_NAME} via SSO."
+msgstr "Bir Şirketi Personel giriş kimlik doğrulaması için kullandığı Sistem — Okta, Entra ID veya Google Workspace — birisi SSO aracılığıyla {BRAND_NAME}'a giriş yaptığında kimliğini doğrular."
 
 msgid "The system passes every in-scope acceptance test in your configured system, with your data; the data is validated; and you sign off. Then go-live."
 msgstr "Sistem, yapılandırılmış sisteminizde kapsamdaki her kabul testini geçer, verilerinizle; veriler doğrulanır; ve siz onay verirsiniz. Ardından canlı yayına geçin."
@@ -23958,8 +23955,8 @@ msgstr "Bu tedarikçiye bu proses için iş göndermekle geri almak arasında ge
 msgid "The unique identifier on this physical unit; one row per serial, quantity is always 1."
 msgstr "Bu fiziksel birim üzerindeki benzersiz tanımlayıcı; seri numarası başına bir satır, miktar her zaman 1'dir."
 
-msgid "The unit a routing time is expressed in, such as Hours/Piece or Total Hours, telling Carbon whether the time scales with quantity or is fixed per run."
-msgstr "Rota zamanının ifade edildiği birim, örneğin Saatler/Parça veya Toplam Saatler, Carbon'a zamanın miktarla ölçeklenip ölçeklenmediğini veya her çalışma başına sabit olup olmadığını söyler."
+msgid "The unit a routing time is expressed in, such as Hours/Piece or Total Hours, telling {BRAND_NAME} whether the time scales with quantity or is fixed per run."
+msgstr "Rota zamanının ifade edildiği birim, örneğin Saatler/Parça veya Toplam Saatler, {BRAND_NAME}'a zamanın miktarla ölçeklenip ölçeklenmediğini veya her çalışma başına sabit olup olmadığını söyler."
 
 msgid "The unit and its rates are fixed once the agreement is activated."
 msgstr "Sözleşme etkinleştirildikten sonra adet ve oranları sabitlenir."
@@ -24132,6 +24129,9 @@ msgstr "Bu birimler satış olarak ele alınır. Etkinleştirme her birini kayı
 msgid "They are not in your chart, but documents or journals use them. Pick the account in your chart that replaces each one."
 msgstr "Bunlar sizin hesap planınızda değil, ancak belgeler veya muhasebe fişleri tarafından kullanılıyorlar. Her birini değiştirecek hesap planınızdaki hesabı seçin."
 
+msgid "This {BRAND_NAME} instance is missing its Onshape OAuth credentials. Ask an administrator to set them."
+msgstr "Bu {BRAND_NAME} örneğinde Onshape OAuth kimlik bilgileri eksik. Bir yöneticiden bunları ayarlamasını isteyin."
+
 msgid "this ability"
 msgstr "bu yetkinlik"
 
@@ -24152,17 +24152,14 @@ msgstr "Bu yedekleme tamamlanamadı."
 msgid "This backup hasn't been checked yet. Any differences are found when the restore runs."
 msgstr "Bu yedek henüz kontrol edilmedi. Herhangi bir fark, geri yükleme çalıştığında bulunur."
 
-msgid "This browser does not support push notifications. On iPhone or iPad, add Carbon to the Home Screen first."
-msgstr "Bu tarayıcı push bildirimleri desteklemez. iPhone veya iPad'de, Carbon'u önce Ana Ekrana ekleyin."
+msgid "This browser does not support push notifications. On iPhone or iPad, add {BRAND_NAME} to the Home Screen first."
+msgstr "Bu tarayıcı push bildirimleri desteklemez. iPhone veya iPad'de, {BRAND_NAME}'u önce Ana Ekrana ekleyin."
 
-msgid "This cannot be changed later — {integrationName} allows only one connected accounting system, so the choice decides what Carbon is permitted to do. To switch, you would uninstall and reconnect."
-msgstr "Bu daha sonra değiştirilemez — {integrationName} yalnızca bir bağlı muhasebe sistemine izin verir, bu nedenle seçim Carbon'un ne yapmasına izin verildiğini belirler. Geçiş yapmak için kaldırıp yeniden bağlanmanız gerekir."
+msgid "This cannot be changed later — {integrationName} allows only one connected accounting system, so the choice decides what {BRAND_NAME} is permitted to do. To switch, you would uninstall and reconnect."
+msgstr "Bu daha sonra değiştirilemez — {integrationName} yalnızca bir bağlı muhasebe sistemine izin verir, bu nedenle seçim {BRAND_NAME}'un ne yapmasına izin verildiğini belirler. Geçiş yapmak için kaldırıp yeniden bağlanmanız gerekir."
 
 msgid "This cannot be undone."
 msgstr "Bu geri alınamaz."
-
-msgid "This Carbon instance is missing its Onshape OAuth credentials. Ask an administrator to set them."
-msgstr "Bu Carbon örneğinde Onshape OAuth kimlik bilgileri eksik. Bir yöneticiden bunları ayarlamasını isteyin."
 
 msgid "This change notice is being implemented, so its changes are locked. Reopen it to edit."
 msgstr "Bu değişiklik bildirimi uygulanmakta olduğundan, değişiklikleri kilitlidir. Düzenlemek için yeniden açın."
@@ -24222,15 +24219,15 @@ msgstr "bu kontrol planı"
 msgid "This integration isn't available yet"
 msgstr "Bu entegrasyon henüz kullanılamıyor"
 
-#. placeholder {0}: company?.name ?? "Carbon"
+#. placeholder {0}: company?.name ?? BRAND_NAME
 msgid "This invitation to join {0} has expired. You can request a new invite to be sent to your email."
 msgstr "{0} grubuna katılma davetinizin süresi doldu. Yeni bir davet talebinde bulunabilirsiniz ve bu e-postanıza gönderilir."
 
 msgid "This invoice has no usable due date — choose one for Stripe."
 msgstr "Bu faturanın kullanılabilir bir son tarihi yok — Stripe için birini seçin."
 
-msgid "This invoice will be billed to the Stripe customer already linked to this Carbon customer. To change its details, edit it in the Stripe dashboard."
-msgstr "Bu fatura, zaten bu Carbon müşterisine bağlı olan Stripe müşterisine faturalanacak. Ayrıntılarını değiştirmek için Stripe panosunda düzenleyin."
+msgid "This invoice will be billed to the Stripe customer already linked to this {BRAND_NAME} customer. To change its details, edit it in the Stripe dashboard."
+msgstr "Bu fatura, zaten bu {BRAND_NAME} müşterisine bağlı olan Stripe müşterisine faturalanacak. Ayrıntılarını değiştirmek için Stripe panosunda düzenleyin."
 
 msgid "This is a controlled environment, so an authenticator app is required."
 msgstr "Bu kontrollü bir ortamdır, bu nedenle doğrulayıcı uygulaması gereklidir."
@@ -24970,8 +24967,8 @@ msgstr "Eğitim kaydedilmedi"
 msgid "Training Plan"
 msgstr "Eğitim Planı"
 
-msgid "Training taken outside Carbon, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
-msgstr "Carbon dışında alınan eğitim, satıcı kursu gibi. Görev sadece bir ada sahiptir. Yönetici her çalışanı tamamlandı olarak işaretler ve sertifikasını ekleyebilir."
+msgid "Training taken outside {BRAND_NAME}, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
+msgstr "{BRAND_NAME} dışında alınan eğitim, satıcı kursu gibi. Görev sadece bir ada sahiptir. Yönetici her çalışanı tamamlandı olarak işaretler ve sertifikasını ekleyebilir."
 
 msgid "Training video"
 msgstr ""
@@ -26341,8 +26338,8 @@ msgstr "Ağırlıklı ortalama kalan dönem (yıl)"
 msgid "Welcome back, {name}."
 msgstr "Tekrar hoş geldin, {name}."
 
-msgid "Welcome to Carbon"
-msgstr "Carbon'a Hoş Geldiniz"
+msgid "Welcome to {BRAND_NAME}"
+msgstr "{BRAND_NAME}'a Hoş Geldiniz"
 
 msgid "Welcome, {companyName}"
 msgstr "Hoş geldiniz, {companyName}"
@@ -26359,8 +26356,8 @@ msgstr "Bu hangi başarısızlık kategorisidir — Mekanik, Elektrik, Yazılım
 msgid "What changes day to day"
 msgstr "Günden güne ne değişir"
 
-msgid "What changes when you move to Carbon, and roughly what it's worth. Estimates, not a forecast."
-msgstr "Carbon'a geçtiğinizde neler değişir ve kabaca ne kadar değerli olur. Tahminler, tahmin değil."
+msgid "What changes when you move to {BRAND_NAME}, and roughly what it's worth. Estimates, not a forecast."
+msgstr "{BRAND_NAME}'a geçtiğinizde neler değişir ve kabaca ne kadar değerli olur. Tahminler, tahmin değil."
 
 msgid "What data"
 msgstr "Hangi veri"
@@ -26473,6 +26470,9 @@ msgstr "Kapsam dışında neler var"
 msgid "When"
 msgstr "Ne zaman"
 
+msgid "When {BRAND_NAME} committed to having the goods arrive; combined with the shipping method's transit days, this drives Ship Date back-calc."
+msgstr "{BRAND_NAME}'un malların teslim edilmesine taahhüt ettiği zaman; sevkiyat yönteminin transit günleriyle birleştirildiğinde, bu Sevk Tarihi'ni geriye doğru hesaplar."
+
 msgid "When {name} changes"
 msgstr "Ne zaman {name} değişir"
 
@@ -26487,9 +26487,6 @@ msgstr "Bir seri veya parti ne zaman süresinin dolduğu ve kullanıldığında 
 
 msgid "When an invoice is created"
 msgstr "Fatura oluşturulduğunda"
-
-msgid "When Carbon committed to having the goods arrive; combined with the shipping method's transit days, this drives Ship Date back-calc."
-msgstr "Carbon'un malların teslim edilmesine taahhüt ettiği zaman; sevkiyat yönteminin transit günleriyle birleştirildiğinde, bu Sevk Tarihi'ni geriye doğru hesaplar."
 
 msgid "When deferred, accrued and lease-interest revenue will be recognized"
 msgstr "Ertelenen, tahakkuk eden ve kira faiz hasılat muhasebeleştirilecek"
@@ -26527,8 +26524,8 @@ msgstr "Etkinleştirildiğinde, bu fiyat geçersiz kılması eşleşen siparişl
 msgid "When on, this rule fires for every target of its type. Assignment rows are ignored but preserved."
 msgstr "Açıkken bu kural, türündeki her hedef için tetiklenir. Atama satırları yok sayılır ancak korunur."
 
-msgid "When supplier responses are expected back; suppliers see this date on the RFQ portal and Carbon stops accepting late responses after it (configurable)."
-msgstr "Tedarikçi yanıtlarının ne zaman beklenmesi gerektiği; tedarikçiler RFQ portalında bu tarihi görür ve Carbon bundan sonra geç yanıtları kabul etmeyi durdurur (yapılandırılabilir)."
+msgid "When supplier responses are expected back; suppliers see this date on the RFQ portal and {BRAND_NAME} stops accepting late responses after it (configurable)."
+msgstr "Tedarikçi yanıtlarının ne zaman beklenmesi gerektiği; tedarikçiler RFQ portalında bu tarihi görür ve {BRAND_NAME} bundan sonra geç yanıtları kabul etmeyi durdurur (yapılandırılabilir)."
 
 msgid "When the buyer asked for the goods; the supplier may promise something else on Promised Date and post something else again on Delivery Date."
 msgstr "Satın almacının malları istediği zaman; tedarikçi Taahhüt tarihinde başka bir şey taahhüt edebilir ve Teslim tarihinde yine başka bir şey muhasebeleştirebilir."
@@ -26659,11 +26656,11 @@ msgstr "Bugün nerede olduğunuz"
 msgid "Where you want to grow"
 msgstr "Büyümek istediğin yer"
 
+msgid "Whether {BRAND_NAME} follows each unit (Serial), each lot (Batch), the quantity (Inventory), or no tracking (Non-Inventory)."
+msgstr "{BRAND_NAME}'un takip şekli — her birim (Seri), her lot (Parti), miktar (Envanter), veya hiçbir takip (Stok dışı)"
+
 msgid "Whether Amount is interpreted as a percentage of the line price or as a fixed currency amount."
 msgstr "Tutarın, satır fiyatının yüzdesi olarak mı yoksa sabit bir para birimi tutarı olarak mı yorumlanacağı."
-
-msgid "Whether Carbon follows each unit (Serial), each lot (Batch), the quantity (Inventory), or no tracking (Non-Inventory)."
-msgstr "Carbon'un takip şekli — her birim (Seri), her lot (Parti), miktar (Envanter), veya hiçbir takip (Stok dışı)"
 
 msgid "Whether each unit is treated as a rental or a sale is decided when the agreement is activated, from the terms and each unit's inputs."
 msgstr "Her bir birimin kiralık mı satış mı olarak muamele göreceği, anlaşma etkinleştirilirken koşullardan ve her birimin girdilerinden karar verilir."
@@ -27040,14 +27037,14 @@ msgstr "Bu ürünü siz aldınız"
 msgid "You received this lot"
 msgstr "Bu partiyi aldınız"
 
-msgid "You're live on Carbon"
-msgstr "Carbon'da canlısınız"
+msgid "You're live on {BRAND_NAME}"
+msgstr "{BRAND_NAME}'da canlısınız"
 
 msgid "You're one step away from your workspace."
 msgstr "Çalışma alanınıza bir adım uzaktasınız."
 
-msgid "You're setting Carbon up yourself, at your own pace"
-msgstr "Carbon'ı kendiniz kendi hızınızda ayarlıyorsunuz"
+msgid "You're setting {BRAND_NAME} up yourself, at your own pace"
+msgstr "{BRAND_NAME}'ı kendiniz kendi hızınızda ayarlıyorsunuz"
 
 msgid "You've been clocked in for {hoursElapsed} hours. Did you forget to clock out?"
 msgstr "{hoursElapsed} saattir işte idiniz. İş bitişini unuttunuz mu?"
@@ -27145,11 +27142,11 @@ msgstr "Oturumunuz hareketsizlikten sonra kilitlendi."
 msgid "Your source data is accessible and reasonably clean"
 msgstr "Kaynak verileriniz erişilebilir ve makul ölçüde temizdir"
 
-msgid "Your team can free up time to learn Carbon and load your data"
-msgstr "Ekibiniz Carbon'u öğrenmek ve verilerinizi yüklemek için zaman ayırabilir"
+msgid "Your team can free up time to learn {BRAND_NAME} and load your data"
+msgstr "Ekibiniz {BRAND_NAME}'u öğrenmek ve verilerinizi yüklemek için zaman ayırabilir"
 
-msgid "Your team leads learn Carbon first using the in-app guides and Academy, then bring everyone else up to speed."
-msgstr "Takım liderleriniz önce uygulama içi kılavuzları ve Academy'yi kullanarak Carbon'u öğrenirler, ardından diğer herkesi hızlandırırlar."
+msgid "Your team leads learn {BRAND_NAME} first using the in-app guides and Academy, then bring everyone else up to speed."
+msgstr "Takım liderleriniz önce uygulama içi kılavuzları ve Academy'yi kullanarak {BRAND_NAME}'u öğrenirler, ardından diğer herkesi hızlandırırlar."
 
 msgid "Your team, structure, and access."
 msgstr "Takımınız, yapı ve erişim."

@@ -11,7 +11,7 @@ import {
   resolveRampSupplier
 } from "@carbon/ee/ramp.server";
 import { storage } from "@carbon/files";
-import { round } from "@carbon/utils";
+import { BRAND_NAME, round } from "@carbon/utils";
 import {
   isPostedRampBill,
   type RampBillLine,
@@ -74,8 +74,7 @@ async function buildBillLines(
   bill: RampBill,
   currencyCode: string
 ): Promise<{ lines: BuiltInvoiceLine[] } | { error: string }> {
-  const uncoded =
-    "Bill line is coded to an account Carbon doesn't recognize — recode the bill in Ramp";
+  const uncoded = `Bill line is coded to an account ${BRAND_NAME} doesn't recognize — recode the bill in Ramp`;
   if (!ctx.companyGroupId)
     return { error: "Cannot verify bill accounts without a company group" };
 

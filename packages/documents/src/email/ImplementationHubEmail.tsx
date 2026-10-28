@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import {
   Body,
   Container,
@@ -95,7 +96,8 @@ export const ImplementationHubEmail = ({
                     className={`text-[15px] leading-[24px] m-0 ${themeClasses.text}`}
                   >
                     Your company has been enrolled in the Implementation Hub.
-                    Open it to track onboarding tasks and get set up in Carbon.
+                    Open it to track onboarding tasks and get set up in{" "}
+                    {BRAND_NAME}.
                   </Text>
                 </td>
               </tr>

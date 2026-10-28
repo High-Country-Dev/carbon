@@ -6,6 +6,7 @@ import { assertIsPost, error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { enrollTotpFactor, getTotpFactors } from "@carbon/auth/mfa.server";
 import { requireAuthSession } from "@carbon/auth/session.server";
+import { BRAND_NAME } from "@carbon/utils";
 import type { ActionFunctionArgs } from "react-router";
 import { data } from "react-router";
 import { getCompany } from "~/modules/settings/settings.service";
@@ -29,8 +30,8 @@ export async function action({ request }: ActionFunctionArgs) {
   // phone's list — otherwise both read "Carbon" and neither can be told apart.
   const company = await getCompany(client, companyId);
   const issuer = company.data?.name
-    ? `Carbon (${company.data.name})`
-    : "Carbon";
+    ? `${BRAND_NAME} (${company.data.name})`
+    : BRAND_NAME;
 
   const enrollment = await enrollTotpFactor(
     {

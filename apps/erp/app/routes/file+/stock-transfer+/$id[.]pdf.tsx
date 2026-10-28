@@ -10,7 +10,7 @@ import {
   toDocumentTemplate
 } from "@carbon/documents/template";
 import { getLogger } from "@carbon/logger";
-import { getPreferenceHeaders } from "@carbon/utils";
+import { BRAND_NAME, getPreferenceHeaders } from "@carbon/utils";
 import { renderToStream } from "@react-pdf/renderer";
 import type { LoaderFunctionArgs } from "react-router";
 import {
@@ -135,7 +135,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
       location={location.data}
       locale={locale}
       meta={{
-        author: "Carbon",
+        author: BRAND_NAME,
         keywords: "stock transfer",
         subject: "Stock Transfer"
       }}

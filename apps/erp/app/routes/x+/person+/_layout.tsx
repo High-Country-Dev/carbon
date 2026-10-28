@@ -4,12 +4,13 @@
 
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { RecordOutlet, VStack } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 
 export { RouteErrorBoundary as ErrorBoundary } from "@carbon/react/ErrorBoundary";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Carbon | People" }];
+  return [{ title: `${BRAND_NAME} | People` }];
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {

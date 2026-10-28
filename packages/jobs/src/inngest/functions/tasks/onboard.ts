@@ -10,6 +10,7 @@ import { EMAIL_DOMAIN, sendEmail } from "@carbon/lib/email.server";
 import { getResend } from "@carbon/lib/resend.server";
 import { getSlackClient } from "@carbon/lib/slack.server";
 import { getTwentyClient } from "@carbon/lib/twenty.server";
+import { BRAND_NAME } from "@carbon/utils";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { generateText, Output } from "ai";
 import { render } from "react-email";
@@ -284,7 +285,7 @@ export const onboardFunction = inngest.createFunction(
         await step.sleep("wait-5m", "5m");
 
         if (sendOnboardingEmail) {
-          const from = `Chase from Carbon <${
+          const from = `Chase from ${BRAND_NAME} <${
             EMAIL_DOMAIN === "carbon.ms"
               ? "chase@carbon.ms"
               : `no-reply@${EMAIL_DOMAIN}`
@@ -293,7 +294,7 @@ export const onboardFunction = inngest.createFunction(
             await sendEmail({
               from,
               to: user.email,
-              subject: `Carbon`,
+              subject: BRAND_NAME,
               html: await render(WelcomeEmail())
             });
           });
@@ -302,7 +303,7 @@ export const onboardFunction = inngest.createFunction(
         await step.sleep("wait-3d", "3d");
 
         if (sendOnboardingEmail) {
-          const from = `Info from Carbon <${
+          const from = `Info from ${BRAND_NAME} <${
             EMAIL_DOMAIN === "carbon.ms"
               ? "info@carbon.ms"
               : `no-reply@${EMAIL_DOMAIN}`
@@ -311,7 +312,7 @@ export const onboardFunction = inngest.createFunction(
             await sendEmail({
               from,
               to: user.email,
-              subject: `Get the most out of Carbon`,
+              subject: `Get the most out of ${BRAND_NAME}`,
               html: await render(
                 GetStartedEmail({
                   firstName: user.firstName,

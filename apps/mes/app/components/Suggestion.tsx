@@ -27,6 +27,7 @@ import {
   useMode,
   VStack
 } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import data from "@emoji-mart/data";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { nanoid } from "nanoid";
@@ -199,7 +200,7 @@ const Suggestion = () => {
                   }
                 />
                 <span className="text-sm">
-                  <Trans>Send to Carbon</Trans>
+                  <Trans>Send to {BRAND_NAME}</Trans>
                 </span>
               </HStack>
             )}

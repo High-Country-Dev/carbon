@@ -3,6 +3,7 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { Button } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans } from "@lingui/react/macro";
 import { useState } from "react";
 import { usePushSubscription } from "~/hooks/usePushSubscription";
@@ -74,7 +75,7 @@ function EnableBrowserNotificationsRow({
           <Trans>Enable browser notifications</Trans>
         </p>
         <p className="text-xs text-muted-foreground">
-          <Trans>Get your Carbon notifications as they happen.</Trans>
+          <Trans>Get your {BRAND_NAME} notifications as they happen.</Trans>
         </p>
       </div>
       <div className="flex gap-2">

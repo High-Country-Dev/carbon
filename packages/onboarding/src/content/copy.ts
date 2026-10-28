@@ -8,6 +8,7 @@
 // strings the surfaces share. Per-page section titles still live in their views
 // for now — move them here as the need to re-word them arises.
 
+import { BRAND_NAME } from "@carbon/utils";
 import type { MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 
@@ -29,7 +30,7 @@ export const PAGE_COPY = {
   },
   setup: {
     title: msg`Setup Map`,
-    lead: msg`The master data to set up when first configuring Carbon, grouped by module. Mark each one configured as you go.`
+    lead: msg`The master data to set up when first configuring ${BRAND_NAME}, grouped by module. Mark each one configured as you go.`
   },
   data: {
     title: msg`Data Migration Map`,
@@ -45,7 +46,7 @@ export const PAGE_COPY = {
   },
   value: {
     title: msg`Value Snapshot`,
-    lead: msg`What changes when you move to Carbon, and roughly what it's worth. Estimates, not a forecast.`
+    lead: msg`What changes when you move to ${BRAND_NAME}, and roughly what it's worth. Estimates, not a forecast.`
   },
   plan: {
     title: msg`Project Plan`
@@ -57,7 +58,7 @@ export const PAGE_COPY = {
   },
   team: {
     title: msg`Your Project Team`,
-    lead: msg`The people on the Carbon side who will run your implementation, and how to reach them.`
+    lead: msg`The people on the ${BRAND_NAME} side who will run your implementation, and how to reach them.`
   }
 } satisfies Record<string, PageCopy>;
 
@@ -65,9 +66,9 @@ export const UI_TEXT = {
   // Header on the per-customer custom-row sections.
   addedForCustomer: msg`Added for this customer`,
   // Badge shown to Carbon staff on editable / internal-only surfaces.
-  carbonOnly: msg`Carbon-only`,
+  carbonOnly: msg`${BRAND_NAME}-only`,
   // Note under a Carbon-owned fill-in field the customer sees but can't edit.
-  carbonOnlyLockedField: msg`Carbon-only · the customer sees this text, locked.`,
+  carbonOnlyLockedField: msg`${BRAND_NAME}-only · the customer sees this text, locked.`,
   // Note under the Value Snapshot's editable metrics.
-  carbonOnlyValueNote: msg`Carbon-only · fill in real targets for this customer. They see the values, locked.`
+  carbonOnlyValueNote: msg`${BRAND_NAME}-only · fill in real targets for this customer. They see the values, locked.`
 } satisfies Record<string, MessageDescriptor>;

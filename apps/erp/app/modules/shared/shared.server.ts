@@ -42,7 +42,7 @@ import {
   getOrCreateConnectAccount,
   isStaleConnectAccountError
 } from "@carbon/stripe/connect.server";
-import { datetime } from "@carbon/utils";
+import { BRAND_NAME, datetime } from "@carbon/utils";
 import { z } from "zod";
 import { nonConformancePriority } from "~/modules/quality/quality.models";
 import { insertIssue } from "~/modules/quality/quality.service";
@@ -753,7 +753,7 @@ export const createJiraIssue = defineServiceFn({
       companyId,
       issue.id,
       service.actionTaskUrl(linked.data, entityType),
-      `Linked Carbon Issue: ${task.parentReadableId ?? ""}`
+      `Linked ${BRAND_NAME} Issue: ${task.parentReadableId ?? ""}`
     );
     return { issueId: issue.id };
   }
@@ -821,7 +821,7 @@ export const linkJiraIssue = defineServiceFn({
       companyId,
       issue.id,
       service.actionTaskUrl(linked.data, entityType),
-      `Linked Carbon Issue: ${task.parentReadableId ?? ""}`
+      `Linked ${BRAND_NAME} Issue: ${task.parentReadableId ?? ""}`
     );
     return { issueId: issue.id };
   }
@@ -930,7 +930,7 @@ export const createLinearIssue = defineServiceFn({
     await linear.createAttachmentLink(companyId, {
       issueId: issue.id,
       url: service.actionTaskUrl(linked.data, entityType),
-      title: `Linked Carbon Issue: ${task.parentReadableId ?? ""}`
+      title: `Linked ${BRAND_NAME} Issue: ${task.parentReadableId ?? ""}`
     });
     return { issueId: issue.id };
   }
@@ -984,7 +984,7 @@ export const linkLinearIssue = defineServiceFn({
     await linear.createAttachmentLink(companyId, {
       issueId: issue.id as string,
       url: service.actionTaskUrl(linked.data, entityType),
-      title: `Linked Carbon Issue: ${task.parentReadableId ?? ""}`
+      title: `Linked ${BRAND_NAME} Issue: ${task.parentReadableId ?? ""}`
     });
     return { issueId: issue.id as string };
   }

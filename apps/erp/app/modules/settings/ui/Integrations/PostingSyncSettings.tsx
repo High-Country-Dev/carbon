@@ -21,6 +21,7 @@ import {
   Subheading,
   toast
 } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { ReactNode } from "react";
 import { useState } from "react";
@@ -172,7 +173,7 @@ function FamilyRepresentationField({
         <span>{t`Handled by ${delegatedTo}`}</span>
       </div>
       <p className="mt-1.5 text-xs text-muted-foreground">
-        {t`${delegatedTo} posts this to your ledger, so Carbon doesn't push it. Your saved choice is kept in case that changes.`}
+        {t`${delegatedTo} posts this to your ledger, so ${BRAND_NAME} doesn't push it. Your saved choice is kept in case that changes.`}
       </p>
       <input type="hidden" name={name} value={settings.families[family]} />
     </div>
@@ -373,8 +374,9 @@ export function PostingSyncSettings({
                 Documents pushes invoices, bills and payments as native provider
                 documents; their journals are recorded as covered by the
                 document. It also pulls payments recorded in the provider back
-                into Carbon, closing the matching invoice or bill and posting a
-                Carbon GL journal. Off records them as deliberately excluded.
+                into {BRAND_NAME}, closing the matching invoice or bill and
+                posting a{BRAND_NAME} GL journal. Off records them as
+                deliberately excluded.
               </Trans>
             </p>
           </div>

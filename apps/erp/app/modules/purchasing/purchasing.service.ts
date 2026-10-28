@@ -62,6 +62,7 @@ import {
   addMonths,
   async,
   BILLABLE_LEASE_STATUSES,
+  BRAND_NAME,
   buildJournalLineDimensionInserts,
   buildLesseeSchedule,
   datetime,
@@ -8809,7 +8810,7 @@ async function prepare(
     );
     if (skipped) {
       throw new InvalidInputError(
-        `The payment due ${skipped.dueDate} is Skipped (paid outside Carbon); choose a date after it`
+        `The payment due ${skipped.dueDate} is Skipped (paid outside ${BRAND_NAME}); choose a date after it`
       );
     }
   };
@@ -9862,7 +9863,7 @@ export function skippedPaymentBlocker(
   const settledBy = args.openingAsOf
     ? `the opening balance on ${args.openingAsOf} still owes it`
     : "only its invoice settles the lease liability";
-  return `${args.description}: the payment due ${payment.dueDate} is Skipped (paid outside Carbon), but ${settledBy}. Set Invoice From on or before ${payment.dueDate} so it is invoiced.`;
+  return `${args.description}: the payment due ${payment.dueDate} is Skipped (paid outside ${BRAND_NAME}), but ${settledBy}. Set Invoice From on or before ${payment.dueDate} so it is invoiced.`;
 }
 
 /** The retained earnings account default, with its class: an opening

@@ -3,6 +3,7 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { RecordOutlet } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
 import type { MetaFunction } from "react-router";
 
@@ -12,7 +13,7 @@ import { path } from "~/utils/path";
 export { RouteErrorBoundary as ErrorBoundary } from "@carbon/react/ErrorBoundary";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Carbon | Reimbursements" }];
+  return [{ title: `${BRAND_NAME} | Reimbursements` }];
 };
 
 export const handle: Handle = {

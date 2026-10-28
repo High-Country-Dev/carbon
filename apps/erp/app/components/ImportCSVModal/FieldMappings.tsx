@@ -21,6 +21,7 @@ import {
   toast,
   useDisclosure
 } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { PostgrestResponse, SupabaseClient } from "@supabase/supabase-js";
 import {
@@ -246,7 +247,7 @@ export function FieldMapping({
                 <Trans>CSV column</Trans>
               </div>
               <div className="text-sm">
-                <Trans>Carbon column</Trans>
+                <Trans>{BRAND_NAME} column</Trans>
               </div>
               {Object.entries(mappableFields).map(
                 ([name, { label, required, type }]) => (
@@ -587,7 +588,7 @@ function EnumMappingStep({
           {`${capitalize(mappedColumn ?? "CSV")} Value`}
         </div>
         <div className="font-medium">
-          <Trans>Carbon Value</Trans>
+          <Trans>{BRAND_NAME} Value</Trans>
         </div>
 
         {[...new Set([...uniqueValues, "Default"])].map((csvValue) => {

@@ -28,6 +28,7 @@ import {
 import { RootErrorBoundary } from "@carbon/react/ErrorBoundary";
 import type { Theme } from "@carbon/utils";
 import {
+  BRAND_NAME,
   colorSchemeHintScript,
   getPreferenceHeaders,
   getViewportHint,
@@ -101,7 +102,7 @@ export const links: Route.LinksFunction = () => [
 export const meta: MetaFunction = () => {
   return [
     {
-      title: "Carbon | MES"
+      title: `${BRAND_NAME} | MES`
     }
   ];
 };
@@ -212,7 +213,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 function Document({
   children,
-  title = "Carbon",
+  title = BRAND_NAME,
   lang = "en",
   mode = "light",
   theme = "zinc",

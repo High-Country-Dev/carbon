@@ -41,7 +41,7 @@ import {
   CarbonPulse,
   VStack
 } from "@carbon/react";
-import { redirect } from "@carbon/utils";
+import { BRAND_NAME, redirect } from "@carbon/utils";
 import { Trans } from "@lingui/react/macro";
 import { useEffect, useRef, useState } from "react";
 import { LuTriangleAlert } from "react-icons/lu";
@@ -175,7 +175,7 @@ export async function action({ request }: ActionFunctionArgs) {
           request,
           error(
             null,
-            "Complete your first SAML SSO sign-in in Carbon ERP, then return here."
+            `Complete your first SAML SSO sign-in in ${BRAND_NAME} ERP, then return here.`
           )
         )
       );

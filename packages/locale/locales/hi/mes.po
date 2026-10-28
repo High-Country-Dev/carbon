@@ -33,8 +33,8 @@ msgid "{0} customers"
 msgstr "{0} ग्राहक"
 
 #. placeholder {0}: unplanned .map( (m) => (m.job as { jobId?: string | null } | null)?.jobId ) .filter(Boolean) .join(", ")
-msgid "{0} has no lot number. Set it on the batch or job in Carbon, then complete."
-msgstr "{0} के पास लॉट संख्या नहीं है। इसे Carbon में बैच या जॉब पर सेट करें, फिर पूर्ण करें।"
+msgid "{0} has no lot number. Set it on the batch or job in {BRAND_NAME}, then complete."
+msgstr "{0} के पास लॉट संख्या नहीं है। इसे {BRAND_NAME} में बैच या जॉब पर सेट करें, फिर पूर्ण करें।"
 
 #. placeholder {0}: batchFacts.items.length
 msgid "{0} items"
@@ -339,9 +339,6 @@ msgstr "रद्द करें"
 msgid "Cancelled"
 msgstr "रद्द किया गया"
 
-msgid "Carbon Logo"
-msgstr "कार्बन लोगो"
-
 msgid "Cards"
 msgstr "कार्ड"
 
@@ -372,8 +369,8 @@ msgstr "एक विकल्प चुनें"
 msgid "Choose avatar"
 msgstr "अवतार चुनें"
 
-msgid "Choose how Carbon reaches you."
-msgstr "चुनें कि Carbon आपको कैसे पहुंचता है।"
+msgid "Choose how {BRAND_NAME} reaches you."
+msgstr "चुनें कि {BRAND_NAME} आपको कैसे पहुंचता है।"
 
 msgid "Clear"
 msgstr "साफ़ करें"
@@ -829,8 +826,8 @@ msgstr "शीर्षक {level}"
 msgid "Hide description"
 msgstr "विवरण छिपाएं"
 
-msgid "How Carbon looks in this browser."
-msgstr "इस ब्राउज़र में Carbon कैसा दिखता है।"
+msgid "How {BRAND_NAME} looks in this browser."
+msgstr "इस ब्राउज़र में {BRAND_NAME} कैसा दिखता है।"
 
 msgid "How many were actually picked?"
 msgstr "वास्तव में कितने चुने गए?"
@@ -1079,8 +1076,8 @@ msgstr "रखरखाव अतिदेय"
 msgid "Make a replacement"
 msgstr "एक प्रतिस्थापन बनाएं"
 
-msgid "Manage how you sign in to Carbon."
-msgstr "प्रबंधित करें कि आप Carbon में कैसे साइन इन करते हैं।"
+msgid "Manage how you sign in to {BRAND_NAME}."
+msgstr "प्रबंधित करें कि आप {BRAND_NAME} में कैसे साइन इन करते हैं।"
 
 msgid "Manually add items to inventory"
 msgstr "इन्वेंटरी में आइटम मैन्युअली जोड़ें"
@@ -1837,8 +1834,8 @@ msgstr "चयनित"
 msgid "Send"
 msgstr "भेजें"
 
-msgid "Send to Carbon"
-msgstr "Carbon को भेजें"
+msgid "Send to {BRAND_NAME}"
+msgstr "{BRAND_NAME} को भेजें"
 
 msgid "Separate lots"
 msgstr "अलग-अलग लॉट"
@@ -1874,8 +1871,8 @@ msgstr "कार्य समाप्ति सेट करें"
 msgid "Set the time you stopped working, or acknowledge that you're still working."
 msgstr "वह समय निर्धारित करें जब आपने काम करना बंद किया, या स्वीकार करें कि आप अभी भी काम कर रहे हैं।"
 
-msgid "Set up in Carbon"
-msgstr "Carbon में सेट अप करें"
+msgid "Set up in {BRAND_NAME}"
+msgstr "{BRAND_NAME} में सेट अप करें"
 
 msgid "Set up two-factor authentication"
 msgstr "दो-कारक प्रमाणीकरण सेट अप करें"
@@ -2047,8 +2044,8 @@ msgstr "सिस्टम"
 msgid "Tag"
 msgstr "टैग"
 
-msgid "The accent color used across Carbon."
-msgstr "Carbon में उपयोग किया जाने वाला उच्चारण रंग।"
+msgid "The accent color used across {BRAND_NAME}."
+msgstr "{BRAND_NAME} में उपयोग किया जाने वाला उच्चारण रंग।"
 
 msgid "The completed quantity for this operation is less than the required quantity of {targetQuantity}."
 msgstr "इस ऑपरेशन के लिए पूर्ण मात्रा आवश्यक मात्रा {targetQuantity} से कम है।"
@@ -2326,11 +2323,11 @@ msgstr ""
 msgid "You've been clocked in for {hoursElapsed} hours. Did you forget to clock out?"
 msgstr "आप {hoursElapsed} घंटों से कार्य पर हैं। क्या आप कार्य समाप्त करना भूल गए?"
 
-msgid "Your account isn't part of a company yet. Complete onboarding in the Carbon ERP to continue."
-msgstr "आपका खाता अभी तक किसी कंपनी का हिस्सा नहीं है। जारी रखने के लिए Carbon ERP में ऑनबोर्डिंग पूर्ण करें।"
+msgid "Your account isn't part of a company yet. Complete onboarding in the {BRAND_NAME} ERP to continue."
+msgstr "आपका खाता अभी तक किसी कंपनी का हिस्सा नहीं है। जारी रखने के लिए {BRAND_NAME} ERP में ऑनबोर्डिंग पूर्ण करें।"
 
-msgid "Your organization requires an authenticator app. Set it up in Carbon, then come back here."
-msgstr "आपके संगठन को एक ऑथेंटिकेटर ऐप की आवश्यकता है। इसे Carbon में सेट अप करें, फिर यहाँ वापस आएं।"
+msgid "Your organization requires an authenticator app. Set it up in{BRAND_NAME}, then come back here."
+msgstr ""
 
 msgid "Your profile could not be loaded."
 msgstr "आपकी प्रोफाइल को लोड नहीं किया जा सका।"

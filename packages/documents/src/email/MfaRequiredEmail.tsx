@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import {
   Body,
   Container,
@@ -101,8 +102,9 @@ export const MfaRequiredEmail = ({
                     className={`text-[15px] leading-[24px] m-0 ${themeClasses.text}`}
                   >
                     {companyName} now requires an authenticator app to sign in
-                    to Carbon. Set one up before your next sign-in — until you
-                    do, you won't be able to open {companyName} in Carbon.
+                    to {BRAND_NAME}. Set one up before your next sign-in — until
+                    you do, you won't be able to open {companyName} in{" "}
+                    {BRAND_NAME}.
                   </Text>
                   <Text
                     className={`text-[15px] leading-[24px] m-0 mt-[12px] ${themeClasses.text}`}

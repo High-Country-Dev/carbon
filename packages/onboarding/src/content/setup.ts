@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import type { MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 import type { Mod } from "../types";
@@ -62,7 +63,7 @@ export const SETUP_GROUPS: SetupGroup[] = [
       {
         key: "default-accounts",
         object: msg`Default Accounts`,
-        detail: msg`The accounts Carbon posts to automatically`,
+        detail: msg`The accounts ${BRAND_NAME} posts to automatically`,
         moduleTags: ["acc"]
       },
       {
@@ -139,7 +140,7 @@ export const SETUP_GROUPS: SetupGroup[] = [
       {
         key: "custom-fields",
         object: msg`Custom Fields`,
-        detail: msg`Extra fields to capture data Carbon doesn't track by default`
+        detail: msg`Extra fields to capture data ${BRAND_NAME} doesn't track by default`
       },
       {
         key: "integrations",
@@ -208,7 +209,7 @@ export const SETUP_GROUPS: SetupGroup[] = [
       {
         key: "employees",
         object: msg`Employees`,
-        detail: msg`The people on your team and their access to Carbon`
+        detail: msg`The people on your team and their access to ${BRAND_NAME}`
       },
       {
         key: "departments",

@@ -3,6 +3,7 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { cn } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import type { ReactNode } from "react";
 import { useHighlightFlash } from "~/hooks";
 import { usePeople } from "~/stores";
@@ -66,7 +67,7 @@ const Activity = ({
         <div className="flex-grow">
           <p>
             <span className="font-semibold mr-1">
-              {person?.name ?? "Carbon Admin"}
+              {person?.name ?? `${BRAND_NAME} Admin`}
             </span>
             <span className="text-muted-foreground">{activityMessage}</span>
           </p>

@@ -27,6 +27,7 @@ import {
   Tr,
   toast
 } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { ReactNode } from "react";
 import { useMemo, useRef, useState } from "react";
@@ -215,10 +216,10 @@ export function DimensionMapping({
         <div className="flex w-full flex-wrap items-center justify-between gap-2">
           <p className="max-w-prose text-xs leading-relaxed text-muted-foreground">
             <Trans>
-              Ride Carbon dimensions along on pushed journals. Each slot maps
-              one Carbon dimension to one provider analytics target; the value
-              mapping below pairs individual dimension values with provider
-              options.
+              Ride {BRAND_NAME} dimensions along on pushed journals. Each slot
+              maps one {BRAND_NAME} dimension to one provider analytics target;
+              the value mapping below pairs individual dimension values with
+              provider options.
             </Trans>
           </p>
           {targets.length > 0 && slots.length > 0 && (
@@ -269,8 +270,8 @@ export function DimensionMapping({
               </div>
               <p className="text-xs text-muted-foreground">
                 <Trans>
-                  Pick a Carbon dimension and the provider target it posts to.
-                  Auto-create adds missing provider options by name at push
+                  Pick a {BRAND_NAME} dimension and the provider target it posts
+                  to. Auto-create adds missing provider options by name at push
                   time.
                 </Trans>
               </p>
@@ -777,8 +778,8 @@ function MatchByNameDrawer({
           </DrawerTitle>
           <DrawerDescription>
             <Trans>
-              Proposed matches where the Carbon dimension value's name equals a
-              provider option name exactly.
+              Proposed matches where the {BRAND_NAME} dimension value's name
+              equals a provider option name exactly.
             </Trans>
           </DrawerDescription>
         </DrawerHeader>
@@ -793,7 +794,7 @@ function MatchByNameDrawer({
                 <Thead>
                   <Tr>
                     <Th className="px-4">
-                      <Trans>Carbon value</Trans>
+                      <Trans>{BRAND_NAME} value</Trans>
                     </Th>
                     <Th className="px-4">
                       <Trans>Provider option</Trans>

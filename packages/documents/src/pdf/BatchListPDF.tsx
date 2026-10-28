@@ -2,7 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
-import { formatDate } from "@carbon/utils";
+import { BRAND_NAME, formatDate } from "@carbon/utils";
 import { Image, Text, View } from "@react-pdf/renderer";
 import type { Company } from "../types";
 import { tw } from "./blocks/jobTraveler/tw";
@@ -76,7 +76,7 @@ export const BatchListPDF = ({
     <Template
       title="Batch List"
       meta={{
-        author: "Carbon",
+        author: BRAND_NAME,
         keywords: "batch list",
         subject: "Batch List"
       }}

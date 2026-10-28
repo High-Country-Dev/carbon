@@ -30,7 +30,7 @@ import {
   toast,
   useOperatingSystem
 } from "@carbon/react";
-import { datetime, formatRelativeTime } from "@carbon/utils";
+import { BRAND_NAME, datetime, formatRelativeTime } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useLocale } from "@react-aria/i18n";
 import * as cookie from "cookie";
@@ -320,7 +320,7 @@ const AGENT_TOOL_ICONS: {
 // `agent-setup.prompt[.]md.tsx`). `getAppUrl()` is this deployment's own origin,
 // so a self-hosted / ITAR instance links to itself.
 function buildAgentSetupMessage(origin: string) {
-  return `Onboard yourself to my Carbon ERP instance over MCP.
+  return `Onboard yourself to my ${BRAND_NAME} ERP instance over MCP.
 
 Read the setup instructions at ${origin}/agent-setup/prompt.md and follow them to connect your MCP client to ${origin}/api/mcp, then verify the connection works.`;
 }
@@ -364,7 +364,7 @@ function OnboardAgentWidget({ dismissed: initial }: { dismissed: boolean }) {
                 wrapping to a second line on narrow screens — the icons keep
                 their width and the text runs out of sight behind them. */}
             <span className="min-w-0 overflow-hidden whitespace-nowrap">
-              <Trans>Onboard your agent to Carbon</Trans>
+              <Trans>Onboard your agent to {BRAND_NAME}</Trans>
             </span>
             <span className="flex items-center gap-2 text-foreground">
               {AGENT_TOOL_ICONS.map(({ Icon, className }, i) => (

@@ -45,6 +45,7 @@ import {
 } from "@carbon/react";
 import { getStripeCustomerByCompanyId } from "@carbon/stripe/stripe.server";
 import {
+  BRAND_NAME,
   Edition,
   formatDate,
   redirect,
@@ -470,12 +471,12 @@ export default function AuthenticatedRoute() {
           <p className="text-muted-foreground tracking-tight text-sm text-center">
             <Trans>
               Your organization requires an authenticator app. Set it up in
-              Carbon, then come back here.
+              {BRAND_NAME}, then come back here.
             </Trans>
           </p>
           <Button size="lg" className="w-full" asChild>
             <a href={path.to.erpAccountSecurity}>
-              <Trans>Set up in Carbon</Trans>
+              <Trans>Set up in {BRAND_NAME}</Trans>
             </a>
           </Button>
           <Form method="post" action={path.to.logout} className="w-full">

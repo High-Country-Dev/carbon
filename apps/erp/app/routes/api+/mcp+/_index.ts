@@ -9,7 +9,7 @@ import { serveMcpRequest } from "@carbon/ee/mcp.server";
 import { getAppUrl } from "@carbon/env";
 import { Ratelimit, redis } from "@carbon/kv";
 import { withLogContext } from "@carbon/logger/middleware.server";
-import { datetime, getRequestOrigin } from "@carbon/utils";
+import { BRAND_NAME, datetime, getRequestOrigin } from "@carbon/utils";
 import type { ActionFunctionArgs } from "react-router";
 import { getCompanyTimeZone } from "~/modules/shared/shared.service";
 import {
@@ -88,8 +88,7 @@ function make429Response(reset: number, remaining: number): Response {
 function makeMcpDisabledResponse(): Response {
   return new Response(
     JSON.stringify({
-      error:
-        "The MCP server is available on the Business plan. Upgrade to connect an agent to Carbon."
+      error: `The MCP server is available on the Business plan. Upgrade to connect an agent to ${BRAND_NAME}.`
     }),
     {
       status: 402,

@@ -4,6 +4,7 @@
 
 import {
   Badge,
+  BrandWordmark,
   Button,
   Card,
   CardContent,
@@ -11,6 +12,7 @@ import {
   CardTitle,
   cn
 } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import { useEffect, useRef } from "react";
 import {
@@ -96,7 +98,7 @@ export function OnboardingHub({
 
   const stateText =
     done === total ? (
-      <Trans>Live on Carbon</Trans>
+      <Trans>Live on {BRAND_NAME}</Trans>
     ) : done === 0 ? (
       <Trans>{total} phases to go live</Trans>
     ) : (
@@ -107,16 +109,7 @@ export function OnboardingHub({
     <div className="w-full max-w-3xl mx-auto flex flex-col gap-6">
       <header className="flex flex-col items-center text-center gap-3 pt-2">
         <div className="size-14 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center mb-1">
-          <img
-            src="/carbon-mark-light.svg"
-            alt="Carbon"
-            className="size-7 dark:hidden"
-          />
-          <img
-            src="/carbon-mark-dark.svg"
-            alt="Carbon"
-            className="size-7 hidden dark:block"
-          />
+          <BrandWordmark size="xs" />
         </div>
         <h1 className="text-3xl font-medium tracking-tight text-balance">
           {companyName ? (
@@ -127,8 +120,8 @@ export function OnboardingHub({
         </h1>
         <p className="text-base text-muted-foreground max-w-xl text-pretty">
           <Trans>
-            {total} phases to get your company live on Carbon. Each one ends at
-            a checkpoint.
+            {total} phases to get your company live on {BRAND_NAME}. Each one
+            ends at a checkpoint.
           </Trans>
         </p>
       </header>
@@ -149,7 +142,7 @@ export function OnboardingHub({
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-lg font-medium tracking-tight">
-              <Trans>You're live on Carbon</Trans>
+              <Trans>You're live on {BRAND_NAME}</Trans>
             </div>
             <p className="text-sm text-muted-foreground mt-0.5">
               <Trans>
@@ -280,7 +273,7 @@ function NextStepCard({
                 leftIcon={<LuArrowRight />}
                 onClick={() => onOpenProduct(product.key)}
               >
-                {product.cta ? i18n._(product.cta) : t`Open in Carbon`}
+                {product.cta ? i18n._(product.cta) : t`Open in ${BRAND_NAME}`}
               </Button>
             ) : (
               <Button

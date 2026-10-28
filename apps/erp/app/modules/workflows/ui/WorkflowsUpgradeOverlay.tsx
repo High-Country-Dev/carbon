@@ -3,6 +3,7 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { Badge, Button, HStack, VStack } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans } from "@lingui/react/macro";
 import { LuWorkflow } from "react-icons/lu";
 import {
@@ -93,7 +94,7 @@ export default function WorkflowsUpgradeOverlay() {
           <UpgradeOverlayDescription>
             <Trans>
               Automate your business processes with event-driven workflows that
-              trigger actions when things happen in Carbon.
+              trigger actions when things happen in {BRAND_NAME}.
             </Trans>
           </UpgradeOverlayDescription>
         </UpgradeOverlayContent>

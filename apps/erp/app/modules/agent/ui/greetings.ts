@@ -2,6 +2,8 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
+
 function timeOfDay(): string {
   const h = new Date().getHours();
   if (h < 12) return "morning";
@@ -12,16 +14,16 @@ function timeOfDay(): string {
 // A pool of complete greetings with varied tone — some time-aware, most casual/direct.
 // One is picked at random per panel open, so it doesn't always sound the same.
 const GREETINGS: Array<() => string> = [
-  () => `Good ${timeOfDay()}! What can I help you with in Carbon today?`,
+  () => `Good ${timeOfDay()}! What can I help you with in ${BRAND_NAME} today?`,
   () => `Good ${timeOfDay()} — what are you working on?`,
   () => "Hey! How can I help?",
   () => "Hi there 👋 What do you need?",
   () => "Hey, what's on your plate today?",
-  () => "How's it going? Ask me anything about Carbon.",
+  () => `How's it going? Ask me anything about ${BRAND_NAME}.`,
   () => "What can I dig up for you?",
   () => "Ready when you are — what do you need?",
   () => "What would you like to know?",
-  () => "Need to find something in Carbon? Just ask.",
+  () => `Need to find something in ${BRAND_NAME}? Just ask.`,
   () => "Looking for something specific?",
   () => "Let's get to work — what's up?"
 ];

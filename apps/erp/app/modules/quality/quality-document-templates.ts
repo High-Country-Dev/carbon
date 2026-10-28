@@ -2,6 +2,8 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
+
 export const documents = [
   {
     name: "Shipping",
@@ -546,7 +548,7 @@ export const documents = [
                                   content: [
                                     {
                                       type: "text",
-                                      text: "All internal documents are created as soft files (MS Word®, Google Drive, Carbon, etc.); it is recommended that files of a similar type follow the format of other documents in that type."
+                                      text: `All internal documents are created as soft files (MS Word®, Google Drive, ${BRAND_NAME}, etc.); it is recommended that files of a similar type follow the format of other documents in that type.`
                                     }
                                   ]
                                 }

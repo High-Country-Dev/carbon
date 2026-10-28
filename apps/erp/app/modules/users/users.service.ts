@@ -46,7 +46,7 @@ import {
   type NotificationTopic,
   notificationPreferenceCompanyId
 } from "@carbon/notifications";
-import { datetime, getClientIp } from "@carbon/utils";
+import { BRAND_NAME, datetime, getClientIp } from "@carbon/utils";
 import { now, parseAbsolute } from "@internationalized/date";
 import type { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
 import { nanoid } from "nanoid";
@@ -2257,7 +2257,7 @@ export async function sendInviteEmail(
   );
   await sendEmail({
     to: invite.email,
-    subject: `You have been invited to join ${invite.companyName} on Carbon`,
+    subject: `You have been invited to join ${invite.companyName} on ${BRAND_NAME}`,
     headers: { "X-Entity-Ref-ID": nanoid() },
     html: await render(
       InviteEmail({

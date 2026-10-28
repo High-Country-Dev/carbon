@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import {
   Body,
   Container,
@@ -137,7 +138,7 @@ export const GetStartedEmail = ({
   firstName = "Huckleberry",
   academyUrl = "https://learn.carbon.ms"
 }: Props) => {
-  const preview = `Hi ${firstName}, here's how to get the most out of Carbon.`;
+  const preview = `Hi ${firstName}, here's how to get the most out of ${BRAND_NAME}.`;
   const themeClasses = getEmailThemeClasses();
   const lightStyles = getEmailInlineStyles("light");
 
@@ -150,7 +151,7 @@ export const GetStartedEmail = ({
     {
       href: `${academyUrl}/course/getting-started/setting-up-company`,
       title: "Setting up your company",
-      description: "Configure Carbon for your team in minutes."
+      description: `Configure ${BRAND_NAME} for your team in minutes.`
     },
     {
       href: `${academyUrl}/course/parts-materials/defining-item`,
@@ -175,7 +176,7 @@ export const GetStartedEmail = ({
     {
       href: `${academyUrl}/course/developing/using-api`,
       title: "Using the API",
-      description: "Build custom apps on top of Carbon."
+      description: `Build custom apps on top of ${BRAND_NAME}.`
     }
   ];
 
@@ -204,7 +205,7 @@ export const GetStartedEmail = ({
             className={`text-[24px] font-normal text-center tracking-tight p-0 mt-[40px] mb-[32px] mx-0 ${themeClasses.heading}`}
             style={{ color: lightStyles.text.color }}
           >
-            Get the most out of Carbon
+            Get the most out of {BRAND_NAME}
           </Heading>
 
           <Section>
@@ -252,7 +253,7 @@ export const GetStartedEmail = ({
               className={`text-[14px] m-0 mb-[2px] ${themeClasses.text}`}
               style={{ color: lightStyles.text.color }}
             >
-              — The Carbon Team
+              — The {BRAND_NAME} Team
             </Text>
           </Section>
         </Container>

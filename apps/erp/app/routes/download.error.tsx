@@ -2,8 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
-import { CONTROLLED_ENVIRONMENT } from "@carbon/auth";
-import { cn } from "@carbon/react";
+import { BrandWordmark } from "@carbon/react";
 import { msg } from "@lingui/core/macro";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { LoaderFunctionArgs } from "react-router";
@@ -34,22 +33,7 @@ export default function DownloadErrorRoute() {
   return (
     <div className="relative flex min-h-dvh flex-col bg-background">
       <header className="p-6">
-        <img
-          src="/carbon-word-light.svg"
-          alt="Carbon"
-          className={cn(
-            "max-w-[160px] dark:hidden",
-            CONTROLLED_ENVIRONMENT && "grayscale"
-          )}
-        />
-        <img
-          src="/carbon-word-dark.svg"
-          alt="Carbon"
-          className={cn(
-            "max-w-[160px] hidden dark:block",
-            CONTROLLED_ENVIRONMENT && "grayscale"
-          )}
-        />
+        <BrandWordmark size="lg" />
       </header>
       <main className="flex flex-1 items-center justify-center px-6 pb-24">
         <div className="flex max-w-md flex-col items-center gap-3 text-center">

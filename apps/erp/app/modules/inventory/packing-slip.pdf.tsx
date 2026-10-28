@@ -12,6 +12,7 @@ import {
 } from "@carbon/documents/template";
 import { getLogger } from "@carbon/logger";
 import type { JSONContent } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { renderToStream } from "@react-pdf/renderer";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getPaymentTerm } from "~/modules/accounting/accounting.service";
@@ -206,7 +207,7 @@ export async function renderPackingSlip({
           customer={customer.data}
           locale={locale}
           meta={{
-            author: "Carbon",
+            author: BRAND_NAME,
             keywords: "packing slip",
             subject: "Packing Slip"
           }}
@@ -329,7 +330,7 @@ export async function renderPackingSlip({
           customer={customer.data}
           locale={locale}
           meta={{
-            author: "Carbon",
+            author: BRAND_NAME,
             keywords: "packing slip",
             subject: "Packing Slip"
           }}
@@ -445,7 +446,7 @@ export async function renderPackingSlip({
           customer={supplier.data}
           locale={locale}
           meta={{
-            author: "Carbon",
+            author: BRAND_NAME,
             keywords: "packing slip",
             subject: "Packing Slip"
           }}
@@ -559,7 +560,7 @@ export async function renderPackingSlip({
           customer={{ name: toLocation?.name ?? "" } as any}
           locale={locale}
           meta={{
-            author: "Carbon",
+            author: BRAND_NAME,
             keywords: "packing slip",
             subject: "Packing Slip"
           }}
@@ -670,7 +671,7 @@ export async function renderPackingSlip({
           customer={customer.data}
           locale={locale}
           meta={{
-            author: "Carbon",
+            author: BRAND_NAME,
             keywords: "delivery ticket",
             subject: "Delivery Ticket"
           }}

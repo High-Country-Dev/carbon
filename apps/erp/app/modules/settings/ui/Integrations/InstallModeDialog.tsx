@@ -15,6 +15,7 @@ import {
   RadioGroup,
   RadioGroupButton
 } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useState } from "react";
 import { LuCheck } from "react-icons/lu";
@@ -68,8 +69,9 @@ export function InstallModeDialog({
           <ModalDescription>
             <Trans>
               This cannot be changed later — {integrationName} allows only one
-              connected accounting system, so the choice decides what Carbon is
-              permitted to do. To switch, you would uninstall and reconnect.
+              connected accounting system, so the choice decides what{" "}
+              {BRAND_NAME} is permitted to do. To switch, you would uninstall
+              and reconnect.
             </Trans>
           </ModalDescription>
         </ModalHeader>

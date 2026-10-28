@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import type { MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 
@@ -49,7 +50,7 @@ const onshapeErrors = {
   },
   "not-configured": {
     title: msg`Onshape isn't configured`,
-    description: msg`This Carbon instance is missing its Onshape OAuth credentials. Ask an administrator to set them.`
+    description: msg`This ${BRAND_NAME} instance is missing its Onshape OAuth credentials. Ask an administrator to set them.`
   },
   "token-exchange": {
     title: msg`Onshape rejected the authorization`,
@@ -104,7 +105,7 @@ export const integrationErrors = {
     // two real ways out instead of the generic "try again", which cannot work.
     "seat-conflict": {
       title: msg`Another system is connected to Ramp as its accounting system`,
-      description: msg`Ramp allows only one. Disconnect the other system in Ramp, or connect Carbon again choosing "Another system posts my ledger".`
+      description: msg`Ramp allows only one. Disconnect the other system in Ramp, or connect ${BRAND_NAME} again choosing "Another system posts my ledger".`
     }
   },
   onshape: onshapeErrors,
@@ -171,7 +172,7 @@ const sharedErrors = {
   // `isIntegrationInstallWithheld`: an `internalOnly` integration.
   "coming-soon": {
     title: msg`This integration isn't available yet`,
-    description: msg`It is coming soon. Contact Carbon to have it set up for your company.`
+    description: msg`It is coming soon. Contact ${BRAND_NAME} to have it set up for your company.`
   }
 } satisfies Record<string, IntegrationErrorMessage>;
 

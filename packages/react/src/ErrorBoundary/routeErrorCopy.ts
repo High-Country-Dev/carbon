@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import { isRouteErrorResponse } from "react-router";
 
 export type RouteErrorCopy = {
@@ -60,8 +61,7 @@ export function routeErrorCopy(error: unknown): RouteErrorCopy {
   if (isNetworkError(error)) {
     return {
       title: "Connection lost",
-      message:
-        "Carbon could not reach the server. It tries again when the connection returns or when you come back to this tab.",
+      message: `${BRAND_NAME} could not reach the server. It tries again when the connection returns or when you come back to this tab.`,
       canRetry: true
     };
   }

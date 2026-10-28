@@ -7,6 +7,7 @@ import {
   AccountSettings as SharedAccountSettings
 } from "@carbon/account/ui";
 import { Button } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans } from "@lingui/react/macro";
 import { useUser } from "~/hooks";
 import { usePlanGate } from "~/hooks/usePlanGate";
@@ -51,21 +52,21 @@ function BrowserNotificationsSection({ publicKey }: { publicKey: string }) {
       description={
         <>
           {device.state === "off" && (
-            <Trans>Get your Carbon notifications as they happen.</Trans>
+            <Trans>Get your {BRAND_NAME} notifications as they happen.</Trans>
           )}
           {device.state === "on" && (
             <Trans>Browser notifications are on for this browser.</Trans>
           )}
           {device.state === "denied" && (
             <Trans>
-              Notifications are blocked for Carbon in this browser&apos;s site
-              settings.
+              Notifications are blocked for {BRAND_NAME} in this browser&apos;s
+              site settings.
             </Trans>
           )}
           {device.state === "unsupported" && (
             <Trans>
               This browser does not support push notifications. On iPhone or
-              iPad, add Carbon to the Home Screen first.
+              iPad, add {BRAND_NAME} to the Home Screen first.
             </Trans>
           )}
         </>

@@ -33,8 +33,8 @@ msgid "{0} customers"
 msgstr "{0} müşteri"
 
 #. placeholder {0}: unplanned .map( (m) => (m.job as { jobId?: string | null } | null)?.jobId ) .filter(Boolean) .join(", ")
-msgid "{0} has no lot number. Set it on the batch or job in Carbon, then complete."
-msgstr "{0} Lot numarasına sahip değil. Bunu Carbon'da Partide veya İş emrinde ayarla, sonra Tamamla."
+msgid "{0} has no lot number. Set it on the batch or job in {BRAND_NAME}, then complete."
+msgstr "{0} Lot numarasına sahip değil. Bunu {BRAND_NAME}'da Partide veya İş emrinde ayarla, sonra Tamamla."
 
 #. placeholder {0}: batchFacts.items.length
 msgid "{0} items"
@@ -339,9 +339,6 @@ msgstr "İptal"
 msgid "Cancelled"
 msgstr "İptal edildi"
 
-msgid "Carbon Logo"
-msgstr "Carbon Logosu"
-
 msgid "Cards"
 msgstr "Kartlar"
 
@@ -372,8 +369,8 @@ msgstr "Bir seçenek seçin"
 msgid "Choose avatar"
 msgstr "Avatar seç"
 
-msgid "Choose how Carbon reaches you."
-msgstr "Carbon'un sizi nasıl ulaştığını seçin."
+msgid "Choose how {BRAND_NAME} reaches you."
+msgstr "{BRAND_NAME}'un sizi nasıl ulaştığını seçin."
 
 msgid "Clear"
 msgstr "Temizle"
@@ -829,8 +826,8 @@ msgstr "Başlık {level}"
 msgid "Hide description"
 msgstr "Açıklamayı gizle"
 
-msgid "How Carbon looks in this browser."
-msgstr "Bu tarayıcıda Carbon'un görünüşü."
+msgid "How {BRAND_NAME} looks in this browser."
+msgstr "Bu tarayıcıda {BRAND_NAME}'un görünüşü."
 
 msgid "How many were actually picked?"
 msgstr "Gerçekte kaç tane alındı?"
@@ -1079,8 +1076,8 @@ msgstr "Bakım gecikmiş"
 msgid "Make a replacement"
 msgstr "Bir yedek oluştur"
 
-msgid "Manage how you sign in to Carbon."
-msgstr "Carbon'a nasıl oturum açacağınızı yönetin."
+msgid "Manage how you sign in to {BRAND_NAME}."
+msgstr "{BRAND_NAME}'a nasıl oturum açacağınızı yönetin."
 
 msgid "Manually add items to inventory"
 msgstr "Envantere öğeler eklemek için manuel olarak"
@@ -1837,8 +1834,8 @@ msgstr "Seçildi"
 msgid "Send"
 msgstr "Gönder"
 
-msgid "Send to Carbon"
-msgstr "Carbon'a Gönder"
+msgid "Send to {BRAND_NAME}"
+msgstr "{BRAND_NAME}'a Gönder"
 
 msgid "Separate lots"
 msgstr "Ayrı Lotlar"
@@ -1874,8 +1871,8 @@ msgstr "İş bitişini ayarla"
 msgid "Set the time you stopped working, or acknowledge that you're still working."
 msgstr "Çalışmayı bitirdiğiniz zamanı ayarlayın veya hala çalışmakta olduğunuzu onaylayın."
 
-msgid "Set up in Carbon"
-msgstr "Carbon'da ayarla"
+msgid "Set up in {BRAND_NAME}"
+msgstr "{BRAND_NAME}'da ayarla"
 
 msgid "Set up two-factor authentication"
 msgstr "İki faktörlü kimlik doğrulamayı ayarla"
@@ -2047,8 +2044,8 @@ msgstr "Sistem"
 msgid "Tag"
 msgstr "Etiket"
 
-msgid "The accent color used across Carbon."
-msgstr "Carbon'da kullanılan vurgu rengi."
+msgid "The accent color used across {BRAND_NAME}."
+msgstr "{BRAND_NAME}'da kullanılan vurgu rengi."
 
 msgid "The completed quantity for this operation is less than the required quantity of {targetQuantity}."
 msgstr "Bu işlem için tamamlanan miktar, gerekli miktar olan {targetQuantity}'dan azdır."
@@ -2326,11 +2323,11 @@ msgstr ""
 msgid "You've been clocked in for {hoursElapsed} hours. Did you forget to clock out?"
 msgstr "{hoursElapsed} saattir zaman kaydı yapıyorsunuz. İş bitişini yapmayı unuttunuz mu?"
 
-msgid "Your account isn't part of a company yet. Complete onboarding in the Carbon ERP to continue."
-msgstr "Hesabınız henüz bir şirkete ait değildir. Devam etmek için Carbon ERP'de yerleşimi tamamlayın."
+msgid "Your account isn't part of a company yet. Complete onboarding in the {BRAND_NAME} ERP to continue."
+msgstr "Hesabınız henüz bir şirkete ait değildir. Devam etmek için {BRAND_NAME} ERP'de yerleşimi tamamlayın."
 
-msgid "Your organization requires an authenticator app. Set it up in Carbon, then come back here."
-msgstr "Kuruluşunuz bir kimlik doğrulama uygulaması gerektirir. Bunu Carbon'da ayarlayın, ardından buraya geri dönün."
+msgid "Your organization requires an authenticator app. Set it up in{BRAND_NAME}, then come back here."
+msgstr ""
 
 msgid "Your profile could not be loaded."
 msgstr "Profiliniz yüklenemedi."

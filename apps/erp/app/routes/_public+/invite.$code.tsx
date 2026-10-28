@@ -22,16 +22,22 @@ import { insertAuditLogEntries } from "@carbon/ee/audit.server";
 import { Ratelimit, redis } from "@carbon/kv";
 import { sendEmail } from "@carbon/lib/email.server";
 import { getLogger } from "@carbon/logger";
-import { Button as _Button, Heading as _Heading, VStack } from "@carbon/react";
+import {
+  Button as _Button,
+  Heading as _Heading,
+  BrandWordmark,
+  VStack
+} from "@carbon/react";
 import { updateSubscriptionQuantityForCompany } from "@carbon/stripe/stripe.server";
 import {
+  BRAND_NAME,
   datetime,
   Edition,
   getClientIp,
   redirect,
   redirectExternal
 } from "@carbon/utils";
-import { Trans, useLingui } from "@lingui/react/macro";
+import { Trans } from "@lingui/react/macro";
 import { AnimatePresence, motion } from "motion/react";
 import { nanoid } from "nanoid";
 import { render } from "react-email";
@@ -51,7 +57,7 @@ import { path } from "~/utils/path";
 const logger = getLogger("erp", "invite");
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Accept Invite | Carbon" }];
+  return [{ title: `Accept Invite | ${BRAND_NAME}` }];
 };
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
@@ -271,7 +277,7 @@ async function requestNewInvite(
 
   await sendEmail({
     to: invite.data.email,
-    subject: `You have been invited to join ${invite.data.company?.name} on Carbon`,
+    subject: `You have been invited to join ${invite.data.company?.name} on ${BRAND_NAME}`,
     headers: { "X-Entity-Ref-ID": nanoid() },
     html: await render(
       InviteEmail({
@@ -279,7 +285,7 @@ async function requestNewInvite(
         invitedByName: inviter.data?.fullName ?? "",
         email: invite.data.email,
         name: "",
-        companyName: invite.data.company?.name ?? "Carbon",
+        companyName: invite.data.company?.name ?? BRAND_NAME,
         inviteLink: `${getAppUrl()}/invite/${refreshed.data.code}`,
         ip,
         location,
@@ -310,22 +316,12 @@ export default function Invite() {
   const { success, expired, company } = data;
   const controlledEnvironment =
     "controlledEnvironment" in data ? data.controlledEnvironment : false;
-  const { t } = useLingui();
 
   if (expired) {
     return (
       <VStack spacing={4} className="max-w-lg items-center text-center">
         <div className="flex justify-center mb-8">
-          <img
-            src="/carbon-mark-light.svg"
-            alt={t`Carbon Logo`}
-            className="w-24 dark:hidden"
-          />
-          <img
-            src="/carbon-mark-dark.svg"
-            alt={t`Carbon Logo`}
-            className="w-24 hidden dark:block"
-          />
+          <BrandWordmark size="lg" />
         </div>
         <VStack spacing={2} className="text-center w-full">
           <Heading className="w-full text-center">
@@ -333,7 +329,7 @@ export default function Invite() {
           </Heading>
           <p>
             <Trans>
-              This invitation to join {company?.name ?? "Carbon"} has expired.
+              This invitation to join {company?.name ?? BRAND_NAME} has expired.
               You can request a new invite to be sent to your email.
             </Trans>
           </p>
@@ -352,16 +348,7 @@ export default function Invite() {
     return (
       <VStack spacing={4} className="max-w-lg items-center text-center">
         <div className="flex justify-center mb-8">
-          <img
-            src="/carbon-mark-light.svg"
-            alt={t`Carbon Logo`}
-            className="w-24 dark:hidden"
-          />
-          <img
-            src="/carbon-mark-dark.svg"
-            alt={t`Carbon Logo`}
-            className="w-24 hidden dark:block"
-          />
+          <BrandWordmark size="lg" />
         </div>
         <VStack spacing={2} className="text-center w-full">
           <Heading className="w-full text-center">
@@ -386,19 +373,13 @@ export default function Invite() {
   return (
     <AnimatePresence>
       <VStack spacing={4} className="max-w-lg items-center text-center">
-        <motion.img
+        <motion.div
           initial={{ opacity: 0, scale: 0.4 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 2, ease: "easeInOut" }}
-          src="/carbon-mark-light.svg"
-          alt="Carbon Logo"
-          className="w-24 dark:hidden"
-        />
-        <img
-          src="/carbon-mark-dark.svg"
-          alt="Carbon Logo"
-          className="w-24 hidden dark:block"
-        />
+        >
+          <BrandWordmark size="lg" />
+        </motion.div>
 
         <Heading
           {...fade}
@@ -406,7 +387,7 @@ export default function Invite() {
           size="h1"
           className="mb-4"
         >
-          <Trans>Welcome to Carbon</Trans>
+          <Trans>Welcome to {BRAND_NAME}</Trans>
         </Heading>
 
         <Form method="post">

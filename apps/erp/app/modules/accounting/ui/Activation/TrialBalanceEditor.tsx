@@ -27,7 +27,13 @@ import {
   TooltipTrigger,
   Tr
 } from "@carbon/react";
-import { equals, INPUT_FORMAT, INPUT_STEP, round } from "@carbon/utils";
+import {
+  BRAND_NAME,
+  equals,
+  INPUT_FORMAT,
+  INPUT_STEP,
+  round
+} from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useMemo, useRef, useState } from "react";
 import {
@@ -295,7 +301,7 @@ export default function TrialBalanceEditor({
         <Alert variant="warning">
           <LuTriangleAlert className="h-4 w-4" />
           <AlertTitle>
-            <Trans>Some balances have no Carbon account</Trans>
+            <Trans>Some balances have no {BRAND_NAME} account</Trans>
           </AlertTitle>
           <AlertDescription>
             <p>
@@ -313,7 +319,9 @@ export default function TrialBalanceEditor({
                   {row.ambiguous && (
                     <span className="text-muted-foreground">
                       {" "}
-                      <Trans>(mapped to more than one Carbon account)</Trans>
+                      <Trans>
+                        (mapped to more than one {BRAND_NAME} account)
+                      </Trans>
                     </span>
                   )}
                 </li>
@@ -356,8 +364,9 @@ export default function TrialBalanceEditor({
                         </TooltipTrigger>
                         <TooltipContent className="max-w-xs">
                           <Trans>
-                            Carbon opens this account from its open items. The
-                            amount here is only compared on Migration Clearing.
+                            {BRAND_NAME} opens this account from its open items.
+                            The amount here is only compared on Migration
+                            Clearing.
                           </Trans>
                         </TooltipContent>
                       </Tooltip>

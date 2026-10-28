@@ -22,6 +22,7 @@ import {
   ModalHeader,
   ModalTitle
 } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useState } from "react";
 import { LuLayers, LuTriangleAlert } from "react-icons/lu";
@@ -223,8 +224,8 @@ export function BatchCompleteModal({
                       )
                       .filter(Boolean)
                       .join(", ")}{" "}
-                    has no lot number. Set it on the batch or job in Carbon,
-                    then complete.
+                    has no lot number. Set it on the batch or job in{" "}
+                    {BRAND_NAME}, then complete.
                   </Trans>
                 </AlertDescription>
               </Alert>

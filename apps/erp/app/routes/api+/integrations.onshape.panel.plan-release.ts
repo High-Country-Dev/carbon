@@ -36,6 +36,7 @@ import {
 import { requireOnshapePanelPermissions } from "@carbon/ee/onshape/panel-session.server";
 import { readPartProperties } from "@carbon/ee/onshape.server";
 import { getLogger } from "@carbon/logger";
+import { BRAND_NAME } from "@carbon/utils";
 import type { ActionFunctionArgs } from "react-router";
 import { data } from "react-router";
 import { z } from "zod";
@@ -159,7 +160,10 @@ export async function action({ request }: ActionFunctionArgs) {
       .order("revision")
   );
   if (releaseRows.error) {
-    return data({ error: "Failed to read Carbon items" }, { status: 500 });
+    return data(
+      { error: `Failed to read ${BRAND_NAME} items` },
+      { status: 500 }
+    );
   }
   const toPlanRow = <T extends { revision: string | null }>(row: T) => ({
     ...row,
@@ -306,7 +310,10 @@ export async function action({ request }: ActionFunctionArgs) {
       .order("revision")
   );
   if (childRows.error) {
-    return data({ error: "Failed to read Carbon items" }, { status: 500 });
+    return data(
+      { error: `Failed to read ${BRAND_NAME} items` },
+      { status: 500 }
+    );
   }
   items.push(...childRows.data.map(toPlanRow));
 
@@ -430,7 +437,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const saved = await createPanelPlan({ companyId, userId, plan: stored });
   if (!saved) {
     return data(
-      { error: "Carbon couldn't save this review. Try again." },
+      { error: `${BRAND_NAME} couldn't save this review. Try again.` },
       { status: 503 }
     );
   }

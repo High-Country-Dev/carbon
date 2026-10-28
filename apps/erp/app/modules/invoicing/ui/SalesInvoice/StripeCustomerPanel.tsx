@@ -12,6 +12,7 @@ import {
   Spinner,
   VStack
 } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useEffect, useRef, useState } from "react";
 import { LuCircleAlert, LuCreditCard } from "react-icons/lu";
@@ -166,12 +167,13 @@ const StripeCustomerPanel = ({
                 <Trans>
                   Stripe emails the invoices to the customer, so an address is
                   required. It is also saved to the contract's invoice contact
-                  in Carbon, if it has one.
+                  in {BRAND_NAME}, if it has one.
                 </Trans>
               ) : (
                 <Trans>
                   Stripe emails the invoice to the customer, so an address is
-                  required. This will also be saved to the contact in Carbon.
+                  required. This will also be saved to the contact in{" "}
+                  {BRAND_NAME}.
                 </Trans>
               )}
             </AlertDescription>
@@ -198,14 +200,14 @@ const StripeCustomerPanel = ({
               {isContract ? (
                 <Trans>
                   The contract's invoices will be billed to the Stripe customer
-                  already linked to this Carbon customer. To change its details,
-                  edit it in the Stripe dashboard.
+                  already linked to this {BRAND_NAME} customer. To change its
+                  details, edit it in the Stripe dashboard.
                 </Trans>
               ) : (
                 <Trans>
                   This invoice will be billed to the Stripe customer already
-                  linked to this Carbon customer. To change its details, edit it
-                  in the Stripe dashboard.
+                  linked to this {BRAND_NAME} customer. To change its details,
+                  edit it in the Stripe dashboard.
                 </Trans>
               )}
             </AlertDescription>
@@ -231,8 +233,8 @@ const StripeCustomerPanel = ({
             </AlertTitle>
             <AlertDescription>
               <Trans>
-                Link this Carbon customer to one of them, or create a separate
-                Stripe customer.
+                Link this {BRAND_NAME} customer to one of them, or create a
+                separate Stripe customer.
               </Trans>
             </AlertDescription>
           </Alert>
@@ -286,13 +288,13 @@ const StripeCustomerPanel = ({
             <AlertDescription>
               {isContract ? (
                 <Trans>
-                  Stripe has no customer for this Carbon customer yet.
+                  Stripe has no customer for this {BRAND_NAME} customer yet.
                   Confirming will create one on your connected account.
                 </Trans>
               ) : (
                 <Trans>
-                  Stripe has no customer for this Carbon customer yet. Posting
-                  will create one on your connected account.
+                  Stripe has no customer for this {BRAND_NAME} customer yet.
+                  Posting will create one on your connected account.
                 </Trans>
               )}
             </AlertDescription>

@@ -27,7 +27,7 @@ import {
   toFormFields
 } from "@carbon/onboarding/ui";
 import { RecordOutlet } from "@carbon/react";
-import { redirect } from "@carbon/utils";
+import { BRAND_NAME, redirect } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
@@ -55,7 +55,7 @@ import { trainingConfig } from "~/utils/training";
 export { RouteErrorBoundary as ErrorBoundary } from "@carbon/react/ErrorBoundary";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Carbon | Get Started" }];
+  return [{ title: `${BRAND_NAME} | Get Started` }];
 };
 
 // Deep links from the Setup Map: each setup row's stable key → the ERP screen

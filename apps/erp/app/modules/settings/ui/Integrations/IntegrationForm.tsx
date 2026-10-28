@@ -49,7 +49,7 @@ import {
   toast,
   VStack
 } from "@carbon/react";
-import { SUPPORT_EMAIL } from "@carbon/utils";
+import { BRAND_NAME, SUPPORT_EMAIL } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { ComponentType, ReactNode } from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -945,7 +945,7 @@ export function IntegrationForm({
             <Badge variant="secondary">{integration.category}</Badge>
             <span aria-hidden>•</span>
             <span>
-              <Trans>Published by Carbon</Trans>
+              <Trans>Published by {BRAND_NAME}</Trans>
             </span>
           </div>
         </div>

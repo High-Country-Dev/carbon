@@ -19,6 +19,7 @@ import {
   validateRampExchangeRate
 } from "@carbon/ee/ramp.server";
 import { getAppUrl } from "@carbon/env";
+import { BRAND_NAME } from "@carbon/utils";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { getJobDatabaseClient } from "../../../db";
 
@@ -185,7 +186,7 @@ export async function verifyCostCenters(
   if (error) return `Failed to verify cost centers: ${error.message}`;
   const known = new Set((data ?? []).map((row) => row.id));
   if (ids.some((id) => !known.has(id))) {
-    return "Line is coded to a cost center Carbon doesn't recognize — recode it in Ramp";
+    return `Line is coded to a cost center ${BRAND_NAME} doesn't recognize — recode it in Ramp`;
   }
   return null;
 }
@@ -210,7 +211,7 @@ export async function verifyProjects(
   if (error) return `Failed to verify projects: ${error.message}`;
   const known = new Set((data ?? []).map((row) => row.id));
   if (ids.some((id) => !known.has(id))) {
-    return "Line is coded to a project Carbon doesn't recognize — recode it in Ramp";
+    return `Line is coded to a project ${BRAND_NAME} doesn't recognize — recode it in Ramp`;
   }
   return null;
 }

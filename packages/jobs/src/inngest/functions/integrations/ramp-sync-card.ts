@@ -16,6 +16,7 @@ import {
   scaleLinesToTotal
 } from "@carbon/ee/ramp.server";
 import { storage } from "@carbon/files";
+import { BRAND_NAME } from "@carbon/utils";
 import { stageOrResumeRampCharge } from "./ramp-sync-card-stage";
 import { recordRampFamilyError } from "./ramp-sync-observability";
 import {
@@ -137,8 +138,7 @@ async function buildTransactionLines(
   decimals: number,
   headerAmount: number
 ): Promise<{ lines: BuiltLine[] } | { error: string }> {
-  const uncoded =
-    "Line is coded to an account Carbon doesn't recognize — recode the transaction";
+  const uncoded = `Line is coded to an account ${BRAND_NAME} doesn't recognize — recode the transaction`;
 
   const lines: BuiltLine[] = [];
 
@@ -281,7 +281,7 @@ export async function createAndPostTransaction(
     return {
       fail: {
         id: args.rampId,
-        message: "Mapped Ramp charge is Voided in Carbon"
+        message: `Mapped Ramp charge is Voided in ${BRAND_NAME}`
       }
     };
   }
@@ -316,7 +316,7 @@ export async function createAndPostTransaction(
         ? postError.message
         : String(postError)
       : (observed.error?.message ??
-        "Ramp charge is not observably Posted in Carbon");
+        `Ramp charge is not observably Posted in ${BRAND_NAME}`);
     return { fail: { id: args.rampId, message } };
   }
 
@@ -398,7 +398,7 @@ async function reconfirmMapped(
     if (row.status !== "Posted") {
       failed.push({
         id: item.rampId,
-        message: `Mapped Ramp charge is ${row.status} in Carbon`
+        message: `Mapped Ramp charge is ${row.status} in ${BRAND_NAME}`
       });
       continue;
     }

@@ -33,8 +33,8 @@ msgid "{0} customers"
 msgstr "{0} Kunden"
 
 #. placeholder {0}: unplanned .map( (m) => (m.job as { jobId?: string | null } | null)?.jobId ) .filter(Boolean) .join(", ")
-msgid "{0} has no lot number. Set it on the batch or job in Carbon, then complete."
-msgstr "{0} hat keine Chargennummer. Stellen Sie sie für das Los oder den Fertigungsauftrag in Carbon ein und schließen Sie ab."
+msgid "{0} has no lot number. Set it on the batch or job in {BRAND_NAME}, then complete."
+msgstr "{0} hat keine Chargennummer. Stellen Sie sie für das Los oder den Fertigungsauftrag in {BRAND_NAME} ein und schließen Sie ab."
 
 #. placeholder {0}: batchFacts.items.length
 msgid "{0} items"
@@ -339,9 +339,6 @@ msgstr "Abbrechen"
 msgid "Cancelled"
 msgstr "Storniert"
 
-msgid "Carbon Logo"
-msgstr "Carbon Logo"
-
 msgid "Cards"
 msgstr "Karten"
 
@@ -372,8 +369,8 @@ msgstr "Wähle eine Option"
 msgid "Choose avatar"
 msgstr "Avatar auswählen"
 
-msgid "Choose how Carbon reaches you."
-msgstr "Wählen Sie, wie Carbon Sie erreicht."
+msgid "Choose how {BRAND_NAME} reaches you."
+msgstr "Wählen Sie, wie {BRAND_NAME} Sie erreicht."
 
 msgid "Clear"
 msgstr "Löschen"
@@ -829,8 +826,8 @@ msgstr "Überschrift {level}"
 msgid "Hide description"
 msgstr "Beschreibung ausblenden"
 
-msgid "How Carbon looks in this browser."
-msgstr "Aussehen von Carbon in diesem Browser."
+msgid "How {BRAND_NAME} looks in this browser."
+msgstr "Aussehen von {BRAND_NAME} in diesem Browser."
 
 msgid "How many were actually picked?"
 msgstr "Wie viele wurden tatsächlich gepickt?"
@@ -1079,8 +1076,8 @@ msgstr "Instandhaltung überfällig"
 msgid "Make a replacement"
 msgstr "Ersatzteil erstellen"
 
-msgid "Manage how you sign in to Carbon."
-msgstr "Verwalten Sie, wie Sie sich bei Carbon anmelden."
+msgid "Manage how you sign in to {BRAND_NAME}."
+msgstr "Verwalten Sie, wie Sie sich bei {BRAND_NAME} anmelden."
 
 msgid "Manually add items to inventory"
 msgstr "Artikel manuell zum Bestand hinzufügen"
@@ -1837,8 +1834,8 @@ msgstr "Ausgewählt"
 msgid "Send"
 msgstr "Senden"
 
-msgid "Send to Carbon"
-msgstr "An Carbon senden"
+msgid "Send to {BRAND_NAME}"
+msgstr "An {BRAND_NAME} senden"
 
 msgid "Separate lots"
 msgstr "Separate Chargen"
@@ -1874,8 +1871,8 @@ msgstr "Ausstempelzeit setzen"
 msgid "Set the time you stopped working, or acknowledge that you're still working."
 msgstr "Legen Sie die Uhrzeit fest, zu der Sie mit der Arbeit aufgehört haben, oder bestätigen Sie, dass Sie noch arbeiten."
 
-msgid "Set up in Carbon"
-msgstr "In Carbon einrichten"
+msgid "Set up in {BRAND_NAME}"
+msgstr "In {BRAND_NAME} einrichten"
 
 msgid "Set up two-factor authentication"
 msgstr "Zwei-Faktor-Authentifizierung einrichten"
@@ -2047,8 +2044,8 @@ msgstr "System"
 msgid "Tag"
 msgstr "Tag"
 
-msgid "The accent color used across Carbon."
-msgstr "Die in Carbon verwendete Akzentfarbe."
+msgid "The accent color used across {BRAND_NAME}."
+msgstr "Die in {BRAND_NAME} verwendete Akzentfarbe."
 
 msgid "The completed quantity for this operation is less than the required quantity of {targetQuantity}."
 msgstr "Die abgeschlossene Menge für diesen Arbeitsgang ist geringer als die erforderliche Menge von {targetQuantity}."
@@ -2326,11 +2323,11 @@ msgstr ""
 msgid "You've been clocked in for {hoursElapsed} hours. Did you forget to clock out?"
 msgstr "Sie sind seit {hoursElapsed} Stunden eingestempelt. Haben Sie das Ausstempeln vergessen?"
 
-msgid "Your account isn't part of a company yet. Complete onboarding in the Carbon ERP to continue."
-msgstr "Ihr Konto ist noch nicht Teil eines Unternehmens. Schließen Sie das Onboarding in Carbon ERP ab, um fortzufahren."
+msgid "Your account isn't part of a company yet. Complete onboarding in the {BRAND_NAME} ERP to continue."
+msgstr "Ihr Konto ist noch nicht Teil eines Unternehmens. Schließen Sie das Onboarding in {BRAND_NAME} ERP ab, um fortzufahren."
 
-msgid "Your organization requires an authenticator app. Set it up in Carbon, then come back here."
-msgstr "Ihre Organisation erfordert eine Authentifizierungs-App. Richten Sie sie in Carbon ein und kommen Sie dann hierher zurück."
+msgid "Your organization requires an authenticator app. Set it up in{BRAND_NAME}, then come back here."
+msgstr ""
 
 msgid "Your profile could not be loaded."
 msgstr "Ihr Profil konnte nicht geladen werden."

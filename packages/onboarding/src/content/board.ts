@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
 import { isModuleExcluded } from "../logic/visibility";
 import type { BoardTask, Mod } from "../types";
@@ -147,7 +148,7 @@ export const BOARD_TASKS: BoardTask[] = [
   },
   {
     key: "cutover",
-    label: msg`Cut over to Carbon and freeze the old system`,
+    label: msg`Cut over to ${BRAND_NAME} and freeze the old system`,
     stepKey: "gate:golive",
     owner: "shared"
   },

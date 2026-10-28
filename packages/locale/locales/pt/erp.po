@@ -54,8 +54,8 @@ msgstr "(conta inativa)"
 msgid "(Inactive)"
 msgstr "(Inativo)"
 
-msgid "(mapped to more than one Carbon account)"
-msgstr "(mapeado para mais de uma conta Carbon)"
+msgid "(mapped to more than one {BRAND_NAME} account)"
+msgstr "(mapeado para mais de uma conta {BRAND_NAME})"
 
 msgid "(not an Equity posting account)"
 msgstr "(não é uma conta de contabilização de Patrimônio líquido)"
@@ -120,8 +120,8 @@ msgid "{0, plural, one {# week} other {# weeks}}"
 msgstr "{0, plural, one {# semana} other {# semanas}}"
 
 #. placeholder {0}: check.count
-msgid "{0, plural, one {Complete or cancel the # job that took costs before Carbon recorded them.} other {Complete or cancel the # jobs that took costs before Carbon recorded them.}}"
-msgstr "{0, plural, one {Concluir ou cancelar a # ordem de produção que teve custos antes de o Carbon registrá-los.} other {Concluir ou cancelar as # ordens de produção que tiveram custos antes de o Carbon registrá-los.}}"
+msgid "{0, plural, one {Complete or cancel the # job that took costs before {BRAND_NAME} recorded them.} other {Complete or cancel the # jobs that took costs before {BRAND_NAME} recorded them.}}"
+msgstr "{0, plural, one {Concluir ou cancelar a # ordem de produção que teve custos antes de o {BRAND_NAME} registrá-los.} other {Concluir ou cancelar as # ordens de produção que tiveram custos antes de o {BRAND_NAME} registrá-los.}}"
 
 #. placeholder {0}: Number(lease.assetCount)
 msgid "{0, plural, one {for # asset} other {for # assets}}"
@@ -434,8 +434,8 @@ msgid "{0}-Year"
 msgstr "{0}-Ano"
 
 #. placeholder {0}: blocker.description
-msgid "{0}: the payment due {dueDate} is marked paid outside Carbon, but nothing would relieve it from the lease liability. Set Invoice From on or before {dueDate} so it is invoiced."
-msgstr "{0}: o pagamento vencido em {dueDate} está marcado como pago fora do Carbon, mas nada o removeria do passivo de arrendamento. Defina Data da fatura em ou antes de {dueDate} para que seja faturado."
+msgid "{0}: the payment due {dueDate} is marked paid outside {BRAND_NAME}, but nothing would relieve it from the lease liability. Set Invoice From on or before {dueDate} so it is invoiced."
+msgstr "{0}: o pagamento vencido em {dueDate} está marcado como pago fora do {BRAND_NAME}, mas nada o removeria do passivo de arrendamento. Defina Data da fatura em ou antes de {dueDate} para que seja faturado."
 
 #. placeholder {0}: line.description
 msgid "{0}: the treatment cannot be worked out. {message}"
@@ -483,14 +483,90 @@ msgstr "{apOverduePct}% de contas a pagar"
 msgid "{arOverduePct}% of receivables"
 msgstr "{arOverduePct}% de contas a receber"
 
-msgid "{asset}: the payment due {dueDate} is Skipped (paid outside Carbon), so nothing would take it off the lease liability. Set Invoice From on or before {dueDate}."
-msgstr "{asset}: o pagamento vencido em {dueDate} é ignorado (pago fora do Carbon), então nada o removeria do passivo de arrendamento. Defina Data da fatura em ou antes de {dueDate}."
+msgid "{asset}: the payment due {dueDate} is Skipped (paid outside {BRAND_NAME}), so nothing would take it off the lease liability. Set Invoice From on or before {dueDate}."
+msgstr "{asset}: o pagamento vencido em {dueDate} é ignorado (pago fora do {BRAND_NAME}), então nada o removeria do passivo de arrendamento. Defina Data da fatura em ou antes de {dueDate}."
 
 msgid "{assetCount} Assets"
 msgstr "{assetCount} Ativos"
 
 msgid "{atRiskJobs} jobs at risk"
 msgstr ""
+
+msgid "{BRAND_NAME}"
+msgstr "{BRAND_NAME}"
+
+msgid "{BRAND_NAME} + you"
+msgstr "{BRAND_NAME} + você"
+
+msgid "{BRAND_NAME} account"
+msgstr "Conta {BRAND_NAME}"
+
+msgid "{BRAND_NAME} column"
+msgstr "Coluna {BRAND_NAME}"
+
+msgid "{BRAND_NAME} is configured the way your company runs, your data is loaded, and your team is confident using it. When that's true, you're ready to go live."
+msgstr "{BRAND_NAME} está configurado da forma como sua empresa funciona, seus dados estão carregados e sua equipe está confiante em usá-lo. Quando isso for verdade, você estará pronto para entrar em operação."
+
+msgid "{BRAND_NAME} leads"
+msgstr "{BRAND_NAME} lidera"
+
+msgid "{BRAND_NAME} only"
+msgstr "Apenas {BRAND_NAME}"
+
+msgid "{BRAND_NAME} opens this account from its open items. The amount here is only compared on Migration Clearing."
+msgstr "{BRAND_NAME} abre esta conta a partir de seus itens em aberto. O valor aqui é comparado apenas em Limpeza de Migração."
+
+msgid "{BRAND_NAME} Posted"
+msgstr "Enviado para o {BRAND_NAME}"
+
+msgid "{BRAND_NAME} posts every document dated on or after this day. Choose the first day of the current period or of one of the 3 periods before it."
+msgstr "{BRAND_NAME} contabiliza cada documento datado em ou após este dia. Escolha o primeiro dia do período atual ou de um dos 3 períodos anteriores."
+
+msgid "{BRAND_NAME} posts the opening journal, posts every journal dated on or after the cutover date, and closes the periods before it."
+msgstr "{BRAND_NAME} contabiliza o diário de abertura, contabiliza cada diário datado em ou após a data de transição e fecha os períodos anteriores."
+
+msgid "{BRAND_NAME} starts every company on its default chart. Import your own chart now, before the trial balance, which matches accounts by number. The import needs two files: your chart, and the default accounts template filled with your account numbers. To keep{BRAND_NAME}'s chart, continue."
+msgstr ""
+
+msgid "{BRAND_NAME} value"
+msgstr "Valor {BRAND_NAME}"
+
+msgid "{BRAND_NAME} Value"
+msgstr "Valor {BRAND_NAME}"
+
+#. placeholder {0}: unmapped.length
+msgid "{BRAND_NAME} will use AI to guess a provider account for each of your {0} unmapped accounts. Suggestions are a starting point — you can review them before anything is saved."
+msgstr "O {BRAND_NAME} usará IA para adivinhar uma conta do provedor para cada uma de suas {0} contas não mapeadas. As sugestões são um ponto de partida — você pode revisá-las antes de salvar qualquer coisa."
+
+msgid "{BRAND_NAME} writes their journals when you enable accounting, with today's accounts and costs."
+msgstr "{BRAND_NAME} escreve seus diários quando você ativa a contabilidade, com as contas e custos de hoje."
+
+msgid "{BRAND_NAME}-only"
+msgstr "Apenas {BRAND_NAME}"
+
+msgid "{BRAND_NAME}-only · fill in real targets for this customer. They see the values, locked."
+msgstr "Apenas {BRAND_NAME} · preencha os objetivos reais para este cliente. Eles veem os valores, bloqueados."
+
+msgid "{BRAND_NAME}-only · the customer sees this text, locked."
+msgstr "Apenas {BRAND_NAME} · o cliente vê este texto, bloqueado."
+
+msgid "{BRAND_NAME}'s default passwordless sign-in: an emailed one-time link that signs you in when opened, with no password to remember or leak."
+msgstr "Login sem senha padrão do {BRAND_NAME}: um link de uso único enviado por email que inicia sua sessão quando aberto, sem uma senha para lembrar ou vazar."
+
+msgid "{BRAND_NAME}'s name for a bill of material and bill of process (routing): the components plus the operations that make a part."
+msgstr "Nome do {BRAND_NAME} para uma lista de materiais e lista de operações (roteiro de produção): os componentes mais as operações que fabricam uma peça."
+
+msgid "{BRAND_NAME}'s planning run nets supply against demand and explodes methods, surfacing shortfalls — but it creates no orders itself."
+msgstr "A execução de planejamento do {BRAND_NAME} balanceia suprimento contra demanda e explode métodos, expondo insuficiências — mas não cria ordens por si só."
+
+msgid "{BRAND_NAME}'s production order — one job builds a quantity of one item from its own copied method and routing."
+msgstr "A ordem de produção do {BRAND_NAME} — uma ordem de produção constrói uma quantidade de um item a partir de seu próprio método copiado e roteiro."
+
+msgid "{BRAND_NAME}'s shop-floor app where operators run operations, report quantities, issue material, and log time against released jobs in real time."
+msgstr "O aplicativo de chão de fábrica do {BRAND_NAME} onde operadores executam operações, relatam quantidades, fazem requisição de material e registram tempo contra ordens de produção liberadas em tempo real."
+
+msgid "{BRAND_NAME}'s single record for anything with a part number — Part, Material, Tool, Service, Consumable, or Fixture — that jobs, methods, orders, and inventory all point at."
+msgstr "O registro único do {BRAND_NAME} para qualquer coisa com um número de peça — Peça, Material, Ferramenta, Serviço, Consumível ou Dispositivo de fixação — ao qual ordens de produção, métodos, pedidos e inventário apontam."
 
 msgid "{chainLabel}. Consider pointing this part directly at the final successor."
 msgstr "{chainLabel}. Considere apontar esta peça diretamente para o sucessor final."
@@ -540,8 +616,8 @@ msgstr "{created} criado(s), {updated} atualizado(s)."
 msgid "{days}d"
 msgstr "{days}d"
 
-msgid "{delegatedTo} posts this to your ledger, so Carbon doesn't push it. Your saved choice is kept in case that changes."
-msgstr "${delegatedTo} publica isto no seu razão, portanto o Carbon não o envia. Sua escolha salva é mantida caso isso mude."
+msgid "{delegatedTo} posts this to your ledger, so {BRAND_NAME} doesn't push it. Your saved choice is kept in case that changes."
+msgstr "${delegatedTo} publica isto no seu razão, portanto o {BRAND_NAME} não o envia. Sua escolha salva é mantida caso isso mude."
 
 msgid "{discount} off"
 msgstr "{discount} de desconto"
@@ -596,8 +672,8 @@ msgstr "{label} é utilizado por documentos, diários ou contas padrão, portant
 msgid "{leadTime, plural, one {# day} other {# days}}"
 msgstr "{leadTime, plural, one {# dia} other {# dias}}"
 
-msgid "{legacyDocumentCount, plural, one {# document posted before Carbon kept journals has no journal.} other {# documents posted before Carbon kept journals have no journal.}}"
-msgstr "{legacyDocumentCount, plural, one {# documento contabilizado antes de o Carbon manter diários não tem diário.} other {# documentos contabilizados antes de o Carbon manter diários não têm diário.}}"
+msgid "{legacyDocumentCount, plural, one {# document posted before {BRAND_NAME} kept journals has no journal.} other {# documents posted before {BRAND_NAME} kept journals have no journal.}}"
+msgstr "{legacyDocumentCount, plural, one {# documento contabilizado antes de o {BRAND_NAME} manter diários não tem diário.} other {# documentos contabilizados antes de o {BRAND_NAME} manter diários não têm diário.}}"
 
 msgid "{linesCount, plural, one {# line} other {# lines}}"
 msgstr "{linesCount, plural, one {# linha} other {# linhas}}"
@@ -733,8 +809,8 @@ msgstr "{state} · sincronizado {syncedAgo}"
 msgid "{termMonths, plural, one {# month} other {# months}}"
 msgstr "{termMonths, plural, one {# mês} other {# meses}}"
 
-msgid "{total} phases to get your company live on Carbon. Each one ends at a checkpoint."
-msgstr "{total} fases para colocar sua empresa ao vivo no Carbon. Cada uma termina em um checkpoint."
+msgid "{total} phases to get your company live on {BRAND_NAME}. Each one ends at a checkpoint."
+msgstr "{total} fases para colocar sua empresa ao vivo no {BRAND_NAME}. Cada uma termina em um checkpoint."
 
 msgid "{total} phases to go live"
 msgstr "{total} fases para entrar em produção"
@@ -981,6 +1057,9 @@ msgstr "90 dias"
 msgid "A \"must match\" rule on this process blocks these from sharing a batch"
 msgstr "Uma regra \"deve coincidir\" neste processo impede que estes compartilhem um lote de produção"
 
+msgid "A {BRAND_NAME}-run data migration — you load your own data"
+msgstr "Uma migração de dados executada pela {BRAND_NAME} — você carrega seus próprios dados"
+
 msgid "A 3D model the operator can turn around"
 msgstr "Um modelo 3D que o operador pode girar"
 
@@ -989,9 +1068,6 @@ msgstr "Um PIN de 4 dígitos é gerado quando o operador é criado."
 
 msgid "A batch needs at least one operation. To break up the whole batch, use Dissolve instead."
 msgstr "Um lote de produção precisa de pelo menos uma operação. Para dividir o lote de produção inteiro, use Dissolver em vez disso."
-
-msgid "A Carbon-run data migration — you load your own data"
-msgstr "Uma migração de dados executada pela Carbon — você carrega seus próprios dados"
 
 msgid "A change notice tracks a controlled engineering or manufacturing change through review and implementation."
 msgstr "Um aviso de alteração rastreia uma alteração de engenharia ou fabricação controlada através de revisão e implementação."
@@ -1074,8 +1150,8 @@ msgstr "O status de um cliente muda"
 msgid "A customer's type changes"
 msgstr "O tipo de um cliente muda"
 
-msgid "A date on a contract moved into Carbon mid-term: billing periods that end on or before it were invoiced elsewhere, so they read Billed Externally and are never invoiced."
-msgstr "Uma data em um contrato movido para o Carbon no meio do período: períodos de faturamento que terminam nela ou antes foram faturados em outro lugar, então eles exibem Faturado Externamente e nunca são faturados."
+msgid "A date on a contract moved into {BRAND_NAME} mid-term: billing periods that end on or before it were invoiced elsewhere, so they read Billed Externally and are never invoiced."
+msgstr "Uma data em um contrato movido para o {BRAND_NAME} no meio do período: períodos de faturamento que terminam nela ou antes foram faturados em outro lugar, então eles exibem Faturado Externamente e nunca são faturados."
 
 msgid "A dated change to an active contract, with a reason and a contract type: changed lines end and their replacements start from the change date, prorated by day, or from the next billing period."
 msgstr "Uma alteração datada de um contrato ativo, com um motivo e um tipo de contrato: linhas alteradas terminam e seus substitutos começam na data de alteração, rateados por dia, ou a partir do próximo período de faturamento."
@@ -1194,8 +1270,8 @@ msgstr "Um componente de Fabricação sob encomenda que recebe sua própria orde
 msgid "A Make to Order component whose parts are issued together into the parent job — no separate build."
 msgstr "Um componente de Fabricação sob encomenda cujas peças são emitidas juntas para a ordem de produção do pai — sem construção separada."
 
-msgid "A managed cloud-hosted version of Carbon"
-msgstr "Uma versão gerenciada hospedada na nuvem do Carbon"
+msgid "A managed cloud-hosted version of {BRAND_NAME}"
+msgstr "Uma versão gerenciada hospedada na nuvem do {BRAND_NAME}"
 
 msgid "A managed version with all the advanced features"
 msgstr "Uma versão gerenciada com todos os recursos avançados"
@@ -1233,8 +1309,8 @@ msgstr "Um novo prazo do mesmo comprimento começa quando este termina."
 msgid "A non-cash document that settles an invoice against a reason account: a credit lowers what's owed, a debit raises it."
 msgstr "Um documento sem dinheiro que liquida uma fatura em relação a uma conta de motivo: um crédito reduz o que é devido, um débito aumenta."
 
-msgid "A non-conformance shared with a supplier over a login-free /share/scar link, so they can respond to the issue and update its tasks from outside Carbon."
-msgstr "Uma não conformidade compartilhada com um fornecedor através de um link /share/scar sem login, para que possa responder ao problema e atualizar suas tarefas fora do Carbon."
+msgid "A non-conformance shared with a supplier over a login-free /share/scar link, so they can respond to the issue and update its tasks from outside {BRAND_NAME}."
+msgstr "Uma não conformidade compartilhada com um fornecedor através de um link /share/scar sem login, para que possa responder ao problema e atualizar suas tarefas fora do {BRAND_NAME}."
 
 msgid "A non-taxable surcharge (e.g. recoverable expenses like permit fees) added to the line; excluded from the tax base."
 msgstr "Uma sobretaxa não tributável (por ex. despesas recuperáveis como taxas de licença) adicionada à linha; excluída da base de imposto."
@@ -1257,8 +1333,8 @@ msgstr "Uma foto ou PDF que o operador vê nesta etapa"
 msgid "A physical pull signal — a printed card or QR code living with the stock — that raises a purchase order or a job the moment it's scanned to refill a bin."
 msgstr "Um sinal físico de puxada — um cartão impresso ou código QR que acompanha o estoque — que gera um pedido de compra ou uma ordem de produção no momento em que é escaneado para reabastecer um compartimento."
 
-msgid "A point in one of Carbon's own flows that a workflow can watch — a job released, a quote accepted, a shipment posted — as opposed to a raw field change; it hands the workflow the records involved by id."
-msgstr "Um ponto em um dos próprios fluxos do Carbon que um fluxo de trabalho pode monitorar — uma ordem de produção liberada, um orçamento aceito, uma remessa contabilizada — em oposição a uma mudança de campo bruta; fornece ao fluxo de trabalho os registros envolvidos por id."
+msgid "A point in one of {BRAND_NAME}'s own flows that a workflow can watch — a job released, a quote accepted, a shipment posted — as opposed to a raw field change; it hands the workflow the records involved by id."
+msgstr "Um ponto em um dos próprios fluxos do {BRAND_NAME} que um fluxo de trabalho pode monitorar — uma ordem de produção liberada, um orçamento aceito, uma remessa contabilizada — em oposição a uma mudança de campo bruta; fornece ao fluxo de trabalho os registros envolvidos por id."
 
 msgid "A posted accounting entry: a header plus balanced debit and credit lines against GL accounts."
 msgstr "Um lançamento contábil postado: um cabeçalho mais linhas de débito e crédito equilibradas contra contas GL."
@@ -1482,8 +1558,8 @@ msgstr "Uma solicitação de cotação (RFQ) é uma investigação do cliente pa
 msgid "A sales RFQ (a customer asks you to quote) or a purchasing RFQ (you ask suppliers); both feed the opportunity thread."
 msgstr "Um RFQ de venda (um cliente pede para você fazer uma cotação) ou um RFQ de compra (você solicita aos fornecedores); ambos alimentam o thread de oportunidade."
 
-msgid "A scoped secret sent on the carbon-key request header that authenticates programmatic calls to Carbon, carrying its own permissions and rate limit rather than a user session's."
-msgstr "Um segredo com escopo enviado no cabeçalho de solicitação carbon-key que autentica chamadas programáticas ao Carbon, carregando suas próprias permissões e limite de taxa em vez de uma sessão do usuário."
+msgid "A scoped secret sent on the carbon-key request header that authenticates programmatic calls to {BRAND_NAME}, carrying its own permissions and rate limit rather than a user session's."
+msgstr "Um segredo com escopo enviado no cabeçalho de solicitação carbon-key que autentica chamadas programáticas ao {BRAND_NAME}, carregando suas próprias permissões e limite de taxa em vez de uma sessão do usuário."
 
 msgid "A separate schedule for tax reporting when tax rules require a method different from book depreciation."
 msgstr "Um cronograma separado para fins de declaração de impostos quando as regras fiscais exigem um método diferente da depreciação contábil."
@@ -2647,8 +2723,8 @@ msgstr "Uma alteração de engenharia: os itens afetados cujos métodos são rev
 msgid "An Enterprise sign-in method where everyone on a company's registered email domains authenticates through the company's own SAML identity provider instead of a magic link, so IT grants and revokes access centrally."
 msgstr "Um método de autenticação empresarial em que todos os usuários dos domínios de email registrados da empresa se autenticam por meio do próprio provedor de identidade SAML da empresa, em vez de um link mágico, para que a equipe de TI possa conceder e revogar o acesso centralmente."
 
-msgid "An https request Carbon sends to a system of yours when a workflow reaches that step, carrying whatever headers and body you configured."
-msgstr "Uma solicitação https que o Carbon envia para um sistema seu quando um fluxo de trabalho atinge essa etapa, carregando quaisquer cabeçalhos e corpo que você configurou."
+msgid "An https request {BRAND_NAME} sends to a system of yours when a workflow reaches that step, carrying whatever headers and body you configured."
+msgstr "Uma solicitação https que o {BRAND_NAME} envia para um sistema seu quando um fluxo de trabalho atinge essa etapa, carregando quaisquer cabeçalhos e corpo que você configurou."
 
 msgid "An integration or a custom change — the small slice that's actually custom."
 msgstr "Uma integração ou uma mudança personalizada — a pequena parte que é realmente personalizada."
@@ -2883,8 +2959,8 @@ msgstr "Chave de API"
 msgid "API Keys"
 msgstr "Chaves de API"
 
-msgid "API keys for programmatic access to your Carbon data."
-msgstr "Chaves de API para acesso programático aos seus dados do Carbon."
+msgid "API keys for programmatic access to your {BRAND_NAME} data."
+msgstr "Chaves de API para acesso programático aos seus dados do {BRAND_NAME}."
 
 msgid "API, webhooks, and integrations"
 msgstr "API, webhooks e integrações"
@@ -3896,8 +3972,8 @@ msgstr "Automatizar"
 msgid "Automate quality flags and notifications"
 msgstr "Automatizar sinalizadores de qualidade e notificações"
 
-msgid "Automate your business processes with event-driven workflows that trigger actions when things happen in Carbon."
-msgstr "Automatize seus processos de negócio com fluxos de trabalho orientados por eventos que disparam ações quando coisas acontecem no Carbon."
+msgid "Automate your business processes with event-driven workflows that trigger actions when things happen in {BRAND_NAME}."
+msgstr "Automatize seus processos de negócio com fluxos de trabalho orientados por eventos que disparam ações quando coisas acontecem no {BRAND_NAME}."
 
 msgid "Automatic"
 msgstr "Automático"
@@ -4340,8 +4416,8 @@ msgstr "Bônus de depreciação %"
 msgid "Book a call to discuss guided implementation"
 msgstr "Agende uma chamada para discutir implementação guiada"
 
-msgid "Book a call with Carbon"
-msgstr "Agende uma chamada com Carbon"
+msgid "Book a call with {BRAND_NAME}"
+msgstr "Agende uma chamada com {BRAND_NAME}"
 
 msgid "Book Depreciation"
 msgstr "Depreciação Contábil"
@@ -4364,8 +4440,8 @@ msgstr "Ramifique uma cópia editável desta versão que você pode alterar e pu
 msgid "Breadcrumb"
 msgstr "Migalha de pão"
 
-msgid "Bring in your parts, BOMs, Bill of Process, and costing — with Carbon's import tools, CSV, or LLM help."
-msgstr "Traga suas peças, BOMs, listas de operações e custeio — com as ferramentas de importação do Carbon, CSV ou ajuda de LLM."
+msgid "Bring in your parts, BOMs, Bill of Process, and costing — with {BRAND_NAME}'s import tools, CSV, or LLM help."
+msgstr "Traga suas peças, BOMs, listas de operações e custeio — com as ferramentas de importação do {BRAND_NAME}, CSV ou ajuda de LLM."
 
 msgid "Browse library"
 msgstr "Procurar biblioteca"
@@ -4520,8 +4596,8 @@ msgstr "Calibrações"
 msgid "Call an outside URL"
 msgstr "Chamar uma URL externa"
 
-msgid "Called a method in Carbon — the components plus operations that produce a part."
-msgstr "Chamada uma método em Carbon — os componentes mais as operações que produzem uma parte."
+msgid "Called a method in {BRAND_NAME} — the components plus operations that produce a part."
+msgstr "Chamada uma método em {BRAND_NAME} — os componentes mais as operações que produzem uma parte."
 
 msgid "Camera"
 msgstr "Câmera"
@@ -4692,15 +4768,6 @@ msgstr "Capitalizar Ativo"
 msgid "Caption"
 msgstr "Legenda"
 
-msgid "Carbon"
-msgstr "Carbon"
-
-msgid "Carbon + you"
-msgstr "Carbon + você"
-
-msgid "Carbon account"
-msgstr "Conta Carbon"
-
 msgid "Carbon client is not available"
 msgstr "Cliente Carbon não está disponível"
 
@@ -4709,76 +4776,6 @@ msgstr "Cliente Carbon não disponível"
 
 msgid "Carbon client not found"
 msgstr "Cliente Carbon não encontrado"
-
-msgid "Carbon column"
-msgstr "Coluna Carbon"
-
-msgid "Carbon is configured the way your company runs, your data is loaded, and your team is confident using it. When that's true, you're ready to go live."
-msgstr "Carbon está configurado da forma como sua empresa funciona, seus dados estão carregados e sua equipe está confiante em usá-lo. Quando isso for verdade, você estará pronto para entrar em operação."
-
-msgid "Carbon leads"
-msgstr "Carbon lidera"
-
-msgid "Carbon Logo"
-msgstr "Logótipo do Carbon"
-
-msgid "Carbon only"
-msgstr "Apenas Carbon"
-
-msgid "Carbon opens this account from its open items. The amount here is only compared on Migration Clearing."
-msgstr "Carbon abre esta conta a partir de seus itens em aberto. O valor aqui é comparado apenas em Limpeza de Migração."
-
-msgid "Carbon Posted"
-msgstr "Enviado para o Carbon"
-
-msgid "Carbon posts every document dated on or after this day. Choose the first day of the current period or of one of the 3 periods before it."
-msgstr "Carbon contabiliza cada documento datado em ou após este dia. Escolha o primeiro dia do período atual ou de um dos 3 períodos anteriores."
-
-msgid "Carbon posts the opening journal, posts every journal dated on or after the cutover date, and closes the periods before it."
-msgstr "Carbon contabiliza o diário de abertura, contabiliza cada diário datado em ou após a data de transição e fecha os períodos anteriores."
-
-msgid "Carbon starts every company on its default chart. Import your own chart now, before the trial balance, which matches accounts by number. The import needs two files: your chart, and the default accounts template filled with your account numbers. To keep Carbon's chart, continue."
-msgstr "Carbon inicia cada empresa com seu plano de contas padrão. Importe seu próprio plano agora, antes do balanço de verificação, que vincula contas pelo número. A importação precisa de dois arquivos: seu plano e o modelo de contas padrão preenchido com seus números de conta. Para manter o plano de contas do Carbon, continue."
-
-msgid "Carbon value"
-msgstr "Valor Carbon"
-
-msgid "Carbon Value"
-msgstr "Valor Carbon"
-
-#. placeholder {0}: unmapped.length
-msgid "Carbon will use AI to guess a provider account for each of your {0} unmapped accounts. Suggestions are a starting point — you can review them before anything is saved."
-msgstr "O Carbon usará IA para adivinhar uma conta do provedor para cada uma de suas {0} contas não mapeadas. As sugestões são um ponto de partida — você pode revisá-las antes de salvar qualquer coisa."
-
-msgid "Carbon writes their journals when you enable accounting, with today's accounts and costs."
-msgstr "Carbon escreve seus diários quando você ativa a contabilidade, com as contas e custos de hoje."
-
-msgid "Carbon-only"
-msgstr "Apenas Carbon"
-
-msgid "Carbon-only · fill in real targets for this customer. They see the values, locked."
-msgstr "Apenas Carbon · preencha os objetivos reais para este cliente. Eles veem os valores, bloqueados."
-
-msgid "Carbon-only · the customer sees this text, locked."
-msgstr "Apenas Carbon · o cliente vê este texto, bloqueado."
-
-msgid "Carbon's default passwordless sign-in: an emailed one-time link that signs you in when opened, with no password to remember or leak."
-msgstr "Login sem senha padrão do Carbon: um link de uso único enviado por email que inicia sua sessão quando aberto, sem uma senha para lembrar ou vazar."
-
-msgid "Carbon's name for a bill of material and bill of process (routing): the components plus the operations that make a part."
-msgstr "Nome do Carbon para uma lista de materiais e lista de operações (roteiro de produção): os componentes mais as operações que fabricam uma peça."
-
-msgid "Carbon's planning run nets supply against demand and explodes methods, surfacing shortfalls — but it creates no orders itself."
-msgstr "A execução de planejamento do Carbon balanceia suprimento contra demanda e explode métodos, expondo insuficiências — mas não cria ordens por si só."
-
-msgid "Carbon's production order — one job builds a quantity of one item from its own copied method and routing."
-msgstr "A ordem de produção do Carbon — uma ordem de produção constrói uma quantidade de um item a partir de seu próprio método copiado e roteiro."
-
-msgid "Carbon's shop-floor app where operators run operations, report quantities, issue material, and log time against released jobs in real time."
-msgstr "O aplicativo de chão de fábrica do Carbon onde operadores executam operações, relatam quantidades, fazem requisição de material e registram tempo contra ordens de produção liberadas em tempo real."
-
-msgid "Carbon's single record for anything with a part number — Part, Material, Tool, Service, Consumable, or Fixture — that jobs, methods, orders, and inventory all point at."
-msgstr "O registro único do Carbon para qualquer coisa com um número de peça — Peça, Material, Ferramenta, Serviço, Consumível ou Dispositivo de fixação — ao qual ordens de produção, métodos, pedidos e inventário apontam."
 
 msgid "Card Holder"
 msgstr "Titular do Cartão"
@@ -5044,8 +5041,8 @@ msgstr "Escolher outro arquivo"
 msgid "Choose avatar"
 msgstr "Escolher avatar"
 
-msgid "Choose how Carbon reaches you."
-msgstr "Escolha como o Carbon entra em contato com você."
+msgid "Choose how {BRAND_NAME} reaches you."
+msgstr "Escolha como o {BRAND_NAME} entra em contato com você."
 
 msgid "Choose how to add lines to this return."
 msgstr "Escolha como adicionar linhas a esta devolução."
@@ -5478,11 +5475,11 @@ msgstr "Configurador"
 msgid "Configure"
 msgstr "Configurar"
 
+msgid "Configure {BRAND_NAME}"
+msgstr "Configurar {BRAND_NAME}"
+
 msgid "Configure {label}"
 msgstr "Configurar {label}"
-
-msgid "Configure Carbon"
-msgstr "Configurar Carbon"
 
 msgid "Configure default accounts for cash and bank transactions"
 msgstr "Configurar contas padrão para transações de caixa e banco"
@@ -5619,8 +5616,8 @@ msgstr "Motivo do conflito"
 msgid "Connect"
 msgstr "Conectar"
 
-msgid "Connect Carbon to your accounting, project management, and CAD tools and much more."
-msgstr "Conecte o Carbon às suas ferramentas de contabilidade, gerenciamento de projetos, CAD e muito mais."
+msgid "Connect {BRAND_NAME} to your accounting, project management, and CAD tools and much more."
+msgstr "Conecte o {BRAND_NAME} às suas ferramentas de contabilidade, gerenciamento de projetos, CAD e muito mais."
 
 msgid "Connect Jira issue"
 msgstr "Conectar problema do Jira"
@@ -6955,11 +6952,11 @@ msgstr "Personalizar"
 msgid "Customize the layout of your PDF documents — reorder sections, hide what you don't need, and add your own blocks."
 msgstr "Personalize o layout dos seus documentos PDF — reordene seções, oculte o que não precisa e adicione seus próprios blocos."
 
-msgid "Cut over to Carbon and freeze the old system"
-msgstr "Migrar para o Carbon e congelar o sistema antigo"
+msgid "Cut over to {BRAND_NAME} and freeze the old system"
+msgstr "Migrar para o {BRAND_NAME} e congelar o sistema antigo"
 
-msgid "Cut over, freeze the old system, and confirm you're live on Carbon."
-msgstr "Migre, congele o sistema antigo e confirme que você está ativo no Carbon."
+msgid "Cut over, freeze the old system, and confirm you're live on {BRAND_NAME}."
+msgstr "Migre, congele o sistema antigo e confirme que você está ativo no {BRAND_NAME}."
 
 msgid "Cutover checklist"
 msgstr "Lista de verificação de transição"
@@ -8176,14 +8173,14 @@ msgstr "Documentos"
 msgid "Documents and activity"
 msgstr "Documentos e atividade"
 
-msgid "Documents Posted Before Carbon Kept Journals"
-msgstr "Documentos contabilizados antes de o Carbon manter diários"
+msgid "Documents Posted Before {BRAND_NAME} Kept Journals"
+msgstr "Documentos contabilizados antes de o {BRAND_NAME} manter diários"
 
-msgid "Documents posted before Carbon kept journals have no journal."
-msgstr "Os documentos contabilizados antes de o Carbon manter diários não possuem diário."
+msgid "Documents posted before {BRAND_NAME} kept journals have no journal."
+msgstr "Os documentos contabilizados antes de o {BRAND_NAME} manter diários não possuem diário."
 
-msgid "Documents pushes invoices, bills and payments as native provider documents; their journals are recorded as covered by the document. It also pulls payments recorded in the provider back into Carbon, closing the matching invoice or bill and posting a Carbon GL journal. Off records them as deliberately excluded."
-msgstr "O recurso Documentos envia faturas, contas e pagamentos como documentos nativos do provedor; seus diários são registrados como cobertos pelo documento. Também puxa os pagamentos registrados no provedor de volta ao Carbon, fechando a fatura ou conta correspondente e contabilizando um diário de GL do Carbon. A opção Desativado registra-os como deliberadamente excluídos."
+msgid "Documents pushes invoices, bills and payments as native provider documents; their journals are recorded as covered by the document. It also pulls payments recorded in the provider back into {BRAND_NAME}, closing the matching invoice or bill and posting a{BRAND_NAME} GL journal. Off records them as deliberately excluded."
+msgstr ""
 
 msgid "Documents you open will show up here for quick access."
 msgstr "Documentos que abrir aparecerão aqui para acesso rápido."
@@ -8246,8 +8243,8 @@ msgstr "Baixar PDF"
 msgid "Download template"
 msgstr "Baixar modelo"
 
-msgid "Download the template. Each row is a default account Carbon posts to. In Account Number, enter the number of the account in your chart that takes it. Carbon updates the default account to match."
-msgstr "Baixe o modelo. Cada linha é uma conta padrão em que o Carbon contabiliza. No Número da conta, insira o número da conta em seu plano que a corresponde. Carbon atualiza a conta padrão para corresponder."
+msgid "Download the template. Each row is a default account {BRAND_NAME} posts to. In Account Number, enter the number of the account in your chart that takes it. {BRAND_NAME} updates the default account to match."
+msgstr "Baixe o modelo. Cada linha é uma conta padrão em que o {BRAND_NAME} contabiliza. No Número da conta, insira o número da conta em seu plano que a corresponde. {BRAND_NAME} atualiza a conta padrão para corresponder."
 
 msgid "Draft"
 msgstr "Rascunho"
@@ -9024,8 +9021,8 @@ msgstr "Funcionários alocados para este treinamento podem abri-lo. O conteúdo,
 msgid "Employees can no longer open this training."
 msgstr "Os funcionários não podem mais abrir este treinamento."
 
-msgid "Employees complete a training in Carbon"
-msgstr "Os funcionários concluem um treinamento no Carbon"
+msgid "Employees complete a training in {BRAND_NAME}"
+msgstr "Os funcionários concluem um treinamento no {BRAND_NAME}"
 
 msgid "Empty"
 msgstr "Vazio"
@@ -9343,8 +9340,8 @@ msgstr "Conta de patrimônio líquido para ajustes de conversão de moeda (CTA)"
 msgid "Equity account that offsets the opening balances when accounting is set up. It must total zero."
 msgstr "Conta de patrimônio líquido que compensa os saldos iniciais quando a contabilidade é configurada. Deve totalizar zero."
 
-msgid "Equity account the opening journal posts against when accounting is set up; it holds any difference between the prior trial balance and Carbon's records, and must total zero before you can enable."
-msgstr "Conta de patrimônio líquido que o diário de abertura contabiliza quando a contabilidade é configurada; ela mantém qualquer diferença entre o saldo de verificação anterior e os registros do Carbon, e deve totalizar zero antes de você poder ativar."
+msgid "Equity account the opening journal posts against when accounting is set up; it holds any difference between the prior trial balance and {BRAND_NAME}'s records, and must total zero before you can enable."
+msgstr "Conta de patrimônio líquido que o diário de abertura contabiliza quando a contabilidade é configurada; ela mantém qualquer diferença entre o saldo de verificação anterior e os registros do {BRAND_NAME}, e deve totalizar zero antes de você poder ativar."
 
 msgid "Error"
 msgstr "Erro"
@@ -9500,8 +9497,8 @@ msgstr "Todos os registros da empresa. Credenciais, tokens de integração e web
 msgid "Every condition must match"
 msgstr "Todas as condições devem corresponder"
 
-msgid "Every delivery carries a Carbon-Signature header signed with this secret. Verify it to know a request came from Carbon."
-msgstr "Toda entrega carrega um cabeçalho Carbon-Signature assinado com esta chave. Verifique-o para confirmar que a requisição veio de Carbon."
+msgid "Every delivery carries a Carbon-Signature header signed with this secret. Verify it to know a request came from {BRAND_NAME}."
+msgstr "Toda entrega carrega um cabeçalho {BRAND_NAME}-Signature assinado com esta chave. Verifique-o para confirmar que a requisição veio de {BRAND_NAME}."
 
 msgid "Every in-scope test passes in your configured system, with your data."
 msgstr "Todos os testes no escopo passam no seu sistema configurado, com seus dados."
@@ -9777,8 +9774,8 @@ msgstr "Exportar CSV"
 msgid "Export Lines to CSV"
 msgstr "Exportar Linhas para CSV"
 
-msgid "Export your chart from your current system as a CSV, one row per account, with its number, name, class, type and group, or start from the template of the current chart. Carbon keeps only the accounts in this file."
-msgstr "Exporte seu plano de contas do sistema atual como CSV, uma linha por conta, com número, nome, classe, tipo e grupo, ou comece pelo modelo do plano atual. O Carbon mantém apenas as contas deste arquivo."
+msgid "Export your chart from your current system as a CSV, one row per account, with its number, name, class, type and group, or start from the template of the current chart. {BRAND_NAME} keeps only the accounts in this file."
+msgstr "Exporte seu plano de contas do sistema atual como CSV, uma linha por conta, com número, nome, classe, tipo e grupo, ou comece pelo modelo do plano atual. O {BRAND_NAME} mantém apenas as contas deste arquivo."
 
 msgid "Extended Price"
 msgstr "Preço Estendido"
@@ -9810,8 +9807,8 @@ msgstr "Referência Externa"
 msgid "External training"
 msgstr "Treinamento Externo"
 
-msgid "Extra fields to capture data Carbon doesn't track by default"
-msgstr "Campos extras para capturar dados que o Carbon não rastreia por padrão"
+msgid "Extra fields to capture data {BRAND_NAME} doesn't track by default"
+msgstr "Campos extras para capturar dados que o {BRAND_NAME} não rastreia por padrão"
 
 msgid "Extra hours on the whole day"
 msgstr "Horas extras durante o dia inteiro"
@@ -10767,8 +10764,8 @@ msgstr "IDs gerados estão ativados"
 msgid "Generating suggestions…"
 msgstr "Gerando sugestões…"
 
-msgid "Get live on Carbon: one system running quoting, purchasing, the shop floor, inventory, and finance, replacing the current tools."
-msgstr "Ativar no Carbon: um sistema executando cotações, compras, chão de fábrica, inventário e finanças, substituindo as ferramentas atuais."
+msgid "Get live on {BRAND_NAME}: one system running quoting, purchasing, the shop floor, inventory, and finance, replacing the current tools."
+msgstr "Ativar no {BRAND_NAME}: um sistema executando cotações, compras, chão de fábrica, inventário e finanças, substituindo as ferramentas atuais."
 
 msgid "Get Method"
 msgstr "Obter Método"
@@ -10779,14 +10776,14 @@ msgstr "Começar"
 msgid "Get Started"
 msgstr "Começar"
 
-msgid "Get your Carbon notifications as they happen."
-msgstr "Receba suas notificações do Carbon assim que acontecerem."
+msgid "Get your {BRAND_NAME} notifications as they happen."
+msgstr "Receba suas notificações do {BRAND_NAME} assim que acontecerem."
 
 msgid "Gets the summary for every agreement"
 msgstr "Obtém o resumo de cada acordo"
 
-msgid "Getting around Carbon"
-msgstr "Navegando pelo Carbon"
+msgid "Getting around {BRAND_NAME}"
+msgstr "Navegando pelo {BRAND_NAME}"
 
 msgid "Getting set up"
 msgstr "Configurando"
@@ -10966,8 +10963,8 @@ msgstr "Data de Ativação"
 msgid "Go-live timing holds if each gate is cleared on schedule"
 msgstr "O cronograma de ativação é mantido se cada etapa for concluída conforme programado"
 
-msgid "Going live on Carbon"
-msgstr "Entrar em produção no Carbon"
+msgid "Going live on {BRAND_NAME}"
+msgstr "Entrar em produção no {BRAND_NAME}"
 
 msgid "Good afternoon, {name}."
 msgstr "Boa tarde, {name}."
@@ -11194,14 +11191,17 @@ msgstr "Horas/1000 Peças"
 msgid "Hours/Piece"
 msgstr "Horas/Peça"
 
+msgid "How {BRAND_NAME} looks in this browser."
+msgstr "Como o {BRAND_NAME} aparece neste navegador."
+
 msgid "How a batchable process runs its grouped work: Sequential runs parts one after another on one machine (a saw or laser table), while Simultaneous runs them together in a single load (a furnace, oven, or plating bath)."
 msgstr "Como um processo em lote executa seu trabalho agrupado: Sequencial executa peças uma após a outra em uma máquina (uma serra ou mesa laser), enquanto Simultâneo as executa juntas em uma única carga (um forno, estufa ou banho de galvanização)."
 
 msgid "How a contract line earns its revenue over its revenue dates: Daily, the same amount every day, or Even Period, the same amount every calendar month with partial months prorated by days."
 msgstr "Como uma linha de contrato aufere sua receita ao longo de suas datas de receita: Diariamente, o mesmo valor todos os dias, ou Período Uniforme, o mesmo valor a cada mês calendário com meses parciais rateados por dias."
 
-msgid "How a contract or an amendment is classified for recurring-revenue reporting: New Sales, Existing, Expansion, Reactivation, or Contraction. Carbon suggests it and you can change it."
-msgstr "Como um contrato ou uma emenda é classificado para relatórios de receita recorrente: Novas Vendas, Existente, Expansão, Reativação ou Contração. O Carbon sugere e você pode alterar."
+msgid "How a contract or an amendment is classified for recurring-revenue reporting: New Sales, Existing, Expansion, Reactivation, or Contraction. {BRAND_NAME} suggests it and you can change it."
+msgstr "Como um contrato ou uma emenda é classificado para relatórios de receita recorrente: Novas Vendas, Existente, Expansão, Reativação ou Contração. O {BRAND_NAME} sugere e você pode alterar."
 
 msgid "How a rental agreement cuts billing periods from its start date: Monthly cuts one month from the start date's day (a start on the 7th bills the 7th to the 6th), Calendar Month (Monthly, aligned to calendar periods) cuts calendar months, and 28 Days cuts consecutive 28-day periods. Each unit bills one rate at its own frequency for the whole days, weeks, or months a period covers; a monthly rate in a part period is prorated by days."
 msgstr "Como um contrato de aluguel corta períodos de faturação a partir da sua data de início: Mensal corta um mês a partir do dia da data de início (um início no 7º fatura do 7º ao 6º), Mês do Calendário (Mensal, alinhado a períodos do calendário) corta meses do calendário, e 28 Dias corta períodos consecutivos de 28 dias. Cada unidade fatura uma taxa em sua própria frequência pelos dias, semanas ou meses inteiros que um período cobre; uma taxa mensal em um período parcial é rateada por dias."
@@ -11220,9 +11220,6 @@ msgstr "Como o custo unitário de um artigo é avaliado: Padrão, Média, FIFO o
 
 msgid "How are these hours calculated?"
 msgstr "Como estas horas são calculadas?"
-
-msgid "How Carbon looks in this browser."
-msgstr "Como o Carbon aparece neste navegador."
 
 msgid "How coverage is worked out"
 msgstr "Como a cobertura é calculada"
@@ -11347,8 +11344,8 @@ msgstr "Como Trabalhamos Juntos"
 msgid "How will you use {integrationName}?"
 msgstr "Como você usará {integrationName}?"
 
-msgid "How your company's process maps to Carbon"
-msgstr "Como o processo da sua empresa se mapeia para o Carbon"
+msgid "How your company's process maps to {BRAND_NAME}"
+msgstr "Como o processo da sua empresa se mapeia para o {BRAND_NAME}"
 
 msgid "How your quotes, orders, and invoices look when they go out"
 msgstr "Como seus orçamentos, pedidos e faturas aparecem quando são enviados"
@@ -12210,8 +12207,8 @@ msgstr "Data de Emissão"
 msgid "Issues"
 msgstr "Problemas"
 
-msgid "It is coming soon. Contact Carbon to have it set up for your company."
-msgstr "Ela estará disponível em breve. Entre em contato com a Carbon para configurá-la para sua empresa."
+msgid "It is coming soon. Contact {BRAND_NAME} to have it set up for your company."
+msgstr "Ela estará disponível em breve. Entre em contato com a {BRAND_NAME} para configurá-la para sua empresa."
 
 msgid "It will stop running until you publish a version again. Nothing is deleted."
 msgstr "Ele parará de ser executado até que você publique uma versão novamente. Nada é excluído."
@@ -12985,8 +12982,8 @@ msgstr "Vincular Problema Linear"
 msgid "link outside company"
 msgstr "vínculo fora da empresa"
 
-msgid "Link this Carbon customer to one of them, or create a separate Stripe customer."
-msgstr "Vincule este cliente Carbon a um deles ou crie um cliente Stripe separado."
+msgid "Link this {BRAND_NAME} customer to one of them, or create a separate Stripe customer."
+msgstr "Vincule este cliente {BRAND_NAME} a um deles ou crie um cliente Stripe separado."
 
 msgid "Link to sales order line"
 msgstr "Vincular à linha do pedido de venda"
@@ -13025,8 +13022,8 @@ msgstr "Visualização em Lista"
 msgid "Lists are wired into both {0} and {1}, so this step cannot tell which one to repeat over. Leave a list on only one of them."
 msgstr "Listas estão conectadas em ambos {0} e {1}, então esta etapa não pode saber qual repetir. Deixe uma lista em apenas um deles."
 
-msgid "Live on Carbon"
-msgstr "Ao vivo no Carbon"
+msgid "Live on {BRAND_NAME}"
+msgstr "Ao vivo no {BRAND_NAME}"
 
 msgid "Live reloading"
 msgstr "Recarregamento ao vivo"
@@ -13064,8 +13061,8 @@ msgstr "Carregando detalhes do item..."
 msgid "Loading returnable lines..."
 msgstr "Carregando linhas devolvíveis..."
 
-msgid "Loading your own data with Carbon's import tools"
-msgstr "Carregando seus próprios dados com as ferramentas de importação do Carbon"
+msgid "Loading your own data with {BRAND_NAME}'s import tools"
+msgstr "Carregando seus próprios dados com as ferramentas de importação do {BRAND_NAME}"
 
 msgid "Loading..."
 msgstr "Carregando..."
@@ -13375,8 +13372,8 @@ msgstr "Gerencie autenticação e requisitos de login para sua empresa."
 msgid "Manage how shelf life is tracked, computed, and enforced across inventory."
 msgstr "Gerenciar como a vida de prateleira é rastreada, calculada e aplicada no inventário."
 
-msgid "Manage how you sign in to Carbon."
-msgstr "Gerencie como você entra no Carbon."
+msgid "Manage how you sign in to {BRAND_NAME}."
+msgstr "Gerencie como você entra no {BRAND_NAME}."
 
 msgid "Manage Ownership"
 msgstr "Gerenciar Propriedade"
@@ -15136,8 +15133,8 @@ msgstr "Nenhuma ordem de produção aberta para Pedidos de venda está prevista 
 msgid "No open jobs for sales orders at this location."
 msgstr "Nenhuma ordem de produção aberta para Pedidos de venda neste Local."
 
-msgid "No open jobs with costs from before Carbon recorded them"
-msgstr "Nenhuma ordem de produção aberta com custos anteriores ao seu registro no Carbon"
+msgid "No open jobs with costs from before {BRAND_NAME} recorded them"
+msgstr "Nenhuma ordem de produção aberta com custos anteriores ao seu registro no {BRAND_NAME}"
 
 msgid "No open lines. Add a service to amend."
 msgstr "Nenhuma linha aberta. Adicione um serviço para alterar."
@@ -15675,8 +15672,8 @@ msgstr "Tipo de Notificação"
 msgid "Notifications"
 msgstr "Notificações"
 
-msgid "Notifications are blocked for Carbon in this browser's site settings."
-msgstr "As notificações estão bloqueadas para Carbon nas configurações de site deste navegador."
+msgid "Notifications are blocked for {BRAND_NAME} in this browser's site settings."
+msgstr "As notificações estão bloqueadas para {BRAND_NAME} nas configurações de site deste navegador."
 
 msgid "Notify"
 msgstr "Notificar"
@@ -15757,11 +15754,11 @@ msgstr "Ativado"
 msgid "On {sentDate}"
 msgstr "Ligado"
 
-msgid "On a control account, Carbon opens the balance from its own open items, inventory and fixed assets. The trial balance must agree: every difference stays on Migration Clearing, which must total zero. Open an account to see its items, and ignore an invoice the prior system already settled. Apply to Trial Balance sets each control account to Carbon's total and puts what is left on Retained Earnings."
-msgstr "Em uma conta de controle, Carbon abre o saldo de seus próprios itens abertos, inventário e ativos fixos. O saldo de verificação deve concordar: cada diferença permanece em Compensação de migração, que deve totalizar zero. Abra uma conta para ver seus itens e ignore uma fatura que o sistema anterior já liquidou. Aplicar ao Saldo de verificação define cada conta de controle ao total de Carbon e coloca o que sobra em Lucros acumulados."
+msgid "On a control account, {BRAND_NAME} opens the balance from its own open items, inventory and fixed assets. The trial balance must agree: every difference stays on Migration Clearing, which must total zero. Open an account to see its items, and ignore an invoice the prior system already settled. Apply to Trial Balance sets each control account to {BRAND_NAME}'s total and puts what is left on Retained Earnings."
+msgstr "Em uma conta de controle, {BRAND_NAME} abre o saldo de seus próprios itens abertos, inventário e ativos fixos. O saldo de verificação deve concordar: cada diferença permanece em Compensação de migração, que deve totalizar zero. Abra uma conta para ver seus itens e ignore uma fatura que o sistema anterior já liquidou. Aplicar ao Saldo de verificação define cada conta de controle ao total de {BRAND_NAME} e coloca o que sobra em Lucros acumulados."
 
-msgid "On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, Carbon creates a Released stock transfer for the kanban quantity."
-msgstr "Em um kanban de transferência, a quantidade mínima para a unidade de armazenamento de destino. Quando o estoque em mão mais as transferências de entrada abertas caem abaixo disso, Carbon cria uma transferência de estoque confirmada para a quantidade do kanban."
+msgid "On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, {BRAND_NAME} creates a Released stock transfer for the kanban quantity."
+msgstr "Em um kanban de transferência, a quantidade mínima para a unidade de armazenamento de destino. Quando o estoque em mão mais as transferências de entrada abertas caem abaixo disso, {BRAND_NAME} cria uma transferência de estoque confirmada para a quantidade do kanban."
 
 msgid "On cutover day, work the checklist below in order. Acceptance tests come from your in-scope requirements. Support details are at the bottom."
 msgstr "No dia de cutover, trabalhe a lista de verificação abaixo em ordem. Os testes de aceitação vêm dos seus requisitos no escopo. Os detalhes de suporte estão na parte inferior."
@@ -15850,8 +15847,8 @@ msgstr "Dias de Aluguel"
 msgid "On-time delivery"
 msgstr "Entrega no prazo"
 
-msgid "Onboard your agent to Carbon"
-msgstr "Integre seu agente ao Carbon"
+msgid "Onboard your agent to {BRAND_NAME}"
+msgstr "Integre seu agente ao {BRAND_NAME}"
 
 msgid "Once a day"
 msgstr "Uma vez por dia"
@@ -15882,8 +15879,8 @@ msgstr "Uma linha por fatura, uma coluna por linha. Altere uma data ou um valor,
 msgid "One row per month, one column per line. Each line recognizes exactly what its invoices bill."
 msgstr "Uma linha por mês, uma coluna por linha. Cada linha reconhece exatamente o que suas faturas faturam."
 
-msgid "One serial unit or one batch that Carbon follows individually, carrying its own status and attributes such as an expiry date."
-msgstr "Uma unidade serial ou um lote que Carbon acompanha individualmente, carregando seu próprio status e atributos como data de validade."
+msgid "One serial unit or one batch that {BRAND_NAME} follows individually, carrying its own status and attributes such as an expiry date."
+msgstr "Uma unidade serial ou um lote que {BRAND_NAME} acompanha individualmente, carregando seu próprio status e atributos como data de validade."
 
 msgid "One set of numbers"
 msgstr "Um conjunto de números"
@@ -16017,8 +16014,8 @@ msgstr "Data de Abertura"
 msgid "Open Dispatches"
 msgstr "Ordens de manutenção abertas"
 
-msgid "Open in Carbon"
-msgstr "Abrir no Carbon"
+msgid "Open in {BRAND_NAME}"
+msgstr "Abrir no {BRAND_NAME}"
 
 msgid "Open in change notice {ids}. Release it to change the active version."
 msgstr "Aberto em aviso de alteração {ids}. Libere-o para alterar a versão ativa."
@@ -16137,8 +16134,8 @@ msgstr "Abertura"
 msgid "Opening an operation starts its timer, so time is tracked from the moment work begins."
 msgstr "Abrir uma operação inicia seu temporizador, portanto o tempo é rastreado a partir do momento em que o trabalho começa."
 
-msgid "Opening balance of depreciation already booked before this asset was added to Carbon (use 0 for new acquisitions)."
-msgstr "Saldo de abertura da depreciação já contabilizada antes de este ativo ser adicionado ao Carbon (use 0 para novas aquisições)."
+msgid "Opening balance of depreciation already booked before this asset was added to {BRAND_NAME} (use 0 for new acquisitions)."
+msgstr "Saldo de abertura da depreciação já contabilizada antes de este ativo ser adicionado ao {BRAND_NAME} (use 0 para novas aquisições)."
 
 msgid "Opening balances as of"
 msgstr "Saldos de abertura em"
@@ -16578,8 +16575,8 @@ msgstr "Valor Pago:"
 msgid "Paid Date"
 msgstr "Data de Pagamento"
 
-msgid "Paid outside Carbon"
-msgstr "Pago fora do Carbon"
+msgid "Paid outside {BRAND_NAME}"
+msgstr "Pago fora do {BRAND_NAME}"
 
 msgid "Paid up front; record it as a payment once received"
 msgstr "Pagamento antecipado; registre-o como um pagamento quando recebido"
@@ -16820,8 +16817,8 @@ msgstr "Pagamentos"
 msgid "Payments and credits applied to this invoice. Applied amounts and FX are in company base currency. Click a row to open the source document."
 msgstr "Pagamentos e créditos aplicados a esta fatura. Os valores aplicados e de variação cambial estão na moeda base da empresa. Clique em uma linha para abrir o documento de origem."
 
-msgid "Payments due before this date were paid outside Carbon"
-msgstr "Pagamentos devidos antes desta data foram pagos fora da Carbon"
+msgid "Payments due before this date were paid outside {BRAND_NAME}"
+msgstr "Pagamentos devidos antes desta data foram pagos fora da {BRAND_NAME}"
 
 msgid "Pays the deposit held for this document back out of customer prepayments."
 msgstr "Reembolsa o depósito retido para este documento através de adiantamentos do cliente."
@@ -16958,11 +16955,11 @@ msgstr "Impressoras físicas disponíveis para atribuição."
 msgid "Pick"
 msgstr "Selecionar"
 
+msgid "Pick a {BRAND_NAME} dimension and the provider target it posts to. Auto-create adds missing provider options by name at push time."
+msgstr "Escolha uma dimensão {BRAND_NAME} e o alvo do provedor ao qual ela publica. Auto-create adiciona opções de provedor ausentes por nome no momento do push."
+
 msgid "Pick a batchable process, filter the eligible operations by their material, and select the ones to run together."
 msgstr "Escolha um processo em lote, filtre as operações elegíveis por seu material e selecione as que serão executadas juntas."
-
-msgid "Pick a Carbon dimension and the provider target it posts to. Auto-create adds missing provider options by name at push time."
-msgstr "Escolha uma dimensão Carbon e o alvo do provedor ao qual ela publica. Auto-create adiciona opções de provedor ausentes por nome no momento do push."
 
 msgid "Pick a column to sort by"
 msgstr "Escolha uma coluna para ordenar"
@@ -17739,11 +17736,11 @@ msgstr "Propriedades"
 msgid "Property"
 msgstr "Propriedade"
 
-msgid "Proposed matches where the Carbon account number equals the provider account code exactly."
-msgstr "Correspondências propostas onde o número da conta Carbon é exatamente igual ao código de conta do provedor."
+msgid "Proposed matches where the {BRAND_NAME} account number equals the provider account code exactly."
+msgstr "Correspondências propostas onde o número da conta {BRAND_NAME} é exatamente igual ao código de conta do provedor."
 
-msgid "Proposed matches where the Carbon dimension value's name equals a provider option name exactly."
-msgstr "Correspondências propostas onde o nome do valor da dimensão Carbon é exatamente igual a um nome de opção de provedor."
+msgid "Proposed matches where the {BRAND_NAME} dimension value's name equals a provider option name exactly."
+msgstr "Correspondências propostas onde o nome do valor da dimensão {BRAND_NAME} é exatamente igual a um nome de opção de provedor."
 
 msgid "Protect the go-live date"
 msgstr "Proteja a data de ativação"
@@ -17763,8 +17760,8 @@ msgstr "Comprove a propriedade de cada domínio de email com um registro TXT de 
 msgid "Provide process knowledge and inputs"
 msgstr "Forneça conhecimento do processo e entradas"
 
-msgid "Provide these URLs to your identity provider (Okta, Entra ID, Google Workspace, etc.) when registering Carbon as a SAML application."
-msgstr "Forneça esses URLs ao seu provedor de identidade (Okta, Entra ID, Google Workspace, etc.) ao registrar o Carbon como uma aplicação SAML."
+msgid "Provide these URLs to your identity provider (Okta, Entra ID, Google Workspace, etc.) when registering {BRAND_NAME} as a SAML application."
+msgstr "Forneça esses URLs ao seu provedor de identidade (Okta, Entra ID, Google Workspace, etc.) ao registrar o {BRAND_NAME} como uma aplicação SAML."
 
 msgid "Provider"
 msgstr "Provedor"
@@ -17797,8 +17794,8 @@ msgstr "Publicar versão {0}?"
 msgid "Published"
 msgstr "Publicado"
 
-msgid "Published by Carbon"
-msgstr "Publicado pela Carbon"
+msgid "Published by {BRAND_NAME}"
+msgstr "Publicado pela {BRAND_NAME}"
 
 msgid "Published Version"
 msgstr "Versão publicada"
@@ -18286,8 +18283,8 @@ msgstr "levante cedo e levante claramente. Um problema identificado na semana 2 
 msgid "Ramp"
 msgstr "Ramp"
 
-msgid "Ramp allows only one. Disconnect the other system in Ramp, or connect Carbon again choosing \"Another system posts my ledger\"."
-msgstr "Ramp permite apenas um. Desconecte o outro sistema no Ramp ou conecte o Carbon novamente escolhendo \"Another system posts my ledger\"."
+msgid "Ramp allows only one. Disconnect the other system in Ramp, or connect {BRAND_NAME} again choosing \"Another system posts my ledger\"."
+msgstr "Ramp permite apenas um. Desconecte o outro sistema no Ramp ou conecte o {BRAND_NAME} novamente escolhendo \"Another system posts my ledger\"."
 
 msgid "Ramp authorized the connection but saving it failed. Try connecting again."
 msgstr "O Ramp autorizou a conexão, mas não foi possível salvá-la. Tente conectar novamente."
@@ -18367,8 +18364,8 @@ msgstr "Reativar"
 msgid "Reactivation"
 msgstr "Reativação"
 
-msgid "Read this through — what Carbon will and won't do for your setup. When it looks right, mark it agreed below."
-msgstr "Leia isto — o que o Carbon fará e não fará para sua configuração. Quando parecer correto, marque como concordado abaixo."
+msgid "Read this through — what {BRAND_NAME} will and won't do for your setup. When it looks right, mark it agreed below."
+msgstr "Leia isto — o que o {BRAND_NAME} fará e não fará para sua configuração. Quando parecer correto, marque como concordado abaixo."
 
 msgid "Read this through. When it's right, sign off at the bottom. It's the statement your commercial agreement points to, with no prices or legal terms here."
 msgstr "Leia isto com atenção. Quando estiver correto, assine no final. É a declaração para a qual seu acordo comercial aponta, sem preços ou termos legais aqui."
@@ -18608,8 +18605,8 @@ msgstr "Reconciliar"
 msgid "Reconciliation found discrepancies with the provider"
 msgstr "A reconciliação encontrou discrepâncias com o provedor"
 
-msgid "Reconciling a purchase order against what was received and invoiced — implicit in Carbon, via the line quantities and GR/IR balance."
-msgstr "Reconciliação de um pedido de compra contra o que foi recebido e faturado — implícito no Carbon, através das quantidades das linhas e do saldo GR/IR."
+msgid "Reconciling a purchase order against what was received and invoiced — implicit in {BRAND_NAME}, via the line quantities and GR/IR balance."
+msgstr "Reconciliação de um pedido de compra contra o que foi recebido e faturado — implícito no {BRAND_NAME}, através das quantidades das linhas e do saldo GR/IR."
 
 msgid "Reconfigure"
 msgstr "Reconfigurar"
@@ -19156,8 +19153,8 @@ msgstr "Repete uma vez para cada item em {inputLabel}"
 msgid "Replace"
 msgstr "Substituir"
 
-msgid "Replace Carbon's default chart with your own, before you set up accounting"
-msgstr "Substitua o plano padrão do Carbon pelo seu próprio, antes de configurar a Contabilidade"
+msgid "Replace {BRAND_NAME}'s default chart with your own, before you set up accounting"
+msgstr "Substitua o plano padrão do {BRAND_NAME} pelo seu próprio, antes de configurar a Contabilidade"
 
 msgid "Replace chart"
 msgstr "Substituir plano"
@@ -19781,8 +19778,8 @@ msgstr ""
 msgid "RFQs"
 msgstr "RFQs"
 
-msgid "Ride Carbon dimensions along on pushed journals. Each slot maps one Carbon dimension to one provider analytics target; the value mapping below pairs individual dimension values with provider options."
-msgstr "Leve as dimensões Carbon junto nos diários enviados. Cada slot mapeia uma dimensão Carbon para um alvo de análise do provedor; o mapeamento de valor abaixo emparelha valores de dimensão individuais com opções de provedor."
+msgid "Ride {BRAND_NAME} dimensions along on pushed journals. Each slot maps one {BRAND_NAME} dimension to one provider analytics target; the value mapping below pairs individual dimension values with provider options."
+msgstr "Leve as dimensões {BRAND_NAME} junto nos diários enviados. Cada slot mapeia uma dimensão {BRAND_NAME} para um alvo de análise do provedor; o mapeamento de valor abaixo emparelha valores de dimensão individuais com opções de provedor."
 
 #. placeholder {0}: certification.docVersion
 msgid "Rider v{0}"
@@ -20843,8 +20840,8 @@ msgstr "Enviar Convites"
 msgid "Send RFQ to Suppliers"
 msgstr "Enviar RFQ para Fornecedores"
 
-msgid "Send to Carbon"
-msgstr "Enviar para Carbon"
+msgid "Send to {BRAND_NAME}"
+msgstr "Enviar para {BRAND_NAME}"
 
 msgid "Send Via"
 msgstr "Enviar Via"
@@ -20981,6 +20978,9 @@ msgstr "Serviços"
 msgid "Session locked"
 msgstr "Sessão bloqueada"
 
+msgid "Set {BRAND_NAME} up around how your company runs: sites, parts, BOMs, Bill of Process, and the flows you use."
+msgstr "Configure o {BRAND_NAME} de acordo com como sua empresa funciona: locais, peças, BOMs, Lista de operações e os fluxos que você usa."
+
 msgid "Set a customer on this return to add from a shipment."
 msgstr "Defina um cliente nesta devolução para adicionar de uma remessa."
 
@@ -21001,9 +21001,6 @@ msgstr "Defina uma meta"
 
 msgid "Set at activation"
 msgstr "Definido na ativação"
-
-msgid "Set Carbon up around how your company runs: sites, parts, BOMs, Bill of Process, and the flows you use."
-msgstr "Configure o Carbon de acordo com como sua empresa funciona: locais, peças, BOMs, Lista de operações e os fluxos que você usa."
 
 msgid "Set Clock Out"
 msgstr "Apontar fim"
@@ -21087,8 +21084,8 @@ msgstr "Define o valor pelo qual esta unidade é registrada no inventário. A di
 msgid "Settings"
 msgstr "Configurações"
 
-msgid "Settled in the system that kept the books before the cutover. Carbon leaves them out of its totals and marks them Paid on the day before the cutover when you set up accounting."
-msgstr "Liquidado no sistema que manteve os registros antes da mudança. O Carbon os deixa de fora de seus totais e os marca como Pagos no dia anterior à mudança quando você configura a contabilidade."
+msgid "Settled in the system that kept the books before the cutover.{BRAND_NAME} leaves them out of its totals and marks them Paid on the day before the cutover when you set up accounting."
+msgstr ""
 
 msgid "Setup"
 msgstr "Configuração"
@@ -21483,8 +21480,8 @@ msgstr "Embaralhar"
 msgid "Sign in here instead"
 msgstr ""
 
-msgid "Sign in to Carbon"
-msgstr "Entrar no Carbon"
+msgid "Sign in to {BRAND_NAME}"
+msgstr "Entrar no {BRAND_NAME}"
 
 msgid "Sign in with biometrics instead of a magic link. Passkeys are secured by Face ID, Touch ID, or your device PIN."
 msgstr "Inicie sessão com biometria em vez de uma ligação mágica. As chaves de acesso são protegidas por Face ID, Touch ID ou o PIN do seu dispositivo."
@@ -21619,8 +21616,8 @@ msgstr "Vendido"
 msgid "Solutions Engineer"
 msgstr "Engenheiro de Soluções"
 
-msgid "Some balances have no Carbon account"
-msgstr "Alguns saldos não têm conta Carbon"
+msgid "Some balances have no {BRAND_NAME} account"
+msgstr "Alguns saldos não têm conta {BRAND_NAME}"
 
 msgid "Some lines are invoiced for more or less than they total. Fix the amounts before confirming."
 msgstr "Algumas linhas são faturadas por mais ou menos do que totalizam. Corrija os valores antes de confirmar."
@@ -21796,8 +21793,8 @@ msgstr "Configurar hospedagem (nuvem ou auto-hospedado)"
 msgid "Standard"
 msgstr "Padrão"
 
-msgid "Standard cloud Carbon fits how your company runs"
-msgstr "O Carbon em nuvem padrão se adequa ao modo como sua empresa funciona"
+msgid "Standard cloud {BRAND_NAME} fits how your company runs"
+msgstr "O {BRAND_NAME} em nuvem padrão se adequa ao modo como sua empresa funciona"
 
 msgid "Standard Cost Variances"
 msgstr "Variações de Custo Padrão"
@@ -22119,17 +22116,17 @@ msgstr "O Stripe já possui um cliente com este e-mail"
 msgid "Stripe Due Date"
 msgstr "Data de Vencimento Stripe"
 
-msgid "Stripe emails the invoice to the customer, so an address is required. This will also be saved to the contact in Carbon."
-msgstr "Stripe envia a fatura por email para o cliente, portanto um endereço é necessário. Isso também será salvo no contato no Carbon."
+msgid "Stripe emails the invoice to the customer, so an address is required. This will also be saved to the contact in {BRAND_NAME}."
+msgstr "Stripe envia a fatura por email para o cliente, portanto um endereço é necessário. Isso também será salvo no contato no {BRAND_NAME}."
 
-msgid "Stripe emails the invoices to the customer, so an address is required. It is also saved to the contract's invoice contact in Carbon, if it has one."
-msgstr "Stripe envia as faturas por e-mail para o cliente, portanto um endereço é necessário. Também é salvo no contato de fatura do contrato no Carbon, se houver um."
+msgid "Stripe emails the invoices to the customer, so an address is required. It is also saved to the contract's invoice contact in {BRAND_NAME}, if it has one."
+msgstr "Stripe envia as faturas por e-mail para o cliente, portanto um endereço é necessário. Também é salvo no contato de fatura do contrato no {BRAND_NAME}, se houver um."
 
-msgid "Stripe has no customer for this Carbon customer yet. Confirming will create one on your connected account."
-msgstr "Stripe não tem um cliente para este cliente do Carbon ainda. Confirmar criará um em sua conta conectada."
+msgid "Stripe has no customer for this {BRAND_NAME} customer yet. Confirming will create one on your connected account."
+msgstr "Stripe não tem um cliente para este cliente do {BRAND_NAME} ainda. Confirmar criará um em sua conta conectada."
 
-msgid "Stripe has no customer for this Carbon customer yet. Posting will create one on your connected account."
-msgstr "Stripe ainda não tem um cliente para este cliente do Carbon. A Contabilização criará um na sua conta conectada."
+msgid "Stripe has no customer for this {BRAND_NAME} customer yet. Posting will create one on your connected account."
+msgstr "Stripe ainda não tem um cliente para este cliente do {BRAND_NAME}. A Contabilização criará um na sua conta conectada."
 
 msgid "Structure"
 msgstr "Estrutura"
@@ -22660,8 +22657,8 @@ msgstr "Usar a vida de prateleira restante mais curta entre os materiais consumi
 msgid "taken"
 msgstr "tomado"
 
-msgid "Taken outside Carbon. You mark each employee complete."
-msgstr "Realizado fora do Carbon. Você marca cada funcionário como concluído."
+msgid "Taken outside {BRAND_NAME}. You mark each employee complete."
+msgstr "Realizado fora do {BRAND_NAME}. Você marca cada funcionário como concluído."
 
 msgid "Takes Effect"
 msgstr "Entra em Vigor"
@@ -22929,8 +22926,20 @@ msgstr "A fase \"{0}\" está concluída — seu ponto de verificação \"{1}\" f
 msgid "The {0} phases to go live, each ending at a checkpoint. Tick off each task as you complete it."
 msgstr "Os {0} fases para entrar em produção, cada uma terminando em um ponto de verificação. Marque cada tarefa conforme a concluir."
 
-msgid "The accent color used across Carbon."
-msgstr "A cor de destaque usada em todo o Carbon."
+msgid "The {BRAND_NAME} user currently responsible for working this record, set per record and independent of ownership fields like Account Manager or Sales Person."
+msgstr "O usuário do {BRAND_NAME} atualmente responsável por trabalhar neste registro, definido por registro e independente de campos de propriedade como Gerenciador de Contas ou Vendedor."
+
+msgid "The {BRAND_NAME} user responsible for this customer relationship; emails and reminders about this customer route to them."
+msgstr "O usuário {BRAND_NAME} responsável por este relacionamento com o cliente; os e-mails e lembretes sobre este cliente são roteados para eles."
+
+msgid "The {BRAND_NAME} user responsible for this supplier relationship; emails and reminders about this supplier route to them."
+msgstr "O usuário {BRAND_NAME} responsável por este relacionamento com o fornecedor; os e-mails e lembretes sobre este fornecedor são roteados para eles."
+
+msgid "The {BRAND_NAME} user who owns this RFQ; supplier responses and reminders route to them."
+msgstr "O usuário {BRAND_NAME} que possui esta RFQ; as respostas do fornecedor e lembretes são roteados para eles."
+
+msgid "The accent color used across {BRAND_NAME}."
+msgstr "A cor de destaque usada em todo o {BRAND_NAME}."
 
 msgid "The account picked for {account} is no longer in the chart."
 msgstr "A conta selecionada para {account} não está mais no plano."
@@ -22938,8 +22947,8 @@ msgstr "A conta selecionada para {account} não está mais no plano."
 msgid "The accounting dimension that categorizes items for reporting and analysis."
 msgstr "A dimensão contábil que categoriza itens para relatórios e análises."
 
-msgid "The accounts Carbon posts to automatically"
-msgstr "As contas que o Carbon publica automaticamente"
+msgid "The accounts {BRAND_NAME} posts to automatically"
+msgstr "As contas que o {BRAND_NAME} publica automaticamente"
 
 msgid "The action that copies a saved method (its materials, operations, and work instructions) onto a job or quote line."
 msgstr "A ação que copia um método salvo (seus materiais, operações e instruções de trabalho) para uma ordem de produção ou linha do orçamento."
@@ -23002,26 +23011,14 @@ msgstr "Os buckets nos quais você rastreia custos"
 msgid "The capital assets you own and depreciate"
 msgstr "Os ativos de capital que você possui e deprecia"
 
-msgid "The Carbon user currently responsible for working this record, set per record and independent of ownership fields like Account Manager or Sales Person."
-msgstr "O usuário do Carbon atualmente responsável por trabalhar neste registro, definido por registro e independente de campos de propriedade como Gerenciador de Contas ou Vendedor."
-
-msgid "The Carbon user responsible for this customer relationship; emails and reminders about this customer route to them."
-msgstr "O usuário Carbon responsável por este relacionamento com o cliente; os e-mails e lembretes sobre este cliente são roteados para eles."
-
-msgid "The Carbon user responsible for this supplier relationship; emails and reminders about this supplier route to them."
-msgstr "O usuário Carbon responsável por este relacionamento com o fornecedor; os e-mails e lembretes sobre este fornecedor são roteados para eles."
-
-msgid "The Carbon user who owns this RFQ; supplier responses and reminders route to them."
-msgstr "O usuário Carbon que possui esta RFQ; as respostas do fornecedor e lembretes são roteados para eles."
-
 msgid "The carrier and service a shipment goes out on, supplying the tracking-URL template that turns a tracking number into a link and the account freight charges post to."
 msgstr "A transportadora e o serviço com o qual uma remessa é enviada, fornecendo o modelo de URL de rastreamento que converte um número de rastreamento em um link e a conta para a qual os encargos de frete são lançados."
 
 msgid "The carrier that delivers goods from this supplier, when different from the supplier itself (e.g. supplier sells, FedEx ships)."
 msgstr "A transportadora que entrega mercadorias deste fornecedor, quando diferente do fornecedor em si (por exemplo, fornecedor vende, FedEx envia)."
 
-msgid "The carrier's tracking-page URL with {trackingNumber} as a placeholder — Carbon substitutes the actual number when generating links on shipments."
-msgstr "A URL da página de rastreamento da transportadora com {trackingNumber} como um espaço reservado — o Carbon substitui o número real ao gerar links nas remessas."
+msgid "The carrier's tracking-page URL with {trackingNumber} as a placeholder — {BRAND_NAME} substitutes the actual number when generating links on shipments."
+msgstr "A URL da página de rastreamento da transportadora com {trackingNumber} como um espaço reservado — o {BRAND_NAME} substitui o número real ao gerar links nas remessas."
 
 msgid "The carriers and methods you ship orders with"
 msgstr "As transportadoras e métodos com os quais você envia pedidos"
@@ -23086,8 +23083,8 @@ msgstr "O contrato termina na data de término e a faturação para."
 msgid "The contract ends on the end date and does not renew. Planned invoices after it are removed."
 msgstr "O contrato termina na data de término e não é renovado. As faturas planejadas após ele são removidas."
 
-msgid "The contract's invoices will be billed to the Stripe customer already linked to this Carbon customer. To change its details, edit it in the Stripe dashboard."
-msgstr "As faturas do contrato serão faturadas para o cliente do Stripe já vinculado a este cliente do Carbon. Para alterar seus detalhes, edite no painel do Stripe."
+msgid "The contract's invoices will be billed to the Stripe customer already linked to this {BRAND_NAME} customer. To change its details, edit it in the Stripe dashboard."
+msgstr "As faturas do contrato serão faturadas para o cliente do Stripe já vinculado a este cliente do {BRAND_NAME}. Para alterar seus detalhes, edite no painel do Stripe."
 
 msgid "The contractor's expected weekly availability; scheduling uses this as the upper bound when assigning this contractor to operations across the week."
 msgstr "A disponibilidade semanal esperada do terceirizado; o agendamento usa isso como o limite superior ao atribuir este terceirizado a operações ao longo da semana."
@@ -23267,8 +23264,8 @@ msgstr "O arquivo enviado e os mapeamentos feitos serão perdidos."
 msgid "the first 3 to 4 weeks"
 msgstr "as primeiras 3 a 4 semanas"
 
-msgid "The first day a company keeps its books in Carbon, set once when accounting is set up and never changed; from then on every posting writes a Posted journal."
-msgstr "O primeiro dia em que uma empresa mantém seus livros no Carbon, definido uma única vez quando a contabilidade é configurada e nunca alterado; a partir de então, toda contabilização cria um diário contabilizado."
+msgid "The first day a company keeps its books in {BRAND_NAME}, set once when accounting is set up and never changed; from then on every posting writes a Posted journal."
+msgstr "O primeiro dia em que uma empresa mantém seus livros no {BRAND_NAME}, definido uma única vez quando a contabilidade é configurada e nunca alterado; a partir de então, toda contabilização cria um diário contabilizado."
 
 msgid "The first day of a lease month (day {commencementDay}) where a payment period starts, after the last posted lease run"
 msgstr "O primeiro dia do mês do arrendamento (dia {commencementDay}) em que um período de pagamento é iniciado, após a última execução de aluguel contabilizada"
@@ -23339,11 +23336,11 @@ msgstr "O endereço https para o qual uma etapa webhook de fluxo de trabalho pub
 msgid "The human-readable document number (like J000001 or ECO-000001) minted from a sequence and stored on the record, distinct from its internal id."
 msgstr "O número de documento legível (como J000001 ou ECO-000001) criado a partir de uma sequência e armazenado no registro, distinto de sua id interna."
 
-msgid "The identifier the customer uses for this part on their POs; Carbon resolves it to our internal Part ID on order import."
-msgstr "O identificador que o cliente usa para essa parte nos POs; Carbon o resolve para nosso ID de parte interno na importação de pedidos."
+msgid "The identifier the customer uses for this part on their POs; {BRAND_NAME} resolves it to our internal Part ID on order import."
+msgstr "O identificador que o cliente usa para essa parte nos POs; {BRAND_NAME} o resolve para nosso ID de parte interno na importação de pedidos."
 
-msgid "The identifier the supplier uses for this part on their quotes and invoices; Carbon resolves it to our internal Part ID."
-msgstr "O identificador que o fornecedor usa para essa parte em suas cotações e faturas; Carbon o resolve para nosso ID de parte interno."
+msgid "The identifier the supplier uses for this part on their quotes and invoices; {BRAND_NAME} resolves it to our internal Part ID."
+msgstr "O identificador que o fornecedor usa para essa parte em suas cotações e faturas; {BRAND_NAME} o resolve para nosso ID de parte interno."
 
 msgid "The immediate nonconformance task that quarantines affected stock or work before the root cause is known."
 msgstr "A tarefa imediata de não conformidade que coloca em quarentena o estoque ou trabalho afetado antes da causa raiz ser conhecida."
@@ -23381,8 +23378,8 @@ msgstr "as horas de trabalho devidas naquele dia (com base na data de vencimento
 msgid "The job whose operation this outside-processing line covers; the line's receipt closes the operation against this job."
 msgstr "O trabalho cuja operação cobre essa linha de processamento externo; o recebimento da linha fecha a operação contra esse trabalho."
 
-msgid "The job's position in its location's schedule queue — a fractional number Carbon computes from the due date and deadline type, not a Low/High rating."
-msgstr "A posição do trabalho em sua fila de agendamento de localização — um número fracionário que o Carbon calcula a partir da data de vencimento e do tipo de prazo, não uma classificação Baixo/Alto."
+msgid "The job's position in its location's schedule queue — a fractional number {BRAND_NAME} computes from the due date and deadline type, not a Low/High rating."
+msgstr "A posição do trabalho em sua fila de agendamento de localização — um número fracionário que o {BRAND_NAME} calcula a partir da data de vencimento e do tipo de prazo, não uma classificação Baixo/Alto."
 
 msgid "The job's work-in-progress balance moves to this asset now, and completing the job sweeps the rest. Only open jobs that are not linked to a sales order or another asset are listed."
 msgstr "O saldo de trabalho em andamento da ordem de produção se move para este ativo agora, e a conclusão da ordem de produção move o restante. Apenas ordens de produção abertas que não estão vinculadas a um pedido de venda ou outro ativo são listadas."
@@ -23491,8 +23488,8 @@ msgstr "A máquina ainda está em funcionamento. Atribua este tempo depois que e
 msgid "The machines, cells, and stations your work runs through"
 msgstr "As máquinas, células e estações por onde seu trabalho passa"
 
-msgid "The master data to set up when first configuring Carbon, grouped by module. Mark each one configured as you go."
-msgstr "Os dados mestres a configurar ao primeiro configurar o Carbon, agrupados por módulo. Marque cada um como configurado conforme avança."
+msgid "The master data to set up when first configuring {BRAND_NAME}, grouped by module. Mark each one configured as you go."
+msgstr "Os dados mestres a configurar ao primeiro configurar o {BRAND_NAME}, agrupados por módulo. Marque cada um como configurado conforme avança."
 
 msgid "The material is purchased from a supplier for that specific order, rather than made or pulled from stock."
 msgstr "O material é comprado de um fornecedor para esse pedido específico, em vez de ser fabricado ou retirado do estoque."
@@ -23620,11 +23617,11 @@ msgstr "A trajetória que os componentes da etapa percorrem para se posicionarem
 msgid "The payment from the effective date. Escalation still steps up on each anniversary of the commencement"
 msgstr "O pagamento a partir da data efetiva. A escalação ainda sobe a cada aniversário do início."
 
-msgid "The people on the Carbon side who will run your implementation, and how to reach them."
-msgstr "As pessoas do lado da Carbon que executarão sua implementação e como contatá-las."
+msgid "The people on the {BRAND_NAME} side who will run your implementation, and how to reach them."
+msgstr "As pessoas do lado da {BRAND_NAME} que executarão sua implementação e como contatá-las."
 
-msgid "The people on your team and their access to Carbon"
-msgstr "As pessoas da sua equipe e seu acesso ao Carbon"
+msgid "The people on your team and their access to {BRAND_NAME}"
+msgstr "As pessoas da sua equipe e seu acesso ao {BRAND_NAME}"
 
 msgid "The per-company counter behind a document type's readable number, assembling the prefix, the zero-padded next value, and the suffix, and advancing as each document is created."
 msgstr "O contador por empresa por trás do número legível de um tipo de documento, montando o prefixo, o próximo valor preenchido com zeros, e o sufixo, e avançando conforme cada documento é criado."
@@ -23754,8 +23751,8 @@ msgstr "Os {0} {1} restantes não serão mais esperados. O suprimento pedido e o
 msgid "The request body sent verbatim with a JSON content type after workflow variables inside it are substituted, on the methods that carry one."
 msgstr "O corpo da solicitação enviado literalmente com um tipo de conteúdo JSON após as variáveis de fluxo de trabalho dentro dele serem substituídas, nos métodos que carregam um."
 
-msgid "The residual WIP a job has left at close, swept to a Production Variance account — the only variance Carbon books for a job."
-msgstr "O produto em processo residual que uma ordem de produção deixa ao fechar, movido para uma conta de Variação de Produção — a única variação que o Carbon contabiliza para uma ordem de produção."
+msgid "The residual WIP a job has left at close, swept to a Production Variance account — the only variance {BRAND_NAME} books for a job."
+msgstr "O produto em processo residual que uma ordem de produção deixa ao fechar, movido para uma conta de Variação de Produção — a única variação que o {BRAND_NAME} contabiliza para uma ordem de produção."
 
 msgid "The response from Onshape was missing required parameters. Check the private app's redirect URL, then save the integration settings again."
 msgstr "A resposta do Onshape estava faltando parâmetros obrigatórios. Verifique a URL de redirecionamento do aplicativo privado, então salve as configurações de integração novamente."
@@ -23913,8 +23910,8 @@ msgstr "Os fornecedores que recebem este RFQ; cada fornecedor recebe sua própri
 msgid "The surface finishes available on your materials"
 msgstr "Os acabamentos de superfície disponíveis nos seus materiais"
 
-msgid "The system a company uses to manage its people's logins — Okta, Entra ID, or Google Workspace — which vouches for who someone is when they sign in to Carbon via SSO."
-msgstr "O sistema que uma empresa usa para gerenciar os logins de suas pessoas — Okta, Entra ID ou Google Workspace — que valida a identidade de alguém quando eles se conectam ao Carbon via SSO."
+msgid "The system a company uses to manage its people's logins — Okta, Entra ID, or Google Workspace — which vouches for who someone is when they sign in to {BRAND_NAME} via SSO."
+msgstr "O sistema que uma empresa usa para gerenciar os logins de suas pessoas — Okta, Entra ID ou Google Workspace — que valida a identidade de alguém quando eles se conectam ao {BRAND_NAME} via SSO."
 
 msgid "The system passes every in-scope acceptance test in your configured system, with your data; the data is validated; and you sign off. Then go-live."
 msgstr "O sistema passa em todos os testes de aceitação no escopo do seu sistema configurado, com seus dados; os dados são validados; e você assina. Depois, entre em operação."
@@ -23958,8 +23955,8 @@ msgstr "O número típico de dias entre enviar trabalho para este fornecedor par
 msgid "The unique identifier on this physical unit; one row per serial, quantity is always 1."
 msgstr "O identificador único nesta unidade física; uma linha por número de série, a quantidade é sempre 1."
 
-msgid "The unit a routing time is expressed in, such as Hours/Piece or Total Hours, telling Carbon whether the time scales with quantity or is fixed per run."
-msgstr "A unidade em que o tempo de roteiro de produção é expresso, como Horas/Peça ou Horas Totais, informando ao Carbon se o tempo escala com a quantidade ou é fixo por execução."
+msgid "The unit a routing time is expressed in, such as Hours/Piece or Total Hours, telling {BRAND_NAME} whether the time scales with quantity or is fixed per run."
+msgstr "A unidade em que o tempo de roteiro de produção é expresso, como Horas/Peça ou Horas Totais, informando ao {BRAND_NAME} se o tempo escala com a quantidade ou é fixo por execução."
 
 msgid "The unit and its rates are fixed once the agreement is activated."
 msgstr "A unidade e suas taxas são fixas uma vez que o contrato é ativado."
@@ -24132,6 +24129,9 @@ msgstr "Essas unidades são tratadas como vendas. Ativar desreconhece cada uma e
 msgid "They are not in your chart, but documents or journals use them. Pick the account in your chart that replaces each one."
 msgstr "Elas não estão em seu plano de contas, mas documentos ou diários as usam. Escolha a conta em seu plano de contas que substitui cada uma."
 
+msgid "This {BRAND_NAME} instance is missing its Onshape OAuth credentials. Ask an administrator to set them."
+msgstr "Esta instância do {BRAND_NAME} não tem credenciais OAuth do Onshape. Peça a um administrador para configurá-las."
+
 msgid "this ability"
 msgstr "esta habilidade"
 
@@ -24152,17 +24152,14 @@ msgstr "Este backup não pôde ser concluído."
 msgid "This backup hasn't been checked yet. Any differences are found when the restore runs."
 msgstr "Este backup ainda não foi verificado. As diferenças são encontradas quando a restauração é executada."
 
-msgid "This browser does not support push notifications. On iPhone or iPad, add Carbon to the Home Screen first."
-msgstr "Este navegador não suporta notificações push. No iPhone ou iPad, adicione o Carbon à Tela de Início primeiro."
+msgid "This browser does not support push notifications. On iPhone or iPad, add {BRAND_NAME} to the Home Screen first."
+msgstr "Este navegador não suporta notificações push. No iPhone ou iPad, adicione o {BRAND_NAME} à Tela de Início primeiro."
 
-msgid "This cannot be changed later — {integrationName} allows only one connected accounting system, so the choice decides what Carbon is permitted to do. To switch, you would uninstall and reconnect."
-msgstr "Isto não pode ser alterado depois — {integrationName} permite apenas um sistema contábil conectado, portanto a escolha decide o que o Carbon tem permissão para fazer. Para mudar, você desinstalaria e reconectaria."
+msgid "This cannot be changed later — {integrationName} allows only one connected accounting system, so the choice decides what {BRAND_NAME} is permitted to do. To switch, you would uninstall and reconnect."
+msgstr "Isto não pode ser alterado depois — {integrationName} permite apenas um sistema contábil conectado, portanto a escolha decide o que o {BRAND_NAME} tem permissão para fazer. Para mudar, você desinstalaria e reconectaria."
 
 msgid "This cannot be undone."
 msgstr "Isto não pode ser desfeito."
-
-msgid "This Carbon instance is missing its Onshape OAuth credentials. Ask an administrator to set them."
-msgstr "Esta instância do Carbon não tem credenciais OAuth do Onshape. Peça a um administrador para configurá-las."
 
 msgid "This change notice is being implemented, so its changes are locked. Reopen it to edit."
 msgstr "Este aviso de mudança está sendo implementado, portanto suas alterações estão bloqueadas. Reabra-o para editar."
@@ -24222,15 +24219,15 @@ msgstr "este plano de inspeção"
 msgid "This integration isn't available yet"
 msgstr "Esta integração ainda não está disponível"
 
-#. placeholder {0}: company?.name ?? "Carbon"
+#. placeholder {0}: company?.name ?? BRAND_NAME
 msgid "This invitation to join {0} has expired. You can request a new invite to be sent to your email."
 msgstr "Este convite para se juntar a {0} está vencido. Você pode solicitar um novo convite para ser enviado para seu email."
 
 msgid "This invoice has no usable due date — choose one for Stripe."
 msgstr "Esta fatura não possui uma data de vencimento utilizável — escolha uma para Stripe."
 
-msgid "This invoice will be billed to the Stripe customer already linked to this Carbon customer. To change its details, edit it in the Stripe dashboard."
-msgstr "Esta fatura será cobrada do cliente Stripe já vinculado a este cliente Carbon. Para alterar seus detalhes, edite-o no painel Stripe."
+msgid "This invoice will be billed to the Stripe customer already linked to this {BRAND_NAME} customer. To change its details, edit it in the Stripe dashboard."
+msgstr "Esta fatura será cobrada do cliente Stripe já vinculado a este cliente {BRAND_NAME}. Para alterar seus detalhes, edite-o no painel Stripe."
 
 msgid "This is a controlled environment, so an authenticator app is required."
 msgstr "Este é um ambiente controlado, portanto um aplicativo autenticador é obrigatório."
@@ -24970,8 +24967,8 @@ msgstr "Treinamento não registrado"
 msgid "Training Plan"
 msgstr "Plano de Treinamento"
 
-msgid "Training taken outside Carbon, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
-msgstr "Treinamento realizado fora do Carbon, como um curso de um fornecedor. A atribuição tem apenas um nome. Um administrador marca cada funcionário como concluído e pode anexar seu certificado."
+msgid "Training taken outside {BRAND_NAME}, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
+msgstr "Treinamento realizado fora do {BRAND_NAME}, como um curso de um fornecedor. A atribuição tem apenas um nome. Um administrador marca cada funcionário como concluído e pode anexar seu certificado."
 
 msgid "Training video"
 msgstr ""
@@ -26341,8 +26338,8 @@ msgstr "Prazo médio ponderado restante (anos)"
 msgid "Welcome back, {name}."
 msgstr "Bem-vindo de volta, {name}."
 
-msgid "Welcome to Carbon"
-msgstr "Bem-vindo ao Carbon"
+msgid "Welcome to {BRAND_NAME}"
+msgstr "Bem-vindo ao {BRAND_NAME}"
 
 msgid "Welcome, {companyName}"
 msgstr "Bem-vindo, {companyName}"
@@ -26359,8 +26356,8 @@ msgstr "Qual categoria de falha é essa — Mecânica, Elétrica, Software, Oper
 msgid "What changes day to day"
 msgstr "O que muda dia a dia"
 
-msgid "What changes when you move to Carbon, and roughly what it's worth. Estimates, not a forecast."
-msgstr "O que muda quando você migra para o Carbon e aproximadamente quanto vale. Estimativas, não uma previsão."
+msgid "What changes when you move to {BRAND_NAME}, and roughly what it's worth. Estimates, not a forecast."
+msgstr "O que muda quando você migra para o {BRAND_NAME} e aproximadamente quanto vale. Estimativas, não uma previsão."
 
 msgid "What data"
 msgstr "Que dados"
@@ -26473,6 +26470,9 @@ msgstr "O que está fora do escopo"
 msgid "When"
 msgstr "Quando"
 
+msgid "When {BRAND_NAME} committed to having the goods arrive; combined with the shipping method's transit days, this drives Ship Date back-calc."
+msgstr "Quando a {BRAND_NAME} se comprometeu com a chegada das mercadorias; combinado com os dias de trânsito do método de envio, isso impulsiona o cálculo retroativo da Data de envio."
+
 msgid "When {name} changes"
 msgstr "Quando {name} muda"
 
@@ -26487,9 +26487,6 @@ msgstr "Quando um número de série ou lote expira e o que acontece se usado dep
 
 msgid "When an invoice is created"
 msgstr "Quando uma fatura é criada"
-
-msgid "When Carbon committed to having the goods arrive; combined with the shipping method's transit days, this drives Ship Date back-calc."
-msgstr "Quando a Carbon se comprometeu com a chegada das mercadorias; combinado com os dias de trânsito do método de envio, isso impulsiona o cálculo retroativo da Data de envio."
 
 msgid "When deferred, accrued and lease-interest revenue will be recognized"
 msgstr "Quando receitas diferidas, acumuladas e de juros de arrendamento forem reconhecidas"
@@ -26527,8 +26524,8 @@ msgstr "Quando ativado, esta sobrescrita de preço se aplica aos pedidos corresp
 msgid "When on, this rule fires for every target of its type. Assignment rows are ignored but preserved."
 msgstr "Quando ativado, esta regra é acionada para cada alvo do seu tipo. As linhas de atribuição são ignoradas, mas preservadas."
 
-msgid "When supplier responses are expected back; suppliers see this date on the RFQ portal and Carbon stops accepting late responses after it (configurable)."
-msgstr "Quando se espera que os fornecedores respondam; os fornecedores veem esta data no portal RFQ e a Carbon para de aceitar respostas tardias depois dela (configurável)."
+msgid "When supplier responses are expected back; suppliers see this date on the RFQ portal and {BRAND_NAME} stops accepting late responses after it (configurable)."
+msgstr "Quando se espera que os fornecedores respondam; os fornecedores veem esta data no portal RFQ e a {BRAND_NAME} para de aceitar respostas tardias depois dela (configurável)."
 
 msgid "When the buyer asked for the goods; the supplier may promise something else on Promised Date and post something else again on Delivery Date."
 msgstr "Quando o comprador solicitou os bens; o fornecedor pode prometer algo diferente na Data Prometida e contabilizar algo diferente novamente na Data de Entrega."
@@ -26659,11 +26656,11 @@ msgstr "Onde você está hoje"
 msgid "Where you want to grow"
 msgstr "Onde você quer crescer"
 
+msgid "Whether {BRAND_NAME} follows each unit (Serial), each lot (Batch), the quantity (Inventory), or no tracking (Non-Inventory)."
+msgstr "Se {BRAND_NAME} segue cada unidade (Série), cada lote (Lote de produção), a quantidade (Inventário) ou sem rastreamento (Não estocável)."
+
 msgid "Whether Amount is interpreted as a percentage of the line price or as a fixed currency amount."
 msgstr "Se o valor é interpretado como uma porcentagem do preço da linha ou como um valor fixo em moeda."
-
-msgid "Whether Carbon follows each unit (Serial), each lot (Batch), the quantity (Inventory), or no tracking (Non-Inventory)."
-msgstr "Se Carbon segue cada unidade (Série), cada lote (Lote de produção), a quantidade (Inventário) ou sem rastreamento (Não estocável)."
 
 msgid "Whether each unit is treated as a rental or a sale is decided when the agreement is activated, from the terms and each unit's inputs."
 msgstr "Se cada unidade é tratada como aluguel ou venda é decidido quando o contrato é ativado, a partir dos termos e inputs de cada unidade."
@@ -27040,14 +27037,14 @@ msgstr "Você recebeu este item"
 msgid "You received this lot"
 msgstr "Você recebeu este lote"
 
-msgid "You're live on Carbon"
-msgstr "Está ao vivo no Carbon"
+msgid "You're live on {BRAND_NAME}"
+msgstr "Está ao vivo no {BRAND_NAME}"
 
 msgid "You're one step away from your workspace."
 msgstr "Você está a uma etapa de seu espaço de trabalho."
 
-msgid "You're setting Carbon up yourself, at your own pace"
-msgstr "Você está configurando o Carbon por conta própria, no seu próprio ritmo"
+msgid "You're setting {BRAND_NAME} up yourself, at your own pace"
+msgstr "Você está configurando o {BRAND_NAME} por conta própria, no seu próprio ritmo"
 
 msgid "You've been clocked in for {hoursElapsed} hours. Did you forget to clock out?"
 msgstr "Você marcou entrada há {hoursElapsed} horas. Você esqueceu de apontar fim?"
@@ -27145,11 +27142,11 @@ msgstr "A sua sessão foi bloqueada após inatividade."
 msgid "Your source data is accessible and reasonably clean"
 msgstr "Os seus dados de origem estão acessíveis e razoavelmente limpos"
 
-msgid "Your team can free up time to learn Carbon and load your data"
-msgstr "Sua equipe pode liberar tempo para aprender Carbon e carregar seus dados"
+msgid "Your team can free up time to learn {BRAND_NAME} and load your data"
+msgstr "Sua equipe pode liberar tempo para aprender {BRAND_NAME} e carregar seus dados"
 
-msgid "Your team leads learn Carbon first using the in-app guides and Academy, then bring everyone else up to speed."
-msgstr "Os líderes da sua equipa aprendem Carbon primeiro usando os guias na aplicação e a Academy, depois trazem todos os outros ao mesmo nível."
+msgid "Your team leads learn {BRAND_NAME} first using the in-app guides and Academy, then bring everyone else up to speed."
+msgstr "Os líderes da sua equipa aprendem {BRAND_NAME} primeiro usando os guias na aplicação e a Academy, depois trazem todos os outros ao mesmo nível."
 
 msgid "Your team, structure, and access."
 msgstr "Sua equipe, estrutura e acesso."

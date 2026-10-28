@@ -11,6 +11,7 @@ import {
 } from "@carbon/notifications";
 import { useLoaderQuery } from "@carbon/query";
 import { Switch } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useFetchers, useSubmit } from "react-router";
 import type { AccountNotificationsData } from "../types";
@@ -32,7 +33,7 @@ export default function NotificationSettings() {
   return (
     <AccountSettingsPane
       title={<Trans>Notifications</Trans>}
-      description={<Trans>Choose how Carbon reaches you.</Trans>}
+      description={<Trans>Choose how {BRAND_NAME} reaches you.</Trans>}
     >
       {data ? (
         <NotificationSettingsForm {...data} />

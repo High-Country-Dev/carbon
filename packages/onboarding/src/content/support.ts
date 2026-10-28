@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import type { MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 
@@ -28,7 +29,7 @@ export const GUIDED_UPSELL: GuidedUpsell = {
     msg`In the loop together`,
     msg`Set up the right way`
   ],
-  cta: msg`Book a call with Carbon`
+  cta: msg`Book a call with ${BRAND_NAME}`
 };
 
 // The guided-implementation row in "How to reach us" (Go-Live page), shown to

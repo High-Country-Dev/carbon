@@ -9,6 +9,7 @@ import { createGunzip, createGzip } from "node:zlib";
 import type { KyselyDatabase } from "@carbon/database/client";
 import { getCompanyPrivateBucket } from "@carbon/files";
 import { getLogger } from "@carbon/logger";
+import { BRAND_NAME } from "@carbon/utils";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { type Kysely, sql } from "kysely";
 import { nanoid } from "nanoid";
@@ -349,7 +350,7 @@ export async function readBackup(
   }
   const manifest = JSON.parse(await mf.data.text()) as Manifest;
   if (manifest.kind !== BACKUP_KIND) {
-    throw new Error("Not a Carbon company backup");
+    throw new Error(`Not a ${BRAND_NAME} company backup`);
   }
 
   const data: CompanyBackup["data"] = {};

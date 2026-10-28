@@ -11,6 +11,7 @@ import {
   Input,
   Card as UICard
 } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import type { MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -85,7 +86,7 @@ export function SetupControls() {
             <Trans>Setup & Controls</Trans>
           </h1>
           <Badge variant="blue">
-            <Trans>Carbon only</Trans>
+            <Trans>{BRAND_NAME} only</Trans>
           </Badge>
         </div>
         <p className="text-sm text-muted-foreground max-w-xl text-pretty">

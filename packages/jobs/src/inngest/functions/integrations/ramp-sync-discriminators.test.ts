@@ -3,6 +3,7 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import type { RampClient } from "@carbon/ee/ramp.server";
+import { BRAND_NAME } from "@carbon/utils";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   type RampBillPaymentDependencies,
@@ -42,7 +43,7 @@ describe("Ramp inbound accounting discriminators", () => {
       expect(outcome).toEqual({
         fail: {
           id: "payment-1",
-          message: "Bill was never synced to Carbon — sync the bill first"
+          message: `Bill was never synced to ${BRAND_NAME} — sync the bill first`
         }
       });
       expect(getMappedInvoiceId).toHaveBeenCalledWith("bill-1");

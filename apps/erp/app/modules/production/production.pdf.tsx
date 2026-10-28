@@ -19,6 +19,7 @@ import {
 import { getLogger } from "@carbon/logger";
 import type { JSONContent } from "@carbon/react";
 import {
+  BRAND_NAME,
   flattenTree,
   generateBomIds,
   groupBy,
@@ -297,7 +298,7 @@ export async function renderJobTravelerPdf(
   const stream = await renderToStream(
     <Document
       title="Job Traveler"
-      author="Carbon"
+      author={BRAND_NAME}
       subject="Job Traveler"
       keywords="job traveler, manufacturing"
     >

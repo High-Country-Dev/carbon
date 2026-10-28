@@ -2,7 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
-import { Card, cn, IconButton } from "@carbon/react";
+import { BrandWordmark, Card, cn, IconButton } from "@carbon/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { ReactNode } from "react";
 import { LuX } from "react-icons/lu";
@@ -39,16 +39,7 @@ export function OnboardingHubSummary({
   return (
     <Card className="relative flex-row flex-wrap items-center gap-5 p-6 pr-12 mb-6 bg-gradient-to-bl from-card from-50% to-background max-md:gap-x-3 max-md:gap-y-4 max-md:p-4 max-md:pr-10">
       <div className="shrink-0 size-12 rounded-xl border flex items-center justify-center max-md:size-10">
-        <img
-          src="/carbon-mark-light.svg"
-          alt="Carbon"
-          className="size-6 dark:hidden"
-        />
-        <img
-          src="/carbon-mark-dark.svg"
-          alt="Carbon"
-          className="size-6 hidden dark:block"
-        />
+        <BrandWordmark size="xs" />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex flex-wrap items-center gap-x-2">

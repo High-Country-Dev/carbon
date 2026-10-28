@@ -28,6 +28,7 @@ import {
 import { RootErrorBoundary } from "@carbon/react/ErrorBoundary";
 import type { Theme } from "@carbon/utils";
 import {
+  BRAND_NAME,
   colorSchemeHintScript,
   getPreferenceHeaders,
   getViewportHint,
@@ -107,7 +108,7 @@ export const links: LinksFunction = () => {
 export const meta: MetaFunction = ({ error }) => {
   return [
     {
-      title: error ? "Carbon | Error" : "Carbon"
+      title: error ? `${BRAND_NAME} | Error` : BRAND_NAME
     }
   ];
 };

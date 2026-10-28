@@ -36,6 +36,7 @@ import {
   Tr,
   toast
 } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -696,7 +697,7 @@ function MatchByCodeDrawer({
           </DrawerTitle>
           <DrawerDescription>
             <Trans>
-              Proposed matches where the Carbon account number equals the
+              Proposed matches where the {BRAND_NAME} account number equals the
               provider account code exactly.
             </Trans>
           </DrawerDescription>
@@ -712,7 +713,7 @@ function MatchByCodeDrawer({
                 <Thead>
                   <Tr>
                     <Th className="px-4">
-                      <Trans>Carbon account</Trans>
+                      <Trans>{BRAND_NAME} account</Trans>
                     </Th>
                     <Th className="px-4">
                       <Trans>Provider account</Trans>
@@ -862,9 +863,9 @@ function AiSuggestModal({
               </Trans>
             ) : (
               <Trans>
-                Carbon will use AI to guess a provider account for each of your{" "}
-                {unmapped.length} unmapped accounts. Suggestions are a starting
-                point — you can review them before anything is saved.
+                {BRAND_NAME} will use AI to guess a provider account for each of
+                your {unmapped.length} unmapped accounts. Suggestions are a
+                starting point — you can review them before anything is saved.
               </Trans>
             )}
           </ModalDescription>
@@ -892,7 +893,7 @@ function AiSuggestModal({
                 <Thead>
                   <Tr>
                     <Th className="px-4">
-                      <Trans>Carbon account</Trans>
+                      <Trans>{BRAND_NAME} account</Trans>
                     </Th>
                     <Th className="px-4">
                       <Trans>Provider account</Trans>

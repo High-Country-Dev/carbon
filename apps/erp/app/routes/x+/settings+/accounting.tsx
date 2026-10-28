@@ -28,7 +28,7 @@ import {
   toast,
   VStack
 } from "@carbon/react";
-import { INPUT_FORMAT, INPUT_STEP, redirect } from "@carbon/utils";
+import { BRAND_NAME, INPUT_FORMAT, INPUT_STEP, redirect } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
 import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import { useCallback } from "react";
@@ -304,14 +304,14 @@ export default function AccountingSettingsRoute() {
                   <span>
                     {legacyDocumentCount === null ? (
                       <Trans>
-                        Documents posted before Carbon kept journals have no
-                        journal.
+                        Documents posted before {BRAND_NAME} kept journals have
+                        no journal.
                       </Trans>
                     ) : (
                       <Plural
                         value={legacyDocumentCount}
-                        one="# document posted before Carbon kept journals has no journal."
-                        other="# documents posted before Carbon kept journals have no journal."
+                        one={`# document posted before ${BRAND_NAME} kept journals has no journal.`}
+                        other={`# documents posted before ${BRAND_NAME} kept journals have no journal.`}
                       />
                     )}
                   </span>

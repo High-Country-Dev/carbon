@@ -33,8 +33,8 @@ msgid "{0} customers"
 msgstr "{0} customers"
 
 #. placeholder {0}: unplanned .map( (m) => (m.job as { jobId?: string | null } | null)?.jobId ) .filter(Boolean) .join(", ")
-msgid "{0} has no lot number. Set it on the batch or job in Carbon, then complete."
-msgstr "{0} has no lot number. Set it on the batch or job in Carbon, then complete."
+msgid "{0} has no lot number. Set it on the batch or job in {BRAND_NAME}, then complete."
+msgstr "{0} has no lot number. Set it on the batch or job in {BRAND_NAME}, then complete."
 
 #. placeholder {0}: batchFacts.items.length
 msgid "{0} items"
@@ -339,9 +339,6 @@ msgstr "Cancel"
 msgid "Cancelled"
 msgstr "Cancelled"
 
-msgid "Carbon Logo"
-msgstr "Carbon Logo"
-
 msgid "Cards"
 msgstr "Cards"
 
@@ -372,8 +369,8 @@ msgstr "Choose an option"
 msgid "Choose avatar"
 msgstr "Choose avatar"
 
-msgid "Choose how Carbon reaches you."
-msgstr "Choose how Carbon reaches you."
+msgid "Choose how {BRAND_NAME} reaches you."
+msgstr "Choose how {BRAND_NAME} reaches you."
 
 msgid "Clear"
 msgstr "Clear"
@@ -829,8 +826,8 @@ msgstr "Heading {level}"
 msgid "Hide description"
 msgstr "Hide description"
 
-msgid "How Carbon looks in this browser."
-msgstr "How Carbon looks in this browser."
+msgid "How {BRAND_NAME} looks in this browser."
+msgstr "How {BRAND_NAME} looks in this browser."
 
 msgid "How many were actually picked?"
 msgstr "How many were actually picked?"
@@ -1079,8 +1076,8 @@ msgstr "Maintenance overdue"
 msgid "Make a replacement"
 msgstr "Make a replacement"
 
-msgid "Manage how you sign in to Carbon."
-msgstr "Manage how you sign in to Carbon."
+msgid "Manage how you sign in to {BRAND_NAME}."
+msgstr "Manage how you sign in to {BRAND_NAME}."
 
 msgid "Manually add items to inventory"
 msgstr "Manually add items to inventory"
@@ -1837,8 +1834,8 @@ msgstr "Selected"
 msgid "Send"
 msgstr "Send"
 
-msgid "Send to Carbon"
-msgstr "Send to Carbon"
+msgid "Send to {BRAND_NAME}"
+msgstr "Send to {BRAND_NAME}"
 
 msgid "Separate lots"
 msgstr "Separate lots"
@@ -1874,8 +1871,8 @@ msgstr "Set Clock Out"
 msgid "Set the time you stopped working, or acknowledge that you're still working."
 msgstr "Set the time you stopped working, or acknowledge that you're still working."
 
-msgid "Set up in Carbon"
-msgstr "Set up in Carbon"
+msgid "Set up in {BRAND_NAME}"
+msgstr "Set up in {BRAND_NAME}"
 
 msgid "Set up two-factor authentication"
 msgstr "Set up two-factor authentication"
@@ -2047,8 +2044,8 @@ msgstr "System"
 msgid "Tag"
 msgstr "Tag"
 
-msgid "The accent color used across Carbon."
-msgstr "The accent color used across Carbon."
+msgid "The accent color used across {BRAND_NAME}."
+msgstr "The accent color used across {BRAND_NAME}."
 
 msgid "The completed quantity for this operation is less than the required quantity of {targetQuantity}."
 msgstr "The completed quantity for this operation is less than the required quantity of {targetQuantity}."
@@ -2326,11 +2323,11 @@ msgstr "Yes, log scrap"
 msgid "You've been clocked in for {hoursElapsed} hours. Did you forget to clock out?"
 msgstr "You've been clocked in for {hoursElapsed} hours. Did you forget to clock out?"
 
-msgid "Your account isn't part of a company yet. Complete onboarding in the Carbon ERP to continue."
-msgstr "Your account isn't part of a company yet. Complete onboarding in the Carbon ERP to continue."
+msgid "Your account isn't part of a company yet. Complete onboarding in the {BRAND_NAME} ERP to continue."
+msgstr "Your account isn't part of a company yet. Complete onboarding in the {BRAND_NAME} ERP to continue."
 
-msgid "Your organization requires an authenticator app. Set it up in Carbon, then come back here."
-msgstr "Your organization requires an authenticator app. Set it up in Carbon, then come back here."
+msgid "Your organization requires an authenticator app. Set it up in{BRAND_NAME}, then come back here."
+msgstr "Your organization requires an authenticator app. Set it up in{BRAND_NAME}, then come back here."
 
 msgid "Your profile could not be loaded."
 msgstr "Your profile could not be loaded."

@@ -4,8 +4,9 @@
 
 import { CONTROLLED_ENVIRONMENT, SUPABASE_URL } from "@carbon/auth";
 import { isSignInBrowser } from "@carbon/auth/sign-in-browser.server";
-import { Button, Heading } from "@carbon/react";
-import { Trans, useLingui } from "@lingui/react/macro";
+import { BrandWordmark, Button, Heading } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
+import { Trans } from "@lingui/react/macro";
 import type { LoaderFunctionArgs } from "react-router";
 import {
   Link,
@@ -28,7 +29,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function ConfirmMagicLink() {
-  const { t } = useLingui();
   const { sameBrowser } = useLoaderData<typeof loader>();
   const [params] = useSearchParams();
   const navigate = useNavigate();
@@ -59,21 +59,16 @@ export default function ConfirmMagicLink() {
   return (
     <>
       <div className="flex justify-center mb-8">
-        <img
-          src={CONTROLLED_ENVIRONMENT ? "/flag.png" : "/carbon-mark-light.svg"}
-          className="w-24 dark:hidden"
-          alt={t`Carbon Logo`}
-        />
-        <img
-          src={CONTROLLED_ENVIRONMENT ? "/flag.png" : "/carbon-mark-dark.svg"}
-          className="w-24 hidden dark:block"
-          alt={t`Carbon Logo`}
-        />
+        {CONTROLLED_ENVIRONMENT ? (
+          <img src="/flag.png" alt={BRAND_NAME} className="w-24" />
+        ) : (
+          <BrandWordmark size="lg" />
+        )}
       </div>
       <div className="rounded-lg p-8 w-[380px]">
         <div className="flex flex-col items-center text-center">
           <Heading size="h3" className="tracking-tight">
-            <Trans>Sign in to Carbon</Trans>
+            <Trans>Sign in to {BRAND_NAME}</Trans>
           </Heading>
           {sameBrowser ? (
             <>

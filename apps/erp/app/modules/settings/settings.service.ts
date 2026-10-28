@@ -211,6 +211,7 @@ import { redis } from "@carbon/kv";
 import { getLogger } from "@carbon/logger";
 import type { JSONContent } from "@carbon/react";
 import {
+  BRAND_NAME,
   datetime,
   isInternalEmail,
   labelSizes,
@@ -4052,7 +4053,7 @@ export function oauthPopupResponse(
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex">
-<title>Carbon</title>
+<title>${BRAND_NAME}</title>
 </head>
 <body>
 <script>
@@ -4591,7 +4592,7 @@ export async function findOpenReleaseNotice(
     });
     return {
       data: null,
-      error: `Carbon couldn't read this release's earlier ${what}`
+      error: `${BRAND_NAME} couldn't read this release's earlier ${what}`
     };
   };
 
@@ -5280,7 +5281,7 @@ export async function pushOnshapePart(
   ]);
   if (byNumber.error || byId.error) {
     return panelReply(
-      { error: "Failed to read Carbon items" },
+      { error: `Failed to read ${BRAND_NAME} items` },
       { status: 500 }
     );
   }
@@ -5335,7 +5336,7 @@ export async function pushOnshapePart(
   );
   if (partRows.error) {
     return panelReply(
-      { error: "Failed to read Carbon parts" },
+      { error: `Failed to read ${BRAND_NAME} parts` },
       { status: 500 }
     );
   }
@@ -5798,7 +5799,7 @@ export async function pushOnshapeAssembly(
   );
   if (existing.error) {
     return panelReply(
-      { error: "Failed to read Carbon items" },
+      { error: `Failed to read ${BRAND_NAME} items` },
       { status: 500 }
     );
   }
@@ -5846,7 +5847,7 @@ export async function pushOnshapeAssembly(
   );
   if (heldParts.error) {
     return panelReply(
-      { error: "Failed to read Carbon parts" },
+      { error: `Failed to read ${BRAND_NAME} parts` },
       { status: 500 }
     );
   }
@@ -5868,7 +5869,7 @@ export async function pushOnshapeAssembly(
       summary.itemsReused += 1;
       if (planned.itemId === null) {
         summary.skipped.push(
-          `${partNumber}: added to Carbon since the review; reused as is`
+          `${partNumber}: added to ${BRAND_NAME} since the review; reused as is`
         );
       }
       // Only the row the review was about takes its values and edits.
@@ -6537,7 +6538,7 @@ export async function pushOnshapeAssembly(
   // A root released in Carbon keeps the link and model its release gave it.
   if (root.released) {
     summary.skipped.push(
-      `${root.partNumber}: released in Carbon as Rev ${root.released.revision}; its fields, link and model stay as its release left them`
+      `${root.partNumber}: released in ${BRAND_NAME} as Rev ${root.released.revision}; its fields, link and model stay as its release left them`
     );
     const childLinkProblems = await linkChildParts(client, serviceRole, {
       companyId,
@@ -7057,7 +7058,7 @@ export async function pushOnshapeRelease(
   );
   if (existing.error) {
     return panelReply(
-      { error: "Failed to read Carbon items" },
+      { error: `Failed to read ${BRAND_NAME} items` },
       { status: 500 }
     );
   }
@@ -7375,7 +7376,7 @@ export async function pushOnshapeRelease(
     const removed = await deleteItem(serviceRole, db, itemId, companyId);
     summary.errors.push(
       removed.error
-        ? `${label}: created but not added to change notice ${notice} (${staged.error}), and could not be removed (${removed.error.message}). Delete it in Carbon, then push again.`
+        ? `${label}: created but not added to change notice ${notice} (${staged.error}), and could not be removed (${removed.error.message}). Delete it in ${BRAND_NAME}, then push again.`
         : `${label}: not created, because it could not be added to change notice ${notice} (${staged.error}). Push again.`
     );
     return false;
@@ -7564,7 +7565,7 @@ export async function pushOnshapeRelease(
     }
     if (method.status === "Active") {
       summary.skipped.push(
-        `${label}: make method is released in Carbon, so its BOM was left as it is`
+        `${label}: make method is released in ${BRAND_NAME}, so its BOM was left as it is`
       );
       continue;
     }
@@ -7758,7 +7759,7 @@ export async function pushOnshapeRelease(
       return !!baseMethod && copiedKeysByBaseMethodId.has(baseMethod.id);
     });
     summary.errors.push(
-      `The released BOMs were not written: Carbon couldn't read what they replace (${bomReadFailure}). Push the release again.${
+      `The released BOMs were not written: ${BRAND_NAME} couldn't read what they replace (${bomReadFailure}). Push the release again.${
         carriesCopies
           ? " A revision this push created still carries its base revision's lines — check its bill of materials before pushing again."
           : ""
@@ -8004,7 +8005,7 @@ export async function pushOnshapeRelease(
         model
           ? `${drawing.partNumber}: drawing waits for ${model.partNumber}${
               model.revision ? ` Rev ${model.revision}` : ""
-            }, which isn't in Carbon; push its release first`
+            }, which isn't in ${BRAND_NAME}; push its release first`
           : `${drawing.partNumber}: drawing has no matching model item in this release`
       );
       continue;
@@ -8187,7 +8188,7 @@ export async function saveOnshapePropertyMap(
       fieldErrors.push({
         key: entry.onshapePropertyId,
         errors: [
-          `${others.join(", ")} already maps to this Carbon field. A Carbon field takes one property.`
+          `${others.join(", ")} already maps to this ${BRAND_NAME} field. A ${BRAND_NAME} field takes one property.`
         ]
       });
     }
@@ -8204,7 +8205,7 @@ export async function saveOnshapePropertyMap(
   ) {
     return panelReply(
       {
-        error: `${pushDefaults.unitOfMeasureCode} is not a unit of measure in Carbon`
+        error: `${pushDefaults.unitOfMeasureCode} is not a unit of measure in ${BRAND_NAME}`
       },
       { status: 422 }
     );
@@ -8254,7 +8255,7 @@ export async function saveOnshapePropertyMap(
       if (field === undefined || dataTypeId === undefined) {
         fieldErrors.push({
           key: entry.onshapePropertyId,
-          errors: ["The mapped Carbon field no longer exists"]
+          errors: [`The mapped ${BRAND_NAME} field no longer exists`]
         });
       } else if (
         Object.hasOwn(MAPPABLE_VALUE_TYPES, entry.valueType) &&
