@@ -5731,6 +5731,9 @@ msgstr "Действие по локализации"
 msgid "Content"
 msgstr "Содержание"
 
+msgid "Contents"
+msgstr ""
+
 msgid "Context"
 msgstr "Контекст"
 
@@ -25904,6 +25907,9 @@ msgstr "Просмотр контактного лица"
 
 msgid "View Contained Issues"
 msgstr "Просмотреть содержащиеся проблемы"
+
+msgid "View Contents"
+msgstr ""
 
 msgid "View Count"
 msgstr "Просмотр подсчета"
