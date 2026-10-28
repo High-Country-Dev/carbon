@@ -394,6 +394,22 @@ export const JobOperation = ({
       setParams({ trackedEntityId: entity.id });
     }
   });
+  // The running Labor/Machine timer the stop button would close out. Whether
+  // it is a batch timer comes from the event itself, as on the server
+  // (stopNeedsCloseOut), not from today's batch membership.
+  const closeOutEvent =
+    eventType === "Labor"
+      ? laborProductionEvent
+      : eventType === "Machine"
+        ? machineProductionEvent
+        : undefined;
+  const stopNeedsCloseOut =
+    !!closeOutEvent &&
+    requiresCloseOut({
+      type: eventType as (typeof productionEventType)[number],
+      isBatched: !!closeOutEvent.jobOperationBatchId
+    });
+
   // Batch mode: the selected material's outstanding requirement ACROSS the
   // batch — the shared pick is split pro-rata over every member, so defaulting
   // to one member's share would under-serve all of them.
@@ -2618,14 +2634,7 @@ export const JobOperation = ({
                   }
                   trackedEntityId={trackedEntityId}
                   batchId={batch?.id}
-                  onStop={
-                    requiresCloseOut({
-                      type: eventType as (typeof productionEventType)[number],
-                      isBatched
-                    })
-                      ? closeOutModal.onOpen
-                      : undefined
-                  }
+                  onStop={stopNeedsCloseOut ? closeOutModal.onOpen : undefined}
                 />
                 {/* What the big button will do, or what is running — the dock
                     only; the rail and the phone bar stay icon-sized. */}
@@ -2903,20 +2912,14 @@ export const JobOperation = ({
         </Suspense>
       )}
       {closeOutModal.isOpen &&
-        (eventType === "Labor" || eventType === "Machine") &&
-        (eventType === "Labor"
-          ? laborProductionEvent
-          : machineProductionEvent) && (
+        closeOutEvent &&
+        (eventType === "Labor" || eventType === "Machine") && (
           <Suspense key={`close-out-modal-${operationId}`}>
             <Await resolve={procedure}>
               {(resolvedProcedure) => (
                 <CloseOutModal
                   eventType={eventType}
-                  event={
-                    (eventType === "Labor"
-                      ? laborProductionEvent
-                      : machineProductionEvent)!
-                  }
+                  event={closeOutEvent}
                   operation={operation}
                   setupProductionEvent={setupProductionEvent}
                   laborProductionEvent={laborProductionEvent}

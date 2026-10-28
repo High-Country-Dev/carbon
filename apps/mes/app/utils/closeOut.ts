@@ -11,16 +11,15 @@
 type WorkType = "Setup" | "Labor" | "Machine";
 
 type StepRecordValues = {
-  value: string | null;
-  numericValue: number | null;
-  booleanValue: boolean | null;
-  userValue: string | null;
+  value?: string | null;
+  numericValue?: number | null;
+  booleanValue?: boolean | null;
+  userValue?: string | null;
 };
 
 type ProcedureStep = {
-  name: string;
-  required: boolean | null;
-  jobOperationStepRecord: StepRecordValues[] | null;
+  required?: boolean | null;
+  jobOperationStepRecord?: StepRecordValues[] | null;
 };
 
 /**
@@ -40,10 +39,10 @@ export function requiresCloseOut({
 
 function hasRecordedValue(record: StepRecordValues) {
   return (
-    record.value !== null ||
-    record.numericValue !== null ||
-    record.booleanValue !== null ||
-    record.userValue !== null
+    record.value != null ||
+    record.numericValue != null ||
+    record.booleanValue != null ||
+    record.userValue != null
   );
 }
 

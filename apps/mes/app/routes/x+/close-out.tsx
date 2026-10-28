@@ -28,7 +28,9 @@ const logger = getLogger("mes", "close-out");
 /**
  * Stops a Labor or Machine timer on the Operation view with its close-out
  * answers (see `closeOutValidator`). Every check runs before the first write,
- * then, in order: the scrap posting, the stop, and finishing the operation.
+ * then, in order: the stop, the scrap posting, and finishing the operation.
+ * These are separate writes, as in the Scrap and Mark as Done routes; a
+ * failure after the stop is reported with what is left to do by hand.
  */
 export async function action({ request }: ActionFunctionArgs) {
   assertIsPost(request);
@@ -87,10 +89,38 @@ export async function action({ request }: ActionFunctionArgs) {
     if (refusal) return refused(refusal);
   }
 
+  // The stop goes first: once it lands the modal closes, so a retry can never
+  // post the scrap a second time.
+  const stopped = await stopTimer({
+    request,
+    client,
+    companyId,
+    userId,
+    id,
+    event: event.data
+  });
+  if ("refusal" in stopped) {
+    logger.error("Close-out stop failed", {
+      companyId,
+      jobOperationId,
+      refusal: stopped.refusal,
+      error: stopped.cause
+    });
+    return refused(stopped.refusal, stopped.cause ?? null);
+  }
+
+  // From here the timer is stopped: a later failure closes the modal (a retry
+  // would only hit "already ended") and the flash says what to do by hand.
+  const stoppedButFailed = async (message: string, cause: unknown) =>
+    data(
+      { closedOut: true as const },
+      await flash(request, error(cause, message))
+    );
+
   let newTrackedEntityId: string | undefined;
   if (scrapped === "yes") {
-    // The same posting as Scrap in More actions (x+/scrap.tsx), recorded while
-    // the timer is still running so the scrap links to its events.
+    // The same posting as Scrap in More actions (x+/scrap.tsx), linked to the
+    // operation's events.
     const issued = await erpPosting(
       "issue",
       { companyId, userId },
@@ -112,37 +142,15 @@ export async function action({ request }: ActionFunctionArgs) {
         jobOperationId,
         error: issued.error
       });
-      return refused(
-        issued.error.message ||
-          "Failed to record scrap. The timer is still running.",
+      return stoppedButFailed(
+        finished
+          ? "The timer stopped, but the scrap was not recorded, so the operation was left open. Log it from More actions → Scrap, then Mark as Done."
+          : "The timer stopped, but the scrap was not recorded. Log it from More actions → Scrap.",
         issued.error
       );
     }
     const spawned = issued.data?.newTrackedEntityId;
     newTrackedEntityId = typeof spawned === "string" ? spawned : undefined;
-  }
-
-  const stopped = await stopTimer({
-    request,
-    client,
-    companyId,
-    userId,
-    id,
-    event: event.data
-  });
-  if ("refusal" in stopped) {
-    logger.error("Close-out stop failed", {
-      companyId,
-      jobOperationId,
-      refusal: stopped.refusal,
-      error: stopped.cause
-    });
-    return refused(
-      scrapped === "yes"
-        ? `Scrap was recorded, but the timer did not stop: ${stopped.refusal}`
-        : stopped.refusal,
-      stopped.cause ?? null
-    );
   }
 
   if (!finished) {
@@ -152,6 +160,7 @@ export async function action({ request }: ActionFunctionArgs) {
     );
   }
 
+  // Done also ends the operation's other open timers (sync_finish_job_operation).
   const finish = await finishJobOperation(serviceRole, {
     jobOperationId,
     userId,
@@ -163,7 +172,7 @@ export async function action({ request }: ActionFunctionArgs) {
       jobOperationId,
       error: finish.error
     });
-    return refused(
+    return stoppedButFailed(
       "The timer stopped, but the operation could not be marked done. Use Mark as Done in More actions.",
       finish.error
     );

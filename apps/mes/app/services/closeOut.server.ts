@@ -207,9 +207,11 @@ export async function getFinishRefusal(
     ]
   });
   if (isBlocked(ruleEval.violations, true)) {
-    return (
-      ruleEval.violations[0]?.message ?? "A business rule blocks finishing"
-    );
+    // Name the rule that blocked: an error, not a warning that sorted first.
+    const blocking =
+      ruleEval.violations.find((v) => v.severity === "error") ??
+      ruleEval.violations[0];
+    return blocking?.message ?? "A business rule blocks finishing";
   }
   return null;
 }
