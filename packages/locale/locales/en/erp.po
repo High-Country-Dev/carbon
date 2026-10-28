@@ -5711,6 +5711,9 @@ msgstr "Containment action"
 msgid "Content"
 msgstr "Content"
 
+msgid "Contents"
+msgstr "Contents"
+
 msgid "Context"
 msgstr "Context"
 
@@ -25842,6 +25845,9 @@ msgstr "View Contact"
 
 msgid "View Contained Issues"
 msgstr "View Contained Issues"
+
+msgid "View Contents"
+msgstr "View Contents"
 
 msgid "View Count"
 msgstr "View Count"

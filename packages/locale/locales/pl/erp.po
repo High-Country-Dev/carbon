@@ -5711,6 +5711,9 @@ msgstr "Działanie zabezpieczające"
 msgid "Content"
 msgstr "Zawartość"
 
+msgid "Contents"
+msgstr ""
+
 msgid "Context"
 msgstr "Kontekst"
 
@@ -25842,6 +25845,9 @@ msgstr "Wyświetl Kontakt"
 
 msgid "View Contained Issues"
 msgstr "Wyświetl zawarte problemy"
+
+msgid "View Contents"
+msgstr ""
 
 msgid "View Count"
 msgstr "Wyświetl Liczenie"

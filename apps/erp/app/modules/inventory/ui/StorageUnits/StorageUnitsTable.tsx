@@ -33,12 +33,13 @@ import {
   LuChevronRight,
   LuLayers,
   LuMapPin,
+  LuPackageSearch,
   LuPencil,
   LuPlus,
   LuPrinter,
   LuTrash
 } from "react-icons/lu";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Hyperlink, New, Table } from "~/components";
 import { Enumerable } from "~/components/Enumerable";
 import { useLocations } from "~/components/Form/Location";
@@ -469,6 +470,25 @@ const StorageUnitsTable = memo(
         },
 
         {
+          id: "contents",
+          header: t`Contents`,
+          cell: ({ row }) => (
+            <Button
+              variant="secondary"
+              size="sm"
+              leftIcon={<LuPackageSearch />}
+              asChild
+            >
+              <Link to={getContentsPath(row.original)}>
+                <Trans>View Contents</Trans>
+              </Link>
+            </Button>
+          ),
+          meta: {
+            icon: <LuPackageSearch />
+          }
+        },
+        {
           accessorKey: "active",
           header: t`Active`,
           cell: (item) => <Checkbox isChecked={item.getValue<boolean>()} />,
@@ -612,6 +632,14 @@ const StorageUnitsTable = memo(
             >
               <MenuIcon icon={<LuPencil />} />
               <Trans>Edit Storage Unit</Trans>
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                navigate(getContentsPath(row));
+              }}
+            >
+              <MenuIcon icon={<LuPackageSearch />} />
+              <Trans>View Contents</Trans>
             </MenuItem>
             <MenuItem
               disabled={!permissions.can("create", "inventory")}
@@ -767,6 +795,16 @@ function StorageUnitDownloadModal({
       onClose={onClose}
     />
   );
+}
+
+// Inventory Quantities filtered to one bin (its child bins included: the
+// quantities loader expands the filter to descendants).
+function getContentsPath(storageUnit: StorageUnit) {
+  const params = new URLSearchParams({
+    filter: `storageUnitIds:contains:${storageUnit.id}`
+  });
+  if (storageUnit.locationId) params.set("location", storageUnit.locationId);
+  return `${path.to.inventory}?${params.toString()}`;
 }
 
 function getLocationPath(locationId: string) {

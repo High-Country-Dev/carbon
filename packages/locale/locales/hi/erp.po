@@ -5711,6 +5711,9 @@ msgstr "नियंत्रण कार्रवाई"
 msgid "Content"
 msgstr "सामग्री"
 
+msgid "Contents"
+msgstr ""
+
 msgid "Context"
 msgstr "संदर्भ"
 
@@ -25842,6 +25845,9 @@ msgstr "संपर्क देखें"
 
 msgid "View Contained Issues"
 msgstr "नियंत्रित समस्याओं को देखें"
+
+msgid "View Contents"
+msgstr ""
 
 msgid "View Count"
 msgstr "गणना देखें"

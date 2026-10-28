@@ -5711,6 +5711,9 @@ msgstr "封じ込め対策"
 msgid "Content"
 msgstr "コンテンツ"
 
+msgid "Contents"
+msgstr ""
+
 msgid "Context"
 msgstr "コンテキスト"
 
@@ -25842,6 +25845,9 @@ msgstr "担当者を表示"
 
 msgid "View Contained Issues"
 msgstr "含まれた問題を表示"
+
+msgid "View Contents"
+msgstr ""
 
 msgid "View Count"
 msgstr "カウントを表示"
