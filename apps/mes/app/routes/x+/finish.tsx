@@ -10,6 +10,7 @@ import { validationError, validator } from "@carbon/form";
 import { redirect } from "@carbon/utils";
 import type { ActionFunctionArgs } from "react-router";
 import { data } from "react-router";
+import { getFinishRefusal } from "~/services/closeOut.server";
 import { finishValidator } from "~/services/models";
 import { finishJobOperation } from "~/services/operations.service";
 import { readOrigin } from "~/utils/origin";
@@ -25,6 +26,17 @@ export async function action({ request }: ActionFunctionArgs) {
 
   if (validation.error) {
     return validationError(validation.error);
+  }
+
+  // Required steps and blocking business rules hold the operation open.
+  const refusal = await getFinishRefusal(serviceRole, {
+    operationId: validation.data.jobOperationId,
+    companyId,
+    userId,
+    quantity: 0
+  });
+  if (refusal) {
+    return data({}, await flash(request, error(null, refusal)));
   }
 
   const finishOperation = await finishJobOperation(serviceRole, {

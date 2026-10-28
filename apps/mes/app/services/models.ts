@@ -203,6 +203,47 @@ export const productionEventValidator = z.object({
   jobOperationBatchId: zfd.text(z.string().optional())
 });
 
+// Stopping a Labor/Machine timer on the Operation view (see utils/closeOut.ts):
+// the operator must say whether anything was scrapped (with quantity and reason)
+// and whether the operation is finished. `x+/close-out.tsx` does the writes.
+export const closeOutValidator = z
+  .object({
+    id: z.string().min(1, { message: "No running timer" }),
+    jobOperationId: z.string().min(1),
+    type: z.enum(["Labor", "Machine"]),
+    trackedEntityId: zfd.text(z.string().optional()),
+    trackingType: z.enum(["Serial", "Batch", ""]).optional(),
+    setupProductionEventId: zfd.text(z.string().optional()),
+    laborProductionEventId: zfd.text(z.string().optional()),
+    machineProductionEventId: zfd.text(z.string().optional()),
+    scrapped: z.enum(["yes", "no"], {
+      error: "Say whether anything was scrapped"
+    }),
+    scrapQuantity: zfd.numeric(z.number().optional()),
+    scrapReasonId: zfd.text(z.string().optional()),
+    notes: zfd.text(z.string().optional()),
+    outcome: z.enum(["finished", "inProgress"], {
+      error: "Say whether the operation is finished"
+    })
+  })
+  .superRefine((value, ctx) => {
+    if (value.scrapped !== "yes") return;
+    if (!value.scrapQuantity || value.scrapQuantity <= 0) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["scrapQuantity"],
+        message: "Enter how many were scrapped"
+      });
+    }
+    if (!value.scrapReasonId) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["scrapReasonId"],
+        message: "Scrap reason is required"
+      });
+    }
+  });
+
 export const finishValidator = z.object({
   jobOperationId: z.string(),
   setupProductionEventId: zfd.text(z.string().optional()),

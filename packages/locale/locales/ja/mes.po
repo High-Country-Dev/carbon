@@ -63,6 +63,10 @@ msgstr "{0} / {1} 完了"
 msgid "{0} of {1} completed"
 msgstr "{0} / {1} 完了済み"
 
+#. placeholder {0}: operation.quantityComplete
+msgid "{0} of {targetQuantity} completed"
+msgstr ""
+
 #. placeholder {0}: rows.length
 msgid "{0} queued"
 msgstr "{0}件がキュー待ちです"
@@ -109,6 +113,9 @@ msgstr "🚨 お知らせ：{0}にアカウントが erp.try.carbon.ms に移行
 
 msgid "A previous completion did not finish. Retrying resumes the remaining steps — quantities are not double-counted."
 msgstr "前回の完了は終了しませんでした。再試行により残りのステップが再開されます。数量は二重計算されません。"
+
+msgid "A replacement serial number will be created."
+msgstr ""
 
 msgid "About"
 msgstr "バージョン情報"
@@ -201,6 +208,10 @@ msgstr "不合格ユニットを割り当てる"
 
 msgid "Allocate units"
 msgstr "ユニットを割り当てる"
+
+#. placeholder {0}: operation.itemReadableId
+msgid "Answer both questions to log your time on {0}."
+msgstr ""
 
 msgid "Appearance"
 msgstr "外観"
@@ -546,6 +557,9 @@ msgstr "説明"
 msgid "Details"
 msgstr "詳細"
 
+msgid "Did you scrap anything?"
+msgstr ""
+
 msgid "Dismiss"
 msgstr "閉じる"
 
@@ -769,6 +783,12 @@ msgstr "アカウントのセットアップを完了する"
 msgid "Finish with material unpicked?"
 msgstr "材料がピッキングされていない状態で終了しますか?"
 
+msgid "Finished"
+msgstr ""
+
+msgid "Finishing marks the operation done with fewer than planned. Log completed parts first if you made more."
+msgstr ""
+
 #. placeholder {0}: formatRelativeTime( convertDateStringToIsoString(batchFacts.dueDate) )
 msgid "First due {0}"
 msgstr "最初の期日 {0}"
@@ -799,6 +819,9 @@ msgstr "操作に戻る"
 
 msgid "Go to onboarding"
 msgstr "オンボーディングに移動"
+
+msgid "Go to steps"
+msgstr ""
 
 msgid "Heading {level}"
 msgstr "見出し {level}"
@@ -879,6 +902,9 @@ msgstr "が次と等しい"
 msgid "is any of"
 msgstr "が次のいずれか"
 
+msgid "Is this operation finished?"
+msgstr ""
+
 msgid "Issue"
 msgstr "払出"
 
@@ -924,11 +950,17 @@ msgstr "ナビゲーションを開いたままにする"
 msgid "Keep picking"
 msgstr "ピッキングを続ける"
 
+msgid "Keep running"
+msgstr ""
+
 msgid "Keyboard shortcuts"
 msgstr "キーボード ショートカット"
 
 msgid "Kit"
 msgstr "キット"
+
+msgid "labor"
+msgstr ""
 
 msgid "Labor"
 msgstr "労務"
@@ -1022,6 +1054,9 @@ msgstr "ロット番号がありません"
 
 msgid "Lot tracked"
 msgstr "ロット追跡対象"
+
+msgid "machine"
+msgstr ""
 
 msgid "Machine"
 msgstr "機械"
@@ -1237,6 +1272,9 @@ msgstr "サンプルは必要ありません。"
 
 msgid "No scheduled time"
 msgstr "予定時間なし"
+
+msgid "No scrap"
+msgstr ""
 
 msgid "No serial numbers"
 msgstr "シリアル番号なし"
@@ -1580,6 +1618,10 @@ msgstr "記録のみ"
 msgid "Record Partial"
 msgstr "一部を記録"
 
+#. placeholder {0}: missingSteps.join(", ")
+msgid "Record these steps before marking the operation done: {0}"
+msgstr ""
+
 msgid "Recorded"
 msgstr "記録済"
 
@@ -1627,6 +1669,9 @@ msgstr "サインイン時に認証器アプリからの6桁コードが必要�
 
 msgid "Required"
 msgstr "必須"
+
+msgid "Required steps are not recorded"
+msgstr ""
 
 msgid "Reset"
 msgstr "リセット"
@@ -1945,6 +1990,18 @@ msgstr "ステップ"
 msgid "Steps are missing"
 msgstr "ステップが未記録です"
 
+msgid "Still in progress"
+msgstr ""
+
+msgid "Stop {workType} timer"
+msgstr ""
+
+msgid "Stop and finish"
+msgstr ""
+
+msgid "Stop timer"
+msgstr ""
+
 msgid "Storage Unit"
 msgstr "保管ユニット"
 
@@ -2262,6 +2319,9 @@ msgstr "メモを書く…"
 
 msgid "Yes"
 msgstr "はい"
+
+msgid "Yes, log scrap"
+msgstr ""
 
 msgid "You've been clocked in for {hoursElapsed} hours. Did you forget to clock out?"
 msgstr "作業開始から{hoursElapsed}時間が経過しています。作業終了を忘れていませんか？"

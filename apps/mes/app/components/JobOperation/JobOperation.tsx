@@ -140,6 +140,7 @@ import type {
   TrackedInput
 } from "~/services/types";
 import { useItems } from "~/stores";
+import { missingRequiredSteps, requiresCloseOut } from "~/utils/closeOut";
 import { makeDurations } from "~/utils/durations";
 import { useOrigin } from "~/utils/origin";
 import { getPrivateUrl, getRawModelUrl, path } from "~/utils/path";
@@ -148,6 +149,7 @@ import { MesAppBar } from "../MesAppBar";
 import { BatchCompleteModal } from "./components/BatchCompleteModal";
 import { BatchOverview } from "./components/BatchOverview";
 import { OperationChat } from "./components/Chat";
+import { CloseOutModal } from "./components/CloseOutModal";
 import {
   Controls,
   IconButtonWithTooltip,
@@ -337,6 +339,7 @@ export const JobOperation = ({
   const attributeRecordDeleteModal = useDisclosure();
   const maintenanceModal = useDisclosure();
   const qualityIssueModal = useDisclosure();
+  const closeOutModal = useDisclosure();
   const [activeStep, setActiveStep] = useState(
     parentIsSerial ? serialIndex : 0
   );
@@ -391,6 +394,22 @@ export const JobOperation = ({
       setParams({ trackedEntityId: entity.id });
     }
   });
+  // The running Labor/Machine timer the stop button would close out. Whether
+  // it is a batch timer comes from the event itself, as on the server
+  // (stopNeedsCloseOut), not from today's batch membership.
+  const closeOutEvent =
+    eventType === "Labor"
+      ? laborProductionEvent
+      : eventType === "Machine"
+        ? machineProductionEvent
+        : undefined;
+  const stopNeedsCloseOut =
+    !!closeOutEvent &&
+    requiresCloseOut({
+      type: eventType as (typeof productionEventType)[number],
+      isBatched: !!closeOutEvent.jobOperationBatchId
+    });
+
   // Batch mode: the selected material's outstanding requirement ACROSS the
   // batch — the shared pick is split pro-rata over every member, so defaulting
   // to one member's share would under-serve all of them.
@@ -2615,6 +2634,7 @@ export const JobOperation = ({
                   }
                   trackedEntityId={trackedEntityId}
                   batchId={batch?.id}
+                  onStop={stopNeedsCloseOut ? closeOutModal.onOpen : undefined}
                 />
                 {/* What the big button will do, or what is running — the dock
                     only; the rail and the phone bar stay icon-sized. */}
@@ -2891,18 +2911,51 @@ export const JobOperation = ({
           </Await>
         </Suspense>
       )}
+      {closeOutModal.isOpen &&
+        closeOutEvent &&
+        (eventType === "Labor" || eventType === "Machine") && (
+          <Suspense key={`close-out-modal-${operationId}`}>
+            <Await resolve={procedure}>
+              {(resolvedProcedure) => (
+                <CloseOutModal
+                  eventType={eventType}
+                  event={closeOutEvent}
+                  operation={operation}
+                  setupProductionEvent={setupProductionEvent}
+                  laborProductionEvent={laborProductionEvent}
+                  machineProductionEvent={machineProductionEvent}
+                  parentIsSerial={!!parentIsSerial}
+                  parentIsBatch={!!parentIsBatch}
+                  trackedEntityId={trackedEntityId}
+                  trackedEntityReadableId={
+                    trackedEntities.find(
+                      (entity) => entity.id === trackedEntityId
+                    )?.readableId ?? undefined
+                  }
+                  missingSteps={missingRequiredSteps(
+                    resolvedProcedure.attributes
+                  ).map((step) => step.name)}
+                  onReviewSteps={() => {
+                    closeOutModal.onClose();
+                    setActiveTab("procedure");
+                  }}
+                  onClose={closeOutModal.onClose}
+                />
+              )}
+            </Await>
+          </Suspense>
+        )}
       {finishModal.isOpen && (
         <Suspense key={`finish-modal-${operationId}`}>
           <Await resolve={procedure}>
             {(resolvedProcedure) => {
-              const { attributes } = resolvedProcedure;
-              const allStepsRecorded = attributes.every(
-                (a) => a.jobOperationStepRecord !== null
-              );
+              const missingSteps = missingRequiredSteps(
+                resolvedProcedure.attributes
+              ).map((step) => step.name);
               return (
                 <QuantityModal
                   type="finish"
-                  allStepsRecorded={allStepsRecorded}
+                  missingSteps={missingSteps}
                   laborProductionEvent={laborProductionEvent}
                   machineProductionEvent={machineProductionEvent}
                   operation={operation}

@@ -63,6 +63,10 @@ msgstr "{0} из {1} завершено"
 msgid "{0} of {1} completed"
 msgstr "{0} из {1} завершено"
 
+#. placeholder {0}: operation.quantityComplete
+msgid "{0} of {targetQuantity} completed"
+msgstr ""
+
 #. placeholder {0}: rows.length
 msgid "{0} queued"
 msgstr "{0} в очереди"
@@ -109,6 +113,9 @@ msgstr "🚨 Внимание: {0} ваша учётная запись буде
 
 msgid "A previous completion did not finish. Retrying resumes the remaining steps — quantities are not double-counted."
 msgstr "Предыдущее выполнение не завершилось. Повторное выполнение возобновляет оставшиеся шаги — количество не учитывается дважды."
+
+msgid "A replacement serial number will be created."
+msgstr ""
 
 msgid "About"
 msgstr "О системе"
@@ -201,6 +208,10 @@ msgstr "Распределить неудачные единицы"
 
 msgid "Allocate units"
 msgstr "Распределить единицы"
+
+#. placeholder {0}: operation.itemReadableId
+msgid "Answer both questions to log your time on {0}."
+msgstr ""
 
 msgid "Appearance"
 msgstr "Внешний вид"
@@ -546,6 +557,9 @@ msgstr "Описание"
 msgid "Details"
 msgstr "Детали"
 
+msgid "Did you scrap anything?"
+msgstr ""
+
 msgid "Dismiss"
 msgstr "Отклонить"
 
@@ -769,6 +783,12 @@ msgstr "Завершите настройку вашего аккаунта"
 msgid "Finish with material unpicked?"
 msgstr "Завершить с неподобранным материалом?"
 
+msgid "Finished"
+msgstr ""
+
+msgid "Finishing marks the operation done with fewer than planned. Log completed parts first if you made more."
+msgstr ""
+
 #. placeholder {0}: formatRelativeTime( convertDateStringToIsoString(batchFacts.dueDate) )
 msgid "First due {0}"
 msgstr "Первый срок {0}"
@@ -799,6 +819,9 @@ msgstr "Вернуться к операции"
 
 msgid "Go to onboarding"
 msgstr "Перейти к первоначальной настройке"
+
+msgid "Go to steps"
+msgstr ""
 
 msgid "Heading {level}"
 msgstr "Заголовок {level}"
@@ -879,6 +902,9 @@ msgstr "равно"
 msgid "is any of"
 msgstr "любое из"
 
+msgid "Is this operation finished?"
+msgstr ""
+
 msgid "Issue"
 msgstr "Выдать"
 
@@ -924,11 +950,17 @@ msgstr "Не сворачивать навигацию"
 msgid "Keep picking"
 msgstr "Продолжить отбор"
 
+msgid "Keep running"
+msgstr ""
+
 msgid "Keyboard shortcuts"
 msgstr "Клавиатурные сокращения"
 
 msgid "Kit"
 msgstr "Комплект"
+
+msgid "labor"
+msgstr ""
 
 msgid "Labor"
 msgstr "Трудозатраты"
@@ -1022,6 +1054,9 @@ msgstr "Номера партий отсутствуют"
 
 msgid "Lot tracked"
 msgstr "Партия отслежена"
+
+msgid "machine"
+msgstr ""
 
 msgid "Machine"
 msgstr "Станок"
@@ -1237,6 +1272,9 @@ msgstr "Образцы не требуются."
 
 msgid "No scheduled time"
 msgstr "Нет запланированного времени"
+
+msgid "No scrap"
+msgstr ""
 
 msgid "No serial numbers"
 msgstr "Нет серийных номеров"
@@ -1580,6 +1618,10 @@ msgstr "Только записать"
 msgid "Record Partial"
 msgstr "Записать частичный результат"
 
+#. placeholder {0}: missingSteps.join(", ")
+msgid "Record these steps before marking the operation done: {0}"
+msgstr ""
+
 msgid "Recorded"
 msgstr "Записано"
 
@@ -1627,6 +1669,9 @@ msgstr "Требуется 6-значный код из приложения а�
 
 msgid "Required"
 msgstr "Требуется"
+
+msgid "Required steps are not recorded"
+msgstr ""
 
 msgid "Reset"
 msgstr "Сбросить"
@@ -1945,6 +1990,18 @@ msgstr "Шаги"
 msgid "Steps are missing"
 msgstr "Шаги не заполнены"
 
+msgid "Still in progress"
+msgstr ""
+
+msgid "Stop {workType} timer"
+msgstr ""
+
+msgid "Stop and finish"
+msgstr ""
+
+msgid "Stop timer"
+msgstr ""
+
 msgid "Storage Unit"
 msgstr "Единица хранения"
 
@@ -2262,6 +2319,9 @@ msgstr "Напишите примечание…"
 
 msgid "Yes"
 msgstr "Да"
+
+msgid "Yes, log scrap"
+msgstr ""
 
 msgid "You've been clocked in for {hoursElapsed} hours. Did you forget to clock out?"
 msgstr "Вы находились на работе {hoursElapsed} часов. Вы забыли записать окончание работы?"
