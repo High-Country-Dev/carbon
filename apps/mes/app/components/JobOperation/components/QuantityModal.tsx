@@ -44,13 +44,14 @@ import ScrapReason from "./ScrapReason";
 
 // Fractional quantities for weight/length UoMs, capped at the 2 decimals
 // jobOperation.quantityComplete/Scrapped/Reworked store.
-const QUANTITY_FORMAT_OPTIONS: Intl.NumberFormatOptions = {
+export const QUANTITY_FORMAT_OPTIONS: Intl.NumberFormatOptions = {
   minimumFractionDigits: 0,
   maximumFractionDigits: 2
 };
 
 export function QuantityModal({
   allStepsRecorded = true,
+  missingSteps = [],
   laborProductionEvent,
   machineProductionEvent,
   materials = [],
@@ -63,7 +64,10 @@ export function QuantityModal({
   type,
   onClose
 }: {
+  // Soft warning only (Assembly/Inspection views: every step for this unit).
   allStepsRecorded?: boolean;
+  /** Required steps with nothing recorded; they block finishing. */
+  missingSteps?: string[];
   laborProductionEvent: ProductionEvent | undefined;
   machineProductionEvent: ProductionEvent | undefined;
   materials?: JobMaterial[];
@@ -253,19 +257,36 @@ export function QuantityModal({
                   </AlertDescription>
                 </Alert>
               )}
-              {type === "finish" && !allStepsRecorded && (
+              {type === "finish" && missingSteps.length > 0 && (
                 <Alert variant="destructive">
                   <LuTriangleAlert className="h-4 w-4" />
                   <AlertTitle>
-                    <Trans>Steps are missing</Trans>
+                    <Trans>Required steps are not recorded</Trans>
                   </AlertTitle>
                   <AlertDescription>
                     <Trans>
-                      Please record all steps for this operation before closing.
+                      Record these steps before marking the operation done:{" "}
+                      {missingSteps.join(", ")}
                     </Trans>
                   </AlertDescription>
                 </Alert>
               )}
+              {type === "finish" &&
+                missingSteps.length === 0 &&
+                !allStepsRecorded && (
+                  <Alert variant="destructive">
+                    <LuTriangleAlert className="h-4 w-4" />
+                    <AlertTitle>
+                      <Trans>Steps are missing</Trans>
+                    </AlertTitle>
+                    <AlertDescription>
+                      <Trans>
+                        Please record all steps for this operation before
+                        closing.
+                      </Trans>
+                    </AlertDescription>
+                  </Alert>
+                )}
               {type !== "finish" && (
                 <div className="flex items-end gap-2 w-full">
                   <div className="flex-grow">
@@ -360,6 +381,7 @@ export function QuantityModal({
               isLoading={isSubmitting}
               disabled={
                 isSubmitting ||
+                (type === "finish" && missingSteps.length > 0) ||
                 (type === "complete" &&
                   hasUnissuedTrackedMaterials &&
                   !confirmedUnissued)

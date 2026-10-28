@@ -63,6 +63,10 @@ msgstr "{0} of {1} complete"
 msgid "{0} of {1} completed"
 msgstr "{0} of {1} completed"
 
+#. placeholder {0}: operation.quantityComplete
+msgid "{0} of {targetQuantity} completed"
+msgstr "{0} of {targetQuantity} completed"
+
 #. placeholder {0}: rows.length
 msgid "{0} queued"
 msgstr "{0} queued"
@@ -109,6 +113,9 @@ msgstr "🚨 Heads up: on {0} your account will be moved to erp.try.carbon.ms"
 
 msgid "A previous completion did not finish. Retrying resumes the remaining steps — quantities are not double-counted."
 msgstr "A previous completion did not finish. Retrying resumes the remaining steps — quantities are not double-counted."
+
+msgid "A replacement serial number will be created."
+msgstr "A replacement serial number will be created."
 
 msgid "About"
 msgstr "About"
@@ -201,6 +208,10 @@ msgstr "Allocate failed units"
 
 msgid "Allocate units"
 msgstr "Allocate units"
+
+#. placeholder {0}: operation.itemReadableId
+msgid "Answer both questions to log your time on {0}."
+msgstr "Answer both questions to log your time on {0}."
 
 msgid "Appearance"
 msgstr "Appearance"
@@ -546,6 +557,9 @@ msgstr "Description"
 msgid "Details"
 msgstr "Details"
 
+msgid "Did you scrap anything?"
+msgstr "Did you scrap anything?"
+
 msgid "Dismiss"
 msgstr "Dismiss"
 
@@ -769,6 +783,12 @@ msgstr "Finish setting up your account"
 msgid "Finish with material unpicked?"
 msgstr "Finish with material unpicked?"
 
+msgid "Finished"
+msgstr "Finished"
+
+msgid "Finishing marks the operation done with fewer than planned. Log completed parts first if you made more."
+msgstr "Finishing marks the operation done with fewer than planned. Log completed parts first if you made more."
+
 #. placeholder {0}: formatRelativeTime( convertDateStringToIsoString(batchFacts.dueDate) )
 msgid "First due {0}"
 msgstr "First due {0}"
@@ -799,6 +819,9 @@ msgstr "Go back to operation"
 
 msgid "Go to onboarding"
 msgstr "Go to onboarding"
+
+msgid "Go to steps"
+msgstr "Go to steps"
 
 msgid "Heading {level}"
 msgstr "Heading {level}"
@@ -879,6 +902,9 @@ msgstr "is"
 msgid "is any of"
 msgstr "is any of"
 
+msgid "Is this operation finished?"
+msgstr "Is this operation finished?"
+
 msgid "Issue"
 msgstr "Issue"
 
@@ -924,11 +950,17 @@ msgstr "Keep navigation open"
 msgid "Keep picking"
 msgstr "Keep picking"
 
+msgid "Keep running"
+msgstr "Keep running"
+
 msgid "Keyboard shortcuts"
 msgstr "Keyboard shortcuts"
 
 msgid "Kit"
 msgstr "Kit"
+
+msgid "labor"
+msgstr "labor"
 
 msgid "Labor"
 msgstr "Labor"
@@ -1022,6 +1054,9 @@ msgstr "Lot numbers missing"
 
 msgid "Lot tracked"
 msgstr "Lot tracked"
+
+msgid "machine"
+msgstr "machine"
 
 msgid "Machine"
 msgstr "Machine"
@@ -1237,6 +1272,9 @@ msgstr "No samples required."
 
 msgid "No scheduled time"
 msgstr "No scheduled time"
+
+msgid "No scrap"
+msgstr "No scrap"
 
 msgid "No serial numbers"
 msgstr "No serial numbers"
@@ -1580,6 +1618,10 @@ msgstr "Record only"
 msgid "Record Partial"
 msgstr "Record Partial"
 
+#. placeholder {0}: missingSteps.join(", ")
+msgid "Record these steps before marking the operation done: {0}"
+msgstr "Record these steps before marking the operation done: {0}"
+
 msgid "Recorded"
 msgstr "Recorded"
 
@@ -1627,6 +1669,9 @@ msgstr "Require a 6-digit code from an authenticator app when signing in."
 
 msgid "Required"
 msgstr "Required"
+
+msgid "Required steps are not recorded"
+msgstr "Required steps are not recorded"
 
 msgid "Reset"
 msgstr "Reset"
@@ -1945,6 +1990,18 @@ msgstr "Steps"
 msgid "Steps are missing"
 msgstr "Steps are missing"
 
+msgid "Still in progress"
+msgstr "Still in progress"
+
+msgid "Stop {workType} timer"
+msgstr "Stop {workType} timer"
+
+msgid "Stop and finish"
+msgstr "Stop and finish"
+
+msgid "Stop timer"
+msgstr "Stop timer"
+
 msgid "Storage Unit"
 msgstr "Storage Unit"
 
@@ -2262,6 +2319,9 @@ msgstr "Write a note…"
 
 msgid "Yes"
 msgstr "Yes"
+
+msgid "Yes, log scrap"
+msgstr "Yes, log scrap"
 
 msgid "You've been clocked in for {hoursElapsed} hours. Did you forget to clock out?"
 msgstr "You've been clocked in for {hoursElapsed} hours. Did you forget to clock out?"

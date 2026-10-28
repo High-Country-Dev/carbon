@@ -10,10 +10,14 @@ import { validationError, validator } from "@carbon/form";
 import { datetime } from "@carbon/utils";
 import type { ActionFunctionArgs } from "react-router";
 import { data } from "react-router";
+import {
+  getRunningEvent,
+  stopNeedsCloseOut,
+  stopTimer
+} from "~/services/closeOut.server";
 import { getDatabaseClient } from "~/services/database.server";
 import { productionEventValidator } from "~/services/models";
 import {
-  endMachineProductionEvent,
   endProductionEvent,
   getOperationEligibility,
   postEndedProductionEvents,
@@ -167,76 +171,39 @@ export async function action({ request }: ActionFunctionArgs) {
     return data({}, await flash(request, error("No event id provided")));
   }
   // End on the event's own work center and type, not the form's.
-  const event = await client
-    .from("productionEvent")
-    .select("workCenterId, type, endTime")
-    .eq("id", id)
-    .eq("companyId", companyId)
-    .maybeSingle();
+  const event = await getRunningEvent(client, { id, companyId });
   if (event.error || !event.data) {
     return data(
       {},
       await flash(request, error(event.error, "Failed to end event"))
     );
   }
-  const typeLabel = (event.data.type ?? d.type).toLowerCase();
-  // A repeated End must not end it again, nor end a newer event through the
-  // press.
-  if (event.data.endTime) return refused("This event has already ended");
-
-  if (event.data.type === "Machine" && event.data.workCenterId) {
-    if (!(await permitted({ update: "production" }))) {
-      return refused("You do not have permission to end machine time");
-    }
-    let press: Awaited<ReturnType<typeof endMachineProductionEvent>>;
-    try {
-      press = await endMachineProductionEvent(db, {
-        id,
-        workCenterId: event.data.workCenterId,
-        companyId,
-        userId
-      });
-    } catch (err) {
-      return data({}, await flash(request, error(err, "Failed to end event")));
-    }
-    if (!press) return refused("This event has already ended");
-    // The press ended this event with every other one on the work center.
-    await postEnded(press.endedEventIds);
-    const ended = await client
-      .from("productionEvent")
-      .select("*")
-      .eq("id", id)
-      .eq("companyId", companyId);
-    return data(
-      ended.data,
-      await flash(request, success(`Ended ${typeLabel} operation`))
+  // Labor and Machine timers on the Operation view stop through the close-out
+  // questions (scrap, finished or in progress), never a bare End.
+  if (!event.data.endTime && stopNeedsCloseOut(event.data)) {
+    return refused(
+      "Answer the close-out questions to stop this timer: refresh the page and press stop again"
     );
   }
-
-  const endEvent = await endProductionEvent(client, {
+  const stopped = await stopTimer({
+    request,
+    client,
+    companyId,
+    userId,
     id,
-    endTime: datetime.timestamp(),
-    employeeId: userId,
-    companyId
+    event: event.data
   });
-  if (endEvent.error) {
+  if ("refusal" in stopped) {
     return data(
       {},
-      await flash(request, error(endEvent.error, "Failed to end event"))
+      await flash(request, error(stopped.cause ?? null, stopped.refusal))
     );
   }
-  const ended = endEvent.data?.[0];
-  if (!ended) {
-    // Open when read, but the update matched nothing: another End won the
-    // race, or RLS refused the update.
-    return refused("This event has already ended, or you cannot end it");
-  }
-  // Batch timers post cost at batch completion, when the aggregate event is
-  // sliced per member (batch-operations). Posting it here too would
-  // double-book the cost, so postEnded skips a batch event.
-  await postEnded([ended.id]);
   return data(
-    endEvent.data,
-    await flash(request, success(`Ended ${typeLabel} operation`))
+    stopped.ended,
+    await flash(
+      request,
+      success(`Ended ${stopped.typeLabel || d.type.toLowerCase()} operation`)
+    )
   );
 }

@@ -112,6 +112,7 @@ import type {
   OperationWithDetails,
   ProductionEvent as ProductionEventType
 } from "~/services/types";
+import { missingRequiredSteps } from "~/utils/closeOut";
 import { ORIGIN_PARAM, readOrigin, useOrigin } from "~/utils/origin";
 import { getPrivateUrl, path } from "~/utils/path";
 import { deriveUnits } from "~/utils/units";
@@ -190,6 +191,7 @@ type Step = {
   minValue?: number | null;
   maxValue?: number | null;
   listValues?: string[] | null;
+  required?: boolean | null;
   // Assembly → BOP sync provenance: the assemblyInstructionStep this step was
   // synced from. Maps the operator's current step to the animated 3D playback.
   assemblyInstructionStepId?: string | null;
@@ -2701,6 +2703,9 @@ export function AssemblyView({
           laborProductionEvent={openByType("Labor")}
           machineProductionEvent={openByType("Machine")}
           allStepsRecorded={allStepsRecorded}
+          missingSteps={missingRequiredSteps(steps).map(
+            (step) => step.name ?? ""
+          )}
           onClose={finishModal.onClose}
         />
       )}

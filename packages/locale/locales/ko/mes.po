@@ -63,6 +63,10 @@ msgstr "{1} 중 {0} 완료"
 msgid "{0} of {1} completed"
 msgstr "{1} 중 {0} 완료됨"
 
+#. placeholder {0}: operation.quantityComplete
+msgid "{0} of {targetQuantity} completed"
+msgstr ""
+
 #. placeholder {0}: rows.length
 msgid "{0} queued"
 msgstr "{0} 대기열"
@@ -109,6 +113,9 @@ msgstr "🚨 안내: {0}에 계정이 erp.try.carbon.ms(으)로 이전됩니다"
 
 msgid "A previous completion did not finish. Retrying resumes the remaining steps — quantities are not double-counted."
 msgstr "이전 완료가 완료되지 않았습니다. 다시 시도하면 남은 단계가 재개되며 — 수량이 중복으로 계산되지 않습니다."
+
+msgid "A replacement serial number will be created."
+msgstr ""
 
 msgid "About"
 msgstr "정보"
@@ -201,6 +208,10 @@ msgstr "실패한 단위 할당"
 
 msgid "Allocate units"
 msgstr "단위 할당"
+
+#. placeholder {0}: operation.itemReadableId
+msgid "Answer both questions to log your time on {0}."
+msgstr ""
 
 msgid "Appearance"
 msgstr "모양"
@@ -546,6 +557,9 @@ msgstr "설명"
 msgid "Details"
 msgstr "상세 정보"
 
+msgid "Did you scrap anything?"
+msgstr ""
+
 msgid "Dismiss"
 msgstr "닫기"
 
@@ -769,6 +783,12 @@ msgstr "계정 설정을 완료하세요"
 msgid "Finish with material unpicked?"
 msgstr "미선택 재료가 있는 상태로 완료하시겠습니까?"
 
+msgid "Finished"
+msgstr ""
+
+msgid "Finishing marks the operation done with fewer than planned. Log completed parts first if you made more."
+msgstr ""
+
 #. placeholder {0}: formatRelativeTime( convertDateStringToIsoString(batchFacts.dueDate) )
 msgid "First due {0}"
 msgstr "첫 번째 기한 {0}"
@@ -799,6 +819,9 @@ msgstr "공정작업으로 돌아가기"
 
 msgid "Go to onboarding"
 msgstr "온보딩으로 이동"
+
+msgid "Go to steps"
+msgstr ""
 
 msgid "Heading {level}"
 msgstr "{level} 제목"
@@ -879,6 +902,9 @@ msgstr "같음"
 msgid "is any of"
 msgstr "다음 중 하나임"
 
+msgid "Is this operation finished?"
+msgstr ""
+
 msgid "Issue"
 msgstr "이슈"
 
@@ -924,11 +950,17 @@ msgstr "탐색 열어 두기"
 msgid "Keep picking"
 msgstr "피킹을 계속하세요"
 
+msgid "Keep running"
+msgstr ""
+
 msgid "Keyboard shortcuts"
 msgstr "키보드 단축키"
 
 msgid "Kit"
 msgstr "키트"
+
+msgid "labor"
+msgstr ""
 
 msgid "Labor"
 msgstr "노무"
@@ -1022,6 +1054,9 @@ msgstr "로트 번호 누락"
 
 msgid "Lot tracked"
 msgstr "로트 추적됨"
+
+msgid "machine"
+msgstr ""
 
 msgid "Machine"
 msgstr "기계"
@@ -1237,6 +1272,9 @@ msgstr "필요한 샘플이 없습니다."
 
 msgid "No scheduled time"
 msgstr "예정된 시간 없음"
+
+msgid "No scrap"
+msgstr ""
 
 msgid "No serial numbers"
 msgstr "시리얼 번호 없음"
@@ -1580,6 +1618,10 @@ msgstr "기록만"
 msgid "Record Partial"
 msgstr "부분 기록"
 
+#. placeholder {0}: missingSteps.join(", ")
+msgid "Record these steps before marking the operation done: {0}"
+msgstr ""
+
 msgid "Recorded"
 msgstr "기록됨"
 
@@ -1627,6 +1669,9 @@ msgstr "로그인할 때 인증 앱에서 6자리 코드를 요구합니다."
 
 msgid "Required"
 msgstr "필수"
+
+msgid "Required steps are not recorded"
+msgstr ""
 
 msgid "Reset"
 msgstr "재설정"
@@ -1945,6 +1990,18 @@ msgstr "단계"
 msgid "Steps are missing"
 msgstr "단계가 누락되었습니다"
 
+msgid "Still in progress"
+msgstr ""
+
+msgid "Stop {workType} timer"
+msgstr ""
+
+msgid "Stop and finish"
+msgstr ""
+
+msgid "Stop timer"
+msgstr ""
+
 msgid "Storage Unit"
 msgstr "보관 단위"
 
@@ -2262,6 +2319,9 @@ msgstr "메모 작성…"
 
 msgid "Yes"
 msgstr "예"
+
+msgid "Yes, log scrap"
+msgstr ""
 
 msgid "You've been clocked in for {hoursElapsed} hours. Did you forget to clock out?"
 msgstr "{hoursElapsed}시간 동안 작업 중입니다. 작업 종료를 잊으셨나요?"
