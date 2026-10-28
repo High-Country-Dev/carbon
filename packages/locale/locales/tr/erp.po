@@ -60,6 +60,9 @@ msgstr "(birden fazla Carbon hesabına eşleştirildi)"
 msgid "(not an Equity posting account)"
 msgstr "(Özkaynak muhasebeleştirme hesabı değildir)"
 
+msgid "(rates set {referenceDate})"
+msgstr ""
+
 #. placeholder {0}: check.count
 msgid "{0, plural, one {# blocking record} other {# blocking records}}"
 msgstr "{0, plural, one {# engelleme kaydı} other {# engelleme kaydı}}"
@@ -693,6 +696,9 @@ msgstr "{position} / {total}"
 
 msgid "{purgeRowCount, plural, one {Permanently delete # row?} other {Permanently delete # rows?}}"
 msgstr "{purgeRowCount, plural, one {# satırı kalıcı olarak sil?} other {# satırı kalıcı olarak sil?}}"
+
+msgid "{referenceLabel} is {referenceRateText}"
+msgstr ""
 
 msgid "{remaining, plural, one {# phase left} other {# phases left}}"
 msgstr "{remaining, plural, one {# aşama kaldı} other {# aşama kaldı}}"
@@ -10596,6 +10602,9 @@ msgstr "Başlangıç"
 msgid "From {0}"
 msgstr "{0} tarihinden itibaren"
 
+msgid "From {referenceLabel}"
+msgstr ""
+
 msgid "From / To"
 msgstr "Başlangıç / Bitiş"
 
@@ -11496,6 +11505,9 @@ msgstr "Hesap planınızı içe aktarın"
 
 msgid "Import your chart of accounts from a spreadsheet"
 msgstr "Hesap planınızı bir elektronik tablodan içe aktarın"
+
+msgid "Imported from JobBoss"
+msgstr ""
 
 #. placeholder {0}: precise?.text
 msgid "in {0}"
@@ -13381,6 +13393,9 @@ msgstr "Yönetici"
 msgid "Manual"
 msgstr "Manuel"
 
+msgid "Manual override on this quote"
+msgstr ""
+
 msgid "Manually scheduled"
 msgstr "El ile zamanlandırılmış"
 
@@ -13538,6 +13553,12 @@ msgstr "Eşleştirildi"
 
 msgid "matches"
 msgstr "eşleşir"
+
+msgid "Matches {referenceLabel} (rates set {referenceDate})"
+msgstr ""
+
+msgid "Matches the process average"
+msgstr ""
 
 msgid "Matching Pairs"
 msgstr "Eşleştirme Çiftleri"
@@ -15554,6 +15575,9 @@ msgstr "Gerekli Değil"
 msgid "Not restorable"
 msgstr "Geri yüklenemez"
 
+msgid "Not saved yet"
+msgstr ""
+
 msgid "Not scheduled"
 msgstr "Planlanmadı"
 
@@ -17548,6 +17572,12 @@ msgstr "süreçler"
 msgid "Process"
 msgstr "Proses"
 
+msgid "Process average"
+msgstr ""
+
+msgid "Process average is {referenceRateText}"
+msgstr ""
+
 msgid "Process Name"
 msgstr "İşlem Adı"
 
@@ -19335,6 +19365,12 @@ msgstr "Çizelgeyi Sıfırla"
 
 msgid "Reset to market rate"
 msgstr "Piyasa kuruna sıfırla"
+
+msgid "Reset to process average"
+msgstr ""
+
+msgid "Reset to work center rate"
+msgstr ""
 
 msgid "Reset Two-Factor Auth"
 msgstr "İki Faktörlü Kimlik Doğrulamayı Sıfırla"
@@ -23993,6 +24029,9 @@ msgstr "Bu alıntının mallarının gönderileceği depo; müşterinin Sevkiyat
 
 msgid "The ways equipment fails, for maintenance and quality tracking"
 msgstr "Ekipmanın arıza yapma şekilleri, bakım ve kalite izlemesi için"
+
+msgid "the work center"
+msgstr ""
 
 msgid "The work center's own bin where picked material is staged for production to draw down, as opposed to its warehouse source shelf."
 msgstr "Depo kaynak Rafının aksine, Toplandı malzemelerin üretime çekilmek üzere hazırlandığı İş merkezinin Göz'ü."

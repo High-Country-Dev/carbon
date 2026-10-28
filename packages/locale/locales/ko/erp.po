@@ -60,6 +60,9 @@ msgstr "(하나 이상의 Carbon 계정에 매핑됨)"
 msgid "(not an Equity posting account)"
 msgstr "(자본 전기 계정이 아님)"
 
+msgid "(rates set {referenceDate})"
+msgstr ""
+
 #. placeholder {0}: check.count
 msgid "{0, plural, one {# blocking record} other {# blocking records}}"
 msgstr "{0, plural, one {# 차단 레코드} other {# 차단 레코드}}"
@@ -693,6 +696,9 @@ msgstr "{position}/{total}"
 
 msgid "{purgeRowCount, plural, one {Permanently delete # row?} other {Permanently delete # rows?}}"
 msgstr "{purgeRowCount, plural, one {# 행을 영구 삭제하시겠습니까?} other {# 행을 영구 삭제하시겠습니까?}}"
+
+msgid "{referenceLabel} is {referenceRateText}"
+msgstr ""
 
 msgid "{remaining, plural, one {# phase left} other {# phases left}}"
 msgstr "{remaining}단계 남음"
@@ -10596,6 +10602,9 @@ msgstr "출발지"
 msgid "From {0}"
 msgstr "{0}부터"
 
+msgid "From {referenceLabel}"
+msgstr ""
+
 msgid "From / To"
 msgstr "출발지 / 도착지"
 
@@ -11496,6 +11505,9 @@ msgstr "계정과목표 가져오기"
 
 msgid "Import your chart of accounts from a spreadsheet"
 msgstr "스프레드시트에서 계정과목표 가져오기"
+
+msgid "Imported from JobBoss"
+msgstr ""
 
 #. placeholder {0}: precise?.text
 msgid "in {0}"
@@ -13381,6 +13393,9 @@ msgstr "관리자"
 msgid "Manual"
 msgstr "수동"
 
+msgid "Manual override on this quote"
+msgstr ""
+
 msgid "Manually scheduled"
 msgstr "수동으로 예약됨"
 
@@ -13538,6 +13553,12 @@ msgstr "일치함"
 
 msgid "matches"
 msgstr "일치"
+
+msgid "Matches {referenceLabel} (rates set {referenceDate})"
+msgstr ""
+
+msgid "Matches the process average"
+msgstr ""
 
 msgid "Matching Pairs"
 msgstr "일치하는 쌍"
@@ -15554,6 +15575,9 @@ msgstr "필수 아님"
 msgid "Not restorable"
 msgstr "복원 불가"
 
+msgid "Not saved yet"
+msgstr ""
+
 msgid "Not scheduled"
 msgstr "예약되지 않음"
 
@@ -17548,6 +17572,12 @@ msgstr "공정"
 msgid "Process"
 msgstr "공정"
 
+msgid "Process average"
+msgstr ""
+
+msgid "Process average is {referenceRateText}"
+msgstr ""
+
 msgid "Process Name"
 msgstr "공정명"
 
@@ -19335,6 +19365,12 @@ msgstr "일정 재설정"
 
 msgid "Reset to market rate"
 msgstr "시장 환율로 재설정"
+
+msgid "Reset to process average"
+msgstr ""
+
+msgid "Reset to work center rate"
+msgstr ""
 
 msgid "Reset Two-Factor Auth"
 msgstr "2단계 인증 재설정"
@@ -23993,6 +24029,9 @@ msgstr "이 견적의 재화가 출하될 창고입니다. 고객의 배송지�
 
 msgid "The ways equipment fails, for maintenance and quality tracking"
 msgstr "설비 실패 방식으로, 유지보수 및 품질 추적을 위해 사용됩니다."
+
+msgid "the work center"
+msgstr ""
 
 msgid "The work center's own bin where picked material is staged for production to draw down, as opposed to its warehouse source shelf."
 msgstr "작업장의 자체 빈으로, 피킹된 자재가 생산이 사용할 수 있도록 준비되는 곳이며, 창고 원본 선반과는 다릅니다."

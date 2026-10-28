@@ -60,6 +60,9 @@ msgstr "(mapped to more than one Carbon account)"
 msgid "(not an Equity posting account)"
 msgstr "(not an Equity posting account)"
 
+msgid "(rates set {referenceDate})"
+msgstr "(rates set {referenceDate})"
+
 #. placeholder {0}: check.count
 msgid "{0, plural, one {# blocking record} other {# blocking records}}"
 msgstr "{0, plural, one {# blocking record} other {# blocking records}}"
@@ -693,6 +696,9 @@ msgstr "{position} of {total}"
 
 msgid "{purgeRowCount, plural, one {Permanently delete # row?} other {Permanently delete # rows?}}"
 msgstr "{purgeRowCount, plural, one {Permanently delete # row?} other {Permanently delete # rows?}}"
+
+msgid "{referenceLabel} is {referenceRateText}"
+msgstr "{referenceLabel} is {referenceRateText}"
 
 msgid "{remaining, plural, one {# phase left} other {# phases left}}"
 msgstr "{remaining, plural, one {# phase left} other {# phases left}}"
@@ -10596,6 +10602,9 @@ msgstr "From"
 msgid "From {0}"
 msgstr "From {0}"
 
+msgid "From {referenceLabel}"
+msgstr "From {referenceLabel}"
+
 msgid "From / To"
 msgstr "From / To"
 
@@ -11496,6 +11505,9 @@ msgstr "Import your chart"
 
 msgid "Import your chart of accounts from a spreadsheet"
 msgstr "Import your chart of accounts from a spreadsheet"
+
+msgid "Imported from JobBoss"
+msgstr "Imported from JobBoss"
 
 #. placeholder {0}: precise?.text
 msgid "in {0}"
@@ -13381,6 +13393,9 @@ msgstr "Manager"
 msgid "Manual"
 msgstr "Manual"
 
+msgid "Manual override on this quote"
+msgstr "Manual override on this quote"
+
 msgid "Manually scheduled"
 msgstr "Manually scheduled"
 
@@ -13538,6 +13553,12 @@ msgstr "Matched"
 
 msgid "matches"
 msgstr "matches"
+
+msgid "Matches {referenceLabel} (rates set {referenceDate})"
+msgstr "Matches {referenceLabel} (rates set {referenceDate})"
+
+msgid "Matches the process average"
+msgstr "Matches the process average"
 
 msgid "Matching Pairs"
 msgstr "Matching Pairs"
@@ -15554,6 +15575,9 @@ msgstr "Not Required"
 msgid "Not restorable"
 msgstr "Not restorable"
 
+msgid "Not saved yet"
+msgstr "Not saved yet"
+
 msgid "Not scheduled"
 msgstr "Not scheduled"
 
@@ -17548,6 +17572,12 @@ msgstr "process"
 msgid "Process"
 msgstr "Process"
 
+msgid "Process average"
+msgstr "Process average"
+
+msgid "Process average is {referenceRateText}"
+msgstr "Process average is {referenceRateText}"
+
 msgid "Process Name"
 msgstr "Process Name"
 
@@ -19335,6 +19365,12 @@ msgstr "Reset Schedule"
 
 msgid "Reset to market rate"
 msgstr "Reset to market rate"
+
+msgid "Reset to process average"
+msgstr "Reset to process average"
+
+msgid "Reset to work center rate"
+msgstr "Reset to work center rate"
 
 msgid "Reset Two-Factor Auth"
 msgstr "Reset Two-Factor Auth"
@@ -23993,6 +24029,9 @@ msgstr "The warehouse goods on this quote will ship from; the customer's Shippin
 
 msgid "The ways equipment fails, for maintenance and quality tracking"
 msgstr "The ways equipment fails, for maintenance and quality tracking"
+
+msgid "the work center"
+msgstr "the work center"
 
 msgid "The work center's own bin where picked material is staged for production to draw down, as opposed to its warehouse source shelf."
 msgstr "The work center's own bin where picked material is staged for production to draw down, as opposed to its warehouse source shelf."

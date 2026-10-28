@@ -60,6 +60,9 @@ msgstr "(сопоставлено с несколькими счетами Carbo
 msgid "(not an Equity posting account)"
 msgstr "(не счет проведения собственного капитала)"
 
+msgid "(rates set {referenceDate})"
+msgstr ""
+
 #. placeholder {0}: check.count
 msgid "{0, plural, one {# blocking record} other {# blocking records}}"
 msgstr "{0, plural, one {# блокирующая запись} other {# блокирующие записи}}"
@@ -693,6 +696,9 @@ msgstr "{position} из {total}"
 
 msgid "{purgeRowCount, plural, one {Permanently delete # row?} other {Permanently delete # rows?}}"
 msgstr "{purgeRowCount, plural, one {Окончательно удалить # строку?} other {Окончательно удалить # строк?}}"
+
+msgid "{referenceLabel} is {referenceRateText}"
+msgstr ""
 
 msgid "{remaining, plural, one {# phase left} other {# phases left}}"
 msgstr "{remaining, plural, one {# этап остался} other {# этапов осталось}}"
@@ -10596,6 +10602,9 @@ msgstr "От"
 msgid "From {0}"
 msgstr "С {0}"
 
+msgid "From {referenceLabel}"
+msgstr ""
+
 msgid "From / To"
 msgstr "От / К"
 
@@ -11496,6 +11505,9 @@ msgstr "Импортируйте свой план счетов"
 
 msgid "Import your chart of accounts from a spreadsheet"
 msgstr "Импортируйте свой план счетов из электронной таблицы"
+
+msgid "Imported from JobBoss"
+msgstr ""
 
 #. placeholder {0}: precise?.text
 msgid "in {0}"
@@ -13381,6 +13393,9 @@ msgstr "Менеджер"
 msgid "Manual"
 msgstr "Ручной"
 
+msgid "Manual override on this quote"
+msgstr ""
+
 msgid "Manually scheduled"
 msgstr "Вручную запланировано"
 
@@ -13538,6 +13553,12 @@ msgstr "Сопоставлено"
 
 msgid "matches"
 msgstr "совпадает"
+
+msgid "Matches {referenceLabel} (rates set {referenceDate})"
+msgstr ""
+
+msgid "Matches the process average"
+msgstr ""
 
 msgid "Matching Pairs"
 msgstr "Парные соответствия"
@@ -15554,6 +15575,9 @@ msgstr "Не требуется"
 msgid "Not restorable"
 msgstr "Восстановление невозможно"
 
+msgid "Not saved yet"
+msgstr ""
+
 msgid "Not scheduled"
 msgstr "Не запланировано"
 
@@ -17548,6 +17572,12 @@ msgstr "процессы"
 msgid "Process"
 msgstr "Процесс"
 
+msgid "Process average"
+msgstr ""
+
+msgid "Process average is {referenceRateText}"
+msgstr ""
+
 msgid "Process Name"
 msgstr "Название процесса"
 
@@ -19335,6 +19365,12 @@ msgstr "Сбросить график"
 
 msgid "Reset to market rate"
 msgstr "Сбросить к рыночному курсу"
+
+msgid "Reset to process average"
+msgstr ""
+
+msgid "Reset to work center rate"
+msgstr ""
 
 msgid "Reset Two-Factor Auth"
 msgstr "Сбросить двухфакторную аутентификацию"
@@ -23993,6 +24029,9 @@ msgstr "Склад, с которого будут отгружены товар
 
 msgid "The ways equipment fails, for maintenance and quality tracking"
 msgstr "Способы отказа оборудования для отслеживания техобслуживания и качества"
+
+msgid "the work center"
+msgstr ""
 
 msgid "The work center's own bin where picked material is staged for production to draw down, as opposed to its warehouse source shelf."
 msgstr "Собственная ячейка рабочего центра, где отобранный материал подготавливается для производства, в отличие от исходной полки его склада."
