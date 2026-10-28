@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import type { MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 import type { Mod, Tier } from "../types";
@@ -43,7 +44,7 @@ export const SCOPE_IN: ScopeItem[] = [
     tiers: ["guided", "enterprise"]
   },
   {
-    label: msg`Loading your own data with Carbon's import tools`,
+    label: msg`Loading your own data with ${BRAND_NAME}'s import tools`,
     tiers: ["self_serve"]
   },
   { label: msg`Training your team via the Academy and in-app guides` },
@@ -51,7 +52,7 @@ export const SCOPE_IN: ScopeItem[] = [
     label: msg`Go-live and acceptance sign-off`,
     tiers: ["guided", "enterprise"]
   },
-  { label: msg`Going live on Carbon`, tiers: ["self_serve"] }
+  { label: msg`Going live on ${BRAND_NAME}`, tiers: ["self_serve"] }
 ];
 
 export const SCOPE_OUT: MessageDescriptor[] = [
@@ -64,7 +65,7 @@ export const SCOPE_OUT: MessageDescriptor[] = [
 const SCOPE_OUT_SELF_SERVE: MessageDescriptor[] = [
   msg`Anything not explicitly listed in scope above`,
   msg`Custom development, integrations, or self-hosting`,
-  msg`A Carbon-run data migration — you load your own data`,
+  msg`A ${BRAND_NAME}-run data migration — you load your own data`,
   msg`A formal acceptance / sign-off phase`
 ];
 
@@ -80,10 +81,10 @@ export const SCOPE_ASSUMPTIONS: MessageDescriptor[] = [
 ];
 
 const SCOPE_ASSUMPTIONS_SELF_SERVE: MessageDescriptor[] = [
-  msg`You're setting Carbon up yourself, at your own pace`,
-  msg`Your team can free up time to learn Carbon and load your data`,
+  msg`You're setting ${BRAND_NAME} up yourself, at your own pace`,
+  msg`Your team can free up time to learn ${BRAND_NAME} and load your data`,
   msg`Your data is accessible and reasonably clean`,
-  msg`Standard cloud Carbon fits how your company runs`
+  msg`Standard cloud ${BRAND_NAME} fits how your company runs`
 ];
 
 export function scopeAssumptionsForTier(tier: Tier): MessageDescriptor[] {
@@ -95,12 +96,12 @@ export function scopeAssumptionsForTier(tier: Tier): MessageDescriptor[] {
 // "How we know we're done" copy, by tier. Self-serve has no acceptance/sign-off.
 export function scopeDoneForTier(tier: Tier): MessageDescriptor {
   return tier === "self_serve"
-    ? msg`Carbon is configured the way your company runs, your data is loaded, and your team is confident using it. When that's true, you're ready to go live.`
+    ? msg`${BRAND_NAME} is configured the way your company runs, your data is loaded, and your team is confident using it. When that's true, you're ready to go live.`
     : msg`The system passes every in-scope acceptance test in your configured system, with your data; the data is validated; and you sign off. Then go-live.`;
 }
 
-export const SCOPE_GOAL_DEFAULT: MessageDescriptor = msg`Get live on Carbon: one system running quoting, purchasing, the shop floor, inventory, and finance, replacing the current tools.`;
+export const SCOPE_GOAL_DEFAULT: MessageDescriptor = msg`Get live on ${BRAND_NAME}: one system running quoting, purchasing, the shop floor, inventory, and finance, replacing the current tools.`;
 
 // Self-serve page intro — no commercial agreement / legal sign-off, unlike the
 // paid lead in PAGE_COPY.scope.
-export const SCOPE_LEAD_SELF_SERVE: MessageDescriptor = msg`Read this through — what Carbon will and won't do for your setup. When it looks right, mark it agreed below.`;
+export const SCOPE_LEAD_SELF_SERVE: MessageDescriptor = msg`Read this through — what ${BRAND_NAME} will and won't do for your setup. When it looks right, mark it agreed below.`;

@@ -10,7 +10,7 @@ import { getUserClaims } from "@carbon/auth/users.server";
 import { PANEL_SESSION_MESSAGE } from "@carbon/ee";
 import { createPanelSession } from "@carbon/ee/onshape/panel-session.server";
 import { getLogger } from "@carbon/logger";
-import { requiresItarEntityCertification } from "@carbon/utils";
+import { BRAND_NAME, requiresItarEntityCertification } from "@carbon/utils";
 import type { LoaderFunctionArgs } from "react-router";
 import { getCompanySettings } from "~/modules/settings/settings.service";
 import { getItarCertificationStatus } from "~/modules/users/users.service";
@@ -36,7 +36,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // A console session is a shared device; writes would be stamped with it.
   if (authSession.console) {
     return page(
-      "The Onshape panel can't be used from a console session. Sign in to Carbon with your own account.",
+      `The Onshape panel can't be used from a console session. Sign in to ${BRAND_NAME} with your own account.`,
       403
     );
   }
@@ -62,9 +62,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     (mfaRequired && !(await userHasVerifiedTotpFactor(userId)))
   ) {
     return page(
-      "Finish setting up your Carbon account, then sign in to the panel again.",
+      `Finish setting up your ${BRAND_NAME} account, then sign in to the panel again.`,
       403,
-      { href: path.to.authenticatedRoot, label: "Open Carbon" }
+      { href: path.to.authenticatedRoot, label: `Open ${BRAND_NAME}` }
     );
   }
 
@@ -74,7 +74,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
       companyId,
       userId
     });
-    return page("Carbon couldn't sign you in. Try again in a moment.", 503);
+    return page(
+      `${BRAND_NAME} couldn't sign you in. Try again in a moment.`,
+      503
+    );
   }
 
   // Safe inside a <script>: no "</" and no JS line terminators.
@@ -88,7 +91,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex">
-<title>Carbon</title>
+<title>${BRAND_NAME}</title>
 </head>
 <body style="font-family: system-ui, sans-serif; padding: 2rem; color: #333;">
 <p id="status">Signing you in to the Onshape panel…</p>
@@ -108,7 +111,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     status.textContent = "Signed in. You can close this window.";
     window.close();
   } else {
-    status.textContent = "Open this page from the Carbon panel in Onshape.";
+    status.textContent = "Open this page from the ${BRAND_NAME} panel in Onshape.";
   }
 })();
 </script>
@@ -148,7 +151,7 @@ function page(
 <head>
 <meta charset="utf-8">
 <meta name="robots" content="noindex">
-<title>Carbon</title>
+<title>${BRAND_NAME}</title>
 </head>
 <body style="font-family: system-ui, sans-serif; padding: 2rem; color: #333;">
 <p>${escapeHtml(message)}</p>

@@ -10,6 +10,7 @@ import {
   type RampReimbursement,
   scaleLinesToTotal
 } from "@carbon/ee/ramp.server";
+import { BRAND_NAME } from "@carbon/utils";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { type Kysely, sql } from "kysely";
 
@@ -500,8 +501,7 @@ async function resolveReimbursementEmployee(
   if (!email) {
     return {
       ok: false,
-      error:
-        "Reimbursement's Ramp user has no email — cannot match a Carbon employee"
+      error: `Reimbursement's Ramp user has no email — cannot match a ${BRAND_NAME} employee`
     };
   }
   const users = await deps.client.from("user").select("id").eq("email", email);
@@ -512,7 +512,7 @@ async function resolveReimbursementEmployee(
     };
   }
   const userIds = (users.data ?? []).map((row) => row.id);
-  const notAnEmployee = `Reimbursement has no matching Carbon employee — invite ${email} as an employee, then retry`;
+  const notAnEmployee = `Reimbursement has no matching ${BRAND_NAME} employee — invite ${email} as an employee, then retry`;
   if (userIds.length === 0) return { ok: false, error: notAnEmployee };
 
   const employees = await deps.client
@@ -531,7 +531,7 @@ async function resolveReimbursementEmployee(
   if (matches.length > 1) {
     return {
       ok: false,
-      error: `Reimbursement matches more than one Carbon employee for ${email} — resolve the duplicate, then retry`
+      error: `Reimbursement matches more than one ${BRAND_NAME} employee for ${email} — resolve the duplicate, then retry`
     };
   }
   return { ok: true, value: matches[0]!.id };
@@ -549,8 +549,7 @@ async function buildReimbursementLines(
     return { error: "Reimbursement has no line items to post" };
   }
 
-  const uncoded =
-    "Reimbursement line is coded to an account Carbon doesn't recognize — recode it in Ramp";
+  const uncoded = `Reimbursement line is coded to an account ${BRAND_NAME} doesn't recognize — recode it in Ramp`;
   const lines: RampReimbursementLine[] = [];
   for (const item of items) {
     const { accountId, costCenterId, projectId } = codeSelections(
@@ -636,8 +635,7 @@ async function buildReimbursementLines(
     );
     if (costCenterIds.some((id) => !knownCostCenters.has(id))) {
       return {
-        error:
-          "Line is coded to a cost center Carbon doesn't recognize — recode it in Ramp"
+        error: `Line is coded to a cost center ${BRAND_NAME} doesn't recognize — recode it in Ramp`
       };
     }
   }
@@ -663,8 +661,7 @@ async function buildReimbursementLines(
     const knownProjects = new Set((projects.data ?? []).map((row) => row.id));
     if (projectIds.some((id) => !knownProjects.has(id))) {
       return {
-        error:
-          "Line is coded to a project Carbon doesn't recognize — recode it in Ramp"
+        error: `Line is coded to a project ${BRAND_NAME} doesn't recognize — recode it in Ramp`
       };
     }
   }
@@ -695,7 +692,7 @@ async function observeRampReimbursement(
     return {
       fail: {
         id: reimbursement.id,
-        message: "Reimbursement is not observably durable in Carbon"
+        message: `Reimbursement is not observably durable in ${BRAND_NAME}`
       }
     };
   }
@@ -786,7 +783,7 @@ export async function syncRampReimbursement(
     return {
       fail: {
         id: reimbursement.id,
-        message: "Reimbursement has no user — cannot resolve a Carbon employee"
+        message: `Reimbursement has no user — cannot resolve a ${BRAND_NAME} employee`
       }
     };
   }

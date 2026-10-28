@@ -39,7 +39,7 @@ import {
   toast,
   VStack
 } from "@carbon/react";
-import { redirect } from "@carbon/utils";
+import { BRAND_NAME, redirect } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { type ReactNode, useEffect, useState } from "react";
@@ -448,8 +448,8 @@ export default function Security() {
                 <CardDescription>
                   <Trans>
                     Provide these URLs to your identity provider (Okta, Entra
-                    ID, Google Workspace, etc.) when registering Carbon as a
-                    SAML application.
+                    ID, Google Workspace, etc.) when registering {BRAND_NAME} as
+                    a SAML application.
                   </Trans>
                 </CardDescription>
               </CardHeader>

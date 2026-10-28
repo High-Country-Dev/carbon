@@ -21,7 +21,7 @@ import {
   Thead,
   Tr
 } from "@carbon/react";
-import { formatDate, redirect } from "@carbon/utils";
+import { BRAND_NAME, formatDate, redirect } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useLocale } from "@react-aria/i18n";
@@ -113,7 +113,7 @@ export default function SyncTieOutCellRoute() {
     INTEGRATION_LABELS[cell.integration] ?? cell.integration;
 
   const amounts: { label: string; value: number | null; delta?: boolean }[] = [
-    { label: t`Carbon Posted`, value: cell.carbonPostedAmount },
+    { label: t`${BRAND_NAME} Posted`, value: cell.carbonPostedAmount },
     { label: t`Synced`, value: cell.syncedAmount },
     { label: t`Doc-Backed`, value: cell.docBackedAmount },
     { label: t`Excluded`, value: cell.excludedAmount },

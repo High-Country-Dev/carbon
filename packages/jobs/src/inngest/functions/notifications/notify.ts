@@ -31,7 +31,7 @@ import {
   renderInlineLinks,
   renderSlackMrkdwn
 } from "@carbon/notifications";
-import { chunkArray, datetime } from "@carbon/utils";
+import { BRAND_NAME, chunkArray, datetime } from "@carbon/utils";
 import { now } from "@internationalized/date";
 import { NonRetriableError } from "inngest";
 import { render } from "react-email";
@@ -813,7 +813,7 @@ export const notifyFunction = inngest.createFunction(
               ].join("\n")
             : `${description}${
                 slackDetailLines ? `\n${slackDetailLines}` : ""
-              }\n<${ctaUrl}|View in Carbon>`;
+              }\n<${ctaUrl}|View in ${BRAND_NAME}>`;
 
           const slackUserIds = await Promise.all(
             slackRecipientIds.map((userId) =>

@@ -26,6 +26,7 @@
   },
   "exports": {
     ".": "./src/index.ts",
+    "./brand": "./src/brand.ts",
     "./favicon": "./src/favicon.ts",
     "./status-colors": "./src/status-colors.ts"
   },

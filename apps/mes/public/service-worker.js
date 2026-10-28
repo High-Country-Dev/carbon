@@ -11,7 +11,7 @@
 // when this file changes: bump SHELL_CACHE whenever offline.html changes, or
 // browsers keep the old page. The asset cache has its own version: build files
 // are named by their content, so an offline.html change keeps them.
-const SHELL_CACHE = "mes-shell-v5";
+const SHELL_CACHE = "mes-shell-v6";
 const ASSET_CACHE = "mes-assets-v1";
 const OFFLINE_URL = "/offline.html";
 

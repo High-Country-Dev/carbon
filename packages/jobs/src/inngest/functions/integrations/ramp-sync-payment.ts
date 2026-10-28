@@ -10,6 +10,7 @@ import {
   upsertLocalPaymentDraft
 } from "@carbon/ee/accounting";
 import type { RampBill, RampBillPayment } from "@carbon/ee/ramp.server";
+import { BRAND_NAME } from "@carbon/utils";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { type Kysely, sql } from "kysely";
 
@@ -249,7 +250,7 @@ export async function syncRampBillPayment(
     return {
       fail: {
         id: paymentRampId,
-        message: "Bill was never synced to Carbon — sync the bill first"
+        message: `Bill was never synced to ${BRAND_NAME} — sync the bill first`
       }
     };
   }
@@ -267,7 +268,7 @@ export async function syncRampBillPayment(
     return {
       fail: {
         id: paymentRampId,
-        message: "The bill's Carbon invoice no longer exists"
+        message: `The bill's ${BRAND_NAME} invoice no longer exists`
       }
     };
   }

@@ -29,6 +29,7 @@ import {
   Tr,
   toast
 } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { ReactNode } from "react";
 import { useCallback, useMemo, useState } from "react";
@@ -807,9 +808,7 @@ function ReconciliationDrift({
               <Th className="px-4 w-full">
                 <Trans>Reference</Trans>
               </Th>
-              <Th className="px-4 text-right">
-                <Trans>Carbon</Trans>
-              </Th>
+              <Th className="px-4 text-right">{BRAND_NAME}</Th>
               <Th className="px-4 text-right">
                 <Trans>Provider</Trans>
               </Th>

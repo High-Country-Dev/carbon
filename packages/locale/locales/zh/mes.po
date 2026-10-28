@@ -33,8 +33,8 @@ msgid "{0} customers"
 msgstr "{0} 个客户"
 
 #. placeholder {0}: unplanned .map( (m) => (m.job as { jobId?: string | null } | null)?.jobId ) .filter(Boolean) .join(", ")
-msgid "{0} has no lot number. Set it on the batch or job in Carbon, then complete."
-msgstr "{0}没有批次号。在Carbon中的生产批次或工单上设置，然后完成。"
+msgid "{0} has no lot number. Set it on the batch or job in {BRAND_NAME}, then complete."
+msgstr "{0}没有批次号。在{BRAND_NAME}中的生产批次或工单上设置，然后完成。"
 
 #. placeholder {0}: batchFacts.items.length
 msgid "{0} items"
@@ -339,9 +339,6 @@ msgstr "取消"
 msgid "Cancelled"
 msgstr "已取消"
 
-msgid "Carbon Logo"
-msgstr "Carbon 标志"
-
 msgid "Cards"
 msgstr "卡片"
 
@@ -372,8 +369,8 @@ msgstr "选择一个选项"
 msgid "Choose avatar"
 msgstr "选择头像"
 
-msgid "Choose how Carbon reaches you."
-msgstr "选择 Carbon 如何与您联系。"
+msgid "Choose how {BRAND_NAME} reaches you."
+msgstr "选择 {BRAND_NAME} 如何与您联系。"
 
 msgid "Clear"
 msgstr "清除"
@@ -829,8 +826,8 @@ msgstr "标题 {level}"
 msgid "Hide description"
 msgstr "隐藏描述"
 
-msgid "How Carbon looks in this browser."
-msgstr "Carbon 在此浏览器中的外观。"
+msgid "How {BRAND_NAME} looks in this browser."
+msgstr "{BRAND_NAME} 在此浏览器中的外观。"
 
 msgid "How many were actually picked?"
 msgstr "实际拣了多少？"
@@ -1079,8 +1076,8 @@ msgstr "维护已逾期"
 msgid "Make a replacement"
 msgstr "制作替换件"
 
-msgid "Manage how you sign in to Carbon."
-msgstr "管理您如何登录 Carbon。"
+msgid "Manage how you sign in to {BRAND_NAME}."
+msgstr "管理您如何登录 {BRAND_NAME}。"
 
 msgid "Manually add items to inventory"
 msgstr "手动添加物料至库存管理"
@@ -1837,8 +1834,8 @@ msgstr "已选择"
 msgid "Send"
 msgstr "发送"
 
-msgid "Send to Carbon"
-msgstr "发送至 Carbon"
+msgid "Send to {BRAND_NAME}"
+msgstr "发送至 {BRAND_NAME}"
 
 msgid "Separate lots"
 msgstr "单独批次"
@@ -1874,8 +1871,8 @@ msgstr "设置收工"
 msgid "Set the time you stopped working, or acknowledge that you're still working."
 msgstr "设置您停止工作的时间，或确认您仍在工作。"
 
-msgid "Set up in Carbon"
-msgstr "在 Carbon 中设置"
+msgid "Set up in {BRAND_NAME}"
+msgstr "在 {BRAND_NAME} 中设置"
 
 msgid "Set up two-factor authentication"
 msgstr "设置双因素认证"
@@ -2047,8 +2044,8 @@ msgstr "系统"
 msgid "Tag"
 msgstr "标签"
 
-msgid "The accent color used across Carbon."
-msgstr "整个 Carbon 中使用的强调色。"
+msgid "The accent color used across {BRAND_NAME}."
+msgstr "整个 {BRAND_NAME} 中使用的强调色。"
 
 msgid "The completed quantity for this operation is less than the required quantity of {targetQuantity}."
 msgstr "此工序的完成数量小于所需数量 {targetQuantity}。"
@@ -2326,11 +2323,11 @@ msgstr ""
 msgid "You've been clocked in for {hoursElapsed} hours. Did you forget to clock out?"
 msgstr "您已打卡 {hoursElapsed} 小时。您是否忘记收工？"
 
-msgid "Your account isn't part of a company yet. Complete onboarding in the Carbon ERP to continue."
-msgstr "您的账户尚未属于任何公司。完成 Carbon ERP 入职流程以继续。"
+msgid "Your account isn't part of a company yet. Complete onboarding in the {BRAND_NAME} ERP to continue."
+msgstr "您的账户尚未属于任何公司。完成 {BRAND_NAME} ERP 入职流程以继续。"
 
-msgid "Your organization requires an authenticator app. Set it up in Carbon, then come back here."
-msgstr "您的组织需要身份验证器应用。在 Carbon 中设置，然后返回此处。"
+msgid "Your organization requires an authenticator app. Set it up in{BRAND_NAME}, then come back here."
+msgstr ""
 
 msgid "Your profile could not be loaded."
 msgstr "无法加载您的资料。"

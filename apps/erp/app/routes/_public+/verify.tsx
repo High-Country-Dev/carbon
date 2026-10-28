@@ -26,12 +26,13 @@ import {
   Alert,
   AlertDescription,
   AlertTitle,
+  BrandWordmark,
   Button,
   Heading,
   VStack
 } from "@carbon/react";
-import { getClientIp, redirect } from "@carbon/utils";
-import { Trans, useLingui } from "@lingui/react/macro";
+import { BRAND_NAME, getClientIp, redirect } from "@carbon/utils";
+import { Trans } from "@lingui/react/macro";
 import { LuCircleAlert } from "react-icons/lu";
 import type {
   ActionFunctionArgs,
@@ -45,7 +46,7 @@ import type { Result } from "~/types";
 import { path } from "~/utils/path";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Carbon | Verify Email" }];
+  return [{ title: `${BRAND_NAME} | Verify Email` }];
 };
 
 const verifyValidator = z.object({
@@ -155,7 +156,6 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function VerifyRoute() {
-  const { t } = useLingui();
   const [searchParams] = useSearchParams();
   const email = searchParams.get("email") ?? "";
   const redirectTo = searchParams.get("redirectTo") ?? undefined;
@@ -165,16 +165,7 @@ export default function VerifyRoute() {
   return (
     <>
       <div className="flex justify-center mb-8">
-        <img
-          src="/carbon-mark-light.svg"
-          alt={t`Carbon Logo`}
-          className="w-24 dark:hidden"
-        />
-        <img
-          src="/carbon-mark-dark.svg"
-          alt={t`Carbon Logo`}
-          className="w-24 hidden dark:block"
-        />
+        <BrandWordmark size="lg" />
       </div>
       <div className="rounded-lg p-8 w-[380px]">
         <ValidatedForm

@@ -18,7 +18,7 @@ import {
   VStack
 } from "@carbon/react";
 import { getCheckoutUrl } from "@carbon/stripe/stripe.server";
-import { Edition, redirect, redirectExternal } from "@carbon/utils";
+import { BRAND_NAME, Edition, redirect, redirectExternal } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useLocale } from "@react-aria/i18n";
 import { useMemo } from "react";
@@ -43,7 +43,7 @@ function usePlans() {
       price: 40,
       userMinimum: 0,
       talkToSales: false,
-      description: t`A managed cloud-hosted version of Carbon`,
+      description: t`A managed cloud-hosted version of ${BRAND_NAME}`,
       features: [
         t`Automatic updates and backups`,
         t`Basic ERP, MES, and QMS functionality`,

@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans } from "@lingui/react/macro";
 import { LuKeyRound } from "react-icons/lu";
 import {
@@ -109,7 +110,9 @@ export default function ApiKeysUpgradeOverlay() {
             <Trans>API Keys</Trans>
           </UpgradeOverlayTitle>
           <UpgradeOverlayDescription>
-            <Trans>API keys for programmatic access to your Carbon data.</Trans>
+            <Trans>
+              API keys for programmatic access to your {BRAND_NAME} data.
+            </Trans>
           </UpgradeOverlayDescription>
         </UpgradeOverlayContent>
         <UpgradeOverlayActions>

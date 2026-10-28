@@ -11,6 +11,7 @@ import {
   SMTP_USER
 } from "@carbon/env";
 import { getLogger } from "@carbon/logger";
+import { BRAND_NAME } from "@carbon/utils";
 import type { Transporter } from "nodemailer";
 import nodemailer from "nodemailer";
 
@@ -38,7 +39,8 @@ export type SendEmailResult = {
 };
 
 export const DEFAULT_FROM =
-  SMTP_FROM ?? `Carbon <no-reply@${process.env.RESEND_DOMAIN ?? "carbon.ms"}>`;
+  SMTP_FROM ??
+  `${BRAND_NAME} <no-reply@${process.env.RESEND_DOMAIN ?? "carbon.ms"}>`;
 
 /**
  * Whether companies can send their documents through this server's own mail

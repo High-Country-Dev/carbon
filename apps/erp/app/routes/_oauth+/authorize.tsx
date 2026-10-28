@@ -6,8 +6,8 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { getCarbonServiceRole } from "@carbon/auth/client.server";
 import { getUserClaims } from "@carbon/auth/users.server";
 import { validator } from "@carbon/form";
-import { Button, Heading, VStack } from "@carbon/react";
-import { redirectExternal } from "@carbon/utils";
+import { BrandWordmark, Button, Heading, VStack } from "@carbon/react";
+import { BRAND_NAME, redirectExternal } from "@carbon/utils";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router";
 import { data, Form, useLoaderData } from "react-router";
 import { z } from "zod";
@@ -202,16 +202,7 @@ export default function AuthorizeRoute() {
     <div className="flex min-h-dvh items-center justify-center p-4">
       <div className="flex w-[380px] flex-col items-center space-y-6">
         <div className="flex justify-center">
-          <img
-            src="/carbon-mark-light.svg"
-            alt="Carbon Logo"
-            className="w-24 dark:hidden"
-          />
-          <img
-            src="/carbon-mark-dark.svg"
-            alt="Carbon Logo"
-            className="hidden w-24 dark:block"
-          />
+          <BrandWordmark size="lg" />
         </div>
         <div className="w-full rounded-lg p-8 md:border md:border-border md:bg-card md:shadow-lg">
           <Form method="post">
@@ -224,7 +215,7 @@ export default function AuthorizeRoute() {
                 {redirectDomain && (
                   <span className="text-xs"> ({redirectDomain})</span>
                 )}{" "}
-                is requesting access to your Carbon account.
+                is requesting access to your {BRAND_NAME} account.
               </p>
               <p className="text-center text-xs text-pretty text-muted-foreground">
                 The application names itself. Only authorize it if you started

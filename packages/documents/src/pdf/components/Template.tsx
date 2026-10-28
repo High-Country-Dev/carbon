@@ -3,6 +3,7 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import type { JSONContent } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Document, Page, StyleSheet, View } from "@react-pdf/renderer";
 import { type PropsWithChildren, useMemo } from "react";
 import { DEFAULT_THEME, type DocumentTheme } from "../../template";
@@ -71,7 +72,7 @@ const Template = ({
 
   return (
     <Document
-      author={meta?.author ?? "Carbon"}
+      author={meta?.author ?? BRAND_NAME}
       keywords={meta?.keywords}
       subject={meta?.subject}
       title={title}

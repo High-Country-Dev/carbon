@@ -6,7 +6,7 @@ import type { Database } from "@carbon/database";
 import { MfaEnabledEmail, MfaRequiredEmail } from "@carbon/documents/email";
 import { batchTrigger, trigger } from "@carbon/jobs";
 import { getLogger } from "@carbon/logger";
-import { chunkArray } from "@carbon/utils";
+import { BRAND_NAME, chunkArray } from "@carbon/utils";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { render } from "react-email";
 import { getUser } from "~/modules/users/users.service";
@@ -133,7 +133,7 @@ export async function sendMfaEnabledEmail(
 
     await trigger("send-email", {
       to: [user.data.email],
-      subject: "Two-factor authentication is on for your Carbon account",
+      subject: `Two-factor authentication is on for your ${BRAND_NAME} account`,
       html: await render(email),
       text: await render(email, { plainText: true }),
       companyId

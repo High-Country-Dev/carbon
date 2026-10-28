@@ -16,6 +16,7 @@ import {
 } from "@carbon/database/accounting-cutover-reads";
 import { ValidatedForm, validator } from "@carbon/form";
 import { Alert, AlertDescription, AlertTitle } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import type { MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -205,11 +206,13 @@ export default function AccountingActivationEnableRoute() {
 
         {legacyDocuments.length > 0 && (
           <SetupSection
-            title={<Trans>Documents Posted Before Carbon Kept Journals</Trans>}
+            title={
+              <Trans>Documents Posted Before {BRAND_NAME} Kept Journals</Trans>
+            }
             description={
               <Trans>
-                Carbon writes their journals when you enable accounting, with
-                today's accounts and costs.
+                {BRAND_NAME} writes their journals when you enable accounting,
+                with today's accounts and costs.
               </Trans>
             }
           >
@@ -234,8 +237,9 @@ export default function AccountingActivationEnableRoute() {
             </AlertTitle>
             <AlertDescription>
               <Trans>
-                Carbon posts the opening journal, posts every journal dated on
-                or after the cutover date, and closes the periods before it.
+                {BRAND_NAME} posts the opening journal, posts every journal
+                dated on or after the cutover date, and closes the periods
+                before it.
               </Trans>
             </AlertDescription>
           </Alert>

@@ -2,16 +2,17 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
-/**
- * Auth-failure handling for the accounting crons. Kept out of
- * accounting-sync-operations.ts on purpose: that module is imported by the
- * pure decision tests, and @carbon/kv boots @carbon/env on import.
- */
 import type { Database } from "@carbon/database";
 import { AccountingAuthError } from "@carbon/ee/accounting";
 import { redis } from "@carbon/kv";
 import { trigger } from "@carbon/lib/trigger";
 import { NotificationEvent } from "@carbon/notifications";
+/**
+ * Auth-failure handling for the accounting crons. Kept out of
+ * accounting-sync-operations.ts on purpose: that module is imported by the
+ * pure decision tests, and @carbon/kv boots @carbon/env on import.
+ */
+import { BRAND_NAME } from "@carbon/utils";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { GetStepTools } from "inngest";
 import type { inngest } from "../../client";
@@ -113,7 +114,7 @@ export async function recordIntegrationAuthFailure(
       providerId,
       recipientId,
       title: "Accounting integration disconnected",
-      body: `Carbon can no longer authenticate with ${providerId} — reconnect it in Settings → Integrations to resume sync`
+      body: `${BRAND_NAME} can no longer authenticate with ${providerId} — reconnect it in Settings → Integrations to resume sync`
     });
     return "notified";
   } catch (error) {

@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import {
   Body,
   Container,
@@ -100,7 +101,7 @@ export const MfaEnabledEmail = ({
                   <Text
                     className={`text-[15px] leading-[24px] m-0 ${themeClasses.text}`}
                   >
-                    An authenticator app was added to your Carbon account.
+                    An authenticator app was added to your {BRAND_NAME} account.
                     You'll be asked for a 6-digit code the next time you sign
                     in.
                   </Text>

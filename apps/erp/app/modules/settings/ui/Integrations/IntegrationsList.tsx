@@ -13,6 +13,7 @@ import {
   useEdition,
   useUrlParams
 } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useMemo, useRef, useState } from "react";
 import { LuPuzzle } from "react-icons/lu";
@@ -168,8 +169,8 @@ const IntegrationsList = ({
               </UpgradeOverlayTitle>
               <UpgradeOverlayDescription>
                 <Trans>
-                  Connect Carbon to your accounting, project management, and CAD
-                  tools and much more.
+                  Connect {BRAND_NAME} to your accounting, project management,
+                  and CAD tools and much more.
                 </Trans>
               </UpgradeOverlayDescription>
             </UpgradeOverlayContent>

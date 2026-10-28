@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import { Fragment } from "react";
 import type { DocumentTemplate, ResolvedSection } from "../template";
 import {
@@ -106,7 +107,7 @@ const IssuePDF = ({
       theme={resolved.theme}
       title={title}
       meta={{
-        author: meta?.author ?? "Carbon",
+        author: meta?.author ?? BRAND_NAME,
         keywords: meta?.keywords ?? "issue report",
         subject: meta?.subject ?? "Issue Report"
       }}

@@ -3,6 +3,7 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import type { Database } from "@carbon/database";
+import { BRAND_NAME } from "@carbon/utils";
 import { Fragment } from "react";
 import type { DocumentTemplate, ResolvedSection } from "../template";
 import {
@@ -85,7 +86,7 @@ const StockTransferPDF = ({
       theme={theme}
       title={title}
       meta={{
-        author: "Carbon",
+        author: BRAND_NAME,
         keywords: "stock transfer",
         subject: "Stock Transfer"
       }}

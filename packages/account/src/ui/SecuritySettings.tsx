@@ -22,6 +22,7 @@ import {
   toast,
   VStack
 } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { startRegistration } from "@simplewebauthn/browser";
 import { useState } from "react";
@@ -54,7 +55,7 @@ export default function SecuritySettings() {
   return (
     <AccountSettingsPane
       title={<Trans>Security</Trans>}
-      description={<Trans>Manage how you sign in to Carbon.</Trans>}
+      description={<Trans>Manage how you sign in to {BRAND_NAME}.</Trans>}
     >
       {data ? (
         // Enrolling and removing a factor or a passkey go through plain

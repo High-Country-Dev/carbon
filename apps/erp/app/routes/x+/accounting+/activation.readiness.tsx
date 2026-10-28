@@ -6,6 +6,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { dayBeforeCutover } from "@carbon/database/accounting-cutover";
 import { getActivationReadiness } from "@carbon/database/accounting-cutover-reads";
 import { DatePicker } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { parseDate } from "@internationalized/date";
 import { msg } from "@lingui/core/macro";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -55,9 +56,9 @@ export default function AccountingActivationReadinessRoute() {
           title={<Trans>Cutover Date</Trans>}
           description={
             <Trans>
-              Carbon posts every document dated on or after this day. Choose the
-              first day of the current period or of one of the 3 periods before
-              it.
+              {BRAND_NAME} posts every document dated on or after this day.
+              Choose the first day of the current period or of one of the 3
+              periods before it.
             </Trans>
           }
         >

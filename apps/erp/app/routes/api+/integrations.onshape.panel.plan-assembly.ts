@@ -35,6 +35,7 @@ import {
 } from "@carbon/ee/onshape";
 import { requireOnshapePanelPermissions } from "@carbon/ee/onshape/panel-session.server";
 import { getLogger } from "@carbon/logger";
+import { BRAND_NAME } from "@carbon/utils";
 import type { ActionFunctionArgs } from "react-router";
 import { data } from "react-router";
 import { z } from "zod";
@@ -200,7 +201,10 @@ export async function action({ request }: ActionFunctionArgs) {
       .order("revision")
   );
   if (existing.error) {
-    return data({ error: "Failed to read Carbon items" }, { status: 500 });
+    return data(
+      { error: `Failed to read ${BRAND_NAME} items` },
+      { status: 500 }
+    );
   }
   const items: PlanItemRow[] = existing.data.map((row) => ({
     ...row,
@@ -276,7 +280,7 @@ export async function action({ request }: ActionFunctionArgs) {
   // A failed read would mark every reuse a conflict; say so instead.
   if (links.error || itemLinks.error) {
     return data(
-      { error: "Carbon couldn't read its Onshape links. Try again." },
+      { error: `${BRAND_NAME} couldn't read its Onshape links. Try again.` },
       { status: 500 }
     );
   }
@@ -349,7 +353,9 @@ export async function action({ request }: ActionFunctionArgs) {
     return data(
       {
         error:
-          error instanceof Error ? error.message : "Failed to read Carbon items"
+          error instanceof Error
+            ? error.message
+            : `Failed to read ${BRAND_NAME} items`
       },
       { status: 500 }
     );
@@ -404,7 +410,7 @@ export async function action({ request }: ActionFunctionArgs) {
   const created = await createPanelPlan({ companyId, userId, plan: stored });
   if (!created) {
     return data(
-      { error: "Carbon couldn't save this review. Try again." },
+      { error: `${BRAND_NAME} couldn't save this review. Try again.` },
       { status: 503 }
     );
   }

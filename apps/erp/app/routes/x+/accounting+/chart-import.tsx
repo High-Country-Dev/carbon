@@ -21,7 +21,7 @@ import { loadAccountImportContext } from "@carbon/database/account-import-reads"
 import { getLogger } from "@carbon/logger";
 import { useAction } from "@carbon/query";
 import { Button, File } from "@carbon/react";
-import { redirect } from "@carbon/utils";
+import { BRAND_NAME, redirect } from "@carbon/utils";
 import { msg, plural } from "@lingui/core/macro";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { type ChangeEvent, useState } from "react";
@@ -263,7 +263,7 @@ export default function ChartOfAccountsImportRoute() {
       title={<Trans>Import chart of accounts</Trans>}
       subtitle={
         <Trans>
-          Replace Carbon's default chart with your own, before you set up
+          Replace {BRAND_NAME}'s default chart with your own, before you set up
           accounting
         </Trans>
       }
@@ -276,8 +276,8 @@ export default function ChartOfAccountsImportRoute() {
             <Trans>
               Export your chart from your current system as a CSV, one row per
               account, with its number, name, class, type and group, or start
-              from the template of the current chart. Carbon keeps only the
-              accounts in this file.
+              from the template of the current chart. {BRAND_NAME} keeps only
+              the accounts in this file.
             </Trans>
           }
           actions={
@@ -309,9 +309,10 @@ export default function ChartOfAccountsImportRoute() {
           title={<Trans>Default accounts</Trans>}
           description={
             <Trans>
-              Download the template. Each row is a default account Carbon posts
-              to. In Account Number, enter the number of the account in your
-              chart that takes it. Carbon updates the default account to match.
+              Download the template. Each row is a default account {BRAND_NAME}{" "}
+              posts to. In Account Number, enter the number of the account in
+              your chart that takes it. {BRAND_NAME} updates the default account
+              to match.
             </Trans>
           }
           actions={

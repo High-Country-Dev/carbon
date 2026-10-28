@@ -4,6 +4,7 @@
 
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { Button } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { LuFileUp } from "react-icons/lu";
@@ -39,11 +40,12 @@ export default function AccountingActivationChartRoute() {
           title={<Trans>Chart of Accounts</Trans>}
           description={
             <Trans>
-              Carbon starts every company on its default chart. Import your own
-              chart now, before the trial balance, which matches accounts by
-              number. The import needs two files: your chart, and the default
-              accounts template filled with your account numbers. To keep
-              Carbon's chart, continue.
+              {BRAND_NAME} starts every company on its default chart. Import
+              your own chart now, before the trial balance, which matches
+              accounts by number. The import needs two files: your chart, and
+              the default accounts template filled with your account numbers. To
+              keep
+              {BRAND_NAME}'s chart, continue.
             </Trans>
           }
           actions={

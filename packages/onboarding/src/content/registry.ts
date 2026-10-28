@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import type { MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 import type { HubExclusions, PageDef } from "../types";
@@ -122,9 +123,9 @@ export const PAGE_GROUP_LABEL: Record<PageDef["group"], MessageDescriptor> = {
   "get-started": msg`Get started`,
   align: msg`Align on scope`,
   plan: msg`Plan the work`,
-  configure: msg`Configure Carbon`,
+  configure: msg`Configure ${BRAND_NAME}`,
   launch: msg`Train & go live`,
-  "carbon-only": msg`Carbon only`
+  "carbon-only": msg`${BRAND_NAME} only`
 };
 
 export const PAGE_GROUP_ORDER: PageDef["group"][] = [

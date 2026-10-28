@@ -7,7 +7,7 @@ import { requirePermissions } from "@carbon/auth/auth.server";
 import { flash } from "@carbon/auth/session.server";
 import { getIntegrationIdsByRole } from "@carbon/ee";
 import { RecordOutlet, VStack } from "@carbon/react";
-import { redirect } from "@carbon/utils";
+import { BRAND_NAME, redirect } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 
@@ -25,7 +25,7 @@ import { path } from "~/utils/path";
 export { RouteErrorBoundary as ErrorBoundary } from "@carbon/react/ErrorBoundary";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Carbon | Accounting" }];
+  return [{ title: `${BRAND_NAME} | Accounting` }];
 };
 
 function AccountingSidebar() {

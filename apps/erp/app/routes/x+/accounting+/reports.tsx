@@ -17,6 +17,7 @@ import {
   PrefetchLink,
   Subheading
 } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { ReactNode } from "react";
@@ -58,7 +59,7 @@ import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Carbon | Reports" }];
+  return [{ title: `${BRAND_NAME} | Reports` }];
 };
 
 export const handle: Handle = {

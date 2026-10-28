@@ -2,7 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
-import { formatDate, lesseeCommencementLegs } from "@carbon/utils";
+import { BRAND_NAME, formatDate, lesseeCommencementLegs } from "@carbon/utils";
 import { Trans } from "@lingui/react/macro";
 import { useLocale } from "@react-aria/i18n";
 import { useUser } from "~/hooks";
@@ -108,7 +108,7 @@ export function LeaseCommencementPreview({
           >
             <Trans>
               {blocker.description}: the payment due {dueDate} is marked paid
-              outside Carbon, but nothing would relieve it from the lease
+              outside {BRAND_NAME}, but nothing would relieve it from the lease
               liability. Set Invoice From on or before {dueDate} so it is
               invoiced.
             </Trans>

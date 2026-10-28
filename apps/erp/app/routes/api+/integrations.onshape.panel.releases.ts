@@ -18,6 +18,7 @@ import {
 } from "@carbon/ee/onshape";
 import { requireOnshapePanelPermissions } from "@carbon/ee/onshape/panel-session.server";
 import { getLogger } from "@carbon/logger";
+import { BRAND_NAME } from "@carbon/utils";
 import type { LoaderFunctionArgs } from "react-router";
 import { data } from "react-router";
 
@@ -104,7 +105,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
       .in("readableId", batch)
   );
   if (rows.error) {
-    return data({ error: "Failed to read Carbon items" }, { status: 500 });
+    return data(
+      { error: `Failed to read ${BRAND_NAME} items` },
+      { status: 500 }
+    );
   }
   const carbonRows = rows.data as ReleaseCarbonItemRow[];
 
@@ -132,7 +136,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
     if (documents.error) {
       return data(
-        { error: "Failed to read Carbon documents" },
+        { error: `Failed to read ${BRAND_NAME} documents` },
         { status: 500 }
       );
     }

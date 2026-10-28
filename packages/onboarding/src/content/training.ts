@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import type { MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 import type { Mod } from "../types";
@@ -33,7 +34,7 @@ export const TRAINING_TRACKS: TrainingTrack[] = [
     courses: [
       {
         key: "found-1",
-        course: msg`Getting around Carbon`,
+        course: msg`Getting around ${BRAND_NAME}`,
         audience: msg`All users`,
         format: "Self-paced",
         length: msg`2h`,
@@ -41,7 +42,7 @@ export const TRAINING_TRACKS: TrainingTrack[] = [
       },
       {
         key: "found-2",
-        course: msg`How your company's process maps to Carbon`,
+        course: msg`How your company's process maps to ${BRAND_NAME}`,
         audience: msg`Champions`,
         format: "Hands-on",
         length: msg`2h`,

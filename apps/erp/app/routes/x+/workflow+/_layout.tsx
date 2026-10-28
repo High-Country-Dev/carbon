@@ -3,6 +3,7 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { RecordOutlet } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import type { MetaFunction } from "react-router";
 
 import type { Handle } from "~/utils/handle";
@@ -10,7 +11,7 @@ import type { Handle } from "~/utils/handle";
 export { RouteErrorBoundary as ErrorBoundary } from "@carbon/react/ErrorBoundary";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Carbon | Workflow" }];
+  return [{ title: `${BRAND_NAME} | Workflow` }];
 };
 
 // No breadcrumb here: the detail route ($id.tsx) already emits the "Workflows"

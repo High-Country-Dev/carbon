@@ -33,8 +33,8 @@ msgid "{0} customers"
 msgstr "{0}件の得意先"
 
 #. placeholder {0}: unplanned .map( (m) => (m.job as { jobId?: string | null } | null)?.jobId ) .filter(Boolean) .join(", ")
-msgid "{0} has no lot number. Set it on the batch or job in Carbon, then complete."
-msgstr "{0}にはロット番号がありません。Carbonでバッチまたは製造指図に設定してから、完了してください。"
+msgid "{0} has no lot number. Set it on the batch or job in {BRAND_NAME}, then complete."
+msgstr "{0}にはロット番号がありません。{BRAND_NAME}でバッチまたは製造指図に設定してから、完了してください。"
 
 #. placeholder {0}: batchFacts.items.length
 msgid "{0} items"
@@ -339,9 +339,6 @@ msgstr "キャンセル"
 msgid "Cancelled"
 msgstr "キャンセル済み"
 
-msgid "Carbon Logo"
-msgstr "Carbonロゴ"
-
 msgid "Cards"
 msgstr "カード"
 
@@ -372,8 +369,8 @@ msgstr "オプションを選択"
 msgid "Choose avatar"
 msgstr "アバターを選択"
 
-msgid "Choose how Carbon reaches you."
-msgstr "Carbon があなたに連絡する方法を選択します。"
+msgid "Choose how {BRAND_NAME} reaches you."
+msgstr "{BRAND_NAME} があなたに連絡する方法を選択します。"
 
 msgid "Clear"
 msgstr "クリア"
@@ -829,8 +826,8 @@ msgstr "見出し {level}"
 msgid "Hide description"
 msgstr "説明を非表示"
 
-msgid "How Carbon looks in this browser."
-msgstr "このブラウザでのCarbonの表示方法。"
+msgid "How {BRAND_NAME} looks in this browser."
+msgstr "このブラウザでの{BRAND_NAME}の表示方法。"
 
 msgid "How many were actually picked?"
 msgstr "実際にはいくつ選ばれましたか？"
@@ -1079,8 +1076,8 @@ msgstr "保全が期限超過"
 msgid "Make a replacement"
 msgstr "代替品を作成"
 
-msgid "Manage how you sign in to Carbon."
-msgstr "Carbon へのサインイン方法を管理します。"
+msgid "Manage how you sign in to {BRAND_NAME}."
+msgstr "{BRAND_NAME} へのサインイン方法を管理します。"
 
 msgid "Manually add items to inventory"
 msgstr "手動で在庫に品目を追加"
@@ -1837,8 +1834,8 @@ msgstr "選択済み"
 msgid "Send"
 msgstr "送信"
 
-msgid "Send to Carbon"
-msgstr "Carbonに送信"
+msgid "Send to {BRAND_NAME}"
+msgstr "{BRAND_NAME}に送信"
 
 msgid "Separate lots"
 msgstr "個別のロット"
@@ -1874,8 +1871,8 @@ msgstr "作業終了を設定"
 msgid "Set the time you stopped working, or acknowledge that you're still working."
 msgstr "作業を停止した時刻を設定するか、まだ作業中であることを確認してください。"
 
-msgid "Set up in Carbon"
-msgstr "Carbonで設定"
+msgid "Set up in {BRAND_NAME}"
+msgstr "{BRAND_NAME}で設定"
 
 msgid "Set up two-factor authentication"
 msgstr "二要素認証を設定"
@@ -2047,8 +2044,8 @@ msgstr "システム"
 msgid "Tag"
 msgstr "タグ"
 
-msgid "The accent color used across Carbon."
-msgstr "Carbon全体で使用されるアクセントカラー。"
+msgid "The accent color used across {BRAND_NAME}."
+msgstr "{BRAND_NAME}全体で使用されるアクセントカラー。"
 
 msgid "The completed quantity for this operation is less than the required quantity of {targetQuantity}."
 msgstr "この工程の完了数量が必要数量 {targetQuantity} を下回っています。"
@@ -2326,11 +2323,11 @@ msgstr ""
 msgid "You've been clocked in for {hoursElapsed} hours. Did you forget to clock out?"
 msgstr "作業開始から{hoursElapsed}時間が経過しています。作業終了を忘れていませんか？"
 
-msgid "Your account isn't part of a company yet. Complete onboarding in the Carbon ERP to continue."
-msgstr "あなたのアカウントはまだ会社に属していません。継続するには、Carbon ERP でオンボーディングを完了してください。"
+msgid "Your account isn't part of a company yet. Complete onboarding in the {BRAND_NAME} ERP to continue."
+msgstr "あなたのアカウントはまだ会社に属していません。継続するには、{BRAND_NAME} ERP でオンボーディングを完了してください。"
 
-msgid "Your organization requires an authenticator app. Set it up in Carbon, then come back here."
-msgstr "あなたの組織は認証器アプリが必要です。Carbonで設定してから、ここに戻ってください。"
+msgid "Your organization requires an authenticator app. Set it up in{BRAND_NAME}, then come back here."
+msgstr ""
 
 msgid "Your profile could not be loaded."
 msgstr "プロフィールを読み込めませんでした。"

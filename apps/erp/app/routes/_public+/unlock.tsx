@@ -33,12 +33,13 @@ import {
   Alert,
   AlertDescription,
   AlertTitle,
+  BrandWordmark,
   Button,
   Heading,
   toast,
   VStack
 } from "@carbon/react";
-import { getClientIp, redirect } from "@carbon/utils";
+import { BRAND_NAME, getClientIp, redirect } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { WebAuthnCredential } from "@simplewebauthn/browser";
 import {
@@ -65,7 +66,7 @@ import type { Result } from "~/types";
 import { path } from "~/utils/path";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Carbon | Session Locked" }];
+  return [{ title: `${BRAND_NAME} | Session Locked` }];
 };
 
 const unlockValidator = z.object({
@@ -405,16 +406,7 @@ export default function UnlockRoute() {
   return (
     <>
       <div className="flex justify-center mb-8">
-        <img
-          src="/carbon-mark-light.svg"
-          alt={t`Carbon Logo`}
-          className="w-24 dark:hidden"
-        />
-        <img
-          src="/carbon-mark-dark.svg"
-          alt={t`Carbon Logo`}
-          className="w-24 hidden dark:block"
-        />
+        <BrandWordmark size="lg" />
       </div>
       <div className="rounded-lg p-8 w-[380px]">
         <VStack spacing={4} className="items-center">

@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans } from "@lingui/react/macro";
 import type { ReactNode } from "react";
 import { LuCircleCheck, LuTriangleAlert } from "react-icons/lu";
@@ -104,8 +105,8 @@ export default function LeaseSetupReviewRoute() {
                   >
                     <Trans>
                       {asset}: the payment due {dueDate} is Skipped (paid
-                      outside Carbon), so nothing would take it off the lease
-                      liability. Set Invoice From on or before {dueDate}.
+                      outside {BRAND_NAME}), so nothing would take it off the
+                      lease liability. Set Invoice From on or before {dueDate}.
                     </Trans>
                   </Gap>
                 );

@@ -54,8 +54,8 @@ msgstr "(無効な勘定)"
 msgid "(Inactive)"
 msgstr "(無効)"
 
-msgid "(mapped to more than one Carbon account)"
-msgstr "(複数のCarbonアカウントにマップされています)"
+msgid "(mapped to more than one {BRAND_NAME} account)"
+msgstr "(複数の{BRAND_NAME}アカウントにマップされています)"
 
 msgid "(not an Equity posting account)"
 msgstr "(純資産転記勘定科目ではありません)"
@@ -117,8 +117,8 @@ msgid "{0, plural, one {# week} other {# weeks}}"
 msgstr "{0, plural, other {#週}}"
 
 #. placeholder {0}: check.count
-msgid "{0, plural, one {Complete or cancel the # job that took costs before Carbon recorded them.} other {Complete or cancel the # jobs that took costs before Carbon recorded them.}}"
-msgstr "{0, plural, one {Carbon が原価を記録する前に原価が発生した # 製造指図を完了またはキャンセルしてください。} other {Carbon が原価を記録する前に原価が発生した # 製造指図を完了またはキャンセルしてください。}}"
+msgid "{0, plural, one {Complete or cancel the # job that took costs before {BRAND_NAME} recorded them.} other {Complete or cancel the # jobs that took costs before {BRAND_NAME} recorded them.}}"
+msgstr "{0, plural, one {{BRAND_NAME} が原価を記録する前に原価が発生した # 製造指図を完了またはキャンセルしてください。} other {{BRAND_NAME} が原価を記録する前に原価が発生した # 製造指図を完了またはキャンセルしてください。}}"
 
 #. placeholder {0}: Number(lease.assetCount)
 msgid "{0, plural, one {for # asset} other {for # assets}}"
@@ -423,8 +423,8 @@ msgid "{0}-Year"
 msgstr "{0} 年"
 
 #. placeholder {0}: blocker.description
-msgid "{0}: the payment due {dueDate} is marked paid outside Carbon, but nothing would relieve it from the lease liability. Set Invoice From on or before {dueDate} so it is invoiced."
-msgstr "{0}: {dueDate}に支払期限のある支払はCarbon外で支払済とマークされていますが、リース債務からは何も除去されません。{dueDate}以前に「請求書発行元」を設定して、請求済にしてください。"
+msgid "{0}: the payment due {dueDate} is marked paid outside {BRAND_NAME}, but nothing would relieve it from the lease liability. Set Invoice From on or before {dueDate} so it is invoiced."
+msgstr "{0}: {dueDate}に支払期限のある支払は{BRAND_NAME}外で支払済とマークされていますが、リース債務からは何も除去されません。{dueDate}以前に「請求書発行元」を設定して、請求済にしてください。"
 
 #. placeholder {0}: line.description
 msgid "{0}: the treatment cannot be worked out. {message}"
@@ -472,11 +472,87 @@ msgstr "{apOverduePct}%の買掛金"
 msgid "{arOverduePct}% of receivables"
 msgstr "{arOverduePct}%の売掛金"
 
-msgid "{asset}: the payment due {dueDate} is Skipped (paid outside Carbon), so nothing would take it off the lease liability. Set Invoice From on or before {dueDate}."
-msgstr "{asset}: {dueDate}に支払期限のある支払はスキップ済（Carbon外で支払済）なので、リース債務からは何も除去されません。{dueDate}以前に「請求書発行元」を設定してください。"
+msgid "{asset}: the payment due {dueDate} is Skipped (paid outside {BRAND_NAME}), so nothing would take it off the lease liability. Set Invoice From on or before {dueDate}."
+msgstr "{asset}: {dueDate}に支払期限のある支払はスキップ済（{BRAND_NAME}外で支払済）なので、リース債務からは何も除去されません。{dueDate}以前に「請求書発行元」を設定してください。"
 
 msgid "{assetCount} Assets"
 msgstr "{assetCount} 固定資産"
+
+msgid "{BRAND_NAME}"
+msgstr ""
+
+msgid "{BRAND_NAME} + you"
+msgstr "{BRAND_NAME} + あなた"
+
+msgid "{BRAND_NAME} account"
+msgstr "{BRAND_NAME}勘定科目"
+
+msgid "{BRAND_NAME} column"
+msgstr "{BRAND_NAME}カラム"
+
+msgid "{BRAND_NAME} is configured the way your company runs, your data is loaded, and your team is confident using it. When that's true, you're ready to go live."
+msgstr "{BRAND_NAME}が会社の運用方法に従って構成されており、データがロードされ、チームがそれを自信を持って使用できるようになります。その場合、本番環境へのリリースの準備ができています。"
+
+msgid "{BRAND_NAME} leads"
+msgstr "{BRAND_NAME}がリード"
+
+msgid "{BRAND_NAME} only"
+msgstr "{BRAND_NAME}のみ"
+
+msgid "{BRAND_NAME} opens this account from its open items. The amount here is only compared on Migration Clearing."
+msgstr "{BRAND_NAME}はこのアカウントをその決済待ちアイテムから開きます。ここの金額はマイグレーション清算時にのみ比較されます。"
+
+msgid "{BRAND_NAME} Posted"
+msgstr ""
+
+msgid "{BRAND_NAME} posts every document dated on or after this day. Choose the first day of the current period or of one of the 3 periods before it."
+msgstr "{BRAND_NAME}はこの日付以降のすべての文書を転記します。現在の期間または前の3つの期間のいずれかの最初の日を選択してください。"
+
+msgid "{BRAND_NAME} posts the opening journal, posts every journal dated on or after the cutover date, and closes the periods before it."
+msgstr "{BRAND_NAME}は開始仕訳を転記し、カットオーバー日以降のすべての仕訳を転記し、その前の期間をクローズします。"
+
+msgid "{BRAND_NAME} starts every company on its default chart. Import your own chart now, before the trial balance, which matches accounts by number. The import needs two files: your chart, and the default accounts template filled with your account numbers. To keep{BRAND_NAME}'s chart, continue."
+msgstr ""
+
+msgid "{BRAND_NAME} value"
+msgstr "{BRAND_NAME}値"
+
+msgid "{BRAND_NAME} Value"
+msgstr ""
+
+#. placeholder {0}: unmapped.length
+msgid "{BRAND_NAME} will use AI to guess a provider account for each of your {0} unmapped accounts. Suggestions are a starting point — you can review them before anything is saved."
+msgstr "{BRAND_NAME}はあなたの{0}個のマップされていないアカウントのそれぞれについて、プロバイダーアカウントをAIで推測します。提案は出発点です — 保存する前にそれらをレビューできます。"
+
+msgid "{BRAND_NAME} writes their journals when you enable accounting, with today's accounts and costs."
+msgstr "会計を有効にするとき、{BRAND_NAME}は今日のアカウントとコストを使用してそれらの仕訳を作成します。"
+
+msgid "{BRAND_NAME}-only"
+msgstr "{BRAND_NAME}専用"
+
+msgid "{BRAND_NAME}-only · fill in real targets for this customer. They see the values, locked."
+msgstr "{BRAND_NAME}専用 · この得意先の実際の目標を記入します。値が表示され、ロックされます。"
+
+msgid "{BRAND_NAME}-only · the customer sees this text, locked."
+msgstr "{BRAND_NAME}専用 · 得意先がこのテキストを確認します。ロックされます。"
+
+msgid "{BRAND_NAME}'s default passwordless sign-in: an emailed one-time link that signs you in when opened, with no password to remember or leak."
+msgstr "{BRAND_NAME}のデフォルトのパスワードレスサインイン：メール送信された一度限りのリンクをクリックするだけでサインイン。パスワードを覚えたり漏らしたりする心配がありません。"
+
+msgid "{BRAND_NAME}'s name for a bill of material and bill of process (routing): the components plus the operations that make a part."
+msgstr "部品表と工程表（工順）に対する{BRAND_NAME}の名前：部品を製造するための部品と工程。"
+
+msgid "{BRAND_NAME}'s planning run nets supply against demand and explodes methods, surfacing shortfalls — but it creates no orders itself."
+msgstr "{BRAND_NAME}の計画実行は供給を所要量に対してネット化し、製法を展開して不足分を表面化します — ただし、発注は作成しません。"
+
+msgid "{BRAND_NAME}'s production order — one job builds a quantity of one item from its own copied method and routing."
+msgstr "{BRAND_NAME}の生産指示 — 1つの製造指図は、自身のコピーされた製法と工順から1つの品目の数量を製造します。"
+
+msgid "{BRAND_NAME}'s shop-floor app where operators run operations, report quantities, issue material, and log time against released jobs in real time."
+msgstr "{BRAND_NAME}の生産現場アプリ：作業者が工程を実行し、数量を報告し、材料を出庫し、リリース済の製造指図に対してリアルタイムで時間を記録します。"
+
+msgid "{BRAND_NAME}'s single record for anything with a part number — Part, Material, Tool, Service, Consumable, or Fixture — that jobs, methods, orders, and inventory all point at."
+msgstr "{BRAND_NAME}の単一レコード。部品番号を持つあらゆるもの（部品、材料、工具、外注サービス、消耗品、治具）に対応し、製造指図、製法、受注、在庫管理すべてが参照します。"
 
 msgid "{chainLabel}. Consider pointing this part directly at the final successor."
 msgstr "{chainLabel}。この部品を最終的な後継品目に直接ポイントすることを検討してください。"
@@ -526,8 +602,8 @@ msgstr "{created} 件作成、{updated} 件更新されました。"
 msgid "{days}d"
 msgstr "{days}日"
 
-msgid "{delegatedTo} posts this to your ledger, so Carbon doesn't push it. Your saved choice is kept in case that changes."
-msgstr "{delegatedTo}がこれをあなたの台帳に転記するため、Carbonはそれをプッシュしません。変更があった場合に備えて、保存された選択肢は保持されます。"
+msgid "{delegatedTo} posts this to your ledger, so {BRAND_NAME} doesn't push it. Your saved choice is kept in case that changes."
+msgstr "{delegatedTo}がこれをあなたの台帳に転記するため、{BRAND_NAME}はそれをプッシュしません。変更があった場合に備えて、保存された選択肢は保持されます。"
 
 msgid "{discount} off"
 msgstr "{discount} 割引"
@@ -579,8 +655,8 @@ msgstr "{label} はドキュメント、仕訳、またはデフォルトアカ�
 msgid "{leadTime, plural, one {# day} other {# days}}"
 msgstr "{leadTime, plural, other {#日}}"
 
-msgid "{legacyDocumentCount, plural, one {# document posted before Carbon kept journals has no journal.} other {# documents posted before Carbon kept journals have no journal.}}"
-msgstr "{legacyDocumentCount, plural, one {Carbon が仕訳を記録する前に転記された # 件の文書に仕訳がありません。} other {Carbon が仕訳を記録する前に転記された # 件の文書に仕訳がありません。}}"
+msgid "{legacyDocumentCount, plural, one {# document posted before {BRAND_NAME} kept journals has no journal.} other {# documents posted before {BRAND_NAME} kept journals have no journal.}}"
+msgstr "{legacyDocumentCount, plural, one {{BRAND_NAME} が仕訳を記録する前に転記された # 件の文書に仕訳がありません。} other {{BRAND_NAME} が仕訳を記録する前に転記された # 件の文書に仕訳がありません。}}"
 
 msgid "{linesCount, plural, one {# line} other {# lines}}"
 msgstr "{linesCount, plural, one {# 行} other {# 行}}"
@@ -713,8 +789,8 @@ msgstr "{state} · {syncedAgo} に同期"
 msgid "{termMonths, plural, one {# month} other {# months}}"
 msgstr "{termMonths, plural, one {# ヶ月} other {# ヶ月}}"
 
-msgid "{total} phases to get your company live on Carbon. Each one ends at a checkpoint."
-msgstr "あなたの会社を Carbon に本格運用するまでの {total} つのフェーズがあります。それぞれがチェックポイントで終わります。"
+msgid "{total} phases to get your company live on {BRAND_NAME}. Each one ends at a checkpoint."
+msgstr "あなたの会社を {BRAND_NAME} に本格運用するまでの {total} つのフェーズがあります。それぞれがチェックポイントで終わります。"
 
 msgid "{total} phases to go live"
 msgstr "{total}個のフェーズをライブにする"
@@ -961,6 +1037,9 @@ msgstr "90日"
 msgid "A \"must match\" rule on this process blocks these from sharing a batch"
 msgstr "このプロセスの\"一致必須\"ルールにより、これらはバッチを共有できません"
 
+msgid "A {BRAND_NAME}-run data migration — you load your own data"
+msgstr "{BRAND_NAME}実行のデータ移行 — あなたが自分のデータをロードします"
+
 msgid "A 3D model the operator can turn around"
 msgstr "作業者が回転させることができる3Dモデル"
 
@@ -969,9 +1048,6 @@ msgstr "4 桁の PIN は、作業者が作成されるときに生成されま�
 
 msgid "A batch needs at least one operation. To break up the whole batch, use Dissolve instead."
 msgstr "バッチには少なくとも 1 つの工程が必要です。バッチ全体を分割するには、代わりに [分割] を使用してください。"
-
-msgid "A Carbon-run data migration — you load your own data"
-msgstr "Carbon実行のデータ移行 — あなたが自分のデータをロードします"
 
 msgid "A change notice tracks a controlled engineering or manufacturing change through review and implementation."
 msgstr "変更通知は、エンジニアリングまたは製造変更をレビューと実施を通じて追跡します。"
@@ -1054,8 +1130,8 @@ msgstr "得意先のステータスが変わりました"
 msgid "A customer's type changes"
 msgstr "得意先のタイプが変わりました"
 
-msgid "A date on a contract moved into Carbon mid-term: billing periods that end on or before it were invoiced elsewhere, so they read Billed Externally and are never invoiced."
-msgstr "契約が Carbon に途中で移動された日付: その日付に終了またはそれ以前に終了する請求期間は他の場所で請求されたため、請求済み（外部）と表示され、請求されることはありません。"
+msgid "A date on a contract moved into {BRAND_NAME} mid-term: billing periods that end on or before it were invoiced elsewhere, so they read Billed Externally and are never invoiced."
+msgstr "契約が {BRAND_NAME} に途中で移動された日付: その日付に終了またはそれ以前に終了する請求期間は他の場所で請求されたため、請求済み（外部）と表示され、請求されることはありません。"
 
 msgid "A dated change to an active contract, with a reason and a contract type: changed lines end and their replacements start from the change date, prorated by day, or from the next billing period."
 msgstr "有効な契約の日付付き変更。理由と契約タイプ付き: 変更された明細は終了し、その交換品は変更日から開始します。日数で按分、または次の請求期間から開始します。"
@@ -1174,8 +1250,8 @@ msgstr "親の製造時に自身のジョブと工順を取得する受注生産
 msgid "A Make to Order component whose parts are issued together into the parent job — no separate build."
 msgstr "部品が親ジョブに一緒に出庫される受注生産部品。別途製造なし。"
 
-msgid "A managed cloud-hosted version of Carbon"
-msgstr "Carbonのマネージド クラウド ホスト版"
+msgid "A managed cloud-hosted version of {BRAND_NAME}"
+msgstr "{BRAND_NAME}のマネージド クラウド ホスト版"
 
 msgid "A managed version with all the advanced features"
 msgstr "すべての高度な機能を備えた管理版"
@@ -1213,8 +1289,8 @@ msgstr "同じ期間の新しい契約期間がこれが終了するときに開
 msgid "A non-cash document that settles an invoice against a reason account: a credit lowers what's owed, a debit raises it."
 msgstr "請求書を理由勘定に対して決済する非現金文書。貸方は支払額を減らし、借方は増やします。"
 
-msgid "A non-conformance shared with a supplier over a login-free /share/scar link, so they can respond to the issue and update its tasks from outside Carbon."
-msgstr "ログイン不要の/share/scarリンク経由で仕入先と共有された不適合。仕入先はCarbonの外から問題に対応してタスクを更新できます。"
+msgid "A non-conformance shared with a supplier over a login-free /share/scar link, so they can respond to the issue and update its tasks from outside {BRAND_NAME}."
+msgstr "ログイン不要の/share/scarリンク経由で仕入先と共有された不適合。仕入先は{BRAND_NAME}の外から問題に対応してタスクを更新できます。"
 
 msgid "A non-taxable surcharge (e.g. recoverable expenses like permit fees) added to the line; excluded from the tax base."
 msgstr "明細に追加された非課税手数料（例：許可手数料などの回収可能な費用）。税ベースから除外。"
@@ -1237,8 +1313,8 @@ msgstr "このステップで作業者が見る写真またはPDF"
 msgid "A physical pull signal — a printed card or QR code living with the stock — that raises a purchase order or a job the moment it's scanned to refill a bin."
 msgstr "物理的なプルシグナル。在庫に付属する印刷されたカードまたはQRコード。スキャンされた時点で発注書またはジョブを作成してビンを補充します。"
 
-msgid "A point in one of Carbon's own flows that a workflow can watch — a job released, a quote accepted, a shipment posted — as opposed to a raw field change; it hands the workflow the records involved by id."
-msgstr "Carbon のワークフロー内のポイント（製造指図がリリース済、見積が承諾済、出荷が転記済など）で、ワークフローが監視できます。生のフィールド変更とは異なり、関連するレコードを ID で提供します。"
+msgid "A point in one of {BRAND_NAME}'s own flows that a workflow can watch — a job released, a quote accepted, a shipment posted — as opposed to a raw field change; it hands the workflow the records involved by id."
+msgstr "{BRAND_NAME} のワークフロー内のポイント（製造指図がリリース済、見積が承諾済、出荷が転記済など）で、ワークフローが監視できます。生のフィールド変更とは異なり、関連するレコードを ID で提供します。"
 
 msgid "A posted accounting entry: a header plus balanced debit and credit lines against GL accounts."
 msgstr "転記済会計エントリ。ヘッダーと勘定科目に対する均衡した借方・貸方明細から構成。"
@@ -1462,8 +1538,8 @@ msgstr "売上見積依頼（RFQ）は、複数の部品と数量に関する価
 msgid "A sales RFQ (a customer asks you to quote) or a purchasing RFQ (you ask suppliers); both feed the opportunity thread."
 msgstr "売上見積依頼（得意先が見積をお願いする）または購買見積依頼（仕入先に見積をお願いする）で、どちらも商談に情報を提供します。"
 
-msgid "A scoped secret sent on the carbon-key request header that authenticates programmatic calls to Carbon, carrying its own permissions and rate limit rather than a user session's."
-msgstr "carbon-key リクエスト ヘッダーで送信されるスコープ付きシークレット。Carbon へのプログラマティック呼び出しを認証し、ユーザー セッションではなく独自の権限とレート制限を保有します。"
+msgid "A scoped secret sent on the carbon-key request header that authenticates programmatic calls to {BRAND_NAME}, carrying its own permissions and rate limit rather than a user session's."
+msgstr "carbon-key リクエスト ヘッダーで送信されるスコープ付きシークレット。{BRAND_NAME} へのプログラマティック呼び出しを認証し、ユーザー セッションではなく独自の権限とレート制限を保有します。"
 
 msgid "A separate schedule for tax reporting when tax rules require a method different from book depreciation."
 msgstr "税務報告のための別のスケジュール。税務ルールが帳簿減価償却とは異なる方法を要求する場合。"
@@ -2627,8 +2703,8 @@ msgstr "設計変更。影響を受ける品目の製法が下書きで改訂さ
 msgid "An Enterprise sign-in method where everyone on a company's registered email domains authenticates through the company's own SAML identity provider instead of a magic link, so IT grants and revokes access centrally."
 msgstr "エンタープライズ認証方式で、会社の登録済みメールドメイン上の全員が、マジックリンクの代わりに会社自身の SAML アイデンティティプロバイダーを通じて認証されるため、IT は中央でアクセスを付与および取り消します。"
 
-msgid "An https request Carbon sends to a system of yours when a workflow reaches that step, carrying whatever headers and body you configured."
-msgstr "ワークフローがそのステップに到達したときに、Carbonがあなたのシステムに送信するHTTPSリクエスト。設定したヘッダーと本文が含まれます。"
+msgid "An https request {BRAND_NAME} sends to a system of yours when a workflow reaches that step, carrying whatever headers and body you configured."
+msgstr "ワークフローがそのステップに到達したときに、{BRAND_NAME}があなたのシステムに送信するHTTPSリクエスト。設定したヘッダーと本文が含まれます。"
 
 msgid "An integration or a custom change — the small slice that's actually custom."
 msgstr "連携またはカスタム変更 — 実際にカスタムされている小さなスライス。"
@@ -2863,8 +2939,8 @@ msgstr "APIキー"
 msgid "API Keys"
 msgstr "APIキー"
 
-msgid "API keys for programmatic access to your Carbon data."
-msgstr "Carbonデータへのプログラマティックアクセス用のAPIキー。"
+msgid "API keys for programmatic access to your {BRAND_NAME} data."
+msgstr "{BRAND_NAME}データへのプログラマティックアクセス用のAPIキー。"
 
 msgid "API, webhooks, and integrations"
 msgstr "API、Webhook、および連携"
@@ -3870,8 +3946,8 @@ msgstr "自動化"
 msgid "Automate quality flags and notifications"
 msgstr "品質フラグと通知を自動化"
 
-msgid "Automate your business processes with event-driven workflows that trigger actions when things happen in Carbon."
-msgstr "Carbonで発生するときにアクションをトリガーするイベント駆動型ワークフローでビジネスプロセスを自動化します。"
+msgid "Automate your business processes with event-driven workflows that trigger actions when things happen in {BRAND_NAME}."
+msgstr "{BRAND_NAME}で発生するときにアクションをトリガーするイベント駆動型ワークフローでビジネスプロセスを自動化します。"
 
 msgid "Automatic"
 msgstr "自動"
@@ -4314,8 +4390,8 @@ msgstr "ボーナス減価償却 %"
 msgid "Book a call to discuss guided implementation"
 msgstr "実施についてのガイド付きディスカッションの通話を予約"
 
-msgid "Book a call with Carbon"
-msgstr "Carbonとの通話を予約する"
+msgid "Book a call with {BRAND_NAME}"
+msgstr "{BRAND_NAME}との通話を予約する"
 
 msgid "Book Depreciation"
 msgstr "減価償却の計上"
@@ -4338,8 +4414,8 @@ msgstr "このバージョンの編集可能なコピーをブランチして、
 msgid "Breadcrumb"
 msgstr "パンくずリスト"
 
-msgid "Bring in your parts, BOMs, Bill of Process, and costing — with Carbon's import tools, CSV, or LLM help."
-msgstr "部品、BOM、工程表、原価計算をインポート — Carbonのツール、CSV、LLM支援で。"
+msgid "Bring in your parts, BOMs, Bill of Process, and costing — with {BRAND_NAME}'s import tools, CSV, or LLM help."
+msgstr "部品、BOM、工程表、原価計算をインポート — {BRAND_NAME}のツール、CSV、LLM支援で。"
 
 msgid "Browse library"
 msgstr "ライブラリを参照"
@@ -4494,8 +4570,8 @@ msgstr "校正"
 msgid "Call an outside URL"
 msgstr "外部URLを呼び出す"
 
-msgid "Called a method in Carbon — the components plus operations that produce a part."
-msgstr "Carbonで「製法」と呼ばれるもの — 部品を製造するための部品と工程。"
+msgid "Called a method in {BRAND_NAME} — the components plus operations that produce a part."
+msgstr "{BRAND_NAME}で「製法」と呼ばれるもの — 部品を製造するための部品と工程。"
 
 msgid "Camera"
 msgstr "カメラ"
@@ -4666,15 +4742,6 @@ msgstr "資産を資本化"
 msgid "Caption"
 msgstr "キャプション"
 
-msgid "Carbon"
-msgstr "カーボン"
-
-msgid "Carbon + you"
-msgstr "Carbon + あなた"
-
-msgid "Carbon account"
-msgstr "Carbon勘定科目"
-
 msgid "Carbon client is not available"
 msgstr "Carbonクライアントは利用できません。"
 
@@ -4683,76 +4750,6 @@ msgstr "Carbonクライアント未対応"
 
 msgid "Carbon client not found"
 msgstr "Carbonクライアントが見つかりません"
-
-msgid "Carbon column"
-msgstr "Carbonカラム"
-
-msgid "Carbon is configured the way your company runs, your data is loaded, and your team is confident using it. When that's true, you're ready to go live."
-msgstr "Carbonが会社の運用方法に従って構成されており、データがロードされ、チームがそれを自信を持って使用できるようになります。その場合、本番環境へのリリースの準備ができています。"
-
-msgid "Carbon leads"
-msgstr "Carbonがリード"
-
-msgid "Carbon Logo"
-msgstr "Carbonロゴ"
-
-msgid "Carbon only"
-msgstr "Carbonのみ"
-
-msgid "Carbon opens this account from its open items. The amount here is only compared on Migration Clearing."
-msgstr "Carbonはこのアカウントをその決済待ちアイテムから開きます。ここの金額はマイグレーション清算時にのみ比較されます。"
-
-msgid "Carbon Posted"
-msgstr "カーボン転記済み"
-
-msgid "Carbon posts every document dated on or after this day. Choose the first day of the current period or of one of the 3 periods before it."
-msgstr "Carbonはこの日付以降のすべての文書を転記します。現在の期間または前の3つの期間のいずれかの最初の日を選択してください。"
-
-msgid "Carbon posts the opening journal, posts every journal dated on or after the cutover date, and closes the periods before it."
-msgstr "Carbonは開始仕訳を転記し、カットオーバー日以降のすべての仕訳を転記し、その前の期間をクローズします。"
-
-msgid "Carbon starts every company on its default chart. Import your own chart now, before the trial balance, which matches accounts by number. The import needs two files: your chart, and the default accounts template filled with your account numbers. To keep Carbon's chart, continue."
-msgstr "Carbon は毎社をデフォルト勘定科目表で開始します。試算表の前に、番号で勘定を照合する自社の勘定科目表をインポートしてください。インポートには 2 つのファイルが必要です: 自社の勘定科目表と、勘定番号を記入したデフォルト勘定テンプレートです。Carbon の勘定科目表を保持するには、続行してください。"
-
-msgid "Carbon value"
-msgstr "Carbon値"
-
-msgid "Carbon Value"
-msgstr "カーボン値"
-
-#. placeholder {0}: unmapped.length
-msgid "Carbon will use AI to guess a provider account for each of your {0} unmapped accounts. Suggestions are a starting point — you can review them before anything is saved."
-msgstr "Carbonはあなたの{0}個のマップされていないアカウントのそれぞれについて、プロバイダーアカウントをAIで推測します。提案は出発点です — 保存する前にそれらをレビューできます。"
-
-msgid "Carbon writes their journals when you enable accounting, with today's accounts and costs."
-msgstr "会計を有効にするとき、Carbonは今日のアカウントとコストを使用してそれらの仕訳を作成します。"
-
-msgid "Carbon-only"
-msgstr "Carbon専用"
-
-msgid "Carbon-only · fill in real targets for this customer. They see the values, locked."
-msgstr "Carbon専用 · この得意先の実際の目標を記入します。値が表示され、ロックされます。"
-
-msgid "Carbon-only · the customer sees this text, locked."
-msgstr "Carbon専用 · 得意先がこのテキストを確認します。ロックされます。"
-
-msgid "Carbon's default passwordless sign-in: an emailed one-time link that signs you in when opened, with no password to remember or leak."
-msgstr "Carbonのデフォルトのパスワードレスサインイン：メール送信された一度限りのリンクをクリックするだけでサインイン。パスワードを覚えたり漏らしたりする心配がありません。"
-
-msgid "Carbon's name for a bill of material and bill of process (routing): the components plus the operations that make a part."
-msgstr "部品表と工程表（工順）に対するCarbonの名前：部品を製造するための部品と工程。"
-
-msgid "Carbon's planning run nets supply against demand and explodes methods, surfacing shortfalls — but it creates no orders itself."
-msgstr "Carbonの計画実行は供給を所要量に対してネット化し、製法を展開して不足分を表面化します — ただし、発注は作成しません。"
-
-msgid "Carbon's production order — one job builds a quantity of one item from its own copied method and routing."
-msgstr "Carbonの生産指示 — 1つの製造指図は、自身のコピーされた製法と工順から1つの品目の数量を製造します。"
-
-msgid "Carbon's shop-floor app where operators run operations, report quantities, issue material, and log time against released jobs in real time."
-msgstr "Carbonの生産現場アプリ：作業者が工程を実行し、数量を報告し、材料を出庫し、リリース済の製造指図に対してリアルタイムで時間を記録します。"
-
-msgid "Carbon's single record for anything with a part number — Part, Material, Tool, Service, Consumable, or Fixture — that jobs, methods, orders, and inventory all point at."
-msgstr "Carbonの単一レコード。部品番号を持つあらゆるもの（部品、材料、工具、外注サービス、消耗品、治具）に対応し、製造指図、製法、受注、在庫管理すべてが参照します。"
 
 msgid "Card Holder"
 msgstr "カードホルダー"
@@ -5018,8 +5015,8 @@ msgstr "別のファイルを選択"
 msgid "Choose avatar"
 msgstr "アバターを選択"
 
-msgid "Choose how Carbon reaches you."
-msgstr "Carbon があなたに連絡する方法を選択してください。"
+msgid "Choose how {BRAND_NAME} reaches you."
+msgstr "{BRAND_NAME} があなたに連絡する方法を選択してください。"
 
 msgid "Choose how to add lines to this return."
 msgstr "この返品に明細を追加する方法を選択してください。"
@@ -5452,11 +5449,11 @@ msgstr "コンフィギュレーター"
 msgid "Configure"
 msgstr "設定"
 
+msgid "Configure {BRAND_NAME}"
+msgstr "{BRAND_NAME}を設定"
+
 msgid "Configure {label}"
 msgstr "{label}を設定"
-
-msgid "Configure Carbon"
-msgstr "Carbonを設定"
 
 msgid "Configure default accounts for cash and bank transactions"
 msgstr "現金と銀行取引のデフォルトアカウントを構成"
@@ -5593,8 +5590,8 @@ msgstr "紛争の理由"
 msgid "Connect"
 msgstr "接続"
 
-msgid "Connect Carbon to your accounting, project management, and CAD tools and much more."
-msgstr "Carbonを会計、プロジェクト管理、CADツールなど、さまざまなツールに接続できます。"
+msgid "Connect {BRAND_NAME} to your accounting, project management, and CAD tools and much more."
+msgstr "{BRAND_NAME}を会計、プロジェクト管理、CADツールなど、さまざまなツールに接続できます。"
 
 msgid "Connect Jira issue"
 msgstr "Jira課題に接続"
@@ -6923,11 +6920,11 @@ msgstr "カスタマイズ"
 msgid "Customize the layout of your PDF documents — reorder sections, hide what you don't need, and add your own blocks."
 msgstr "PDFドキュメントのレイアウトをカスタマイズ — セクションを並べ替え、不要な部分を非表示にし、独自のブロックを追加できます。"
 
-msgid "Cut over to Carbon and freeze the old system"
-msgstr "Carbonに切り替えて古いシステムを凍結する"
+msgid "Cut over to {BRAND_NAME} and freeze the old system"
+msgstr "{BRAND_NAME}に切り替えて古いシステムを凍結する"
 
-msgid "Cut over, freeze the old system, and confirm you're live on Carbon."
-msgstr "切り替え、旧システムをフリーズし、Carbonで稼働していることを確認します。"
+msgid "Cut over, freeze the old system, and confirm you're live on {BRAND_NAME}."
+msgstr "切り替え、旧システムをフリーズし、{BRAND_NAME}で稼働していることを確認します。"
 
 msgid "Cutover checklist"
 msgstr "カットオーバーチェックリスト"
@@ -8144,14 +8141,14 @@ msgstr "ドキュメント"
 msgid "Documents and activity"
 msgstr "ドキュメントと活動"
 
-msgid "Documents Posted Before Carbon Kept Journals"
-msgstr "Carbon が仕訳を保持する前に転記されたドキュメント"
+msgid "Documents Posted Before {BRAND_NAME} Kept Journals"
+msgstr "{BRAND_NAME} が仕訳を保持する前に転記されたドキュメント"
 
-msgid "Documents posted before Carbon kept journals have no journal."
-msgstr "Carbon が仕訳を保持する前に転記されたドキュメントには仕訳がありません。"
+msgid "Documents posted before {BRAND_NAME} kept journals have no journal."
+msgstr "{BRAND_NAME} が仕訳を保持する前に転記されたドキュメントには仕訳がありません。"
 
-msgid "Documents pushes invoices, bills and payments as native provider documents; their journals are recorded as covered by the document. It also pulls payments recorded in the provider back into Carbon, closing the matching invoice or bill and posting a Carbon GL journal. Off records them as deliberately excluded."
-msgstr "ドキュメントはネイティブプロバイダ文書として請求書および支払をプッシュします。それらの仕訳は文書でカバーされたものとして記録されます。また、プロバイダで記録された支払をCarbonに取り込み、対応する請求書をクローズし、Carbon総勘定元帳仕訳を転記します。オフはそれらを意図的に除外したものとして記録します。"
+msgid "Documents pushes invoices, bills and payments as native provider documents; their journals are recorded as covered by the document. It also pulls payments recorded in the provider back into {BRAND_NAME}, closing the matching invoice or bill and posting a{BRAND_NAME} GL journal. Off records them as deliberately excluded."
+msgstr ""
 
 msgid "Documents you open will show up here for quick access."
 msgstr "開いたドキュメントはここに表示され、すぐにアクセスできます。"
@@ -8214,8 +8211,8 @@ msgstr "PDFをダウンロード"
 msgid "Download template"
 msgstr "テンプレートをダウンロード"
 
-msgid "Download the template. Each row is a default account Carbon posts to. In Account Number, enter the number of the account in your chart that takes it. Carbon updates the default account to match."
-msgstr "テンプレートをダウンロードしてください。各行は Carbon が転記するデフォルト勘定です。勘定番号に、自社の勘定科目表でそれを取得する勘定の番号を入力してください。Carbon はデフォルト勘定を更新して一致させます。"
+msgid "Download the template. Each row is a default account {BRAND_NAME} posts to. In Account Number, enter the number of the account in your chart that takes it. {BRAND_NAME} updates the default account to match."
+msgstr "テンプレートをダウンロードしてください。各行は {BRAND_NAME} が転記するデフォルト勘定です。勘定番号に、自社の勘定科目表でそれを取得する勘定の番号を入力してください。{BRAND_NAME} はデフォルト勘定を更新して一致させます。"
 
 msgid "Draft"
 msgstr "下書き"
@@ -8986,8 +8983,8 @@ msgstr "この教育訓練に割り当てられた従業員は開くことがで
 msgid "Employees can no longer open this training."
 msgstr "従業員はこの教育訓練を開くことができなくなりました。"
 
-msgid "Employees complete a training in Carbon"
-msgstr "従業員がCarbonで教育訓練を完了する"
+msgid "Employees complete a training in {BRAND_NAME}"
+msgstr "従業員が{BRAND_NAME}で教育訓練を完了する"
 
 msgid "Empty"
 msgstr "空"
@@ -9305,8 +9302,8 @@ msgstr "通貨換算調整（CTA）のための純資産勘定科目"
 msgid "Equity account that offsets the opening balances when accounting is set up. It must total zero."
 msgstr "会計がセットアップされるときに開始残高を相殺する純資産アカウント。合計がゼロである必要があります。"
 
-msgid "Equity account the opening journal posts against when accounting is set up; it holds any difference between the prior trial balance and Carbon's records, and must total zero before you can enable."
-msgstr "会計が設定された際に開始仕訳が転記される純資産勘定科目。前期試算表と Carbon の記録との差額を保有し、有効にする前に合計がゼロである必要があります。"
+msgid "Equity account the opening journal posts against when accounting is set up; it holds any difference between the prior trial balance and {BRAND_NAME}'s records, and must total zero before you can enable."
+msgstr "会計が設定された際に開始仕訳が転記される純資産勘定科目。前期試算表と {BRAND_NAME} の記録との差額を保有し、有効にする前に合計がゼロである必要があります。"
 
 msgid "Error"
 msgstr "エラー"
@@ -9462,8 +9459,8 @@ msgstr "会社に属するすべてのレコード。認証情報、連携トー
 msgid "Every condition must match"
 msgstr "すべての条件が一致する必要があります"
 
-msgid "Every delivery carries a Carbon-Signature header signed with this secret. Verify it to know a request came from Carbon."
-msgstr "すべての配信にはこのシークレットで署名されたCarbon-Signatureヘッダーが含まれます。Carbonからのリクエストであることを検証してください。"
+msgid "Every delivery carries a Carbon-Signature header signed with this secret. Verify it to know a request came from {BRAND_NAME}."
+msgstr "すべての配信にはこのシークレットで署名された{BRAND_NAME}-Signatureヘッダーが含まれます。{BRAND_NAME}からのリクエストであることを検証してください。"
 
 msgid "Every in-scope test passes in your configured system, with your data."
 msgstr "スコープ内のすべてのテストが、設定されたシステムで、あなたのデータを使用して合格します。"
@@ -9736,8 +9733,8 @@ msgstr "CSVをエクスポート"
 msgid "Export Lines to CSV"
 msgstr "CSVにラインをエクスポート"
 
-msgid "Export your chart from your current system as a CSV, one row per account, with its number, name, class, type and group, or start from the template of the current chart. Carbon keeps only the accounts in this file."
-msgstr "現在のシステムから勘定科目表を CSV でエクスポートしてください。1 行につき 1 つの勘定で、その番号、名前、クラス、タイプ、グループを含みます。または現在の勘定科目表のテンプレートから始めることもできます。Carbon はこのファイルにある勘定のみを保持します。"
+msgid "Export your chart from your current system as a CSV, one row per account, with its number, name, class, type and group, or start from the template of the current chart. {BRAND_NAME} keeps only the accounts in this file."
+msgstr "現在のシステムから勘定科目表を CSV でエクスポートしてください。1 行につき 1 つの勘定で、その番号、名前、クラス、タイプ、グループを含みます。または現在の勘定科目表のテンプレートから始めることもできます。{BRAND_NAME} はこのファイルにある勘定のみを保持します。"
 
 msgid "Extended Price"
 msgstr "拡張価格"
@@ -9772,8 +9769,8 @@ msgstr "社外参照"
 msgid "External training"
 msgstr "社外教育訓練"
 
-msgid "Extra fields to capture data Carbon doesn't track by default"
-msgstr "Carbonがデフォルトで追跡しないデータをキャプチャするための追加フィールド"
+msgid "Extra fields to capture data {BRAND_NAME} doesn't track by default"
+msgstr "{BRAND_NAME}がデフォルトで追跡しないデータをキャプチャするための追加フィールド"
 
 msgid "Extra hours on the whole day"
 msgstr "1日全体の追加時間"
@@ -10726,8 +10723,8 @@ msgstr "生成されたIDが有効です"
 msgid "Generating suggestions…"
 msgstr "提案を生成中…"
 
-msgid "Get live on Carbon: one system running quoting, purchasing, the shop floor, inventory, and finance, replacing the current tools."
-msgstr "Carbonで稼働開始：見積、購買、製造現場、在庫、財務を実行する1つのシステムで、現在のツールに置き換わります。"
+msgid "Get live on {BRAND_NAME}: one system running quoting, purchasing, the shop floor, inventory, and finance, replacing the current tools."
+msgstr "{BRAND_NAME}で稼働開始：見積、購買、製造現場、在庫、財務を実行する1つのシステムで、現在のツールに置き換わります。"
 
 msgid "Get Method"
 msgstr "製法を取得"
@@ -10738,14 +10735,14 @@ msgstr "始めましょう"
 msgid "Get Started"
 msgstr "はじめる"
 
-msgid "Get your Carbon notifications as they happen."
-msgstr "Carbonからの通知がリアルタイムで届きます。"
+msgid "Get your {BRAND_NAME} notifications as they happen."
+msgstr "{BRAND_NAME}からの通知がリアルタイムで届きます。"
 
 msgid "Gets the summary for every agreement"
 msgstr "すべての協定のサマリーを取得します"
 
-msgid "Getting around Carbon"
-msgstr "Carbonの基本操作"
+msgid "Getting around {BRAND_NAME}"
+msgstr "{BRAND_NAME}の基本操作"
 
 msgid "Getting set up"
 msgstr "セットアップ中"
@@ -10925,8 +10922,8 @@ msgstr "運用開始日"
 msgid "Go-live timing holds if each gate is cleared on schedule"
 msgstr "各ゲートがスケジュール通りにクリアされれば、本番稼働のタイミングは維持されます"
 
-msgid "Going live on Carbon"
-msgstr "Carbonで本番稼働"
+msgid "Going live on {BRAND_NAME}"
+msgstr "{BRAND_NAME}で本番稼働"
 
 msgid "Good afternoon, {name}."
 msgstr "こんにちは、{name}。"
@@ -11150,14 +11147,17 @@ msgstr "時間/1000個"
 msgid "Hours/Piece"
 msgstr "時間/個"
 
+msgid "How {BRAND_NAME} looks in this browser."
+msgstr "このブラウザにおける{BRAND_NAME}の表示方法。"
+
 msgid "How a batchable process runs its grouped work: Sequential runs parts one after another on one machine (a saw or laser table), while Simultaneous runs them together in a single load (a furnace, oven, or plating bath)."
 msgstr "バッチ処理可能な工法がグループ化されたworkをどのように実行するかを示します：シーケンシャルは部品を1つの機械（のこぎりやレーザーテーブル）で次々と実行し、シミュルタネアスは1回の負荷でそれらを一緒に実行します（炉、オーブン、またはメッキ槽）。"
 
 msgid "How a contract line earns its revenue over its revenue dates: Daily, the same amount every day, or Even Period, the same amount every calendar month with partial months prorated by days."
 msgstr "契約明細が売上高日にわたって売上高を獲得する方法：毎日同じ金額、または均等期間で毎暦月同じ金額で、部分月は日数で按分されます。"
 
-msgid "How a contract or an amendment is classified for recurring-revenue reporting: New Sales, Existing, Expansion, Reactivation, or Contraction. Carbon suggests it and you can change it."
-msgstr "契約または修正が継続売上高レポート用にどのように分類されるか：新規販売、既存、拡張、再開始、または縮小。Carbonが提案し、変更できます。"
+msgid "How a contract or an amendment is classified for recurring-revenue reporting: New Sales, Existing, Expansion, Reactivation, or Contraction. {BRAND_NAME} suggests it and you can change it."
+msgstr "契約または修正が継続売上高レポート用にどのように分類されるか：新規販売、既存、拡張、再開始、または縮小。{BRAND_NAME}が提案し、変更できます。"
 
 msgid "How a rental agreement cuts billing periods from its start date: Monthly cuts one month from the start date's day (a start on the 7th bills the 7th to the 6th), Calendar Month (Monthly, aligned to calendar periods) cuts calendar months, and 28 Days cuts consecutive 28-day periods. Each unit bills one rate at its own frequency for the whole days, weeks, or months a period covers; a monthly rate in a part period is prorated by days."
 msgstr "レンタル契約がその開始日から請求期間をどのように区切るかについて：毎月は開始日からの1か月を期間とします（例：開始日が7日の場合は毎月7日から翌月6日まで）。カレンダー月（毎月をカレンダー期間に合わせたもの）はカレンダー月ごとに期間を区切ります。28日は連続した28日間の期間に区切ります。各期間は、独自の頻度で、全体の日、週、または月に対して1つのレートを請求します。一部期間での月額レートは日数で按分されます。"
@@ -11176,9 +11176,6 @@ msgstr "品目の単位原価がどのように評価されるかについて：
 
 msgid "How are these hours calculated?"
 msgstr "これらの時間はどのように計算されますか？"
-
-msgid "How Carbon looks in this browser."
-msgstr "このブラウザにおけるCarbonの表示方法。"
 
 msgid "How coverage is worked out"
 msgstr "カバレッジの計算方法"
@@ -11303,8 +11300,8 @@ msgstr "私たちの働き方"
 msgid "How will you use {integrationName}?"
 msgstr "{integrationName}をどのように使用しますか？"
 
-msgid "How your company's process maps to Carbon"
-msgstr "あなたの会社のプロセスがCarbonにどのようにマップされるか"
+msgid "How your company's process maps to {BRAND_NAME}"
+msgstr "あなたの会社のプロセスが{BRAND_NAME}にどのようにマップされるか"
 
 msgid "How your quotes, orders, and invoices look when they go out"
 msgstr "見積書、注文書、請求書が送信される際の外観"
@@ -12166,8 +12163,8 @@ msgstr "発行日"
 msgid "Issues"
 msgstr "問題"
 
-msgid "It is coming soon. Contact Carbon to have it set up for your company."
-msgstr "近日公開予定です。会社向けに設定するには Carbon にお問い合わせください。"
+msgid "It is coming soon. Contact {BRAND_NAME} to have it set up for your company."
+msgstr "近日公開予定です。会社向けに設定するには {BRAND_NAME} にお問い合わせください。"
 
 msgid "It will stop running until you publish a version again. Nothing is deleted."
 msgstr "バージョンを再度公開するまで実行は停止します。削除されるものはありません。"
@@ -12935,8 +12932,8 @@ msgstr "Linear イシューをリンク"
 msgid "link outside company"
 msgstr "会社外へのリンク"
 
-msgid "Link this Carbon customer to one of them, or create a separate Stripe customer."
-msgstr "このCarbonの得意先をいずれかにリンクするか、別のStripe顧客を作成してください。"
+msgid "Link this {BRAND_NAME} customer to one of them, or create a separate Stripe customer."
+msgstr "この{BRAND_NAME}の得意先をいずれかにリンクするか、別のStripe顧客を作成してください。"
 
 msgid "Link to sales order line"
 msgstr "受注明細へのリンク"
@@ -12975,8 +12972,8 @@ msgstr "一覧表示"
 msgid "Lists are wired into both {0} and {1}, so this step cannot tell which one to repeat over. Leave a list on only one of them."
 msgstr "リストが{0}と{1}の両方に接続されています。そのため、このステップはどちらを繰り返すべきかを判断できません。リストはそのうちの1つにのみ残してください。"
 
-msgid "Live on Carbon"
-msgstr "Carbonで稼働中"
+msgid "Live on {BRAND_NAME}"
+msgstr "{BRAND_NAME}で稼働中"
 
 msgid "Live reloading"
 msgstr "ライブリロード中"
@@ -13014,8 +13011,8 @@ msgstr "アイテムの詳細を読み込み中..."
 msgid "Loading returnable lines..."
 msgstr "返品対象行を読み込み中..."
 
-msgid "Loading your own data with Carbon's import tools"
-msgstr "Carbonのインポートツールで独自のデータを読み込む"
+msgid "Loading your own data with {BRAND_NAME}'s import tools"
+msgstr "{BRAND_NAME}のインポートツールで独自のデータを読み込む"
 
 msgid "Loading..."
 msgstr "読み込み中..."
@@ -13325,8 +13322,8 @@ msgstr "会社の認証およびサインイン要件を管理してください
 msgid "Manage how shelf life is tracked, computed, and enforced across inventory."
 msgstr "保存期間が在庫全体で追跡、計算、および適用される方法を管理します。"
 
-msgid "Manage how you sign in to Carbon."
-msgstr "Carbon へのサインイン方法を管理します。"
+msgid "Manage how you sign in to {BRAND_NAME}."
+msgstr "{BRAND_NAME} へのサインイン方法を管理します。"
 
 msgid "Manage Ownership"
 msgstr "所有権を管理"
@@ -15071,8 +15068,8 @@ msgstr "この拠点で、次の{horizon}日間に完了予定のオープン受
 msgid "No open jobs for sales orders at this location."
 msgstr "この拠点にはオープン受注用製造指図がありません。"
 
-msgid "No open jobs with costs from before Carbon recorded them"
-msgstr "Carbon が記録する前の原価があるオープン製造指図がありません"
+msgid "No open jobs with costs from before {BRAND_NAME} recorded them"
+msgstr "{BRAND_NAME} が記録する前の原価があるオープン製造指図がありません"
 
 msgid "No open lines. Add a service to amend."
 msgstr "未完了の明細はありません。変更するにはサービスを追加してください。"
@@ -15604,8 +15601,8 @@ msgstr "通知タイプ"
 msgid "Notifications"
 msgstr "通知"
 
-msgid "Notifications are blocked for Carbon in this browser's site settings."
-msgstr "このブラウザのサイト設定でCarbonの通知がブロックされています。"
+msgid "Notifications are blocked for {BRAND_NAME} in this browser's site settings."
+msgstr "このブラウザのサイト設定で{BRAND_NAME}の通知がブロックされています。"
 
 msgid "Notify"
 msgstr "通知"
@@ -15683,11 +15680,11 @@ msgstr "オン"
 msgid "On {sentDate}"
 msgstr "{sentDate}に送信"
 
-msgid "On a control account, Carbon opens the balance from its own open items, inventory and fixed assets. The trial balance must agree: every difference stays on Migration Clearing, which must total zero. Open an account to see its items, and ignore an invoice the prior system already settled. Apply to Trial Balance sets each control account to Carbon's total and puts what is left on Retained Earnings."
-msgstr "制御勘定では、Carbonは独自のオープン品目、在庫管理および固定資産から残高を開きます。試算表は一致する必要があります。すべての差異は移行クリアリングに留まり、ゼロに合計する必要があります。勘定をオープンして品目を確認し、前のシステムで既に決済した請求書は無視してください。試算表に適用することで、各制御勘定をCarbonの合計に設定し、残りを利益剰余金に配置します。"
+msgid "On a control account, {BRAND_NAME} opens the balance from its own open items, inventory and fixed assets. The trial balance must agree: every difference stays on Migration Clearing, which must total zero. Open an account to see its items, and ignore an invoice the prior system already settled. Apply to Trial Balance sets each control account to {BRAND_NAME}'s total and puts what is left on Retained Earnings."
+msgstr "制御勘定では、{BRAND_NAME}は独自のオープン品目、在庫管理および固定資産から残高を開きます。試算表は一致する必要があります。すべての差異は移行クリアリングに留まり、ゼロに合計する必要があります。勘定をオープンして品目を確認し、前のシステムで既に決済した請求書は無視してください。試算表に適用することで、各制御勘定を{BRAND_NAME}の合計に設定し、残りを利益剰余金に配置します。"
 
-msgid "On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, Carbon creates a Released stock transfer for the kanban quantity."
-msgstr "転送かんばんでは、宛先保管ユニットの最小数量です。手持ちプラス未処理の受信転送がそれ以下に落ちると、Carbon はかんばん数量のためにリリース済の在庫転送を作成します。"
+msgid "On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, {BRAND_NAME} creates a Released stock transfer for the kanban quantity."
+msgstr "転送かんばんでは、宛先保管ユニットの最小数量です。手持ちプラス未処理の受信転送がそれ以下に落ちると、{BRAND_NAME} はかんばん数量のためにリリース済の在庫転送を作成します。"
 
 msgid "On cutover day, work the checklist below in order. Acceptance tests come from your in-scope requirements. Support details are at the bottom."
 msgstr "カットオーバー日に、下のチェックリストを順番に作業してください。受け入れテストはあなたの対象要求事項から取得されます。サポートの詳細は下部にあります。"
@@ -15776,8 +15773,8 @@ msgstr "レンタル中日数"
 msgid "On-time delivery"
 msgstr "オンタイム配送"
 
-msgid "Onboard your agent to Carbon"
-msgstr "エージェントを Carbon にオンボード"
+msgid "Onboard your agent to {BRAND_NAME}"
+msgstr "エージェントを {BRAND_NAME} にオンボード"
 
 msgid "Once a day"
 msgstr "1日1回"
@@ -15808,8 +15805,8 @@ msgstr "1件の請求書に1行、1つの明細に1列。日付または金額�
 msgid "One row per month, one column per line. Each line recognizes exactly what its invoices bill."
 msgstr "1ヶ月1行、1つの明細1列。各明細は、その請求書が請求する正確な金額を認識します。"
 
-msgid "One serial unit or one batch that Carbon follows individually, carrying its own status and attributes such as an expiry date."
-msgstr "Carbonが個別に追跡する1個のシリアルユニットまたは1つのバッチ。使用期限などのステータスと属性を独自に保有しています。"
+msgid "One serial unit or one batch that {BRAND_NAME} follows individually, carrying its own status and attributes such as an expiry date."
+msgstr "{BRAND_NAME}が個別に追跡する1個のシリアルユニットまたは1つのバッチ。使用期限などのステータスと属性を独自に保有しています。"
 
 msgid "One set of numbers"
 msgstr "1つの数字セット"
@@ -15943,8 +15940,8 @@ msgstr "開始日"
 msgid "Open Dispatches"
 msgstr "オープン保全指示"
 
-msgid "Open in Carbon"
-msgstr "Carbonで開く"
+msgid "Open in {BRAND_NAME}"
+msgstr "{BRAND_NAME}で開く"
 
 msgid "Open in change notice {ids}. Release it to change the active version."
 msgstr "変更通知{ids}で開いています。アクティブバージョンを変更するには、それをリリースしてください。"
@@ -16063,8 +16060,8 @@ msgstr "開始残高"
 msgid "Opening an operation starts its timer, so time is tracked from the moment work begins."
 msgstr "操作を開くとそのタイマーが開始され、作業開始時点から時間が追跡されます。"
 
-msgid "Opening balance of depreciation already booked before this asset was added to Carbon (use 0 for new acquisitions)."
-msgstr "このアセットがCarbonに追加される前に既に予約されていた減価償却の期首残高（新規取得の場合は0を使用してください）。"
+msgid "Opening balance of depreciation already booked before this asset was added to {BRAND_NAME} (use 0 for new acquisitions)."
+msgstr "このアセットが{BRAND_NAME}に追加される前に既に予約されていた減価償却の期首残高（新規取得の場合は0を使用してください）。"
 
 msgid "Opening balances as of"
 msgstr "～の期首残高"
@@ -16504,8 +16501,8 @@ msgstr "支払済み金額:"
 msgid "Paid Date"
 msgstr "支払日"
 
-msgid "Paid outside Carbon"
-msgstr "Carbonの外で支払済み"
+msgid "Paid outside {BRAND_NAME}"
+msgstr "{BRAND_NAME}の外で支払済み"
 
 msgid "Paid up front; record it as a payment once received"
 msgstr "前払いされ、受け取ったら支払として記録してください。"
@@ -16746,8 +16743,8 @@ msgstr "支払い"
 msgid "Payments and credits applied to this invoice. Applied amounts and FX are in company base currency. Click a row to open the source document."
 msgstr "この請求書に適用された支払とクレジット。適用済み金額と為替差損益は会社の基本通貨で表示されます。行をクリックして参照伝票を開きます。"
 
-msgid "Payments due before this date were paid outside Carbon"
-msgstr "この日付より前の支払期日は Carbon 外で支払われました"
+msgid "Payments due before this date were paid outside {BRAND_NAME}"
+msgstr "この日付より前の支払期日は {BRAND_NAME} 外で支払われました"
 
 msgid "Pays the deposit held for this document back out of customer prepayments."
 msgstr "この文書の前受金を顧客の前払金から返金します。"
@@ -16884,11 +16881,11 @@ msgstr "割り当て可能な物理プリンター。"
 msgid "Pick"
 msgstr "ピック"
 
+msgid "Pick a {BRAND_NAME} dimension and the provider target it posts to. Auto-create adds missing provider options by name at push time."
+msgstr "{BRAND_NAME}ディメンションと、それを投稿するプロバイダーターゲットを選択します。自動作成は、プッシュ時に不足しているプロバイダーオプションを名前で追加します。"
+
 msgid "Pick a batchable process, filter the eligible operations by their material, and select the ones to run together."
 msgstr "バッチ可能な工法を選択し、適格な工程をそれらの材料で絞り込み、一緒に実行するものを選択します"
-
-msgid "Pick a Carbon dimension and the provider target it posts to. Auto-create adds missing provider options by name at push time."
-msgstr "Carbonディメンションと、それを投稿するプロバイダーターゲットを選択します。自動作成は、プッシュ時に不足しているプロバイダーオプションを名前で追加します。"
 
 msgid "Pick a column to sort by"
 msgstr "ソート対象の列を選択"
@@ -17659,11 +17656,11 @@ msgstr "プロパティ"
 msgid "Property"
 msgstr "プロパティ"
 
-msgid "Proposed matches where the Carbon account number equals the provider account code exactly."
-msgstr "Carbon勘定科目番号がプロバイダー勘定科目コードと正確に一致する提案されたマッチ。"
+msgid "Proposed matches where the {BRAND_NAME} account number equals the provider account code exactly."
+msgstr "{BRAND_NAME}勘定科目番号がプロバイダー勘定科目コードと正確に一致する提案されたマッチ。"
 
-msgid "Proposed matches where the Carbon dimension value's name equals a provider option name exactly."
-msgstr "Carbonディメンション値の名前がプロバイダーオプション名と完全に一致する提案されたマッチ。"
+msgid "Proposed matches where the {BRAND_NAME} dimension value's name equals a provider option name exactly."
+msgstr "{BRAND_NAME}ディメンション値の名前がプロバイダーオプション名と完全に一致する提案されたマッチ。"
 
 msgid "Protect the go-live date"
 msgstr "ゴーライブ日を保護する"
@@ -17683,8 +17680,8 @@ msgstr "SAML SSO サインインをルーティングする前に、DNS TXTレ�
 msgid "Provide process knowledge and inputs"
 msgstr "プロセスの知識と入力を提供する"
 
-msgid "Provide these URLs to your identity provider (Okta, Entra ID, Google Workspace, etc.) when registering Carbon as a SAML application."
-msgstr "CarbonをSAMLアプリケーションとして登録する際に、これらのURLをIDプロバイダー（Okta、Entra ID、Google Workspaceなど）に提供してください。"
+msgid "Provide these URLs to your identity provider (Okta, Entra ID, Google Workspace, etc.) when registering {BRAND_NAME} as a SAML application."
+msgstr "{BRAND_NAME}をSAMLアプリケーションとして登録する際に、これらのURLをIDプロバイダー（Okta、Entra ID、Google Workspaceなど）に提供してください。"
 
 msgid "Provider"
 msgstr "プロバイダー"
@@ -17717,8 +17714,8 @@ msgstr "バージョン{0}を公開しますか?"
 msgid "Published"
 msgstr "公開済み"
 
-msgid "Published by Carbon"
-msgstr "Carbonによって公開済"
+msgid "Published by {BRAND_NAME}"
+msgstr "{BRAND_NAME}によって公開済"
 
 msgid "Published Version"
 msgstr "公開済バージョン"
@@ -18206,8 +18203,8 @@ msgstr "早期に報告し、明確に報告してください。2週目に特�
 msgid "Ramp"
 msgstr "Ramp"
 
-msgid "Ramp allows only one. Disconnect the other system in Ramp, or connect Carbon again choosing \"Another system posts my ledger\"."
-msgstr "Rampは1つのみ許可しています。Rampで他のシステムを切断するか、「別のシステムが私の台帳を投稿する」を選択してCarbonに再度接続してください。"
+msgid "Ramp allows only one. Disconnect the other system in Ramp, or connect {BRAND_NAME} again choosing \"Another system posts my ledger\"."
+msgstr "Rampは1つのみ許可しています。Rampで他のシステムを切断するか、「別のシステムが私の台帳を投稿する」を選択して{BRAND_NAME}に再度接続してください。"
 
 msgid "Ramp authorized the connection but saving it failed. Try connecting again."
 msgstr "Ramp は接続を承認しましたが、保存に失敗しました。もう一度接続してください。"
@@ -18287,8 +18284,8 @@ msgstr "再度有効化"
 msgid "Reactivation"
 msgstr "再開"
 
-msgid "Read this through — what Carbon will and won't do for your setup. When it looks right, mark it agreed below."
-msgstr "これを読んでください — Carbonがあなたのセットアップで何ができて何ができないかを確認してください。問題なければ、下記で同意済みとしてマークしてください。"
+msgid "Read this through — what {BRAND_NAME} will and won't do for your setup. When it looks right, mark it agreed below."
+msgstr "これを読んでください — {BRAND_NAME}があなたのセットアップで何ができて何ができないかを確認してください。問題なければ、下記で同意済みとしてマークしてください。"
 
 msgid "Read this through. When it's right, sign off at the bottom. It's the statement your commercial agreement points to, with no prices or legal terms here."
 msgstr "これを読み通してください。正しいと思ったら、下部で署名してください。これはあなたの商業契約が指す声明であり、価格や法的条件は含まれていません。"
@@ -18528,8 +18525,8 @@ msgstr "調整"
 msgid "Reconciliation found discrepancies with the provider"
 msgstr "調整でプロバイダとの不一致が見つかりました"
 
-msgid "Reconciling a purchase order against what was received and invoiced — implicit in Carbon, via the line quantities and GR/IR balance."
-msgstr "発注書を受け取られたものと請求済のものと照合する - Carbonでは、明細数量とGR/IRバランスを介して暗黙的に行われます。"
+msgid "Reconciling a purchase order against what was received and invoiced — implicit in {BRAND_NAME}, via the line quantities and GR/IR balance."
+msgstr "発注書を受け取られたものと請求済のものと照合する - {BRAND_NAME}では、明細数量とGR/IRバランスを介して暗黙的に行われます。"
 
 msgid "Reconfigure"
 msgstr "再構成"
@@ -19073,8 +19070,8 @@ msgstr "{inputLabel}内の各アイテムに対して1回繰り返します"
 msgid "Replace"
 msgstr "置き換え"
 
-msgid "Replace Carbon's default chart with your own, before you set up accounting"
-msgstr "会計を設定する前に、Carbon のデフォルト勘定科目表を自社のもので置き換えてください。"
+msgid "Replace {BRAND_NAME}'s default chart with your own, before you set up accounting"
+msgstr "会計を設定する前に、{BRAND_NAME} のデフォルト勘定科目表を自社のもので置き換えてください。"
 
 msgid "Replace chart"
 msgstr "勘定科目表を置き換える"
@@ -19692,8 +19689,8 @@ msgstr ""
 msgid "RFQs"
 msgstr "RFQ"
 
-msgid "Ride Carbon dimensions along on pushed journals. Each slot maps one Carbon dimension to one provider analytics target; the value mapping below pairs individual dimension values with provider options."
-msgstr "プッシュされた仕訳と一緒にCarbonディメンションを乗せます。各スロットは、1つのCarbonディメンションを1つのプロバイダー分析ターゲットにマップします。下記の値マッピングは、個別のディメンション値をプロバイダーオプションと対応させます。"
+msgid "Ride {BRAND_NAME} dimensions along on pushed journals. Each slot maps one {BRAND_NAME} dimension to one provider analytics target; the value mapping below pairs individual dimension values with provider options."
+msgstr "プッシュされた仕訳と一緒に{BRAND_NAME}ディメンションを乗せます。各スロットは、1つの{BRAND_NAME}ディメンションを1つのプロバイダー分析ターゲットにマップします。下記の値マッピングは、個別のディメンション値をプロバイダーオプションと対応させます。"
 
 #. placeholder {0}: certification.docVersion
 msgid "Rider v{0}"
@@ -20754,8 +20751,8 @@ msgstr "招待を送信"
 msgid "Send RFQ to Suppliers"
 msgstr "仕入先に見積依頼を送信"
 
-msgid "Send to Carbon"
-msgstr "Carbon に送信"
+msgid "Send to {BRAND_NAME}"
+msgstr "{BRAND_NAME} に送信"
 
 msgid "Send Via"
 msgstr "経由で送信"
@@ -20892,6 +20889,9 @@ msgstr "サービス"
 msgid "Session locked"
 msgstr "セッションがロック中"
 
+msgid "Set {BRAND_NAME} up around how your company runs: sites, parts, BOMs, Bill of Process, and the flows you use."
+msgstr "{BRAND_NAME}を会社の運営方法に合わせてセットアップします：サイト、部品、BOM、工程表、および使用するワークフロー。"
+
 msgid "Set a customer on this return to add from a shipment."
 msgstr "出荷から追加するにはこのリターンに得意先を設定してください。"
 
@@ -20912,9 +20912,6 @@ msgstr "ターゲットを設定"
 
 msgid "Set at activation"
 msgstr "有効化時に設定"
-
-msgid "Set Carbon up around how your company runs: sites, parts, BOMs, Bill of Process, and the flows you use."
-msgstr "Carbonを会社の運営方法に合わせてセットアップします：サイト、部品、BOM、工程表、および使用するワークフロー。"
 
 msgid "Set Clock Out"
 msgstr "作業終了を設定"
@@ -20998,8 +20995,8 @@ msgstr "この個が在庫で計上されている価値を設定します。差
 msgid "Settings"
 msgstr "設定"
 
-msgid "Settled in the system that kept the books before the cutover. Carbon leaves them out of its totals and marks them Paid on the day before the cutover when you set up accounting."
-msgstr "カットオーバー前に帳簿をつけていたシステムで決済されています。Carbonはそれらを合計から除外し、会計をセットアップするときにカットオーバーの前日に支払い済みとしてマークします。"
+msgid "Settled in the system that kept the books before the cutover.{BRAND_NAME} leaves them out of its totals and marks them Paid on the day before the cutover when you set up accounting."
+msgstr ""
 
 msgid "Setup"
 msgstr "セットアップ"
@@ -21391,8 +21388,8 @@ msgstr "シャッフル"
 msgid "Sign in here instead"
 msgstr ""
 
-msgid "Sign in to Carbon"
-msgstr "Carbonにサインイン"
+msgid "Sign in to {BRAND_NAME}"
+msgstr "{BRAND_NAME}にサインイン"
 
 msgid "Sign in with biometrics instead of a magic link. Passkeys are secured by Face ID, Touch ID, or your device PIN."
 msgstr "マジックリンクの代わりに生体認証でサインインします。パスキーはFace ID、Touch ID、またはデバイスPINで保護されます。"
@@ -21527,8 +21524,8 @@ msgstr "売却"
 msgid "Solutions Engineer"
 msgstr "ソリューションズエンジニア"
 
-msgid "Some balances have no Carbon account"
-msgstr "いくつかの残高にはCarbonアカウントがありません"
+msgid "Some balances have no {BRAND_NAME} account"
+msgstr "いくつかの残高には{BRAND_NAME}アカウントがありません"
 
 msgid "Some lines are invoiced for more or less than they total. Fix the amounts before confirming."
 msgstr "いくつかの明細は、合計より多くまたは少なく請求されています。確認する前に金額を修正してください。"
@@ -21704,8 +21701,8 @@ msgstr "ホスティングをセットアップする（クラウドまたはセ
 msgid "Standard"
 msgstr "標準"
 
-msgid "Standard cloud Carbon fits how your company runs"
-msgstr "標準クラウドCarbonはあなたの会社の運営方法に適合します"
+msgid "Standard cloud {BRAND_NAME} fits how your company runs"
+msgstr "標準クラウド{BRAND_NAME}はあなたの会社の運営方法に適合します"
 
 msgid "Standard Cost Variances"
 msgstr "標準原価差異"
@@ -22024,17 +22021,17 @@ msgstr "Stripe にはこのメールアドレスの顧客が既に存在しま�
 msgid "Stripe Due Date"
 msgstr "Stripe支払期日"
 
-msgid "Stripe emails the invoice to the customer, so an address is required. This will also be saved to the contact in Carbon."
-msgstr "Stripeは請求書を得意先にメール送信するため、住所が必要です。これはCarbon内の担当者にも保存されます。"
+msgid "Stripe emails the invoice to the customer, so an address is required. This will also be saved to the contact in {BRAND_NAME}."
+msgstr "Stripeは請求書を得意先にメール送信するため、住所が必要です。これは{BRAND_NAME}内の担当者にも保存されます。"
 
-msgid "Stripe emails the invoices to the customer, so an address is required. It is also saved to the contract's invoice contact in Carbon, if it has one."
-msgstr "Stripeは請求書を得意先にメールで送信するため、住所が必要です。この住所は契約の請求先（設定されている場合）にもCarbonに保存されます。"
+msgid "Stripe emails the invoices to the customer, so an address is required. It is also saved to the contract's invoice contact in {BRAND_NAME}, if it has one."
+msgstr "Stripeは請求書を得意先にメールで送信するため、住所が必要です。この住所は契約の請求先（設定されている場合）にも{BRAND_NAME}に保存されます。"
 
-msgid "Stripe has no customer for this Carbon customer yet. Confirming will create one on your connected account."
-msgstr "StripeにはこのCarbon得意先用のカスタマーがまだありません。確認するとあなたの接続されたアカウントに作成されます。"
+msgid "Stripe has no customer for this {BRAND_NAME} customer yet. Confirming will create one on your connected account."
+msgstr "Stripeにはこの{BRAND_NAME}得意先用のカスタマーがまだありません。確認するとあなたの接続されたアカウントに作成されます。"
 
-msgid "Stripe has no customer for this Carbon customer yet. Posting will create one on your connected account."
-msgstr "StripeにはこのCarbon得意先に対応する顧客がまだありません。転記すると、接続済みアカウント上に作成されます。"
+msgid "Stripe has no customer for this {BRAND_NAME} customer yet. Posting will create one on your connected account."
+msgstr "Stripeにはこの{BRAND_NAME}得意先に対応する顧客がまだありません。転記すると、接続済みアカウント上に作成されます。"
 
 msgid "Structure"
 msgstr "構造"
@@ -22565,8 +22562,8 @@ msgstr "このアイテムを製造するために消費される材料全体で
 msgid "taken"
 msgstr "実施"
 
-msgid "Taken outside Carbon. You mark each employee complete."
-msgstr "Carbon以外で実施。各従業員を完了にしてください。"
+msgid "Taken outside {BRAND_NAME}. You mark each employee complete."
+msgstr "{BRAND_NAME}以外で実施。各従業員を完了にしてください。"
 
 msgid "Takes Effect"
 msgstr "有効開始"
@@ -22834,8 +22831,20 @@ msgstr "「{0}」フェーズが完了しました — その「{1}」チェッ�
 msgid "The {0} phases to go live, each ending at a checkpoint. Tick off each task as you complete it."
 msgstr "{0}個のフェーズをリリースするまで進め、各フェーズはチェックポイントで終了します。完了したタスクをチェックオフしてください。"
 
-msgid "The accent color used across Carbon."
-msgstr "Carbon全体で使用するアクセントカラー。"
+msgid "The {BRAND_NAME} user currently responsible for working this record, set per record and independent of ownership fields like Account Manager or Sales Person."
+msgstr "このレコード作業に現在責任を持つ{BRAND_NAME}ユーザー。レコードごとに設定でき、Account ManagerやSales Personなどの所有フィールドとは独立しています。"
+
+msgid "The {BRAND_NAME} user responsible for this customer relationship; emails and reminders about this customer route to them."
+msgstr "この得意先の関係について責任がある{BRAND_NAME} ユーザー。この得意先に関するメールとリマインダーがこのユーザーに送られます。"
+
+msgid "The {BRAND_NAME} user responsible for this supplier relationship; emails and reminders about this supplier route to them."
+msgstr "この仕入先の関係について責任がある{BRAND_NAME} ユーザー。この仕入先に関するメールとリマインダーがこのユーザーに送られます。"
+
+msgid "The {BRAND_NAME} user who owns this RFQ; supplier responses and reminders route to them."
+msgstr "このRFQを所有する{BRAND_NAME} ユーザー。仕入先からの回答とリマインダーがこのユーザーに送られます。"
+
+msgid "The accent color used across {BRAND_NAME}."
+msgstr "{BRAND_NAME}全体で使用するアクセントカラー。"
 
 msgid "The account picked for {account} is no longer in the chart."
 msgstr "{account} に対して選択された勘定はもはや勘定科目表にありません。"
@@ -22843,8 +22852,8 @@ msgstr "{account} に対して選択された勘定はもはや勘定科目表�
 msgid "The accounting dimension that categorizes items for reporting and analysis."
 msgstr "レポートと分析のためにアイテムを分類する会計ディメンション。"
 
-msgid "The accounts Carbon posts to automatically"
-msgstr "Carbonが自動的に転記するアカウント"
+msgid "The accounts {BRAND_NAME} posts to automatically"
+msgstr "{BRAND_NAME}が自動的に転記するアカウント"
 
 msgid "The action that copies a saved method (its materials, operations, and work instructions) onto a job or quote line."
 msgstr "保存された製法（その材料、工程、および作業手順書）をジョブまたは見積明細にコピーするアクション。"
@@ -22907,26 +22916,14 @@ msgstr "原価を追跡する集計単位"
 msgid "The capital assets you own and depreciate"
 msgstr "所有・減価償却する固定資産"
 
-msgid "The Carbon user currently responsible for working this record, set per record and independent of ownership fields like Account Manager or Sales Person."
-msgstr "このレコード作業に現在責任を持つCarbonユーザー。レコードごとに設定でき、Account ManagerやSales Personなどの所有フィールドとは独立しています。"
-
-msgid "The Carbon user responsible for this customer relationship; emails and reminders about this customer route to them."
-msgstr "この得意先の関係について責任があるCarbon ユーザー。この得意先に関するメールとリマインダーがこのユーザーに送られます。"
-
-msgid "The Carbon user responsible for this supplier relationship; emails and reminders about this supplier route to them."
-msgstr "この仕入先の関係について責任があるCarbon ユーザー。この仕入先に関するメールとリマインダーがこのユーザーに送られます。"
-
-msgid "The Carbon user who owns this RFQ; supplier responses and reminders route to them."
-msgstr "このRFQを所有するCarbon ユーザー。仕入先からの回答とリマインダーがこのユーザーに送られます。"
-
 msgid "The carrier and service a shipment goes out on, supplying the tracking-URL template that turns a tracking number into a link and the account freight charges post to."
 msgstr "出荷が発送される運送業者とサービス。追跡URLテンプレート（追跡番号をリンクに変換する）と、運賃料金が転記される勘定を提供します。"
 
 msgid "The carrier that delivers goods from this supplier, when different from the supplier itself (e.g. supplier sells, FedEx ships)."
 msgstr "この仕入先から商品を配送する運送業者。仕入先と異なる場合に使用します（例：仕入先が販売し、FedExが配送）。"
 
-msgid "The carrier's tracking-page URL with {trackingNumber} as a placeholder — Carbon substitutes the actual number when generating links on shipments."
-msgstr "運送業者の追跡ページURL（プレースホルダーとして{trackingNumber}を使用）。Carbonは出荷のリンク生成時に実際の番号に置き換えます。"
+msgid "The carrier's tracking-page URL with {trackingNumber} as a placeholder — {BRAND_NAME} substitutes the actual number when generating links on shipments."
+msgstr "運送業者の追跡ページURL（プレースホルダーとして{trackingNumber}を使用）。{BRAND_NAME}は出荷のリンク生成時に実際の番号に置き換えます。"
 
 msgid "The carriers and methods you ship orders with"
 msgstr "注文を発送する際に使用する運送業者と方法"
@@ -22991,8 +22988,8 @@ msgstr "契約は終了日に終了し、請求は停止します。"
 msgid "The contract ends on the end date and does not renew. Planned invoices after it are removed."
 msgstr "契約は終了日に終了し、更新されません。その後の計画済請求書は削除されます。"
 
-msgid "The contract's invoices will be billed to the Stripe customer already linked to this Carbon customer. To change its details, edit it in the Stripe dashboard."
-msgstr "この契約の請求書は、このCarbon得意先にリンク済みのStripeカスタマーに請求されます。詳細を変更するにはStripeダッシュボードで編集してください。"
+msgid "The contract's invoices will be billed to the Stripe customer already linked to this {BRAND_NAME} customer. To change its details, edit it in the Stripe dashboard."
+msgstr "この契約の請求書は、この{BRAND_NAME}得意先にリンク済みのStripeカスタマーに請求されます。詳細を変更するにはStripeダッシュボードで編集してください。"
 
 msgid "The contractor's expected weekly availability; scheduling uses this as the upper bound when assigning this contractor to operations across the week."
 msgstr "外部作業者の期待される毎週の利用可能性。スケジューリングはこれを、週間を通じてこの外部作業者を工程に割り当てる際の上限として使用します。"
@@ -23172,8 +23169,8 @@ msgstr "アップロードしたファイルと設定したマッピングは失
 msgid "the first 3 to 4 weeks"
 msgstr "最初の3～4週間"
 
-msgid "The first day a company keeps its books in Carbon, set once when accounting is set up and never changed; from then on every posting writes a Posted journal."
-msgstr "会社がCarbonで帳簿の記録を始める最初の日であり、会計設定時に一度だけ設定され、その後は変更されません。この日以降、転記するたびに転記済の仕訳が作成されます。"
+msgid "The first day a company keeps its books in {BRAND_NAME}, set once when accounting is set up and never changed; from then on every posting writes a Posted journal."
+msgstr "会社が{BRAND_NAME}で帳簿の記録を始める最初の日であり、会計設定時に一度だけ設定され、その後は変更されません。この日以降、転記するたびに転記済の仕訳が作成されます。"
 
 msgid "The first day of a lease month (day {commencementDay}) where a payment period starts, after the last posted lease run"
 msgstr "最後に転記済のリース実行の後の、支払期間が開始されるリース月の初日（{commencementDay}日）"
@@ -23244,11 +23241,11 @@ msgstr "ワークフローのWebhookステップが投稿するhttpsアドレス
 msgid "The human-readable document number (like J000001 or ECO-000001) minted from a sequence and stored on the record, distinct from its internal id."
 msgstr "採番から生成された、人間が読める文書番号（J000001やECO-000001など）で、レコードに保存されています。内部IDとは異なります。"
 
-msgid "The identifier the customer uses for this part on their POs; Carbon resolves it to our internal Part ID on order import."
-msgstr "得意先が発注書で使用するこの部品の識別子。Carbonは発注書のインポート時にそれを社内の部品IDに解決します。"
+msgid "The identifier the customer uses for this part on their POs; {BRAND_NAME} resolves it to our internal Part ID on order import."
+msgstr "得意先が発注書で使用するこの部品の識別子。{BRAND_NAME}は発注書のインポート時にそれを社内の部品IDに解決します。"
 
-msgid "The identifier the supplier uses for this part on their quotes and invoices; Carbon resolves it to our internal Part ID."
-msgstr "仕入先が見積と請求書で使用するこの部品の識別子。Carbonはそれを社内の部品IDに解決します。"
+msgid "The identifier the supplier uses for this part on their quotes and invoices; {BRAND_NAME} resolves it to our internal Part ID."
+msgstr "仕入先が見積と請求書で使用するこの部品の識別子。{BRAND_NAME}はそれを社内の部品IDに解決します。"
 
 msgid "The immediate nonconformance task that quarantines affected stock or work before the root cause is known."
 msgstr "根本原因が判明する前に、影響を受けた在庫または作業を隔離する即座の不適合タスク。"
@@ -23286,8 +23283,8 @@ msgstr "その日に期限切れになるジョブの時間（作業が実行さ
 msgid "The job whose operation this outside-processing line covers; the line's receipt closes the operation against this job."
 msgstr "この外部加工明細が対象とする作業。行の受領はこの作業に対して操作を閉じます。"
 
-msgid "The job's position in its location's schedule queue — a fractional number Carbon computes from the due date and deadline type, not a Low/High rating."
-msgstr "このジョブのロケーション内のスケジュール順序での位置。Carbonが期日と期限タイプから計算した小数値で、低/高レーティングではありません。"
+msgid "The job's position in its location's schedule queue — a fractional number {BRAND_NAME} computes from the due date and deadline type, not a Low/High rating."
+msgstr "このジョブのロケーション内のスケジュール順序での位置。{BRAND_NAME}が期日と期限タイプから計算した小数値で、低/高レーティングではありません。"
 
 msgid "The job's work-in-progress balance moves to this asset now, and completing the job sweeps the rest. Only open jobs that are not linked to a sales order or another asset are listed."
 msgstr "製造指図の仕掛品残高がこの資産に移動され、製造指図の完了により残りが振替されます。受注またはその他の資産にリンクされていないオープンな製造指図のみがリストされます。"
@@ -23396,8 +23393,8 @@ msgstr "機械はまだ稼働中です。停止後にこの時間を割り当て
 msgid "The machines, cells, and stations your work runs through"
 msgstr "あなたの仕事が実行される機械、セル、およびステーション"
 
-msgid "The master data to set up when first configuring Carbon, grouped by module. Mark each one configured as you go."
-msgstr "Carbonを初めて設定する際にセットアップするマスターデータ。モジュール別にグループ化されています。設定が完了したら、各項目をマークしていきます。"
+msgid "The master data to set up when first configuring {BRAND_NAME}, grouped by module. Mark each one configured as you go."
+msgstr "{BRAND_NAME}を初めて設定する際にセットアップするマスターデータ。モジュール別にグループ化されています。設定が完了したら、各項目をマークしていきます。"
 
 msgid "The material is purchased from a supplier for that specific order, rather than made or pulled from stock."
 msgstr "この材料は、製造または在庫から取得するのではなく、その特定のオーダーのために仕入先から購入されます。"
@@ -23525,11 +23522,11 @@ msgstr "再生中にこのステップのコンポーネントが所定の位置
 msgid "The payment from the effective date. Escalation still steps up on each anniversary of the commencement"
 msgstr "支払は実効日からのものです。段階的上昇はcommencement日（開始日）の毎年記念日に上昇し続けます。"
 
-msgid "The people on the Carbon side who will run your implementation, and how to reach them."
-msgstr "実装を実施する Carbon 側の人員および連絡方法"
+msgid "The people on the {BRAND_NAME} side who will run your implementation, and how to reach them."
+msgstr "実装を実施する {BRAND_NAME} 側の人員および連絡方法"
 
-msgid "The people on your team and their access to Carbon"
-msgstr "チームの人員と Carbon へのアクセス"
+msgid "The people on your team and their access to {BRAND_NAME}"
+msgstr "チームの人員と {BRAND_NAME} へのアクセス"
 
 msgid "The per-company counter behind a document type's readable number, assembling the prefix, the zero-padded next value, and the suffix, and advancing as each document is created."
 msgstr "文書タイプの判読可能番号の背後にある会社別のカウンター。プリフィックス、ゼロパディングされた次の値、サフィックスを組み立て、各文書が作成されるたびに進行します。"
@@ -23659,8 +23656,8 @@ msgstr "残り {0} {1} は予想されなくなります。発注済の供給と
 msgid "The request body sent verbatim with a JSON content type after workflow variables inside it are substituted, on the methods that carry one."
 msgstr "ワークフロー変数が置き換えられた後、JSON コンテンツ タイプで逐語的に送信されるリクエスト本文。これを含むメソッドで送信されます。"
 
-msgid "The residual WIP a job has left at close, swept to a Production Variance account — the only variance Carbon books for a job."
-msgstr "製造指図がクローズ時に残した残留仕掛品は、生産差異勘定に振り替えられます — これはCarbonが製造指図について計上する唯一の差異です。"
+msgid "The residual WIP a job has left at close, swept to a Production Variance account — the only variance {BRAND_NAME} books for a job."
+msgstr "製造指図がクローズ時に残した残留仕掛品は、生産差異勘定に振り替えられます — これは{BRAND_NAME}が製造指図について計上する唯一の差異です。"
 
 msgid "The response from Onshape was missing required parameters. Check the private app's redirect URL, then save the integration settings again."
 msgstr "Onshapeからのレスポンスに必要なパラメータが不足しています。プライベートアプリのリダイレクトURLを確認してから、連携設定を再度保存してください。"
@@ -23818,8 +23815,8 @@ msgstr "この見積依頼を受け取る仕入先。各仕入先は見積依頼
 msgid "The surface finishes available on your materials"
 msgstr "あなたの材料で利用可能な表面仕上げ"
 
-msgid "The system a company uses to manage its people's logins — Okta, Entra ID, or Google Workspace — which vouches for who someone is when they sign in to Carbon via SSO."
-msgstr "会社が人員のログインを管理するシステム — OktaまたはEntra IDまたはGoogle Workspace — Carbonにログインするときにその人が誰であるかを保証します（SSO経由）。"
+msgid "The system a company uses to manage its people's logins — Okta, Entra ID, or Google Workspace — which vouches for who someone is when they sign in to {BRAND_NAME} via SSO."
+msgstr "会社が人員のログインを管理するシステム — OktaまたはEntra IDまたはGoogle Workspace — {BRAND_NAME}にログインするときにその人が誰であるかを保証します（SSO経由）。"
 
 msgid "The system passes every in-scope acceptance test in your configured system, with your data; the data is validated; and you sign off. Then go-live."
 msgstr "システムは、設定されたシステム内のすべてのスコープ内受け入れテストに合格し、データが検証され、サインオフされます。その後、本番環境に移行します。"
@@ -23863,8 +23860,8 @@ msgstr "この工法のためにこの仕入先に作業を送ってから返っ
 msgid "The unique identifier on this physical unit; one row per serial, quantity is always 1."
 msgstr "この物理ユニットの一意の識別子。シリアル番号ごとに1行、数量は常に1です。"
 
-msgid "The unit a routing time is expressed in, such as Hours/Piece or Total Hours, telling Carbon whether the time scales with quantity or is fixed per run."
-msgstr "工順時間が表現される単位で、例えば「時間/個」または「総時間」など、時間が数量に応じてスケールするか、実行単位で固定されるかを示します。"
+msgid "The unit a routing time is expressed in, such as Hours/Piece or Total Hours, telling {BRAND_NAME} whether the time scales with quantity or is fixed per run."
+msgstr ""
 
 msgid "The unit and its rates are fixed once the agreement is activated."
 msgstr "契約が有効化されるとユニットと料率は確定します。"
@@ -24034,6 +24031,9 @@ msgstr "これらの単位は販売として扱われます。起動により各
 msgid "They are not in your chart, but documents or journals use them. Pick the account in your chart that replaces each one."
 msgstr "これらは勘定科目表にありませんが、ドキュメントまたは仕訳で使用されています。各々を置き換える勘定科目表内のアカウントを選択してください。"
 
+msgid "This {BRAND_NAME} instance is missing its Onshape OAuth credentials. Ask an administrator to set them."
+msgstr "この {BRAND_NAME} インスタンスには Onshape の OAuth 認証情報がありません。管理者に設定を依頼してください。"
+
 msgid "this ability"
 msgstr "このスキル"
 
@@ -24054,17 +24054,14 @@ msgstr "このバックアップを完了できませんでした。"
 msgid "This backup hasn't been checked yet. Any differences are found when the restore runs."
 msgstr "このバックアップはまだチェックされていません。違いは復元の実行時に見つかります。"
 
-msgid "This browser does not support push notifications. On iPhone or iPad, add Carbon to the Home Screen first."
-msgstr "このブラウザはプッシュ通知に対応していません。iPhoneまたはiPadの場合は、まずCarbonをホーム画面に追加してください。"
+msgid "This browser does not support push notifications. On iPhone or iPad, add {BRAND_NAME} to the Home Screen first."
+msgstr "このブラウザはプッシュ通知に対応していません。iPhoneまたはiPadの場合は、まず{BRAND_NAME}をホーム画面に追加してください。"
 
-msgid "This cannot be changed later — {integrationName} allows only one connected accounting system, so the choice decides what Carbon is permitted to do. To switch, you would uninstall and reconnect."
-msgstr "これは後で変更することはできません — {integrationName}は接続できる会計システムが1つだけに限定されているため、この選択はCarbonが実行できることを決定します。切り替えるには、アンインストールして再度接続する必要があります。"
+msgid "This cannot be changed later — {integrationName} allows only one connected accounting system, so the choice decides what {BRAND_NAME} is permitted to do. To switch, you would uninstall and reconnect."
+msgstr "これは後で変更することはできません — {integrationName}は接続できる会計システムが1つだけに限定されているため、この選択は{BRAND_NAME}が実行できることを決定します。切り替えるには、アンインストールして再度接続する必要があります。"
 
 msgid "This cannot be undone."
 msgstr "これは元に戻せません。"
-
-msgid "This Carbon instance is missing its Onshape OAuth credentials. Ask an administrator to set them."
-msgstr "この Carbon インスタンスには Onshape の OAuth 認証情報がありません。管理者に設定を依頼してください。"
 
 msgid "This change notice is being implemented, so its changes are locked. Reopen it to edit."
 msgstr "この変更通知は実施中のため、その変更はロック中です。編集するために再オープンしてください。"
@@ -24124,15 +24121,15 @@ msgstr "この検査計画"
 msgid "This integration isn't available yet"
 msgstr "この連携はまだご利用いただけません"
 
-#. placeholder {0}: company?.name ?? "Carbon"
+#. placeholder {0}: company?.name ?? BRAND_NAME
 msgid "This invitation to join {0} has expired. You can request a new invite to be sent to your email."
 msgstr "この{0}への参加への招待は期限切れです。新しい招待をメールで送信されるようにリクエストできます。"
 
 msgid "This invoice has no usable due date — choose one for Stripe."
 msgstr "この請求書は使用可能な支払期日がありません。Stripe 用に 1 つ選択してください。"
 
-msgid "This invoice will be billed to the Stripe customer already linked to this Carbon customer. To change its details, edit it in the Stripe dashboard."
-msgstr "この請求書は、すでにこのCarbon得意先にリンクされているStripe顧客に請求されます。詳細を変更するには、Stripeダッシュボードで編集してください。"
+msgid "This invoice will be billed to the Stripe customer already linked to this {BRAND_NAME} customer. To change its details, edit it in the Stripe dashboard."
+msgstr "この請求書は、すでにこの{BRAND_NAME}得意先にリンクされているStripe顧客に請求されます。詳細を変更するには、Stripeダッシュボードで編集してください。"
 
 msgid "This is a controlled environment, so an authenticator app is required."
 msgstr "これは管理環境のため、認証アプリが必須です。"
@@ -24872,8 +24869,8 @@ msgstr "教育訓練が記録されていません"
 msgid "Training Plan"
 msgstr "教育訓練計画"
 
-msgid "Training taken outside Carbon, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
-msgstr "Carbonの外で実施された教育訓練（例：ベンダーコース）。割り当ては名前のみです。管理者が各従業員を完了にし、証明書を添付できます。"
+msgid "Training taken outside {BRAND_NAME}, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
+msgstr "{BRAND_NAME}の外で実施された教育訓練（例：ベンダーコース）。割り当ては名前のみです。管理者が各従業員を完了にし、証明書を添付できます。"
 
 msgid "Training video"
 msgstr ""
@@ -26228,8 +26225,8 @@ msgstr "加重平均残存期間（年）"
 msgid "Welcome back, {name}."
 msgstr "お帰りなさい、{name}。"
 
-msgid "Welcome to Carbon"
-msgstr "Carbonへようこそ"
+msgid "Welcome to {BRAND_NAME}"
+msgstr "{BRAND_NAME}へようこそ"
 
 msgid "Welcome, {companyName}"
 msgstr "ようこそ、{companyName}"
@@ -26246,8 +26243,8 @@ msgstr "障害のカテゴリー（機械的、電気的、ソフトウェア、
 msgid "What changes day to day"
 msgstr "日々変わること"
 
-msgid "What changes when you move to Carbon, and roughly what it's worth. Estimates, not a forecast."
-msgstr "Carbonに移行するときに何が変わるか、およびおおよその価値。推定値であり、予測ではありません。"
+msgid "What changes when you move to {BRAND_NAME}, and roughly what it's worth. Estimates, not a forecast."
+msgstr "{BRAND_NAME}に移行するときに何が変わるか、およびおおよその価値。推定値であり、予測ではありません。"
 
 msgid "What data"
 msgstr "どのデータ"
@@ -26360,6 +26357,9 @@ msgstr "スコープ外の内容"
 msgid "When"
 msgstr "いつ"
 
+msgid "When {BRAND_NAME} committed to having the goods arrive; combined with the shipping method's transit days, this drives Ship Date back-calc."
+msgstr "{BRAND_NAME}が商品の到着を約束した日付。出荷方法の輸送日数と組み合わせて、発送日の逆算を決定します。"
+
 msgid "When {name} changes"
 msgstr "{name}が変更されるとき"
 
@@ -26374,9 +26374,6 @@ msgstr "シリアルまたはバッチが期限切れになるとき、および
 
 msgid "When an invoice is created"
 msgstr "請求書が作成されるとき"
-
-msgid "When Carbon committed to having the goods arrive; combined with the shipping method's transit days, this drives Ship Date back-calc."
-msgstr "Carbonが商品の到着を約束した日付。出荷方法の輸送日数と組み合わせて、発送日の逆算を決定します。"
 
 msgid "When deferred, accrued and lease-interest revenue will be recognized"
 msgstr "繰延収益、見越収益およびリース利息収益が認識される場合"
@@ -26414,8 +26411,8 @@ msgstr "オンの場合、この価格上書きは一致する注文に適用さ
 msgid "When on, this rule fires for every target of its type. Assignment rows are ignored but preserved."
 msgstr "オンの場合、このルールはそのタイプのすべてのターゲットに対して発火します。割り当て行は無視されますが保持されます。"
 
-msgid "When supplier responses are expected back; suppliers see this date on the RFQ portal and Carbon stops accepting late responses after it (configurable)."
-msgstr "仕入先の回答が返信予定の日付。仕入先は見積依頼ポータルでこの日付を確認できます。Carbonはこの日付後の遅い回答の受け入れを中止します（設定可能）。"
+msgid "When supplier responses are expected back; suppliers see this date on the RFQ portal and {BRAND_NAME} stops accepting late responses after it (configurable)."
+msgstr "仕入先の回答が返信予定の日付。仕入先は見積依頼ポータルでこの日付を確認できます。{BRAND_NAME}はこの日付後の遅い回答の受け入れを中止します（設定可能）。"
 
 msgid "When the buyer asked for the goods; the supplier may promise something else on Promised Date and post something else again on Delivery Date."
 msgstr "購買担当者が商品をリクエストした日付。仕入先は回答納期に異なる日付を約束し、納期に再び別の日付を記録することができます。"
@@ -26546,11 +26543,11 @@ msgstr "今日のあなたの状況"
 msgid "Where you want to grow"
 msgstr "成長したい場所"
 
+msgid "Whether {BRAND_NAME} follows each unit (Serial), each lot (Batch), the quantity (Inventory), or no tracking (Non-Inventory)."
+msgstr "{BRAND_NAME}が各単位（Serial）、各ロット（バッチ）、数量（Inventory）、またはトラッキングなし（非在庫）のいずれを追跡するかどうか。"
+
 msgid "Whether Amount is interpreted as a percentage of the line price or as a fixed currency amount."
 msgstr "金額を明細価格に対する割合として解釈するか、固定の通貨額として解釈するか。"
-
-msgid "Whether Carbon follows each unit (Serial), each lot (Batch), the quantity (Inventory), or no tracking (Non-Inventory)."
-msgstr "Carbonが各単位（Serial）、各ロット（バッチ）、数量（Inventory）、またはトラッキングなし（非在庫）のいずれを追跡するかどうか。"
 
 msgid "Whether each unit is treated as a rental or a sale is decided when the agreement is activated, from the terms and each unit's inputs."
 msgstr "各ユニットがレンタルまたは売却として扱われるかは、契約が有効になるときに、契約条件と各ユニットの入力に基づいて決定されます。"
@@ -26927,14 +26924,14 @@ msgstr "あなたがこのアイテムを受け取りました"
 msgid "You received this lot"
 msgstr "このロットを受け取りました"
 
-msgid "You're live on Carbon"
-msgstr "Carbonで本番稼働中です"
+msgid "You're live on {BRAND_NAME}"
+msgstr "{BRAND_NAME}で本番稼働中です"
 
 msgid "You're one step away from your workspace."
 msgstr "ワークスペースの1ステップ手前です。"
 
-msgid "You're setting Carbon up yourself, at your own pace"
-msgstr "あなた自身のペースでCarbonをセットアップしています"
+msgid "You're setting {BRAND_NAME} up yourself, at your own pace"
+msgstr "あなた自身のペースで{BRAND_NAME}をセットアップしています"
 
 msgid "You've been clocked in for {hoursElapsed} hours. Did you forget to clock out?"
 msgstr "{hoursElapsed}時間作業しています。作業終了を忘れましたか?"
@@ -27032,11 +27029,11 @@ msgstr "非アクティブのためセッションがロック中になりまし
 msgid "Your source data is accessible and reasonably clean"
 msgstr "あなたのソースデータはアクセス可能で、適切にクリーンです"
 
-msgid "Your team can free up time to learn Carbon and load your data"
-msgstr "あなたのチームはCarbonを学び、データをロードするための時間を確保できます"
+msgid "Your team can free up time to learn {BRAND_NAME} and load your data"
+msgstr "あなたのチームは{BRAND_NAME}を学び、データをロードするための時間を確保できます"
 
-msgid "Your team leads learn Carbon first using the in-app guides and Academy, then bring everyone else up to speed."
-msgstr "チームリーダーがまずアプリ内ガイドとアカデミーを使用してCarbonを学習し、その後、他のメンバー全員をサポートします。"
+msgid "Your team leads learn {BRAND_NAME} first using the in-app guides and Academy, then bring everyone else up to speed."
+msgstr "チームリーダーがまずアプリ内ガイドとアカデミーを使用して{BRAND_NAME}を学習し、その後、他のメンバー全員をサポートします。"
 
 msgid "Your team, structure, and access."
 msgstr "あなたのチーム、構造、およびアクセス。"

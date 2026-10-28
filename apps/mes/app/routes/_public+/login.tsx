@@ -53,6 +53,7 @@ import {
   Alert,
   AlertDescription,
   AlertTitle,
+  BrandWordmark,
   Button,
   Heading,
   ItarLoginDisclaimer,
@@ -62,7 +63,7 @@ import {
   useMount,
   VStack
 } from "@carbon/react";
-import { Edition, getClientIp, redirect } from "@carbon/utils";
+import { BRAND_NAME, Edition, getClientIp, redirect } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   browserSupportsWebAuthn,
@@ -80,7 +81,7 @@ import { data, useFetcher, useLoaderData, useSearchParams } from "react-router";
 import { path } from "~/utils/path";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Carbon | Login" }];
+  return [{ title: `${BRAND_NAME} | Login` }];
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -498,16 +499,11 @@ export default function LoginRoute() {
   return (
     <>
       <div className="flex justify-center mb-8">
-        <img
-          src={CONTROLLED_ENVIRONMENT ? "/flag.png" : "/carbon-mark-light.svg"}
-          alt={t`Carbon Logo`}
-          className="w-24 dark:hidden"
-        />
-        <img
-          src={CONTROLLED_ENVIRONMENT ? "/flag.png" : "/carbon-mark-dark.svg"}
-          alt={t`Carbon Logo`}
-          className="w-24 hidden dark:block"
-        />
+        {CONTROLLED_ENVIRONMENT ? (
+          <img src="/flag.png" alt={BRAND_NAME} className="w-24" />
+        ) : (
+          <BrandWordmark size="lg" />
+        )}
       </div>
       <div className="rounded-lg p-8 w-[380px]">
         {fetcher.data?.success === true ? (

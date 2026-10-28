@@ -3,6 +3,7 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { redis } from "@carbon/kv";
+import { BRAND_NAME } from "@carbon/utils";
 import {
   generateAuthenticationOptions,
   generateRegistrationOptions,
@@ -137,7 +138,7 @@ export async function getPasskeyRegistrationOptions(
   existingCredentialIds: string[]
 ) {
   const options = await generateRegistrationOptions({
-    rpName: "Carbon",
+    rpName: BRAND_NAME,
     rpID: RP_ID,
     userName: userEmail,
     userDisplayName: userDisplayName || userEmail,

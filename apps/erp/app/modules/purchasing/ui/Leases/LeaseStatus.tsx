@@ -3,6 +3,7 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { Status } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans } from "@lingui/react/macro";
 import type { LeasePaymentStatusType, LeaseStatusType } from "./types";
 
@@ -73,7 +74,7 @@ export const LeasePaymentStatus = ({
     case "Skipped":
       return (
         <Status color="purple">
-          <Trans>Paid outside Carbon</Trans>
+          <Trans>Paid outside {BRAND_NAME}</Trans>
         </Status>
       );
     default:

@@ -14,7 +14,7 @@ import {
 } from "@carbon/ee/accounting";
 import { xeroOnInstall } from "@carbon/ee/xero/hooks.server";
 import { getLogger } from "@carbon/logger";
-import { redirectExternal } from "@carbon/utils";
+import { BRAND_NAME, redirectExternal } from "@carbon/utils";
 import type { LoaderFunctionArgs } from "react-router";
 import { data } from "react-router";
 import {
@@ -192,7 +192,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     if (company.baseCurrencyCode !== xeroBaseCurrency) {
       return data(
         {
-          error: `Currency mismatch: Your Carbon company uses ${company.baseCurrencyCode}, but your Xero organization uses ${xeroBaseCurrency}. Please ensure both systems use the same base currency before connecting.`
+          error: `Currency mismatch: Your ${BRAND_NAME} company uses ${company.baseCurrencyCode}, but your Xero organization uses ${xeroBaseCurrency}. Please ensure both systems use the same base currency before connecting.`
         },
         { status: 400 }
       );

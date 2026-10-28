@@ -3,6 +3,7 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { renderInlineLinks } from "@carbon/notifications";
+import { BRAND_NAME } from "@carbon/utils";
 import {
   Body,
   Container,
@@ -236,7 +237,7 @@ export const NotificationEmail = ({
                 className={`text-[12px] leading-[18px] m-0 nf-fallback ${themeClasses.mutedText}`}
               >
                 You&apos;re receiving this email because you have email
-                notifications enabled on your Carbon account.{" "}
+                notifications enabled on your {BRAND_NAME} account.{" "}
                 <Link
                   href={settingsUrl}
                   className={`${themeClasses.mutedText} underline nf-fallback`}

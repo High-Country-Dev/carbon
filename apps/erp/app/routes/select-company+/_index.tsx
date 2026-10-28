@@ -8,15 +8,15 @@ import { flash } from "@carbon/auth/session.server";
 import {
   Avatar,
   Badge,
+  BrandWordmark,
   Button,
-  cn,
   Heading,
   Input,
   InputGroup,
   InputLeftElement,
   useMode
 } from "@carbon/react";
-import { redirect } from "@carbon/utils";
+import { BRAND_NAME, redirect } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useMemo, useState } from "react";
 import {
@@ -91,22 +91,11 @@ export default function SelectCompany() {
   return (
     <div className="flex min-h-screen w-full flex-col">
       <header className="flex h-[49px] shrink-0 items-center justify-between border-b border-border px-4">
-        <img
-          src={CONTROLLED_ENVIRONMENT ? "/flag.png" : "/carbon-mark-light.svg"}
-          alt="Carbon Logo"
-          className={cn(
-            "w-6 dark:hidden",
-            CONTROLLED_ENVIRONMENT && "grayscale"
-          )}
-        />
-        <img
-          src={CONTROLLED_ENVIRONMENT ? "/flag.png" : "/carbon-mark-dark.svg"}
-          alt="Carbon Logo"
-          className={cn(
-            "hidden w-6 dark:block",
-            CONTROLLED_ENVIRONMENT && "grayscale"
-          )}
-        />
+        {CONTROLLED_ENVIRONMENT ? (
+          <img src="/flag.png" alt={BRAND_NAME} className="w-6 grayscale" />
+        ) : (
+          <BrandWordmark size="sm" />
+        )}
         <Form method="post" action={path.to.logout}>
           <Button
             type="submit"

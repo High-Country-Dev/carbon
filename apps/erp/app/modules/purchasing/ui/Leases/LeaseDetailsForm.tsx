@@ -3,6 +3,7 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { ValidatedForm } from "@carbon/form";
+import { BRAND_NAME } from "@carbon/utils";
 import { parseDate } from "@internationalized/date";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useState } from "react";
@@ -187,7 +188,7 @@ const LeaseDetailsForm = ({ initialValues, action }: LeaseDetailsFormProps) => {
             <DatePicker
               name="invoiceFromDate"
               label={t`Invoice From`}
-              helperText={t`Payments due before this date were paid outside Carbon`}
+              helperText={t`Payments due before this date were paid outside ${BRAND_NAME}`}
             />
           </div>
         </SetupSection>

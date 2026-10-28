@@ -2,6 +2,10 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+// A relative path, not @carbon/utils: this package keeps no workspace deps,
+// and brand.ts has no imports of its own.
+import { BRAND_NAME } from "../../packages/utils/src/brand";
+
 /**
  * Auth's emails for a hosted Supabase project.
  *
@@ -17,11 +21,11 @@
  * its own (packages/documents/src/email/auth/index.tsx).
  */
 const AUTH_EMAILS = [
-  { file: "magic-link.html", name: "magic_link", subject: "Your Carbon sign-in code" },
-  { file: "invite.html", name: "invite", subject: "You have been invited to Carbon" },
-  { file: "confirmation.html", name: "confirmation", subject: "Confirm your email for Carbon" },
-  { file: "recovery.html", name: "recovery", subject: "Reset your Carbon password" },
-  { file: "email-change.html", name: "email_change", subject: "Confirm your new email for Carbon" }
+  { file: "magic-link.html", name: "magic_link", subject: `Your ${BRAND_NAME} sign-in code` },
+  { file: "invite.html", name: "invite", subject: `You have been invited to ${BRAND_NAME}` },
+  { file: "confirmation.html", name: "confirmation", subject: `Confirm your email for ${BRAND_NAME}` },
+  { file: "recovery.html", name: "recovery", subject: `Reset your ${BRAND_NAME} password` },
+  { file: "email-change.html", name: "email_change", subject: `Confirm your new email for ${BRAND_NAME}` }
 ] as const;
 
 /** The Management API's settings for every Auth email, read from the ERP. */

@@ -3,7 +3,7 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { datetime } from "@carbon/utils";
+import { BRAND_NAME, datetime } from "@carbon/utils";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import { useLoaderData } from "react-router";
 import { hasAccountingCutover } from "~/modules/accounting/accounting.utils";
@@ -21,7 +21,7 @@ import { getCompanyTimeZone } from "~/modules/shared/shared.service";
 import { getGenericQueryFilters } from "~/utils/query";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Carbon | Invoicing" }];
+  return [{ title: `${BRAND_NAME} | Invoicing` }];
 };
 
 // The four bucket boundaries the dashboard rolls aging into (Current, 1–30,

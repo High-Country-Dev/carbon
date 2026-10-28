@@ -54,8 +54,8 @@ msgstr "(inactive account)"
 msgid "(Inactive)"
 msgstr "(Inactive)"
 
-msgid "(mapped to more than one Carbon account)"
-msgstr "(mapped to more than one Carbon account)"
+msgid "(mapped to more than one {BRAND_NAME} account)"
+msgstr "(mapped to more than one {BRAND_NAME} account)"
 
 msgid "(not an Equity posting account)"
 msgstr "(not an Equity posting account)"
@@ -117,8 +117,8 @@ msgid "{0, plural, one {# week} other {# weeks}}"
 msgstr "{0, plural, one {# week} other {# weeks}}"
 
 #. placeholder {0}: check.count
-msgid "{0, plural, one {Complete or cancel the # job that took costs before Carbon recorded them.} other {Complete or cancel the # jobs that took costs before Carbon recorded them.}}"
-msgstr "{0, plural, one {Complete or cancel the # job that took costs before Carbon recorded them.} other {Complete or cancel the # jobs that took costs before Carbon recorded them.}}"
+msgid "{0, plural, one {Complete or cancel the # job that took costs before {BRAND_NAME} recorded them.} other {Complete or cancel the # jobs that took costs before {BRAND_NAME} recorded them.}}"
+msgstr "{0, plural, one {Complete or cancel the # job that took costs before {BRAND_NAME} recorded them.} other {Complete or cancel the # jobs that took costs before {BRAND_NAME} recorded them.}}"
 
 #. placeholder {0}: Number(lease.assetCount)
 msgid "{0, plural, one {for # asset} other {for # assets}}"
@@ -423,8 +423,8 @@ msgid "{0}-Year"
 msgstr "{0}-Year"
 
 #. placeholder {0}: blocker.description
-msgid "{0}: the payment due {dueDate} is marked paid outside Carbon, but nothing would relieve it from the lease liability. Set Invoice From on or before {dueDate} so it is invoiced."
-msgstr "{0}: the payment due {dueDate} is marked paid outside Carbon, but nothing would relieve it from the lease liability. Set Invoice From on or before {dueDate} so it is invoiced."
+msgid "{0}: the payment due {dueDate} is marked paid outside {BRAND_NAME}, but nothing would relieve it from the lease liability. Set Invoice From on or before {dueDate} so it is invoiced."
+msgstr "{0}: the payment due {dueDate} is marked paid outside {BRAND_NAME}, but nothing would relieve it from the lease liability. Set Invoice From on or before {dueDate} so it is invoiced."
 
 #. placeholder {0}: line.description
 msgid "{0}: the treatment cannot be worked out. {message}"
@@ -472,11 +472,87 @@ msgstr "{apOverduePct}% of payables"
 msgid "{arOverduePct}% of receivables"
 msgstr "{arOverduePct}% of receivables"
 
-msgid "{asset}: the payment due {dueDate} is Skipped (paid outside Carbon), so nothing would take it off the lease liability. Set Invoice From on or before {dueDate}."
-msgstr "{asset}: the payment due {dueDate} is Skipped (paid outside Carbon), so nothing would take it off the lease liability. Set Invoice From on or before {dueDate}."
+msgid "{asset}: the payment due {dueDate} is Skipped (paid outside {BRAND_NAME}), so nothing would take it off the lease liability. Set Invoice From on or before {dueDate}."
+msgstr "{asset}: the payment due {dueDate} is Skipped (paid outside {BRAND_NAME}), so nothing would take it off the lease liability. Set Invoice From on or before {dueDate}."
 
 msgid "{assetCount} Assets"
 msgstr "{assetCount} Assets"
+
+msgid "{BRAND_NAME}"
+msgstr "{BRAND_NAME}"
+
+msgid "{BRAND_NAME} + you"
+msgstr "{BRAND_NAME} + you"
+
+msgid "{BRAND_NAME} account"
+msgstr "{BRAND_NAME} account"
+
+msgid "{BRAND_NAME} column"
+msgstr "{BRAND_NAME} column"
+
+msgid "{BRAND_NAME} is configured the way your company runs, your data is loaded, and your team is confident using it. When that's true, you're ready to go live."
+msgstr "{BRAND_NAME} is configured the way your company runs, your data is loaded, and your team is confident using it. When that's true, you're ready to go live."
+
+msgid "{BRAND_NAME} leads"
+msgstr "{BRAND_NAME} leads"
+
+msgid "{BRAND_NAME} only"
+msgstr "{BRAND_NAME} only"
+
+msgid "{BRAND_NAME} opens this account from its open items. The amount here is only compared on Migration Clearing."
+msgstr "{BRAND_NAME} opens this account from its open items. The amount here is only compared on Migration Clearing."
+
+msgid "{BRAND_NAME} Posted"
+msgstr "{BRAND_NAME} Posted"
+
+msgid "{BRAND_NAME} posts every document dated on or after this day. Choose the first day of the current period or of one of the 3 periods before it."
+msgstr "{BRAND_NAME} posts every document dated on or after this day. Choose the first day of the current period or of one of the 3 periods before it."
+
+msgid "{BRAND_NAME} posts the opening journal, posts every journal dated on or after the cutover date, and closes the periods before it."
+msgstr "{BRAND_NAME} posts the opening journal, posts every journal dated on or after the cutover date, and closes the periods before it."
+
+msgid "{BRAND_NAME} starts every company on its default chart. Import your own chart now, before the trial balance, which matches accounts by number. The import needs two files: your chart, and the default accounts template filled with your account numbers. To keep{BRAND_NAME}'s chart, continue."
+msgstr "{BRAND_NAME} starts every company on its default chart. Import your own chart now, before the trial balance, which matches accounts by number. The import needs two files: your chart, and the default accounts template filled with your account numbers. To keep{BRAND_NAME}'s chart, continue."
+
+msgid "{BRAND_NAME} value"
+msgstr "{BRAND_NAME} value"
+
+msgid "{BRAND_NAME} Value"
+msgstr "{BRAND_NAME} Value"
+
+#. placeholder {0}: unmapped.length
+msgid "{BRAND_NAME} will use AI to guess a provider account for each of your {0} unmapped accounts. Suggestions are a starting point — you can review them before anything is saved."
+msgstr "{BRAND_NAME} will use AI to guess a provider account for each of your {0} unmapped accounts. Suggestions are a starting point — you can review them before anything is saved."
+
+msgid "{BRAND_NAME} writes their journals when you enable accounting, with today's accounts and costs."
+msgstr "{BRAND_NAME} writes their journals when you enable accounting, with today's accounts and costs."
+
+msgid "{BRAND_NAME}-only"
+msgstr "{BRAND_NAME}-only"
+
+msgid "{BRAND_NAME}-only · fill in real targets for this customer. They see the values, locked."
+msgstr "{BRAND_NAME}-only · fill in real targets for this customer. They see the values, locked."
+
+msgid "{BRAND_NAME}-only · the customer sees this text, locked."
+msgstr "{BRAND_NAME}-only · the customer sees this text, locked."
+
+msgid "{BRAND_NAME}'s default passwordless sign-in: an emailed one-time link that signs you in when opened, with no password to remember or leak."
+msgstr "{BRAND_NAME}'s default passwordless sign-in: an emailed one-time link that signs you in when opened, with no password to remember or leak."
+
+msgid "{BRAND_NAME}'s name for a bill of material and bill of process (routing): the components plus the operations that make a part."
+msgstr "{BRAND_NAME}'s name for a bill of material and bill of process (routing): the components plus the operations that make a part."
+
+msgid "{BRAND_NAME}'s planning run nets supply against demand and explodes methods, surfacing shortfalls — but it creates no orders itself."
+msgstr "{BRAND_NAME}'s planning run nets supply against demand and explodes methods, surfacing shortfalls — but it creates no orders itself."
+
+msgid "{BRAND_NAME}'s production order — one job builds a quantity of one item from its own copied method and routing."
+msgstr "{BRAND_NAME}'s production order — one job builds a quantity of one item from its own copied method and routing."
+
+msgid "{BRAND_NAME}'s shop-floor app where operators run operations, report quantities, issue material, and log time against released jobs in real time."
+msgstr "{BRAND_NAME}'s shop-floor app where operators run operations, report quantities, issue material, and log time against released jobs in real time."
+
+msgid "{BRAND_NAME}'s single record for anything with a part number — Part, Material, Tool, Service, Consumable, or Fixture — that jobs, methods, orders, and inventory all point at."
+msgstr "{BRAND_NAME}'s single record for anything with a part number — Part, Material, Tool, Service, Consumable, or Fixture — that jobs, methods, orders, and inventory all point at."
 
 msgid "{chainLabel}. Consider pointing this part directly at the final successor."
 msgstr "{chainLabel}. Consider pointing this part directly at the final successor."
@@ -526,8 +602,8 @@ msgstr "{created} created, {updated} updated."
 msgid "{days}d"
 msgstr "{days}d"
 
-msgid "{delegatedTo} posts this to your ledger, so Carbon doesn't push it. Your saved choice is kept in case that changes."
-msgstr "{delegatedTo} posts this to your ledger, so Carbon doesn't push it. Your saved choice is kept in case that changes."
+msgid "{delegatedTo} posts this to your ledger, so {BRAND_NAME} doesn't push it. Your saved choice is kept in case that changes."
+msgstr "{delegatedTo} posts this to your ledger, so {BRAND_NAME} doesn't push it. Your saved choice is kept in case that changes."
 
 msgid "{discount} off"
 msgstr "{discount} off"
@@ -579,8 +655,8 @@ msgstr "{label} is used by documents, journals or default accounts, so it cannot
 msgid "{leadTime, plural, one {# day} other {# days}}"
 msgstr "{leadTime, plural, one {# day} other {# days}}"
 
-msgid "{legacyDocumentCount, plural, one {# document posted before Carbon kept journals has no journal.} other {# documents posted before Carbon kept journals have no journal.}}"
-msgstr "{legacyDocumentCount, plural, one {# document posted before Carbon kept journals has no journal.} other {# documents posted before Carbon kept journals have no journal.}}"
+msgid "{legacyDocumentCount, plural, one {# document posted before {BRAND_NAME} kept journals has no journal.} other {# documents posted before {BRAND_NAME} kept journals have no journal.}}"
+msgstr "{legacyDocumentCount, plural, one {# document posted before {BRAND_NAME} kept journals has no journal.} other {# documents posted before {BRAND_NAME} kept journals have no journal.}}"
 
 msgid "{linesCount, plural, one {# line} other {# lines}}"
 msgstr "{linesCount, plural, one {# line} other {# lines}}"
@@ -713,8 +789,8 @@ msgstr "{state} · synced {syncedAgo}"
 msgid "{termMonths, plural, one {# month} other {# months}}"
 msgstr "{termMonths, plural, one {# month} other {# months}}"
 
-msgid "{total} phases to get your company live on Carbon. Each one ends at a checkpoint."
-msgstr "{total} phases to get your company live on Carbon. Each one ends at a checkpoint."
+msgid "{total} phases to get your company live on {BRAND_NAME}. Each one ends at a checkpoint."
+msgstr "{total} phases to get your company live on {BRAND_NAME}. Each one ends at a checkpoint."
 
 msgid "{total} phases to go live"
 msgstr "{total} phases to go live"
@@ -961,6 +1037,9 @@ msgstr "90D"
 msgid "A \"must match\" rule on this process blocks these from sharing a batch"
 msgstr "A \"must match\" rule on this process blocks these from sharing a batch"
 
+msgid "A {BRAND_NAME}-run data migration — you load your own data"
+msgstr "A {BRAND_NAME}-run data migration — you load your own data"
+
 msgid "A 3D model the operator can turn around"
 msgstr "A 3D model the operator can turn around"
 
@@ -969,9 +1048,6 @@ msgstr "A 4-digit PIN is generated when the operator is created."
 
 msgid "A batch needs at least one operation. To break up the whole batch, use Dissolve instead."
 msgstr "A batch needs at least one operation. To break up the whole batch, use Dissolve instead."
-
-msgid "A Carbon-run data migration — you load your own data"
-msgstr "A Carbon-run data migration — you load your own data"
 
 msgid "A change notice tracks a controlled engineering or manufacturing change through review and implementation."
 msgstr "A change notice tracks a controlled engineering or manufacturing change through review and implementation."
@@ -1054,8 +1130,8 @@ msgstr "A customer's status changes"
 msgid "A customer's type changes"
 msgstr "A customer's type changes"
 
-msgid "A date on a contract moved into Carbon mid-term: billing periods that end on or before it were invoiced elsewhere, so they read Billed Externally and are never invoiced."
-msgstr "A date on a contract moved into Carbon mid-term: billing periods that end on or before it were invoiced elsewhere, so they read Billed Externally and are never invoiced."
+msgid "A date on a contract moved into {BRAND_NAME} mid-term: billing periods that end on or before it were invoiced elsewhere, so they read Billed Externally and are never invoiced."
+msgstr "A date on a contract moved into {BRAND_NAME} mid-term: billing periods that end on or before it were invoiced elsewhere, so they read Billed Externally and are never invoiced."
 
 msgid "A dated change to an active contract, with a reason and a contract type: changed lines end and their replacements start from the change date, prorated by day, or from the next billing period."
 msgstr "A dated change to an active contract, with a reason and a contract type: changed lines end and their replacements start from the change date, prorated by day, or from the next billing period."
@@ -1174,8 +1250,8 @@ msgstr "A Make to Order component that gets its own job and routing inside the p
 msgid "A Make to Order component whose parts are issued together into the parent job — no separate build."
 msgstr "A Make to Order component whose parts are issued together into the parent job — no separate build."
 
-msgid "A managed cloud-hosted version of Carbon"
-msgstr "A managed cloud-hosted version of Carbon"
+msgid "A managed cloud-hosted version of {BRAND_NAME}"
+msgstr "A managed cloud-hosted version of {BRAND_NAME}"
 
 msgid "A managed version with all the advanced features"
 msgstr "A managed version with all the advanced features"
@@ -1213,8 +1289,8 @@ msgstr "A new term of the same length starts when this one ends."
 msgid "A non-cash document that settles an invoice against a reason account: a credit lowers what's owed, a debit raises it."
 msgstr "A non-cash document that settles an invoice against a reason account: a credit lowers what's owed, a debit raises it."
 
-msgid "A non-conformance shared with a supplier over a login-free /share/scar link, so they can respond to the issue and update its tasks from outside Carbon."
-msgstr "A non-conformance shared with a supplier over a login-free /share/scar link, so they can respond to the issue and update its tasks from outside Carbon."
+msgid "A non-conformance shared with a supplier over a login-free /share/scar link, so they can respond to the issue and update its tasks from outside {BRAND_NAME}."
+msgstr "A non-conformance shared with a supplier over a login-free /share/scar link, so they can respond to the issue and update its tasks from outside {BRAND_NAME}."
 
 msgid "A non-taxable surcharge (e.g. recoverable expenses like permit fees) added to the line; excluded from the tax base."
 msgstr "A non-taxable surcharge (e.g. recoverable expenses like permit fees) added to the line; excluded from the tax base."
@@ -1237,8 +1313,8 @@ msgstr "A photo or PDF the operator sees on this step"
 msgid "A physical pull signal — a printed card or QR code living with the stock — that raises a purchase order or a job the moment it's scanned to refill a bin."
 msgstr "A physical pull signal — a printed card or QR code living with the stock — that raises a purchase order or a job the moment it's scanned to refill a bin."
 
-msgid "A point in one of Carbon's own flows that a workflow can watch — a job released, a quote accepted, a shipment posted — as opposed to a raw field change; it hands the workflow the records involved by id."
-msgstr "A point in one of Carbon's own flows that a workflow can watch — a job released, a quote accepted, a shipment posted — as opposed to a raw field change; it hands the workflow the records involved by id."
+msgid "A point in one of {BRAND_NAME}'s own flows that a workflow can watch — a job released, a quote accepted, a shipment posted — as opposed to a raw field change; it hands the workflow the records involved by id."
+msgstr "A point in one of {BRAND_NAME}'s own flows that a workflow can watch — a job released, a quote accepted, a shipment posted — as opposed to a raw field change; it hands the workflow the records involved by id."
 
 msgid "A posted accounting entry: a header plus balanced debit and credit lines against GL accounts."
 msgstr "A posted accounting entry: a header plus balanced debit and credit lines against GL accounts."
@@ -1462,8 +1538,8 @@ msgstr "A sales request for quote (RFQ) is a customer inquiry for pricing on a s
 msgid "A sales RFQ (a customer asks you to quote) or a purchasing RFQ (you ask suppliers); both feed the opportunity thread."
 msgstr "A sales RFQ (a customer asks you to quote) or a purchasing RFQ (you ask suppliers); both feed the opportunity thread."
 
-msgid "A scoped secret sent on the carbon-key request header that authenticates programmatic calls to Carbon, carrying its own permissions and rate limit rather than a user session's."
-msgstr "A scoped secret sent on the carbon-key request header that authenticates programmatic calls to Carbon, carrying its own permissions and rate limit rather than a user session's."
+msgid "A scoped secret sent on the carbon-key request header that authenticates programmatic calls to {BRAND_NAME}, carrying its own permissions and rate limit rather than a user session's."
+msgstr "A scoped secret sent on the carbon-key request header that authenticates programmatic calls to {BRAND_NAME}, carrying its own permissions and rate limit rather than a user session's."
 
 msgid "A separate schedule for tax reporting when tax rules require a method different from book depreciation."
 msgstr "A separate schedule for tax reporting when tax rules require a method different from book depreciation."
@@ -2627,8 +2703,8 @@ msgstr "An engineering change: the affected items whose methods are revised on a
 msgid "An Enterprise sign-in method where everyone on a company's registered email domains authenticates through the company's own SAML identity provider instead of a magic link, so IT grants and revokes access centrally."
 msgstr "An Enterprise sign-in method where everyone on a company's registered email domains authenticates through the company's own SAML identity provider instead of a magic link, so IT grants and revokes access centrally."
 
-msgid "An https request Carbon sends to a system of yours when a workflow reaches that step, carrying whatever headers and body you configured."
-msgstr "An https request Carbon sends to a system of yours when a workflow reaches that step, carrying whatever headers and body you configured."
+msgid "An https request {BRAND_NAME} sends to a system of yours when a workflow reaches that step, carrying whatever headers and body you configured."
+msgstr "An https request {BRAND_NAME} sends to a system of yours when a workflow reaches that step, carrying whatever headers and body you configured."
 
 msgid "An integration or a custom change — the small slice that's actually custom."
 msgstr "An integration or a custom change — the small slice that's actually custom."
@@ -2863,8 +2939,8 @@ msgstr "API Key"
 msgid "API Keys"
 msgstr "API Keys"
 
-msgid "API keys for programmatic access to your Carbon data."
-msgstr "API keys for programmatic access to your Carbon data."
+msgid "API keys for programmatic access to your {BRAND_NAME} data."
+msgstr "API keys for programmatic access to your {BRAND_NAME} data."
 
 msgid "API, webhooks, and integrations"
 msgstr "API, webhooks, and integrations"
@@ -3870,8 +3946,8 @@ msgstr "Automate"
 msgid "Automate quality flags and notifications"
 msgstr "Automate quality flags and notifications"
 
-msgid "Automate your business processes with event-driven workflows that trigger actions when things happen in Carbon."
-msgstr "Automate your business processes with event-driven workflows that trigger actions when things happen in Carbon."
+msgid "Automate your business processes with event-driven workflows that trigger actions when things happen in {BRAND_NAME}."
+msgstr "Automate your business processes with event-driven workflows that trigger actions when things happen in {BRAND_NAME}."
 
 msgid "Automatic"
 msgstr "Automatic"
@@ -4314,8 +4390,8 @@ msgstr "Bonus Depreciation %"
 msgid "Book a call to discuss guided implementation"
 msgstr "Book a call to discuss guided implementation"
 
-msgid "Book a call with Carbon"
-msgstr "Book a call with Carbon"
+msgid "Book a call with {BRAND_NAME}"
+msgstr "Book a call with {BRAND_NAME}"
 
 msgid "Book Depreciation"
 msgstr "Book Depreciation"
@@ -4338,8 +4414,8 @@ msgstr "Branch an editable copy of this version that you can change and publish.
 msgid "Breadcrumb"
 msgstr "Breadcrumb"
 
-msgid "Bring in your parts, BOMs, Bill of Process, and costing — with Carbon's import tools, CSV, or LLM help."
-msgstr "Bring in your parts, BOMs, Bill of Process, and costing — with Carbon's import tools, CSV, or LLM help."
+msgid "Bring in your parts, BOMs, Bill of Process, and costing — with {BRAND_NAME}'s import tools, CSV, or LLM help."
+msgstr "Bring in your parts, BOMs, Bill of Process, and costing — with {BRAND_NAME}'s import tools, CSV, or LLM help."
 
 msgid "Browse library"
 msgstr "Browse library"
@@ -4494,8 +4570,8 @@ msgstr "Calibrations"
 msgid "Call an outside URL"
 msgstr "Call an outside URL"
 
-msgid "Called a method in Carbon — the components plus operations that produce a part."
-msgstr "Called a method in Carbon — the components plus operations that produce a part."
+msgid "Called a method in {BRAND_NAME} — the components plus operations that produce a part."
+msgstr "Called a method in {BRAND_NAME} — the components plus operations that produce a part."
 
 msgid "Camera"
 msgstr "Camera"
@@ -4666,15 +4742,6 @@ msgstr "Capitalize Asset"
 msgid "Caption"
 msgstr "Caption"
 
-msgid "Carbon"
-msgstr "Carbon"
-
-msgid "Carbon + you"
-msgstr "Carbon + you"
-
-msgid "Carbon account"
-msgstr "Carbon account"
-
 msgid "Carbon client is not available"
 msgstr "Carbon client is not available"
 
@@ -4683,76 +4750,6 @@ msgstr "Carbon client not available"
 
 msgid "Carbon client not found"
 msgstr "Carbon client not found"
-
-msgid "Carbon column"
-msgstr "Carbon column"
-
-msgid "Carbon is configured the way your company runs, your data is loaded, and your team is confident using it. When that's true, you're ready to go live."
-msgstr "Carbon is configured the way your company runs, your data is loaded, and your team is confident using it. When that's true, you're ready to go live."
-
-msgid "Carbon leads"
-msgstr "Carbon leads"
-
-msgid "Carbon Logo"
-msgstr "Carbon Logo"
-
-msgid "Carbon only"
-msgstr "Carbon only"
-
-msgid "Carbon opens this account from its open items. The amount here is only compared on Migration Clearing."
-msgstr "Carbon opens this account from its open items. The amount here is only compared on Migration Clearing."
-
-msgid "Carbon Posted"
-msgstr "Carbon Posted"
-
-msgid "Carbon posts every document dated on or after this day. Choose the first day of the current period or of one of the 3 periods before it."
-msgstr "Carbon posts every document dated on or after this day. Choose the first day of the current period or of one of the 3 periods before it."
-
-msgid "Carbon posts the opening journal, posts every journal dated on or after the cutover date, and closes the periods before it."
-msgstr "Carbon posts the opening journal, posts every journal dated on or after the cutover date, and closes the periods before it."
-
-msgid "Carbon starts every company on its default chart. Import your own chart now, before the trial balance, which matches accounts by number. The import needs two files: your chart, and the default accounts template filled with your account numbers. To keep Carbon's chart, continue."
-msgstr "Carbon starts every company on its default chart. Import your own chart now, before the trial balance, which matches accounts by number. The import needs two files: your chart, and the default accounts template filled with your account numbers. To keep Carbon's chart, continue."
-
-msgid "Carbon value"
-msgstr "Carbon value"
-
-msgid "Carbon Value"
-msgstr "Carbon Value"
-
-#. placeholder {0}: unmapped.length
-msgid "Carbon will use AI to guess a provider account for each of your {0} unmapped accounts. Suggestions are a starting point — you can review them before anything is saved."
-msgstr "Carbon will use AI to guess a provider account for each of your {0} unmapped accounts. Suggestions are a starting point — you can review them before anything is saved."
-
-msgid "Carbon writes their journals when you enable accounting, with today's accounts and costs."
-msgstr "Carbon writes their journals when you enable accounting, with today's accounts and costs."
-
-msgid "Carbon-only"
-msgstr "Carbon-only"
-
-msgid "Carbon-only · fill in real targets for this customer. They see the values, locked."
-msgstr "Carbon-only · fill in real targets for this customer. They see the values, locked."
-
-msgid "Carbon-only · the customer sees this text, locked."
-msgstr "Carbon-only · the customer sees this text, locked."
-
-msgid "Carbon's default passwordless sign-in: an emailed one-time link that signs you in when opened, with no password to remember or leak."
-msgstr "Carbon's default passwordless sign-in: an emailed one-time link that signs you in when opened, with no password to remember or leak."
-
-msgid "Carbon's name for a bill of material and bill of process (routing): the components plus the operations that make a part."
-msgstr "Carbon's name for a bill of material and bill of process (routing): the components plus the operations that make a part."
-
-msgid "Carbon's planning run nets supply against demand and explodes methods, surfacing shortfalls — but it creates no orders itself."
-msgstr "Carbon's planning run nets supply against demand and explodes methods, surfacing shortfalls — but it creates no orders itself."
-
-msgid "Carbon's production order — one job builds a quantity of one item from its own copied method and routing."
-msgstr "Carbon's production order — one job builds a quantity of one item from its own copied method and routing."
-
-msgid "Carbon's shop-floor app where operators run operations, report quantities, issue material, and log time against released jobs in real time."
-msgstr "Carbon's shop-floor app where operators run operations, report quantities, issue material, and log time against released jobs in real time."
-
-msgid "Carbon's single record for anything with a part number — Part, Material, Tool, Service, Consumable, or Fixture — that jobs, methods, orders, and inventory all point at."
-msgstr "Carbon's single record for anything with a part number — Part, Material, Tool, Service, Consumable, or Fixture — that jobs, methods, orders, and inventory all point at."
 
 msgid "Card Holder"
 msgstr "Card Holder"
@@ -5018,8 +5015,8 @@ msgstr "Choose another file"
 msgid "Choose avatar"
 msgstr "Choose avatar"
 
-msgid "Choose how Carbon reaches you."
-msgstr "Choose how Carbon reaches you."
+msgid "Choose how {BRAND_NAME} reaches you."
+msgstr "Choose how {BRAND_NAME} reaches you."
 
 msgid "Choose how to add lines to this return."
 msgstr "Choose how to add lines to this return."
@@ -5452,11 +5449,11 @@ msgstr "Configurator"
 msgid "Configure"
 msgstr "Configure"
 
+msgid "Configure {BRAND_NAME}"
+msgstr "Configure {BRAND_NAME}"
+
 msgid "Configure {label}"
 msgstr "Configure {label}"
-
-msgid "Configure Carbon"
-msgstr "Configure Carbon"
 
 msgid "Configure default accounts for cash and bank transactions"
 msgstr "Configure default accounts for cash and bank transactions"
@@ -5593,8 +5590,8 @@ msgstr "Conflict reason"
 msgid "Connect"
 msgstr "Connect"
 
-msgid "Connect Carbon to your accounting, project management, and CAD tools and much more."
-msgstr "Connect Carbon to your accounting, project management, and CAD tools and much more."
+msgid "Connect {BRAND_NAME} to your accounting, project management, and CAD tools and much more."
+msgstr "Connect {BRAND_NAME} to your accounting, project management, and CAD tools and much more."
 
 msgid "Connect Jira issue"
 msgstr "Connect Jira issue"
@@ -6923,11 +6920,11 @@ msgstr "Customize"
 msgid "Customize the layout of your PDF documents — reorder sections, hide what you don't need, and add your own blocks."
 msgstr "Customize the layout of your PDF documents — reorder sections, hide what you don't need, and add your own blocks."
 
-msgid "Cut over to Carbon and freeze the old system"
-msgstr "Cut over to Carbon and freeze the old system"
+msgid "Cut over to {BRAND_NAME} and freeze the old system"
+msgstr "Cut over to {BRAND_NAME} and freeze the old system"
 
-msgid "Cut over, freeze the old system, and confirm you're live on Carbon."
-msgstr "Cut over, freeze the old system, and confirm you're live on Carbon."
+msgid "Cut over, freeze the old system, and confirm you're live on {BRAND_NAME}."
+msgstr "Cut over, freeze the old system, and confirm you're live on {BRAND_NAME}."
 
 msgid "Cutover checklist"
 msgstr "Cutover checklist"
@@ -8144,14 +8141,14 @@ msgstr "Documents"
 msgid "Documents and activity"
 msgstr "Documents and activity"
 
-msgid "Documents Posted Before Carbon Kept Journals"
-msgstr "Documents Posted Before Carbon Kept Journals"
+msgid "Documents Posted Before {BRAND_NAME} Kept Journals"
+msgstr "Documents Posted Before {BRAND_NAME} Kept Journals"
 
-msgid "Documents posted before Carbon kept journals have no journal."
-msgstr "Documents posted before Carbon kept journals have no journal."
+msgid "Documents posted before {BRAND_NAME} kept journals have no journal."
+msgstr "Documents posted before {BRAND_NAME} kept journals have no journal."
 
-msgid "Documents pushes invoices, bills and payments as native provider documents; their journals are recorded as covered by the document. It also pulls payments recorded in the provider back into Carbon, closing the matching invoice or bill and posting a Carbon GL journal. Off records them as deliberately excluded."
-msgstr "Documents pushes invoices, bills and payments as native provider documents; their journals are recorded as covered by the document. It also pulls payments recorded in the provider back into Carbon, closing the matching invoice or bill and posting a Carbon GL journal. Off records them as deliberately excluded."
+msgid "Documents pushes invoices, bills and payments as native provider documents; their journals are recorded as covered by the document. It also pulls payments recorded in the provider back into {BRAND_NAME}, closing the matching invoice or bill and posting a{BRAND_NAME} GL journal. Off records them as deliberately excluded."
+msgstr "Documents pushes invoices, bills and payments as native provider documents; their journals are recorded as covered by the document. It also pulls payments recorded in the provider back into {BRAND_NAME}, closing the matching invoice or bill and posting a{BRAND_NAME} GL journal. Off records them as deliberately excluded."
 
 msgid "Documents you open will show up here for quick access."
 msgstr "Documents you open will show up here for quick access."
@@ -8214,8 +8211,8 @@ msgstr "Download PDF"
 msgid "Download template"
 msgstr "Download template"
 
-msgid "Download the template. Each row is a default account Carbon posts to. In Account Number, enter the number of the account in your chart that takes it. Carbon updates the default account to match."
-msgstr "Download the template. Each row is a default account Carbon posts to. In Account Number, enter the number of the account in your chart that takes it. Carbon updates the default account to match."
+msgid "Download the template. Each row is a default account {BRAND_NAME} posts to. In Account Number, enter the number of the account in your chart that takes it. {BRAND_NAME} updates the default account to match."
+msgstr "Download the template. Each row is a default account {BRAND_NAME} posts to. In Account Number, enter the number of the account in your chart that takes it. {BRAND_NAME} updates the default account to match."
 
 msgid "Draft"
 msgstr "Draft"
@@ -8986,8 +8983,8 @@ msgstr "Employees assigned to this training can open it. The content, guide and 
 msgid "Employees can no longer open this training."
 msgstr "Employees can no longer open this training."
 
-msgid "Employees complete a training in Carbon"
-msgstr "Employees complete a training in Carbon"
+msgid "Employees complete a training in {BRAND_NAME}"
+msgstr "Employees complete a training in {BRAND_NAME}"
 
 msgid "Empty"
 msgstr "Empty"
@@ -9305,8 +9302,8 @@ msgstr "Equity account for currency translation adjustments (CTA)"
 msgid "Equity account that offsets the opening balances when accounting is set up. It must total zero."
 msgstr "Equity account that offsets the opening balances when accounting is set up. It must total zero."
 
-msgid "Equity account the opening journal posts against when accounting is set up; it holds any difference between the prior trial balance and Carbon's records, and must total zero before you can enable."
-msgstr "Equity account the opening journal posts against when accounting is set up; it holds any difference between the prior trial balance and Carbon's records, and must total zero before you can enable."
+msgid "Equity account the opening journal posts against when accounting is set up; it holds any difference between the prior trial balance and {BRAND_NAME}'s records, and must total zero before you can enable."
+msgstr "Equity account the opening journal posts against when accounting is set up; it holds any difference between the prior trial balance and {BRAND_NAME}'s records, and must total zero before you can enable."
 
 msgid "Error"
 msgstr "Error"
@@ -9462,8 +9459,8 @@ msgstr "Every company-scoped record. Credentials, integration tokens and webhook
 msgid "Every condition must match"
 msgstr "Every condition must match"
 
-msgid "Every delivery carries a Carbon-Signature header signed with this secret. Verify it to know a request came from Carbon."
-msgstr "Every delivery carries a Carbon-Signature header signed with this secret. Verify it to know a request came from Carbon."
+msgid "Every delivery carries a Carbon-Signature header signed with this secret. Verify it to know a request came from {BRAND_NAME}."
+msgstr "Every delivery carries a Carbon-Signature header signed with this secret. Verify it to know a request came from {BRAND_NAME}."
 
 msgid "Every in-scope test passes in your configured system, with your data."
 msgstr "Every in-scope test passes in your configured system, with your data."
@@ -9736,8 +9733,8 @@ msgstr "Export CSV"
 msgid "Export Lines to CSV"
 msgstr "Export Lines to CSV"
 
-msgid "Export your chart from your current system as a CSV, one row per account, with its number, name, class, type and group, or start from the template of the current chart. Carbon keeps only the accounts in this file."
-msgstr "Export your chart from your current system as a CSV, one row per account, with its number, name, class, type and group, or start from the template of the current chart. Carbon keeps only the accounts in this file."
+msgid "Export your chart from your current system as a CSV, one row per account, with its number, name, class, type and group, or start from the template of the current chart. {BRAND_NAME} keeps only the accounts in this file."
+msgstr "Export your chart from your current system as a CSV, one row per account, with its number, name, class, type and group, or start from the template of the current chart. {BRAND_NAME} keeps only the accounts in this file."
 
 msgid "Extended Price"
 msgstr "Extended Price"
@@ -9772,8 +9769,8 @@ msgstr "External Reference"
 msgid "External training"
 msgstr "External training"
 
-msgid "Extra fields to capture data Carbon doesn't track by default"
-msgstr "Extra fields to capture data Carbon doesn't track by default"
+msgid "Extra fields to capture data {BRAND_NAME} doesn't track by default"
+msgstr "Extra fields to capture data {BRAND_NAME} doesn't track by default"
 
 msgid "Extra hours on the whole day"
 msgstr "Extra hours on the whole day"
@@ -10726,8 +10723,8 @@ msgstr "Generated IDs are enabled"
 msgid "Generating suggestions…"
 msgstr "Generating suggestions…"
 
-msgid "Get live on Carbon: one system running quoting, purchasing, the shop floor, inventory, and finance, replacing the current tools."
-msgstr "Get live on Carbon: one system running quoting, purchasing, the shop floor, inventory, and finance, replacing the current tools."
+msgid "Get live on {BRAND_NAME}: one system running quoting, purchasing, the shop floor, inventory, and finance, replacing the current tools."
+msgstr "Get live on {BRAND_NAME}: one system running quoting, purchasing, the shop floor, inventory, and finance, replacing the current tools."
 
 msgid "Get Method"
 msgstr "Get Method"
@@ -10738,14 +10735,14 @@ msgstr "Get started"
 msgid "Get Started"
 msgstr "Get Started"
 
-msgid "Get your Carbon notifications as they happen."
-msgstr "Get your Carbon notifications as they happen."
+msgid "Get your {BRAND_NAME} notifications as they happen."
+msgstr "Get your {BRAND_NAME} notifications as they happen."
 
 msgid "Gets the summary for every agreement"
 msgstr "Gets the summary for every agreement"
 
-msgid "Getting around Carbon"
-msgstr "Getting around Carbon"
+msgid "Getting around {BRAND_NAME}"
+msgstr "Getting around {BRAND_NAME}"
 
 msgid "Getting set up"
 msgstr "Getting set up"
@@ -10925,8 +10922,8 @@ msgstr "Go-Live Date"
 msgid "Go-live timing holds if each gate is cleared on schedule"
 msgstr "Go-live timing holds if each gate is cleared on schedule"
 
-msgid "Going live on Carbon"
-msgstr "Going live on Carbon"
+msgid "Going live on {BRAND_NAME}"
+msgstr "Going live on {BRAND_NAME}"
 
 msgid "Good afternoon, {name}."
 msgstr "Good afternoon, {name}."
@@ -11150,14 +11147,17 @@ msgstr "Hours/1000 Pieces"
 msgid "Hours/Piece"
 msgstr "Hours/Piece"
 
+msgid "How {BRAND_NAME} looks in this browser."
+msgstr "How {BRAND_NAME} looks in this browser."
+
 msgid "How a batchable process runs its grouped work: Sequential runs parts one after another on one machine (a saw or laser table), while Simultaneous runs them together in a single load (a furnace, oven, or plating bath)."
 msgstr "How a batchable process runs its grouped work: Sequential runs parts one after another on one machine (a saw or laser table), while Simultaneous runs them together in a single load (a furnace, oven, or plating bath)."
 
 msgid "How a contract line earns its revenue over its revenue dates: Daily, the same amount every day, or Even Period, the same amount every calendar month with partial months prorated by days."
 msgstr "How a contract line earns its revenue over its revenue dates: Daily, the same amount every day, or Even Period, the same amount every calendar month with partial months prorated by days."
 
-msgid "How a contract or an amendment is classified for recurring-revenue reporting: New Sales, Existing, Expansion, Reactivation, or Contraction. Carbon suggests it and you can change it."
-msgstr "How a contract or an amendment is classified for recurring-revenue reporting: New Sales, Existing, Expansion, Reactivation, or Contraction. Carbon suggests it and you can change it."
+msgid "How a contract or an amendment is classified for recurring-revenue reporting: New Sales, Existing, Expansion, Reactivation, or Contraction. {BRAND_NAME} suggests it and you can change it."
+msgstr "How a contract or an amendment is classified for recurring-revenue reporting: New Sales, Existing, Expansion, Reactivation, or Contraction. {BRAND_NAME} suggests it and you can change it."
 
 msgid "How a rental agreement cuts billing periods from its start date: Monthly cuts one month from the start date's day (a start on the 7th bills the 7th to the 6th), Calendar Month (Monthly, aligned to calendar periods) cuts calendar months, and 28 Days cuts consecutive 28-day periods. Each unit bills one rate at its own frequency for the whole days, weeks, or months a period covers; a monthly rate in a part period is prorated by days."
 msgstr "How a rental agreement cuts billing periods from its start date: Monthly cuts one month from the start date's day (a start on the 7th bills the 7th to the 6th), Calendar Month (Monthly, aligned to calendar periods) cuts calendar months, and 28 Days cuts consecutive 28-day periods. Each unit bills one rate at its own frequency for the whole days, weeks, or months a period covers; a monthly rate in a part period is prorated by days."
@@ -11176,9 +11176,6 @@ msgstr "How an item's unit cost is valued: Standard, Average, FIFO, or LIFO. Set
 
 msgid "How are these hours calculated?"
 msgstr "How are these hours calculated?"
-
-msgid "How Carbon looks in this browser."
-msgstr "How Carbon looks in this browser."
 
 msgid "How coverage is worked out"
 msgstr "How coverage is worked out"
@@ -11303,8 +11300,8 @@ msgstr "How We Work Together"
 msgid "How will you use {integrationName}?"
 msgstr "How will you use {integrationName}?"
 
-msgid "How your company's process maps to Carbon"
-msgstr "How your company's process maps to Carbon"
+msgid "How your company's process maps to {BRAND_NAME}"
+msgstr "How your company's process maps to {BRAND_NAME}"
 
 msgid "How your quotes, orders, and invoices look when they go out"
 msgstr "How your quotes, orders, and invoices look when they go out"
@@ -12166,8 +12163,8 @@ msgstr "Issued Date"
 msgid "Issues"
 msgstr "Issues"
 
-msgid "It is coming soon. Contact Carbon to have it set up for your company."
-msgstr "It is coming soon. Contact Carbon to have it set up for your company."
+msgid "It is coming soon. Contact {BRAND_NAME} to have it set up for your company."
+msgstr "It is coming soon. Contact {BRAND_NAME} to have it set up for your company."
 
 msgid "It will stop running until you publish a version again. Nothing is deleted."
 msgstr "It will stop running until you publish a version again. Nothing is deleted."
@@ -12935,8 +12932,8 @@ msgstr "Link Linear Issue"
 msgid "link outside company"
 msgstr "link outside company"
 
-msgid "Link this Carbon customer to one of them, or create a separate Stripe customer."
-msgstr "Link this Carbon customer to one of them, or create a separate Stripe customer."
+msgid "Link this {BRAND_NAME} customer to one of them, or create a separate Stripe customer."
+msgstr "Link this {BRAND_NAME} customer to one of them, or create a separate Stripe customer."
 
 msgid "Link to sales order line"
 msgstr "Link to sales order line"
@@ -12975,8 +12972,8 @@ msgstr "List View"
 msgid "Lists are wired into both {0} and {1}, so this step cannot tell which one to repeat over. Leave a list on only one of them."
 msgstr "Lists are wired into both {0} and {1}, so this step cannot tell which one to repeat over. Leave a list on only one of them."
 
-msgid "Live on Carbon"
-msgstr "Live on Carbon"
+msgid "Live on {BRAND_NAME}"
+msgstr "Live on {BRAND_NAME}"
 
 msgid "Live reloading"
 msgstr "Live reloading"
@@ -13014,8 +13011,8 @@ msgstr "Loading item details..."
 msgid "Loading returnable lines..."
 msgstr "Loading returnable lines..."
 
-msgid "Loading your own data with Carbon's import tools"
-msgstr "Loading your own data with Carbon's import tools"
+msgid "Loading your own data with {BRAND_NAME}'s import tools"
+msgstr "Loading your own data with {BRAND_NAME}'s import tools"
 
 msgid "Loading..."
 msgstr "Loading..."
@@ -13325,8 +13322,8 @@ msgstr "Manage authentication and sign-in requirements for your company."
 msgid "Manage how shelf life is tracked, computed, and enforced across inventory."
 msgstr "Manage how shelf life is tracked, computed, and enforced across inventory."
 
-msgid "Manage how you sign in to Carbon."
-msgstr "Manage how you sign in to Carbon."
+msgid "Manage how you sign in to {BRAND_NAME}."
+msgstr "Manage how you sign in to {BRAND_NAME}."
 
 msgid "Manage Ownership"
 msgstr "Manage Ownership"
@@ -15071,8 +15068,8 @@ msgstr "No open jobs for sales orders are projected to complete at this location
 msgid "No open jobs for sales orders at this location."
 msgstr "No open jobs for sales orders at this location."
 
-msgid "No open jobs with costs from before Carbon recorded them"
-msgstr "No open jobs with costs from before Carbon recorded them"
+msgid "No open jobs with costs from before {BRAND_NAME} recorded them"
+msgstr "No open jobs with costs from before {BRAND_NAME} recorded them"
 
 msgid "No open lines. Add a service to amend."
 msgstr "No open lines. Add a service to amend."
@@ -15604,8 +15601,8 @@ msgstr "Notification Type"
 msgid "Notifications"
 msgstr "Notifications"
 
-msgid "Notifications are blocked for Carbon in this browser's site settings."
-msgstr "Notifications are blocked for Carbon in this browser's site settings."
+msgid "Notifications are blocked for {BRAND_NAME} in this browser's site settings."
+msgstr "Notifications are blocked for {BRAND_NAME} in this browser's site settings."
 
 msgid "Notify"
 msgstr "Notify"
@@ -15683,11 +15680,11 @@ msgstr "On"
 msgid "On {sentDate}"
 msgstr "On {sentDate}"
 
-msgid "On a control account, Carbon opens the balance from its own open items, inventory and fixed assets. The trial balance must agree: every difference stays on Migration Clearing, which must total zero. Open an account to see its items, and ignore an invoice the prior system already settled. Apply to Trial Balance sets each control account to Carbon's total and puts what is left on Retained Earnings."
-msgstr "On a control account, Carbon opens the balance from its own open items, inventory and fixed assets. The trial balance must agree: every difference stays on Migration Clearing, which must total zero. Open an account to see its items, and ignore an invoice the prior system already settled. Apply to Trial Balance sets each control account to Carbon's total and puts what is left on Retained Earnings."
+msgid "On a control account, {BRAND_NAME} opens the balance from its own open items, inventory and fixed assets. The trial balance must agree: every difference stays on Migration Clearing, which must total zero. Open an account to see its items, and ignore an invoice the prior system already settled. Apply to Trial Balance sets each control account to {BRAND_NAME}'s total and puts what is left on Retained Earnings."
+msgstr "On a control account, {BRAND_NAME} opens the balance from its own open items, inventory and fixed assets. The trial balance must agree: every difference stays on Migration Clearing, which must total zero. Open an account to see its items, and ignore an invoice the prior system already settled. Apply to Trial Balance sets each control account to {BRAND_NAME}'s total and puts what is left on Retained Earnings."
 
-msgid "On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, Carbon creates a Released stock transfer for the kanban quantity."
-msgstr "On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, Carbon creates a Released stock transfer for the kanban quantity."
+msgid "On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, {BRAND_NAME} creates a Released stock transfer for the kanban quantity."
+msgstr "On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, {BRAND_NAME} creates a Released stock transfer for the kanban quantity."
 
 msgid "On cutover day, work the checklist below in order. Acceptance tests come from your in-scope requirements. Support details are at the bottom."
 msgstr "On cutover day, work the checklist below in order. Acceptance tests come from your in-scope requirements. Support details are at the bottom."
@@ -15776,8 +15773,8 @@ msgstr "On-Rent Days"
 msgid "On-time delivery"
 msgstr "On-time delivery"
 
-msgid "Onboard your agent to Carbon"
-msgstr "Onboard your agent to Carbon"
+msgid "Onboard your agent to {BRAND_NAME}"
+msgstr "Onboard your agent to {BRAND_NAME}"
 
 msgid "Once a day"
 msgstr "Once a day"
@@ -15808,8 +15805,8 @@ msgstr "One row per invoice, one column per line. Change a date or an amount, ad
 msgid "One row per month, one column per line. Each line recognizes exactly what its invoices bill."
 msgstr "One row per month, one column per line. Each line recognizes exactly what its invoices bill."
 
-msgid "One serial unit or one batch that Carbon follows individually, carrying its own status and attributes such as an expiry date."
-msgstr "One serial unit or one batch that Carbon follows individually, carrying its own status and attributes such as an expiry date."
+msgid "One serial unit or one batch that {BRAND_NAME} follows individually, carrying its own status and attributes such as an expiry date."
+msgstr "One serial unit or one batch that {BRAND_NAME} follows individually, carrying its own status and attributes such as an expiry date."
 
 msgid "One set of numbers"
 msgstr "One set of numbers"
@@ -15943,8 +15940,8 @@ msgstr "Open Date"
 msgid "Open Dispatches"
 msgstr "Open Dispatches"
 
-msgid "Open in Carbon"
-msgstr "Open in Carbon"
+msgid "Open in {BRAND_NAME}"
+msgstr "Open in {BRAND_NAME}"
 
 msgid "Open in change notice {ids}. Release it to change the active version."
 msgstr "Open in change notice {ids}. Release it to change the active version."
@@ -16063,8 +16060,8 @@ msgstr "Opening"
 msgid "Opening an operation starts its timer, so time is tracked from the moment work begins."
 msgstr "Opening an operation starts its timer, so time is tracked from the moment work begins."
 
-msgid "Opening balance of depreciation already booked before this asset was added to Carbon (use 0 for new acquisitions)."
-msgstr "Opening balance of depreciation already booked before this asset was added to Carbon (use 0 for new acquisitions)."
+msgid "Opening balance of depreciation already booked before this asset was added to {BRAND_NAME} (use 0 for new acquisitions)."
+msgstr "Opening balance of depreciation already booked before this asset was added to {BRAND_NAME} (use 0 for new acquisitions)."
 
 msgid "Opening balances as of"
 msgstr "Opening balances as of"
@@ -16504,8 +16501,8 @@ msgstr "Paid Amount:"
 msgid "Paid Date"
 msgstr "Paid Date"
 
-msgid "Paid outside Carbon"
-msgstr "Paid outside Carbon"
+msgid "Paid outside {BRAND_NAME}"
+msgstr "Paid outside {BRAND_NAME}"
 
 msgid "Paid up front; record it as a payment once received"
 msgstr "Paid up front; record it as a payment once received"
@@ -16746,8 +16743,8 @@ msgstr "Payments"
 msgid "Payments and credits applied to this invoice. Applied amounts and FX are in company base currency. Click a row to open the source document."
 msgstr "Payments and credits applied to this invoice. Applied amounts and FX are in company base currency. Click a row to open the source document."
 
-msgid "Payments due before this date were paid outside Carbon"
-msgstr "Payments due before this date were paid outside Carbon"
+msgid "Payments due before this date were paid outside {BRAND_NAME}"
+msgstr "Payments due before this date were paid outside {BRAND_NAME}"
 
 msgid "Pays the deposit held for this document back out of customer prepayments."
 msgstr "Pays the deposit held for this document back out of customer prepayments."
@@ -16884,11 +16881,11 @@ msgstr "Physical printers available for assignment."
 msgid "Pick"
 msgstr "Pick"
 
+msgid "Pick a {BRAND_NAME} dimension and the provider target it posts to. Auto-create adds missing provider options by name at push time."
+msgstr "Pick a {BRAND_NAME} dimension and the provider target it posts to. Auto-create adds missing provider options by name at push time."
+
 msgid "Pick a batchable process, filter the eligible operations by their material, and select the ones to run together."
 msgstr "Pick a batchable process, filter the eligible operations by their material, and select the ones to run together."
-
-msgid "Pick a Carbon dimension and the provider target it posts to. Auto-create adds missing provider options by name at push time."
-msgstr "Pick a Carbon dimension and the provider target it posts to. Auto-create adds missing provider options by name at push time."
 
 msgid "Pick a column to sort by"
 msgstr "Pick a column to sort by"
@@ -17659,11 +17656,11 @@ msgstr "Properties"
 msgid "Property"
 msgstr "Property"
 
-msgid "Proposed matches where the Carbon account number equals the provider account code exactly."
-msgstr "Proposed matches where the Carbon account number equals the provider account code exactly."
+msgid "Proposed matches where the {BRAND_NAME} account number equals the provider account code exactly."
+msgstr "Proposed matches where the {BRAND_NAME} account number equals the provider account code exactly."
 
-msgid "Proposed matches where the Carbon dimension value's name equals a provider option name exactly."
-msgstr "Proposed matches where the Carbon dimension value's name equals a provider option name exactly."
+msgid "Proposed matches where the {BRAND_NAME} dimension value's name equals a provider option name exactly."
+msgstr "Proposed matches where the {BRAND_NAME} dimension value's name equals a provider option name exactly."
 
 msgid "Protect the go-live date"
 msgstr "Protect the go-live date"
@@ -17683,8 +17680,8 @@ msgstr "Prove ownership of each email domain with a DNS TXT record before it can
 msgid "Provide process knowledge and inputs"
 msgstr "Provide process knowledge and inputs"
 
-msgid "Provide these URLs to your identity provider (Okta, Entra ID, Google Workspace, etc.) when registering Carbon as a SAML application."
-msgstr "Provide these URLs to your identity provider (Okta, Entra ID, Google Workspace, etc.) when registering Carbon as a SAML application."
+msgid "Provide these URLs to your identity provider (Okta, Entra ID, Google Workspace, etc.) when registering {BRAND_NAME} as a SAML application."
+msgstr "Provide these URLs to your identity provider (Okta, Entra ID, Google Workspace, etc.) when registering {BRAND_NAME} as a SAML application."
 
 msgid "Provider"
 msgstr "Provider"
@@ -17717,8 +17714,8 @@ msgstr "Publish Version {0}?"
 msgid "Published"
 msgstr "Published"
 
-msgid "Published by Carbon"
-msgstr "Published by Carbon"
+msgid "Published by {BRAND_NAME}"
+msgstr "Published by {BRAND_NAME}"
 
 msgid "Published Version"
 msgstr "Published Version"
@@ -18206,8 +18203,8 @@ msgstr "raise it early and raise it plainly. A problem named in week 2 is a smal
 msgid "Ramp"
 msgstr "Ramp"
 
-msgid "Ramp allows only one. Disconnect the other system in Ramp, or connect Carbon again choosing \"Another system posts my ledger\"."
-msgstr "Ramp allows only one. Disconnect the other system in Ramp, or connect Carbon again choosing \"Another system posts my ledger\"."
+msgid "Ramp allows only one. Disconnect the other system in Ramp, or connect {BRAND_NAME} again choosing \"Another system posts my ledger\"."
+msgstr "Ramp allows only one. Disconnect the other system in Ramp, or connect {BRAND_NAME} again choosing \"Another system posts my ledger\"."
 
 msgid "Ramp authorized the connection but saving it failed. Try connecting again."
 msgstr "Ramp authorized the connection but saving it failed. Try connecting again."
@@ -18287,8 +18284,8 @@ msgstr "Reactivate"
 msgid "Reactivation"
 msgstr "Reactivation"
 
-msgid "Read this through — what Carbon will and won't do for your setup. When it looks right, mark it agreed below."
-msgstr "Read this through — what Carbon will and won't do for your setup. When it looks right, mark it agreed below."
+msgid "Read this through — what {BRAND_NAME} will and won't do for your setup. When it looks right, mark it agreed below."
+msgstr "Read this through — what {BRAND_NAME} will and won't do for your setup. When it looks right, mark it agreed below."
 
 msgid "Read this through. When it's right, sign off at the bottom. It's the statement your commercial agreement points to, with no prices or legal terms here."
 msgstr "Read this through. When it's right, sign off at the bottom. It's the statement your commercial agreement points to, with no prices or legal terms here."
@@ -18528,8 +18525,8 @@ msgstr "Reconcile"
 msgid "Reconciliation found discrepancies with the provider"
 msgstr "Reconciliation found discrepancies with the provider"
 
-msgid "Reconciling a purchase order against what was received and invoiced — implicit in Carbon, via the line quantities and GR/IR balance."
-msgstr "Reconciling a purchase order against what was received and invoiced — implicit in Carbon, via the line quantities and GR/IR balance."
+msgid "Reconciling a purchase order against what was received and invoiced — implicit in {BRAND_NAME}, via the line quantities and GR/IR balance."
+msgstr "Reconciling a purchase order against what was received and invoiced — implicit in {BRAND_NAME}, via the line quantities and GR/IR balance."
 
 msgid "Reconfigure"
 msgstr "Reconfigure"
@@ -19073,8 +19070,8 @@ msgstr "Repeats once for each item in {inputLabel}"
 msgid "Replace"
 msgstr "Replace"
 
-msgid "Replace Carbon's default chart with your own, before you set up accounting"
-msgstr "Replace Carbon's default chart with your own, before you set up accounting"
+msgid "Replace {BRAND_NAME}'s default chart with your own, before you set up accounting"
+msgstr "Replace {BRAND_NAME}'s default chart with your own, before you set up accounting"
 
 msgid "Replace chart"
 msgstr "Replace chart"
@@ -19692,8 +19689,8 @@ msgstr "RFQ setting updated"
 msgid "RFQs"
 msgstr "RFQs"
 
-msgid "Ride Carbon dimensions along on pushed journals. Each slot maps one Carbon dimension to one provider analytics target; the value mapping below pairs individual dimension values with provider options."
-msgstr "Ride Carbon dimensions along on pushed journals. Each slot maps one Carbon dimension to one provider analytics target; the value mapping below pairs individual dimension values with provider options."
+msgid "Ride {BRAND_NAME} dimensions along on pushed journals. Each slot maps one {BRAND_NAME} dimension to one provider analytics target; the value mapping below pairs individual dimension values with provider options."
+msgstr "Ride {BRAND_NAME} dimensions along on pushed journals. Each slot maps one {BRAND_NAME} dimension to one provider analytics target; the value mapping below pairs individual dimension values with provider options."
 
 #. placeholder {0}: certification.docVersion
 msgid "Rider v{0}"
@@ -20754,8 +20751,8 @@ msgstr "Send Invites"
 msgid "Send RFQ to Suppliers"
 msgstr "Send RFQ to Suppliers"
 
-msgid "Send to Carbon"
-msgstr "Send to Carbon"
+msgid "Send to {BRAND_NAME}"
+msgstr "Send to {BRAND_NAME}"
 
 msgid "Send Via"
 msgstr "Send Via"
@@ -20892,6 +20889,9 @@ msgstr "Services"
 msgid "Session locked"
 msgstr "Session locked"
 
+msgid "Set {BRAND_NAME} up around how your company runs: sites, parts, BOMs, Bill of Process, and the flows you use."
+msgstr "Set {BRAND_NAME} up around how your company runs: sites, parts, BOMs, Bill of Process, and the flows you use."
+
 msgid "Set a customer on this return to add from a shipment."
 msgstr "Set a customer on this return to add from a shipment."
 
@@ -20912,9 +20912,6 @@ msgstr "Set a target"
 
 msgid "Set at activation"
 msgstr "Set at activation"
-
-msgid "Set Carbon up around how your company runs: sites, parts, BOMs, Bill of Process, and the flows you use."
-msgstr "Set Carbon up around how your company runs: sites, parts, BOMs, Bill of Process, and the flows you use."
 
 msgid "Set Clock Out"
 msgstr "Set Clock Out"
@@ -20998,8 +20995,8 @@ msgstr "Sets what this unit is carried at in inventory. The difference is booked
 msgid "Settings"
 msgstr "Settings"
 
-msgid "Settled in the system that kept the books before the cutover. Carbon leaves them out of its totals and marks them Paid on the day before the cutover when you set up accounting."
-msgstr "Settled in the system that kept the books before the cutover. Carbon leaves them out of its totals and marks them Paid on the day before the cutover when you set up accounting."
+msgid "Settled in the system that kept the books before the cutover.{BRAND_NAME} leaves them out of its totals and marks them Paid on the day before the cutover when you set up accounting."
+msgstr "Settled in the system that kept the books before the cutover.{BRAND_NAME} leaves them out of its totals and marks them Paid on the day before the cutover when you set up accounting."
 
 msgid "Setup"
 msgstr "Setup"
@@ -21391,8 +21388,8 @@ msgstr "Shuffle"
 msgid "Sign in here instead"
 msgstr "Sign in here instead"
 
-msgid "Sign in to Carbon"
-msgstr "Sign in to Carbon"
+msgid "Sign in to {BRAND_NAME}"
+msgstr "Sign in to {BRAND_NAME}"
 
 msgid "Sign in with biometrics instead of a magic link. Passkeys are secured by Face ID, Touch ID, or your device PIN."
 msgstr "Sign in with biometrics instead of a magic link. Passkeys are secured by Face ID, Touch ID, or your device PIN."
@@ -21527,8 +21524,8 @@ msgstr "Sold"
 msgid "Solutions Engineer"
 msgstr "Solutions Engineer"
 
-msgid "Some balances have no Carbon account"
-msgstr "Some balances have no Carbon account"
+msgid "Some balances have no {BRAND_NAME} account"
+msgstr "Some balances have no {BRAND_NAME} account"
 
 msgid "Some lines are invoiced for more or less than they total. Fix the amounts before confirming."
 msgstr "Some lines are invoiced for more or less than they total. Fix the amounts before confirming."
@@ -21704,8 +21701,8 @@ msgstr "Stand up hosting (cloud or self-hosted)"
 msgid "Standard"
 msgstr "Standard"
 
-msgid "Standard cloud Carbon fits how your company runs"
-msgstr "Standard cloud Carbon fits how your company runs"
+msgid "Standard cloud {BRAND_NAME} fits how your company runs"
+msgstr "Standard cloud {BRAND_NAME} fits how your company runs"
 
 msgid "Standard Cost Variances"
 msgstr "Standard Cost Variances"
@@ -22024,17 +22021,17 @@ msgstr "Stripe already has a customer with this email"
 msgid "Stripe Due Date"
 msgstr "Stripe Due Date"
 
-msgid "Stripe emails the invoice to the customer, so an address is required. This will also be saved to the contact in Carbon."
-msgstr "Stripe emails the invoice to the customer, so an address is required. This will also be saved to the contact in Carbon."
+msgid "Stripe emails the invoice to the customer, so an address is required. This will also be saved to the contact in {BRAND_NAME}."
+msgstr "Stripe emails the invoice to the customer, so an address is required. This will also be saved to the contact in {BRAND_NAME}."
 
-msgid "Stripe emails the invoices to the customer, so an address is required. It is also saved to the contract's invoice contact in Carbon, if it has one."
-msgstr "Stripe emails the invoices to the customer, so an address is required. It is also saved to the contract's invoice contact in Carbon, if it has one."
+msgid "Stripe emails the invoices to the customer, so an address is required. It is also saved to the contract's invoice contact in {BRAND_NAME}, if it has one."
+msgstr "Stripe emails the invoices to the customer, so an address is required. It is also saved to the contract's invoice contact in {BRAND_NAME}, if it has one."
 
-msgid "Stripe has no customer for this Carbon customer yet. Confirming will create one on your connected account."
-msgstr "Stripe has no customer for this Carbon customer yet. Confirming will create one on your connected account."
+msgid "Stripe has no customer for this {BRAND_NAME} customer yet. Confirming will create one on your connected account."
+msgstr "Stripe has no customer for this {BRAND_NAME} customer yet. Confirming will create one on your connected account."
 
-msgid "Stripe has no customer for this Carbon customer yet. Posting will create one on your connected account."
-msgstr "Stripe has no customer for this Carbon customer yet. Posting will create one on your connected account."
+msgid "Stripe has no customer for this {BRAND_NAME} customer yet. Posting will create one on your connected account."
+msgstr "Stripe has no customer for this {BRAND_NAME} customer yet. Posting will create one on your connected account."
 
 msgid "Structure"
 msgstr "Structure"
@@ -22565,8 +22562,8 @@ msgstr "Take the shortest remaining shelf life across the materials consumed to 
 msgid "taken"
 msgstr "taken"
 
-msgid "Taken outside Carbon. You mark each employee complete."
-msgstr "Taken outside Carbon. You mark each employee complete."
+msgid "Taken outside {BRAND_NAME}. You mark each employee complete."
+msgstr "Taken outside {BRAND_NAME}. You mark each employee complete."
 
 msgid "Takes Effect"
 msgstr "Takes Effect"
@@ -22834,8 +22831,20 @@ msgstr "The \"{0}\" phase is done — its \"{1}\" checkpoint has been passed."
 msgid "The {0} phases to go live, each ending at a checkpoint. Tick off each task as you complete it."
 msgstr "The {0} phases to go live, each ending at a checkpoint. Tick off each task as you complete it."
 
-msgid "The accent color used across Carbon."
-msgstr "The accent color used across Carbon."
+msgid "The {BRAND_NAME} user currently responsible for working this record, set per record and independent of ownership fields like Account Manager or Sales Person."
+msgstr "The {BRAND_NAME} user currently responsible for working this record, set per record and independent of ownership fields like Account Manager or Sales Person."
+
+msgid "The {BRAND_NAME} user responsible for this customer relationship; emails and reminders about this customer route to them."
+msgstr "The {BRAND_NAME} user responsible for this customer relationship; emails and reminders about this customer route to them."
+
+msgid "The {BRAND_NAME} user responsible for this supplier relationship; emails and reminders about this supplier route to them."
+msgstr "The {BRAND_NAME} user responsible for this supplier relationship; emails and reminders about this supplier route to them."
+
+msgid "The {BRAND_NAME} user who owns this RFQ; supplier responses and reminders route to them."
+msgstr "The {BRAND_NAME} user who owns this RFQ; supplier responses and reminders route to them."
+
+msgid "The accent color used across {BRAND_NAME}."
+msgstr "The accent color used across {BRAND_NAME}."
 
 msgid "The account picked for {account} is no longer in the chart."
 msgstr "The account picked for {account} is no longer in the chart."
@@ -22843,8 +22852,8 @@ msgstr "The account picked for {account} is no longer in the chart."
 msgid "The accounting dimension that categorizes items for reporting and analysis."
 msgstr "The accounting dimension that categorizes items for reporting and analysis."
 
-msgid "The accounts Carbon posts to automatically"
-msgstr "The accounts Carbon posts to automatically"
+msgid "The accounts {BRAND_NAME} posts to automatically"
+msgstr "The accounts {BRAND_NAME} posts to automatically"
 
 msgid "The action that copies a saved method (its materials, operations, and work instructions) onto a job or quote line."
 msgstr "The action that copies a saved method (its materials, operations, and work instructions) onto a job or quote line."
@@ -22907,26 +22916,14 @@ msgstr "The buckets you track costs against"
 msgid "The capital assets you own and depreciate"
 msgstr "The capital assets you own and depreciate"
 
-msgid "The Carbon user currently responsible for working this record, set per record and independent of ownership fields like Account Manager or Sales Person."
-msgstr "The Carbon user currently responsible for working this record, set per record and independent of ownership fields like Account Manager or Sales Person."
-
-msgid "The Carbon user responsible for this customer relationship; emails and reminders about this customer route to them."
-msgstr "The Carbon user responsible for this customer relationship; emails and reminders about this customer route to them."
-
-msgid "The Carbon user responsible for this supplier relationship; emails and reminders about this supplier route to them."
-msgstr "The Carbon user responsible for this supplier relationship; emails and reminders about this supplier route to them."
-
-msgid "The Carbon user who owns this RFQ; supplier responses and reminders route to them."
-msgstr "The Carbon user who owns this RFQ; supplier responses and reminders route to them."
-
 msgid "The carrier and service a shipment goes out on, supplying the tracking-URL template that turns a tracking number into a link and the account freight charges post to."
 msgstr "The carrier and service a shipment goes out on, supplying the tracking-URL template that turns a tracking number into a link and the account freight charges post to."
 
 msgid "The carrier that delivers goods from this supplier, when different from the supplier itself (e.g. supplier sells, FedEx ships)."
 msgstr "The carrier that delivers goods from this supplier, when different from the supplier itself (e.g. supplier sells, FedEx ships)."
 
-msgid "The carrier's tracking-page URL with {trackingNumber} as a placeholder — Carbon substitutes the actual number when generating links on shipments."
-msgstr "The carrier's tracking-page URL with {trackingNumber} as a placeholder — Carbon substitutes the actual number when generating links on shipments."
+msgid "The carrier's tracking-page URL with {trackingNumber} as a placeholder — {BRAND_NAME} substitutes the actual number when generating links on shipments."
+msgstr "The carrier's tracking-page URL with {trackingNumber} as a placeholder — {BRAND_NAME} substitutes the actual number when generating links on shipments."
 
 msgid "The carriers and methods you ship orders with"
 msgstr "The carriers and methods you ship orders with"
@@ -22991,8 +22988,8 @@ msgstr "The contract ends on its end date and invoicing stops."
 msgid "The contract ends on the end date and does not renew. Planned invoices after it are removed."
 msgstr "The contract ends on the end date and does not renew. Planned invoices after it are removed."
 
-msgid "The contract's invoices will be billed to the Stripe customer already linked to this Carbon customer. To change its details, edit it in the Stripe dashboard."
-msgstr "The contract's invoices will be billed to the Stripe customer already linked to this Carbon customer. To change its details, edit it in the Stripe dashboard."
+msgid "The contract's invoices will be billed to the Stripe customer already linked to this {BRAND_NAME} customer. To change its details, edit it in the Stripe dashboard."
+msgstr "The contract's invoices will be billed to the Stripe customer already linked to this {BRAND_NAME} customer. To change its details, edit it in the Stripe dashboard."
 
 msgid "The contractor's expected weekly availability; scheduling uses this as the upper bound when assigning this contractor to operations across the week."
 msgstr "The contractor's expected weekly availability; scheduling uses this as the upper bound when assigning this contractor to operations across the week."
@@ -23172,8 +23169,8 @@ msgstr "The file you uploaded and the mappings you've made will be lost."
 msgid "the first 3 to 4 weeks"
 msgstr "the first 3 to 4 weeks"
 
-msgid "The first day a company keeps its books in Carbon, set once when accounting is set up and never changed; from then on every posting writes a Posted journal."
-msgstr "The first day a company keeps its books in Carbon, set once when accounting is set up and never changed; from then on every posting writes a Posted journal."
+msgid "The first day a company keeps its books in {BRAND_NAME}, set once when accounting is set up and never changed; from then on every posting writes a Posted journal."
+msgstr "The first day a company keeps its books in {BRAND_NAME}, set once when accounting is set up and never changed; from then on every posting writes a Posted journal."
 
 msgid "The first day of a lease month (day {commencementDay}) where a payment period starts, after the last posted lease run"
 msgstr "The first day of a lease month (day {commencementDay}) where a payment period starts, after the last posted lease run"
@@ -23244,11 +23241,11 @@ msgstr "The https address a workflow's webhook step posts to — plain http, red
 msgid "The human-readable document number (like J000001 or ECO-000001) minted from a sequence and stored on the record, distinct from its internal id."
 msgstr "The human-readable document number (like J000001 or ECO-000001) minted from a sequence and stored on the record, distinct from its internal id."
 
-msgid "The identifier the customer uses for this part on their POs; Carbon resolves it to our internal Part ID on order import."
-msgstr "The identifier the customer uses for this part on their POs; Carbon resolves it to our internal Part ID on order import."
+msgid "The identifier the customer uses for this part on their POs; {BRAND_NAME} resolves it to our internal Part ID on order import."
+msgstr "The identifier the customer uses for this part on their POs; {BRAND_NAME} resolves it to our internal Part ID on order import."
 
-msgid "The identifier the supplier uses for this part on their quotes and invoices; Carbon resolves it to our internal Part ID."
-msgstr "The identifier the supplier uses for this part on their quotes and invoices; Carbon resolves it to our internal Part ID."
+msgid "The identifier the supplier uses for this part on their quotes and invoices; {BRAND_NAME} resolves it to our internal Part ID."
+msgstr "The identifier the supplier uses for this part on their quotes and invoices; {BRAND_NAME} resolves it to our internal Part ID."
 
 msgid "The immediate nonconformance task that quarantines affected stock or work before the root cause is known."
 msgstr "The immediate nonconformance task that quarantines affected stock or work before the root cause is known."
@@ -23286,8 +23283,8 @@ msgstr "the job hours due that day (a due-date basis, not the day the work runs)
 msgid "The job whose operation this outside-processing line covers; the line's receipt closes the operation against this job."
 msgstr "The job whose operation this outside-processing line covers; the line's receipt closes the operation against this job."
 
-msgid "The job's position in its location's schedule queue — a fractional number Carbon computes from the due date and deadline type, not a Low/High rating."
-msgstr "The job's position in its location's schedule queue — a fractional number Carbon computes from the due date and deadline type, not a Low/High rating."
+msgid "The job's position in its location's schedule queue — a fractional number {BRAND_NAME} computes from the due date and deadline type, not a Low/High rating."
+msgstr "The job's position in its location's schedule queue — a fractional number {BRAND_NAME} computes from the due date and deadline type, not a Low/High rating."
 
 msgid "The job's work-in-progress balance moves to this asset now, and completing the job sweeps the rest. Only open jobs that are not linked to a sales order or another asset are listed."
 msgstr "The job's work-in-progress balance moves to this asset now, and completing the job sweeps the rest. Only open jobs that are not linked to a sales order or another asset are listed."
@@ -23396,8 +23393,8 @@ msgstr "The machine is still running. Assign this time after it stops."
 msgid "The machines, cells, and stations your work runs through"
 msgstr "The machines, cells, and stations your work runs through"
 
-msgid "The master data to set up when first configuring Carbon, grouped by module. Mark each one configured as you go."
-msgstr "The master data to set up when first configuring Carbon, grouped by module. Mark each one configured as you go."
+msgid "The master data to set up when first configuring {BRAND_NAME}, grouped by module. Mark each one configured as you go."
+msgstr "The master data to set up when first configuring {BRAND_NAME}, grouped by module. Mark each one configured as you go."
 
 msgid "The material is purchased from a supplier for that specific order, rather than made or pulled from stock."
 msgstr "The material is purchased from a supplier for that specific order, rather than made or pulled from stock."
@@ -23525,11 +23522,11 @@ msgstr "The path this step's components travel into place during playback; worke
 msgid "The payment from the effective date. Escalation still steps up on each anniversary of the commencement"
 msgstr "The payment from the effective date. Escalation still steps up on each anniversary of the commencement"
 
-msgid "The people on the Carbon side who will run your implementation, and how to reach them."
-msgstr "The people on the Carbon side who will run your implementation, and how to reach them."
+msgid "The people on the {BRAND_NAME} side who will run your implementation, and how to reach them."
+msgstr "The people on the {BRAND_NAME} side who will run your implementation, and how to reach them."
 
-msgid "The people on your team and their access to Carbon"
-msgstr "The people on your team and their access to Carbon"
+msgid "The people on your team and their access to {BRAND_NAME}"
+msgstr "The people on your team and their access to {BRAND_NAME}"
 
 msgid "The per-company counter behind a document type's readable number, assembling the prefix, the zero-padded next value, and the suffix, and advancing as each document is created."
 msgstr "The per-company counter behind a document type's readable number, assembling the prefix, the zero-padded next value, and the suffix, and advancing as each document is created."
@@ -23659,8 +23656,8 @@ msgstr "The remaining {0} {1} will no longer be expected. On-order supply and MR
 msgid "The request body sent verbatim with a JSON content type after workflow variables inside it are substituted, on the methods that carry one."
 msgstr "The request body sent verbatim with a JSON content type after workflow variables inside it are substituted, on the methods that carry one."
 
-msgid "The residual WIP a job has left at close, swept to a Production Variance account — the only variance Carbon books for a job."
-msgstr "The residual WIP a job has left at close, swept to a Production Variance account — the only variance Carbon books for a job."
+msgid "The residual WIP a job has left at close, swept to a Production Variance account — the only variance {BRAND_NAME} books for a job."
+msgstr "The residual WIP a job has left at close, swept to a Production Variance account — the only variance {BRAND_NAME} books for a job."
 
 msgid "The response from Onshape was missing required parameters. Check the private app's redirect URL, then save the integration settings again."
 msgstr "The response from Onshape was missing required parameters. Check the private app's redirect URL, then save the integration settings again."
@@ -23818,8 +23815,8 @@ msgstr "The suppliers receiving this RFQ; each gets its own line on the RFQ that
 msgid "The surface finishes available on your materials"
 msgstr "The surface finishes available on your materials"
 
-msgid "The system a company uses to manage its people's logins — Okta, Entra ID, or Google Workspace — which vouches for who someone is when they sign in to Carbon via SSO."
-msgstr "The system a company uses to manage its people's logins — Okta, Entra ID, or Google Workspace — which vouches for who someone is when they sign in to Carbon via SSO."
+msgid "The system a company uses to manage its people's logins — Okta, Entra ID, or Google Workspace — which vouches for who someone is when they sign in to {BRAND_NAME} via SSO."
+msgstr "The system a company uses to manage its people's logins — Okta, Entra ID, or Google Workspace — which vouches for who someone is when they sign in to {BRAND_NAME} via SSO."
 
 msgid "The system passes every in-scope acceptance test in your configured system, with your data; the data is validated; and you sign off. Then go-live."
 msgstr "The system passes every in-scope acceptance test in your configured system, with your data; the data is validated; and you sign off. Then go-live."
@@ -23863,8 +23860,8 @@ msgstr "The typical number of days between sending work to this supplier for thi
 msgid "The unique identifier on this physical unit; one row per serial, quantity is always 1."
 msgstr "The unique identifier on this physical unit; one row per serial, quantity is always 1."
 
-msgid "The unit a routing time is expressed in, such as Hours/Piece or Total Hours, telling Carbon whether the time scales with quantity or is fixed per run."
-msgstr "The unit a routing time is expressed in, such as Hours/Piece or Total Hours, telling Carbon whether the time scales with quantity or is fixed per run."
+msgid "The unit a routing time is expressed in, such as Hours/Piece or Total Hours, telling {BRAND_NAME} whether the time scales with quantity or is fixed per run."
+msgstr "The unit a routing time is expressed in, such as Hours/Piece or Total Hours, telling {BRAND_NAME} whether the time scales with quantity or is fixed per run."
 
 msgid "The unit and its rates are fixed once the agreement is activated."
 msgstr "The unit and its rates are fixed once the agreement is activated."
@@ -24034,6 +24031,9 @@ msgstr "These units are treated as sales. Activating derecognizes each one and p
 msgid "They are not in your chart, but documents or journals use them. Pick the account in your chart that replaces each one."
 msgstr "They are not in your chart, but documents or journals use them. Pick the account in your chart that replaces each one."
 
+msgid "This {BRAND_NAME} instance is missing its Onshape OAuth credentials. Ask an administrator to set them."
+msgstr "This {BRAND_NAME} instance is missing its Onshape OAuth credentials. Ask an administrator to set them."
+
 msgid "this ability"
 msgstr "this ability"
 
@@ -24054,17 +24054,14 @@ msgstr "This backup could not be completed."
 msgid "This backup hasn't been checked yet. Any differences are found when the restore runs."
 msgstr "This backup hasn't been checked yet. Any differences are found when the restore runs."
 
-msgid "This browser does not support push notifications. On iPhone or iPad, add Carbon to the Home Screen first."
-msgstr "This browser does not support push notifications. On iPhone or iPad, add Carbon to the Home Screen first."
+msgid "This browser does not support push notifications. On iPhone or iPad, add {BRAND_NAME} to the Home Screen first."
+msgstr "This browser does not support push notifications. On iPhone or iPad, add {BRAND_NAME} to the Home Screen first."
 
-msgid "This cannot be changed later — {integrationName} allows only one connected accounting system, so the choice decides what Carbon is permitted to do. To switch, you would uninstall and reconnect."
-msgstr "This cannot be changed later — {integrationName} allows only one connected accounting system, so the choice decides what Carbon is permitted to do. To switch, you would uninstall and reconnect."
+msgid "This cannot be changed later — {integrationName} allows only one connected accounting system, so the choice decides what {BRAND_NAME} is permitted to do. To switch, you would uninstall and reconnect."
+msgstr "This cannot be changed later — {integrationName} allows only one connected accounting system, so the choice decides what {BRAND_NAME} is permitted to do. To switch, you would uninstall and reconnect."
 
 msgid "This cannot be undone."
 msgstr "This cannot be undone."
-
-msgid "This Carbon instance is missing its Onshape OAuth credentials. Ask an administrator to set them."
-msgstr "This Carbon instance is missing its Onshape OAuth credentials. Ask an administrator to set them."
 
 msgid "This change notice is being implemented, so its changes are locked. Reopen it to edit."
 msgstr "This change notice is being implemented, so its changes are locked. Reopen it to edit."
@@ -24124,15 +24121,15 @@ msgstr "this inspection plan"
 msgid "This integration isn't available yet"
 msgstr "This integration isn't available yet"
 
-#. placeholder {0}: company?.name ?? "Carbon"
+#. placeholder {0}: company?.name ?? BRAND_NAME
 msgid "This invitation to join {0} has expired. You can request a new invite to be sent to your email."
 msgstr "This invitation to join {0} has expired. You can request a new invite to be sent to your email."
 
 msgid "This invoice has no usable due date — choose one for Stripe."
 msgstr "This invoice has no usable due date — choose one for Stripe."
 
-msgid "This invoice will be billed to the Stripe customer already linked to this Carbon customer. To change its details, edit it in the Stripe dashboard."
-msgstr "This invoice will be billed to the Stripe customer already linked to this Carbon customer. To change its details, edit it in the Stripe dashboard."
+msgid "This invoice will be billed to the Stripe customer already linked to this {BRAND_NAME} customer. To change its details, edit it in the Stripe dashboard."
+msgstr "This invoice will be billed to the Stripe customer already linked to this {BRAND_NAME} customer. To change its details, edit it in the Stripe dashboard."
 
 msgid "This is a controlled environment, so an authenticator app is required."
 msgstr "This is a controlled environment, so an authenticator app is required."
@@ -24872,8 +24869,8 @@ msgstr "Training not recorded"
 msgid "Training Plan"
 msgstr "Training Plan"
 
-msgid "Training taken outside Carbon, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
-msgstr "Training taken outside Carbon, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
+msgid "Training taken outside {BRAND_NAME}, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
+msgstr "Training taken outside {BRAND_NAME}, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
 
 msgid "Training video"
 msgstr "Training video"
@@ -26228,8 +26225,8 @@ msgstr "Weighted-average remaining term (years)"
 msgid "Welcome back, {name}."
 msgstr "Welcome back, {name}."
 
-msgid "Welcome to Carbon"
-msgstr "Welcome to Carbon"
+msgid "Welcome to {BRAND_NAME}"
+msgstr "Welcome to {BRAND_NAME}"
 
 msgid "Welcome, {companyName}"
 msgstr "Welcome, {companyName}"
@@ -26246,8 +26243,8 @@ msgstr "What category of failure this is — Mechanical, Electrical, Software, O
 msgid "What changes day to day"
 msgstr "What changes day to day"
 
-msgid "What changes when you move to Carbon, and roughly what it's worth. Estimates, not a forecast."
-msgstr "What changes when you move to Carbon, and roughly what it's worth. Estimates, not a forecast."
+msgid "What changes when you move to {BRAND_NAME}, and roughly what it's worth. Estimates, not a forecast."
+msgstr "What changes when you move to {BRAND_NAME}, and roughly what it's worth. Estimates, not a forecast."
 
 msgid "What data"
 msgstr "What data"
@@ -26360,6 +26357,9 @@ msgstr "What's out of scope"
 msgid "When"
 msgstr "When"
 
+msgid "When {BRAND_NAME} committed to having the goods arrive; combined with the shipping method's transit days, this drives Ship Date back-calc."
+msgstr "When {BRAND_NAME} committed to having the goods arrive; combined with the shipping method's transit days, this drives Ship Date back-calc."
+
 msgid "When {name} changes"
 msgstr "When {name} changes"
 
@@ -26374,9 +26374,6 @@ msgstr "When a serial or batch expires, and what happens if used after — a com
 
 msgid "When an invoice is created"
 msgstr "When an invoice is created"
-
-msgid "When Carbon committed to having the goods arrive; combined with the shipping method's transit days, this drives Ship Date back-calc."
-msgstr "When Carbon committed to having the goods arrive; combined with the shipping method's transit days, this drives Ship Date back-calc."
 
 msgid "When deferred, accrued and lease-interest revenue will be recognized"
 msgstr "When deferred, accrued and lease-interest revenue will be recognized"
@@ -26414,8 +26411,8 @@ msgstr "When on, this price override applies to matching orders; turning off wit
 msgid "When on, this rule fires for every target of its type. Assignment rows are ignored but preserved."
 msgstr "When on, this rule fires for every target of its type. Assignment rows are ignored but preserved."
 
-msgid "When supplier responses are expected back; suppliers see this date on the RFQ portal and Carbon stops accepting late responses after it (configurable)."
-msgstr "When supplier responses are expected back; suppliers see this date on the RFQ portal and Carbon stops accepting late responses after it (configurable)."
+msgid "When supplier responses are expected back; suppliers see this date on the RFQ portal and {BRAND_NAME} stops accepting late responses after it (configurable)."
+msgstr "When supplier responses are expected back; suppliers see this date on the RFQ portal and {BRAND_NAME} stops accepting late responses after it (configurable)."
 
 msgid "When the buyer asked for the goods; the supplier may promise something else on Promised Date and post something else again on Delivery Date."
 msgstr "When the buyer asked for the goods; the supplier may promise something else on Promised Date and post something else again on Delivery Date."
@@ -26546,11 +26543,11 @@ msgstr "Where you are today"
 msgid "Where you want to grow"
 msgstr "Where you want to grow"
 
+msgid "Whether {BRAND_NAME} follows each unit (Serial), each lot (Batch), the quantity (Inventory), or no tracking (Non-Inventory)."
+msgstr "Whether {BRAND_NAME} follows each unit (Serial), each lot (Batch), the quantity (Inventory), or no tracking (Non-Inventory)."
+
 msgid "Whether Amount is interpreted as a percentage of the line price or as a fixed currency amount."
 msgstr "Whether Amount is interpreted as a percentage of the line price or as a fixed currency amount."
-
-msgid "Whether Carbon follows each unit (Serial), each lot (Batch), the quantity (Inventory), or no tracking (Non-Inventory)."
-msgstr "Whether Carbon follows each unit (Serial), each lot (Batch), the quantity (Inventory), or no tracking (Non-Inventory)."
 
 msgid "Whether each unit is treated as a rental or a sale is decided when the agreement is activated, from the terms and each unit's inputs."
 msgstr "Whether each unit is treated as a rental or a sale is decided when the agreement is activated, from the terms and each unit's inputs."
@@ -26930,14 +26927,14 @@ msgstr "You received this item"
 msgid "You received this lot"
 msgstr "You received this lot"
 
-msgid "You're live on Carbon"
-msgstr "You're live on Carbon"
+msgid "You're live on {BRAND_NAME}"
+msgstr "You're live on {BRAND_NAME}"
 
 msgid "You're one step away from your workspace."
 msgstr "You're one step away from your workspace."
 
-msgid "You're setting Carbon up yourself, at your own pace"
-msgstr "You're setting Carbon up yourself, at your own pace"
+msgid "You're setting {BRAND_NAME} up yourself, at your own pace"
+msgstr "You're setting {BRAND_NAME} up yourself, at your own pace"
 
 msgid "You've been clocked in for {hoursElapsed} hours. Did you forget to clock out?"
 msgstr "You've been clocked in for {hoursElapsed} hours. Did you forget to clock out?"
@@ -27035,11 +27032,11 @@ msgstr "Your session was locked after inactivity."
 msgid "Your source data is accessible and reasonably clean"
 msgstr "Your source data is accessible and reasonably clean"
 
-msgid "Your team can free up time to learn Carbon and load your data"
-msgstr "Your team can free up time to learn Carbon and load your data"
+msgid "Your team can free up time to learn {BRAND_NAME} and load your data"
+msgstr "Your team can free up time to learn {BRAND_NAME} and load your data"
 
-msgid "Your team leads learn Carbon first using the in-app guides and Academy, then bring everyone else up to speed."
-msgstr "Your team leads learn Carbon first using the in-app guides and Academy, then bring everyone else up to speed."
+msgid "Your team leads learn {BRAND_NAME} first using the in-app guides and Academy, then bring everyone else up to speed."
+msgstr "Your team leads learn {BRAND_NAME} first using the in-app guides and Academy, then bring everyone else up to speed."
 
 msgid "Your team, structure, and access."
 msgstr "Your team, structure, and access."

@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import { useEffect } from "react";
 import { isRouteErrorResponse, useNavigate } from "react-router";
 import { ErrorScreen, type ErrorScreenProps } from "./ErrorScreen";
@@ -78,7 +79,7 @@ function resolveConfig(error: unknown, retry: () => void): ErrorScreenProps {
       return {
         code: "503",
         eyebrow: "— scheduled maintenance",
-        title: "Carbon is down for maintenance.",
+        title: `${BRAND_NAME} is down for maintenance.`,
         message:
           "We are working on the system and will be back shortly. Nothing you saved is lost; try again in a few minutes.",
         highlightIndex: 3,
@@ -129,9 +130,8 @@ function resolveConfig(error: unknown, retry: () => void): ErrorScreenProps {
     return {
       code: "000",
       eyebrow: "— connection lost",
-      title: "Carbon could not reach the server.",
-      message:
-        "The connection dropped or the computer was asleep. Nothing you saved is lost; Carbon tries again when the connection returns or when you come back to this tab.",
+      title: `${BRAND_NAME} could not reach the server.`,
+      message: `The connection dropped or the computer was asleep. Nothing you saved is lost; ${BRAND_NAME} tries again when the connection returns or when you come back to this tab.`,
       highlightIndex: 3,
       logLines: [
         "> opening channel to server ...",

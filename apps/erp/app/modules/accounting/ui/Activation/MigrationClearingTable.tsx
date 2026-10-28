@@ -21,6 +21,7 @@ import {
   Thead,
   Tr
 } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useState } from "react";
 import { LuChevronDown, LuChevronRight } from "react-icons/lu";
@@ -124,9 +125,7 @@ export default function MigrationClearingTable({
             <Th className="text-right">
               <Trans>Trial Balance</Trans>
             </Th>
-            <Th className="text-right">
-              <Trans>Carbon</Trans>
-            </Th>
+            <Th className="text-right">{BRAND_NAME}</Th>
             <Th className="text-right">
               <Trans>Difference</Trans>
             </Th>
@@ -238,8 +237,8 @@ export default function MigrationClearingTable({
           <p className="text-sm text-muted-foreground">
             <Trans>
               Settled in the system that kept the books before the cutover.
-              Carbon leaves them out of its totals and marks them Paid on the
-              day before the cutover when you set up accounting.
+              {BRAND_NAME} leaves them out of its totals and marks them Paid on
+              the day before the cutover when you set up accounting.
             </Trans>
           </p>
           <Table>

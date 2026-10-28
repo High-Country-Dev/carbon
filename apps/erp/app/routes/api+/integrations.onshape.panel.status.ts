@@ -26,6 +26,7 @@ import {
 } from "@carbon/ee/onshape";
 import { requireOnshapePanelPermissions } from "@carbon/ee/onshape/panel-session.server";
 import { getLogger } from "@carbon/logger";
+import { BRAND_NAME } from "@carbon/utils";
 import type { LoaderFunctionArgs } from "react-router";
 import { data } from "react-router";
 
@@ -216,7 +217,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     if (lineMappings.error || rootMapping.error || items.error) {
       return data(
         {
-          error: "Carbon couldn't read its items for this assembly. Try again."
+          error: `${BRAND_NAME} couldn't read its items for this assembly. Try again.`
         },
         { status: 500 }
       );
@@ -245,7 +246,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     if (mappedResult.error) {
       return data(
         {
-          error: "Carbon couldn't read its items for this assembly. Try again."
+          error: `${BRAND_NAME} couldn't read its items for this assembly. Try again.`
         },
         { status: 500 }
       );
@@ -258,7 +259,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     } catch {
       return data(
         {
-          error: "Carbon couldn't read its items for this assembly. Try again."
+          error: `${BRAND_NAME} couldn't read its items for this assembly. Try again.`
         },
         { status: 500 }
       );
@@ -354,7 +355,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   if (mappings.error || matches.error) {
     return data(
       {
-        error: "Carbon couldn't read its items for these parts. Try again."
+        error: `${BRAND_NAME} couldn't read its items for these parts. Try again.`
       },
       { status: 500 }
     );
@@ -373,7 +374,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   if (mappedResult.error) {
     return data(
       {
-        error: "Carbon couldn't read its items for these parts. Try again."
+        error: `${BRAND_NAME} couldn't read its items for these parts. Try again.`
       },
       { status: 500 }
     );
@@ -389,7 +390,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   } catch {
     return data(
       {
-        error: "Carbon couldn't read its items for these parts. Try again."
+        error: `${BRAND_NAME} couldn't read its items for these parts. Try again.`
       },
       { status: 500 }
     );

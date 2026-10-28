@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import {
   Body,
   Container,
@@ -42,7 +43,7 @@ export const InviteEmail = ({
   location = "Tombstone, AZ",
   controlledEnvironment = false
 }: Props) => {
-  const preview = <Preview>{`Join ${companyName} on Carbon`}</Preview>;
+  const preview = <Preview>{`Join ${companyName} on ${BRAND_NAME}`}</Preview>;
   const themeClasses = getEmailThemeClasses();
   const lightStyles = getEmailInlineStyles("light");
 
@@ -65,7 +66,7 @@ export const InviteEmail = ({
             className={`mx-0 my-[30px] p-0 text-[24px] font-normal ${themeClasses.text} text-center`}
             style={{ color: lightStyles.text.color }}
           >
-            Join <strong>{companyName}</strong> on <strong>Carbon</strong>
+            Join <strong>{companyName}</strong> on <strong>{BRAND_NAME}</strong>
           </Heading>
 
           <Text
@@ -88,7 +89,7 @@ export const InviteEmail = ({
               {invitedByEmail}
             </Link>
             ) has invited you to join <strong>{companyName}</strong> on{" "}
-            <strong>Carbon</strong>.
+            <strong>{BRAND_NAME}</strong>.
           </Text>
           {controlledEnvironment ? (
             <Text

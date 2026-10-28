@@ -29,6 +29,7 @@ import {
   type SyncOperation,
   type XeroProvider
 } from "@carbon/ee/accounting";
+import { BRAND_NAME } from "@carbon/utils";
 /**
  * Daily-consolidation cron (posting sync, spec Phase B §6).
  *
@@ -409,7 +410,7 @@ async function consolidateCompany(args: {
     await failOperation(client, {
       id: operation.id,
       companyId: operation.companyId,
-      errorMessage: `Journal ${operation.entityId} not found in Carbon`
+      errorMessage: `Journal ${operation.entityId} not found in ${BRAND_NAME}`
     });
   }
 
@@ -459,7 +460,7 @@ async function consolidateCompany(args: {
         await failOperation(client, {
           id: operation.id,
           companyId: operation.companyId,
-          errorMessage: `Journal ${operation.entityId} not found in Carbon`
+          errorMessage: `Journal ${operation.entityId} not found in ${BRAND_NAME}`
         });
         continue;
       }

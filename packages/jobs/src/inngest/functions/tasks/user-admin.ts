@@ -10,7 +10,7 @@ import { getSsoAwareInviteLink } from "@carbon/ee/sso.server";
 import { CarbonEdition, CONTROLLED_ENVIRONMENT } from "@carbon/env";
 import { sendEmail } from "@carbon/lib/email.server";
 import { updateSubscriptionQuantityForCompany } from "@carbon/stripe/stripe.server";
-import { Edition } from "@carbon/utils";
+import { BRAND_NAME, Edition } from "@carbon/utils";
 import { nanoid } from "nanoid";
 import { render } from "react-email";
 import { inngest } from "../../client";
@@ -106,7 +106,7 @@ export const userAdminFunction = inngest.createFunction(
 
           await sendEmail({
             to: user.data.email,
-            subject: `You have been invited to join ${company.data?.name} on Carbon`,
+            subject: `You have been invited to join ${company.data?.name} on ${BRAND_NAME}`,
             headers: {
               "X-Entity-Ref-ID": nanoid()
             },

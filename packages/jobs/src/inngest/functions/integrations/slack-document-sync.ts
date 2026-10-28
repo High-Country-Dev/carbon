@@ -18,6 +18,7 @@ import {
 } from "@carbon/ee/slack/messages";
 import { VERCEL_URL } from "@carbon/env";
 import { getLogger } from "@carbon/logger";
+import { BRAND_NAME } from "@carbon/utils";
 import { WebClient } from "@slack/web-api";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { inngest } from "../../client";
@@ -508,6 +509,6 @@ async function postToSlackThread(params: {
     channel: channelId,
     thread_ts: threadTs,
     blocks,
-    text: text || "Update from Carbon"
+    text: text || `Update from ${BRAND_NAME}`
   });
 }

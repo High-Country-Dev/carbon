@@ -11,7 +11,12 @@ import {
   useModePreference,
   useRouteData
 } from "@carbon/react";
-import { modeValidator, themeColorValidator, themes } from "@carbon/utils";
+import {
+  BRAND_NAME,
+  modeValidator,
+  themeColorValidator,
+  themes
+} from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { CSSProperties } from "react";
 import { useEffect, useRef } from "react";
@@ -123,7 +128,7 @@ export default function AppearanceSettings() {
   return (
     <AccountSettingsPane
       title={<Trans>Appearance</Trans>}
-      description={<Trans>How Carbon looks in this browser.</Trans>}
+      description={<Trans>How {BRAND_NAME} looks in this browser.</Trans>}
     >
       <AccountSettingsSection
         title={<Trans>Mode</Trans>}
@@ -157,7 +162,7 @@ export default function AppearanceSettings() {
       />
       <AccountSettingsSection
         title={<Trans>Theme color</Trans>}
-        description={<Trans>The accent color used across Carbon.</Trans>}
+        description={<Trans>The accent color used across {BRAND_NAME}.</Trans>}
       >
         <ToggleGroup
           type="single"

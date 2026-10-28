@@ -13,7 +13,7 @@
 // offline.html is saved only when this worker installs, and it installs only
 // when this file changes: bump the version whenever offline.html changes, or
 // browsers keep the old page.
-const OFFLINE_CACHE = "erp-offline-v5";
+const OFFLINE_CACHE = "erp-offline-v6";
 const OFFLINE_URL = "/offline.html";
 
 // Only offline.html is cached, so a new version can take over at once instead

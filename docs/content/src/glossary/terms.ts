@@ -27,6 +27,9 @@
  *                           (packages/database/.../20230330024716_parts.sql)
  */
 import { msg } from "@lingui/core/macro";
+// A relative path: @carbon/content keeps no workspace deps, and brand.ts has
+// no imports of its own.
+import { BRAND_NAME } from "../../../../packages/utils/src/brand";
 import type { GlossaryEntry } from "./types";
 
 export const terms = {
@@ -65,12 +68,12 @@ export const terms = {
   },
   method: {
     term: msg`Method`,
-    definition: msg`Carbon's name for a bill of material and bill of process (routing): the components plus the operations that make a part.`,
+    definition: msg`${BRAND_NAME}'s name for a bill of material and bill of process (routing): the components plus the operations that make a part.`,
     href: "/docs/reference/methods"
   },
   bom: {
     term: msg`Bill of materials`,
-    definition: msg`Called a method in Carbon — the components plus operations that produce a part.`,
+    definition: msg`Called a method in ${BRAND_NAME} — the components plus operations that produce a part.`,
     href: "/docs/reference/methods"
   },
   "operation-type": {
@@ -149,7 +152,7 @@ export const terms = {
   // ── Production & the floor ──────────────────────────────────────────────
   job: {
     term: msg`Job`,
-    definition: msg`Carbon's production order — one job builds a quantity of one item from its own copied method and routing.`,
+    definition: msg`${BRAND_NAME}'s production order — one job builds a quantity of one item from its own copied method and routing.`,
     href: "/docs/reference/jobs"
   },
   routing: {
@@ -179,7 +182,7 @@ export const terms = {
   },
   "standard-factor": {
     term: msg`Standard factor`,
-    definition: msg`The unit a routing time is expressed in, such as Hours/Piece or Total Hours, telling Carbon whether the time scales with quantity or is fixed per run.`,
+    definition: msg`The unit a routing time is expressed in, such as Hours/Piece or Total Hours, telling ${BRAND_NAME} whether the time scales with quantity or is fixed per run.`,
     href: "/docs/reference/routings"
   },
   "work-center": {
@@ -258,7 +261,7 @@ export const terms = {
   },
   "three-way-match": {
     term: msg`Three-way match`,
-    definition: msg`Reconciling a purchase order against what was received and invoiced — implicit in Carbon, via the line quantities and GR/IR balance.`,
+    definition: msg`Reconciling a purchase order against what was received and invoiced — implicit in ${BRAND_NAME}, via the line quantities and GR/IR balance.`,
     href: "/guides/receive-and-bill#match-and-post"
   },
   "gr-ir": {
@@ -270,7 +273,7 @@ export const terms = {
   // ── Inventory, tracking & costing ───────────────────────────────────────
   "tracked-entity": {
     term: msg`Tracked entity`,
-    definition: msg`One serial unit or one batch that Carbon follows individually, carrying its own status and attributes such as an expiry date.`,
+    definition: msg`One serial unit or one batch that ${BRAND_NAME} follows individually, carrying its own status and attributes such as an expiry date.`,
     href: "/docs/reference/traceability#tracked-entities"
   },
   serial: {
@@ -333,7 +336,7 @@ export const terms = {
   },
   mrp: {
     term: msg`MRP (planning)`,
-    definition: msg`Carbon's planning run nets supply against demand and explodes methods, surfacing shortfalls — but it creates no orders itself.`,
+    definition: msg`${BRAND_NAME}'s planning run nets supply against demand and explodes methods, surfacing shortfalls — but it creates no orders itself.`,
     href: "/docs/reference/planning"
   },
   nonconformance: {
@@ -378,7 +381,7 @@ export const terms = {
   },
   "accounting-cutover": {
     term: msg`Accounting cutover`,
-    definition: msg`The first day a company keeps its books in Carbon, set once when accounting is set up and never changed; from then on every posting writes a Posted journal.`,
+    definition: msg`The first day a company keeps its books in ${BRAND_NAME}, set once when accounting is set up and never changed; from then on every posting writes a Posted journal.`,
     href: "/docs/reference/accounting#setting-up-accounting",
     aliases: ["cutover-date"]
   },
@@ -445,7 +448,7 @@ export const terms = {
   },
   "production-variance": {
     term: msg`Production variance`,
-    definition: msg`The residual WIP a job has left at close, swept to a Production Variance account — the only variance Carbon books for a job.`,
+    definition: msg`The residual WIP a job has left at close, swept to a Production Variance account — the only variance ${BRAND_NAME} books for a job.`,
     href: "/guides/job-finish-close#close-the-job"
   },
   "purchase-price-variance": {
@@ -611,7 +614,7 @@ export const terms = {
   },
   "contract-type": {
     term: msg`Contract type`,
-    definition: msg`How a contract or an amendment is classified for recurring-revenue reporting: New Sales, Existing, Expansion, Reactivation, or Contraction. Carbon suggests it and you can change it.`,
+    definition: msg`How a contract or an amendment is classified for recurring-revenue reporting: New Sales, Existing, Expansion, Reactivation, or Contraction. ${BRAND_NAME} suggests it and you can change it.`,
     href: "/docs/reference/contracts#contract-types"
   },
   "invoice-schedule": {
@@ -631,7 +634,7 @@ export const terms = {
   },
   "billed-through": {
     term: msg`Billed through`,
-    definition: msg`A date on a contract moved into Carbon mid-term: billing periods that end on or before it were invoiced elsewhere, so they read Billed Externally and are never invoiced.`,
+    definition: msg`A date on a contract moved into ${BRAND_NAME} mid-term: billing periods that end on or before it were invoiced elsewhere, so they read Billed Externally and are never invoiced.`,
     href: "/docs/reference/contracts#the-invoice-schedule"
   },
   amendment: {
@@ -751,7 +754,7 @@ export const terms = {
   },
   "account-default-migration-clearing": {
     term: msg`Migration Clearing (default)`,
-    definition: msg`Equity account the opening journal posts against when accounting is set up; it holds any difference between the prior trial balance and Carbon's records, and must total zero before you can enable.`,
+    definition: msg`Equity account the opening journal posts against when accounting is set up; it holds any difference between the prior trial balance and ${BRAND_NAME}'s records, and must total zero before you can enable.`,
     href: "/docs/reference/accounting#setting-up-accounting",
     aliases: ["migration-clearing"]
   },
@@ -1031,7 +1034,7 @@ export const terms = {
   },
   "fixed-asset-opening-accumulated-depreciation": {
     term: msg`Accumulated Depreciation (opening)`,
-    definition: msg`Opening balance of depreciation already booked before this asset was added to Carbon (use 0 for new acquisitions).`
+    definition: msg`Opening balance of depreciation already booked before this asset was added to ${BRAND_NAME} (use 0 for new acquisitions).`
   },
   "fixed-asset-depreciation-start-date": {
     term: msg`Depreciation Start Date`,
@@ -1124,7 +1127,7 @@ export const terms = {
   },
   "kanban-replenishment-level": {
     term: msg`Replenishment Level`,
-    definition: msg`On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, Carbon creates a Released stock transfer for the kanban quantity.`,
+    definition: msg`On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, ${BRAND_NAME} creates a Released stock transfer for the kanban quantity.`,
     href: "/docs/reference/kanban"
   },
   "kanban-auto-start-job": {
@@ -1147,7 +1150,7 @@ export const terms = {
   },
   "shipping-method-tracking-url": {
     term: msg`Tracking URL`,
-    definition: msg`The carrier's tracking-page URL with {trackingNumber} as a placeholder — Carbon substitutes the actual number when generating links on shipments.`
+    definition: msg`The carrier's tracking-page URL with {trackingNumber} as a placeholder — ${BRAND_NAME} substitutes the actual number when generating links on shipments.`
   },
 
   // ── Warehouse transfers (WarehouseTransferForm) ─────────────────────────
@@ -1221,11 +1224,11 @@ export const terms = {
   // ── Items: core (Part/Tool/Material/Consumable/Item forms) ──────────────
   item: {
     term: msg`Item`,
-    definition: msg`Carbon's single record for anything with a part number — Part, Material, Tool, Service, Consumable, or Fixture — that jobs, methods, orders, and inventory all point at.`
+    definition: msg`${BRAND_NAME}'s single record for anything with a part number — Part, Material, Tool, Service, Consumable, or Fixture — that jobs, methods, orders, and inventory all point at.`
   },
   "item-tracking-type": {
     term: msg`Tracking Type`,
-    definition: msg`Whether Carbon follows each unit (Serial), each lot (Batch), the quantity (Inventory), or no tracking (Non-Inventory).`
+    definition: msg`Whether ${BRAND_NAME} follows each unit (Serial), each lot (Batch), the quantity (Inventory), or no tracking (Non-Inventory).`
   },
   "item-default-method-type": {
     term: msg`Default Method Type`,
@@ -1247,7 +1250,7 @@ export const terms = {
   // ── Items: Customer/Supplier cross-references ───────────────────────────
   "customer-part-id": {
     term: msg`Customer Part ID`,
-    definition: msg`The identifier the customer uses for this part on their POs; Carbon resolves it to our internal Part ID on order import.`
+    definition: msg`The identifier the customer uses for this part on their POs; ${BRAND_NAME} resolves it to our internal Part ID on order import.`
   },
   "customer-part-revision": {
     term: msg`Customer Part Revision`,
@@ -1255,7 +1258,7 @@ export const terms = {
   },
   "supplier-part-id": {
     term: msg`Supplier Part ID`,
-    definition: msg`The identifier the supplier uses for this part on their quotes and invoices; Carbon resolves it to our internal Part ID.`
+    definition: msg`The identifier the supplier uses for this part on their quotes and invoices; ${BRAND_NAME} resolves it to our internal Part ID.`
   },
   "supplier-part-moq": {
     term: msg`Minimum Order Quantity`,
@@ -1558,7 +1561,7 @@ export const terms = {
   },
   "job-priority": {
     term: msg`Job Priority`,
-    definition: msg`The job's position in its location's schedule queue — a fractional number Carbon computes from the due date and deadline type, not a Low/High rating.`
+    definition: msg`The job's position in its location's schedule queue — a fractional number ${BRAND_NAME} computes from the due date and deadline type, not a Low/High rating.`
   },
   "job-sales-order-line": {
     term: msg`Sales Order Line (job)`,
@@ -1624,7 +1627,7 @@ export const terms = {
   },
   "supplier-account-manager": {
     term: msg`Account Manager`,
-    definition: msg`The Carbon user responsible for this supplier relationship; emails and reminders about this supplier route to them.`
+    definition: msg`The ${BRAND_NAME} user responsible for this supplier relationship; emails and reminders about this supplier route to them.`
   },
   "invoice-supplier": {
     term: msg`Invoice Supplier`,
@@ -1680,11 +1683,11 @@ export const terms = {
   },
   "purchasing-rfq-due-date": {
     term: msg`Due Date`,
-    definition: msg`When supplier responses are expected back; suppliers see this date on the RFQ portal and Carbon stops accepting late responses after it (configurable).`
+    definition: msg`When supplier responses are expected back; suppliers see this date on the RFQ portal and ${BRAND_NAME} stops accepting late responses after it (configurable).`
   },
   "purchasing-rfq-buyer": {
     term: msg`Buyer`,
-    definition: msg`The Carbon user who owns this RFQ; supplier responses and reminders route to them.`
+    definition: msg`The ${BRAND_NAME} user who owns this RFQ; supplier responses and reminders route to them.`
   },
 
   // ── Purchasing: Supplier quote (SupplierQuoteForm) ──────────────────────
@@ -1778,7 +1781,7 @@ export const terms = {
   },
   "customer-account-manager": {
     term: msg`Account Manager`,
-    definition: msg`The Carbon user responsible for this customer relationship; emails and reminders about this customer route to them.`
+    definition: msg`The ${BRAND_NAME} user responsible for this customer relationship; emails and reminders about this customer route to them.`
   },
   "customer-default-tax-percent": {
     term: msg`Tax Percent`,
@@ -1924,7 +1927,7 @@ export const terms = {
   },
   "sales-order-shipment-receipt-promised-date": {
     term: msg`Receipt Promised Date`,
-    definition: msg`When Carbon committed to having the goods arrive; combined with the shipping method's transit days, this drives Ship Date back-calc.`
+    definition: msg`When ${BRAND_NAME} committed to having the goods arrive; combined with the shipping method's transit days, this drives Ship Date back-calc.`
   },
   "sales-order-shipment-date": {
     term: msg`Shipment Date`,
@@ -2112,7 +2115,7 @@ export const terms = {
   },
   scar: {
     term: msg`SCAR (supplier corrective action request)`,
-    definition: msg`A non-conformance shared with a supplier over a login-free /share/scar link, so they can respond to the issue and update its tasks from outside Carbon.`,
+    definition: msg`A non-conformance shared with a supplier over a login-free /share/scar link, so they can respond to the issue and update its tasks from outside ${BRAND_NAME}.`,
     href: "/docs/reference/sharing"
   },
 
@@ -2206,7 +2209,7 @@ export const terms = {
   // ── Shop floor: MES, kanban, picking, lineside ──────────────────────────
   mes: {
     term: msg`MES`,
-    definition: msg`Carbon's shop-floor app where operators run operations, report quantities, issue material, and log time against released jobs in real time.`,
+    definition: msg`${BRAND_NAME}'s shop-floor app where operators run operations, report quantities, issue material, and log time against released jobs in real time.`,
     href: "/docs/reference/mes"
   },
   kanban: {
@@ -2238,7 +2241,7 @@ export const terms = {
   },
   "api-key": {
     term: msg`API key`,
-    definition: msg`A scoped secret sent on the carbon-key request header that authenticates programmatic calls to Carbon, carrying its own permissions and rate limit rather than a user session's.`,
+    definition: msg`A scoped secret sent on the carbon-key request header that authenticates programmatic calls to ${BRAND_NAME}, carrying its own permissions and rate limit rather than a user session's.`,
     href: "/docs/building/api-keys"
   },
   notification: {
@@ -2255,7 +2258,7 @@ export const terms = {
   },
   "business-moment": {
     term: msg`Business moment`,
-    definition: msg`A point in one of Carbon's own flows that a workflow can watch — a job released, a quote accepted, a shipment posted — as opposed to a raw field change; it hands the workflow the records involved by id.`,
+    definition: msg`A point in one of ${BRAND_NAME}'s own flows that a workflow can watch — a job released, a quote accepted, a shipment posted — as opposed to a raw field change; it hands the workflow the records involved by id.`,
     href: "/docs/reference/workflows#what-starts-a-workflow"
   },
   "workflow-run": {
@@ -2265,12 +2268,12 @@ export const terms = {
   },
   webhook: {
     term: msg`Webhook`,
-    definition: msg`An https request Carbon sends to a system of yours when a workflow reaches that step, carrying whatever headers and body you configured.`,
+    definition: msg`An https request ${BRAND_NAME} sends to a system of yours when a workflow reaches that step, carrying whatever headers and body you configured.`,
     href: "/docs/reference/workflows#calling-an-outside-url"
   },
   assignee: {
     term: msg`Assignee`,
-    definition: msg`The Carbon user currently responsible for working this record, set per record and independent of ownership fields like Account Manager or Sales Person.`
+    definition: msg`The ${BRAND_NAME} user currently responsible for working this record, set per record and independent of ownership fields like Account Manager or Sales Person.`
   },
   "workflow-notify-about-record": {
     term: msg`About (notification)`,
@@ -2303,12 +2306,12 @@ export const terms = {
   },
   "identity-provider": {
     term: msg`Identity provider (IdP)`,
-    definition: msg`The system a company uses to manage its people's logins — Okta, Entra ID, or Google Workspace — which vouches for who someone is when they sign in to Carbon via SSO.`,
+    definition: msg`The system a company uses to manage its people's logins — Okta, Entra ID, or Google Workspace — which vouches for who someone is when they sign in to ${BRAND_NAME} via SSO.`,
     href: "/docs/reference/single-sign-on"
   },
   "magic-link": {
     term: msg`Magic link`,
-    definition: msg`Carbon's default passwordless sign-in: an emailed one-time link that signs you in when opened, with no password to remember or leak.`
+    definition: msg`${BRAND_NAME}'s default passwordless sign-in: an emailed one-time link that signs you in when opened, with no password to remember or leak.`
   },
   iban: {
     term: msg`IBAN`,
@@ -2320,6 +2323,6 @@ export const terms = {
   },
   "external-training": {
     term: msg`External training`,
-    definition: msg`Training taken outside Carbon, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate.`
+    definition: msg`Training taken outside ${BRAND_NAME}, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate.`
   }
 } as const satisfies Record<string, GlossaryEntry>;

@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import type { MessageDescriptor } from "@lingui/core";
 import { msg } from "@lingui/core/macro";
 import type { Owner, StepDef, Tier } from "../types";
@@ -29,6 +30,6 @@ export function ownerForStep(step: StepDef, tier: Tier): Owner {
 // ungrammatical "You leads" the bare label produced.
 export function ownerLeadLabel(owner: Owner): MessageDescriptor {
   if (owner === "you") return msg`You lead`;
-  if (owner === "carbon") return msg`Carbon leads`;
-  return msg`Carbon + you`;
+  if (owner === "carbon") return msg`${BRAND_NAME} leads`;
+  return msg`${BRAND_NAME} + you`;
 }

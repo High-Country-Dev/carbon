@@ -54,8 +54,8 @@ msgstr "（已停用账户）"
 msgid "(Inactive)"
 msgstr "(已停用)"
 
-msgid "(mapped to more than one Carbon account)"
-msgstr "（映射到多个 Carbon 账户）"
+msgid "(mapped to more than one {BRAND_NAME} account)"
+msgstr "（映射到多个 {BRAND_NAME} 账户）"
 
 msgid "(not an Equity posting account)"
 msgstr "（非所有者权益过账账户）"
@@ -117,8 +117,8 @@ msgid "{0, plural, one {# week} other {# weeks}}"
 msgstr "{0, plural, other {#周}}"
 
 #. placeholder {0}: check.count
-msgid "{0, plural, one {Complete or cancel the # job that took costs before Carbon recorded them.} other {Complete or cancel the # jobs that took costs before Carbon recorded them.}}"
-msgstr "{0, plural, one {完成或取消在 Carbon 记录成本之前已产生成本的 # 个工单。} other {完成或取消在 Carbon 记录成本之前已产生成本的 # 个工单。}}"
+msgid "{0, plural, one {Complete or cancel the # job that took costs before {BRAND_NAME} recorded them.} other {Complete or cancel the # jobs that took costs before {BRAND_NAME} recorded them.}}"
+msgstr "{0, plural, one {完成或取消在 {BRAND_NAME} 记录成本之前已产生成本的 # 个工单。} other {完成或取消在 {BRAND_NAME} 记录成本之前已产生成本的 # 个工单。}}"
 
 #. placeholder {0}: Number(lease.assetCount)
 msgid "{0, plural, one {for # asset} other {for # assets}}"
@@ -423,8 +423,8 @@ msgid "{0}-Year"
 msgstr "{0} 年"
 
 #. placeholder {0}: blocker.description
-msgid "{0}: the payment due {dueDate} is marked paid outside Carbon, but nothing would relieve it from the lease liability. Set Invoice From on or before {dueDate} so it is invoiced."
-msgstr "{0}: 应付日期为 {dueDate} 的付款标记为在 Carbon 外支付，但这不会减少租赁负债。在 {dueDate} 当日或之前设置发票来源，以便开票。"
+msgid "{0}: the payment due {dueDate} is marked paid outside {BRAND_NAME}, but nothing would relieve it from the lease liability. Set Invoice From on or before {dueDate} so it is invoiced."
+msgstr "{0}: 应付日期为 {dueDate} 的付款标记为在 {BRAND_NAME} 外支付，但这不会减少租赁负债。在 {dueDate} 当日或之前设置发票来源，以便开票。"
 
 #. placeholder {0}: line.description
 msgid "{0}: the treatment cannot be worked out. {message}"
@@ -472,11 +472,87 @@ msgstr "应付款项的{apOverduePct}%"
 msgid "{arOverduePct}% of receivables"
 msgstr "应收款项的{arOverduePct}%"
 
-msgid "{asset}: the payment due {dueDate} is Skipped (paid outside Carbon), so nothing would take it off the lease liability. Set Invoice From on or before {dueDate}."
-msgstr "{asset}: 应付日期为 {dueDate} 的付款已跳过（在 Carbon 外支付），所以不会减少租赁负债。在 {dueDate} 当日或之前设置发票来源。"
+msgid "{asset}: the payment due {dueDate} is Skipped (paid outside {BRAND_NAME}), so nothing would take it off the lease liability. Set Invoice From on or before {dueDate}."
+msgstr "{asset}: 应付日期为 {dueDate} 的付款已跳过（在 {BRAND_NAME} 外支付），所以不会减少租赁负债。在 {dueDate} 当日或之前设置发票来源。"
 
 msgid "{assetCount} Assets"
 msgstr "{assetCount} 个资产"
+
+msgid "{BRAND_NAME}"
+msgstr "{BRAND_NAME}"
+
+msgid "{BRAND_NAME} + you"
+msgstr "{BRAND_NAME} + 你"
+
+msgid "{BRAND_NAME} account"
+msgstr "{BRAND_NAME} 账户"
+
+msgid "{BRAND_NAME} column"
+msgstr "{BRAND_NAME} 列"
+
+msgid "{BRAND_NAME} is configured the way your company runs, your data is loaded, and your team is confident using it. When that's true, you're ready to go live."
+msgstr "{BRAND_NAME}已按照您的公司运营方式进行配置，您的数据已加载，您的团队对其使用有信心。当这一切都实现时，您就可以准备上线了。"
+
+msgid "{BRAND_NAME} leads"
+msgstr "{BRAND_NAME} 主导"
+
+msgid "{BRAND_NAME} only"
+msgstr "仅限 {BRAND_NAME}"
+
+msgid "{BRAND_NAME} opens this account from its open items. The amount here is only compared on Migration Clearing."
+msgstr "{BRAND_NAME}从其未结项目中开设此账户。此处的金额仅在迁移清算时比较。"
+
+msgid "{BRAND_NAME} Posted"
+msgstr "{BRAND_NAME}已过账"
+
+msgid "{BRAND_NAME} posts every document dated on or after this day. Choose the first day of the current period or of one of the 3 periods before it."
+msgstr "{BRAND_NAME}过账所有日期在此日期或之后的文档。选择当前期间或其前3个期间之一的第一天。"
+
+msgid "{BRAND_NAME} posts the opening journal, posts every journal dated on or after the cutover date, and closes the periods before it."
+msgstr "{BRAND_NAME}过账开盘凭证，过账所有日期在过账日期或之后的凭证，并关闭其前的期间。"
+
+msgid "{BRAND_NAME} starts every company on its default chart. Import your own chart now, before the trial balance, which matches accounts by number. The import needs two files: your chart, and the default accounts template filled with your account numbers. To keep{BRAND_NAME}'s chart, continue."
+msgstr ""
+
+msgid "{BRAND_NAME} value"
+msgstr "{BRAND_NAME} 值"
+
+msgid "{BRAND_NAME} Value"
+msgstr ""
+
+#. placeholder {0}: unmapped.length
+msgid "{BRAND_NAME} will use AI to guess a provider account for each of your {0} unmapped accounts. Suggestions are a starting point — you can review them before anything is saved."
+msgstr "{BRAND_NAME}将使用AI为您的{0}个未映射账户各猜测一个供应商账户。建议是一个起点 — 您可以在保存前审查它们。"
+
+msgid "{BRAND_NAME} writes their journals when you enable accounting, with today's accounts and costs."
+msgstr "启用会计时，{BRAND_NAME}将使用今天的账户和成本编写其凭证。"
+
+msgid "{BRAND_NAME}-only"
+msgstr "仅限{BRAND_NAME}"
+
+msgid "{BRAND_NAME}-only · fill in real targets for this customer. They see the values, locked."
+msgstr "仅限{BRAND_NAME} · 为此客户填入真实目标。他们可以看到这些值，但已锁定。"
+
+msgid "{BRAND_NAME}-only · the customer sees this text, locked."
+msgstr "仅限{BRAND_NAME} · 客户可以看到此文本，已锁定。"
+
+msgid "{BRAND_NAME}'s default passwordless sign-in: an emailed one-time link that signs you in when opened, with no password to remember or leak."
+msgstr "{BRAND_NAME} 的默认无密码登录:一个通过电子邮件发送的一次性链接,打开时会自动登录您,无需记住或泄露任何密码。"
+
+msgid "{BRAND_NAME}'s name for a bill of material and bill of process (routing): the components plus the operations that make a part."
+msgstr "{BRAND_NAME}对物料清单和工序清单（工艺路线）的称呼：组成零件的物料和工序。"
+
+msgid "{BRAND_NAME}'s planning run nets supply against demand and explodes methods, surfacing shortfalls — but it creates no orders itself."
+msgstr "{BRAND_NAME}的计划运行对需求进行净供应和展开方法，表面不足 — 但它本身不创建订单。"
+
+msgid "{BRAND_NAME}'s production order — one job builds a quantity of one item from its own copied method and routing."
+msgstr "{BRAND_NAME}的生产订单 — 一个工单从其自身复制的方法和工艺路线构建一个物料的数量。"
+
+msgid "{BRAND_NAME}'s shop-floor app where operators run operations, report quantities, issue material, and log time against released jobs in real time."
+msgstr "{BRAND_NAME}的车间应用程序，操作员可在其中执行工序、报告数量、领料并对已下达工单实时计工时。"
+
+msgid "{BRAND_NAME}'s single record for anything with a part number — Part, Material, Tool, Service, Consumable, or Fixture — that jobs, methods, orders, and inventory all point at."
+msgstr "{BRAND_NAME}对任何具有零件号的事物的单一记录 — 零件、原材料、刀具、服务、耗材或工装夹具 — 工单、方法、订单和库存管理都指向。"
 
 msgid "{chainLabel}. Consider pointing this part directly at the final successor."
 msgstr "{chainLabel}。考虑直接将此零件指向最终后继物料。"
@@ -526,8 +602,8 @@ msgstr "已创建 {created} 条，已更新 {updated} 条。"
 msgid "{days}d"
 msgstr "{days}天"
 
-msgid "{delegatedTo} posts this to your ledger, so Carbon doesn't push it. Your saved choice is kept in case that changes."
-msgstr "{delegatedTo}将其发布到您的分类账，因此Carbon不会推送它。您保存的选择将被保留，以防情况发生变化。"
+msgid "{delegatedTo} posts this to your ledger, so {BRAND_NAME} doesn't push it. Your saved choice is kept in case that changes."
+msgstr "{delegatedTo}将其发布到您的分类账，因此{BRAND_NAME}不会推送它。您保存的选择将被保留，以防情况发生变化。"
 
 msgid "{discount} off"
 msgstr "{discount} 折扣"
@@ -579,8 +655,8 @@ msgstr "{label} 被文档、凭证或默认账户使用，因此无法删除。"
 msgid "{leadTime, plural, one {# day} other {# days}}"
 msgstr "{leadTime, plural, other {#天}}"
 
-msgid "{legacyDocumentCount, plural, one {# document posted before Carbon kept journals has no journal.} other {# documents posted before Carbon kept journals have no journal.}}"
-msgstr "{legacyDocumentCount, plural, one {在 Carbon 记录凭证前过账的 # 份文件没有凭证。} other {在 Carbon 记录凭证前过账的 # 份文件没有凭证。}}"
+msgid "{legacyDocumentCount, plural, one {# document posted before {BRAND_NAME} kept journals has no journal.} other {# documents posted before {BRAND_NAME} kept journals have no journal.}}"
+msgstr "{legacyDocumentCount, plural, one {在 {BRAND_NAME} 记录凭证前过账的 # 份文件没有凭证。} other {在 {BRAND_NAME} 记录凭证前过账的 # 份文件没有凭证。}}"
 
 msgid "{linesCount, plural, one {# line} other {# lines}}"
 msgstr "{linesCount, plural, one {# 行} other {# 行}}"
@@ -713,8 +789,8 @@ msgstr "{state} · {syncedAgo} 已同步"
 msgid "{termMonths, plural, one {# month} other {# months}}"
 msgstr "{termMonths, plural, one {# 个月} other {# 个月}}"
 
-msgid "{total} phases to get your company live on Carbon. Each one ends at a checkpoint."
-msgstr "{total}个阶段使贵公司在Carbon中正式启用。每个阶段都在一个检查点处结束。"
+msgid "{total} phases to get your company live on {BRAND_NAME}. Each one ends at a checkpoint."
+msgstr "{total}个阶段使贵公司在{BRAND_NAME}中正式启用。每个阶段都在一个检查点处结束。"
 
 msgid "{total} phases to go live"
 msgstr "{total}个阶段即可正式运行"
@@ -961,6 +1037,9 @@ msgstr "90天"
 msgid "A \"must match\" rule on this process blocks these from sharing a batch"
 msgstr "此工序上的 \"必须匹配\" 规则阻止这些共享一个生产批次"
 
+msgid "A {BRAND_NAME}-run data migration — you load your own data"
+msgstr "{BRAND_NAME} 运行的数据迁移 — 您加载自己的数据"
+
 msgid "A 3D model the operator can turn around"
 msgstr "操作员可以旋转查看的 3D 模型"
 
@@ -969,9 +1048,6 @@ msgstr "创建操作员时会生成4位数PIN。"
 
 msgid "A batch needs at least one operation. To break up the whole batch, use Dissolve instead."
 msgstr "生产批次需要至少一个工序。要分解整个生产批次，请改用\"分解\"。"
-
-msgid "A Carbon-run data migration — you load your own data"
-msgstr "Carbon 运行的数据迁移 — 您加载自己的数据"
 
 msgid "A change notice tracks a controlled engineering or manufacturing change through review and implementation."
 msgstr "变更通知跟踪通过评审和实施的受控工程或制造变更。"
@@ -1054,8 +1130,8 @@ msgstr "客户的状态已变更"
 msgid "A customer's type changes"
 msgstr "客户的类型已变更"
 
-msgid "A date on a contract moved into Carbon mid-term: billing periods that end on or before it were invoiced elsewhere, so they read Billed Externally and are never invoiced."
-msgstr "合约在中期迁移到 Carbon 上的日期：在此日期结束或之前的计费期间已在其他地方开票，因此显示「已外部计费」并且永远不会被开票。"
+msgid "A date on a contract moved into {BRAND_NAME} mid-term: billing periods that end on or before it were invoiced elsewhere, so they read Billed Externally and are never invoiced."
+msgstr "合约在中期迁移到 {BRAND_NAME} 上的日期：在此日期结束或之前的计费期间已在其他地方开票，因此显示「已外部计费」并且永远不会被开票。"
 
 msgid "A dated change to an active contract, with a reason and a contract type: changed lines end and their replacements start from the change date, prorated by day, or from the next billing period."
 msgstr "对启用合约的日期变更，附带原因和合约类型：已更改行结束，其替换从变更日期开始（按天按比例分配）或从下一个计费期间开始。"
@@ -1174,8 +1250,8 @@ msgstr "一个按订单生产的组件，在父项构建中获得自己的工单
 msgid "A Make to Order component whose parts are issued together into the parent job — no separate build."
 msgstr "一个按订单生产的组件，其零件一起领用到父工单中——无单独构建。"
 
-msgid "A managed cloud-hosted version of Carbon"
-msgstr "Carbon 的托管云版本"
+msgid "A managed cloud-hosted version of {BRAND_NAME}"
+msgstr "{BRAND_NAME} 的托管云版本"
 
 msgid "A managed version with all the advanced features"
 msgstr "具有所有高级功能的托管版本"
@@ -1213,8 +1289,8 @@ msgstr "相同期限的新合同期开始时，该期结束。"
 msgid "A non-cash document that settles an invoice against a reason account: a credit lowers what's owed, a debit raises it."
 msgstr "一份非现金文件，根据原因账户结算发票：贷方降低欠额，借方提高欠额。"
 
-msgid "A non-conformance shared with a supplier over a login-free /share/scar link, so they can respond to the issue and update its tasks from outside Carbon."
-msgstr "通过无登录 /share/scar 链接与供应商共享的不合格记录，以便他们可以从 Carbon 外部响应问题并更新其任务。"
+msgid "A non-conformance shared with a supplier over a login-free /share/scar link, so they can respond to the issue and update its tasks from outside {BRAND_NAME}."
+msgstr "通过无登录 /share/scar 链接与供应商共享的不合格记录，以便他们可以从 {BRAND_NAME} 外部响应问题并更新其任务。"
 
 msgid "A non-taxable surcharge (e.g. recoverable expenses like permit fees) added to the line; excluded from the tax base."
 msgstr "不可征税的附加费（如可收回的费用，如许可证费用），添加到行中并从税基中排除。"
@@ -1237,8 +1313,8 @@ msgstr "操作员在此步骤中看到的照片或 PDF"
 msgid "A physical pull signal — a printed card or QR code living with the stock — that raises a purchase order or a job the moment it's scanned to refill a bin."
 msgstr "一个物理拉动信号——一张印刷卡片或 QR 码与库存一起放置——在扫描时立即提高采购订单或工单以补充料箱。"
 
-msgid "A point in one of Carbon's own flows that a workflow can watch — a job released, a quote accepted, a shipment posted — as opposed to a raw field change; it hands the workflow the records involved by id."
-msgstr "Carbon 自身流程中的一个点，工作流可以监控——工单已下达、报价单已接受、发货已过账——相对于原始字段更改；它通过 ID 将所涉及的记录传递给工作流。"
+msgid "A point in one of {BRAND_NAME}'s own flows that a workflow can watch — a job released, a quote accepted, a shipment posted — as opposed to a raw field change; it hands the workflow the records involved by id."
+msgstr "{BRAND_NAME} 自身流程中的一个点，工作流可以监控——工单已下达、报价单已接受、发货已过账——相对于原始字段更改；它通过 ID 将所涉及的记录传递给工作流。"
 
 msgid "A posted accounting entry: a header plus balanced debit and credit lines against GL accounts."
 msgstr "一个已过账的会计分录：标题加上针对总账科目的平衡借方和贷方行。"
@@ -1462,8 +1538,8 @@ msgstr "销售报价请求 (RFQ) 是客户对一组零件和数量的定价询�
 msgid "A sales RFQ (a customer asks you to quote) or a purchasing RFQ (you ask suppliers); both feed the opportunity thread."
 msgstr "销售RFQ（客户要求您报价）或采购RFQ（您要求供应商）；两者都为商机线程提供信息。"
 
-msgid "A scoped secret sent on the carbon-key request header that authenticates programmatic calls to Carbon, carrying its own permissions and rate limit rather than a user session's."
-msgstr "在 carbon-key 请求标头上发送的范围内秘密，用于验证对 Carbon 的编程调用，携带自己的权限和速率限制，而不是用户会话的。"
+msgid "A scoped secret sent on the carbon-key request header that authenticates programmatic calls to {BRAND_NAME}, carrying its own permissions and rate limit rather than a user session's."
+msgstr "在 carbon-key 请求标头上发送的范围内秘密，用于验证对 {BRAND_NAME} 的编程调用，携带自己的权限和速率限制，而不是用户会话的。"
 
 msgid "A separate schedule for tax reporting when tax rules require a method different from book depreciation."
 msgstr "当税收规则要求与账面折旧不同的方法时，用于税收报告的单独税收折旧方案。"
@@ -2627,8 +2703,8 @@ msgstr "工程变更是指受影响的物料，其方法在草稿上修订后一
 msgid "An Enterprise sign-in method where everyone on a company's registered email domains authenticates through the company's own SAML identity provider instead of a magic link, so IT grants and revokes access centrally."
 msgstr "一种企业登录方法,公司注册电子邮件域中的所有人通过公司自己的 SAML 身份提供商进行身份验证,而不是使用魔法链接,因此 IT 可以集中授予和撤销访问权限。"
 
-msgid "An https request Carbon sends to a system of yours when a workflow reaches that step, carrying whatever headers and body you configured."
-msgstr "当工作流到达该步骤时，Carbon向您的系统发送的HTTPS请求，携带您配置的任何标头和请求体。"
+msgid "An https request {BRAND_NAME} sends to a system of yours when a workflow reaches that step, carrying whatever headers and body you configured."
+msgstr "当工作流到达该步骤时，{BRAND_NAME}向您的系统发送的HTTPS请求，携带您配置的任何标头和请求体。"
 
 msgid "An integration or a custom change — the small slice that's actually custom."
 msgstr "一个集成或自定义更改——实际上是自定义的小部分。"
@@ -2863,8 +2939,8 @@ msgstr "API密钥"
 msgid "API Keys"
 msgstr "API密钥"
 
-msgid "API keys for programmatic access to your Carbon data."
-msgstr "API密钥用于以编程方式访问您的Carbon数据。"
+msgid "API keys for programmatic access to your {BRAND_NAME} data."
+msgstr "API密钥用于以编程方式访问您的{BRAND_NAME}数据。"
 
 msgid "API, webhooks, and integrations"
 msgstr "API、Webhook 和集成"
@@ -3870,8 +3946,8 @@ msgstr "自动化"
 msgid "Automate quality flags and notifications"
 msgstr "自动化质量标志和通知"
 
-msgid "Automate your business processes with event-driven workflows that trigger actions when things happen in Carbon."
-msgstr "通过事件驱动的工作流自动化您的业务流程，当 Carbon 中发生事情时触发操作。"
+msgid "Automate your business processes with event-driven workflows that trigger actions when things happen in {BRAND_NAME}."
+msgstr "通过事件驱动的工作流自动化您的业务流程，当 {BRAND_NAME} 中发生事情时触发操作。"
 
 msgid "Automatic"
 msgstr "自动"
@@ -4314,8 +4390,8 @@ msgstr "奖金折旧%"
 msgid "Book a call to discuss guided implementation"
 msgstr "预约通话讨论引导式实施"
 
-msgid "Book a call with Carbon"
-msgstr "与 Carbon 预约通话"
+msgid "Book a call with {BRAND_NAME}"
+msgstr "与 {BRAND_NAME} 预约通话"
 
 msgid "Book Depreciation"
 msgstr "账面折旧"
@@ -4338,8 +4414,8 @@ msgstr "创建此版本的可编辑副本，您可以对其进行更改和发布
 msgid "Breadcrumb"
 msgstr "面包屑"
 
-msgid "Bring in your parts, BOMs, Bill of Process, and costing — with Carbon's import tools, CSV, or LLM help."
-msgstr "导入您的零件、BOM、工序清单和成本核算—使用 Carbon 的导入工具、CSV 或 LLM 帮助。"
+msgid "Bring in your parts, BOMs, Bill of Process, and costing — with {BRAND_NAME}'s import tools, CSV, or LLM help."
+msgstr "导入您的零件、BOM、工序清单和成本核算—使用 {BRAND_NAME} 的导入工具、CSV 或 LLM 帮助。"
 
 msgid "Browse library"
 msgstr "浏览库"
@@ -4494,8 +4570,8 @@ msgstr "校准"
 msgid "Call an outside URL"
 msgstr "调用外部 URL"
 
-msgid "Called a method in Carbon — the components plus operations that produce a part."
-msgstr "在Carbon中称为方法 — 生产一个零件的组成部分和工序。"
+msgid "Called a method in {BRAND_NAME} — the components plus operations that produce a part."
+msgstr "在{BRAND_NAME}中称为方法 — 生产一个零件的组成部分和工序。"
 
 msgid "Camera"
 msgstr "摄像头"
@@ -4666,15 +4742,6 @@ msgstr "资本化资产"
 msgid "Caption"
 msgstr "标题"
 
-msgid "Carbon"
-msgstr "Carbon"
-
-msgid "Carbon + you"
-msgstr "Carbon + 你"
-
-msgid "Carbon account"
-msgstr "Carbon 账户"
-
 msgid "Carbon client is not available"
 msgstr "Carbon 客户端不可用"
 
@@ -4683,76 +4750,6 @@ msgstr "Carbon 客户端不可用"
 
 msgid "Carbon client not found"
 msgstr "找不到 Carbon 客户端"
-
-msgid "Carbon column"
-msgstr "Carbon 列"
-
-msgid "Carbon is configured the way your company runs, your data is loaded, and your team is confident using it. When that's true, you're ready to go live."
-msgstr "Carbon已按照您的公司运营方式进行配置，您的数据已加载，您的团队对其使用有信心。当这一切都实现时，您就可以准备上线了。"
-
-msgid "Carbon leads"
-msgstr "Carbon 主导"
-
-msgid "Carbon Logo"
-msgstr "Carbon 标志"
-
-msgid "Carbon only"
-msgstr "仅限 Carbon"
-
-msgid "Carbon opens this account from its open items. The amount here is only compared on Migration Clearing."
-msgstr "Carbon从其未结项目中开设此账户。此处的金额仅在迁移清算时比较。"
-
-msgid "Carbon Posted"
-msgstr "Carbon已过账"
-
-msgid "Carbon posts every document dated on or after this day. Choose the first day of the current period or of one of the 3 periods before it."
-msgstr "Carbon过账所有日期在此日期或之后的文档。选择当前期间或其前3个期间之一的第一天。"
-
-msgid "Carbon posts the opening journal, posts every journal dated on or after the cutover date, and closes the periods before it."
-msgstr "Carbon过账开盘凭证，过账所有日期在过账日期或之后的凭证，并关闭其前的期间。"
-
-msgid "Carbon starts every company on its default chart. Import your own chart now, before the trial balance, which matches accounts by number. The import needs two files: your chart, and the default accounts template filled with your account numbers. To keep Carbon's chart, continue."
-msgstr "Carbon 为每个公司配置默认会计科目表。现在就导入您自己的科目表，在试算平衡表之前完成（试算平衡表按账户编号匹配）。导入需要两个文件：您的科目表和已填有您的账户编号的默认账户模板。要保留 Carbon 的科目表，请继续。"
-
-msgid "Carbon value"
-msgstr "Carbon 值"
-
-msgid "Carbon Value"
-msgstr "碳值"
-
-#. placeholder {0}: unmapped.length
-msgid "Carbon will use AI to guess a provider account for each of your {0} unmapped accounts. Suggestions are a starting point — you can review them before anything is saved."
-msgstr "Carbon将使用AI为您的{0}个未映射账户各猜测一个供应商账户。建议是一个起点 — 您可以在保存前审查它们。"
-
-msgid "Carbon writes their journals when you enable accounting, with today's accounts and costs."
-msgstr "启用会计时，Carbon将使用今天的账户和成本编写其凭证。"
-
-msgid "Carbon-only"
-msgstr "仅限Carbon"
-
-msgid "Carbon-only · fill in real targets for this customer. They see the values, locked."
-msgstr "仅限Carbon · 为此客户填入真实目标。他们可以看到这些值，但已锁定。"
-
-msgid "Carbon-only · the customer sees this text, locked."
-msgstr "仅限Carbon · 客户可以看到此文本，已锁定。"
-
-msgid "Carbon's default passwordless sign-in: an emailed one-time link that signs you in when opened, with no password to remember or leak."
-msgstr "Carbon 的默认无密码登录:一个通过电子邮件发送的一次性链接,打开时会自动登录您,无需记住或泄露任何密码。"
-
-msgid "Carbon's name for a bill of material and bill of process (routing): the components plus the operations that make a part."
-msgstr "Carbon对物料清单和工序清单（工艺路线）的称呼：组成零件的物料和工序。"
-
-msgid "Carbon's planning run nets supply against demand and explodes methods, surfacing shortfalls — but it creates no orders itself."
-msgstr "Carbon的计划运行对需求进行净供应和展开方法，表面不足 — 但它本身不创建订单。"
-
-msgid "Carbon's production order — one job builds a quantity of one item from its own copied method and routing."
-msgstr "Carbon的生产订单 — 一个工单从其自身复制的方法和工艺路线构建一个物料的数量。"
-
-msgid "Carbon's shop-floor app where operators run operations, report quantities, issue material, and log time against released jobs in real time."
-msgstr "Carbon的车间应用程序，操作员可在其中执行工序、报告数量、领料并对已下达工单实时计工时。"
-
-msgid "Carbon's single record for anything with a part number — Part, Material, Tool, Service, Consumable, or Fixture — that jobs, methods, orders, and inventory all point at."
-msgstr "Carbon对任何具有零件号的事物的单一记录 — 零件、原材料、刀具、服务、耗材或工装夹具 — 工单、方法、订单和库存管理都指向。"
 
 msgid "Card Holder"
 msgstr "持卡人"
@@ -5018,8 +5015,8 @@ msgstr "选择另一个文件"
 msgid "Choose avatar"
 msgstr "选择头像"
 
-msgid "Choose how Carbon reaches you."
-msgstr "选择 Carbon 联系您的方式。"
+msgid "Choose how {BRAND_NAME} reaches you."
+msgstr "选择 {BRAND_NAME} 联系您的方式。"
 
 msgid "Choose how to add lines to this return."
 msgstr "选择如何向此退货添加行。"
@@ -5452,11 +5449,11 @@ msgstr "配置器"
 msgid "Configure"
 msgstr "配置"
 
+msgid "Configure {BRAND_NAME}"
+msgstr "配置 {BRAND_NAME}"
+
 msgid "Configure {label}"
 msgstr "配置 {label}"
-
-msgid "Configure Carbon"
-msgstr "配置 Carbon"
 
 msgid "Configure default accounts for cash and bank transactions"
 msgstr "配置现金和银行交易的默认账户"
@@ -5593,8 +5590,8 @@ msgstr "冲突原因"
 msgid "Connect"
 msgstr "连接"
 
-msgid "Connect Carbon to your accounting, project management, and CAD tools and much more."
-msgstr "将 Carbon 连接到您的会计、项目管理和 CAD 工具等更多应用。"
+msgid "Connect {BRAND_NAME} to your accounting, project management, and CAD tools and much more."
+msgstr "将 {BRAND_NAME} 连接到您的会计、项目管理和 CAD 工具等更多应用。"
 
 msgid "Connect Jira issue"
 msgstr "连接 Jira 问题"
@@ -6923,11 +6920,11 @@ msgstr "自定义"
 msgid "Customize the layout of your PDF documents — reorder sections, hide what you don't need, and add your own blocks."
 msgstr "自定义您的 PDF 文档布局 — 重新排列部分、隐藏不需要的内容，并添加您自己的块。"
 
-msgid "Cut over to Carbon and freeze the old system"
-msgstr "切换到 Carbon 并冻结旧系统"
+msgid "Cut over to {BRAND_NAME} and freeze the old system"
+msgstr "切换到 {BRAND_NAME} 并冻结旧系统"
 
-msgid "Cut over, freeze the old system, and confirm you're live on Carbon."
-msgstr "切换系统，冻结旧系统，并确认您已在 Carbon 上线。"
+msgid "Cut over, freeze the old system, and confirm you're live on {BRAND_NAME}."
+msgstr "切换系统，冻结旧系统，并确认您已在 {BRAND_NAME} 上线。"
 
 msgid "Cutover checklist"
 msgstr "转换检查清单"
@@ -8144,14 +8141,14 @@ msgstr "文档"
 msgid "Documents and activity"
 msgstr "文档和活动"
 
-msgid "Documents Posted Before Carbon Kept Journals"
-msgstr "Carbon 开始保留凭证前已过账的文档"
+msgid "Documents Posted Before {BRAND_NAME} Kept Journals"
+msgstr "{BRAND_NAME} 开始保留凭证前已过账的文档"
 
-msgid "Documents posted before Carbon kept journals have no journal."
-msgstr "Carbon 开始保留凭证前已过账的文档没有对应的凭证。"
+msgid "Documents posted before {BRAND_NAME} kept journals have no journal."
+msgstr "{BRAND_NAME} 开始保留凭证前已过账的文档没有对应的凭证。"
 
-msgid "Documents pushes invoices, bills and payments as native provider documents; their journals are recorded as covered by the document. It also pulls payments recorded in the provider back into Carbon, closing the matching invoice or bill and posting a Carbon GL journal. Off records them as deliberately excluded."
-msgstr "文档推送发票、账单和付款作为本地提供商文件；其凭证被记录为由该文件覆盖。它还将在提供商中记录的付款拉回到Carbon，关闭匹配的发票或账单并过账一个Carbon总账凭证。关闭时将其记录为故意排除。"
+msgid "Documents pushes invoices, bills and payments as native provider documents; their journals are recorded as covered by the document. It also pulls payments recorded in the provider back into {BRAND_NAME}, closing the matching invoice or bill and posting a{BRAND_NAME} GL journal. Off records them as deliberately excluded."
+msgstr ""
 
 msgid "Documents you open will show up here for quick access."
 msgstr "您打开的文档将显示在此处以便快速访问。"
@@ -8214,8 +8211,8 @@ msgstr "下载 PDF"
 msgid "Download template"
 msgstr "下载模板"
 
-msgid "Download the template. Each row is a default account Carbon posts to. In Account Number, enter the number of the account in your chart that takes it. Carbon updates the default account to match."
-msgstr "下载模板。每一行是一个 Carbon 过账的默认账户。在账户编号中，输入您的科目表中对应账户的编号。Carbon 会更新默认账户以匹配。"
+msgid "Download the template. Each row is a default account {BRAND_NAME} posts to. In Account Number, enter the number of the account in your chart that takes it. {BRAND_NAME} updates the default account to match."
+msgstr "下载模板。每一行是一个 {BRAND_NAME} 过账的默认账户。在账户编号中，输入您的科目表中对应账户的编号。{BRAND_NAME} 会更新默认账户以匹配。"
 
 msgid "Draft"
 msgstr "草稿"
@@ -8986,8 +8983,8 @@ msgstr "已分配此培训的员工可以打开它。内容、指南和问题不
 msgid "Employees can no longer open this training."
 msgstr "员工无法再打开此培训"
 
-msgid "Employees complete a training in Carbon"
-msgstr "员工在 Carbon 中完成培训"
+msgid "Employees complete a training in {BRAND_NAME}"
+msgstr "员工在 {BRAND_NAME} 中完成培训"
 
 msgid "Empty"
 msgstr "空"
@@ -9305,8 +9302,8 @@ msgstr "所有者权益科目，用于货币折算调整(CTA)"
 msgid "Equity account that offsets the opening balances when accounting is set up. It must total zero."
 msgstr "权益账户，在设置会计时抵消开盘余额。其总额必须为零。"
 
-msgid "Equity account the opening journal posts against when accounting is set up; it holds any difference between the prior trial balance and Carbon's records, and must total zero before you can enable."
-msgstr "设置会计时期初凭证过账到的所有者权益账户；它保持先前试算平衡与 Carbon 记录之间的任何差异，启用前必须总计为零。"
+msgid "Equity account the opening journal posts against when accounting is set up; it holds any difference between the prior trial balance and {BRAND_NAME}'s records, and must total zero before you can enable."
+msgstr "设置会计时期初凭证过账到的所有者权益账户；它保持先前试算平衡与 {BRAND_NAME} 记录之间的任何差异，启用前必须总计为零。"
 
 msgid "Error"
 msgstr "错误"
@@ -9462,8 +9459,8 @@ msgstr "公司范围内的所有记录。凭据、集成令牌和 Webhook 永不
 msgid "Every condition must match"
 msgstr "每个条件都必须匹配"
 
-msgid "Every delivery carries a Carbon-Signature header signed with this secret. Verify it to know a request came from Carbon."
-msgstr "每个投递都携带使用此密钥签名的 Carbon-Signature 标头。验证该标头以确认请求来自 Carbon。"
+msgid "Every delivery carries a Carbon-Signature header signed with this secret. Verify it to know a request came from {BRAND_NAME}."
+msgstr "每个投递都携带使用此密钥签名的 {BRAND_NAME}-Signature 标头。验证该标头以确认请求来自 {BRAND_NAME}。"
 
 msgid "Every in-scope test passes in your configured system, with your data."
 msgstr "您配置的系统中的每项范围内测试都通过了您的数据。"
@@ -9736,8 +9733,8 @@ msgstr "导出 CSV"
 msgid "Export Lines to CSV"
 msgstr "导出行到 CSV"
 
-msgid "Export your chart from your current system as a CSV, one row per account, with its number, name, class, type and group, or start from the template of the current chart. Carbon keeps only the accounts in this file."
-msgstr "从您的现有系统导出科目表为 CSV，每行一个账户，包括编号、名称、类别、类型和组，或从当前科目表的模板开始。Carbon 仅保留此文件中的账户。"
+msgid "Export your chart from your current system as a CSV, one row per account, with its number, name, class, type and group, or start from the template of the current chart. {BRAND_NAME} keeps only the accounts in this file."
+msgstr "从您的现有系统导出科目表为 CSV，每行一个账户，包括编号、名称、类别、类型和组，或从当前科目表的模板开始。{BRAND_NAME} 仅保留此文件中的账户。"
 
 msgid "Extended Price"
 msgstr "扩展价格"
@@ -9772,8 +9769,8 @@ msgstr "外部参考"
 msgid "External training"
 msgstr "外部培训"
 
-msgid "Extra fields to capture data Carbon doesn't track by default"
-msgstr "用于捕获 Carbon 默认不跟踪的额外数据的字段"
+msgid "Extra fields to capture data {BRAND_NAME} doesn't track by default"
+msgstr "用于捕获 {BRAND_NAME} 默认不跟踪的额外数据的字段"
 
 msgid "Extra hours on the whole day"
 msgstr "整天额外时数"
@@ -10726,8 +10723,8 @@ msgstr "生成的ID已启用"
 msgid "Generating suggestions…"
 msgstr "正在生成建议…"
 
-msgid "Get live on Carbon: one system running quoting, purchasing, the shop floor, inventory, and finance, replacing the current tools."
-msgstr "在Carbon上线：一套系统运行报价、采购、车间、库存管理和财务，取代当前工具。"
+msgid "Get live on {BRAND_NAME}: one system running quoting, purchasing, the shop floor, inventory, and finance, replacing the current tools."
+msgstr "在{BRAND_NAME}上线：一套系统运行报价、采购、车间、库存管理和财务，取代当前工具。"
 
 msgid "Get Method"
 msgstr "获取方法"
@@ -10738,14 +10735,14 @@ msgstr "开始使用"
 msgid "Get Started"
 msgstr "开始使用"
 
-msgid "Get your Carbon notifications as they happen."
-msgstr "实时获取您的 Carbon 通知。"
+msgid "Get your {BRAND_NAME} notifications as they happen."
+msgstr "实时获取您的 {BRAND_NAME} 通知。"
 
 msgid "Gets the summary for every agreement"
 msgstr "获取每个协议的汇总"
 
-msgid "Getting around Carbon"
-msgstr "在 Carbon 中导航"
+msgid "Getting around {BRAND_NAME}"
+msgstr "在 {BRAND_NAME} 中导航"
 
 msgid "Getting set up"
 msgstr "正在设置"
@@ -10925,8 +10922,8 @@ msgstr "上线日期"
 msgid "Go-live timing holds if each gate is cleared on schedule"
 msgstr "如果每个关键节点都按计划完成，上线时间是稳定的"
 
-msgid "Going live on Carbon"
-msgstr "在 Carbon 上线"
+msgid "Going live on {BRAND_NAME}"
+msgstr "在 {BRAND_NAME} 上线"
 
 msgid "Good afternoon, {name}."
 msgstr "下午好，{name}。"
@@ -11150,14 +11147,17 @@ msgstr "小时/1000件"
 msgid "Hours/Piece"
 msgstr "小时/件"
 
+msgid "How {BRAND_NAME} looks in this browser."
+msgstr "{BRAND_NAME} 在此浏览器中的外观"
+
 msgid "How a batchable process runs its grouped work: Sequential runs parts one after another on one machine (a saw or laser table), while Simultaneous runs them together in a single load (a furnace, oven, or plating bath)."
 msgstr "可批处理工艺如何运行其分组工作：顺序在一台机器上将零件逐一运行（如锯床或激光台），同时在一个负荷中将它们一起运行（如炉、烤箱或电镀槽）。"
 
 msgid "How a contract line earns its revenue over its revenue dates: Daily, the same amount every day, or Even Period, the same amount every calendar month with partial months prorated by days."
 msgstr "合同行如何在其收入日期内获得收入：每日，每天金额相同；或均匀周期，每个日历月金额相同，部分月份按天数按比例分配。"
 
-msgid "How a contract or an amendment is classified for recurring-revenue reporting: New Sales, Existing, Expansion, Reactivation, or Contraction. Carbon suggests it and you can change it."
-msgstr "合同或修订如何为经常性收入报告分类：新销售、现有、扩展、重新激活或缩减。Carbon 会建议分类，您可以更改。"
+msgid "How a contract or an amendment is classified for recurring-revenue reporting: New Sales, Existing, Expansion, Reactivation, or Contraction. {BRAND_NAME} suggests it and you can change it."
+msgstr "合同或修订如何为经常性收入报告分类：新销售、现有、扩展、重新激活或缩减。{BRAND_NAME} 会建议分类，您可以更改。"
 
 msgid "How a rental agreement cuts billing periods from its start date: Monthly cuts one month from the start date's day (a start on the 7th bills the 7th to the 6th), Calendar Month (Monthly, aligned to calendar periods) cuts calendar months, and 28 Days cuts consecutive 28-day periods. Each unit bills one rate at its own frequency for the whole days, weeks, or months a period covers; a monthly rate in a part period is prorated by days."
 msgstr "租赁协议如何从开始日期开始划分计费期间：每月从开始日期的那一天划分一个月（例如，从7日开始计费到6日），日历月（每月，与日历期间对齐）划分日历月，28天则划分连续的28天期间。每件按其自身频率对周期所涵盖的整个天数、周或月计费一个费率；在部分期间内的月费率按天分摊。"
@@ -11176,9 +11176,6 @@ msgstr "物料的单位成本估价方法：标准成本、平均成本、先进
 
 msgid "How are these hours calculated?"
 msgstr "这些小时数是如何计算的？"
-
-msgid "How Carbon looks in this browser."
-msgstr "Carbon 在此浏览器中的外观"
 
 msgid "How coverage is worked out"
 msgstr "如何计算覆盖范围"
@@ -11303,8 +11300,8 @@ msgstr "我们如何合作"
 msgid "How will you use {integrationName}?"
 msgstr "你将如何使用 {integrationName}？"
 
-msgid "How your company's process maps to Carbon"
-msgstr "您的公司流程如何映射到 Carbon"
+msgid "How your company's process maps to {BRAND_NAME}"
+msgstr "您的公司流程如何映射到 {BRAND_NAME}"
 
 msgid "How your quotes, orders, and invoices look when they go out"
 msgstr "您的报价单、订单和发票发出时的外观"
@@ -12166,8 +12163,8 @@ msgstr "签发日期"
 msgid "Issues"
 msgstr "问题"
 
-msgid "It is coming soon. Contact Carbon to have it set up for your company."
-msgstr "即将推出。请联系 Carbon 为您的公司进行设置。"
+msgid "It is coming soon. Contact {BRAND_NAME} to have it set up for your company."
+msgstr "即将推出。请联系 {BRAND_NAME} 为您的公司进行设置。"
 
 msgid "It will stop running until you publish a version again. Nothing is deleted."
 msgstr "它将停止运行，直到您再次发布版本。不会删除任何内容。"
@@ -12935,8 +12932,8 @@ msgstr "关联 Linear 问题"
 msgid "link outside company"
 msgstr "公司外的链接"
 
-msgid "Link this Carbon customer to one of them, or create a separate Stripe customer."
-msgstr "将此 Carbon 客户链接到其中一个，或创建单独的 Stripe 客户。"
+msgid "Link this {BRAND_NAME} customer to one of them, or create a separate Stripe customer."
+msgstr "将此 {BRAND_NAME} 客户链接到其中一个，或创建单独的 Stripe 客户。"
 
 msgid "Link to sales order line"
 msgstr "关联销售订单行"
@@ -12975,8 +12972,8 @@ msgstr "列表视图"
 msgid "Lists are wired into both {0} and {1}, so this step cannot tell which one to repeat over. Leave a list on only one of them."
 msgstr "列表同时连接到{0}和{1}，因此此步骤无法判断要在哪一个上重复。仅在其中一个上保留列表。"
 
-msgid "Live on Carbon"
-msgstr "在 Carbon 上线"
+msgid "Live on {BRAND_NAME}"
+msgstr "在 {BRAND_NAME} 上线"
 
 msgid "Live reloading"
 msgstr "实时重新加载"
@@ -13014,8 +13011,8 @@ msgstr "正在加载项目详情..."
 msgid "Loading returnable lines..."
 msgstr "正在加载可退货行..."
 
-msgid "Loading your own data with Carbon's import tools"
-msgstr "使用 Carbon 的导入工具加载您自己的数据"
+msgid "Loading your own data with {BRAND_NAME}'s import tools"
+msgstr "使用 {BRAND_NAME} 的导入工具加载您自己的数据"
 
 msgid "Loading..."
 msgstr "加载中..."
@@ -13325,8 +13322,8 @@ msgstr "管理您公司的身份验证和登录要求。"
 msgid "Manage how shelf life is tracked, computed, and enforced across inventory."
 msgstr "管理保质期在库存管理中的跟踪、计算和执行方式。"
 
-msgid "Manage how you sign in to Carbon."
-msgstr "管理您登录 Carbon 的方式。"
+msgid "Manage how you sign in to {BRAND_NAME}."
+msgstr "管理您登录 {BRAND_NAME} 的方式。"
 
 msgid "Manage Ownership"
 msgstr "管理所有权"
@@ -15071,8 +15068,8 @@ msgstr "该地点在接下来{horizon}天内没有计划完成的销售订单相
 msgid "No open jobs for sales orders at this location."
 msgstr "此地点没有销售订单相关的未结工单。"
 
-msgid "No open jobs with costs from before Carbon recorded them"
-msgstr "没有在 Carbon 记录成本之前已产生成本的未结工单"
+msgid "No open jobs with costs from before {BRAND_NAME} recorded them"
+msgstr "没有在 {BRAND_NAME} 记录成本之前已产生成本的未结工单"
 
 msgid "No open lines. Add a service to amend."
 msgstr "没有未结行。添加服务以进行修改。"
@@ -15604,8 +15601,8 @@ msgstr "通知类型"
 msgid "Notifications"
 msgstr "通知"
 
-msgid "Notifications are blocked for Carbon in this browser's site settings."
-msgstr "在此浏览器的网站设置中,Carbon 的通知被阻止。"
+msgid "Notifications are blocked for {BRAND_NAME} in this browser's site settings."
+msgstr "在此浏览器的网站设置中,{BRAND_NAME} 的通知被阻止。"
 
 msgid "Notify"
 msgstr "通知"
@@ -15683,11 +15680,11 @@ msgstr "开"
 msgid "On {sentDate}"
 msgstr "打开"
 
-msgid "On a control account, Carbon opens the balance from its own open items, inventory and fixed assets. The trial balance must agree: every difference stays on Migration Clearing, which must total zero. Open an account to see its items, and ignore an invoice the prior system already settled. Apply to Trial Balance sets each control account to Carbon's total and puts what is left on Retained Earnings."
-msgstr "在控制账户上，Carbon从其自有的未结物料、库存管理和固定资产中开账户余额。试算表必须相符：每个差异都留在迁移清算上，必须总计为零。打开一个账户以查看其物料，并忽略前一个系统已经结清的发票。应用至试算表将每个控制账户设置为Carbon的总计，并将剩余部分放在未分配利润上。"
+msgid "On a control account, {BRAND_NAME} opens the balance from its own open items, inventory and fixed assets. The trial balance must agree: every difference stays on Migration Clearing, which must total zero. Open an account to see its items, and ignore an invoice the prior system already settled. Apply to Trial Balance sets each control account to {BRAND_NAME}'s total and puts what is left on Retained Earnings."
+msgstr "在控制账户上，{BRAND_NAME}从其自有的未结物料、库存管理和固定资产中开账户余额。试算表必须相符：每个差异都留在迁移清算上，必须总计为零。打开一个账户以查看其物料，并忽略前一个系统已经结清的发票。应用至试算表将每个控制账户设置为{BRAND_NAME}的总计，并将剩余部分放在未分配利润上。"
 
-msgid "On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, Carbon creates a Released stock transfer for the kanban quantity."
-msgstr "在转移看板上，指目标存储单元的最小数量。当现有库存加上未完成的入库调拨降至此水位以下时，Carbon 会创建一个已下达的库存调拨，调拨数量为看板数量。"
+msgid "On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, {BRAND_NAME} creates a Released stock transfer for the kanban quantity."
+msgstr "在转移看板上，指目标存储单元的最小数量。当现有库存加上未完成的入库调拨降至此水位以下时，{BRAND_NAME} 会创建一个已下达的库存调拨，调拨数量为看板数量。"
 
 msgid "On cutover day, work the checklist below in order. Acceptance tests come from your in-scope requirements. Support details are at the bottom."
 msgstr "在转换日，按顺序完成下列检查清单。验收测试来自您范围内的要求。支持详情见下方。"
@@ -15776,8 +15773,8 @@ msgstr "租赁天数"
 msgid "On-time delivery"
 msgstr "准时交付"
 
-msgid "Onboard your agent to Carbon"
-msgstr "将您的代理接入Carbon"
+msgid "Onboard your agent to {BRAND_NAME}"
+msgstr "将您的代理接入{BRAND_NAME}"
 
 msgid "Once a day"
 msgstr "每天一次"
@@ -15808,8 +15805,8 @@ msgstr "每张发票一行，每行一列。更改日期或金额，添加或删
 msgid "One row per month, one column per line. Each line recognizes exactly what its invoices bill."
 msgstr "每月一行，每行一列。每行确认其发票所开票的确切金额。"
 
-msgid "One serial unit or one batch that Carbon follows individually, carrying its own status and attributes such as an expiry date."
-msgstr "Carbon单独跟踪的一个编号件或一个生产批次，具有自己的状态和属性，例如有效期。"
+msgid "One serial unit or one batch that {BRAND_NAME} follows individually, carrying its own status and attributes such as an expiry date."
+msgstr "{BRAND_NAME}单独跟踪的一个编号件或一个生产批次，具有自己的状态和属性，例如有效期。"
 
 msgid "One set of numbers"
 msgstr "一套数字"
@@ -15943,8 +15940,8 @@ msgstr "打开日期"
 msgid "Open Dispatches"
 msgstr "未结维护工单"
 
-msgid "Open in Carbon"
-msgstr "在 Carbon 中打开"
+msgid "Open in {BRAND_NAME}"
+msgstr "在 {BRAND_NAME} 中打开"
 
 msgid "Open in change notice {ids}. Release it to change the active version."
 msgstr "打开于变更通知 {ids}。下达它以更改有效版本。"
@@ -16063,8 +16060,8 @@ msgstr "期初"
 msgid "Opening an operation starts its timer, so time is tracked from the moment work begins."
 msgstr "打开一个操作会启动其计时器，因此从工作开始时起就跟踪时间。"
 
-msgid "Opening balance of depreciation already booked before this asset was added to Carbon (use 0 for new acquisitions)."
-msgstr "在将此资产添加到Carbon之前已入账的折旧的期初余额（新购置的情况下使用0）。"
+msgid "Opening balance of depreciation already booked before this asset was added to {BRAND_NAME} (use 0 for new acquisitions)."
+msgstr "在将此资产添加到{BRAND_NAME}之前已入账的折旧的期初余额（新购置的情况下使用0）。"
 
 msgid "Opening balances as of"
 msgstr "期初余额截至"
@@ -16504,8 +16501,8 @@ msgstr "已支付金额："
 msgid "Paid Date"
 msgstr "支付日期"
 
-msgid "Paid outside Carbon"
-msgstr "在 Carbon 外已支付"
+msgid "Paid outside {BRAND_NAME}"
+msgstr "在 {BRAND_NAME} 外已支付"
 
 msgid "Paid up front; record it as a payment once received"
 msgstr "预付款；收到后将其记录为付款"
@@ -16746,8 +16743,8 @@ msgstr "付款"
 msgid "Payments and credits applied to this invoice. Applied amounts and FX are in company base currency. Click a row to open the source document."
 msgstr "分配至此发票的付款和抵扣款。已分配金额和汇兑差额均以公司基本货币表示。点击某一行以打开源单据。"
 
-msgid "Payments due before this date were paid outside Carbon"
-msgstr "此日期前应支付的款项已在Carbon外支付"
+msgid "Payments due before this date were paid outside {BRAND_NAME}"
+msgstr "此日期前应支付的款项已在{BRAND_NAME}外支付"
 
 msgid "Pays the deposit held for this document back out of customer prepayments."
 msgstr "从客户预付款中支付为此文件持有的押金。"
@@ -16884,11 +16881,11 @@ msgstr "可用于分配的物理打印机。"
 msgid "Pick"
 msgstr "拣货"
 
+msgid "Pick a {BRAND_NAME} dimension and the provider target it posts to. Auto-create adds missing provider options by name at push time."
+msgstr "选择一个 {BRAND_NAME} 维度和它过账到的提供商目标。自动创建在推送时按名称添加缺失的提供商选项。"
+
 msgid "Pick a batchable process, filter the eligible operations by their material, and select the ones to run together."
 msgstr "选择可批处理的工序，按材料筛选符合条件的操作，然后选择要一起运行的操作。"
-
-msgid "Pick a Carbon dimension and the provider target it posts to. Auto-create adds missing provider options by name at push time."
-msgstr "选择一个 Carbon 维度和它过账到的提供商目标。自动创建在推送时按名称添加缺失的提供商选项。"
 
 msgid "Pick a column to sort by"
 msgstr "选择要排序的列"
@@ -17659,11 +17656,11 @@ msgstr "属性"
 msgid "Property"
 msgstr "属性"
 
-msgid "Proposed matches where the Carbon account number equals the provider account code exactly."
-msgstr "提议的匹配项，其中 Carbon 账户编号与提供商账户代码完全相等。"
+msgid "Proposed matches where the {BRAND_NAME} account number equals the provider account code exactly."
+msgstr "提议的匹配项，其中 {BRAND_NAME} 账户编号与提供商账户代码完全相等。"
 
-msgid "Proposed matches where the Carbon dimension value's name equals a provider option name exactly."
-msgstr "建议的匹配，其中 Carbon 维度值的名称与提供商选项名称完全相同。"
+msgid "Proposed matches where the {BRAND_NAME} dimension value's name equals a provider option name exactly."
+msgstr "建议的匹配，其中 {BRAND_NAME} 维度值的名称与提供商选项名称完全相同。"
 
 msgid "Protect the go-live date"
 msgstr "保护上线日期"
@@ -17683,8 +17680,8 @@ msgstr "在路由 SAML SSO 登录前，通过 DNS TXT 记录证明每个电子�
 msgid "Provide process knowledge and inputs"
 msgstr "提供流程知识和输入"
 
-msgid "Provide these URLs to your identity provider (Okta, Entra ID, Google Workspace, etc.) when registering Carbon as a SAML application."
-msgstr "在将 Carbon 注册为 SAML 应用程序时,将这些 URL 提供给您的身份提供商(Okta、Entra ID、Google Workspace 等)。"
+msgid "Provide these URLs to your identity provider (Okta, Entra ID, Google Workspace, etc.) when registering {BRAND_NAME} as a SAML application."
+msgstr "在将 {BRAND_NAME} 注册为 SAML 应用程序时,将这些 URL 提供给您的身份提供商(Okta、Entra ID、Google Workspace 等)。"
 
 msgid "Provider"
 msgstr "提供商"
@@ -17717,8 +17714,8 @@ msgstr "发布版本{0}?"
 msgid "Published"
 msgstr "已发布"
 
-msgid "Published by Carbon"
-msgstr "由Carbon发布"
+msgid "Published by {BRAND_NAME}"
+msgstr "由{BRAND_NAME}发布"
 
 msgid "Published Version"
 msgstr "已发布版本"
@@ -18206,8 +18203,8 @@ msgstr "尽早提出问题，直言不讳地提出。第2周发现的问题很�
 msgid "Ramp"
 msgstr "Ramp"
 
-msgid "Ramp allows only one. Disconnect the other system in Ramp, or connect Carbon again choosing \"Another system posts my ledger\"."
-msgstr "Ramp 仅允许一个。在 Ramp 中断开另一个系统的连接，或重新连接 Carbon 并选择\"另一个系统发布我的账本\"。"
+msgid "Ramp allows only one. Disconnect the other system in Ramp, or connect {BRAND_NAME} again choosing \"Another system posts my ledger\"."
+msgstr "Ramp 仅允许一个。在 Ramp 中断开另一个系统的连接，或重新连接 {BRAND_NAME} 并选择\"另一个系统发布我的账本\"。"
 
 msgid "Ramp authorized the connection but saving it failed. Try connecting again."
 msgstr "Ramp 已授权此连接，但保存失败。请重新连接。"
@@ -18287,8 +18284,8 @@ msgstr "重新激活"
 msgid "Reactivation"
 msgstr "重新激活"
 
-msgid "Read this through — what Carbon will and won't do for your setup. When it looks right, mark it agreed below."
-msgstr "仔细阅读此内容——Carbon将为您的设置做什么和不做什么。当看起来正确时，在下面标记同意。"
+msgid "Read this through — what {BRAND_NAME} will and won't do for your setup. When it looks right, mark it agreed below."
+msgstr "仔细阅读此内容——{BRAND_NAME}将为您的设置做什么和不做什么。当看起来正确时，在下面标记同意。"
 
 msgid "Read this through. When it's right, sign off at the bottom. It's the statement your commercial agreement points to, with no prices or legal terms here."
 msgstr "通读此内容。确认无误后，在底部签署。这是您商业协议所指向的声明，不包含价格或法律条款。"
@@ -18528,8 +18525,8 @@ msgstr "对账"
 msgid "Reconciliation found discrepancies with the provider"
 msgstr "对账发现与提供商的差异"
 
-msgid "Reconciling a purchase order against what was received and invoiced — implicit in Carbon, via the line quantities and GR/IR balance."
-msgstr "将采购订单与已收货和已开票的内容进行对账——在Carbon中隐含进行，通过行数量和GR/IR余额。"
+msgid "Reconciling a purchase order against what was received and invoiced — implicit in {BRAND_NAME}, via the line quantities and GR/IR balance."
+msgstr "将采购订单与已收货和已开票的内容进行对账——在{BRAND_NAME}中隐含进行，通过行数量和GR/IR余额。"
 
 msgid "Reconfigure"
 msgstr "重新配置"
@@ -19073,8 +19070,8 @@ msgstr "为 {inputLabel} 中的每个项目重复一次"
 msgid "Replace"
 msgstr "替换"
 
-msgid "Replace Carbon's default chart with your own, before you set up accounting"
-msgstr "在设置会计之前，将 Carbon 的默认科目表替换为您自己的"
+msgid "Replace {BRAND_NAME}'s default chart with your own, before you set up accounting"
+msgstr "在设置会计之前，将 {BRAND_NAME} 的默认科目表替换为您自己的"
 
 msgid "Replace chart"
 msgstr "替换科目表"
@@ -19692,8 +19689,8 @@ msgstr ""
 msgid "RFQs"
 msgstr "询价单"
 
-msgid "Ride Carbon dimensions along on pushed journals. Each slot maps one Carbon dimension to one provider analytics target; the value mapping below pairs individual dimension values with provider options."
-msgstr "在推送的凭证上传递Carbon维度。每个槽位将一个Carbon维度映射到一个供应商分析目标；下方的值映射将各个维度值与供应商选项配对。"
+msgid "Ride {BRAND_NAME} dimensions along on pushed journals. Each slot maps one {BRAND_NAME} dimension to one provider analytics target; the value mapping below pairs individual dimension values with provider options."
+msgstr "在推送的凭证上传递{BRAND_NAME}维度。每个槽位将一个{BRAND_NAME}维度映射到一个供应商分析目标；下方的值映射将各个维度值与供应商选项配对。"
 
 #. placeholder {0}: certification.docVersion
 msgid "Rider v{0}"
@@ -20754,8 +20751,8 @@ msgstr "发送邀请"
 msgid "Send RFQ to Suppliers"
 msgstr "向供应商发送询价单"
 
-msgid "Send to Carbon"
-msgstr "发送至 Carbon"
+msgid "Send to {BRAND_NAME}"
+msgstr "发送至 {BRAND_NAME}"
 
 msgid "Send Via"
 msgstr "通过以下方式发送"
@@ -20892,6 +20889,9 @@ msgstr "服务"
 msgid "Session locked"
 msgstr "会话已锁定"
 
+msgid "Set {BRAND_NAME} up around how your company runs: sites, parts, BOMs, Bill of Process, and the flows you use."
+msgstr "根据公司运营方式设置 {BRAND_NAME}：地点、零件、BOM、工序清单和您使用的流程。"
+
 msgid "Set a customer on this return to add from a shipment."
 msgstr "在此退货上设置客户以从发货中添加。"
 
@@ -20912,9 +20912,6 @@ msgstr "设置目标"
 
 msgid "Set at activation"
 msgstr "在激活时设置"
-
-msgid "Set Carbon up around how your company runs: sites, parts, BOMs, Bill of Process, and the flows you use."
-msgstr "根据公司运营方式设置 Carbon：地点、零件、BOM、工序清单和您使用的流程。"
 
 msgid "Set Clock Out"
 msgstr "设置收工"
@@ -20998,8 +20995,8 @@ msgstr "设置此项在库存中的账面价值。差异将在库存和原支出
 msgid "Settings"
 msgstr "设置"
 
-msgid "Settled in the system that kept the books before the cutover. Carbon leaves them out of its totals and marks them Paid on the day before the cutover when you set up accounting."
-msgstr "在先前系统中已结清。Carbon 将它们排除在总计之外，并在设置会计时将它们标记为在截断日期前一天已付款。"
+msgid "Settled in the system that kept the books before the cutover.{BRAND_NAME} leaves them out of its totals and marks them Paid on the day before the cutover when you set up accounting."
+msgstr ""
 
 msgid "Setup"
 msgstr "换型"
@@ -21391,8 +21388,8 @@ msgstr "随机"
 msgid "Sign in here instead"
 msgstr ""
 
-msgid "Sign in to Carbon"
-msgstr "登录 Carbon"
+msgid "Sign in to {BRAND_NAME}"
+msgstr "登录 {BRAND_NAME}"
 
 msgid "Sign in with biometrics instead of a magic link. Passkeys are secured by Face ID, Touch ID, or your device PIN."
 msgstr "使用生物识别而不是魔法链接登录。通行密钥由 Face ID、Touch ID 或您的设备 PIN 保护。"
@@ -21527,8 +21524,8 @@ msgstr "已售出"
 msgid "Solutions Engineer"
 msgstr "解决方案工程师"
 
-msgid "Some balances have no Carbon account"
-msgstr "某些余额没有 Carbon 账户"
+msgid "Some balances have no {BRAND_NAME} account"
+msgstr "某些余额没有 {BRAND_NAME} 账户"
 
 msgid "Some lines are invoiced for more or less than they total. Fix the amounts before confirming."
 msgstr "某些行的开票金额比总额多或少。确认前修复金额。"
@@ -21704,8 +21701,8 @@ msgstr "建立托管（云端或自托管）"
 msgid "Standard"
 msgstr "正常检验"
 
-msgid "Standard cloud Carbon fits how your company runs"
-msgstr "标准云 Carbon 适合你的公司运营方式"
+msgid "Standard cloud {BRAND_NAME} fits how your company runs"
+msgstr "标准云 {BRAND_NAME} 适合你的公司运营方式"
 
 msgid "Standard Cost Variances"
 msgstr "标准成本差异"
@@ -22024,17 +22021,17 @@ msgstr "Stripe已经有使用此电子邮件的客户"
 msgid "Stripe Due Date"
 msgstr "Stripe 到期日期"
 
-msgid "Stripe emails the invoice to the customer, so an address is required. This will also be saved to the contact in Carbon."
-msgstr "Stripe 将发票通过电子邮件发送给客户，因此需要地址。这也将保存到 Carbon 中的联系人。"
+msgid "Stripe emails the invoice to the customer, so an address is required. This will also be saved to the contact in {BRAND_NAME}."
+msgstr "Stripe 将发票通过电子邮件发送给客户，因此需要地址。这也将保存到 {BRAND_NAME} 中的联系人。"
 
-msgid "Stripe emails the invoices to the customer, so an address is required. It is also saved to the contract's invoice contact in Carbon, if it has one."
-msgstr "Stripe将发票通过电子邮件发送给客户，因此需要地址。如果合同有发票联系人，它也会保存到Carbon中。"
+msgid "Stripe emails the invoices to the customer, so an address is required. It is also saved to the contract's invoice contact in {BRAND_NAME}, if it has one."
+msgstr "Stripe将发票通过电子邮件发送给客户，因此需要地址。如果合同有发票联系人，它也会保存到{BRAND_NAME}中。"
 
-msgid "Stripe has no customer for this Carbon customer yet. Confirming will create one on your connected account."
-msgstr "Stripe还没有为此Carbon客户创建对应的客户。确认将在您连接的帐户上创建一个。"
+msgid "Stripe has no customer for this {BRAND_NAME} customer yet. Confirming will create one on your connected account."
+msgstr "Stripe还没有为此{BRAND_NAME}客户创建对应的客户。确认将在您连接的帐户上创建一个。"
 
-msgid "Stripe has no customer for this Carbon customer yet. Posting will create one on your connected account."
-msgstr "Stripe还没有该Carbon客户对应的客户。过账将在您的连接账户上创建一个。"
+msgid "Stripe has no customer for this {BRAND_NAME} customer yet. Posting will create one on your connected account."
+msgstr "Stripe还没有该{BRAND_NAME}客户对应的客户。过账将在您的连接账户上创建一个。"
 
 msgid "Structure"
 msgstr "结构"
@@ -22565,8 +22562,8 @@ msgstr "采用制造此物料所消耗的原材料中最短的保质期。当产
 msgid "taken"
 msgstr "已采取"
 
-msgid "Taken outside Carbon. You mark each employee complete."
-msgstr "在 Carbon 外进行。您将每位员工标记为完成。"
+msgid "Taken outside {BRAND_NAME}. You mark each employee complete."
+msgstr "在 {BRAND_NAME} 外进行。您将每位员工标记为完成。"
 
 msgid "Takes Effect"
 msgstr "生效"
@@ -22834,8 +22831,20 @@ msgstr "\"{0}\"阶段已完成——其\"{1}\"检查点已通过。"
 msgid "The {0} phases to go live, each ending at a checkpoint. Tick off each task as you complete it."
 msgstr "达成上线的{0}个阶段，每个阶段以检查点结束。当您完成每个任务时，将其勾选。"
 
-msgid "The accent color used across Carbon."
-msgstr "整个 Carbon 中使用的强调色"
+msgid "The {BRAND_NAME} user currently responsible for working this record, set per record and independent of ownership fields like Account Manager or Sales Person."
+msgstr "当前负责处理此记录的 {BRAND_NAME} 用户，按记录设置，独立于所有权字段（如客户经理或销售人员）。"
+
+msgid "The {BRAND_NAME} user responsible for this customer relationship; emails and reminders about this customer route to them."
+msgstr "负责此客户关系的{BRAND_NAME}用户；关于此客户的电子邮件和提醒会路由给他们。"
+
+msgid "The {BRAND_NAME} user responsible for this supplier relationship; emails and reminders about this supplier route to them."
+msgstr "负责此供应商关系的{BRAND_NAME}用户；关于此供应商的电子邮件和提醒会路由给他们。"
+
+msgid "The {BRAND_NAME} user who owns this RFQ; supplier responses and reminders route to them."
+msgstr "拥有此RFQ的{BRAND_NAME}用户；供应商响应和提醒会路由给他们。"
+
+msgid "The accent color used across {BRAND_NAME}."
+msgstr "整个 {BRAND_NAME} 中使用的强调色"
 
 msgid "The account picked for {account} is no longer in the chart."
 msgstr "为 {account} 选择的账户不再在科目表中。"
@@ -22843,8 +22852,8 @@ msgstr "为 {account} 选择的账户不再在科目表中。"
 msgid "The accounting dimension that categorizes items for reporting and analysis."
 msgstr "对物料进行分类以用于报告和分析的会计维度。"
 
-msgid "The accounts Carbon posts to automatically"
-msgstr "Carbon 自动记账的账户"
+msgid "The accounts {BRAND_NAME} posts to automatically"
+msgstr "{BRAND_NAME} 自动记账的账户"
 
 msgid "The action that copies a saved method (its materials, operations, and work instructions) onto a job or quote line."
 msgstr "将保存的方法（其原材料、工序和作业指导书）复制到工单或报价行的操作。"
@@ -22907,26 +22916,14 @@ msgstr "您用来追踪成本的分类"
 msgid "The capital assets you own and depreciate"
 msgstr "您拥有并折旧的固定资产"
 
-msgid "The Carbon user currently responsible for working this record, set per record and independent of ownership fields like Account Manager or Sales Person."
-msgstr "当前负责处理此记录的 Carbon 用户，按记录设置，独立于所有权字段（如客户经理或销售人员）。"
-
-msgid "The Carbon user responsible for this customer relationship; emails and reminders about this customer route to them."
-msgstr "负责此客户关系的Carbon用户；关于此客户的电子邮件和提醒会路由给他们。"
-
-msgid "The Carbon user responsible for this supplier relationship; emails and reminders about this supplier route to them."
-msgstr "负责此供应商关系的Carbon用户；关于此供应商的电子邮件和提醒会路由给他们。"
-
-msgid "The Carbon user who owns this RFQ; supplier responses and reminders route to them."
-msgstr "拥有此RFQ的Carbon用户；供应商响应和提醒会路由给他们。"
-
 msgid "The carrier and service a shipment goes out on, supplying the tracking-URL template that turns a tracking number into a link and the account freight charges post to."
 msgstr "发货所用的承运商和服务，提供跟踪 URL 模板，将跟踪号转换为链接，以及应付运费所过账的账户。"
 
 msgid "The carrier that delivers goods from this supplier, when different from the supplier itself (e.g. supplier sells, FedEx ships)."
 msgstr "从此供应商处交付货物的承运商，当其与供应商本身不同时（例如供应商销售，FedEx 配送）。"
 
-msgid "The carrier's tracking-page URL with {trackingNumber} as a placeholder — Carbon substitutes the actual number when generating links on shipments."
-msgstr "承运商的跟踪页面 URL，以 {trackingNumber} 作为占位符——Carbon 在生成发货链接时替换实际号码。"
+msgid "The carrier's tracking-page URL with {trackingNumber} as a placeholder — {BRAND_NAME} substitutes the actual number when generating links on shipments."
+msgstr "承运商的跟踪页面 URL，以 {trackingNumber} 作为占位符——{BRAND_NAME} 在生成发货链接时替换实际号码。"
 
 msgid "The carriers and methods you ship orders with"
 msgstr "您用来发货订单的承运商和方法"
@@ -22991,8 +22988,8 @@ msgstr "合同在结束日期结束，开票停止。"
 msgid "The contract ends on the end date and does not renew. Planned invoices after it are removed."
 msgstr "合同在期末日期结束，不会续期。之后的已计划发票将被移除。"
 
-msgid "The contract's invoices will be billed to the Stripe customer already linked to this Carbon customer. To change its details, edit it in the Stripe dashboard."
-msgstr "合同的发票将计费给已与此Carbon客户关联的Stripe客户。要更改其详细信息，请在Stripe仪表板中编辑。"
+msgid "The contract's invoices will be billed to the Stripe customer already linked to this {BRAND_NAME} customer. To change its details, edit it in the Stripe dashboard."
+msgstr "合同的发票将计费给已与此{BRAND_NAME}客户关联的Stripe客户。要更改其详细信息，请在Stripe仪表板中编辑。"
 
 msgid "The contractor's expected weekly availability; scheduling uses this as the upper bound when assigning this contractor to operations across the week."
 msgstr "外协人员的预期每周可用性；排程在整周将此外协人员分配给工序时使用此作为上限。"
@@ -23172,8 +23169,8 @@ msgstr "您上传的文件和已完成的映射将会丢失。"
 msgid "the first 3 to 4 weeks"
 msgstr "前3到4周"
 
-msgid "The first day a company keeps its books in Carbon, set once when accounting is set up and never changed; from then on every posting writes a Posted journal."
-msgstr "公司在 Carbon 中开始记账的第一天，在设置会计时设置一次并永不更改；从那时起，每次过账都会生成一张已过账的凭证。"
+msgid "The first day a company keeps its books in {BRAND_NAME}, set once when accounting is set up and never changed; from then on every posting writes a Posted journal."
+msgstr "公司在 {BRAND_NAME} 中开始记账的第一天，在设置会计时设置一次并永不更改；从那时起，每次过账都会生成一张已过账的凭证。"
 
 msgid "The first day of a lease month (day {commencementDay}) where a payment period starts, after the last posted lease run"
 msgstr "租赁月份的第一天（第 {commencementDay} 天），即付款期开始的日期，在最后一次已过账的租赁运行之后"
@@ -23244,11 +23241,11 @@ msgstr "工作流的 Webhook 步骤过账至的 https 地址——拒绝纯 http
 msgid "The human-readable document number (like J000001 or ECO-000001) minted from a sequence and stored on the record, distinct from its internal id."
 msgstr "从编号规则生成并存储在记录上的可读文件编号（如 J000001 或 ECO-000001），与其内部 id 不同。"
 
-msgid "The identifier the customer uses for this part on their POs; Carbon resolves it to our internal Part ID on order import."
-msgstr "客户在其采购单上用于此零件的标识符；Carbon在订单导入时将其解析为我们的内部零件ID。"
+msgid "The identifier the customer uses for this part on their POs; {BRAND_NAME} resolves it to our internal Part ID on order import."
+msgstr "客户在其采购单上用于此零件的标识符；{BRAND_NAME}在订单导入时将其解析为我们的内部零件ID。"
 
-msgid "The identifier the supplier uses for this part on their quotes and invoices; Carbon resolves it to our internal Part ID."
-msgstr "供应商在其报价和发票上用于此零件的标识符；Carbon将其解析为我们的内部零件ID。"
+msgid "The identifier the supplier uses for this part on their quotes and invoices; {BRAND_NAME} resolves it to our internal Part ID."
+msgstr "供应商在其报价和发票上用于此零件的标识符；{BRAND_NAME}将其解析为我们的内部零件ID。"
 
 msgid "The immediate nonconformance task that quarantines affected stock or work before the root cause is known."
 msgstr "在了解根本原因之前隔离受影响库存或工作的直接不合格任务。"
@@ -23286,8 +23283,8 @@ msgstr "该天到期的任务小时数（以截止日期为基础，而不是工
 msgid "The job whose operation this outside-processing line covers; the line's receipt closes the operation against this job."
 msgstr "该外部处理行所涵盖的操作工作；行的收据关闭对该工作的操作。"
 
-msgid "The job's position in its location's schedule queue — a fractional number Carbon computes from the due date and deadline type, not a Low/High rating."
-msgstr "工单在其地点排程队列中的位置——一个 Carbon 根据到期日和截止日期类型计算的小数，而非低/高评级。"
+msgid "The job's position in its location's schedule queue — a fractional number {BRAND_NAME} computes from the due date and deadline type, not a Low/High rating."
+msgstr "工单在其地点排程队列中的位置——一个 {BRAND_NAME} 根据到期日和截止日期类型计算的小数，而非低/高评级。"
 
 msgid "The job's work-in-progress balance moves to this asset now, and completing the job sweeps the rest. Only open jobs that are not linked to a sales order or another asset are listed."
 msgstr "工单的在制品余额现已转移至此资产，完成工单将扫入其余部分。只显示未关联销售订单或其他资产的未结工单。"
@@ -23396,8 +23393,8 @@ msgstr "机器仍在运行。请在停止后分配此时间。"
 msgid "The machines, cells, and stations your work runs through"
 msgstr "您的工作运行所经过的机器、单元和工作站"
 
-msgid "The master data to set up when first configuring Carbon, grouped by module. Mark each one configured as you go."
-msgstr "首次配置 Carbon 时要设置的主数据，按模块分组。配置每个模块时进行标记。"
+msgid "The master data to set up when first configuring {BRAND_NAME}, grouped by module. Mark each one configured as you go."
+msgstr "首次配置 {BRAND_NAME} 时要设置的主数据，按模块分组。配置每个模块时进行标记。"
 
 msgid "The material is purchased from a supplier for that specific order, rather than made or pulled from stock."
 msgstr "原材料是从供应商购买用于该特定订单，而不是制造或从库存中提取。"
@@ -23525,11 +23522,11 @@ msgstr "该步骤的零件在播放期间进入到位所走的路径；从模型
 msgid "The payment from the effective date. Escalation still steps up on each anniversary of the commencement"
 msgstr "自生效日期起的付款。在开始日期的每个周年日，升级仍会增加"
 
-msgid "The people on the Carbon side who will run your implementation, and how to reach them."
-msgstr "Carbon 方面将运行您的实施的人员，以及如何联系他们。"
+msgid "The people on the {BRAND_NAME} side who will run your implementation, and how to reach them."
+msgstr "{BRAND_NAME} 方面将运行您的实施的人员，以及如何联系他们。"
 
-msgid "The people on your team and their access to Carbon"
-msgstr "您团队中的人员及其对Carbon的访问权限"
+msgid "The people on your team and their access to {BRAND_NAME}"
+msgstr "您团队中的人员及其对{BRAND_NAME}的访问权限"
 
 msgid "The per-company counter behind a document type's readable number, assembling the prefix, the zero-padded next value, and the suffix, and advancing as each document is created."
 msgstr "每家公司的文件类型可读编号后的计数器,组合前缀、零填充的下一个值和后缀,并在创建每个文件时前进。"
@@ -23659,8 +23656,8 @@ msgstr "剩余的 {0} {1} 将不再被期望。在途供应和MRP将停止计算
 msgid "The request body sent verbatim with a JSON content type after workflow variables inside it are substituted, on the methods that carry one."
 msgstr "在替换其中的工作流变量后，使用 JSON 内容类型逐字发送的请求体，在提供请求体的方法上。"
 
-msgid "The residual WIP a job has left at close, swept to a Production Variance account — the only variance Carbon books for a job."
-msgstr "工作在关闭时留下的残余在制品，扫至生产差异帐户 - Carbon为工作记录的唯一差异。"
+msgid "The residual WIP a job has left at close, swept to a Production Variance account — the only variance {BRAND_NAME} books for a job."
+msgstr "工作在关闭时留下的残余在制品，扫至生产差异帐户 - {BRAND_NAME}为工作记录的唯一差异。"
 
 msgid "The response from Onshape was missing required parameters. Check the private app's redirect URL, then save the integration settings again."
 msgstr "来自 Onshape 的响应缺少必需的参数。检查私有应用程序的重定向 URL，然后再次保存集成设置。"
@@ -23818,8 +23815,8 @@ msgstr "接收此RFQ的供应商；每个都在RFQ上获得自己的行，他们
 msgid "The surface finishes available on your materials"
 msgstr "你的原材料可用的表面处理工艺"
 
-msgid "The system a company uses to manage its people's logins — Okta, Entra ID, or Google Workspace — which vouches for who someone is when they sign in to Carbon via SSO."
-msgstr "公司用来管理员工登录的系统——Okta、Entra ID 或 Google Workspace——当员工通过 SSO 登录 Carbon 时,它会证明身份。"
+msgid "The system a company uses to manage its people's logins — Okta, Entra ID, or Google Workspace — which vouches for who someone is when they sign in to {BRAND_NAME} via SSO."
+msgstr "公司用来管理员工登录的系统——Okta、Entra ID 或 Google Workspace——当员工通过 SSO 登录 {BRAND_NAME} 时,它会证明身份。"
 
 msgid "The system passes every in-scope acceptance test in your configured system, with your data; the data is validated; and you sign off. Then go-live."
 msgstr "系统在您配置的系统中通过了每个范围内的验收测试,使用您的数据;数据已验证;您签署确认。然后上线。"
@@ -23863,8 +23860,8 @@ msgstr "将工作发送给此供应商进行此工艺和取回之间的典型天
 msgid "The unique identifier on this physical unit; one row per serial, quantity is always 1."
 msgstr "此物理单元的唯一标识符；每个序列号一行，数量始终为1。"
 
-msgid "The unit a routing time is expressed in, such as Hours/Piece or Total Hours, telling Carbon whether the time scales with quantity or is fixed per run."
-msgstr "路线工时的表达单位,例如小时/件或总小时数,告诉Carbon时间是否随数量扩展或每次运行固定。"
+msgid "The unit a routing time is expressed in, such as Hours/Piece or Total Hours, telling {BRAND_NAME} whether the time scales with quantity or is fixed per run."
+msgstr "路线工时的表达单位,例如小时/件或总小时数,告诉{BRAND_NAME}时间是否随数量扩展或每次运行固定。"
 
 msgid "The unit and its rates are fixed once the agreement is activated."
 msgstr "协议激活后，单位及其费率被固定。"
@@ -24034,6 +24031,9 @@ msgstr "这些单位被视为销售。激活时注销每一个单位并过账其
 msgid "They are not in your chart, but documents or journals use them. Pick the account in your chart that replaces each one."
 msgstr "这些账户不在你的会计科目表中，但文档或凭证使用了它们。从你的会计科目表中选择替代每一个的账户。"
 
+msgid "This {BRAND_NAME} instance is missing its Onshape OAuth credentials. Ask an administrator to set them."
+msgstr "此 {BRAND_NAME} 实例缺少 Onshape 的 OAuth 凭据。请让管理员进行设置。"
+
 msgid "this ability"
 msgstr "此能力"
 
@@ -24054,17 +24054,14 @@ msgstr "无法完成此备份。"
 msgid "This backup hasn't been checked yet. Any differences are found when the restore runs."
 msgstr "此备份尚未检查。还原运行时将发现任何差异。"
 
-msgid "This browser does not support push notifications. On iPhone or iPad, add Carbon to the Home Screen first."
-msgstr "此浏览器不支持推送通知。在 iPhone 或 iPad 上,请先将 Carbon 添加到主屏幕。"
+msgid "This browser does not support push notifications. On iPhone or iPad, add {BRAND_NAME} to the Home Screen first."
+msgstr "此浏览器不支持推送通知。在 iPhone 或 iPad 上,请先将 {BRAND_NAME} 添加到主屏幕。"
 
-msgid "This cannot be changed later — {integrationName} allows only one connected accounting system, so the choice decides what Carbon is permitted to do. To switch, you would uninstall and reconnect."
-msgstr "这无法在之后更改 — {integrationName} 仅允许一个连接的会计系统，因此您的选择决定了 Carbon 被允许执行的操作。要切换，您需要卸载并重新连接。"
+msgid "This cannot be changed later — {integrationName} allows only one connected accounting system, so the choice decides what {BRAND_NAME} is permitted to do. To switch, you would uninstall and reconnect."
+msgstr "这无法在之后更改 — {integrationName} 仅允许一个连接的会计系统，因此您的选择决定了 {BRAND_NAME} 被允许执行的操作。要切换，您需要卸载并重新连接。"
 
 msgid "This cannot be undone."
 msgstr "此操作无法撤销。"
-
-msgid "This Carbon instance is missing its Onshape OAuth credentials. Ask an administrator to set them."
-msgstr "此 Carbon 实例缺少 Onshape 的 OAuth 凭据。请让管理员进行设置。"
 
 msgid "This change notice is being implemented, so its changes are locked. Reopen it to edit."
 msgstr "此变更通知正在实施中，因此其更改已锁定。重新打开它进行编辑。"
@@ -24124,15 +24121,15 @@ msgstr "这个检验计划"
 msgid "This integration isn't available yet"
 msgstr "此集成尚不可用"
 
-#. placeholder {0}: company?.name ?? "Carbon"
+#. placeholder {0}: company?.name ?? BRAND_NAME
 msgid "This invitation to join {0} has expired. You can request a new invite to be sent to your email."
 msgstr "加入 {0} 的邀请已过期。您可以请求将新邀请发送到您的电子邮件。"
 
 msgid "This invoice has no usable due date — choose one for Stripe."
 msgstr "此发票没有可用的截止日期——为Stripe选择一个。"
 
-msgid "This invoice will be billed to the Stripe customer already linked to this Carbon customer. To change its details, edit it in the Stripe dashboard."
-msgstr "此发票将计费给已链接到此 Carbon 客户的 Stripe 客户。要更改其详细信息，请在 Stripe 仪表板中编辑它。"
+msgid "This invoice will be billed to the Stripe customer already linked to this {BRAND_NAME} customer. To change its details, edit it in the Stripe dashboard."
+msgstr "此发票将计费给已链接到此 {BRAND_NAME} 客户的 Stripe 客户。要更改其详细信息，请在 Stripe 仪表板中编辑它。"
 
 msgid "This is a controlled environment, so an authenticator app is required."
 msgstr "这是受控环境，因此需要身份验证器应用。"
@@ -24872,8 +24869,8 @@ msgstr "培训未记录"
 msgid "Training Plan"
 msgstr "培训计划"
 
-msgid "Training taken outside Carbon, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
-msgstr "在 Carbon 外进行的培训，例如供应商课程。该作业仅有名称。管理员将每位员工标记为完成，并可附加其证书。"
+msgid "Training taken outside {BRAND_NAME}, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
+msgstr "在 {BRAND_NAME} 外进行的培训，例如供应商课程。该作业仅有名称。管理员将每位员工标记为完成，并可附加其证书。"
 
 msgid "Training video"
 msgstr ""
@@ -26228,8 +26225,8 @@ msgstr "加权平均剩余期限（年）"
 msgid "Welcome back, {name}."
 msgstr "欢迎回来，{name}。"
 
-msgid "Welcome to Carbon"
-msgstr "欢迎来到 Carbon"
+msgid "Welcome to {BRAND_NAME}"
+msgstr "欢迎来到 {BRAND_NAME}"
 
 msgid "Welcome, {companyName}"
 msgstr "欢迎，{companyName}"
@@ -26246,8 +26243,8 @@ msgstr "这是什么类别的故障 — 机械、电气、软件、操作员、�
 msgid "What changes day to day"
 msgstr "每天变化的内容"
 
-msgid "What changes when you move to Carbon, and roughly what it's worth. Estimates, not a forecast."
-msgstr "当您切换到 Carbon 时会发生什么变化，以及大致价值。估计值，不是预测。"
+msgid "What changes when you move to {BRAND_NAME}, and roughly what it's worth. Estimates, not a forecast."
+msgstr "当您切换到 {BRAND_NAME} 时会发生什么变化，以及大致价值。估计值，不是预测。"
 
 msgid "What data"
 msgstr "什么数据"
@@ -26360,6 +26357,9 @@ msgstr "超出范围的内容"
 msgid "When"
 msgstr "何时"
 
+msgid "When {BRAND_NAME} committed to having the goods arrive; combined with the shipping method's transit days, this drives Ship Date back-calc."
+msgstr ""
+
 msgid "When {name} changes"
 msgstr "当 {name} 更改时"
 
@@ -26374,9 +26374,6 @@ msgstr "当序列号或批次过期时,以及之后使用时会发生什么 — 
 
 msgid "When an invoice is created"
 msgstr "发票创建时"
-
-msgid "When Carbon committed to having the goods arrive; combined with the shipping method's transit days, this drives Ship Date back-calc."
-msgstr "货物的承诺到达日期；结合发货方式的运输天数，这驱动发货日期的反向计算。"
 
 msgid "When deferred, accrued and lease-interest revenue will be recognized"
 msgstr "当递延收入、应计收入和租赁利息收入被确认时"
@@ -26414,8 +26411,8 @@ msgstr "打开时，此价格覆盖适用于匹配的订单；关闭但不删除
 msgid "When on, this rule fires for every target of its type. Assignment rows are ignored but preserved."
 msgstr "启用时，此规则对其类型的每个目标都会触发。分配行被忽略但保留。"
 
-msgid "When supplier responses are expected back; suppliers see this date on the RFQ portal and Carbon stops accepting late responses after it (configurable)."
-msgstr "何时预期供应商回复;供应商在RFQ门户上看到该日期,Carbon在之后停止接受迟到的回复(可配置)。"
+msgid "When supplier responses are expected back; suppliers see this date on the RFQ portal and {BRAND_NAME} stops accepting late responses after it (configurable)."
+msgstr "何时预期供应商回复;供应商在RFQ门户上看到该日期,{BRAND_NAME}在之后停止接受迟到的回复(可配置)。"
 
 msgid "When the buyer asked for the goods; the supplier may promise something else on Promised Date and post something else again on Delivery Date."
 msgstr "当采购员要求货物时；供应商可能在承诺日期承诺其他内容，在交货日期再过账其他内容。"
@@ -26546,11 +26543,11 @@ msgstr "你今天的位置"
 msgid "Where you want to grow"
 msgstr "你想要成长的地方"
 
+msgid "Whether {BRAND_NAME} follows each unit (Serial), each lot (Batch), the quantity (Inventory), or no tracking (Non-Inventory)."
+msgstr "{BRAND_NAME} 是否跟踪每个件(序列号)、每个生产批次(批次)、数量(库存管理)或不跟踪(非库存)。"
+
 msgid "Whether Amount is interpreted as a percentage of the line price or as a fixed currency amount."
 msgstr "金额是按行价格的百分比解释，还是按固定货币金额解释。"
-
-msgid "Whether Carbon follows each unit (Serial), each lot (Batch), the quantity (Inventory), or no tracking (Non-Inventory)."
-msgstr "Carbon 是否跟踪每个件(序列号)、每个生产批次(批次)、数量(库存管理)或不跟踪(非库存)。"
 
 msgid "Whether each unit is treated as a rental or a sale is decided when the agreement is activated, from the terms and each unit's inputs."
 msgstr "协议激活时，根据条款和单位的输入，决定每个单位是按租赁还是销售处理。"
@@ -26930,14 +26927,14 @@ msgstr "您收到了此项目"
 msgid "You received this lot"
 msgstr "你收到了这批货"
 
-msgid "You're live on Carbon"
-msgstr "您已在 Carbon 上线"
+msgid "You're live on {BRAND_NAME}"
+msgstr "您已在 {BRAND_NAME} 上线"
 
 msgid "You're one step away from your workspace."
 msgstr "您离您的工作区只有一步之遥。"
 
-msgid "You're setting Carbon up yourself, at your own pace"
-msgstr "您正在按照自己的节奏自行设置 Carbon"
+msgid "You're setting {BRAND_NAME} up yourself, at your own pace"
+msgstr "您正在按照自己的节奏自行设置 {BRAND_NAME}"
 
 msgid "You've been clocked in for {hoursElapsed} hours. Did you forget to clock out?"
 msgstr "你已打卡{hoursElapsed}小时。你忘记收工了吗?"
@@ -27035,11 +27032,11 @@ msgstr "你的会话因不活动而被已锁定。"
 msgid "Your source data is accessible and reasonably clean"
 msgstr "您的源数据可访问且相对干净"
 
-msgid "Your team can free up time to learn Carbon and load your data"
-msgstr "您的班组可以腾出时间来学习 Carbon 并加载您的数据"
+msgid "Your team can free up time to learn {BRAND_NAME} and load your data"
+msgstr "您的班组可以腾出时间来学习 {BRAND_NAME} 并加载您的数据"
 
-msgid "Your team leads learn Carbon first using the in-app guides and Academy, then bring everyone else up to speed."
-msgstr "您的班组负责人首先使用应用内指南和学院学习 Carbon，然后让其他人都跟上进度。"
+msgid "Your team leads learn {BRAND_NAME} first using the in-app guides and Academy, then bring everyone else up to speed."
+msgstr "您的班组负责人首先使用应用内指南和学院学习 {BRAND_NAME}，然后让其他人都跟上进度。"
 
 msgid "Your team, structure, and access."
 msgstr "您的班组、结构和访问权限。"

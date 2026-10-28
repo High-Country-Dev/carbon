@@ -4,14 +4,14 @@
 
 import { CONTROLLED_ENVIRONMENT } from "@carbon/auth";
 import { getAuthSession } from "@carbon/auth/session.server";
-import { Button, Heading, VStack } from "@carbon/react";
-import { redirect } from "@carbon/utils";
-import { Trans, useLingui } from "@lingui/react/macro";
+import { BrandWordmark, Button, Heading, VStack } from "@carbon/react";
+import { BRAND_NAME, redirect } from "@carbon/utils";
+import { Trans } from "@lingui/react/macro";
 import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 import { path } from "~/utils/path";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Carbon | Finish setup" }];
+  return [{ title: `${BRAND_NAME} | Finish setup` }];
 };
 
 // A terminal screen for an authenticated user who has no company yet — MES does
@@ -28,21 +28,14 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function SetupRequiredRoute() {
-  const { t } = useLingui();
-
   return (
     <>
       <div className="flex justify-center mb-8">
-        <img
-          src={CONTROLLED_ENVIRONMENT ? "/flag.png" : "/carbon-mark-light.svg"}
-          alt={t`Carbon Logo`}
-          className="w-24 dark:hidden"
-        />
-        <img
-          src={CONTROLLED_ENVIRONMENT ? "/flag.png" : "/carbon-mark-dark.svg"}
-          alt={t`Carbon Logo`}
-          className="w-24 hidden dark:block"
-        />
+        {CONTROLLED_ENVIRONMENT ? (
+          <img src="/flag.png" alt={BRAND_NAME} className="w-24" />
+        ) : (
+          <BrandWordmark size="lg" />
+        )}
       </div>
       <div className="rounded-lg p-8 w-[380px]">
         <VStack spacing={4} className="items-center justify-center text-center">
@@ -52,7 +45,7 @@ export default function SetupRequiredRoute() {
           <p className="text-muted-foreground tracking-tight text-sm">
             <Trans>
               Your account isn't part of a company yet. Complete onboarding in
-              the Carbon ERP to continue.
+              the {BRAND_NAME} ERP to continue.
             </Trans>
           </p>
           <Button size="lg" className="w-full" asChild>

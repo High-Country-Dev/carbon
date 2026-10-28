@@ -17,6 +17,7 @@ import {
 } from "@carbon/documents/template";
 import { getLogger } from "@carbon/logger";
 import type { JSONContent } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { renderToStream } from "@react-pdf/renderer";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
@@ -378,7 +379,7 @@ export async function renderPurchaseReturnOrderPdf(
         locale={locale}
         currencyDecimals={currencyDecimals}
         meta={{
-          author: "Carbon",
+          author: BRAND_NAME,
           keywords: "supplier return, purchase return order",
           subject: "Return to Supplier"
         }}

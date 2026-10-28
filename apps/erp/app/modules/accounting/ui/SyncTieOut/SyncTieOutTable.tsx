@@ -3,7 +3,7 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { cn } from "@carbon/react";
-import { formatDate } from "@carbon/utils";
+import { BRAND_NAME, formatDate } from "@carbon/utils";
 import { useLingui } from "@lingui/react/macro";
 import { useLocale } from "@react-aria/i18n";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -164,7 +164,7 @@ const SyncTieOutTable = memo(
         },
         {
           accessorKey: "carbonPostedAmount",
-          header: t`Carbon Posted`,
+          header: t`${BRAND_NAME} Posted`,
           cell: ({ row }) => formatAmount(row.original.carbonPostedAmount),
           meta: { mobile: "P2", icon: <LuCircleDollarSign /> }
         },

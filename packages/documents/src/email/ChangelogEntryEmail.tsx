@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import {
   Body,
   Container,
@@ -103,7 +104,7 @@ export const ChangelogEntryEmail = ({
             className={`text-[12px] leading-[18px] m-0 nf-fallback ${themeClasses.mutedText}`}
           >
             You&apos;re receiving this email because the changelog newsletter is
-            on in your Carbon account.{" "}
+            on in your {BRAND_NAME} account.{" "}
             <Link
               href={manageUrl}
               className={`${themeClasses.mutedText} underline nf-fallback`}

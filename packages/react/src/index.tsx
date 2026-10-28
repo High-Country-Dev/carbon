@@ -49,6 +49,7 @@ import {
   SheetSectionLabel,
   sheetRowClassName
 } from "./BottomSheet";
+import { BrandWordmark } from "./BrandWordmark";
 import type { ButtonProps } from "./Button";
 import { Button, buttonVariants } from "./Button";
 import { CarbonPulse } from "./CarbonPulse";
@@ -477,6 +478,7 @@ export {
   BottomSheetHeader,
   BottomSheetTitle,
   BottomSheetTrigger,
+  BrandWordmark,
   Button,
   buttonVariants,
   Calendar,

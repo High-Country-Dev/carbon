@@ -54,8 +54,8 @@ msgstr "(निष्क्रिय खाता)"
 msgid "(Inactive)"
 msgstr "(निष्क्रिय)"
 
-msgid "(mapped to more than one Carbon account)"
-msgstr "(एक से अधिक Carbon खातों में मैप किया गया)"
+msgid "(mapped to more than one {BRAND_NAME} account)"
+msgstr "(एक से अधिक {BRAND_NAME} खातों में मैप किया गया)"
 
 msgid "(not an Equity posting account)"
 msgstr "(इक्विटी पोस्टिंग खाता नहीं है)"
@@ -117,8 +117,8 @@ msgid "{0, plural, one {# week} other {# weeks}}"
 msgstr "{0, plural, one {# सप्ताह} other {# सप्ताह}}"
 
 #. placeholder {0}: check.count
-msgid "{0, plural, one {Complete or cancel the # job that took costs before Carbon recorded them.} other {Complete or cancel the # jobs that took costs before Carbon recorded them.}}"
-msgstr "{0, plural, one {# जॉब को पूर्ण करें या रद्द करें जिस पर Carbon के लागत दर्ज करने से पहले लागत लगी थी।} other {# जॉबें को पूर्ण करें या रद्द करें जिन पर Carbon के लागत दर्ज करने से पहले लागत लगी थी।}}"
+msgid "{0, plural, one {Complete or cancel the # job that took costs before {BRAND_NAME} recorded them.} other {Complete or cancel the # jobs that took costs before {BRAND_NAME} recorded them.}}"
+msgstr "{0, plural, one {# जॉब को पूर्ण करें या रद्द करें जिस पर {BRAND_NAME} के लागत दर्ज करने से पहले लागत लगी थी।} other {# जॉबें को पूर्ण करें या रद्द करें जिन पर {BRAND_NAME} के लागत दर्ज करने से पहले लागत लगी थी।}}"
 
 #. placeholder {0}: Number(lease.assetCount)
 msgid "{0, plural, one {for # asset} other {for # assets}}"
@@ -423,8 +423,8 @@ msgid "{0}-Year"
 msgstr "{0}-वर्ष"
 
 #. placeholder {0}: blocker.description
-msgid "{0}: the payment due {dueDate} is marked paid outside Carbon, but nothing would relieve it from the lease liability. Set Invoice From on or before {dueDate} so it is invoiced."
-msgstr "{0}: {dueDate} को देय भुगतान को Carbon के बाहर भुगतान के रूप में चिह्नित किया गया है, लेकिन कुछ भी इसे पट्टा देयता से राहत नहीं देगा। इसे चालान किया जाए, इसके लिए {dueDate} को या उससे पहले चालान स्रोत सेट करें।"
+msgid "{0}: the payment due {dueDate} is marked paid outside {BRAND_NAME}, but nothing would relieve it from the lease liability. Set Invoice From on or before {dueDate} so it is invoiced."
+msgstr "{0}: {dueDate} को देय भुगतान को {BRAND_NAME} के बाहर भुगतान के रूप में चिह्नित किया गया है, लेकिन कुछ भी इसे पट्टा देयता से राहत नहीं देगा। इसे चालान किया जाए, इसके लिए {dueDate} को या उससे पहले चालान स्रोत सेट करें।"
 
 #. placeholder {0}: line.description
 msgid "{0}: the treatment cannot be worked out. {message}"
@@ -472,11 +472,87 @@ msgstr "{apOverduePct}% देय राशि का"
 msgid "{arOverduePct}% of receivables"
 msgstr "प्राप्य राशि का {arOverduePct}%"
 
-msgid "{asset}: the payment due {dueDate} is Skipped (paid outside Carbon), so nothing would take it off the lease liability. Set Invoice From on or before {dueDate}."
-msgstr "{asset}: {dueDate} को देय भुगतान छोड़ा गया है (Carbon के बाहर भुगतान किया गया), इसलिए कुछ भी इसे पट्टा देयता से दूर नहीं करेगा। {dueDate} को या उससे पहले चालान स्रोत सेट करें।"
+msgid "{asset}: the payment due {dueDate} is Skipped (paid outside {BRAND_NAME}), so nothing would take it off the lease liability. Set Invoice From on or before {dueDate}."
+msgstr "{asset}: {dueDate} को देय भुगतान छोड़ा गया है ({BRAND_NAME} के बाहर भुगतान किया गया), इसलिए कुछ भी इसे पट्टा देयता से दूर नहीं करेगा। {dueDate} को या उससे पहले चालान स्रोत सेट करें।"
 
 msgid "{assetCount} Assets"
 msgstr "{assetCount} अचल संपत्तियाँ"
+
+msgid "{BRAND_NAME}"
+msgstr ""
+
+msgid "{BRAND_NAME} + you"
+msgstr "{BRAND_NAME} + आप"
+
+msgid "{BRAND_NAME} account"
+msgstr ""
+
+msgid "{BRAND_NAME} column"
+msgstr ""
+
+msgid "{BRAND_NAME} is configured the way your company runs, your data is loaded, and your team is confident using it. When that's true, you're ready to go live."
+msgstr "{BRAND_NAME} को आपकी कंपनी के तरीके से कॉन्फ़िगर किया गया है, आपका डेटा लोड किया गया है, और आपकी टीम इसे उपयोग करने में आत्मविश्वास रखती है। जब यह सच हो, तो आप लाइव जाने के लिए तैयार हैं।"
+
+msgid "{BRAND_NAME} leads"
+msgstr ""
+
+msgid "{BRAND_NAME} only"
+msgstr ""
+
+msgid "{BRAND_NAME} opens this account from its open items. The amount here is only compared on Migration Clearing."
+msgstr "{BRAND_NAME} इस खाते को अपनी खुली वस्तुओं से खोलता है। यहां की राशि की तुलना केवल माइग्रेशन क्लीयरिंग पर की जाती है।"
+
+msgid "{BRAND_NAME} Posted"
+msgstr "{BRAND_NAME} पोस्ट किया गया"
+
+msgid "{BRAND_NAME} posts every document dated on or after this day. Choose the first day of the current period or of one of the 3 periods before it."
+msgstr "{BRAND_NAME} इस दिन पर या उसके बाद की तारीख वाले प्रत्येक दस्तावेज़ को पोस्ट करता है। वर्तमान अवधि के पहले दिन या इससे पहले की 3 अवधियों में से एक को चुनें।"
+
+msgid "{BRAND_NAME} posts the opening journal, posts every journal dated on or after the cutover date, and closes the periods before it."
+msgstr "{BRAND_NAME} खुली जर्नल पोस्ट करता है, कटओवर तारीख पर या उसके बाद की तारीख वाली प्रत्येक जर्नल पोस्ट करता है, और इससे पहले की अवधि को बंद करता है।"
+
+msgid "{BRAND_NAME} starts every company on its default chart. Import your own chart now, before the trial balance, which matches accounts by number. The import needs two files: your chart, and the default accounts template filled with your account numbers. To keep{BRAND_NAME}'s chart, continue."
+msgstr ""
+
+msgid "{BRAND_NAME} value"
+msgstr "{BRAND_NAME} मान"
+
+msgid "{BRAND_NAME} Value"
+msgstr ""
+
+#. placeholder {0}: unmapped.length
+msgid "{BRAND_NAME} will use AI to guess a provider account for each of your {0} unmapped accounts. Suggestions are a starting point — you can review them before anything is saved."
+msgstr ""
+
+msgid "{BRAND_NAME} writes their journals when you enable accounting, with today's accounts and costs."
+msgstr "जब आप लेखांकन सक्षम करते हैं तो {BRAND_NAME} उनकी जर्नल आज के खातों और लागतों के साथ लिखता है।"
+
+msgid "{BRAND_NAME}-only"
+msgstr ""
+
+msgid "{BRAND_NAME}-only · fill in real targets for this customer. They see the values, locked."
+msgstr "{BRAND_NAME}-only · इस ग्राहक के लिए वास्तविक लक्ष्य भरें। वे मान देख सकते हैं, लॉक किए गए।"
+
+msgid "{BRAND_NAME}-only · the customer sees this text, locked."
+msgstr "{BRAND_NAME}-only · ग्राहक यह पाठ देखता है, लॉक किया गया।"
+
+msgid "{BRAND_NAME}'s default passwordless sign-in: an emailed one-time link that signs you in when opened, with no password to remember or leak."
+msgstr "{BRAND_NAME} की डिफ़ॉल्ट पासवर्ड रहित साइन-इन: ईमेल से भेजा गया एक बार इस्तेमाल होने वाला लिंक जो खोलने पर आपको साइन इन कर देता है, याद रखने या लीक होने के लिए कोई पासवर्ड नहीं।"
+
+msgid "{BRAND_NAME}'s name for a bill of material and bill of process (routing): the components plus the operations that make a part."
+msgstr "{BRAND_NAME} का BOM और प्रक्रिया सूची (रूटिंग) के लिए नाम: पार्ट्स बनाने वाले घटक और ऑपरेशन।"
+
+msgid "{BRAND_NAME}'s planning run nets supply against demand and explodes methods, surfacing shortfalls — but it creates no orders itself."
+msgstr "{BRAND_NAME} की योजना आपूर्ति को मांग के विरुद्ध नेट करती है और विधि को विस्तृत करती है, कमियों को उजागर करती है — लेकिन यह स्वयं कोई आदेश नहीं बनाती।"
+
+msgid "{BRAND_NAME}'s production order — one job builds a quantity of one item from its own copied method and routing."
+msgstr ""
+
+msgid "{BRAND_NAME}'s shop-floor app where operators run operations, report quantities, issue material, and log time against released jobs in real time."
+msgstr "{BRAND_NAME} का शॉप फ्लोर ऐप जहां ऑपरेटर ऑपरेशन चलाते हैं, मात्रा की रिपोर्ट करते हैं, सामग्री निर्गम करते हैं, और जारी जॉब के विरुद्ध रीयल टाइम में समय दर्ज करते हैं।"
+
+msgid "{BRAND_NAME}'s single record for anything with a part number — Part, Material, Tool, Service, Consumable, or Fixture — that jobs, methods, orders, and inventory all point at."
+msgstr "{BRAND_NAME} का एकल रिकॉर्ड किसी भी चीज़ के लिए जिसका पार्ट नंबर है — पार्ट, सामग्री, टूल, सेवा, उपभोग्य सामग्री, या फिक्स्चर — जिस पर जॉब, विधि, आदेश और इन्वेंटरी सभी इंगित करते हैं।"
 
 msgid "{chainLabel}. Consider pointing this part directly at the final successor."
 msgstr "{chainLabel}. इस भाग को सीधे अंतिम उत्तराधिकारी की ओर इंगित करने पर विचार करें।"
@@ -526,8 +602,8 @@ msgstr "{created} बनाया गया, {updated} अपडेट किय
 msgid "{days}d"
 msgstr "{days}d"
 
-msgid "{delegatedTo} posts this to your ledger, so Carbon doesn't push it. Your saved choice is kept in case that changes."
-msgstr "{delegatedTo} यह आपके लेजर में पोस्ट करता है, इसलिए Carbon इसे पुश नहीं करता है। आपकी सहेजी गई पसंद को इस बात के मामले में रखा जाता है कि यह बदल जाए।"
+msgid "{delegatedTo} posts this to your ledger, so {BRAND_NAME} doesn't push it. Your saved choice is kept in case that changes."
+msgstr "{delegatedTo} यह आपके लेजर में पोस्ट करता है, इसलिए {BRAND_NAME} इसे पुश नहीं करता है। आपकी सहेजी गई पसंद को इस बात के मामले में रखा जाता है कि यह बदल जाए।"
 
 msgid "{discount} off"
 msgstr "{discount} छूट"
@@ -579,8 +655,8 @@ msgstr "{label} को दस्तावेज़, जर्नल या ड�
 msgid "{leadTime, plural, one {# day} other {# days}}"
 msgstr "{leadTime, plural, one {# दिन} other {# दिन}}"
 
-msgid "{legacyDocumentCount, plural, one {# document posted before Carbon kept journals has no journal.} other {# documents posted before Carbon kept journals have no journal.}}"
-msgstr "{legacyDocumentCount, plural, one {# दस्तावेज़ को Carbon द्वारा जर्नल कीप करने से पहले पोस्ट किया गया था और इसका कोई जर्नल नहीं है।} other {# दस्तावेज़ को Carbon द्वारा जर्नल कीप करने से पहले पोस्ट किए गए थे और इनके पास कोई जर्नल नहीं है।}}"
+msgid "{legacyDocumentCount, plural, one {# document posted before {BRAND_NAME} kept journals has no journal.} other {# documents posted before {BRAND_NAME} kept journals have no journal.}}"
+msgstr "{legacyDocumentCount, plural, one {# दस्तावेज़ को {BRAND_NAME} द्वारा जर्नल कीप करने से पहले पोस्ट किया गया था और इसका कोई जर्नल नहीं है।} other {# दस्तावेज़ को {BRAND_NAME} द्वारा जर्नल कीप करने से पहले पोस्ट किए गए थे और इनके पास कोई जर्नल नहीं है।}}"
 
 msgid "{linesCount, plural, one {# line} other {# lines}}"
 msgstr "{linesCount, plural, one {# लाइन} other {# लाइनें}}"
@@ -713,8 +789,8 @@ msgstr "{state} · {syncedAgo} सिंक हुआ"
 msgid "{termMonths, plural, one {# month} other {# months}}"
 msgstr "{termMonths, plural, one {# महीना} other {# महीने}}"
 
-msgid "{total} phases to get your company live on Carbon. Each one ends at a checkpoint."
-msgstr "आपकी कंपनी को Carbon पर लाइव करने के लिए {total} चरण। प्रत्येक एक चेकपॉइंट पर समाप्त होता है।"
+msgid "{total} phases to get your company live on {BRAND_NAME}. Each one ends at a checkpoint."
+msgstr "आपकी कंपनी को {BRAND_NAME} पर लाइव करने के लिए {total} चरण। प्रत्येक एक चेकपॉइंट पर समाप्त होता है।"
 
 msgid "{total} phases to go live"
 msgstr "{total} चरण लाइव होने के लिए"
@@ -961,6 +1037,9 @@ msgstr "90 दिन"
 msgid "A \"must match\" rule on this process blocks these from sharing a batch"
 msgstr "इस प्रक्रिया पर एक \"मेल खाना चाहिए\" नियम इन्हें एक बैच साझा करने से रोकता है"
 
+msgid "A {BRAND_NAME}-run data migration — you load your own data"
+msgstr ""
+
 msgid "A 3D model the operator can turn around"
 msgstr "एक 3D मॉडल जिसे ऑपरेटर घुमा सकता है"
 
@@ -969,9 +1048,6 @@ msgstr "ऑपरेटर बनाए जाने पर एक 4-अंक�
 
 msgid "A batch needs at least one operation. To break up the whole batch, use Dissolve instead."
 msgstr "बैच को कम से कम एक ऑपरेशन की आवश्यकता है। पूरे बैच को विभाजित करने के लिए, इसके बजाय विघटन का उपयोग करें।"
-
-msgid "A Carbon-run data migration — you load your own data"
-msgstr "एक कार्बन-चलाया गया डेटा माइग्रेशन — आप अपना डेटा लोड करते हैं"
 
 msgid "A change notice tracks a controlled engineering or manufacturing change through review and implementation."
 msgstr "एक परिवर्तन सूचना समीक्षा और कार्यान्वयन के माध्यम से एक नियंत्रित इंजीनियरिंग या विनिर्माण परिवर्तन को ट्रैक करती है।"
@@ -1054,8 +1130,8 @@ msgstr "किसी ग्राहक की स्थिति में प�
 msgid "A customer's type changes"
 msgstr "किसी ग्राहक के प्रकार में परिवर्तन"
 
-msgid "A date on a contract moved into Carbon mid-term: billing periods that end on or before it were invoiced elsewhere, so they read Billed Externally and are never invoiced."
-msgstr "एक अनुबंध पर एक दिनांक जो Carbon में मध्य-अवधि में स्थानांतरित किया गया: बिलिंग अवधि जो इसके पर या पहले समाप्त होती हैं, उन्हें अन्य स्थान पर चालान किया गया था, इसलिए वे बाहरी रूप से चालान किया गया दिखाई देते हैं और कभी चालान नहीं किए जाते हैं।"
+msgid "A date on a contract moved into {BRAND_NAME} mid-term: billing periods that end on or before it were invoiced elsewhere, so they read Billed Externally and are never invoiced."
+msgstr "एक अनुबंध पर एक दिनांक जो {BRAND_NAME} में मध्य-अवधि में स्थानांतरित किया गया: बिलिंग अवधि जो इसके पर या पहले समाप्त होती हैं, उन्हें अन्य स्थान पर चालान किया गया था, इसलिए वे बाहरी रूप से चालान किया गया दिखाई देते हैं और कभी चालान नहीं किए जाते हैं।"
 
 msgid "A dated change to an active contract, with a reason and a contract type: changed lines end and their replacements start from the change date, prorated by day, or from the next billing period."
 msgstr "एक सक्रिय अनुबंध में एक दिनांकित परिवर्तन, कारण और अनुबंध प्रकार के साथ: बदली गई पंक्तियां समाप्त होती हैं और उनके प्रतिस्थापन परिवर्तन दिनांक से शुरू होते हैं, दिन द्वारा समानुपाती, या अगली बिलिंग अवधि से।"
@@ -1174,8 +1250,8 @@ msgstr "एक ऑर्डर पर निर्माण घटक जिस�
 msgid "A Make to Order component whose parts are issued together into the parent job — no separate build."
 msgstr "एक ऑर्डर पर निर्माण घटक जिसके पार्ट्स को माता-पिता की जॉब में एक साथ जारी किया जाता है — कोई अलग निर्माण नहीं।"
 
-msgid "A managed cloud-hosted version of Carbon"
-msgstr "Carbon का एक प्रबंधित क्लाउड-होस्ट किया गया संस्करण"
+msgid "A managed cloud-hosted version of {BRAND_NAME}"
+msgstr "{BRAND_NAME} का एक प्रबंधित क्लाउड-होस्ट किया गया संस्करण"
 
 msgid "A managed version with all the advanced features"
 msgstr "सभी उन्नत सुविधाओं के साथ एक प्रबंधित संस्करण"
@@ -1213,8 +1289,8 @@ msgstr "समान अवधि का नया कार्यकाल श�
 msgid "A non-cash document that settles an invoice against a reason account: a credit lowers what's owed, a debit raises it."
 msgstr "एक गैर-नकद दस्तावेज़ जो एक कारण खाते के विरुद्ध चालान को निपटाता है: जमा देय राशि को कम करता है, नामे इसे बढ़ाता है।"
 
-msgid "A non-conformance shared with a supplier over a login-free /share/scar link, so they can respond to the issue and update its tasks from outside Carbon."
-msgstr "एक गैर-अनुरूपता जो आपूर्तिकर्ता के साथ एक लॉगिन-मुक्त /share/scar लिंक पर साझा की गई है, ताकि वे Carbon के बाहर से समस्या का जवाब दे सकें और इसके कार्य अपडेट कर सकें।"
+msgid "A non-conformance shared with a supplier over a login-free /share/scar link, so they can respond to the issue and update its tasks from outside {BRAND_NAME}."
+msgstr "एक गैर-अनुरूपता जो आपूर्तिकर्ता के साथ एक लॉगिन-मुक्त /share/scar लिंक पर साझा की गई है, ताकि वे {BRAND_NAME} के बाहर से समस्या का जवाब दे सकें और इसके कार्य अपडेट कर सकें।"
 
 msgid "A non-taxable surcharge (e.g. recoverable expenses like permit fees) added to the line; excluded from the tax base."
 msgstr "एक कर-रहित अतिरिक्त शुल्क (जैसे, वसूली योग्य व्यय जैसे परमिट शुल्क) पंक्ति में जोड़ा गया; कर आधार से बाहर।"
@@ -1237,8 +1313,8 @@ msgstr "एक फ़ोटो या PDF जो ऑपरेटर इस च�
 msgid "A physical pull signal — a printed card or QR code living with the stock — that raises a purchase order or a job the moment it's scanned to refill a bin."
 msgstr "एक भौतिक खींचने का संकेत — एक मुद्रित कार्ड या QR कोड जो स्टॉक के साथ रहता है — जो क्रय आदेश या जॉब बढ़ाता है जिस क्षण इसे बिन को भरने के लिए स्कैन किया जाता है।"
 
-msgid "A point in one of Carbon's own flows that a workflow can watch — a job released, a quote accepted, a shipment posted — as opposed to a raw field change; it hands the workflow the records involved by id."
-msgstr "कार्बन के अपने प्रवाह में एक बिंदु जिसे एक वर्कफ़्लो देख सकता है — एक नौकरी जारी की गई, एक उद्धरण स्वीकार किया गया, एक शिपमेंट पोस्ट किया गया — एक कच्चे क्षेत्र परिवर्तन के विपरीत; यह वर्कफ़्लो को आईडी द्वारा शामिल रिकॉर्ड देता है।"
+msgid "A point in one of {BRAND_NAME}'s own flows that a workflow can watch — a job released, a quote accepted, a shipment posted — as opposed to a raw field change; it hands the workflow the records involved by id."
+msgstr ""
 
 msgid "A posted accounting entry: a header plus balanced debit and credit lines against GL accounts."
 msgstr "एक पोस्ट किया गया लेखांकन प्रविष्टि: एक शीर्षलेख प्लस संतुलित नामे और जमा पंक्तियां लेजर खातों के विरुद्ध।"
@@ -1462,8 +1538,8 @@ msgstr "एक विक्रय कोटेशन अनुरोध (RFQ) �
 msgid "A sales RFQ (a customer asks you to quote) or a purchasing RFQ (you ask suppliers); both feed the opportunity thread."
 msgstr "एक बिक्रय RFQ (एक ग्राहक आपको उद्धृत करने के लिए कहता है) या खरीद RFQ (आप आपूर्तिकर्ताओं से पूछते हैं); दोनों अवसर धागे को खिलाते हैं।"
 
-msgid "A scoped secret sent on the carbon-key request header that authenticates programmatic calls to Carbon, carrying its own permissions and rate limit rather than a user session's."
-msgstr "कार्बन-कुंजी अनुरोध हेडर पर भेजा गया एक स्कोप्ड गोपनीय जो कार्बन के लिए प्रोग्रामेटिक कॉल को प्रमाणित करता है, उपयोगकर्ता सत्र की बजाय अपनी स्वयं की अनुमतियां और दर सीमा ले जाता है।"
+msgid "A scoped secret sent on the carbon-key request header that authenticates programmatic calls to {BRAND_NAME}, carrying its own permissions and rate limit rather than a user session's."
+msgstr ""
 
 msgid "A separate schedule for tax reporting when tax rules require a method different from book depreciation."
 msgstr "कर रिपोर्टिंग के लिए एक अलग अनुसूची जब कर नियम पुस्तक मूल्यह्रास से अलग विधि की आवश्यकता होती है।"
@@ -2627,8 +2703,8 @@ msgstr "एक इंजीनियरिंग परिवर्तन: प�
 msgid "An Enterprise sign-in method where everyone on a company's registered email domains authenticates through the company's own SAML identity provider instead of a magic link, so IT grants and revokes access centrally."
 msgstr "एक एंटरप्राइज साइन-इन विधि जिसमें कंपनी के पंजीकृत ईमेल डोमेन के सभी उपयोगकर्ता मैजिक लिंक के बजाय कंपनी के अपने SAML आइडेंटिटी प्रदाता के माध्यम से प्रमाणीकरण करते हैं, ताकि IT केंद्रीय रूप से एक्सेस दे और रद्द कर सके।"
 
-msgid "An https request Carbon sends to a system of yours when a workflow reaches that step, carrying whatever headers and body you configured."
-msgstr "एक HTTPS अनुरोध जो कार्बन आपके सिस्टम को भेजता है जब एक वर्कफ़्लो उस चरण तक पहुंचता है, आपके द्वारा कॉन्फ़िगर किए गए किसी भी हेडर और बॉडी को ले जाता है।"
+msgid "An https request {BRAND_NAME} sends to a system of yours when a workflow reaches that step, carrying whatever headers and body you configured."
+msgstr ""
 
 msgid "An integration or a custom change — the small slice that's actually custom."
 msgstr "एक एकीकरण या एक कस्टम परिवर्तन — वह छोटा हिस्सा जो वास्तव में कस्टम है।"
@@ -2863,8 +2939,8 @@ msgstr "API कुंजी"
 msgid "API Keys"
 msgstr "API कुंजियाँ"
 
-msgid "API keys for programmatic access to your Carbon data."
-msgstr "आपके Carbon डेटा के लिए प्रोग्रामेटिक एक्सेस के लिए API कुंजियाँ।"
+msgid "API keys for programmatic access to your {BRAND_NAME} data."
+msgstr "आपके {BRAND_NAME} डेटा के लिए प्रोग्रामेटिक एक्सेस के लिए API कुंजियाँ।"
 
 msgid "API, webhooks, and integrations"
 msgstr "API, वेबहुक, और एकीकरण"
@@ -3870,8 +3946,8 @@ msgstr "स्वचालित करें"
 msgid "Automate quality flags and notifications"
 msgstr "गुणवत्ता फ़्लैग और सूचनाओं को स्वचालित करें"
 
-msgid "Automate your business processes with event-driven workflows that trigger actions when things happen in Carbon."
-msgstr "कार्बन में चीजें होने पर कार्रवाई करने वाले इवेंट-संचालित वर्कफ़्लो के साथ अपनी व्यावसायिक प्रक्रियाओं को स्वचालित करें।"
+msgid "Automate your business processes with event-driven workflows that trigger actions when things happen in {BRAND_NAME}."
+msgstr ""
 
 msgid "Automatic"
 msgstr "स्वचालित"
@@ -4314,8 +4390,8 @@ msgstr "बोनस मूल्यह्रास %"
 msgid "Book a call to discuss guided implementation"
 msgstr "गाइडेड कार्यान्वयन पर चर्चा करने के लिए कॉल बुक करें"
 
-msgid "Book a call with Carbon"
-msgstr "Carbon के साथ कॉल बुक करें"
+msgid "Book a call with {BRAND_NAME}"
+msgstr "{BRAND_NAME} के साथ कॉल बुक करें"
 
 msgid "Book Depreciation"
 msgstr "पुस्तक मूल्यह्रास"
@@ -4338,8 +4414,8 @@ msgstr "इस संस्करण की एक संपादन योग�
 msgid "Breadcrumb"
 msgstr "ब्रेडक्रम्ब"
 
-msgid "Bring in your parts, BOMs, Bill of Process, and costing — with Carbon's import tools, CSV, or LLM help."
-msgstr "अपने पार्ट्स, BOM, प्रक्रिया सूची, और लागत निर्धारण लाएं — Carbon के आयात उपकरण, CSV, या LLM सहायता के साथ।"
+msgid "Bring in your parts, BOMs, Bill of Process, and costing — with {BRAND_NAME}'s import tools, CSV, or LLM help."
+msgstr "अपने पार्ट्स, BOM, प्रक्रिया सूची, और लागत निर्धारण लाएं — {BRAND_NAME} के आयात उपकरण, CSV, या LLM सहायता के साथ।"
 
 msgid "Browse library"
 msgstr "लाइब्रेरी ब्राउज़ करें"
@@ -4494,8 +4570,8 @@ msgstr "अंशांकन"
 msgid "Call an outside URL"
 msgstr "बाहरी URL को कॉल करें"
 
-msgid "Called a method in Carbon — the components plus operations that produce a part."
-msgstr "Carbon में एक विधि कहा जाता है — घटक साथ ऑपरेशन जो एक पार्ट का उत्पादन करते हैं।"
+msgid "Called a method in {BRAND_NAME} — the components plus operations that produce a part."
+msgstr "{BRAND_NAME} में एक विधि कहा जाता है — घटक साथ ऑपरेशन जो एक पार्ट का उत्पादन करते हैं।"
 
 msgid "Camera"
 msgstr "कैमरा"
@@ -4666,15 +4742,6 @@ msgstr "संपत्ति को पूंजीकृत करें"
 msgid "Caption"
 msgstr "कैप्शन"
 
-msgid "Carbon"
-msgstr "कार्बन"
-
-msgid "Carbon + you"
-msgstr "Carbon + आप"
-
-msgid "Carbon account"
-msgstr "कार्बन खाता"
-
 msgid "Carbon client is not available"
 msgstr "Carbon क्लाइंट उपलब्ध नहीं है"
 
@@ -4683,76 +4750,6 @@ msgstr "Carbon क्लाइंट उपलब्ध नहीं है"
 
 msgid "Carbon client not found"
 msgstr "कार्बन क्लाइंट नहीं मिला"
-
-msgid "Carbon column"
-msgstr "कार्बन कॉलम"
-
-msgid "Carbon is configured the way your company runs, your data is loaded, and your team is confident using it. When that's true, you're ready to go live."
-msgstr "Carbon को आपकी कंपनी के तरीके से कॉन्फ़िगर किया गया है, आपका डेटा लोड किया गया है, और आपकी टीम इसे उपयोग करने में आत्मविश्वास रखती है। जब यह सच हो, तो आप लाइव जाने के लिए तैयार हैं।"
-
-msgid "Carbon leads"
-msgstr "कार्बन नेतृत्व करता है"
-
-msgid "Carbon Logo"
-msgstr "कार्बन लोगो"
-
-msgid "Carbon only"
-msgstr "केवल कार्बन"
-
-msgid "Carbon opens this account from its open items. The amount here is only compared on Migration Clearing."
-msgstr "Carbon इस खाते को अपनी खुली वस्तुओं से खोलता है। यहां की राशि की तुलना केवल माइग्रेशन क्लीयरिंग पर की जाती है।"
-
-msgid "Carbon Posted"
-msgstr "Carbon पोस्ट किया गया"
-
-msgid "Carbon posts every document dated on or after this day. Choose the first day of the current period or of one of the 3 periods before it."
-msgstr "Carbon इस दिन पर या उसके बाद की तारीख वाले प्रत्येक दस्तावेज़ को पोस्ट करता है। वर्तमान अवधि के पहले दिन या इससे पहले की 3 अवधियों में से एक को चुनें।"
-
-msgid "Carbon posts the opening journal, posts every journal dated on or after the cutover date, and closes the periods before it."
-msgstr "Carbon खुली जर्नल पोस्ट करता है, कटओवर तारीख पर या उसके बाद की तारीख वाली प्रत्येक जर्नल पोस्ट करता है, और इससे पहले की अवधि को बंद करता है।"
-
-msgid "Carbon starts every company on its default chart. Import your own chart now, before the trial balance, which matches accounts by number. The import needs two files: your chart, and the default accounts template filled with your account numbers. To keep Carbon's chart, continue."
-msgstr "Carbon हर कंपनी को अपने डिफ़ॉल्ट चार्ट पर शुरू करता है। अपना चार्ट अभी आयात करें, ट्रायल बैलेंस से पहले, जो खातों को संख्या से मेल खाता है। आयात के लिए दो फ़ाइलों की आवश्यकता है: आपका चार्ट, और डिफ़ॉल्ट खातों का टेम्पलेट आपकी खाता संख्याओं से भरा हुआ। Carbon के चार्ट को रखने के लिए, जारी रखें।"
-
-msgid "Carbon value"
-msgstr "Carbon मान"
-
-msgid "Carbon Value"
-msgstr "कार्बन मान"
-
-#. placeholder {0}: unmapped.length
-msgid "Carbon will use AI to guess a provider account for each of your {0} unmapped accounts. Suggestions are a starting point — you can review them before anything is saved."
-msgstr "कार्बन आपके {0} असंगत खातों में से प्रत्येक के लिए एक प्रदाता खाता अनुमान लगाने के लिए एआई का उपयोग करेगा। सुझाव एक शुरुआती बिंदु हैं — आप कुछ भी सहेजने से पहले उनकी समीक्षा कर सकते हैं।"
-
-msgid "Carbon writes their journals when you enable accounting, with today's accounts and costs."
-msgstr "जब आप लेखांकन सक्षम करते हैं तो Carbon उनकी जर्नल आज के खातों और लागतों के साथ लिखता है।"
-
-msgid "Carbon-only"
-msgstr "कार्बन-केवल"
-
-msgid "Carbon-only · fill in real targets for this customer. They see the values, locked."
-msgstr "Carbon-only · इस ग्राहक के लिए वास्तविक लक्ष्य भरें। वे मान देख सकते हैं, लॉक किए गए।"
-
-msgid "Carbon-only · the customer sees this text, locked."
-msgstr "Carbon-only · ग्राहक यह पाठ देखता है, लॉक किया गया।"
-
-msgid "Carbon's default passwordless sign-in: an emailed one-time link that signs you in when opened, with no password to remember or leak."
-msgstr "Carbon की डिफ़ॉल्ट पासवर्ड रहित साइन-इन: ईमेल से भेजा गया एक बार इस्तेमाल होने वाला लिंक जो खोलने पर आपको साइन इन कर देता है, याद रखने या लीक होने के लिए कोई पासवर्ड नहीं।"
-
-msgid "Carbon's name for a bill of material and bill of process (routing): the components plus the operations that make a part."
-msgstr "Carbon का BOM और प्रक्रिया सूची (रूटिंग) के लिए नाम: पार्ट्स बनाने वाले घटक और ऑपरेशन।"
-
-msgid "Carbon's planning run nets supply against demand and explodes methods, surfacing shortfalls — but it creates no orders itself."
-msgstr "Carbon की योजना आपूर्ति को मांग के विरुद्ध नेट करती है और विधि को विस्तृत करती है, कमियों को उजागर करती है — लेकिन यह स्वयं कोई आदेश नहीं बनाती।"
-
-msgid "Carbon's production order — one job builds a quantity of one item from its own copied method and routing."
-msgstr "कार्बन का उत्पादन आदेश — एक कार्य अपनी प्रतिलिपि की गई विधि और रूटिंग से एक आइटम की मात्रा बनाता है।"
-
-msgid "Carbon's shop-floor app where operators run operations, report quantities, issue material, and log time against released jobs in real time."
-msgstr "Carbon का शॉप फ्लोर ऐप जहां ऑपरेटर ऑपरेशन चलाते हैं, मात्रा की रिपोर्ट करते हैं, सामग्री निर्गम करते हैं, और जारी जॉब के विरुद्ध रीयल टाइम में समय दर्ज करते हैं।"
-
-msgid "Carbon's single record for anything with a part number — Part, Material, Tool, Service, Consumable, or Fixture — that jobs, methods, orders, and inventory all point at."
-msgstr "Carbon का एकल रिकॉर्ड किसी भी चीज़ के लिए जिसका पार्ट नंबर है — पार्ट, सामग्री, टूल, सेवा, उपभोग्य सामग्री, या फिक्स्चर — जिस पर जॉब, विधि, आदेश और इन्वेंटरी सभी इंगित करते हैं।"
 
 msgid "Card Holder"
 msgstr "कार्ड धारक"
@@ -5018,8 +5015,8 @@ msgstr "दूसरी फ़ाइल चुनें"
 msgid "Choose avatar"
 msgstr "अवतार चुनें"
 
-msgid "Choose how Carbon reaches you."
-msgstr "चुनें कि Carbon आपसे कैसे संपर्क करे।"
+msgid "Choose how {BRAND_NAME} reaches you."
+msgstr "चुनें कि {BRAND_NAME} आपसे कैसे संपर्क करे।"
 
 msgid "Choose how to add lines to this return."
 msgstr "इस रिटर्न में पंक्तियाँ कैसे जोड़ें, यह चुनें।"
@@ -5452,11 +5449,11 @@ msgstr "कॉन्फ़िगरेटर"
 msgid "Configure"
 msgstr "कॉन्फ़िगर करें"
 
+msgid "Configure {BRAND_NAME}"
+msgstr ""
+
 msgid "Configure {label}"
 msgstr "{label} को कॉन्फ़िगर करें"
-
-msgid "Configure Carbon"
-msgstr "कार्बन कॉन्फ़िगर करें"
 
 msgid "Configure default accounts for cash and bank transactions"
 msgstr "नकद और बैंकिंग लेनदेन के लिए डिफ़ॉल्ट खाते कॉन्फ़िगर करें"
@@ -5593,8 +5590,8 @@ msgstr "संघर्ष कारण"
 msgid "Connect"
 msgstr "कनेक्ट करें"
 
-msgid "Connect Carbon to your accounting, project management, and CAD tools and much more."
-msgstr "Carbon को अपने लेखांकन, परियोजना प्रबंधन, और CAD उपकरणों और बहुत कुछ से जोड़ें।"
+msgid "Connect {BRAND_NAME} to your accounting, project management, and CAD tools and much more."
+msgstr "{BRAND_NAME} को अपने लेखांकन, परियोजना प्रबंधन, और CAD उपकरणों और बहुत कुछ से जोड़ें।"
 
 msgid "Connect Jira issue"
 msgstr "Jira समस्या से कनेक्ट करें"
@@ -6923,11 +6920,11 @@ msgstr "अनुकूलित करें"
 msgid "Customize the layout of your PDF documents — reorder sections, hide what you don't need, and add your own blocks."
 msgstr "अपने PDF दस्तावेज़ों के लेआउट को कस्टमाइज़ करें — अनुभागों को पुनः व्यवस्थित करें, जो आपको आवश्यकता नहीं है उसे छिपाएं, और अपने स्वयं के ब्लॉक जोड़ें।"
 
-msgid "Cut over to Carbon and freeze the old system"
-msgstr "कार्बन में स्विच करें और पुरानी प्रणाली को फ्रीज करें"
+msgid "Cut over to {BRAND_NAME} and freeze the old system"
+msgstr ""
 
-msgid "Cut over, freeze the old system, and confirm you're live on Carbon."
-msgstr "पुरानी प्रणाली को बंद करें, फ्रीज करें, और पुष्टि करें कि आप Carbon पर लाइव हैं।"
+msgid "Cut over, freeze the old system, and confirm you're live on {BRAND_NAME}."
+msgstr "पुरानी प्रणाली को बंद करें, फ्रीज करें, और पुष्टि करें कि आप {BRAND_NAME} पर लाइव हैं।"
 
 msgid "Cutover checklist"
 msgstr "कटओवर चेकलिस्ट"
@@ -8144,14 +8141,14 @@ msgstr "दस्तावेज़"
 msgid "Documents and activity"
 msgstr "दस्तावेज़ और गतिविधि"
 
-msgid "Documents Posted Before Carbon Kept Journals"
-msgstr "Carbon द्वारा जर्नल रखे जाने से पहले पोस्ट किए गए दस्तावेज़"
+msgid "Documents Posted Before {BRAND_NAME} Kept Journals"
+msgstr "{BRAND_NAME} द्वारा जर्नल रखे जाने से पहले पोस्ट किए गए दस्तावेज़"
 
-msgid "Documents posted before Carbon kept journals have no journal."
-msgstr "Carbon द्वारा जर्नल रखे जाने से पहले पोस्ट किए गए दस्तावेज़ के पास कोई जर्नल नहीं है।"
+msgid "Documents posted before {BRAND_NAME} kept journals have no journal."
+msgstr "{BRAND_NAME} द्वारा जर्नल रखे जाने से पहले पोस्ट किए गए दस्तावेज़ के पास कोई जर्नल नहीं है।"
 
-msgid "Documents pushes invoices, bills and payments as native provider documents; their journals are recorded as covered by the document. It also pulls payments recorded in the provider back into Carbon, closing the matching invoice or bill and posting a Carbon GL journal. Off records them as deliberately excluded."
-msgstr "दस्तावेज़ चालान, बिल और भुगतान को नेटिव प्रदाता दस्तावेज़ के रूप में पुश करता है; उनकी जर्नल दस्तावेज़ द्वारा कवर किए गए के रूप में रिकॉर्ड की जाती है। यह प्रदाता में रिकॉर्ड किए गए भुगतान को Carbon में वापस पुल करता है, मिलान किए गए चालान या बिल को बंद करता है और एक Carbon सामान्य खाता बही जर्नल की पोस्टिंग करता है। बंद होने पर यह उन्हें जानबूझकर बाहर रखे जाने के रूप में रिकॉर्ड करता है।"
+msgid "Documents pushes invoices, bills and payments as native provider documents; their journals are recorded as covered by the document. It also pulls payments recorded in the provider back into {BRAND_NAME}, closing the matching invoice or bill and posting a{BRAND_NAME} GL journal. Off records them as deliberately excluded."
+msgstr ""
 
 msgid "Documents you open will show up here for quick access."
 msgstr "जो दस्तावेज़ आप खोलेंगे वह तेज़ पहुंच के लिए यहां दिखाई देंगे।"
@@ -8214,8 +8211,8 @@ msgstr "PDF डाउनलोड करें"
 msgid "Download template"
 msgstr "टेम्पलेट डाउनलोड करें"
 
-msgid "Download the template. Each row is a default account Carbon posts to. In Account Number, enter the number of the account in your chart that takes it. Carbon updates the default account to match."
-msgstr "टेम्पलेट डाउनलोड करें। प्रत्येक पंक्ति एक डिफ़ॉल्ट खाता है जो Carbon पोस्ट करता है। खाता संख्या में, अपने चार्ट में उस खाते की संख्या दर्ज करें जो इसे लेता है। Carbon डिफ़ॉल्ट खाते को मेल खाने के लिए अपडेट करता है।"
+msgid "Download the template. Each row is a default account {BRAND_NAME} posts to. In Account Number, enter the number of the account in your chart that takes it. {BRAND_NAME} updates the default account to match."
+msgstr "टेम्पलेट डाउनलोड करें। प्रत्येक पंक्ति एक डिफ़ॉल्ट खाता है जो {BRAND_NAME} पोस्ट करता है। खाता संख्या में, अपने चार्ट में उस खाते की संख्या दर्ज करें जो इसे लेता है। {BRAND_NAME} डिफ़ॉल्ट खाते को मेल खाने के लिए अपडेट करता है।"
 
 msgid "Draft"
 msgstr "ड्राफ्ट"
@@ -8986,8 +8983,8 @@ msgstr "इस प्रशिक्षण को सौंपे गए कर�
 msgid "Employees can no longer open this training."
 msgstr "कर्मचारी अब इस प्रशिक्षण को खोल नहीं सकते।"
 
-msgid "Employees complete a training in Carbon"
-msgstr "कर्मचारी Carbon में प्रशिक्षण को पूर्ण करते हैं"
+msgid "Employees complete a training in {BRAND_NAME}"
+msgstr "कर्मचारी {BRAND_NAME} में प्रशिक्षण को पूर्ण करते हैं"
 
 msgid "Empty"
 msgstr "खाली"
@@ -9305,8 +9302,8 @@ msgstr "मुद्रा रूपांतरण समायोजन के
 msgid "Equity account that offsets the opening balances when accounting is set up. It must total zero."
 msgstr "इक्विटी खाता जो लेखांकन सेट अप होने पर खुली शेष राशि को ऑफसेट करता है। यह कुल शून्य होना चाहिए।"
 
-msgid "Equity account the opening journal posts against when accounting is set up; it holds any difference between the prior trial balance and Carbon's records, and must total zero before you can enable."
-msgstr "इक्विटी खाता जिसमें लेखांकन सेटअप किए जाने पर प्रारंभिक जर्नल पोस्ट किए जाते हैं; यह पूर्ववर्ती परीक्षा शेष और Carbon के रिकॉर्ड के बीच किसी भी अंतर को रखता है, और आप सक्षम करने से पहले शून्य तक कुल होना चाहिए।"
+msgid "Equity account the opening journal posts against when accounting is set up; it holds any difference between the prior trial balance and {BRAND_NAME}'s records, and must total zero before you can enable."
+msgstr "इक्विटी खाता जिसमें लेखांकन सेटअप किए जाने पर प्रारंभिक जर्नल पोस्ट किए जाते हैं; यह पूर्ववर्ती परीक्षा शेष और {BRAND_NAME} के रिकॉर्ड के बीच किसी भी अंतर को रखता है, और आप सक्षम करने से पहले शून्य तक कुल होना चाहिए।"
 
 msgid "Error"
 msgstr "त्रुटि"
@@ -9462,8 +9459,8 @@ msgstr "हर कंपनी-स्कोप्ड रिकॉर्ड। �
 msgid "Every condition must match"
 msgstr "हर शर्त मेल खानी चाहिए"
 
-msgid "Every delivery carries a Carbon-Signature header signed with this secret. Verify it to know a request came from Carbon."
-msgstr "प्रत्येक डिलीवरी इस रहस्य के साथ हस्ताक्षरित एक Carbon-Signature हेडर ले जाती है। यह सत्यापित करें कि अनुरोध Carbon से आया है।"
+msgid "Every delivery carries a Carbon-Signature header signed with this secret. Verify it to know a request came from {BRAND_NAME}."
+msgstr "प्रत्येक डिलीवरी इस रहस्य के साथ हस्ताक्षरित एक {BRAND_NAME}-Signature हेडर ले जाती है। यह सत्यापित करें कि अनुरोध {BRAND_NAME} से आया है।"
 
 msgid "Every in-scope test passes in your configured system, with your data."
 msgstr "आपकी कॉन्फ़िगर की गई सिस्टम में, आपके डेटा के साथ, हर स्कोप में आने वाला टेस्ट पास होता है।"
@@ -9736,8 +9733,8 @@ msgstr "CSV निर्यात करें"
 msgid "Export Lines to CSV"
 msgstr "CSV में लाइनें निर्यात करें"
 
-msgid "Export your chart from your current system as a CSV, one row per account, with its number, name, class, type and group, or start from the template of the current chart. Carbon keeps only the accounts in this file."
-msgstr "अपने मौजूदा सिस्टम से अपना खाता चार्ट CSV के रूप में निर्यात करें, प्रति खाता एक पंक्ति, उसकी संख्या, नाम, वर्ग, प्रकार और समूह के साथ, या मौजूदा चार्ट के टेम्पलेट से शुरू करें। Carbon केवल इस फ़ाइल के खाते रखता है।"
+msgid "Export your chart from your current system as a CSV, one row per account, with its number, name, class, type and group, or start from the template of the current chart. {BRAND_NAME} keeps only the accounts in this file."
+msgstr "अपने मौजूदा सिस्टम से अपना खाता चार्ट CSV के रूप में निर्यात करें, प्रति खाता एक पंक्ति, उसकी संख्या, नाम, वर्ग, प्रकार और समूह के साथ, या मौजूदा चार्ट के टेम्पलेट से शुरू करें। {BRAND_NAME} केवल इस फ़ाइल के खाते रखता है।"
 
 msgid "Extended Price"
 msgstr "विस्तारित मूल्य"
@@ -9772,8 +9769,8 @@ msgstr "बाहरी संदर्भ"
 msgid "External training"
 msgstr "बाहरी प्रशिक्षण"
 
-msgid "Extra fields to capture data Carbon doesn't track by default"
-msgstr "कार्बन डिफ़ॉल्ट रूप से ट्रैक नहीं करता है ऐसा डेटा कैप्चर करने के लिए अतिरिक्त फ़ील्ड"
+msgid "Extra fields to capture data {BRAND_NAME} doesn't track by default"
+msgstr ""
 
 msgid "Extra hours on the whole day"
 msgstr "पूरे दिन अतिरिक्त घंटे"
@@ -10726,8 +10723,8 @@ msgstr "जेनरेट की गई आईडी सक्षम हैं"
 msgid "Generating suggestions…"
 msgstr "सुझाव उत्पन्न जा रहे हैं…"
 
-msgid "Get live on Carbon: one system running quoting, purchasing, the shop floor, inventory, and finance, replacing the current tools."
-msgstr "Carbon पर लाइव जाएं: एक प्रणाली जो उद्धरण, क्रय, शॉप फ्लोर, इन्वेंटरी और वित्त चला रही है, वर्तमान उपकरणों को प्रतिस्थापित करती है।"
+msgid "Get live on {BRAND_NAME}: one system running quoting, purchasing, the shop floor, inventory, and finance, replacing the current tools."
+msgstr "{BRAND_NAME} पर लाइव जाएं: एक प्रणाली जो उद्धरण, क्रय, शॉप फ्लोर, इन्वेंटरी और वित्त चला रही है, वर्तमान उपकरणों को प्रतिस्थापित करती है।"
 
 msgid "Get Method"
 msgstr "विधि प्राप्त करें"
@@ -10738,14 +10735,14 @@ msgstr "शुरुआत करें"
 msgid "Get Started"
 msgstr "शुरुआत करें"
 
-msgid "Get your Carbon notifications as they happen."
-msgstr "अपनी Carbon सूचनाएँ तुरंत प्राप्त करें।"
+msgid "Get your {BRAND_NAME} notifications as they happen."
+msgstr "अपनी {BRAND_NAME} सूचनाएँ तुरंत प्राप्त करें।"
 
 msgid "Gets the summary for every agreement"
 msgstr "प्रत्येक समझौते के लिए सारांश प्राप्त करता है"
 
-msgid "Getting around Carbon"
-msgstr "कार्बन के चारों ओर घूमना"
+msgid "Getting around {BRAND_NAME}"
+msgstr ""
 
 msgid "Getting set up"
 msgstr "सेटअप हो रहा है"
@@ -10925,8 +10922,8 @@ msgstr "गो-लाइव तारीख"
 msgid "Go-live timing holds if each gate is cleared on schedule"
 msgstr "यदि प्रत्येक गेट समय पर क्लीयर हो जाए तो गो-लाइव टाइमिंग बनी रहती है"
 
-msgid "Going live on Carbon"
-msgstr "कार्बन पर लाइव जाना"
+msgid "Going live on {BRAND_NAME}"
+msgstr ""
 
 msgid "Good afternoon, {name}."
 msgstr "दोपहर बखेर, {name}।"
@@ -11150,14 +11147,17 @@ msgstr "घंटे/1000 पीस"
 msgid "Hours/Piece"
 msgstr "घंटे/टुकड़ा"
 
+msgid "How {BRAND_NAME} looks in this browser."
+msgstr "यह {BRAND_NAME} इस ब्राउज़र में कैसा दिखता है।"
+
 msgid "How a batchable process runs its grouped work: Sequential runs parts one after another on one machine (a saw or laser table), while Simultaneous runs them together in a single load (a furnace, oven, or plating bath)."
 msgstr "एक बैचयोग्य प्रक्रिया अपने समूहीकृत कार्य को कैसे चलाती है: अनुक्रमिक एक मशीन (एक आरा या लेजर टेबल) पर पार्ट्स को एक के बाद एक चलाता है, जबकि समवर्ती उन्हें एक ही लोड (एक भट्टी, ओवन, या प्लेटिंग बाथ) में एक साथ चलाता है।"
 
 msgid "How a contract line earns its revenue over its revenue dates: Daily, the same amount every day, or Even Period, the same amount every calendar month with partial months prorated by days."
 msgstr "अनुबंध की पंक्ति अपने राजस्व तारीखों पर अपना राजस्व कैसे अर्जित करती है: दैनिक, हर दिन समान राशि, या समान अवधि, प्रत्येक कैलेंडर माह में समान राशि आंशिक महीनों को दिनों द्वारा प्रोरेट किया गया।"
 
-msgid "How a contract or an amendment is classified for recurring-revenue reporting: New Sales, Existing, Expansion, Reactivation, or Contraction. Carbon suggests it and you can change it."
-msgstr "अनुबंध या संशोधन को आवर्ती-राजस्व रिपोर्टिंग के लिए कैसे वर्गीकृत किया जाता है: नई बिक्री, मौजूदा, विस्तार, पुनः सक्रियण, या संकुचन। Carbon इसका सुझाव देता है और आप इसे बदल सकते हैं।"
+msgid "How a contract or an amendment is classified for recurring-revenue reporting: New Sales, Existing, Expansion, Reactivation, or Contraction. {BRAND_NAME} suggests it and you can change it."
+msgstr "अनुबंध या संशोधन को आवर्ती-राजस्व रिपोर्टिंग के लिए कैसे वर्गीकृत किया जाता है: नई बिक्री, मौजूदा, विस्तार, पुनः सक्रियण, या संकुचन। {BRAND_NAME} इसका सुझाव देता है और आप इसे बदल सकते हैं।"
 
 msgid "How a rental agreement cuts billing periods from its start date: Monthly cuts one month from the start date's day (a start on the 7th bills the 7th to the 6th), Calendar Month (Monthly, aligned to calendar periods) cuts calendar months, and 28 Days cuts consecutive 28-day periods. Each unit bills one rate at its own frequency for the whole days, weeks, or months a period covers; a monthly rate in a part period is prorated by days."
 msgstr "किराया समझौता अपनी प्रारंभ तिथि से बिलिंग अवधि को कैसे विभाजित करता है: मासिक विकल्प प्रारंभ तिथि के दिन से एक महीना निर्धारित करता है (7 तारीख को शुरू होने पर 7वीं से 6वीं तक का बिल), कैलेंडर माह (मासिक, कैलेंडर अवधि के साथ संरेखित) कैलेंडर महीनों को निर्धारित करता है, और 28 दिन का विकल्प लगातार 28 दिन की अवधि निर्धारित करता है। प्रत्येक विकल्प अपनी आवृत्ति पर एक दर से बिल करता है जो अवधि के सभी दिनों, हफ्तों, या महीनों को कवर करता है; एक आंशिक अवधि में महीने की दर दिनों के आधार पर समानुपाती होती है।"
@@ -11176,9 +11176,6 @@ msgstr "किसी वस्तु की इकाई लागत का म
 
 msgid "How are these hours calculated?"
 msgstr "इन घंटों की गणना कैसे की जाती है?"
-
-msgid "How Carbon looks in this browser."
-msgstr "यह Carbon इस ब्राउज़र में कैसा दिखता है।"
 
 msgid "How coverage is worked out"
 msgstr "कवरेज कैसे काम किया जाता है"
@@ -11303,8 +11300,8 @@ msgstr "हम कैसे एक साथ काम करते हैं"
 msgid "How will you use {integrationName}?"
 msgstr "आप {integrationName} का उपयोग कैसे करेंगे?"
 
-msgid "How your company's process maps to Carbon"
-msgstr "आपकी कंपनी की प्रक्रिया कार्बन से कैसे मैप होती है"
+msgid "How your company's process maps to {BRAND_NAME}"
+msgstr ""
 
 msgid "How your quotes, orders, and invoices look when they go out"
 msgstr "आपके उद्धरण, ऑर्डर और चालान भेजे जाने पर कैसे दिखते हैं"
@@ -12166,8 +12163,8 @@ msgstr "जारी तारीख"
 msgid "Issues"
 msgstr "समस्याएं"
 
-msgid "It is coming soon. Contact Carbon to have it set up for your company."
-msgstr "यह जल्द ही आ रहा है। इसे अपनी कंपनी के लिए सेट अप करवाने के लिए Carbon से संपर्क करें।"
+msgid "It is coming soon. Contact {BRAND_NAME} to have it set up for your company."
+msgstr "यह जल्द ही आ रहा है। इसे अपनी कंपनी के लिए सेट अप करवाने के लिए {BRAND_NAME} से संपर्क करें।"
 
 msgid "It will stop running until you publish a version again. Nothing is deleted."
 msgstr "यह तब तक चलना बंद कर देगा जब तक आप फिर से एक संस्करण प्रकाशित नहीं करते। कुछ भी हटाया नहीं गया है।"
@@ -12935,8 +12932,8 @@ msgstr "Linear समस्या को लिंक करें"
 msgid "link outside company"
 msgstr "कंपनी के बाहर का लिंक"
 
-msgid "Link this Carbon customer to one of them, or create a separate Stripe customer."
-msgstr "इस Carbon ग्राहक को इनमें से किसी एक से जोड़ें, या एक अलग Stripe ग्राहक बनाएँ।"
+msgid "Link this {BRAND_NAME} customer to one of them, or create a separate Stripe customer."
+msgstr "इस {BRAND_NAME} ग्राहक को इनमें से किसी एक से जोड़ें, या एक अलग Stripe ग्राहक बनाएँ।"
 
 msgid "Link to sales order line"
 msgstr "विक्रय आदेश पंक्ति से जोड़ें"
@@ -12975,8 +12972,8 @@ msgstr "सूची दृश्य"
 msgid "Lists are wired into both {0} and {1}, so this step cannot tell which one to repeat over. Leave a list on only one of them."
 msgstr "सूचियां दोनों {0} और {1} में वायर्ड हैं, इसलिए यह चरण नहीं बता सकता कि किस पर दोहराना है। एक सूची को केवल एक पर छोड़ें।"
 
-msgid "Live on Carbon"
-msgstr "Carbon पर लाइव"
+msgid "Live on {BRAND_NAME}"
+msgstr "{BRAND_NAME} पर लाइव"
 
 msgid "Live reloading"
 msgstr "लाइव रीलोडिंग"
@@ -13014,8 +13011,8 @@ msgstr "आइटम विवरण लोड हो रहे हैं..."
 msgid "Loading returnable lines..."
 msgstr "रिटर्न योग्य लाइनें लोड हो रही हैं..."
 
-msgid "Loading your own data with Carbon's import tools"
-msgstr "Carbon के आयात टूल के साथ अपना डेटा लोड कर रहे हैं"
+msgid "Loading your own data with {BRAND_NAME}'s import tools"
+msgstr "{BRAND_NAME} के आयात टूल के साथ अपना डेटा लोड कर रहे हैं"
 
 msgid "Loading..."
 msgstr "लोड हो रहा है..."
@@ -13325,8 +13322,8 @@ msgstr "अपनी कंपनी के लिए प्रमाणीक�
 msgid "Manage how shelf life is tracked, computed, and enforced across inventory."
 msgstr "शेल्फ लाइफ को कैसे ट्रैक किया जाता है, गणना की जाती है, और इन्वेंटरी में लागू किया जाता है, इसे प्रबंधित करें।"
 
-msgid "Manage how you sign in to Carbon."
-msgstr "प्रबंधित करें कि आप Carbon में कैसे साइन इन करते हैं।"
+msgid "Manage how you sign in to {BRAND_NAME}."
+msgstr "प्रबंधित करें कि आप {BRAND_NAME} में कैसे साइन इन करते हैं।"
 
 msgid "Manage Ownership"
 msgstr "स्वामित्व प्रबंधित करें"
@@ -15071,8 +15068,8 @@ msgstr "इस स्थान पर विक्रय आदेशों क�
 msgid "No open jobs for sales orders at this location."
 msgstr "इस स्थान पर विक्रय आदेशों के लिए कोई खुली जॉब नहीं है।"
 
-msgid "No open jobs with costs from before Carbon recorded them"
-msgstr "Carbon के लागत दर्ज करने से पहले की लागत वाला कोई खुला जॉब नहीं"
+msgid "No open jobs with costs from before {BRAND_NAME} recorded them"
+msgstr "{BRAND_NAME} के लागत दर्ज करने से पहले की लागत वाला कोई खुला जॉब नहीं"
 
 msgid "No open lines. Add a service to amend."
 msgstr "कोई खुली पंक्ति नहीं। संशोधन के लिए एक सेवा जोड़ें।"
@@ -15604,8 +15601,8 @@ msgstr "सूचना प्रकार"
 msgid "Notifications"
 msgstr "सूचनाएं"
 
-msgid "Notifications are blocked for Carbon in this browser's site settings."
-msgstr "इस ब्राउज़र की साइट सेटिंग्स में Carbon के लिए सूचनाएं अवरुद्ध हैं।"
+msgid "Notifications are blocked for {BRAND_NAME} in this browser's site settings."
+msgstr "इस ब्राउज़र की साइट सेटिंग्स में {BRAND_NAME} के लिए सूचनाएं अवरुद्ध हैं।"
 
 msgid "Notify"
 msgstr "सूचित करें"
@@ -15683,11 +15680,11 @@ msgstr "चालू"
 msgid "On {sentDate}"
 msgstr "{sentDate} को"
 
-msgid "On a control account, Carbon opens the balance from its own open items, inventory and fixed assets. The trial balance must agree: every difference stays on Migration Clearing, which must total zero. Open an account to see its items, and ignore an invoice the prior system already settled. Apply to Trial Balance sets each control account to Carbon's total and puts what is left on Retained Earnings."
-msgstr "एक नियंत्रण खाते पर, Carbon अपने स्वयं के खुले आइटम, इन्वेंटरी और अचल संपत्ति से शेष राशि खोलता है। परीक्षण संतुलन सहमत होना चाहिए: प्रत्येक अंतर माइग्रेशन क्लीयरिंग पर रहता है, जो कुल शून्य होना चाहिए। एक खाता खोलें इसके आइटम को देखने के लिए, और एक चालान को अनदेखा करें जो पूर्व प्रणाली ने पहले से ही निपटा दिया है। परीक्षण संतुलन पर लागू करें प्रत्येक नियंत्रण खाते को Carbon के कुल में सेट करता है और जो शेष है उसे प्रतिधारित आय पर रखता है।"
+msgid "On a control account, {BRAND_NAME} opens the balance from its own open items, inventory and fixed assets. The trial balance must agree: every difference stays on Migration Clearing, which must total zero. Open an account to see its items, and ignore an invoice the prior system already settled. Apply to Trial Balance sets each control account to {BRAND_NAME}'s total and puts what is left on Retained Earnings."
+msgstr "एक नियंत्रण खाते पर, {BRAND_NAME} अपने स्वयं के खुले आइटम, इन्वेंटरी और अचल संपत्ति से शेष राशि खोलता है। परीक्षण संतुलन सहमत होना चाहिए: प्रत्येक अंतर माइग्रेशन क्लीयरिंग पर रहता है, जो कुल शून्य होना चाहिए। एक खाता खोलें इसके आइटम को देखने के लिए, और एक चालान को अनदेखा करें जो पूर्व प्रणाली ने पहले से ही निपटा दिया है। परीक्षण संतुलन पर लागू करें प्रत्येक नियंत्रण खाते को {BRAND_NAME} के कुल में सेट करता है और जो शेष है उसे प्रतिधारित आय पर रखता है।"
 
-msgid "On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, Carbon creates a Released stock transfer for the kanban quantity."
-msgstr "एक स्थानांतरण कानबान पर, To भंडारण इकाई के लिए न्यूनतम मात्रा। जब हाथ पर प्लस खुली आने वाली स्थानांतरण इससे नीचे चली जाती है, तो Carbon कानबान मात्रा के लिए एक जारी स्टॉक स्थानांतरण बनाता है।"
+msgid "On a transfer kanban, the minimum quantity for the To storage unit. When on-hand plus open inbound transfers drops below it, {BRAND_NAME} creates a Released stock transfer for the kanban quantity."
+msgstr "एक स्थानांतरण कानबान पर, To भंडारण इकाई के लिए न्यूनतम मात्रा। जब हाथ पर प्लस खुली आने वाली स्थानांतरण इससे नीचे चली जाती है, तो {BRAND_NAME} कानबान मात्रा के लिए एक जारी स्टॉक स्थानांतरण बनाता है।"
 
 msgid "On cutover day, work the checklist below in order. Acceptance tests come from your in-scope requirements. Support details are at the bottom."
 msgstr "कटओवर दिन पर, नीचे दी गई चेकलिस्ट को क्रम में काम करें। स्वीकृति परीक्षण आपकी स्कोप में शामिल आवश्यकताओं से आते हैं। समर्थन विवरण नीचे हैं।"
@@ -15776,8 +15773,8 @@ msgstr "किराये पर दिन"
 msgid "On-time delivery"
 msgstr "समय पर डिलीवरी"
 
-msgid "Onboard your agent to Carbon"
-msgstr "अपने एजेंट को Carbon पर ऑनबोर्ड करें"
+msgid "Onboard your agent to {BRAND_NAME}"
+msgstr "अपने एजेंट को {BRAND_NAME} पर ऑनबोर्ड करें"
 
 msgid "Once a day"
 msgstr "दिन में एक बार"
@@ -15808,8 +15805,8 @@ msgstr "प्रति चालान एक पंक्ति, प्रत�
 msgid "One row per month, one column per line. Each line recognizes exactly what its invoices bill."
 msgstr "प्रति माह एक पंक्ति, प्रति पंक्ति एक स्तंभ। प्रत्येक पंक्ति बिल्कुल उसे मान्यता देती है जो इसके चालान बिल करते हैं।"
 
-msgid "One serial unit or one batch that Carbon follows individually, carrying its own status and attributes such as an expiry date."
-msgstr "एक सीरीज यूनिट या एक बैच जो Carbon व्यक्तिगत रूप से अनुसरण करता है, अपनी स्वयं की स्थिति और विशेषताएं जैसे समाप्ति तिथि ले जाता है।"
+msgid "One serial unit or one batch that {BRAND_NAME} follows individually, carrying its own status and attributes such as an expiry date."
+msgstr "एक सीरीज यूनिट या एक बैच जो {BRAND_NAME} व्यक्तिगत रूप से अनुसरण करता है, अपनी स्वयं की स्थिति और विशेषताएं जैसे समाप्ति तिथि ले जाता है।"
 
 msgid "One set of numbers"
 msgstr "एक ही संख्या का सेट"
@@ -15943,8 +15940,8 @@ msgstr "खुली तारीख"
 msgid "Open Dispatches"
 msgstr "खुले रखरखाव कार्य"
 
-msgid "Open in Carbon"
-msgstr "Carbon में खोलें"
+msgid "Open in {BRAND_NAME}"
+msgstr "{BRAND_NAME} में खोलें"
 
 msgid "Open in change notice {ids}. Release it to change the active version."
 msgstr "परिवर्तन सूचना {ids} में खुला है। सक्रिय संस्करण बदलने के लिए इसे जारी करें।"
@@ -16063,8 +16060,8 @@ msgstr "शुरुआती"
 msgid "Opening an operation starts its timer, so time is tracked from the moment work begins."
 msgstr "किसी ऑपरेशन को खोलने से इसका टाइमर शुरू हो जाता है, इसलिए काम शुरू होने के समय से समय ट्रैक किया जाता है।"
 
-msgid "Opening balance of depreciation already booked before this asset was added to Carbon (use 0 for new acquisitions)."
-msgstr "इस संपत्ति को Carbon में जोड़े जाने से पहले दर्ज मूल्यह्रास का प्रारंभिक शेष (नई खरीद के लिए 0 का उपयोग करें)।"
+msgid "Opening balance of depreciation already booked before this asset was added to {BRAND_NAME} (use 0 for new acquisitions)."
+msgstr "इस संपत्ति को {BRAND_NAME} में जोड़े जाने से पहले दर्ज मूल्यह्रास का प्रारंभिक शेष (नई खरीद के लिए 0 का उपयोग करें)।"
 
 msgid "Opening balances as of"
 msgstr "के अनुसार प्रारंभिक शेष राशि"
@@ -16504,8 +16501,8 @@ msgstr "भुगतान की गई राशि:"
 msgid "Paid Date"
 msgstr "भुगतान की गई तारीख"
 
-msgid "Paid outside Carbon"
-msgstr "Carbon के बाहर भुगतान किया गया"
+msgid "Paid outside {BRAND_NAME}"
+msgstr "{BRAND_NAME} के बाहर भुगतान किया गया"
 
 msgid "Paid up front; record it as a payment once received"
 msgstr "अग्रिम भुगतान; इसे प्राप्त होने के बाद भुगतान के रूप में दर्ज करें"
@@ -16746,8 +16743,8 @@ msgstr "भुगतान"
 msgid "Payments and credits applied to this invoice. Applied amounts and FX are in company base currency. Click a row to open the source document."
 msgstr "इस चालान के लिए आवंटित भुगतान और क्रेडिट। आवंटित राशियाँ और विनिमय अंतर की राशियाँ कंपनी की आधार मुद्रा में हैं। स्रोत दस्तावेज़ खोलने के लिए किसी पंक्ति पर क्लिक करें।"
 
-msgid "Payments due before this date were paid outside Carbon"
-msgstr "इस तारीख से पहले देय भुगतान Carbon के बाहर किए गए"
+msgid "Payments due before this date were paid outside {BRAND_NAME}"
+msgstr "इस तारीख से पहले देय भुगतान {BRAND_NAME} के बाहर किए गए"
 
 msgid "Pays the deposit held for this document back out of customer prepayments."
 msgstr "इस दस्तावेज़ के लिए रखी गई जमा राशि को ग्राहक की अग्रिम भुगतान से वापस करता है।"
@@ -16884,11 +16881,11 @@ msgstr "असाइनमेंट के लिए उपलब्ध भौ�
 msgid "Pick"
 msgstr "चुनें"
 
+msgid "Pick a {BRAND_NAME} dimension and the provider target it posts to. Auto-create adds missing provider options by name at push time."
+msgstr "एक {BRAND_NAME} आयाम चुनें और वह प्रदाता लक्ष्य चुनें जिसे यह पोस्ट करता है। ऑटो-निर्माण पुश समय पर नाम के अनुसार लापता प्रदाता विकल्प जोड़ता है।"
+
 msgid "Pick a batchable process, filter the eligible operations by their material, and select the ones to run together."
 msgstr "एक बैच योग्य प्रक्रिया चुनें, पात्र ऑपरेशन को उनकी सामग्री के अनुसार फ़िल्टर करें, और एक साथ चलाने के लिए उन्हें चुनें।"
-
-msgid "Pick a Carbon dimension and the provider target it posts to. Auto-create adds missing provider options by name at push time."
-msgstr "एक Carbon आयाम चुनें और वह प्रदाता लक्ष्य चुनें जिसे यह पोस्ट करता है। ऑटो-निर्माण पुश समय पर नाम के अनुसार लापता प्रदाता विकल्प जोड़ता है।"
 
 msgid "Pick a column to sort by"
 msgstr "सॉर्ट करने के लिए एक कॉलम चुनें"
@@ -17659,11 +17656,11 @@ msgstr "गुण"
 msgid "Property"
 msgstr "प्रॉपर्टी"
 
-msgid "Proposed matches where the Carbon account number equals the provider account code exactly."
-msgstr "प्रस्तावित मेल जहां कार्बन खाता संख्या प्रदाता खाता कोड के बिल्कुल बराबर है।"
+msgid "Proposed matches where the {BRAND_NAME} account number equals the provider account code exactly."
+msgstr ""
 
-msgid "Proposed matches where the Carbon dimension value's name equals a provider option name exactly."
-msgstr "प्रस्तावित मेल जहां Carbon आयाम मान का नाम प्रदाता विकल्प नाम के बिल्कुल बराबर है।"
+msgid "Proposed matches where the {BRAND_NAME} dimension value's name equals a provider option name exactly."
+msgstr "प्रस्तावित मेल जहां {BRAND_NAME} आयाम मान का नाम प्रदाता विकल्प नाम के बिल्कुल बराबर है।"
 
 msgid "Protect the go-live date"
 msgstr "गो-लाइव की तारीख की सुरक्षा करें"
@@ -17683,8 +17680,8 @@ msgstr "SAML SSO साइन-इन को रूट करने से पह
 msgid "Provide process knowledge and inputs"
 msgstr "प्रक्रिया ज्ञान और इनपुट प्रदान करें"
 
-msgid "Provide these URLs to your identity provider (Okta, Entra ID, Google Workspace, etc.) when registering Carbon as a SAML application."
-msgstr "Carbon को SAML एप्लिकेशन के रूप में पंजीकृत करते समय इन URLs को अपने आइडेंटिटी प्रदाता (Okta, Entra ID, Google Workspace, आदि) को प्रदान करें।"
+msgid "Provide these URLs to your identity provider (Okta, Entra ID, Google Workspace, etc.) when registering {BRAND_NAME} as a SAML application."
+msgstr "{BRAND_NAME} को SAML एप्लिकेशन के रूप में पंजीकृत करते समय इन URLs को अपने आइडेंटिटी प्रदाता (Okta, Entra ID, Google Workspace, आदि) को प्रदान करें।"
 
 msgid "Provider"
 msgstr "प्रदाता"
@@ -17717,8 +17714,8 @@ msgstr "संस्करण {0} प्रकाशित करें?"
 msgid "Published"
 msgstr "प्रकाशित"
 
-msgid "Published by Carbon"
-msgstr "Carbon द्वारा प्रकाशित"
+msgid "Published by {BRAND_NAME}"
+msgstr "{BRAND_NAME} द्वारा प्रकाशित"
 
 msgid "Published Version"
 msgstr "प्रकाशित संस्करण"
@@ -18206,8 +18203,8 @@ msgstr "इसे जल्दी उठाएं और स्पष्ट र�
 msgid "Ramp"
 msgstr "रैम्प"
 
-msgid "Ramp allows only one. Disconnect the other system in Ramp, or connect Carbon again choosing \"Another system posts my ledger\"."
-msgstr "Ramp केवल एक की अनुमति देता है। Ramp में दूसरी प्रणाली को डिस्कनेक्ट करें, या \"Another system posts my ledger\" चुनकर Carbon को फिर से कनेक्ट करें।"
+msgid "Ramp allows only one. Disconnect the other system in Ramp, or connect {BRAND_NAME} again choosing \"Another system posts my ledger\"."
+msgstr "Ramp केवल एक की अनुमति देता है। Ramp में दूसरी प्रणाली को डिस्कनेक्ट करें, या \"Another system posts my ledger\" चुनकर {BRAND_NAME} को फिर से कनेक्ट करें।"
 
 msgid "Ramp authorized the connection but saving it failed. Try connecting again."
 msgstr "Ramp ने कनेक्शन को अधिकृत किया, लेकिन उसे सहेजा नहीं जा सका। दोबारा कनेक्ट करने का प्रयास करें।"
@@ -18287,8 +18284,8 @@ msgstr "पुनः सक्रिय करें"
 msgid "Reactivation"
 msgstr "पुनः सक्रियण"
 
-msgid "Read this through — what Carbon will and won't do for your setup. When it looks right, mark it agreed below."
-msgstr "इसे पूरी तरह पढ़ें — Carbon आपके सेटअप के लिए क्या करेगा और क्या नहीं करेगा। जब यह सही लगे, तो नीचे सहमत के रूप में चिह्नित करें।"
+msgid "Read this through — what {BRAND_NAME} will and won't do for your setup. When it looks right, mark it agreed below."
+msgstr "इसे पूरी तरह पढ़ें — {BRAND_NAME} आपके सेटअप के लिए क्या करेगा और क्या नहीं करेगा। जब यह सही लगे, तो नीचे सहमत के रूप में चिह्नित करें।"
 
 msgid "Read this through. When it's right, sign off at the bottom. It's the statement your commercial agreement points to, with no prices or legal terms here."
 msgstr "इसे पूरी तरह पढ़ें। जब यह सही हो, तो नीचे साइन ऑफ करें। यह वह विवरण है जिसकी ओर आपका व्यावसायिक समझौता इशारा करता है, यहाँ कोई कीमत या कानूनी शर्तें नहीं हैं।"
@@ -18528,8 +18525,8 @@ msgstr "सुलह करें"
 msgid "Reconciliation found discrepancies with the provider"
 msgstr "समन्वय ने प्रदाता के साथ विसंगतियां पाईं"
 
-msgid "Reconciling a purchase order against what was received and invoiced — implicit in Carbon, via the line quantities and GR/IR balance."
-msgstr "एक क्रय आदेश को जो प्राप्त और चालान किया गया था उसके खिलाफ सुलह करना — Carbon में अंतर्निहित, पंक्ति मात्रा और GR/IR शेष राशि के माध्यम से।"
+msgid "Reconciling a purchase order against what was received and invoiced — implicit in {BRAND_NAME}, via the line quantities and GR/IR balance."
+msgstr "एक क्रय आदेश को जो प्राप्त और चालान किया गया था उसके खिलाफ सुलह करना — {BRAND_NAME} में अंतर्निहित, पंक्ति मात्रा और GR/IR शेष राशि के माध्यम से।"
 
 msgid "Reconfigure"
 msgstr "फिर से कॉन्फ़िगर करें"
@@ -19073,8 +19070,8 @@ msgstr "{inputLabel} में प्रत्येक आइटम के ल�
 msgid "Replace"
 msgstr "बदलें"
 
-msgid "Replace Carbon's default chart with your own, before you set up accounting"
-msgstr "Carbon के डिफ़ॉल्ट चार्ट को अपने स्वयं के साथ बदलें, लेखांकन सेट अप करने से पहले"
+msgid "Replace {BRAND_NAME}'s default chart with your own, before you set up accounting"
+msgstr "{BRAND_NAME} के डिफ़ॉल्ट चार्ट को अपने स्वयं के साथ बदलें, लेखांकन सेट अप करने से पहले"
 
 msgid "Replace chart"
 msgstr "चार्ट बदलें"
@@ -19692,8 +19689,8 @@ msgstr ""
 msgid "RFQs"
 msgstr "आरएफक्यू"
 
-msgid "Ride Carbon dimensions along on pushed journals. Each slot maps one Carbon dimension to one provider analytics target; the value mapping below pairs individual dimension values with provider options."
-msgstr "कार्बन आयामों को पुश किए गए जर्नल के साथ ले जाएँ। प्रत्येक स्लॉट एक कार्बन आयाम को एक प्रदाता विश्लेषण लक्ष्य से मैप करता है; नीचे दिया गया मूल्य मैपिंग व्यक्तिगत आयाम मानों को प्रदाता विकल्पों के साथ जोड़ता है।"
+msgid "Ride {BRAND_NAME} dimensions along on pushed journals. Each slot maps one {BRAND_NAME} dimension to one provider analytics target; the value mapping below pairs individual dimension values with provider options."
+msgstr ""
 
 #. placeholder {0}: certification.docVersion
 msgid "Rider v{0}"
@@ -20754,8 +20751,8 @@ msgstr "आमंत्रण भेजें"
 msgid "Send RFQ to Suppliers"
 msgstr "आपूर्तिकर्ताओं को RFQ भेजें"
 
-msgid "Send to Carbon"
-msgstr "Carbon को भेजें"
+msgid "Send to {BRAND_NAME}"
+msgstr "{BRAND_NAME} को भेजें"
 
 msgid "Send Via"
 msgstr "के माध्यम से भेजें"
@@ -20892,6 +20889,9 @@ msgstr "सेवाएं"
 msgid "Session locked"
 msgstr "सत्र लॉक किया गया"
 
+msgid "Set {BRAND_NAME} up around how your company runs: sites, parts, BOMs, Bill of Process, and the flows you use."
+msgstr "{BRAND_NAME} को अपनी कंपनी के संचालन के अनुसार सेट अप करें: साइटें, पार्ट्स, BOM, प्रक्रिया सूची, और जिन प्रवाहों का आप उपयोग करते हैं।"
+
 msgid "Set a customer on this return to add from a shipment."
 msgstr "शिपमेंट से जोड़ने के लिए इस वापसी पर एक ग्राहक सेट करें।"
 
@@ -20912,9 +20912,6 @@ msgstr "लक्ष्य निर्धारित करें"
 
 msgid "Set at activation"
 msgstr "सक्रियण पर सेट करें"
-
-msgid "Set Carbon up around how your company runs: sites, parts, BOMs, Bill of Process, and the flows you use."
-msgstr "Carbon को अपनी कंपनी के संचालन के अनुसार सेट अप करें: साइटें, पार्ट्स, BOM, प्रक्रिया सूची, और जिन प्रवाहों का आप उपयोग करते हैं।"
 
 msgid "Set Clock Out"
 msgstr "कार्य समाप्त सेट करें"
@@ -20998,8 +20995,8 @@ msgstr "यह निर्धारित करता है कि यह इ
 msgid "Settings"
 msgstr "सेटिंग्स"
 
-msgid "Settled in the system that kept the books before the cutover. Carbon leaves them out of its totals and marks them Paid on the day before the cutover when you set up accounting."
-msgstr "कटऑफ से पहले बहीयां रखने वाली प्रणाली में निपटाए गए। Carbon उन्हें अपने योग से बाहर छोड़ देता है और कटऑफ से एक दिन पहले उन्हें भुगतान किया गया के रूप में चिह्नित करता है जब आप लेखांकन सेटअप करते हैं।"
+msgid "Settled in the system that kept the books before the cutover.{BRAND_NAME} leaves them out of its totals and marks them Paid on the day before the cutover when you set up accounting."
+msgstr ""
 
 msgid "Setup"
 msgstr "सेटअप"
@@ -21391,8 +21388,8 @@ msgstr "शफ़ल करें"
 msgid "Sign in here instead"
 msgstr ""
 
-msgid "Sign in to Carbon"
-msgstr "Carbon में साइन इन करें"
+msgid "Sign in to {BRAND_NAME}"
+msgstr "{BRAND_NAME} में साइन इन करें"
 
 msgid "Sign in with biometrics instead of a magic link. Passkeys are secured by Face ID, Touch ID, or your device PIN."
 msgstr "जादुई लिंक के बजाय बायोमेट्रिक्स के साथ साइन इन करें। पासकीज़ Face ID, Touch ID, या आपकी डिवाइस PIN द्वारा सुरक्षित हैं।"
@@ -21527,8 +21524,8 @@ msgstr "बेचा गया"
 msgid "Solutions Engineer"
 msgstr "समाधान इंजीनियर"
 
-msgid "Some balances have no Carbon account"
-msgstr "कुछ शेष राशियों के लिए कोई Carbon खाता नहीं है"
+msgid "Some balances have no {BRAND_NAME} account"
+msgstr "कुछ शेष राशियों के लिए कोई {BRAND_NAME} खाता नहीं है"
 
 msgid "Some lines are invoiced for more or less than they total. Fix the amounts before confirming."
 msgstr "कुछ पंक्तियों को उनकी कुल से अधिक या कम के लिए चालान दिया गया है। पुष्टि करने से पहले राशियों को ठीक करें।"
@@ -21704,8 +21701,8 @@ msgstr "होस्टिंग सेट अप करें (क्लाउ�
 msgid "Standard"
 msgstr "मानक"
 
-msgid "Standard cloud Carbon fits how your company runs"
-msgstr "मानक क्लाउड कार्बन आपकी कंपनी के संचालन के तरीके के अनुरूप है"
+msgid "Standard cloud {BRAND_NAME} fits how your company runs"
+msgstr ""
 
 msgid "Standard Cost Variances"
 msgstr "मानक लागत विचलन"
@@ -22024,17 +22021,17 @@ msgstr "Stripe के पास पहले से इस ईमेल के �
 msgid "Stripe Due Date"
 msgstr "Stripe नियत तिथि"
 
-msgid "Stripe emails the invoice to the customer, so an address is required. This will also be saved to the contact in Carbon."
-msgstr "Stripe ग्राहक को चालान ईमेल करता है, इसलिए एक पता आवश्यक है। यह Carbon में संपर्क के लिए भी सहेजा जाएगा।"
+msgid "Stripe emails the invoice to the customer, so an address is required. This will also be saved to the contact in {BRAND_NAME}."
+msgstr "Stripe ग्राहक को चालान ईमेल करता है, इसलिए एक पता आवश्यक है। यह {BRAND_NAME} में संपर्क के लिए भी सहेजा जाएगा।"
 
-msgid "Stripe emails the invoices to the customer, so an address is required. It is also saved to the contract's invoice contact in Carbon, if it has one."
-msgstr "Stripe ग्राहक को चालान भेजता है, इसलिए एक पता आवश्यक है। यह Carbon में अनुबंध के चालान संपर्क में भी सहेजा जाता है, यदि इसके पास एक है।"
+msgid "Stripe emails the invoices to the customer, so an address is required. It is also saved to the contract's invoice contact in {BRAND_NAME}, if it has one."
+msgstr "Stripe ग्राहक को चालान भेजता है, इसलिए एक पता आवश्यक है। यह {BRAND_NAME} में अनुबंध के चालान संपर्क में भी सहेजा जाता है, यदि इसके पास एक है।"
 
-msgid "Stripe has no customer for this Carbon customer yet. Confirming will create one on your connected account."
-msgstr "Stripe के पास इस Carbon ग्राहक के लिए अभी कोई ग्राहक नहीं है। पुष्टि करने से आपके जुड़े हुए खाते पर एक बनाया जाएगा।"
+msgid "Stripe has no customer for this {BRAND_NAME} customer yet. Confirming will create one on your connected account."
+msgstr "Stripe के पास इस {BRAND_NAME} ग्राहक के लिए अभी कोई ग्राहक नहीं है। पुष्टि करने से आपके जुड़े हुए खाते पर एक बनाया जाएगा।"
 
-msgid "Stripe has no customer for this Carbon customer yet. Posting will create one on your connected account."
-msgstr "Stripe के पास इस Carbon ग्राहक के लिए अभी कोई ग्राहक नहीं है। पोस्टिंग आपके जुड़े खाते पर एक नया ग्राहक बना देगी।"
+msgid "Stripe has no customer for this {BRAND_NAME} customer yet. Posting will create one on your connected account."
+msgstr "Stripe के पास इस {BRAND_NAME} ग्राहक के लिए अभी कोई ग्राहक नहीं है। पोस्टिंग आपके जुड़े खाते पर एक नया ग्राहक बना देगी।"
 
 msgid "Structure"
 msgstr "संरचना"
@@ -22565,8 +22562,8 @@ msgstr "इस आइटम को बनाने के लिए उपयो
 msgid "taken"
 msgstr "लिया गया"
 
-msgid "Taken outside Carbon. You mark each employee complete."
-msgstr "Carbon के बाहर लिया गया। आप प्रत्येक कर्मचारी को पूर्ण करते हैं।"
+msgid "Taken outside {BRAND_NAME}. You mark each employee complete."
+msgstr "{BRAND_NAME} के बाहर लिया गया। आप प्रत्येक कर्मचारी को पूर्ण करते हैं।"
 
 msgid "Takes Effect"
 msgstr "प्रभावी होता है"
@@ -22834,8 +22831,20 @@ msgstr "यह \"{0}\" चरण पूर्ण हो गया — इसक�
 msgid "The {0} phases to go live, each ending at a checkpoint. Tick off each task as you complete it."
 msgstr "{0} चरणों को लाइव करने के लिए, प्रत्येक एक चेकपॉइंट पर समाप्त होता है। जैसे ही आप प्रत्येक कार्य को पूरा करते हैं, उसे टिक करें।"
 
-msgid "The accent color used across Carbon."
-msgstr "Carbon में उपयोग किए जाने वाले हाइलाइट रंग।"
+msgid "The {BRAND_NAME} user currently responsible for working this record, set per record and independent of ownership fields like Account Manager or Sales Person."
+msgstr ""
+
+msgid "The {BRAND_NAME} user responsible for this customer relationship; emails and reminders about this customer route to them."
+msgstr "{BRAND_NAME} उपयोगकर्ता जो इस ग्राहक संबंध के लिए जिम्मेदार है; इस ग्राहक के बारे में ईमेल और अनुस्मारक उन्हें रूट किए जाते हैं।"
+
+msgid "The {BRAND_NAME} user responsible for this supplier relationship; emails and reminders about this supplier route to them."
+msgstr "{BRAND_NAME} उपयोगकर्ता जो इस आपूर्तिकर्ता संबंध के लिए जिम्मेदार है; इस आपूर्तिकर्ता के बारे में ईमेल और अनुस्मारक उन्हें रूट किए जाते हैं।"
+
+msgid "The {BRAND_NAME} user who owns this RFQ; supplier responses and reminders route to them."
+msgstr "{BRAND_NAME} उपयोगकर्ता जो इस RFQ का मालिक है; आपूर्तिकर्ता प्रतिक्रिया और अनुस्मारक उन्हें रूट किए जाते हैं।"
+
+msgid "The accent color used across {BRAND_NAME}."
+msgstr "{BRAND_NAME} में उपयोग किए जाने वाले हाइलाइट रंग।"
 
 msgid "The account picked for {account} is no longer in the chart."
 msgstr "{account} के लिए चुने गए खाते अब चार्ट में नहीं हैं।"
@@ -22843,8 +22852,8 @@ msgstr "{account} के लिए चुने गए खाते अब च�
 msgid "The accounting dimension that categorizes items for reporting and analysis."
 msgstr "लेखांकन आयाम जो रिपोर्टिंग और विश्लेषण के लिए आइटम को वर्गीकृत करता है।"
 
-msgid "The accounts Carbon posts to automatically"
-msgstr "वे खाते जो Carbon स्वचालित रूप से पोस्ट करता है"
+msgid "The accounts {BRAND_NAME} posts to automatically"
+msgstr "वे खाते जो {BRAND_NAME} स्वचालित रूप से पोस्ट करता है"
 
 msgid "The action that copies a saved method (its materials, operations, and work instructions) onto a job or quote line."
 msgstr "किसी सहेजी गई विधि (इसकी सामग्री, ऑपरेशन और कार्य निर्देश) को किसी जॉब या कोटेशन पंक्ति पर प्रतिलिपि करने की कार्रवाई।"
@@ -22907,26 +22916,14 @@ msgstr "वह बाल्टियाँ जिनके विरुद्ध
 msgid "The capital assets you own and depreciate"
 msgstr "पूंजीगत संपत्ति जिसे आप मालिक हैं और मूल्यह्रास करते हैं"
 
-msgid "The Carbon user currently responsible for working this record, set per record and independent of ownership fields like Account Manager or Sales Person."
-msgstr "कार्बन उपयोगकर्ता वर्तमान में इस रिकॉर्ड पर काम करने के लिए जिम्मेदार है, प्रति रिकॉर्ड सेट किया गया है और खाता प्रबंधक या बिक्रय व्यक्ति जैसे स्वामित्व क्षेत्रों से स्वतंत्र है।"
-
-msgid "The Carbon user responsible for this customer relationship; emails and reminders about this customer route to them."
-msgstr "Carbon उपयोगकर्ता जो इस ग्राहक संबंध के लिए जिम्मेदार है; इस ग्राहक के बारे में ईमेल और अनुस्मारक उन्हें रूट किए जाते हैं।"
-
-msgid "The Carbon user responsible for this supplier relationship; emails and reminders about this supplier route to them."
-msgstr "Carbon उपयोगकर्ता जो इस आपूर्तिकर्ता संबंध के लिए जिम्मेदार है; इस आपूर्तिकर्ता के बारे में ईमेल और अनुस्मारक उन्हें रूट किए जाते हैं।"
-
-msgid "The Carbon user who owns this RFQ; supplier responses and reminders route to them."
-msgstr "Carbon उपयोगकर्ता जो इस RFQ का मालिक है; आपूर्तिकर्ता प्रतिक्रिया और अनुस्मारक उन्हें रूट किए जाते हैं।"
-
 msgid "The carrier and service a shipment goes out on, supplying the tracking-URL template that turns a tracking number into a link and the account freight charges post to."
 msgstr "वाहक और सेवा जिस पर एक शिपमेंट बाहर जाता है, ट्रैकिंग-URL टेम्पलेट की आपूर्ति करते हुए जो एक ट्रैकिंग नंबर को एक लिंक में बदल देता है और खाता भाड़ा शुल्क पोस्ट करता है।"
 
 msgid "The carrier that delivers goods from this supplier, when different from the supplier itself (e.g. supplier sells, FedEx ships)."
 msgstr "वह वाहक जो इस आपूर्तिकर्ता से सामान की डिलीवरी करता है, जब आपूर्तिकर्ता स्वयं से अलग हो (जैसे आपूर्तिकर्ता बेचता है, FedEx शिप करता है)।"
 
-msgid "The carrier's tracking-page URL with {trackingNumber} as a placeholder — Carbon substitutes the actual number when generating links on shipments."
-msgstr "{trackingNumber} को प्लेसहोल्डर के रूप में उपयोग करके वाहक का ट्रैकिंग-पेज URL - Carbon शिपमेंट पर लिंक उत्पन्न करते समय वास्तविक संख्या को प्रतिस्थापित करता है।"
+msgid "The carrier's tracking-page URL with {trackingNumber} as a placeholder — {BRAND_NAME} substitutes the actual number when generating links on shipments."
+msgstr "{trackingNumber} को प्लेसहोल्डर के रूप में उपयोग करके वाहक का ट्रैकिंग-पेज URL - {BRAND_NAME} शिपमेंट पर लिंक उत्पन्न करते समय वास्तविक संख्या को प्रतिस्थापित करता है।"
 
 msgid "The carriers and methods you ship orders with"
 msgstr "वह वाहक और तरीके जिनसे आप ऑर्डर भेजते हैं"
@@ -22991,8 +22988,8 @@ msgstr "अनुबंध अपनी समाप्ति तिथि प�
 msgid "The contract ends on the end date and does not renew. Planned invoices after it are removed."
 msgstr "अनुबंध अंतिम तारीख को समाप्त हो जाता है और नवीनीकृत नहीं होता है। उसके बाद के योजनाबद्ध चालान हटा दिए जाते हैं।"
 
-msgid "The contract's invoices will be billed to the Stripe customer already linked to this Carbon customer. To change its details, edit it in the Stripe dashboard."
-msgstr "अनुबंध के चालान पहले से इस Carbon ग्राहक से जुड़े Stripe ग्राहक को बिल किए जाएंगे। इसके विवरण बदलने के लिए, इसे Stripe डैशबोर्ड में संपादित करें।"
+msgid "The contract's invoices will be billed to the Stripe customer already linked to this {BRAND_NAME} customer. To change its details, edit it in the Stripe dashboard."
+msgstr "अनुबंध के चालान पहले से इस {BRAND_NAME} ग्राहक से जुड़े Stripe ग्राहक को बिल किए जाएंगे। इसके विवरण बदलने के लिए, इसे Stripe डैशबोर्ड में संपादित करें।"
 
 msgid "The contractor's expected weekly availability; scheduling uses this as the upper bound when assigning this contractor to operations across the week."
 msgstr "ठेकेदार की अपेक्षित साप्ताहिक उपलब्धता; शेड्यूलिंग इसे इस सप्ताह भर में इस ठेकेदार को ऑपरेशन के लिए असाइन करते समय ऊपरी सीमा के रूप में उपयोग करती है।"
@@ -23172,8 +23169,8 @@ msgstr "आपके द्वारा अपलोड की गई फ़ा�
 msgid "the first 3 to 4 weeks"
 msgstr "पहले 3 से 4 सप्ताह"
 
-msgid "The first day a company keeps its books in Carbon, set once when accounting is set up and never changed; from then on every posting writes a Posted journal."
-msgstr "कोई कंपनी Carbon में अपनी किताबें रखना शुरू करने का पहला दिन, जो लेखांकन सेटअप करते समय एक बार सेट किया जाता है और कभी नहीं बदला जाता; उसके बाद प्रत्येक पोस्टिंग एक पोस्ट किया गया जर्नल लिखती है।"
+msgid "The first day a company keeps its books in {BRAND_NAME}, set once when accounting is set up and never changed; from then on every posting writes a Posted journal."
+msgstr "कोई कंपनी {BRAND_NAME} में अपनी किताबें रखना शुरू करने का पहला दिन, जो लेखांकन सेटअप करते समय एक बार सेट किया जाता है और कभी नहीं बदला जाता; उसके बाद प्रत्येक पोस्टिंग एक पोस्ट किया गया जर्नल लिखती है।"
 
 msgid "The first day of a lease month (day {commencementDay}) where a payment period starts, after the last posted lease run"
 msgstr "पट्टे के महीने का पहला दिन (दिन {commencementDay}) जहां भुगतान अवधि शुरू होती है, अंतिम पोस्ट की गई पट्टे की अवधि के बाद"
@@ -23244,11 +23241,11 @@ msgstr "वह https पता जहाँ वर्कफ़्लो का �
 msgid "The human-readable document number (like J000001 or ECO-000001) minted from a sequence and stored on the record, distinct from its internal id."
 msgstr "मानव-पठनीय दस्तावेज़ संख्या (जैसे J000001 या ECO-000001) जो एक अनुक्रम से बनाई गई है और रिकॉर्ड पर संग्रहीत है, इसके आंतरिक id से अलग।"
 
-msgid "The identifier the customer uses for this part on their POs; Carbon resolves it to our internal Part ID on order import."
-msgstr "वह पहचानकर्ता जिसे ग्राहक अपने PO पर इस पार्ट के लिए उपयोग करता है; Carbon इसे ऑर्डर आयात पर हमारी आंतरिक Part ID में हल करता है।"
+msgid "The identifier the customer uses for this part on their POs; {BRAND_NAME} resolves it to our internal Part ID on order import."
+msgstr "वह पहचानकर्ता जिसे ग्राहक अपने PO पर इस पार्ट के लिए उपयोग करता है; {BRAND_NAME} इसे ऑर्डर आयात पर हमारी आंतरिक Part ID में हल करता है।"
 
-msgid "The identifier the supplier uses for this part on their quotes and invoices; Carbon resolves it to our internal Part ID."
-msgstr "पहचानकर्ता जो आपूर्तिकर्ता इस भाग के लिए अपने उद्धरणों और चालानों पर उपयोग करता है; Carbon इसे हमारे आंतरिक भाग ID में हल करता है।"
+msgid "The identifier the supplier uses for this part on their quotes and invoices; {BRAND_NAME} resolves it to our internal Part ID."
+msgstr "पहचानकर्ता जो आपूर्तिकर्ता इस भाग के लिए अपने उद्धरणों और चालानों पर उपयोग करता है; {BRAND_NAME} इसे हमारे आंतरिक भाग ID में हल करता है।"
 
 msgid "The immediate nonconformance task that quarantines affected stock or work before the root cause is known."
 msgstr "तत्काल गैर-अनुरूपता कार्य जो प्रभावित स्टॉक या काम को संगरोध करता है इससे पहले कि मूल कारण ज्ञात हो।"
@@ -23286,8 +23283,8 @@ msgstr "उस दिन देय नौकरी के घंटे (दे�
 msgid "The job whose operation this outside-processing line covers; the line's receipt closes the operation against this job."
 msgstr "वह काम जिसका संचालन यह बाहरी-प्रसंस्करण लाइन कवर करता है; लाइन की रसीद इस काम के विरुद्ध संचालन को बंद करती है।"
 
-msgid "The job's position in its location's schedule queue — a fractional number Carbon computes from the due date and deadline type, not a Low/High rating."
-msgstr "जॉब की अपने स्थान की शेड्यूल पंक्ति में स्थिति — एक अंशीय संख्या जो Carbon नियत तिथि और समय सीमा प्रकार से परिकलित करता है, कोई निम्न/उच्च रेटिंग नहीं।"
+msgid "The job's position in its location's schedule queue — a fractional number {BRAND_NAME} computes from the due date and deadline type, not a Low/High rating."
+msgstr "जॉब की अपने स्थान की शेड्यूल पंक्ति में स्थिति — एक अंशीय संख्या जो {BRAND_NAME} नियत तिथि और समय सीमा प्रकार से परिकलित करता है, कोई निम्न/उच्च रेटिंग नहीं।"
 
 msgid "The job's work-in-progress balance moves to this asset now, and completing the job sweeps the rest. Only open jobs that are not linked to a sales order or another asset are listed."
 msgstr "जॉब का चल रहा संतुलन अब इस संपत्ति में चली जाती है, और जॉब को पूरा करना बाकी को स्वीप करता है। केवल खुली जॉब जो बिक्रय आदेश या दूसरी संपत्ति से जुड़ी नहीं हैं वे सूचीबद्ध हैं।"
@@ -23396,8 +23393,8 @@ msgstr "मशीन अभी भी चल रही है। रुकने
 msgid "The machines, cells, and stations your work runs through"
 msgstr "वे मशीनें, सेल और स्टेशन जिनके माध्यम से आपका काम चलता है"
 
-msgid "The master data to set up when first configuring Carbon, grouped by module. Mark each one configured as you go."
-msgstr "Carbon को पहली बार कॉन्फ़िगर करते समय सेट अप करने के लिए मास्टर डेटा, मॉड्यूल द्वारा समूहीकृत। जैसे-जैसे आप आगे बढ़ें, प्रत्येक को कॉन्फ़िगर किए गए के रूप में चिह्नित करें।"
+msgid "The master data to set up when first configuring {BRAND_NAME}, grouped by module. Mark each one configured as you go."
+msgstr "{BRAND_NAME} को पहली बार कॉन्फ़िगर करते समय सेट अप करने के लिए मास्टर डेटा, मॉड्यूल द्वारा समूहीकृत। जैसे-जैसे आप आगे बढ़ें, प्रत्येक को कॉन्फ़िगर किए गए के रूप में चिह्नित करें।"
 
 msgid "The material is purchased from a supplier for that specific order, rather than made or pulled from stock."
 msgstr "सामग्री एक विशेष आदेश के लिए एक आपूर्तिकर्ता से खरीदी जाती है, बजाय इसे बनाने या स्टॉक से खींचने के।"
@@ -23525,11 +23522,11 @@ msgstr "यह मार्ग है जो इस चरण के घटक �
 msgid "The payment from the effective date. Escalation still steps up on each anniversary of the commencement"
 msgstr "प्रभावी तिथि से भुगतान। बढ़ोतरी अभी भी शुरुआत की प्रत्येक वर्षगांठ पर बढ़ती है"
 
-msgid "The people on the Carbon side who will run your implementation, and how to reach them."
-msgstr "कार्बन की ओर से वे लोग जो आपके कार्यान्वयन को चलाएंगे, और उन तक कैसे पहुंचें।"
+msgid "The people on the {BRAND_NAME} side who will run your implementation, and how to reach them."
+msgstr ""
 
-msgid "The people on your team and their access to Carbon"
-msgstr "आपकी टीम के लोग और Carbon तक उनकी पहुंच"
+msgid "The people on your team and their access to {BRAND_NAME}"
+msgstr "आपकी टीम के लोग और {BRAND_NAME} तक उनकी पहुंच"
 
 msgid "The per-company counter behind a document type's readable number, assembling the prefix, the zero-padded next value, and the suffix, and advancing as each document is created."
 msgstr "प्रति-कंपनी काउंटर जो एक दस्तावेज़ प्रकार की पठनीय संख्या के अंतर्गत काम करता है, जो उपसर्ग, शून्य-पैडित अगली मान, और प्रत्यय को एकत्रित करता है, और हर नए दस्तावेज़ के निर्माण के साथ आगे बढ़ता है।"
@@ -23659,8 +23656,8 @@ msgstr "शेष {0} {1} अब अपेक्षित नहीं होग
 msgid "The request body sent verbatim with a JSON content type after workflow variables inside it are substituted, on the methods that carry one."
 msgstr "वह request body जिसे JSON content type के साथ ज्यों का त्यों भेजा जाता है इसके अंदर के workflow variables को substitute करने के बाद, उन methods पर जो इसे carry करते हैं।"
 
-msgid "The residual WIP a job has left at close, swept to a Production Variance account — the only variance Carbon books for a job."
-msgstr "अवशिष्ट WIP जो एक जॉब के पास बंद करते समय बचा है, एक उत्पादन विचलन खाते में स्वीप किया गया — एक जॉब के लिए कार्बन बुक का एकमात्र विचलन।"
+msgid "The residual WIP a job has left at close, swept to a Production Variance account — the only variance {BRAND_NAME} books for a job."
+msgstr ""
 
 msgid "The response from Onshape was missing required parameters. Check the private app's redirect URL, then save the integration settings again."
 msgstr "Onshape से प्रतिक्रिया में आवश्यक पैरामीटर नहीं थे। निजी ऐप के पुनः निर्देशन URL की जाँच करें, फिर एकीकरण सेटिंग्स को फिर से सहेजें।"
@@ -23818,8 +23815,8 @@ msgstr "आपूर्तिकर्ता जो इस RFQ को प्र�
 msgid "The surface finishes available on your materials"
 msgstr "आपकी सामग्रियों पर उपलब्ध सतह फिनिशिंग"
 
-msgid "The system a company uses to manage its people's logins — Okta, Entra ID, or Google Workspace — which vouches for who someone is when they sign in to Carbon via SSO."
-msgstr "वह प्रणाली जिसका उपयोग कंपनी अपने लोगों के लॉगिन प्रबंधित करने के लिए करती है — Okta, Entra ID, या Google Workspace — जो SSO के माध्यम से Carbon में साइन इन करते समय व्यक्ति की पहचान की पुष्टि करती है।"
+msgid "The system a company uses to manage its people's logins — Okta, Entra ID, or Google Workspace — which vouches for who someone is when they sign in to {BRAND_NAME} via SSO."
+msgstr "वह प्रणाली जिसका उपयोग कंपनी अपने लोगों के लॉगिन प्रबंधित करने के लिए करती है — Okta, Entra ID, या Google Workspace — जो SSO के माध्यम से {BRAND_NAME} में साइन इन करते समय व्यक्ति की पहचान की पुष्टि करती है।"
 
 msgid "The system passes every in-scope acceptance test in your configured system, with your data; the data is validated; and you sign off. Then go-live."
 msgstr "सिस्टम आपके कॉन्फ़िगर किए गए सिस्टम में हर इन-स्कोप स्वीकृति परीक्षा पास करता है, आपके डेटा के साथ; डेटा सत्यापित है; और आप साइन ऑफ करते हैं। फिर लाइव जाएं।"
@@ -23863,8 +23860,8 @@ msgstr "इस प्रक्रिया के लिए इस आपूर�
 msgid "The unique identifier on this physical unit; one row per serial, quantity is always 1."
 msgstr "इस भौतिक इकाई पर अद्वितीय पहचानकर्ता; प्रति सीरीज़ नंबर एक पंक्ति, मात्रा हमेशा 1 होती है।"
 
-msgid "The unit a routing time is expressed in, such as Hours/Piece or Total Hours, telling Carbon whether the time scales with quantity or is fixed per run."
-msgstr "वह इकाई जिसमें रूटिंग समय व्यक्त किया जाता है, जैसे घंटे/टुकड़ा या कुल घंटे, कार्बन को बताता है कि समय मात्रा के साथ बढ़ता है या प्रति रन निश्चित है।"
+msgid "The unit a routing time is expressed in, such as Hours/Piece or Total Hours, telling {BRAND_NAME} whether the time scales with quantity or is fixed per run."
+msgstr ""
 
 msgid "The unit and its rates are fixed once the agreement is activated."
 msgstr "समझौता सक्रिय होने के बाद इकाई और इसकी दरें तय हो जाती हैं।"
@@ -24034,6 +24031,9 @@ msgstr "इन इकाइयों को बिक्री के रूप 
 msgid "They are not in your chart, but documents or journals use them. Pick the account in your chart that replaces each one."
 msgstr "ये आपके चार्ट में नहीं हैं, लेकिन दस्तावेज़ या जर्नल उनका उपयोग करते हैं। अपने चार्ट में उस खाते को चुनें जो प्रत्येक को बदलता है।"
 
+msgid "This {BRAND_NAME} instance is missing its Onshape OAuth credentials. Ask an administrator to set them."
+msgstr "इस {BRAND_NAME} इंस्टेंस में Onshape OAuth क्रेडेंशियल नहीं हैं। किसी व्यवस्थापक से उन्हें सेट करने के लिए कहें।"
+
 msgid "this ability"
 msgstr "यह कौशल"
 
@@ -24054,17 +24054,14 @@ msgstr "यह बैकअप पूर्ण नहीं किया जा 
 msgid "This backup hasn't been checked yet. Any differences are found when the restore runs."
 msgstr "इस बैकअप की अभी जांच नहीं की गई है। कोई भी अंतर पुनः स्थापित करने के समय पाया जाता है।"
 
-msgid "This browser does not support push notifications. On iPhone or iPad, add Carbon to the Home Screen first."
-msgstr "यह ब्राउज़र पुश सूचनाओं का समर्थन नहीं करता। iPhone या iPad पर, पहले Carbon को होम स्क्रीन में जोड़ें।"
+msgid "This browser does not support push notifications. On iPhone or iPad, add {BRAND_NAME} to the Home Screen first."
+msgstr "यह ब्राउज़र पुश सूचनाओं का समर्थन नहीं करता। iPhone या iPad पर, पहले {BRAND_NAME} को होम स्क्रीन में जोड़ें।"
 
-msgid "This cannot be changed later — {integrationName} allows only one connected accounting system, so the choice decides what Carbon is permitted to do. To switch, you would uninstall and reconnect."
-msgstr "यह बाद में नहीं बदला जा सकता — {integrationName} केवल एक जुड़े हुए लेखांकन प्रणाली की अनुमति देता है, इसलिए यह विकल्प तय करता है कि Carbon क्या करने के लिए अनुमत है। स्विच करने के लिए, आप अनइंस्टॉल करेंगे और फिर से कनेक्ट करेंगे।"
+msgid "This cannot be changed later — {integrationName} allows only one connected accounting system, so the choice decides what {BRAND_NAME} is permitted to do. To switch, you would uninstall and reconnect."
+msgstr "यह बाद में नहीं बदला जा सकता — {integrationName} केवल एक जुड़े हुए लेखांकन प्रणाली की अनुमति देता है, इसलिए यह विकल्प तय करता है कि {BRAND_NAME} क्या करने के लिए अनुमत है। स्विच करने के लिए, आप अनइंस्टॉल करेंगे और फिर से कनेक्ट करेंगे।"
 
 msgid "This cannot be undone."
 msgstr "इसे पूर्ववत नहीं किया जा सकता है।"
-
-msgid "This Carbon instance is missing its Onshape OAuth credentials. Ask an administrator to set them."
-msgstr "इस Carbon इंस्टेंस में Onshape OAuth क्रेडेंशियल नहीं हैं। किसी व्यवस्थापक से उन्हें सेट करने के लिए कहें।"
 
 msgid "This change notice is being implemented, so its changes are locked. Reopen it to edit."
 msgstr "यह परिवर्तन सूचना लागू की जा रही है, इसलिए इसके परिवर्तन लॉक हैं। इसे संपादित करने के लिए फिर से खोलें।"
@@ -24124,15 +24121,15 @@ msgstr "इस निरीक्षण योजना"
 msgid "This integration isn't available yet"
 msgstr "यह एकीकरण अभी उपलब्ध नहीं है"
 
-#. placeholder {0}: company?.name ?? "Carbon"
+#. placeholder {0}: company?.name ?? BRAND_NAME
 msgid "This invitation to join {0} has expired. You can request a new invite to be sent to your email."
 msgstr "यह आमंत्रण {0} में शामिल होने के लिए समाप्त हो गया है। आप अपने ईमेल पर भेजने के लिए नया आमंत्रण का अनुरोध कर सकते हैं।"
 
 msgid "This invoice has no usable due date — choose one for Stripe."
 msgstr "इस चालान का कोई उपयोगी नियत तिथि नहीं है — Stripe के लिए एक चुनें।"
 
-msgid "This invoice will be billed to the Stripe customer already linked to this Carbon customer. To change its details, edit it in the Stripe dashboard."
-msgstr "इस चालान को Stripe ग्राहक को बिल दिया जाएगा जो पहले से इस Carbon ग्राहक से जुड़ा हुआ है। इसके विवरण को बदलने के लिए, Stripe डैशबोर्ड में संपादित करें।"
+msgid "This invoice will be billed to the Stripe customer already linked to this {BRAND_NAME} customer. To change its details, edit it in the Stripe dashboard."
+msgstr "इस चालान को Stripe ग्राहक को बिल दिया जाएगा जो पहले से इस {BRAND_NAME} ग्राहक से जुड़ा हुआ है। इसके विवरण को बदलने के लिए, Stripe डैशबोर्ड में संपादित करें।"
 
 msgid "This is a controlled environment, so an authenticator app is required."
 msgstr "यह एक नियंत्रित वातावरण है, इसलिए एक प्रमाणकर्ता ऐप की आवश्यकता है।"
@@ -24872,8 +24869,8 @@ msgstr "प्रशिक्षण रिकॉर्ड नहीं किय
 msgid "Training Plan"
 msgstr "प्रशिक्षण योजना"
 
-msgid "Training taken outside Carbon, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
-msgstr "Carbon के बाहर लिया गया प्रशिक्षण, जैसे विक्रेता पाठ्यक्रम। असाइनमेंट के पास केवल एक नाम है। एक प्रशासक प्रत्येक कर्मचारी को पूर्ण करता है और उनके प्रमाण पत्र को संलग्न कर सकता है।"
+msgid "Training taken outside {BRAND_NAME}, such as a vendor course. The assignment has only a name. An admin marks each employee complete and can attach their certificate."
+msgstr "{BRAND_NAME} के बाहर लिया गया प्रशिक्षण, जैसे विक्रेता पाठ्यक्रम। असाइनमेंट के पास केवल एक नाम है। एक प्रशासक प्रत्येक कर्मचारी को पूर्ण करता है और उनके प्रमाण पत्र को संलग्न कर सकता है।"
 
 msgid "Training video"
 msgstr ""
@@ -26228,8 +26225,8 @@ msgstr "भारित-औसत शेष अवधि (वर्ष)"
 msgid "Welcome back, {name}."
 msgstr "आपका स्वागत है, {name}।"
 
-msgid "Welcome to Carbon"
-msgstr "कार्बन में आपका स्वागत है"
+msgid "Welcome to {BRAND_NAME}"
+msgstr ""
 
 msgid "Welcome, {companyName}"
 msgstr "स्वागत है, {companyName}"
@@ -26246,8 +26243,8 @@ msgstr "यह किस विफलता श्रेणी का है —
 msgid "What changes day to day"
 msgstr "दिन-प्रतिदिन क्या बदलता है"
 
-msgid "What changes when you move to Carbon, and roughly what it's worth. Estimates, not a forecast."
-msgstr "जब आप Carbon पर जाते हैं तो क्या बदलता है, और मोटे तौर पर इसकी कीमत क्या है। अनुमान, पूर्वानुमान नहीं।"
+msgid "What changes when you move to {BRAND_NAME}, and roughly what it's worth. Estimates, not a forecast."
+msgstr "जब आप {BRAND_NAME} पर जाते हैं तो क्या बदलता है, और मोटे तौर पर इसकी कीमत क्या है। अनुमान, पूर्वानुमान नहीं।"
 
 msgid "What data"
 msgstr "कौन सा डेटा"
@@ -26360,6 +26357,9 @@ msgstr "स्कोप से बाहर क्या है"
 msgid "When"
 msgstr "कब"
 
+msgid "When {BRAND_NAME} committed to having the goods arrive; combined with the shipping method's transit days, this drives Ship Date back-calc."
+msgstr ""
+
 msgid "When {name} changes"
 msgstr "जब {name} परिवर्तन होता है"
 
@@ -26374,9 +26374,6 @@ msgstr "जब एक सीरियल या बैच समाप्त ह
 
 msgid "When an invoice is created"
 msgstr "जब एक चालान बनाया जाता है"
-
-msgid "When Carbon committed to having the goods arrive; combined with the shipping method's transit days, this drives Ship Date back-calc."
-msgstr "जब कार्बन ने माल के आने का वचन दिया; शिपिंग विधि के ट्रांजिट दिनों के साथ संयुक्त, यह जहाज तारीख की पिछली गणना को चलाता है।"
 
 msgid "When deferred, accrued and lease-interest revenue will be recognized"
 msgstr "जब आस्थगित, संचित और पट्टा-ब्याज राजस्व को मान्यता दी जाएगी"
@@ -26414,8 +26411,8 @@ msgstr "जब सक्षम हो, तो यह मूल्य ओवर�
 msgid "When on, this rule fires for every target of its type. Assignment rows are ignored but preserved."
 msgstr "जब चालू हो, तो यह नियम अपने प्रकार के प्रत्येक लक्ष्य के लिए सक्रिय होता है। असाइनमेंट पंक्तियों को अनदेखा किया जाता है लेकिन संरक्षित रखा जाता है।"
 
-msgid "When supplier responses are expected back; suppliers see this date on the RFQ portal and Carbon stops accepting late responses after it (configurable)."
-msgstr "जब आपूर्तिकर्ता प्रतिक्रिया की उम्मीद की जाती है; आपूर्तिकर्ता आरएफक्यू पोर्टल पर यह तारीख देखते हैं और कार्बन इसके बाद देर से प्रतिक्रिया स्वीकार नहीं करता है (कॉन्फ़िगर करने योग्य)।"
+msgid "When supplier responses are expected back; suppliers see this date on the RFQ portal and {BRAND_NAME} stops accepting late responses after it (configurable)."
+msgstr ""
 
 msgid "When the buyer asked for the goods; the supplier may promise something else on Promised Date and post something else again on Delivery Date."
 msgstr "जब क्रेता ने माल के लिए अनुरोध किया; आपूर्तिकर्ता वादा की गई तिथि पर कुछ और वादा कर सकता है और डिलीवरी तिथि पर फिर से कुछ और पोस्ट कर सकता है।"
@@ -26546,11 +26543,11 @@ msgstr "आप आज कहाँ हैं"
 msgid "Where you want to grow"
 msgstr "जहां आप बढ़ना चाहते हैं"
 
+msgid "Whether {BRAND_NAME} follows each unit (Serial), each lot (Batch), the quantity (Inventory), or no tracking (Non-Inventory)."
+msgstr "क्या {BRAND_NAME} प्रत्येक इकाई (Serial), प्रत्येक बैच (Batch), मात्रा (Inventory), या कोई ट्रैकिंग नहीं (गैर-इन्वेंटरी) का पालन करता है।"
+
 msgid "Whether Amount is interpreted as a percentage of the line price or as a fixed currency amount."
 msgstr "क्या राशि को लाइन मूल्य के प्रतिशत के रूप में या एक निश्चित मुद्रा राशि के रूप में समझा जाता है।"
-
-msgid "Whether Carbon follows each unit (Serial), each lot (Batch), the quantity (Inventory), or no tracking (Non-Inventory)."
-msgstr "क्या Carbon प्रत्येक इकाई (Serial), प्रत्येक बैच (Batch), मात्रा (Inventory), या कोई ट्रैकिंग नहीं (गैर-इन्वेंटरी) का पालन करता है।"
 
 msgid "Whether each unit is treated as a rental or a sale is decided when the agreement is activated, from the terms and each unit's inputs."
 msgstr "चाहे प्रत्येक इकाई को किराये या बिक्री के रूप में माना जाए, यह तय किया जाता है जब समझौता सक्रिय किया जाता है, शर्तों और प्रत्येक इकाई के इनपुट से।"
@@ -26930,14 +26927,14 @@ msgstr "आपने यह आइटम प्राप्त किया"
 msgid "You received this lot"
 msgstr "आपने यह लॉट प्राप्त किया"
 
-msgid "You're live on Carbon"
-msgstr "आप Carbon पर लाइव हैं"
+msgid "You're live on {BRAND_NAME}"
+msgstr "आप {BRAND_NAME} पर लाइव हैं"
 
 msgid "You're one step away from your workspace."
 msgstr "आप अपने कार्यक्षेत्र से एक चरण दूर हैं।"
 
-msgid "You're setting Carbon up yourself, at your own pace"
-msgstr "आप Carbon को स्वयं सेट अप कर रहे हैं, अपनी गति से"
+msgid "You're setting {BRAND_NAME} up yourself, at your own pace"
+msgstr "आप {BRAND_NAME} को स्वयं सेट अप कर रहे हैं, अपनी गति से"
 
 msgid "You've been clocked in for {hoursElapsed} hours. Did you forget to clock out?"
 msgstr "आप {hoursElapsed} घंटे से साइन इन हैं। क्या आप कार्य समाप्त करना भूल गए?"
@@ -27035,11 +27032,11 @@ msgstr "निष्क्रियता के बाद आपका सत�
 msgid "Your source data is accessible and reasonably clean"
 msgstr "आपका स्रोत डेटा सुलभ है और उचित रूप से स्वच्छ है"
 
-msgid "Your team can free up time to learn Carbon and load your data"
-msgstr "आपकी टीम Carbon सीखने और अपना डेटा लोड करने के लिए समय निकाल सकती है"
+msgid "Your team can free up time to learn {BRAND_NAME} and load your data"
+msgstr "आपकी टीम {BRAND_NAME} सीखने और अपना डेटा लोड करने के लिए समय निकाल सकती है"
 
-msgid "Your team leads learn Carbon first using the in-app guides and Academy, then bring everyone else up to speed."
-msgstr "आपकी टीम के नेता पहले इन-ऐप गाइड और Academy का उपयोग करके Carbon सीखते हैं, फिर बाकी सभी को तेजी से सीखाते हैं।"
+msgid "Your team leads learn {BRAND_NAME} first using the in-app guides and Academy, then bring everyone else up to speed."
+msgstr "आपकी टीम के नेता पहले इन-ऐप गाइड और Academy का उपयोग करके {BRAND_NAME} सीखते हैं, फिर बाकी सभी को तेजी से सीखाते हैं।"
 
 msgid "Your team, structure, and access."
 msgstr "आपकी टीम, संरचना, और पहुंच।"

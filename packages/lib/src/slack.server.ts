@@ -6,6 +6,7 @@ import type { Database } from "@carbon/database";
 import { getAppUrl, SLACK_BOT_TOKEN } from "@carbon/env";
 import { storage } from "@carbon/files";
 import { getLogger } from "@carbon/logger";
+import { BRAND_NAME } from "@carbon/utils";
 import type { WebClientOptions } from "@slack/web-api";
 import { WebClient } from "@slack/web-api";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -148,7 +149,7 @@ export async function postSuggestionToCarbonSlack(
         type: "section",
         text: {
           type: "mrkdwn",
-          text: "_… suggestion too long for Slack — read the full text in Carbon._"
+          text: `_… suggestion too long for Slack — read the full text in ${BRAND_NAME}._`
         }
       });
     }

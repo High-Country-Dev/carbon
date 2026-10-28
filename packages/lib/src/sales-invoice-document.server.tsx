@@ -15,6 +15,7 @@ import {
 } from "@carbon/documents/template";
 import { getContentType, getFileExtension, storage } from "@carbon/files";
 import { getLogger } from "@carbon/logger";
+import { BRAND_NAME } from "@carbon/utils";
 import { renderToStream } from "@react-pdf/renderer";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
@@ -328,7 +329,7 @@ export async function loadSalesInvoiceDocument(args: {
     locale,
     currencyDecimals,
     meta: {
-      author: "Carbon",
+      author: BRAND_NAME,
       keywords: "sales order",
       subject: "Sales Invoice"
     },

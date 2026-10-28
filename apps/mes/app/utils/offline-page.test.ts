@@ -21,8 +21,8 @@ const read = (path: string) =>
 // 3. pin the new hash and cache name here AND in the other app's copy of this
 //    test (apps/{erp,mes}/app/utils/offline-page.test.ts).
 const OFFLINE_PAGE_SHA256 =
-  "82d00b39fa70f0c33ec54fa8b98480bc42cfb4dfd37d28decd89181b8ff3f2de";
-const OFFLINE_CACHE = "mes-shell-v5";
+  "335871d956bf7c28796cb30df87a6ed81796809465ce18b3b33ba6378c561df2";
+const OFFLINE_CACHE = "mes-shell-v6";
 
 describe("offline page", () => {
   it("ships with the cache version its worker was bumped for", () => {

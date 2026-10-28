@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import { describe, expect, it } from "vitest";
 import { buildSystemPrompt } from "./agent.prompt";
 
@@ -16,7 +17,7 @@ describe("agent system prompt", () => {
   // scope section the model answers arithmetic, writes Python, etc. — it has the
   // capability, and nothing else in the prompt tells it not to.
   it("declares Carbon-only scope", () => {
-    expect(prompt).toContain("SCOPE — CARBON ONLY");
+    expect(prompt).toContain(`SCOPE — ${BRAND_NAME.toUpperCase()} ONLY`);
     expect(prompt).toContain("NOT a general-purpose");
   });
 
@@ -30,19 +31,23 @@ describe("agent system prompt", () => {
     expect(prompt).toContain("HOW TO DECLINE");
     // A refusal with no alternative reads as a dead end.
     expect(prompt).toContain(
-      "offer\na concrete Carbon-related thing you CAN do"
+      `offer\na concrete ${BRAND_NAME}-related thing you CAN do`
     );
   });
 
   it("holds the scope against insistence and Carbon-framed smuggling", () => {
     expect(prompt).toContain("the scope does\nnot change");
-    expect(prompt).toContain("write a Python script to call Carbon's API");
+    expect(prompt).toContain(
+      `write a Python script to call ${BRAND_NAME}'s API`
+    );
   });
 
   it("keeps Carbon-adjacent questions answerable", () => {
     // Over-refusing is the failure mode on the other side: ERP/manufacturing
     // concept questions are the agent's whole job.
     expect(prompt).toContain("manufacturing/ERP/MES/QMS domain concepts");
-    expect(prompt).toContain("answer the Carbon half and decline the rest");
+    expect(prompt).toContain(
+      `answer the ${BRAND_NAME} half and decline the rest`
+    );
   });
 });

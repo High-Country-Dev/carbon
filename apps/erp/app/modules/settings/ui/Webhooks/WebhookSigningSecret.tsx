@@ -17,6 +17,7 @@ import {
   InputRightElement,
   toast
 } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useState } from "react";
 import { path } from "~/utils/path";
@@ -88,7 +89,7 @@ export default function WebhookSigningSecret({
       <FormHelperText>
         <Trans>
           Every delivery carries a Carbon-Signature header signed with this
-          secret. Verify it to know a request came from Carbon.
+          secret. Verify it to know a request came from {BRAND_NAME}.
         </Trans>
       </FormHelperText>
       {confirmingRoll ? (

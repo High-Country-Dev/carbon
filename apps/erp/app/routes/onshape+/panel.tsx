@@ -3,6 +3,7 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { OnshapePanel, parsePanelContext } from "@carbon/ee";
+import { BRAND_NAME } from "@carbon/utils";
 import type {
   HeadersFunction,
   LoaderFunctionArgs,
@@ -15,7 +16,9 @@ export const config = {
   runtime: "nodejs"
 };
 
-export const meta: MetaFunction = () => [{ title: "Carbon for Onshape" }];
+export const meta: MetaFunction = () => [
+  { title: `${BRAND_NAME} for Onshape` }
+];
 
 /**
  * The one route Carbon allows to be framed, and only by Onshape.

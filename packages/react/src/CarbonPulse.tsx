@@ -3,14 +3,16 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import type { CSSProperties } from "react";
+import { BrandWordmark } from "./BrandWordmark";
 import { cn } from "./utils/cn";
 
 const DEFAULT_SIZE = 72;
 const DEFAULT_DURATION_MS = 2400;
 
 type CarbonPulseProps = {
-  // Relative paths resolve against the current app, which ships both marks in
-  // its public/ folder. The light mark is the one drawn on light backgrounds.
+  // Relative paths resolve against the current app's public/ folder. The light
+  // mark is the one drawn on light backgrounds. Without them the pulse sweeps
+  // across the brand wordmark (BrandWordmark).
   lightSrc?: string;
   darkSrc?: string;
   size?: number;
@@ -39,11 +41,25 @@ function Mark({
   className,
   style
 }: {
-  lightSrc: string;
-  darkSrc: string;
+  lightSrc?: string;
+  darkSrc?: string;
   className?: string;
   style?: CSSProperties;
 }) {
+  if (!lightSrc || !darkSrc) {
+    return (
+      <span
+        className={cn(
+          "flex size-full items-center justify-center whitespace-nowrap",
+          className
+        )}
+        style={style}
+      >
+        <BrandWordmark size="md" />
+      </span>
+    );
+  }
+
   return (
     <span className={cn("block size-full", className)} style={style}>
       <img
@@ -62,13 +78,13 @@ function Mark({
   );
 }
 
-// The Carbon mark sits dimmed while a band of light sweeps across it from the
+// The brand mark sits dimmed while a band of light sweeps across it from the
 // bottom-left to the top-right. The sweep reveals a full-strength copy of the
 // mark through a moving mask, so the light only ever falls inside the logo.
 // Keyframes live in packages/config/tailwind/theme.css.
 export function CarbonPulse({
-  lightSrc = "/carbon-mark-light.svg",
-  darkSrc = "/carbon-mark-dark.svg",
+  lightSrc,
+  darkSrc,
   size = DEFAULT_SIZE,
   durationMs = DEFAULT_DURATION_MS,
   label = "Loading",

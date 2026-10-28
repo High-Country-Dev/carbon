@@ -22,6 +22,7 @@ export * from "./batch-pick-split";
 export * from "./batch-split";
 export * from "./batch-time-split";
 export * from "./bom";
+export * from "./brand";
 export * from "./calculate-due-date";
 export * from "./color";
 export * from "./const";

@@ -9,7 +9,7 @@ import {
   MenuItem,
   useDisclosure
 } from "@carbon/react";
-import { INPUT_FORMAT, INPUT_STEP } from "@carbon/utils";
+import { BRAND_NAME, INPUT_FORMAT, INPUT_STEP } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useCallback, useMemo, useState } from "react";
@@ -155,7 +155,7 @@ const LeasePaymentsGrid = ({
             <DateTime value={row.original.dueDate} variant="date" />
             {row.original.status === "Skipped" && (
               <span className="text-xs text-muted-foreground">
-                <Trans>Paid outside Carbon</Trans>
+                <Trans>Paid outside {BRAND_NAME}</Trans>
               </span>
             )}
           </span>

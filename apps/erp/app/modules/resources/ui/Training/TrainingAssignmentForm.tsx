@@ -20,6 +20,7 @@ import {
   ModalDrawerTitle,
   VStack
 } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useState } from "react";
 import type { z } from "zod";
@@ -143,12 +144,12 @@ function AssignmentFormContent({
               {
                 value: "internal",
                 title: t`Internal`,
-                description: t`Employees complete a training in Carbon`
+                description: t`Employees complete a training in ${BRAND_NAME}`
               },
               {
                 value: "external",
                 title: t`External`,
-                description: t`Taken outside Carbon. You mark each employee complete.`
+                description: t`Taken outside ${BRAND_NAME}. You mark each employee complete.`
               }
             ]}
           />

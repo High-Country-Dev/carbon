@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import { tool } from "ai";
 import { z } from "zod";
 import {
@@ -18,8 +19,7 @@ import { findPages, resolvePage } from "./agent.pages";
 export function createAgentTools() {
   return {
     search_docs: tool({
-      description:
-        "Search Carbon product documentation for how-to and conceptual answers. Returns matching sections: page title, section heading, a short snippet and a `url` (with #section). Answer from the snippets when they are enough; otherwise read_doc the url.",
+      description: `Search ${BRAND_NAME} product documentation for how-to and conceptual answers. Returns matching sections: page title, section heading, a short snippet and a \`url\` (with #section). Answer from the snippets when they are enough; otherwise read_doc the url.`,
       inputSchema: z.object({
         query: z.string(),
         limit: z.number().int().min(1).max(10).optional()
@@ -43,8 +43,7 @@ export function createAgentTools() {
       execute: async () => ({ shown: true })
     }),
     present_link: tool({
-      description:
-        "Show a labelled link the user can open (a Carbon record page or a docs URL).",
+      description: `Show a labelled link the user can open (a ${BRAND_NAME} record page or a docs URL).`,
       inputSchema: linkBlock,
       execute: async () => ({ shown: true })
     }),

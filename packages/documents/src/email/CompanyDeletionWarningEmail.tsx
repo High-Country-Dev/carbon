@@ -2,6 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { BRAND_NAME } from "@carbon/utils";
 import {
   Body,
   Container,
@@ -95,9 +96,9 @@ export const CompanyDeletionWarningEmail = ({
             <Text
               className={`text-[15px] leading-[24px] m-0 ${themeClasses.text}`}
             >
-              {companyName} doesn't have an active Carbon subscription. On or
-              after {deletionDate} we'll permanently delete it, along with its
-              data and files.
+              {companyName} doesn't have an active {BRAND_NAME} subscription. On
+              or after {deletionDate} we'll permanently delete it, along with
+              its data and files.
             </Text>
             <Text
               className={`text-[15px] leading-[24px] m-0 mt-[12px] ${themeClasses.text}`}

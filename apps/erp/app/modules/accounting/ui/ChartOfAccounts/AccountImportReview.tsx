@@ -21,6 +21,7 @@ import {
   Thead,
   Tr
 } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { ReactNode } from "react";
 import { LuTriangleAlert } from "react-icons/lu";
@@ -241,7 +242,7 @@ export default function AccountImportReview({
             <Thead>
               <Tr>
                 <Th>
-                  <Trans>Carbon account</Trans>
+                  <Trans>{BRAND_NAME} account</Trans>
                 </Th>
                 <Th>
                   <Trans>Used by</Trans>
@@ -323,7 +324,7 @@ export default function AccountImportReview({
 
       <ActionTable
         title={<Trans>Updated</Trans>}
-        headers={[t`Carbon account`, t`Becomes`, t`Group`]}
+        headers={[t`${BRAND_NAME} account`, t`Becomes`, t`Group`]}
         rows={plan.updates.map((u) => ({
           key: u.accountId,
           cells: [
@@ -335,7 +336,7 @@ export default function AccountImportReview({
       />
       <ActionTable
         title={<Trans>Merged</Trans>}
-        headers={[t`Carbon account`, t`Into`]}
+        headers={[t`${BRAND_NAME} account`, t`Into`]}
         rows={plan.merges.map((m) => ({
           key: m.sourceId,
           cells: [label(accounts[m.sourceId]), rowLabel(m.targetLine)]
@@ -351,7 +352,7 @@ export default function AccountImportReview({
       />
       <ActionTable
         title={<Trans>Deleted</Trans>}
-        headers={[t`Carbon account`]}
+        headers={[t`${BRAND_NAME} account`]}
         rows={plan.deletes.map((accountId) => ({
           key: accountId,
           cells: [label(accounts[accountId])]

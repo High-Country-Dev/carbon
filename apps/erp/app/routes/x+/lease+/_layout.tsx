@@ -3,13 +3,14 @@
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
 import { RecordOutlet } from "@carbon/react";
+import { BRAND_NAME } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
 import type { MetaFunction } from "react-router";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
 
 export const meta: MetaFunction = () => {
-  return [{ title: "Carbon | Lease" }];
+  return [{ title: `${BRAND_NAME} | Lease` }];
 };
 
 export const handle: Handle = {
