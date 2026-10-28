@@ -4,6 +4,7 @@
 
 "use client";
 import { useCarbon } from "@carbon/auth";
+import type { Json } from "@carbon/database";
 import { Array as ArrayInput, Input, ValidatedForm } from "@carbon/form";
 import { useAction } from "@carbon/query";
 import type { JSONContent } from "@carbon/react";
@@ -141,10 +142,16 @@ import { useItems, useTools } from "~/stores";
 import { path } from "~/utils/path";
 import { quoteOperationValidator } from "../../sales.models";
 import type { Quotation } from "../../types";
+import QuoteOperationRateSource, {
+  type OperationRate,
+  type RateReference
+} from "./QuoteOperationRateSource";
 
 export type Operation = z.infer<typeof quoteOperationValidator> & {
   workInstruction: JSONContent | null;
   tags: string[];
+  // Where each saved rate came from (see QuoteOperationRateSource).
+  rateSources?: Json | null;
 };
 
 type ItemWithData = Item & {
@@ -1753,6 +1760,82 @@ function OperationForm({
     setupUnitHint: getUnitHint(item.data.setupUnit)
   });
 
+  // What the rates are measured against: the chosen work center, else the
+  // average of the process's active work centers (what the form fills in).
+  const [workCenterId, setWorkCenterId] = useState<string | null>(
+    item.data.workCenterId ?? null
+  );
+  const [rateReference, setRateReference] = useState<RateReference | null>(
+    null
+  );
+  useEffect(() => {
+    if (!carbon) return;
+    let cancelled = false;
+    (async () => {
+      if (workCenterId) {
+        const { data } = await carbon
+          .from("workCenter")
+          .select("name, laborRate, machineRate, overheadRate, ratesUpdatedAt")
+          .eq("id", workCenterId)
+          .single();
+        if (cancelled) return;
+        setRateReference(
+          data
+            ? {
+                kind: "workCenter",
+                name: data.name,
+                rates: {
+                  laborRate: data.laborRate ?? 0,
+                  machineRate: data.machineRate ?? 0,
+                  overheadRate: data.overheadRate ?? 0
+                },
+                ratesUpdatedAt: data.ratesUpdatedAt
+              }
+            : null
+        );
+        return;
+      }
+      if (!processData.processId) {
+        setRateReference(null);
+        return;
+      }
+      const { data } = await carbon
+        .from("workCenterProcess")
+        .select(
+          "workCenter(laborRate, machineRate, overheadRate, ratesUpdatedAt, active)"
+        )
+        .eq("processId", processData.processId);
+      if (cancelled) return;
+      const active = (data ?? [])
+        .map((row) => row.workCenter)
+        .filter((wc) => wc?.active);
+      if (active.length === 0) {
+        setRateReference(null);
+        return;
+      }
+      const average = (rate: OperationRate) =>
+        active.reduce((sum, wc) => sum + (wc?.[rate] ?? 0), 0) / active.length;
+      setRateReference({
+        kind: "processAverage",
+        name: null,
+        rates: {
+          laborRate: average("laborRate"),
+          machineRate: average("machineRate"),
+          overheadRate: average("overheadRate")
+        },
+        ratesUpdatedAt:
+          active
+            .map((wc) => wc?.ratesUpdatedAt ?? null)
+            .filter((d): d is string => !!d)
+            .sort()
+            .at(-1) ?? null
+      });
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [carbon, workCenterId, processData.processId]);
+
   const onProcessChange = async (processId: string) => {
     if (!carbon || !processId) return;
     const [process, workCenters, supplierProcesses] = await Promise.all([
@@ -1991,6 +2074,7 @@ function OperationForm({
             isOptional
             processId={processData.processId}
             onChange={(value) => {
+              setWorkCenterId((value?.value as string) || null);
               if (value) {
                 onWorkCenterChange(value?.value as string);
               }
@@ -2303,28 +2387,12 @@ function OperationForm({
                 costingDisclosure.isOpen ? "" : "hidden"
               }`}
             >
-              <NumberControlled
-                name="laborRate"
-                label={t`Labor Rate`}
-                minValue={0}
-                value={processData.laborRate}
-                formatOptions={INPUT_FORMAT.rate(
-                  baseCurrency,
-                  currencyDecimals
-                )}
-                onChange={(newValue) =>
-                  setProcessData((d) => ({
-                    ...d,
-                    laborRate: newValue
-                  }))
-                }
-              />
-              {processData.operationType === "Process" && (
+              <div className="flex flex-col gap-2">
                 <NumberControlled
-                  name="machineRate"
-                  label={t`Machine Rate`}
+                  name="laborRate"
+                  label={t`Labor Rate`}
                   minValue={0}
-                  value={processData.machineRate}
+                  value={processData.laborRate}
                   formatOptions={INPUT_FORMAT.rate(
                     baseCurrency,
                     currencyDecimals
@@ -2332,27 +2400,79 @@ function OperationForm({
                   onChange={(newValue) =>
                     setProcessData((d) => ({
                       ...d,
-                      machineRate: newValue
+                      laborRate: newValue
                     }))
                   }
                 />
+                <QuoteOperationRateSource
+                  rate="laborRate"
+                  value={processData.laborRate}
+                  savedValue={item.data.laborRate}
+                  rateSources={item.data.rateSources}
+                  reference={rateReference}
+                  onReset={(value) =>
+                    setProcessData((d) => ({ ...d, laborRate: value }))
+                  }
+                />
+              </div>
+              {processData.operationType === "Process" && (
+                <div className="flex flex-col gap-2">
+                  <NumberControlled
+                    name="machineRate"
+                    label={t`Machine Rate`}
+                    minValue={0}
+                    value={processData.machineRate}
+                    formatOptions={INPUT_FORMAT.rate(
+                      baseCurrency,
+                      currencyDecimals
+                    )}
+                    onChange={(newValue) =>
+                      setProcessData((d) => ({
+                        ...d,
+                        machineRate: newValue
+                      }))
+                    }
+                  />
+                  <QuoteOperationRateSource
+                    rate="machineRate"
+                    value={processData.machineRate}
+                    savedValue={item.data.machineRate}
+                    rateSources={item.data.rateSources}
+                    reference={rateReference}
+                    onReset={(value) =>
+                      setProcessData((d) => ({ ...d, machineRate: value }))
+                    }
+                  />
+                </div>
               )}
-              <NumberControlled
-                name="overheadRate"
-                label={t`Overhead Rate`}
-                minValue={0}
-                value={processData.overheadRate}
-                formatOptions={INPUT_FORMAT.rate(
-                  baseCurrency,
-                  currencyDecimals
-                )}
-                onChange={(newValue) =>
-                  setProcessData((d) => ({
-                    ...d,
-                    overheadRate: newValue
-                  }))
-                }
-              />
+              <div className="flex flex-col gap-2">
+                <NumberControlled
+                  name="overheadRate"
+                  label={t`Overhead Rate`}
+                  minValue={0}
+                  value={processData.overheadRate}
+                  formatOptions={INPUT_FORMAT.rate(
+                    baseCurrency,
+                    currencyDecimals
+                  )}
+                  onChange={(newValue) =>
+                    setProcessData((d) => ({
+                      ...d,
+                      overheadRate: newValue
+                    }))
+                  }
+                />
+                <QuoteOperationRateSource
+                  rate="overheadRate"
+                  value={processData.overheadRate}
+                  savedValue={item.data.overheadRate}
+                  rateSources={item.data.rateSources}
+                  reference={rateReference}
+                  onReset={(value) =>
+                    setProcessData((d) => ({ ...d, overheadRate: value }))
+                  }
+                />
+              </div>
             </div>
           </div>
 

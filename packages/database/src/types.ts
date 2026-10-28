@@ -52762,6 +52762,7 @@ export type Database = {
           quoteId: string
           quoteLineId: string
           quoteMakeMethodId: string | null
+          rateSources: Json
           setupTime: number
           setupUnit: Database["public"]["Enums"]["factor"]
           tags: string[] | null
@@ -52798,6 +52799,7 @@ export type Database = {
           quoteId: string
           quoteLineId: string
           quoteMakeMethodId?: string | null
+          rateSources?: Json
           setupTime?: number
           setupUnit?: Database["public"]["Enums"]["factor"]
           tags?: string[] | null
@@ -52834,6 +52836,7 @@ export type Database = {
           quoteId?: string
           quoteLineId?: string
           quoteMakeMethodId?: string | null
+          rateSources?: Json
           setupTime?: number
           setupUnit?: Database["public"]["Enums"]["factor"]
           tags?: string[] | null
@@ -71843,6 +71846,8 @@ export type Database = {
           minimumBatchQuantity: number | null
           name: string
           overheadRate: number
+          ratesUpdatedAt: string | null
+          ratesUpdatedBy: string | null
           requiredAbilityId: string | null
           tags: string[] | null
           updatedAt: string | null
@@ -71866,6 +71871,8 @@ export type Database = {
           minimumBatchQuantity?: number | null
           name: string
           overheadRate?: number
+          ratesUpdatedAt?: string | null
+          ratesUpdatedBy?: string | null
           requiredAbilityId?: string | null
           tags?: string[] | null
           updatedAt?: string | null
@@ -71889,6 +71896,8 @@ export type Database = {
           minimumBatchQuantity?: number | null
           name?: string
           overheadRate?: number
+          ratesUpdatedAt?: string | null
+          ratesUpdatedBy?: string | null
           requiredAbilityId?: string | null
           tags?: string[] | null
           updatedAt?: string | null

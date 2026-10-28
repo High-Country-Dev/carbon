@@ -60,6 +60,9 @@ msgstr "(複数のCarbonアカウントにマップされています)"
 msgid "(not an Equity posting account)"
 msgstr "(純資産転記勘定科目ではありません)"
 
+msgid "(rates set {referenceDate})"
+msgstr ""
+
 #. placeholder {0}: check.count
 msgid "{0, plural, one {# blocking record} other {# blocking records}}"
 msgstr "{0, plural, one {# ブロック中のレコード} other {# ブロック中のレコード}}"
@@ -679,6 +682,9 @@ msgstr "{position}/{total}"
 
 msgid "{purgeRowCount, plural, one {Permanently delete # row?} other {Permanently delete # rows?}}"
 msgstr "{purgeRowCount, plural, one {# 行を永久に削除しますか？} other {# 行を永久に削除しますか？}}"
+
+msgid "{referenceLabel} is {referenceRateText}"
+msgstr ""
 
 msgid "{remaining, plural, one {# phase left} other {# phases left}}"
 msgstr "{remaining, plural, one {# フェーズ残り} other {# フェーズ残り}}"
@@ -10564,6 +10570,9 @@ msgstr "開始"
 msgid "From {0}"
 msgstr "{0}から"
 
+msgid "From {referenceLabel}"
+msgstr ""
+
 msgid "From / To"
 msgstr "開始 / 終了"
 
@@ -11461,6 +11470,9 @@ msgstr "あなたの勘定科目表をインポート"
 
 msgid "Import your chart of accounts from a spreadsheet"
 msgstr "スプレッドシートからあなたの勘定科目表をインポート"
+
+msgid "Imported from JobBoss"
+msgstr ""
 
 #. placeholder {0}: precise?.text
 msgid "in {0}"
@@ -13343,6 +13355,9 @@ msgstr "マネージャー"
 msgid "Manual"
 msgstr "手動"
 
+msgid "Manual override on this quote"
+msgstr ""
+
 msgid "Manually scheduled"
 msgstr "手動スケジュール済み"
 
@@ -13500,6 +13515,12 @@ msgstr "照合済み"
 
 msgid "matches"
 msgstr "一致する"
+
+msgid "Matches {referenceLabel} (rates set {referenceDate})"
+msgstr ""
+
+msgid "Matches the process average"
+msgstr ""
 
 msgid "Matching Pairs"
 msgstr "マッチングペア"
@@ -15507,6 +15528,9 @@ msgstr "不要"
 msgid "Not restorable"
 msgstr "復元不可"
 
+msgid "Not saved yet"
+msgstr ""
+
 msgid "Not scheduled"
 msgstr "未スケジュール"
 
@@ -17498,6 +17522,12 @@ msgstr "プロセス"
 msgid "Process"
 msgstr "プロセス"
 
+msgid "Process average"
+msgstr ""
+
+msgid "Process average is {referenceRateText}"
+msgstr ""
+
 msgid "Process Name"
 msgstr "プロセス名"
 
@@ -19282,6 +19312,12 @@ msgstr "スケジュールをリセット"
 
 msgid "Reset to market rate"
 msgstr "市場レートにリセット"
+
+msgid "Reset to process average"
+msgstr ""
+
+msgid "Reset to work center rate"
+msgstr ""
 
 msgid "Reset Two-Factor Auth"
 msgstr "2要素認証をリセット"
@@ -23934,6 +23970,9 @@ msgstr "この見積から出荷される倉庫。得意先の出荷拠点がそ
 
 msgid "The ways equipment fails, for maintenance and quality tracking"
 msgstr "設備障害の形式（保全および品質追跡用）"
+
+msgid "the work center"
+msgstr ""
 
 msgid "The work center's own bin where picked material is staged for production to draw down, as opposed to its warehouse source shelf."
 msgstr "作業区が持つ自身のビンで、ピッキング済の材料が生産で引き出されるようにステージングされる場所です。倉庫の仕入元の棚とは異なります。"

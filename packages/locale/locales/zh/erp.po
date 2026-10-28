@@ -60,6 +60,9 @@ msgstr "（映射到多个 Carbon 账户）"
 msgid "(not an Equity posting account)"
 msgstr "（非所有者权益过账账户）"
 
+msgid "(rates set {referenceDate})"
+msgstr ""
+
 #. placeholder {0}: check.count
 msgid "{0, plural, one {# blocking record} other {# blocking records}}"
 msgstr "{0, plural, one {# 条阻止记录} other {# 条阻止记录}}"
@@ -679,6 +682,9 @@ msgstr "{position}/{total}"
 
 msgid "{purgeRowCount, plural, one {Permanently delete # row?} other {Permanently delete # rows?}}"
 msgstr "{purgeRowCount, plural, one {永久删除 # 行？} other {永久删除 # 行？}}"
+
+msgid "{referenceLabel} is {referenceRateText}"
+msgstr ""
 
 msgid "{remaining, plural, one {# phase left} other {# phases left}}"
 msgstr "{remaining, plural, one {# 个阶段剩余} other {# 个阶段剩余}}"
@@ -10564,6 +10570,9 @@ msgstr "从"
 msgid "From {0}"
 msgstr "从 {0}"
 
+msgid "From {referenceLabel}"
+msgstr ""
+
 msgid "From / To"
 msgstr "从/到"
 
@@ -11461,6 +11470,9 @@ msgstr "导入您的会计科目表"
 
 msgid "Import your chart of accounts from a spreadsheet"
 msgstr "从电子表格导入您的会计科目表"
+
+msgid "Imported from JobBoss"
+msgstr ""
 
 #. placeholder {0}: precise?.text
 msgid "in {0}"
@@ -13343,6 +13355,9 @@ msgstr "经理"
 msgid "Manual"
 msgstr "手动"
 
+msgid "Manual override on this quote"
+msgstr ""
+
 msgid "Manually scheduled"
 msgstr "手动计划"
 
@@ -13500,6 +13515,12 @@ msgstr "已匹配"
 
 msgid "matches"
 msgstr "匹配"
+
+msgid "Matches {referenceLabel} (rates set {referenceDate})"
+msgstr ""
+
+msgid "Matches the process average"
+msgstr ""
 
 msgid "Matching Pairs"
 msgstr "匹配对"
@@ -15507,6 +15528,9 @@ msgstr "不需要"
 msgid "Not restorable"
 msgstr "无法恢复"
 
+msgid "Not saved yet"
+msgstr ""
+
 msgid "Not scheduled"
 msgstr "未计划"
 
@@ -17498,6 +17522,12 @@ msgstr "流程"
 msgid "Process"
 msgstr "工艺"
 
+msgid "Process average"
+msgstr ""
+
+msgid "Process average is {referenceRateText}"
+msgstr ""
+
 msgid "Process Name"
 msgstr "流程名称"
 
@@ -19282,6 +19312,12 @@ msgstr "重置排程"
 
 msgid "Reset to market rate"
 msgstr "重置为市场汇率"
+
+msgid "Reset to process average"
+msgstr ""
+
+msgid "Reset to work center rate"
+msgstr ""
 
 msgid "Reset Two-Factor Auth"
 msgstr "重置双因素认证"
@@ -23934,6 +23970,9 @@ msgstr "此报价的商品将从其发货的仓库；客户的发货地点是他
 
 msgid "The ways equipment fails, for maintenance and quality tracking"
 msgstr "设备失效的方式,用于维护和质量追踪"
+
+msgid "the work center"
+msgstr ""
 
 msgid "The work center's own bin where picked material is staged for production to draw down, as opposed to its warehouse source shelf."
 msgstr "工作中心自身的料箱,拣货的原材料在此暂存供生产领取,与其仓库源货架相对。"

@@ -60,6 +60,9 @@ msgstr "(associato a più di un account Carbon)"
 msgid "(not an Equity posting account)"
 msgstr "(non un account di registrazione Patrimonio netto)"
 
+msgid "(rates set {referenceDate})"
+msgstr ""
+
 #. placeholder {0}: check.count
 msgid "{0, plural, one {# blocking record} other {# blocking records}}"
 msgstr "{0, plural, one {# record bloccante} other {# record bloccanti}}"
@@ -679,6 +682,9 @@ msgstr "{position} di {total}"
 
 msgid "{purgeRowCount, plural, one {Permanently delete # row?} other {Permanently delete # rows?}}"
 msgstr "{purgeRowCount, plural, one {Eliminare definitivamente # riga?} other {Eliminare definitivamente # righe?}}"
+
+msgid "{referenceLabel} is {referenceRateText}"
+msgstr ""
 
 msgid "{remaining, plural, one {# phase left} other {# phases left}}"
 msgstr "{remaining, plural, one {# fase rimanente} other {# fasi rimanenti}}"
@@ -10564,6 +10570,9 @@ msgstr "Da"
 msgid "From {0}"
 msgstr "Da {0}"
 
+msgid "From {referenceLabel}"
+msgstr ""
+
 msgid "From / To"
 msgstr "Da / A"
 
@@ -11461,6 +11470,9 @@ msgstr "Importa il tuo piano"
 
 msgid "Import your chart of accounts from a spreadsheet"
 msgstr "Importa il tuo piano dei conti da un foglio di calcolo"
+
+msgid "Imported from JobBoss"
+msgstr ""
 
 #. placeholder {0}: precise?.text
 msgid "in {0}"
@@ -13343,6 +13355,9 @@ msgstr "Responsabile"
 msgid "Manual"
 msgstr "Manuale"
 
+msgid "Manual override on this quote"
+msgstr ""
+
 msgid "Manually scheduled"
 msgstr "Pianificato manualmente"
 
@@ -13500,6 +13515,12 @@ msgstr "Abbinato"
 
 msgid "matches"
 msgstr "corrisponde"
+
+msgid "Matches {referenceLabel} (rates set {referenceDate})"
+msgstr ""
+
+msgid "Matches the process average"
+msgstr ""
 
 msgid "Matching Pairs"
 msgstr "Coppie di corrispondenza"
@@ -15507,6 +15528,9 @@ msgstr "Non richiesto"
 msgid "Not restorable"
 msgstr "Non ripristinabile"
 
+msgid "Not saved yet"
+msgstr ""
+
 msgid "Not scheduled"
 msgstr "Non programmato"
 
@@ -17498,6 +17522,12 @@ msgstr "processi"
 msgid "Process"
 msgstr "Processo"
 
+msgid "Process average"
+msgstr ""
+
+msgid "Process average is {referenceRateText}"
+msgstr ""
+
 msgid "Process Name"
 msgstr "Nome Processo"
 
@@ -19282,6 +19312,12 @@ msgstr "Reimposta programma"
 
 msgid "Reset to market rate"
 msgstr "Ripristina al tasso di mercato"
+
+msgid "Reset to process average"
+msgstr ""
+
+msgid "Reset to work center rate"
+msgstr ""
 
 msgid "Reset Two-Factor Auth"
 msgstr "Ripristina autenticazione a due fattori"
@@ -23934,6 +23970,9 @@ msgstr "Il deposito da cui i beni su questa offerta spediranno; l'ubicazione di 
 
 msgid "The ways equipment fails, for maintenance and quality tracking"
 msgstr "I modi in cui l'impianto si guasta, per il tracciamento della manutenzione e della qualità"
+
+msgid "the work center"
+msgstr ""
 
 msgid "The work center's own bin where picked material is staged for production to draw down, as opposed to its warehouse source shelf."
 msgstr "Il contenitore proprio del centro di lavoro dove il materiale prelevato viene preparato per il consumo da parte della produzione, in contrasto con lo scaffale di origine nel deposito."
