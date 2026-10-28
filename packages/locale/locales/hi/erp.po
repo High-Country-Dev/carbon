@@ -277,6 +277,10 @@ msgstr "{0} पंक्तियां"
 msgid "{0} lines to map"
 msgstr "{0} लाइनें मैप करने के लिए"
 
+#. placeholder {0}: job.missingCount
+msgid "{0} missing"
+msgstr ""
+
 #. placeholder {0}: (asset as any).taxUsefulLifeMonths
 #. placeholder {0}: asset.usefulLifeMonths
 msgid "{0} months"
@@ -303,6 +307,10 @@ msgstr "{0} में से {maxSlots} प्रदाता स्लॉट �
 #. placeholder {0}: pendingJobs.length
 msgid "{0} of {memberCount} member jobs are not completed yet — their output stays out of stock until each job is completed."
 msgstr "{0} का {memberCount} सदस्य जॉब अभी तक पूर्ण नहीं हैं — उनका आउटपुट तब तक स्टॉक से बाहर रहेगा जब तक प्रत्येक जॉब पूर्ण न हो जाए।"
+
+#. placeholder {0}: formatQuantity(part.onHand)
+msgid "{0} on hand"
+msgstr ""
 
 #. placeholder {0}: selected.length
 msgid "{0} operations · {totalQuantity} parts"
@@ -478,6 +486,9 @@ msgstr "{asset}: {dueDate} को देय भुगतान छोड़ा �
 msgid "{assetCount} Assets"
 msgstr "{assetCount} अचल संपत्तियाँ"
 
+msgid "{atRiskJobs} jobs at risk"
+msgstr ""
+
 msgid "{chainLabel}. Consider pointing this part directly at the final successor."
 msgstr "{chainLabel}. इस भाग को सीधे अंतिम उत्तराधिकारी की ओर इंगित करने पर विचार करें।"
 
@@ -569,6 +580,9 @@ msgstr ""
 #. placeholder {1}: skipped.length
 msgid "{inserted} inserted, {updated} updated, {0} need fixing, {1} skipped."
 msgstr "{inserted} सम्मिलित किया गया, {updated} अपडेट किया गया, {0} को ठीक करने की आवश्यकता है, {1} छोड़ा गया।"
+
+msgid "{jobsMissingParts} jobs short now"
+msgstr ""
 
 msgid "{jobsMissingStorageUnit, plural, one {# open job has materials with no storage unit} other {# open jobs have materials with no storage unit}}"
 msgstr "{jobsMissingStorageUnit, plural, one {# खुले जॉब में भंडारण इकाई के बिना सामग्री है} other {# खुले जॉब में भंडारण इकाई के बिना सामग्री हैं}}"
@@ -3561,6 +3575,9 @@ msgstr "क्या आप सुनिश्चित हैं?"
 msgid "Arrears"
 msgstr "बकाया"
 
+msgid "Arriving"
+msgstr ""
+
 msgid "As if it jumped to the front of the shop's queue."
 msgstr "मानो यह कार्यशाला की कतार के आगे कूद गया हो।"
 
@@ -3764,6 +3781,9 @@ msgstr "कम से कम एक शर्त मेल खानी चा�
 
 msgid "At operation completion"
 msgstr "ऑपरेशन पूरी होने पर"
+
+msgid "At risk"
+msgstr ""
 
 msgid "Attach"
 msgstr "संलग्न करें"
@@ -6290,6 +6310,9 @@ msgstr "देश कोड"
 msgid "Coverage"
 msgstr "कवरेज"
 
+msgid "Covered from"
+msgstr ""
+
 msgid "Create"
 msgstr "बनाएं"
 
@@ -8235,6 +8258,9 @@ msgstr "केवल ड्राफ्ट"
 msgid "Draft purchase invoices are created every day for the payments that are due. Use this to draft the due payments right away."
 msgstr "ड्राफ्ट क्रय चालान प्रतिदिन बकाया भुगतान के लिए बनाए जाते हैं। इसका उपयोग करके बकाया भुगतान को तुरंत ड्राफ्ट करें।"
 
+msgid "Draft purchase orders, not counted until they're finalized:"
+msgstr ""
+
 msgid "Drafts a credit memo for the time already invoiced after the end date."
 msgstr "अंतिम तिथि के बाद पहले से चालानित समय के लिए एक क्रेडिट नोट ड्राफ्ट करता है।"
 
@@ -8314,6 +8340,9 @@ msgstr "देय {0}"
 #. placeholder {0}: formatRelativeTime(convertDateStringToIsoString(dueDate))
 msgid "Due {0}"
 msgstr "Due {0}"
+
+msgid "Due {due}"
+msgstr ""
 
 msgid "Due <0/>"
 msgstr "देय <0/>"
@@ -9482,6 +9511,9 @@ msgstr "हर मेल"
 
 msgid "Every posted journal line in a period"
 msgstr "किसी अवधि की प्रत्येक पोस्ट की गई जर्नल पंक्ति"
+
+msgid "Every released job can be filled from stock."
+msgstr ""
 
 msgid "Every required action has already been added."
 msgstr "हर आवश्यक कार्रवाई पहले से जोड़ी जा चुकी है।"
@@ -11051,6 +11083,9 @@ msgstr "खाता संख्या छिपाएँ"
 msgid "Hide Again"
 msgstr "फिर से छिपाएँ"
 
+msgid "Hide at-risk parts"
+msgstr ""
+
 msgid "Hide calculation"
 msgstr "गणना छिपाएं"
 
@@ -12346,8 +12381,14 @@ msgstr "जॉब ट्रैवलर"
 msgid "Jobs"
 msgstr "जॉब"
 
+msgid "Jobs and orders pulling"
+msgstr ""
+
 msgid "Jobs Assigned to Me"
 msgstr "मुझे असाइन किए गए जॉब"
+
+msgid "Jobs Missing Parts"
+msgstr ""
 
 msgid "Jobs Required"
 msgstr "आवश्यक जॉब"
@@ -14141,6 +14182,12 @@ msgstr "क्या आपको सही कॉलम चाहिए?"
 msgid "Need-by target"
 msgstr "आवश्यकता-द्वारा लक्ष्य"
 
+msgid "Needed"
+msgstr ""
+
+msgid "Needed by"
+msgstr ""
+
 msgid "Needed is the job hours due that day divided by {personDayHours}h, rounded up — the shift you're filtering by, or the most common shift length at this location."
 msgstr "आवश्यक उस दिन के कारण काम के घंटे को {personDayHours}h से विभाजित किया जाता है, गोल किया जाता है — आप जिस शिफ्ट को फ़िल्टर कर रहे हैं, या इस स्थान पर सबसे सामान्य शिफ्ट की लंबाई।"
 
@@ -15471,6 +15518,9 @@ msgstr "कॉन्फ़िगर नहीं किया गया"
 msgid "Not Configured"
 msgstr "कॉन्फ़िगर नहीं किया गया"
 
+msgid "Not covered by open orders"
+msgstr ""
+
 msgid "Not delivered"
 msgstr "डिलीवर नहीं किया गया"
 
@@ -15615,6 +15665,9 @@ msgstr "किसी को सूचित करें"
 
 msgid "now"
 msgstr "अभी"
+
+msgid "Now"
+msgstr ""
 
 msgid "Number"
 msgstr "संख्या"
@@ -18784,6 +18837,9 @@ msgstr "जारी किया गया"
 msgid "Released date"
 msgstr "जारी की गई तारीख"
 
+msgid "Released jobs whose parts can't all come from stock. Red: the job needs more than is on hand now. Amber: on hand covers this job, but all the jobs and orders pulling on the part need more than is on hand and on order. The bars are the part's projected stock by week; open a part to see the jobs pulling it and the orders arriving each week."
+msgstr ""
+
 msgid "Released revision"
 msgstr "जारी रिवीजन"
 
@@ -21296,6 +21352,9 @@ msgstr "सभी दिखाएँ"
 msgid "Show all hidden on this step"
 msgstr "इस चरण पर सभी छिपे हुए दिखाएँ"
 
+msgid "Show at-risk parts"
+msgstr ""
+
 msgid "Show available batch numbers"
 msgstr "उपलब्ध बैच नंबर दिखाएं"
 
@@ -21883,6 +21942,9 @@ msgstr "स्टॉक"
 
 msgid "Stock Availability"
 msgstr "स्टॉक उपलब्धता"
+
+msgid "Stock by week"
+msgstr ""
 
 msgid "Stock movement corrected"
 msgstr "स्टॉक आंदोलन सही किया गया"
@@ -25879,6 +25941,9 @@ msgstr "आइटम देखें"
 msgid "View Item Master"
 msgstr "आइटम मास्टर देखें"
 
+msgid "View Jobs Missing Parts"
+msgstr ""
+
 msgid "View Journal Entry"
 msgstr "जर्नल प्रविष्टि देखें"
 
@@ -26177,9 +26242,18 @@ msgstr "सप्ताह {weekNumber}"
 msgid "Week 8 cutover"
 msgstr "सप्ताह 8 कटओवर"
 
+msgid "Week of"
+msgstr ""
+
 #. placeholder {0}: dateFormatter.format(parseDate(d.startDate).toDate(getLocalTimeZone()))
 msgid "Week of {0}"
 msgstr "{0} का सप्ताह"
+
+msgid "Week of {covered}"
+msgstr ""
+
+msgid "Week of {neededBy}"
+msgstr ""
 
 msgid "Week Rate"
 msgstr "साप्ताहिक दर"

@@ -277,6 +277,10 @@ msgstr "{0} linhas"
 msgid "{0} lines to map"
 msgstr "{0} linhas para mapear"
 
+#. placeholder {0}: job.missingCount
+msgid "{0} missing"
+msgstr ""
+
 #. placeholder {0}: (asset as any).taxUsefulLifeMonths
 #. placeholder {0}: asset.usefulLifeMonths
 msgid "{0} months"
@@ -303,6 +307,10 @@ msgstr "{0} de {maxSlots} slots de provedor utilizados"
 #. placeholder {0}: pendingJobs.length
 msgid "{0} of {memberCount} member jobs are not completed yet — their output stays out of stock until each job is completed."
 msgstr "{0} de {memberCount} ordens de produção ainda não foram concluídas — sua saída permanece fora do estoque até que cada ordem de produção seja concluída."
+
+#. placeholder {0}: formatQuantity(part.onHand)
+msgid "{0} on hand"
+msgstr ""
 
 #. placeholder {0}: selected.length
 msgid "{0} operations · {totalQuantity} parts"
@@ -478,6 +486,9 @@ msgstr "{asset}: o pagamento vencido em {dueDate} é ignorado (pago fora do Carb
 msgid "{assetCount} Assets"
 msgstr "{assetCount} Ativos"
 
+msgid "{atRiskJobs} jobs at risk"
+msgstr ""
+
 msgid "{chainLabel}. Consider pointing this part directly at the final successor."
 msgstr "{chainLabel}. Considere apontar esta peça diretamente para o sucessor final."
 
@@ -569,6 +580,9 @@ msgstr ""
 #. placeholder {1}: skipped.length
 msgid "{inserted} inserted, {updated} updated, {0} need fixing, {1} skipped."
 msgstr "{inserted} inseridos, {updated} atualizados, {0} precisam de correção, {1} ignorados."
+
+msgid "{jobsMissingParts} jobs short now"
+msgstr ""
 
 msgid "{jobsMissingStorageUnit, plural, one {# open job has materials with no storage unit} other {# open jobs have materials with no storage unit}}"
 msgstr "{jobsMissingStorageUnit, plural, one {# ordem de produção aberta tem materiais sem unidade de armazenamento} other {# ordens de produção abertas têm materiais sem unidade de armazenamento}}"
@@ -3561,6 +3575,9 @@ msgstr "Tem a certeza?"
 msgid "Arrears"
 msgstr "Atrasos"
 
+msgid "Arriving"
+msgstr ""
+
 msgid "As if it jumped to the front of the shop's queue."
 msgstr "Como se pulasse para o topo da fila da oficina."
 
@@ -3764,6 +3781,9 @@ msgstr "Pelo menos uma condição deve corresponder"
 
 msgid "At operation completion"
 msgstr "Na conclusão da operação"
+
+msgid "At risk"
+msgstr ""
 
 msgid "Attach"
 msgstr "Anexar"
@@ -6290,6 +6310,9 @@ msgstr "Código do país"
 msgid "Coverage"
 msgstr "Cobertura"
 
+msgid "Covered from"
+msgstr ""
+
 msgid "Create"
 msgstr "Criar"
 
@@ -8235,6 +8258,9 @@ msgstr "Apenas rascunho"
 msgid "Draft purchase invoices are created every day for the payments that are due. Use this to draft the due payments right away."
 msgstr "Faturas de compra em rascunho são criadas todos os dias para os pagamentos que vencem. Use isto para rascunhar os pagamentos devidos imediatamente."
 
+msgid "Draft purchase orders, not counted until they're finalized:"
+msgstr ""
+
 msgid "Drafts a credit memo for the time already invoiced after the end date."
 msgstr "Redige uma nota de crédito para o tempo já faturado após a data de término."
 
@@ -8314,6 +8340,9 @@ msgstr "vencimento {0}"
 #. placeholder {0}: formatRelativeTime(convertDateStringToIsoString(dueDate))
 msgid "Due {0}"
 msgstr "Vencimento {0}"
+
+msgid "Due {due}"
+msgstr ""
 
 msgid "Due <0/>"
 msgstr "Vencimento <0/>"
@@ -9482,6 +9511,9 @@ msgstr "Cada correspondência"
 
 msgid "Every posted journal line in a period"
 msgstr "Cada linha de lançamento contabilizada em um período"
+
+msgid "Every released job can be filled from stock."
+msgstr ""
 
 msgid "Every required action has already been added."
 msgstr "Todas as ações necessárias já foram adicionadas."
@@ -11051,6 +11083,9 @@ msgstr "Ocultar número da conta"
 msgid "Hide Again"
 msgstr "Ocultar Novamente"
 
+msgid "Hide at-risk parts"
+msgstr ""
+
 msgid "Hide calculation"
 msgstr "Ocultar cálculo"
 
@@ -12346,8 +12381,14 @@ msgstr "Ficha de acompanhamento"
 msgid "Jobs"
 msgstr "Ordens de produção"
 
+msgid "Jobs and orders pulling"
+msgstr ""
+
 msgid "Jobs Assigned to Me"
 msgstr "Ordens de produção designadas a mim"
+
+msgid "Jobs Missing Parts"
+msgstr ""
 
 msgid "Jobs Required"
 msgstr "Ordens de produção necessárias"
@@ -14141,6 +14182,12 @@ msgstr "Precisa das colunas certas?"
 msgid "Need-by target"
 msgstr "Alvo de necessidade"
 
+msgid "Needed"
+msgstr ""
+
+msgid "Needed by"
+msgstr ""
+
 msgid "Needed is the job hours due that day divided by {personDayHours}h, rounded up — the shift you're filtering by, or the most common shift length at this location."
 msgstr "Necessário é as horas de trabalho devidas naquele dia divididas por {personDayHours}h, arredondadas para cima — o turno que você está filtrando ou o comprimento de turno mais comum neste local."
 
@@ -15471,6 +15518,9 @@ msgstr "Não configurado"
 msgid "Not Configured"
 msgstr "Não Configurado"
 
+msgid "Not covered by open orders"
+msgstr ""
+
 msgid "Not delivered"
 msgstr "Não entregue"
 
@@ -15615,6 +15665,9 @@ msgstr "Notificar alguém"
 
 msgid "now"
 msgstr "agora"
+
+msgid "Now"
+msgstr ""
 
 msgid "Number"
 msgstr "Número"
@@ -18784,6 +18837,9 @@ msgstr "Liberado"
 msgid "Released date"
 msgstr "Data de lançamento"
 
+msgid "Released jobs whose parts can't all come from stock. Red: the job needs more than is on hand now. Amber: on hand covers this job, but all the jobs and orders pulling on the part need more than is on hand and on order. The bars are the part's projected stock by week; open a part to see the jobs pulling it and the orders arriving each week."
+msgstr ""
+
 msgid "Released revision"
 msgstr "Revisão lançada"
 
@@ -21296,6 +21352,9 @@ msgstr "Mostrar tudo"
 msgid "Show all hidden on this step"
 msgstr "Mostrar todos os ocultos nesta etapa"
 
+msgid "Show at-risk parts"
+msgstr ""
+
 msgid "Show available batch numbers"
 msgstr "Mostrar números de lote de produção disponíveis"
 
@@ -21883,6 +21942,9 @@ msgstr "Estoque"
 
 msgid "Stock Availability"
 msgstr "Disponibilidade de Estoque"
+
+msgid "Stock by week"
+msgstr ""
 
 msgid "Stock movement corrected"
 msgstr "Movimento de estoque corrigido"
@@ -25879,6 +25941,9 @@ msgstr "Visualizar Item"
 msgid "View Item Master"
 msgstr "Ver Mestre do Item"
 
+msgid "View Jobs Missing Parts"
+msgstr ""
+
 msgid "View Journal Entry"
 msgstr "Ver Lançamento"
 
@@ -26177,9 +26242,18 @@ msgstr "Semana {weekNumber}"
 msgid "Week 8 cutover"
 msgstr "Semana 8 cutover"
 
+msgid "Week of"
+msgstr ""
+
 #. placeholder {0}: dateFormatter.format(parseDate(d.startDate).toDate(getLocalTimeZone()))
 msgid "Week of {0}"
 msgstr "Semana de {0}"
+
+msgid "Week of {covered}"
+msgstr ""
+
+msgid "Week of {neededBy}"
+msgstr ""
 
 msgid "Week Rate"
 msgstr "Taxa Semanal"

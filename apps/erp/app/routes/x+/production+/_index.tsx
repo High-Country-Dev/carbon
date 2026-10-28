@@ -44,6 +44,7 @@ import {
 } from "@carbon/react/Chart";
 import {
   convertDateStringToIsoString,
+  datetime,
   formatDurationMilliseconds,
   formatRelativeTime,
   pluckUnique
@@ -60,7 +61,8 @@ import {
   LuEllipsisVertical,
   LuFile,
   LuInbox,
-  LuLayers
+  LuLayers,
+  LuPackageX
 } from "react-icons/lu";
 import { RiProgress8Line } from "react-icons/ri";
 import type { LoaderFunctionArgs } from "react-router";
@@ -78,6 +80,7 @@ import {
 import { CSVLink } from "~/components/CSVLink";
 import { usePercentFormatter } from "~/hooks";
 import { useUser } from "~/hooks/useUser";
+import { countJobsMissingParts } from "~/modules/production/missing-parts.service";
 import { KPIs } from "~/modules/production/production.models";
 import {
   getActiveProductionEvents,
@@ -85,9 +88,16 @@ import {
 } from "~/modules/production/production.service";
 import type { ActiveProductionEvent } from "~/modules/production/types";
 import { getDeadlineIcon } from "~/modules/production/ui/Jobs";
+import { MISSING_PARTS_WEEKS } from "~/modules/production/ui/Jobs/missing-parts-logic";
 import { getWorkCentersListWithBlockingStatus } from "~/modules/resources/resources.service";
 import type { WorkCenter } from "~/modules/resources/types";
+import {
+  getLocationTimeZone,
+  getOrCreatePeriods,
+  resolveLocationId
+} from "~/modules/shared/shared.service";
 import type { loader as kpiLoader } from "~/routes/api+/production.kpi.$key";
+import { getDatabaseClient } from "~/services/database.server";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
 import { capitalize } from "~/utils/string";
@@ -136,15 +146,62 @@ export async function loader({ request }: LoaderFunctionArgs) {
     assignedJobs: assignedJobs.data?.length ?? 0,
     unbatchedOperations: unbatchedOperations.count ?? 0,
     workCenters: workCenters.data ?? [],
-    events: getActiveProductionEvents(client, companyId)
+    events: getActiveProductionEvents(client, companyId),
+    // Streamed: it reads every open order that touches a released job's parts.
+    jobsMissingParts: getJobsMissingPartsCount(
+      client,
+      request,
+      companyId,
+      userId
+    )
   };
+}
+
+async function getJobsMissingPartsCount(
+  client: Awaited<ReturnType<typeof requirePermissions>>["client"],
+  request: Request,
+  companyId: string,
+  userId: string
+): Promise<number | null> {
+  try {
+    const locationId = await resolveLocationId(client, request, {
+      searchParams: new URL(request.url).searchParams,
+      userId,
+      companyId,
+      onDefaultsError: path.to.production,
+      onNoLocations: path.to.production
+    });
+    const today = datetime.today(
+      await getLocationTimeZone(client, locationId, companyId)
+    );
+    const periods = await getOrCreatePeriods(
+      getDatabaseClient(),
+      today,
+      MISSING_PARTS_WEEKS
+    );
+    return await countJobsMissingParts(client, {
+      companyId,
+      locationId,
+      today,
+      periods
+    });
+  } catch {
+    // No location (or a redirect to pick one): the card shows a dash.
+    return null;
+  }
 }
 
 export default function ProductionDashboard() {
   const { t } = useLingui();
   const { isPhone } = useViewport();
-  const { activeJobs, assignedJobs, unbatchedOperations, events, workCenters } =
-    useLoaderData<typeof loader>();
+  const {
+    activeJobs,
+    assignedJobs,
+    unbatchedOperations,
+    events,
+    workCenters,
+    jobsMissingParts
+  } = useLoaderData<typeof loader>();
 
   const user = useUser();
 
@@ -324,32 +381,49 @@ export default function ProductionDashboard() {
   return (
     <div className="flex flex-col gap-4 w-full p-4 h-[calc(100dvh-var(--header-height))] overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-muted-foreground bg-card">
       <div className="grid w-full gap-y-4 lg:gap-x-4 grid-cols-1 lg:grid-cols-6 max-md:grid-cols-2 max-md:gap-3">
-        <MetricCard
-          className="col-span-1 lg:col-span-2"
-          icon={<LuCirclePlay />}
-          title={<Trans>Active Jobs</Trans>}
-          value={activeJobs}
-          to={`${path.to.jobs}?filter=status:in:${activeJobStatuses.join(",")}`}
-          linkLabel={t`View Active Jobs`}
-        />
+        <div className="col-span-1 lg:col-span-6 max-md:col-span-2 grid w-full gap-y-4 lg:gap-x-4 grid-cols-1 lg:grid-cols-4 max-md:grid-cols-2 max-md:gap-3">
+          <MetricCard
+            className="col-span-1"
+            icon={<LuCirclePlay />}
+            title={<Trans>Active Jobs</Trans>}
+            value={activeJobs}
+            to={`${path.to.jobs}?filter=status:in:${activeJobStatuses.join(",")}`}
+            linkLabel={t`View Active Jobs`}
+          />
 
-        <MetricCard
-          className="col-span-1 lg:col-span-2"
-          icon={<LuInbox />}
-          title={<Trans>Jobs Assigned to Me</Trans>}
-          value={assignedJobs}
-          to={`${path.to.jobs}?filter=assignee:eq:${user.id}`}
-          linkLabel={t`View Assigned Jobs`}
-        />
+          <MetricCard
+            className="col-span-1"
+            icon={<LuPackageX />}
+            title={<Trans>Jobs Missing Parts</Trans>}
+            value={
+              <Suspense fallback={<Skeleton className="h-8 w-10" />}>
+                <Await resolve={jobsMissingParts}>
+                  {(count) => (count === null ? "—" : count)}
+                </Await>
+              </Suspense>
+            }
+            to={path.to.productionMissingParts}
+            linkLabel={t`View Jobs Missing Parts`}
+          />
 
-        <MetricCard
-          className="col-span-1 lg:col-span-2 max-md:col-span-2"
-          icon={<LuLayers />}
-          title={<Trans>Unbatched Operations</Trans>}
-          value={unbatchedOperations}
-          to={path.to.newOperationBatch}
-          linkLabel={t`Create Batch`}
-        />
+          <MetricCard
+            className="col-span-1"
+            icon={<LuInbox />}
+            title={<Trans>Jobs Assigned to Me</Trans>}
+            value={assignedJobs}
+            to={`${path.to.jobs}?filter=assignee:eq:${user.id}`}
+            linkLabel={t`View Assigned Jobs`}
+          />
+
+          <MetricCard
+            className="col-span-1"
+            icon={<LuLayers />}
+            title={<Trans>Unbatched Operations</Trans>}
+            value={unbatchedOperations}
+            to={path.to.newOperationBatch}
+            linkLabel={t`Create Batch`}
+          />
+        </div>
 
         <Card className="col-span-1 lg:col-span-6 max-md:col-span-2">
           <HStack className="flex-col items-start gap-2 sm:flex-row sm:justify-between sm:items-center max-md:flex-row max-md:items-center max-md:gap-1.5 max-md:px-3 max-md:pt-3">

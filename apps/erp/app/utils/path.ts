@@ -2046,6 +2046,7 @@ export const path = {
       generatePath(`${x}/resources/processes/deactivate/${id}`),
     processes: `${x}/resources/processes`,
     production: `${x}/production`,
+    productionMissingParts: `${x}/production/missing-parts`,
     productionPlanning: `${x}/production/planning`,
     productionPlanningItem: (itemId: string) =>
       generatePath(`${x}/production/planning/${itemId}`),

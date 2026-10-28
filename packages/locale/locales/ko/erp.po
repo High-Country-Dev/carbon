@@ -277,6 +277,10 @@ msgstr "{0} 라인"
 msgid "{0} lines to map"
 msgstr "매핑할 라인 {0}개"
 
+#. placeholder {0}: job.missingCount
+msgid "{0} missing"
+msgstr ""
+
 #. placeholder {0}: (asset as any).taxUsefulLifeMonths
 #. placeholder {0}: asset.usefulLifeMonths
 msgid "{0} months"
@@ -303,6 +307,10 @@ msgstr "{0}개 중 {maxSlots}개 제공자 슬롯 사용됨"
 #. placeholder {0}: pendingJobs.length
 msgid "{0} of {memberCount} member jobs are not completed yet — their output stays out of stock until each job is completed."
 msgstr "{memberCount}개의 작업 지시 중 {0}개가 아직 완료되지 않았습니다 — 각 작업 지시가 완료될 때까지 산출물은 재고로 집계되지 않습니다."
+
+#. placeholder {0}: formatQuantity(part.onHand)
+msgid "{0} on hand"
+msgstr ""
 
 #. placeholder {0}: selected.length
 msgid "{0} operations · {totalQuantity} parts"
@@ -478,6 +486,9 @@ msgstr "{asset}: {dueDate}에 납부 기한이 있는 지불이 건너뜀 상태
 msgid "{assetCount} Assets"
 msgstr "{assetCount} 자산"
 
+msgid "{atRiskJobs} jobs at risk"
+msgstr ""
+
 msgid "{chainLabel}. Consider pointing this part directly at the final successor."
 msgstr "{chainLabel}. 이 품목을 최종 후속 품목으로 직접 연결하는 것을 고려하세요."
 
@@ -569,6 +580,9 @@ msgstr ""
 #. placeholder {1}: skipped.length
 msgid "{inserted} inserted, {updated} updated, {0} need fixing, {1} skipped."
 msgstr "{inserted}개 추가, {updated}개 업데이트, {0}개 수정 필요, {1}개 건너뜀."
+
+msgid "{jobsMissingParts} jobs short now"
+msgstr ""
 
 msgid "{jobsMissingStorageUnit, plural, one {# open job has materials with no storage unit} other {# open jobs have materials with no storage unit}}"
 msgstr "{jobsMissingStorageUnit, plural, one {# 개의 미결 작업 지시에 보관 단위가 없는 자재가 있습니다} other {# 개의 미결 작업 지시에 보관 단위가 없는 자재가 있습니다}}"
@@ -3561,6 +3575,9 @@ msgstr "확실합니까?"
 msgid "Arrears"
 msgstr "연체금"
 
+msgid "Arriving"
+msgstr ""
+
 msgid "As if it jumped to the front of the shop's queue."
 msgstr "마치 공장의 대기열 맨 앞으로 뛰어든 것처럼."
 
@@ -3764,6 +3781,9 @@ msgstr "하나 이상의 조건이 일치해야 합니다"
 
 msgid "At operation completion"
 msgstr "작업 완료 시"
+
+msgid "At risk"
+msgstr ""
 
 msgid "Attach"
 msgstr "첨부"
@@ -6290,6 +6310,9 @@ msgstr "국가 코드"
 msgid "Coverage"
 msgstr "배치"
 
+msgid "Covered from"
+msgstr ""
+
 msgid "Create"
 msgstr "생성"
 
@@ -8235,6 +8258,9 @@ msgstr "초안만"
 msgid "Draft purchase invoices are created every day for the payments that are due. Use this to draft the due payments right away."
 msgstr "매일 지불할 매입 송장 초안이 생성됩니다. 이를 사용하여 지불할 매입 송장 초안을 즉시 생성합니다."
 
+msgid "Draft purchase orders, not counted until they're finalized:"
+msgstr ""
+
 msgid "Drafts a credit memo for the time already invoiced after the end date."
 msgstr "종료일 이후 이미 청구된 시간에 대해 대변전표를 작성합니다."
 
@@ -8314,6 +8340,9 @@ msgstr "{0} 예정"
 #. placeholder {0}: formatRelativeTime(convertDateStringToIsoString(dueDate))
 msgid "Due {0}"
 msgstr "기한 {0}"
+
+msgid "Due {due}"
+msgstr ""
 
 msgid "Due <0/>"
 msgstr "기한 <0/>"
@@ -9482,6 +9511,9 @@ msgstr "모든 일치"
 
 msgid "Every posted journal line in a period"
 msgstr "기간 내 전기된 모든 분개 라인"
+
+msgid "Every released job can be filled from stock."
+msgstr ""
 
 msgid "Every required action has already been added."
 msgstr "필요한 모든 작업이 이미 추가되었습니다."
@@ -11051,6 +11083,9 @@ msgstr "계좌 번호 숨기기"
 msgid "Hide Again"
 msgstr "다시 숨기기"
 
+msgid "Hide at-risk parts"
+msgstr ""
+
 msgid "Hide calculation"
 msgstr "계산 숨기기"
 
@@ -12346,8 +12381,14 @@ msgstr "작업 이동표"
 msgid "Jobs"
 msgstr "작업 지시"
 
+msgid "Jobs and orders pulling"
+msgstr ""
+
 msgid "Jobs Assigned to Me"
 msgstr "내게 할당된 작업 지시"
+
+msgid "Jobs Missing Parts"
+msgstr ""
 
 msgid "Jobs Required"
 msgstr "필요한 작업 지시"
@@ -14141,6 +14182,12 @@ msgstr "적절한 열이 필요하신가요?"
 msgid "Need-by target"
 msgstr "소요 일자"
 
+msgid "Needed"
+msgstr ""
+
+msgid "Needed by"
+msgstr ""
+
 msgid "Needed is the job hours due that day divided by {personDayHours}h, rounded up — the shift you're filtering by, or the most common shift length at this location."
 msgstr "필요한 것은 그 날의 작업 지시 시간을 {personDayHours}h로 나눈 값(올림)입니다 — 필터링하는 교대조 또는 이 사업장의 가장 일반적인 교대조 길이입니다."
 
@@ -15471,6 +15518,9 @@ msgstr "구성되지 않음"
 msgid "Not Configured"
 msgstr "미설정"
 
+msgid "Not covered by open orders"
+msgstr ""
+
 msgid "Not delivered"
 msgstr "배송되지 않음"
 
@@ -15615,6 +15665,9 @@ msgstr "누군가에게 알림"
 
 msgid "now"
 msgstr "지금"
+
+msgid "Now"
+msgstr ""
 
 msgid "Number"
 msgstr "번호"
@@ -18784,6 +18837,9 @@ msgstr "릴리즈됨"
 msgid "Released date"
 msgstr "출시일"
 
+msgid "Released jobs whose parts can't all come from stock. Red: the job needs more than is on hand now. Amber: on hand covers this job, but all the jobs and orders pulling on the part need more than is on hand and on order. The bars are the part's projected stock by week; open a part to see the jobs pulling it and the orders arriving each week."
+msgstr ""
+
 msgid "Released revision"
 msgstr "릴리스된 리비전"
 
@@ -21296,6 +21352,9 @@ msgstr "모두 표시"
 msgid "Show all hidden on this step"
 msgstr "이 단계에서 모두 숨김 표시"
 
+msgid "Show at-risk parts"
+msgstr ""
+
 msgid "Show available batch numbers"
 msgstr "가용 배치 번호 표시"
 
@@ -21883,6 +21942,9 @@ msgstr "재고"
 
 msgid "Stock Availability"
 msgstr "재고 가용성"
+
+msgid "Stock by week"
+msgstr ""
 
 msgid "Stock movement corrected"
 msgstr "재고 이동 수정됨"
@@ -25879,6 +25941,9 @@ msgstr "품목 보기"
 msgid "View Item Master"
 msgstr "품목 마스터 보기"
 
+msgid "View Jobs Missing Parts"
+msgstr ""
+
 msgid "View Journal Entry"
 msgstr "분개 보기"
 
@@ -26177,9 +26242,18 @@ msgstr "{weekNumber}주차"
 msgid "Week 8 cutover"
 msgstr "8주차 전환"
 
+msgid "Week of"
+msgstr ""
+
 #. placeholder {0}: dateFormatter.format(parseDate(d.startDate).toDate(getLocalTimeZone()))
 msgid "Week of {0}"
 msgstr "{0} 주"
+
+msgid "Week of {covered}"
+msgstr ""
+
+msgid "Week of {neededBy}"
+msgstr ""
 
 msgid "Week Rate"
 msgstr "주 요금"

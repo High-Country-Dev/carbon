@@ -277,6 +277,10 @@ msgstr "{0} 行"
 msgid "{0} lines to map"
 msgstr "{0} 行待映射"
 
+#. placeholder {0}: job.missingCount
+msgid "{0} missing"
+msgstr ""
+
 #. placeholder {0}: (asset as any).taxUsefulLifeMonths
 #. placeholder {0}: asset.usefulLifeMonths
 msgid "{0} months"
@@ -303,6 +307,10 @@ msgstr "{0} / {maxSlots} 个提供商插槽已使用"
 #. placeholder {0}: pendingJobs.length
 msgid "{0} of {memberCount} member jobs are not completed yet — their output stays out of stock until each job is completed."
 msgstr "{memberCount}个工单中{0}个尚未完成——其产出将一直缺货，直到每个工单都完成。"
+
+#. placeholder {0}: formatQuantity(part.onHand)
+msgid "{0} on hand"
+msgstr ""
 
 #. placeholder {0}: selected.length
 msgid "{0} operations · {totalQuantity} parts"
@@ -478,6 +486,9 @@ msgstr "{asset}: 应付日期为 {dueDate} 的付款已跳过（在 Carbon 外�
 msgid "{assetCount} Assets"
 msgstr "{assetCount} 个资产"
 
+msgid "{atRiskJobs} jobs at risk"
+msgstr ""
+
 msgid "{chainLabel}. Consider pointing this part directly at the final successor."
 msgstr "{chainLabel}。考虑直接将此零件指向最终后继物料。"
 
@@ -569,6 +580,9 @@ msgstr ""
 #. placeholder {1}: skipped.length
 msgid "{inserted} inserted, {updated} updated, {0} need fixing, {1} skipped."
 msgstr "已插入{inserted}条，已更新{updated}条，需修复{0}条，已跳过{1}条。"
+
+msgid "{jobsMissingParts} jobs short now"
+msgstr ""
 
 msgid "{jobsMissingStorageUnit, plural, one {# open job has materials with no storage unit} other {# open jobs have materials with no storage unit}}"
 msgstr "{jobsMissingStorageUnit, plural, one {# 个未结工单的物料没有存储单元} other {# 个未结工单的物料没有存储单元}}"
@@ -3561,6 +3575,9 @@ msgstr "你确定吗？"
 msgid "Arrears"
 msgstr "逾期"
 
+msgid "Arriving"
+msgstr ""
+
 msgid "As if it jumped to the front of the shop's queue."
 msgstr "就像它跳到了车间队列的最前面。"
 
@@ -3764,6 +3781,9 @@ msgstr "至少一个条件必须匹配"
 
 msgid "At operation completion"
 msgstr "在操作完成时"
+
+msgid "At risk"
+msgstr ""
 
 msgid "Attach"
 msgstr "关联"
@@ -6290,6 +6310,9 @@ msgstr "国家代码"
 msgid "Coverage"
 msgstr "覆盖范围"
 
+msgid "Covered from"
+msgstr ""
+
 msgid "Create"
 msgstr "创建"
 
@@ -8235,6 +8258,9 @@ msgstr "仅限草稿"
 msgid "Draft purchase invoices are created every day for the payments that are due. Use this to draft the due payments right away."
 msgstr "每天为到期付款创建草稿采购发票。使用此选项立即生成到期付款的草稿。"
 
+msgid "Draft purchase orders, not counted until they're finalized:"
+msgstr ""
+
 msgid "Drafts a credit memo for the time already invoiced after the end date."
 msgstr "为结束日期之后已开票的时间起草贷项凭证"
 
@@ -8314,6 +8340,9 @@ msgstr "截止 {0}"
 #. placeholder {0}: formatRelativeTime(convertDateStringToIsoString(dueDate))
 msgid "Due {0}"
 msgstr "截止日期 {0}"
+
+msgid "Due {due}"
+msgstr ""
 
 msgid "Due <0/>"
 msgstr "截止 <0/>"
@@ -9482,6 +9511,9 @@ msgstr "每次匹配"
 
 msgid "Every posted journal line in a period"
 msgstr "某一期间内的所有已过账日记账明细"
+
+msgid "Every released job can be filled from stock."
+msgstr ""
 
 msgid "Every required action has already been added."
 msgstr "每个必需的操作已添加。"
@@ -11051,6 +11083,9 @@ msgstr "隐藏账户号码"
 msgid "Hide Again"
 msgstr "再次隐藏"
 
+msgid "Hide at-risk parts"
+msgstr ""
+
 msgid "Hide calculation"
 msgstr "隐藏计算"
 
@@ -12346,8 +12381,14 @@ msgstr "工单流转卡"
 msgid "Jobs"
 msgstr "工单"
 
+msgid "Jobs and orders pulling"
+msgstr ""
+
 msgid "Jobs Assigned to Me"
 msgstr "分配给我的工单"
+
+msgid "Jobs Missing Parts"
+msgstr ""
 
 msgid "Jobs Required"
 msgstr "所需工单"
@@ -14141,6 +14182,12 @@ msgstr "需要正确的列吗？"
 msgid "Need-by target"
 msgstr "需要日期"
 
+msgid "Needed"
+msgstr ""
+
+msgid "Needed by"
+msgstr ""
+
 msgid "Needed is the job hours due that day divided by {personDayHours}h, rounded up — the shift you're filtering by, or the most common shift length at this location."
 msgstr "需要的是该天的工作小时数除以 {personDayHours} 小时，向上舍入——您筛选的班次或此位置最常见的班次时长。"
 
@@ -15471,6 +15518,9 @@ msgstr "未配置"
 msgid "Not Configured"
 msgstr "未配置"
 
+msgid "Not covered by open orders"
+msgstr ""
+
 msgid "Not delivered"
 msgstr "未交付"
 
@@ -15615,6 +15665,9 @@ msgstr "通知某人"
 
 msgid "now"
 msgstr "现在"
+
+msgid "Now"
+msgstr ""
 
 msgid "Number"
 msgstr "数字"
@@ -18784,6 +18837,9 @@ msgstr "已下达"
 msgid "Released date"
 msgstr "下达日期"
 
+msgid "Released jobs whose parts can't all come from stock. Red: the job needs more than is on hand now. Amber: on hand covers this job, but all the jobs and orders pulling on the part need more than is on hand and on order. The bars are the part's projected stock by week; open a part to see the jobs pulling it and the orders arriving each week."
+msgstr ""
+
 msgid "Released revision"
 msgstr "已下达修订版"
 
@@ -21296,6 +21352,9 @@ msgstr "显示全部"
 msgid "Show all hidden on this step"
 msgstr "显示此步骤上隐藏的全部内容"
 
+msgid "Show at-risk parts"
+msgstr ""
+
 msgid "Show available batch numbers"
 msgstr "显示可用批次号"
 
@@ -21883,6 +21942,9 @@ msgstr "库存"
 
 msgid "Stock Availability"
 msgstr "库存可用性"
+
+msgid "Stock by week"
+msgstr ""
 
 msgid "Stock movement corrected"
 msgstr "库存移动已修正"
@@ -25879,6 +25941,9 @@ msgstr "查看物料"
 msgid "View Item Master"
 msgstr "查看物料主数据"
 
+msgid "View Jobs Missing Parts"
+msgstr ""
+
 msgid "View Journal Entry"
 msgstr "查看日记账分录"
 
@@ -26177,9 +26242,18 @@ msgstr "第 {weekNumber} 周"
 msgid "Week 8 cutover"
 msgstr "第8周切换"
 
+msgid "Week of"
+msgstr ""
+
 #. placeholder {0}: dateFormatter.format(parseDate(d.startDate).toDate(getLocalTimeZone()))
 msgid "Week of {0}"
 msgstr "{0} 的周"
+
+msgid "Week of {covered}"
+msgstr ""
+
+msgid "Week of {neededBy}"
+msgstr ""
 
 msgid "Week Rate"
 msgstr "周费率"

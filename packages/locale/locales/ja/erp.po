@@ -277,6 +277,10 @@ msgstr "{0} 明細"
 msgid "{0} lines to map"
 msgstr "{0}件のラインをマップします"
 
+#. placeholder {0}: job.missingCount
+msgid "{0} missing"
+msgstr ""
+
 #. placeholder {0}: (asset as any).taxUsefulLifeMonths
 #. placeholder {0}: asset.usefulLifeMonths
 msgid "{0} months"
@@ -303,6 +307,10 @@ msgstr "{0}個の{maxSlots}プロバイダースロットが使用されてい�
 #. placeholder {0}: pendingJobs.length
 msgid "{0} of {memberCount} member jobs are not completed yet — their output stays out of stock until each job is completed."
 msgstr "{memberCount}個の製造指図のうち{0}件がまだ完了していません。各製造指図が完了するまで、それらの出力は在庫に入りません。"
+
+#. placeholder {0}: formatQuantity(part.onHand)
+msgid "{0} on hand"
+msgstr ""
 
 #. placeholder {0}: selected.length
 msgid "{0} operations · {totalQuantity} parts"
@@ -478,6 +486,9 @@ msgstr "{asset}: {dueDate}に支払期限のある支払はスキップ済（Car
 msgid "{assetCount} Assets"
 msgstr "{assetCount} 固定資産"
 
+msgid "{atRiskJobs} jobs at risk"
+msgstr ""
+
 msgid "{chainLabel}. Consider pointing this part directly at the final successor."
 msgstr "{chainLabel}。この部品を最終的な後継品目に直接ポイントすることを検討してください。"
 
@@ -569,6 +580,9 @@ msgstr ""
 #. placeholder {1}: skipped.length
 msgid "{inserted} inserted, {updated} updated, {0} need fixing, {1} skipped."
 msgstr "{inserted} 件が挿入されました、{updated} 件が更新されました、{0} 件の修正が必要です、{1} 件がスキップされました。"
+
+msgid "{jobsMissingParts} jobs short now"
+msgstr ""
 
 msgid "{jobsMissingStorageUnit, plural, one {# open job has materials with no storage unit} other {# open jobs have materials with no storage unit}}"
 msgstr "{jobsMissingStorageUnit, plural, one {#個のオープン製造指図に保管ユニットがない材料があります} other {#個のオープン製造指図に保管ユニットがない材料があります}}"
@@ -3561,6 +3575,9 @@ msgstr "本当ですか？"
 msgid "Arrears"
 msgstr "延滞"
 
+msgid "Arriving"
+msgstr ""
+
 msgid "As if it jumped to the front of the shop's queue."
 msgstr "工場の処理待ちキューの最前列に割り込むように。"
 
@@ -3764,6 +3781,9 @@ msgstr "少なくとも1つの条件が一致する必要があります"
 
 msgid "At operation completion"
 msgstr "操作完了時"
+
+msgid "At risk"
+msgstr ""
 
 msgid "Attach"
 msgstr "添付"
@@ -6290,6 +6310,9 @@ msgstr "国コード"
 msgid "Coverage"
 msgstr "配置"
 
+msgid "Covered from"
+msgstr ""
+
 msgid "Create"
 msgstr "作成"
 
@@ -8235,6 +8258,9 @@ msgstr "下書きのみ"
 msgid "Draft purchase invoices are created every day for the payments that are due. Use this to draft the due payments right away."
 msgstr "支払期日の仕入先請求書は毎日下書きで作成されます。この機能を使用して、期日の支払を即座に下書きしてください。"
 
+msgid "Draft purchase orders, not counted until they're finalized:"
+msgstr ""
+
 msgid "Drafts a credit memo for the time already invoiced after the end date."
 msgstr "終了日後に既に請求された時間のクレジットメモを下書きします。"
 
@@ -8314,6 +8340,9 @@ msgstr "納期 {0}"
 #. placeholder {0}: formatRelativeTime(convertDateStringToIsoString(dueDate))
 msgid "Due {0}"
 msgstr "期限 {0}"
+
+msgid "Due {due}"
+msgstr ""
 
 msgid "Due <0/>"
 msgstr "予定日<0/>"
@@ -9482,6 +9511,9 @@ msgstr "すべてのマッチ"
 
 msgid "Every posted journal line in a period"
 msgstr "期間内のすべての転記済み仕訳明細"
+
+msgid "Every released job can be filled from stock."
+msgstr ""
 
 msgid "Every required action has already been added."
 msgstr "すべての必須アクションが既に追加されています。"
@@ -11051,6 +11083,9 @@ msgstr "口座番号を隠す"
 msgid "Hide Again"
 msgstr "もう一度非表示"
 
+msgid "Hide at-risk parts"
+msgstr ""
+
 msgid "Hide calculation"
 msgstr "計算を隠す"
 
@@ -12346,8 +12381,14 @@ msgstr "現品票"
 msgid "Jobs"
 msgstr "製造指図"
 
+msgid "Jobs and orders pulling"
+msgstr ""
+
 msgid "Jobs Assigned to Me"
 msgstr "私に割り当てられた製造指図"
+
+msgid "Jobs Missing Parts"
+msgstr ""
 
 msgid "Jobs Required"
 msgstr "必要な製造指図"
@@ -14141,6 +14182,12 @@ msgstr "正しい列が必要ですか？"
 msgid "Need-by target"
 msgstr "所要日目標"
 
+msgid "Needed"
+msgstr ""
+
+msgid "Needed by"
+msgstr ""
+
 msgid "Needed is the job hours due that day divided by {personDayHours}h, rounded up — the shift you're filtering by, or the most common shift length at this location."
 msgstr "必要人数は、その日の予定作業時間を{personDayHours}hで除した値を四捨五入したものです。フィルタリングしているシフト、またはこの場所で最も一般的なシフト長です。"
 
@@ -15471,6 +15518,9 @@ msgstr "未設定"
 msgid "Not Configured"
 msgstr "未設定"
 
+msgid "Not covered by open orders"
+msgstr ""
+
 msgid "Not delivered"
 msgstr "未配送"
 
@@ -15615,6 +15665,9 @@ msgstr "誰かに通知"
 
 msgid "now"
 msgstr "現在"
+
+msgid "Now"
+msgstr ""
 
 msgid "Number"
 msgstr "数字"
@@ -18784,6 +18837,9 @@ msgstr "リリース済み"
 msgid "Released date"
 msgstr "リリース日"
 
+msgid "Released jobs whose parts can't all come from stock. Red: the job needs more than is on hand now. Amber: on hand covers this job, but all the jobs and orders pulling on the part need more than is on hand and on order. The bars are the part's projected stock by week; open a part to see the jobs pulling it and the orders arriving each week."
+msgstr ""
+
 msgid "Released revision"
 msgstr "リリースされたリビジョン"
 
@@ -21296,6 +21352,9 @@ msgstr "すべて表示"
 msgid "Show all hidden on this step"
 msgstr "このステップで非表示になっているすべてを表示"
 
+msgid "Show at-risk parts"
+msgstr ""
+
 msgid "Show available batch numbers"
 msgstr "利用可能なバッチ番号を表示"
 
@@ -21883,6 +21942,9 @@ msgstr "在庫"
 
 msgid "Stock Availability"
 msgstr "在庫可用性"
+
+msgid "Stock by week"
+msgstr ""
 
 msgid "Stock movement corrected"
 msgstr "在庫移動が訂正されました"
@@ -25879,6 +25941,9 @@ msgstr "品目を表示"
 msgid "View Item Master"
 msgstr "アイテムマスターを表示"
 
+msgid "View Jobs Missing Parts"
+msgstr ""
+
 msgid "View Journal Entry"
 msgstr "仕訳行を表示"
 
@@ -26177,9 +26242,18 @@ msgstr "週 {weekNumber}"
 msgid "Week 8 cutover"
 msgstr "第8週のカットオーバー"
 
+msgid "Week of"
+msgstr ""
+
 #. placeholder {0}: dateFormatter.format(parseDate(d.startDate).toDate(getLocalTimeZone()))
 msgid "Week of {0}"
 msgstr "{0} の週"
+
+msgid "Week of {covered}"
+msgstr ""
+
+msgid "Week of {neededBy}"
+msgstr ""
 
 msgid "Week Rate"
 msgstr "週単位料金"
