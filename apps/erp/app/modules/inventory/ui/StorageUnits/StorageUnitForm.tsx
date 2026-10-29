@@ -22,6 +22,8 @@ import {
   VStack
 } from "@carbon/react";
 import { Trans, useLingui } from "@lingui/react/macro";
+import { LuPackageSearch } from "react-icons/lu";
+import { Link } from "react-router";
 import type { z } from "zod";
 import { PrintButton } from "~/components";
 import {
@@ -35,6 +37,7 @@ import {
 import { usePermissions } from "~/hooks";
 import { storageUnitValidator } from "~/modules/inventory/inventory.models";
 import { path } from "~/utils/path";
+import { getStorageUnitContentsPath } from "./contentsPath";
 import { StorageUnitParentSelect } from "./StorageUnitParentSelect";
 
 type StorageUnitFormProps = {
@@ -96,6 +99,21 @@ const StorageUnitForm = ({
         }}
         label={isPhoneEdit ? t`Print label` : undefined}
       />
+    ) : null;
+  // The only way into a bin on a phone is this sheet, so its contents are
+  // linked from here as well as from the table.
+  const contentsButton =
+    isEditing && initialValues.id ? (
+      <Button
+        size="md"
+        variant="secondary"
+        leftIcon={<LuPackageSearch />}
+        asChild
+      >
+        <Link to={getStorageUnitContentsPath(initialValues.id, locationId)}>
+          <Trans>View Contents</Trans>
+        </Link>
+      </Button>
     ) : null;
 
   return (
@@ -188,13 +206,17 @@ const StorageUnitForm = ({
             <ModalDrawerFooter>
               {isPhoneEdit ? (
                 // Save is in the header; × and the overlay close the sheet.
-                <div className="w-full [&>button]:w-full">{printButton}</div>
+                <div className="flex w-full flex-col gap-2 [&>a]:w-full [&>button]:w-full">
+                  {contentsButton}
+                  {printButton}
+                </div>
               ) : (
                 <HStack>
                   {saveButton}
                   <Button size="md" variant="solid" onClick={onClose}>
                     <Trans>Cancel</Trans>
                   </Button>
+                  {contentsButton}
                   {printButton}
                 </HStack>
               )}

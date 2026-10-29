@@ -82,9 +82,12 @@ export default function QuoteOperationRateSource({
   const deviates =
     referenceRate !== undefined && ratesDiffer(value, referenceRate);
 
-  const byName = saved?.by
-    ? (people.find((p) => p.id === saved.by)?.name ?? null)
-    : null;
+  // An import is stamped with the account that ran it, not a person who
+  // chose the rate.
+  const byName =
+    saved?.by && saved.source !== "Imported"
+      ? (people.find((p) => p.id === saved.by)?.name ?? null)
+      : null;
   const referenceName =
     reference?.kind === "processAverage" ? null : reference?.name;
   const referenceLabel = referenceName ?? t`the work center`;
