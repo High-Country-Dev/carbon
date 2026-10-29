@@ -63,12 +63,23 @@ index 73829de..f90b386 100644
            plugins: [
              childCompilerPlugins.filter(
                (plugin) => typeof plugin === "object" && plugin !== null && "name" in plugin && plugin.name !== "react-router" && plugin.name !== "react-router:route-exports" && plugin.name !== "react-router:hmr-updates" && plugin.name !== "react-router:validate-plugin-order"
-@@ -4016,7 +4016,7 @@ var reactRouterVitePlugin = () => {
+@@ -4016,9 +4016,17 @@ var reactRouterVitePlugin = () => {
                  await (0, import_promises3.rm)(src, { force: true, recursive: true });
                  removedAssetPaths.push(dest);
                }
--            } else if (!(0, import_node_fs2.existsSync)(dest)) {
-+            } else if (!(0, import_node_fs2.existsSync)(dest) && (0, import_node_fs2.existsSync)(src)) {
-               await (0, import_promises3.cp)(src, dest, { recursive: true });
-               copiedAssetPaths.push(dest);
+             } else if (!(0, import_node_fs2.existsSync)(dest)) {
+-              await (0, import_promises3.cp)(src, dest, { recursive: true });
+-              copiedAssetPaths.push(dest);
++              let from = src;
++              if (!(0, import_node_fs2.existsSync)(from)) {
++                let stem = path7.basename(ssrAssetPath).replace(/-[\w-]{8}\.css$/, "-");
++                let sibling = stem.endsWith("-") ? (await (0, import_promises3.readdir)(path7.dirname(dest)).catch(() => [])).find((f) => f.startsWith(stem) && f.endsWith(".css")) : void 0;
++                from = sibling ? path7.join(path7.dirname(dest), sibling) : null;
++              }
++              if (from) {
++                await (0, import_promises3.cp)(from, dest, { recursive: true });
++                copiedAssetPaths.push(dest);
++              }
              }
+           }
+           if (!userSsrEmitAssets) {
