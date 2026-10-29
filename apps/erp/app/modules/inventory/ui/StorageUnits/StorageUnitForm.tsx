@@ -108,6 +108,8 @@ const StorageUnitForm = ({
         size="md"
         variant="secondary"
         leftIcon={<LuPackageSearch />}
+        // The phone footer sizes its buttons to 44px; this one is a link.
+        className="max-md:h-11"
         asChild
       >
         <Link to={getStorageUnitContentsPath(initialValues.id, locationId)}>
@@ -206,7 +208,7 @@ const StorageUnitForm = ({
             <ModalDrawerFooter>
               {isPhoneEdit ? (
                 // Save is in the header; × and the overlay close the sheet.
-                <div className="flex w-full flex-col gap-2 [&>a]:w-full [&>button]:w-full">
+                <div className="flex w-full gap-2 [&>*]:flex-1">
                   {contentsButton}
                   {printButton}
                 </div>
