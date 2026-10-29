@@ -47,6 +47,7 @@ import { useStorageTypes } from "~/components/Form/StorageTypes";
 import { IndeterminateCheckbox } from "~/components/Table/components";
 import { usePermissions, usePrinting, useUrlParams } from "~/hooks";
 import { path } from "~/utils/path";
+import { getStorageUnitContentsPath } from "./contentsPath";
 
 type StorageUnit = {
   id: string;
@@ -797,14 +798,8 @@ function StorageUnitDownloadModal({
   );
 }
 
-// Inventory Quantities filtered to one bin (its child bins included: the
-// quantities loader expands the filter to descendants).
 function getContentsPath(storageUnit: StorageUnit) {
-  const params = new URLSearchParams({
-    filter: `storageUnitIds:contains:${storageUnit.id}`
-  });
-  if (storageUnit.locationId) params.set("location", storageUnit.locationId);
-  return `${path.to.inventory}?${params.toString()}`;
+  return getStorageUnitContentsPath(storageUnit.id, storageUnit.locationId);
 }
 
 function getLocationPath(locationId: string) {
