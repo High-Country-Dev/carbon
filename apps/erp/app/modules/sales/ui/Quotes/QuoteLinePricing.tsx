@@ -377,8 +377,13 @@ const QuoteLinePricing = ({
     []
   );
 
-  const visibleCategories = costCategoryKeys.filter((key: CostCategoryKey) =>
-    costsByQuantity.some((costs) => costs[key] > 0)
+  // LAND-271: labor, machine and overhead cost lines only for people with Resources access.
+  const canSeeRates = permissions.can("view", "resources");
+  const visibleCategories = costCategoryKeys.filter(
+    (key: CostCategoryKey) =>
+      (canSeeRates ||
+        !["laborCost", "machineCost", "overheadCost"].includes(key)) &&
+      costsByQuantity.some((costs) => costs[key] > 0)
   );
 
   const netPricesByQuantity = quantities.map((quantity, index) => {

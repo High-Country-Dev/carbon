@@ -276,7 +276,9 @@ export default function QuoteLine() {
 
       {line.methodType === "Make to Order" &&
         line.status !== "No Quote" &&
-        permissions.is("employee") && (
+        permissions.is("employee") &&
+        // LAND-271: the costing card breaks out labor, machine and overhead cost
+        permissions.can("view", "resources") && (
           <QuoteLineCosting
             quantities={line.quantity ?? [1]}
             getLineCosts={getLineCosts}

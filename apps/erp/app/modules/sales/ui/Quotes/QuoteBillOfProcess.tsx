@@ -1682,6 +1682,7 @@ function OperationForm({
   temporaryItems: TemporaryItems;
   onSubmit: () => void;
 }) {
+  const canSeeRates = usePermissions().can("view", "resources");
   const { t } = useLingui();
   const { quoteId, lineId } = useParams();
   const { company } = useUser();
@@ -2355,73 +2356,47 @@ function OperationForm({
             </div>
           )}
 
-          <div className="border border-border rounded-md shadow-sm p-4 flex flex-col gap-4">
-            <HStack
-              className="w-full justify-between cursor-pointer"
-              onClick={costingDisclosure.onToggle}
-            >
-              <HStack>
-                <LuDollarSign />
-                <Label>Costing</Label>
+          {/* LAND-271: rates and where they came from show only to people with Resources
+              access. Hidden inputs keep the values so saving a step never clears them. */}
+          {canSeeRates ? (
+            <div className="border border-border rounded-md shadow-sm p-4 flex flex-col gap-4">
+              <HStack
+                className="w-full justify-between cursor-pointer"
+                onClick={costingDisclosure.onToggle}
+              >
+                <HStack>
+                  <LuDollarSign />
+                  <Label>Costing</Label>
+                </HStack>
+                <IconButton
+                  icon={<LuChevronRight />}
+                  aria-label={
+                    costingDisclosure.isOpen
+                      ? "Collapse Costing"
+                      : "Expand Costing"
+                  }
+                  variant="ghost"
+                  size="md"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    costingDisclosure.onToggle();
+                  }}
+                  className={`transition-transform ${
+                    costingDisclosure.isOpen ? "rotate-90" : ""
+                  }`}
+                />
               </HStack>
-              <IconButton
-                icon={<LuChevronRight />}
-                aria-label={
-                  costingDisclosure.isOpen
-                    ? "Collapse Costing"
-                    : "Expand Costing"
-                }
-                variant="ghost"
-                size="md"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  costingDisclosure.onToggle();
-                }}
-                className={`transition-transform ${
-                  costingDisclosure.isOpen ? "rotate-90" : ""
+              <div
+                className={`grid w-full gap-x-8 gap-y-4 grid-cols-1 lg:grid-cols-3 pb-4 ${
+                  costingDisclosure.isOpen ? "" : "hidden"
                 }`}
-              />
-            </HStack>
-            <div
-              className={`grid w-full gap-x-8 gap-y-4 grid-cols-1 lg:grid-cols-3 pb-4 ${
-                costingDisclosure.isOpen ? "" : "hidden"
-              }`}
-            >
-              <div className="flex flex-col gap-2">
-                <NumberControlled
-                  name="laborRate"
-                  label={t`Labor Rate`}
-                  minValue={0}
-                  value={processData.laborRate}
-                  formatOptions={INPUT_FORMAT.rate(
-                    baseCurrency,
-                    currencyDecimals
-                  )}
-                  onChange={(newValue) =>
-                    setProcessData((d) => ({
-                      ...d,
-                      laborRate: newValue
-                    }))
-                  }
-                />
-                <QuoteOperationRateSource
-                  rate="laborRate"
-                  value={processData.laborRate}
-                  savedValue={item.data.laborRate}
-                  rateSources={item.data.rateSources}
-                  reference={rateReference}
-                  onReset={(value) =>
-                    setProcessData((d) => ({ ...d, laborRate: value }))
-                  }
-                />
-              </div>
-              {processData.operationType === "Process" && (
+              >
                 <div className="flex flex-col gap-2">
                   <NumberControlled
-                    name="machineRate"
-                    label={t`Machine Rate`}
+                    name="laborRate"
+                    label={t`Labor Rate`}
                     minValue={0}
-                    value={processData.machineRate}
+                    value={processData.laborRate}
                     formatOptions={INPUT_FORMAT.rate(
                       baseCurrency,
                       currencyDecimals
@@ -2429,52 +2404,102 @@ function OperationForm({
                     onChange={(newValue) =>
                       setProcessData((d) => ({
                         ...d,
-                        machineRate: newValue
+                        laborRate: newValue
                       }))
                     }
                   />
                   <QuoteOperationRateSource
-                    rate="machineRate"
-                    value={processData.machineRate}
-                    savedValue={item.data.machineRate}
+                    rate="laborRate"
+                    value={processData.laborRate}
+                    savedValue={item.data.laborRate}
                     rateSources={item.data.rateSources}
                     reference={rateReference}
                     onReset={(value) =>
-                      setProcessData((d) => ({ ...d, machineRate: value }))
+                      setProcessData((d) => ({ ...d, laborRate: value }))
                     }
                   />
                 </div>
-              )}
-              <div className="flex flex-col gap-2">
-                <NumberControlled
-                  name="overheadRate"
-                  label={t`Overhead Rate`}
-                  minValue={0}
-                  value={processData.overheadRate}
-                  formatOptions={INPUT_FORMAT.rate(
-                    baseCurrency,
-                    currencyDecimals
-                  )}
-                  onChange={(newValue) =>
-                    setProcessData((d) => ({
-                      ...d,
-                      overheadRate: newValue
-                    }))
-                  }
-                />
-                <QuoteOperationRateSource
-                  rate="overheadRate"
-                  value={processData.overheadRate}
-                  savedValue={item.data.overheadRate}
-                  rateSources={item.data.rateSources}
-                  reference={rateReference}
-                  onReset={(value) =>
-                    setProcessData((d) => ({ ...d, overheadRate: value }))
-                  }
-                />
+                {processData.operationType === "Process" && (
+                  <div className="flex flex-col gap-2">
+                    <NumberControlled
+                      name="machineRate"
+                      label={t`Machine Rate`}
+                      minValue={0}
+                      value={processData.machineRate}
+                      formatOptions={INPUT_FORMAT.rate(
+                        baseCurrency,
+                        currencyDecimals
+                      )}
+                      onChange={(newValue) =>
+                        setProcessData((d) => ({
+                          ...d,
+                          machineRate: newValue
+                        }))
+                      }
+                    />
+                    <QuoteOperationRateSource
+                      rate="machineRate"
+                      value={processData.machineRate}
+                      savedValue={item.data.machineRate}
+                      rateSources={item.data.rateSources}
+                      reference={rateReference}
+                      onReset={(value) =>
+                        setProcessData((d) => ({ ...d, machineRate: value }))
+                      }
+                    />
+                  </div>
+                )}
+                <div className="flex flex-col gap-2">
+                  <NumberControlled
+                    name="overheadRate"
+                    label={t`Overhead Rate`}
+                    minValue={0}
+                    value={processData.overheadRate}
+                    formatOptions={INPUT_FORMAT.rate(
+                      baseCurrency,
+                      currencyDecimals
+                    )}
+                    onChange={(newValue) =>
+                      setProcessData((d) => ({
+                        ...d,
+                        overheadRate: newValue
+                      }))
+                    }
+                  />
+                  <QuoteOperationRateSource
+                    rate="overheadRate"
+                    value={processData.overheadRate}
+                    savedValue={item.data.overheadRate}
+                    rateSources={item.data.rateSources}
+                    reference={rateReference}
+                    onReset={(value) =>
+                      setProcessData((d) => ({ ...d, overheadRate: value }))
+                    }
+                  />
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <>
+              <input
+                type="hidden"
+                name="laborRate"
+                value={processData.laborRate}
+              />
+              {processData.operationType === "Process" && (
+                <input
+                  type="hidden"
+                  name="machineRate"
+                  value={processData.machineRate}
+                />
+              )}
+              <input
+                type="hidden"
+                name="overheadRate"
+                value={processData.overheadRate}
+              />
+            </>
+          )}
 
           {processData.operationType === "Process" && (
             <div className="border border-border rounded-md shadow-sm p-4 flex flex-col gap-4">

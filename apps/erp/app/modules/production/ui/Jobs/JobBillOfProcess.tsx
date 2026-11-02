@@ -2805,6 +2805,7 @@ function OperationForm({
   onSubmit: () => void;
   temporaryItems: TemporaryItems;
 }) {
+  const canSeeRates = usePermissions().can("view", "resources");
   const { jobId } = useParams();
   const { t } = useLingui();
   const { company } = useUser();
@@ -3412,62 +3413,48 @@ function OperationForm({
             </div>
           )}
 
-          <div className="border border-border rounded-md shadow-sm p-4 flex flex-col gap-4">
-            <HStack
-              className="w-full justify-between cursor-pointer"
-              onClick={costingDisclosure.onToggle}
-            >
-              <HStack>
-                <LuDollarSign />
-                <Label>Costing</Label>
+          {/* LAND-271: rates show only to people with Resources access. Hidden inputs keep
+              the values so saving a step never clears them. */}
+          {canSeeRates ? (
+            <div className="border border-border rounded-md shadow-sm p-4 flex flex-col gap-4">
+              <HStack
+                className="w-full justify-between cursor-pointer"
+                onClick={costingDisclosure.onToggle}
+              >
+                <HStack>
+                  <LuDollarSign />
+                  <Label>Costing</Label>
+                </HStack>
+                <HStack>
+                  <IconButton
+                    icon={<LuChevronRight />}
+                    aria-label={
+                      costingDisclosure.isOpen
+                        ? "Collapse Costing"
+                        : "Expand Costing"
+                    }
+                    variant="ghost"
+                    size="md"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      costingDisclosure.onToggle();
+                    }}
+                    className={`transition-transform ${
+                      costingDisclosure.isOpen ? "rotate-90" : ""
+                    }`}
+                  />
+                </HStack>
               </HStack>
-              <HStack>
-                <IconButton
-                  icon={<LuChevronRight />}
-                  aria-label={
-                    costingDisclosure.isOpen
-                      ? "Collapse Costing"
-                      : "Expand Costing"
-                  }
-                  variant="ghost"
-                  size="md"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    costingDisclosure.onToggle();
-                  }}
-                  className={`transition-transform ${
-                    costingDisclosure.isOpen ? "rotate-90" : ""
-                  }`}
-                />
-              </HStack>
-            </HStack>
-            <div
-              className={`grid w-full gap-x-8 gap-y-4 grid-cols-1 lg:grid-cols-3 pb-4 ${
-                costingDisclosure.isOpen ? "" : "hidden"
-              }`}
-            >
-              <NumberControlled
-                name="laborRate"
-                label={t`Labor Rate`}
-                minValue={0}
-                value={processData.laborRate}
-                formatOptions={INPUT_FORMAT.rate(
-                  baseCurrency,
-                  currencyDecimals
-                )}
-                onChange={(newValue) =>
-                  setProcessData((d) => ({
-                    ...d,
-                    laborRate: newValue
-                  }))
-                }
-              />
-              {processData.operationType === "Process" && (
+              <div
+                className={`grid w-full gap-x-8 gap-y-4 grid-cols-1 lg:grid-cols-3 pb-4 ${
+                  costingDisclosure.isOpen ? "" : "hidden"
+                }`}
+              >
                 <NumberControlled
-                  name="machineRate"
-                  label={t`Machine Rate`}
+                  name="laborRate"
+                  label={t`Labor Rate`}
                   minValue={0}
-                  value={processData.machineRate}
+                  value={processData.laborRate}
                   formatOptions={INPUT_FORMAT.rate(
                     baseCurrency,
                     currencyDecimals
@@ -3475,29 +3462,67 @@ function OperationForm({
                   onChange={(newValue) =>
                     setProcessData((d) => ({
                       ...d,
-                      machineRate: newValue
+                      laborRate: newValue
                     }))
                   }
                 />
-              )}
-              <NumberControlled
-                name="overheadRate"
-                label={t`Overhead Rate`}
-                minValue={0}
-                value={processData.overheadRate}
-                formatOptions={INPUT_FORMAT.rate(
-                  baseCurrency,
-                  currencyDecimals
+                {processData.operationType === "Process" && (
+                  <NumberControlled
+                    name="machineRate"
+                    label={t`Machine Rate`}
+                    minValue={0}
+                    value={processData.machineRate}
+                    formatOptions={INPUT_FORMAT.rate(
+                      baseCurrency,
+                      currencyDecimals
+                    )}
+                    onChange={(newValue) =>
+                      setProcessData((d) => ({
+                        ...d,
+                        machineRate: newValue
+                      }))
+                    }
+                  />
                 )}
-                onChange={(newValue) =>
-                  setProcessData((d) => ({
-                    ...d,
-                    overheadRate: newValue
-                  }))
-                }
-              />
+                <NumberControlled
+                  name="overheadRate"
+                  label={t`Overhead Rate`}
+                  minValue={0}
+                  value={processData.overheadRate}
+                  formatOptions={INPUT_FORMAT.rate(
+                    baseCurrency,
+                    currencyDecimals
+                  )}
+                  onChange={(newValue) =>
+                    setProcessData((d) => ({
+                      ...d,
+                      overheadRate: newValue
+                    }))
+                  }
+                />
+              </div>
             </div>
-          </div>
+          ) : (
+            <>
+              <input
+                type="hidden"
+                name="laborRate"
+                value={processData.laborRate}
+              />
+              {processData.operationType === "Process" && (
+                <input
+                  type="hidden"
+                  name="machineRate"
+                  value={processData.machineRate}
+                />
+              )}
+              <input
+                type="hidden"
+                name="overheadRate"
+                value={processData.overheadRate}
+              />
+            </>
+          )}
 
           {processData.operationType === "Process" && (
             <div className="border border-border rounded-md shadow-sm p-4 flex flex-col gap-4">
