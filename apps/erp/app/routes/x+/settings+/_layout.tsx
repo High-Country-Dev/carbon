@@ -2,10 +2,11 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
+import { requirePermissions } from "@carbon/auth/auth.server";
 import { RecordOutlet, VStack } from "@carbon/react";
 import { BRAND_NAME } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
-import type { MetaFunction } from "react-router";
+import type { LoaderFunctionArgs, MetaFunction } from "react-router";
 
 import { GroupedContentSidebar } from "~/components/Layout";
 import { useSettingsSubmodules } from "~/modules/settings/ui";
@@ -17,6 +18,16 @@ export { RouteErrorBoundary as ErrorBoundary } from "@carbon/react/ErrorBoundary
 export const meta: MetaFunction = () => {
   return [{ title: `${BRAND_NAME} | Settings` }];
 };
+
+// Every Settings page needs Settings access. Most pages check this themselves, but a
+// few (company details, new company, tags, API keys) don't, so a user without
+// Settings access could open them by address. Switching companies stays open to all.
+export async function loader({ request }: LoaderFunctionArgs) {
+  if (!new URL(request.url).pathname.includes("/switch/")) {
+    await requirePermissions(request, { view: "settings" });
+  }
+  return null;
+}
 
 function SettingsSidebar() {
   const { groups } = useSettingsSubmodules();
