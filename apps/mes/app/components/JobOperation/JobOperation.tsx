@@ -157,6 +157,7 @@ import {
   Times,
   WorkTypeToggle
 } from "./components/Controls";
+import { IssueMaterialInfo } from "./components/IssueMaterialInfo";
 import { IssueMaterialModal } from "./components/IssueMaterialModal";
 import { MaintenanceDispatch } from "./components/MaintenanceDispatch";
 import { OperationMaterials } from "./components/Materials";
@@ -351,8 +352,11 @@ export const JobOperation = ({
     }
   }, [parentIsSerial, serialIndex]);
 
+  // Pauses the 1 s progress tick, as useOperation does for its own modals.
   const isModalOpen =
-    attributeRecordModal.isOpen || attributeRecordDeleteModal.isOpen;
+    attributeRecordModal.isOpen ||
+    attributeRecordDeleteModal.isOpen ||
+    closeOutModal.isOpen;
 
   const {
     actionsSheet,
@@ -1843,15 +1847,18 @@ export const JobOperation = ({
                       <Heading size="h3">
                         <Trans>Materials</Trans>
                       </Heading>
-                      <Button
-                        aria-label={t`Issue Material`}
-                        leftIcon={<LuGitBranchPlus />}
-                        variant="secondary"
-                        size="lg"
-                        onClick={() => openIssueModal(null)}
-                      >
-                        <Trans>Issue Material</Trans>
-                      </Button>
+                      <HStack spacing={1}>
+                        <IssueMaterialInfo />
+                        <Button
+                          aria-label={t`Issue Material`}
+                          leftIcon={<LuGitBranchPlus />}
+                          variant="secondary"
+                          size="lg"
+                          onClick={() => openIssueModal(null)}
+                        >
+                          <Trans>Issue Material</Trans>
+                        </Button>
+                      </HStack>
                     </HStack>
                     <Suspense
                       key={`materials-${operationId}`}

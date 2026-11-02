@@ -33,6 +33,7 @@ import type { JobMaterialPickedItem } from "~/services/inventory.service";
 import type { BatchMaterialTotal } from "~/services/operations.service";
 import type { JobMaterial } from "~/services/types";
 import { useItems } from "~/stores";
+import { IssueMaterialInfo } from "./IssueMaterialInfo";
 
 type MaterialRow = {
   material: JobMaterial;
@@ -328,7 +329,10 @@ function MaterialsTable({ groups, parentIsSerial, onIssue }: LayoutProps) {
             <Th className="text-sm">
               <Trans>Actual</Trans>
             </Th>
-            <Th className="text-right" />
+            {/* The Issue column: one "i" over every row's Issue control. */}
+            <Th className="text-right">
+              <IssueMaterialInfo className="h-8 w-8" />
+            </Th>
           </Tr>
         </Thead>
         <Tbody className="[&>tr]:border-b [&>tr:last-child]:border-0">

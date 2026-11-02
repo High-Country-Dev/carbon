@@ -157,6 +157,16 @@ export async function action({ request }: ActionFunctionArgs) {
         await flash(request, error(startEvent.error, "Failed to start event"))
       );
     }
+    // A second Start keeps the running timer; nothing was written.
+    if (startEvent.data && "alreadyRunning" in startEvent.data) {
+      return data(
+        startEvent.data,
+        await flash(
+          request,
+          success(`Your ${d.type.toLowerCase()} timer is already running`)
+        )
+      );
+    }
     if (startEvent.data && "endedEventIds" in startEvent.data) {
       await postEnded(startEvent.data.endedEventIds);
     }
