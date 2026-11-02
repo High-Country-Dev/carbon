@@ -156,7 +156,7 @@ export default function PurchaseOrderExplorer() {
             )
           ) : (
             <Empty>
-              {permissions.can("update", "sales") && (
+              {permissions.can("update", "purchasing") && (
                 <Button
                   isDisabled={isDisabled}
                   leftIcon={<LuCirclePlus />}
@@ -182,7 +182,7 @@ export default function PurchaseOrderExplorer() {
               <Button
                 className="flex-1"
                 shortcut={EXPLORER_SHORTCUTS.addLine}
-                isDisabled={isDisabled || !permissions.can("update", "sales")}
+                isDisabled={isDisabled || !permissions.can("update", "purchasing")}
                 leftIcon={<LuCirclePlus />}
                 variant="secondary"
                 onClick={newPurchaseOrderLineDisclosure.onOpen}
