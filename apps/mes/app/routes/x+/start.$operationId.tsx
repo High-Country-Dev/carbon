@@ -2,7 +2,7 @@
 // Carbon (github.com/crbnos/carbon). Modified or adapted versions of this file,
 // including ports, remain AGPLv3; serving them over a network requires releasing their source.
 
-import { error } from "@carbon/auth";
+import { error, success } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
 import { getCarbonServiceRole } from "@carbon/auth/client.server";
 import { rejectCrossSiteNavigation } from "@carbon/auth/middleware/security.server";
@@ -284,6 +284,18 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     throw redirect(
       path.to.operations,
       await flash(request, error(startEvent.error, "Failed to start event"))
+    );
+  }
+
+  // A re-scan while this person's timer runs keeps that timer: nothing was
+  // written, and nothing else is ended.
+  if (startEvent.data && "alreadyRunning" in startEvent.data) {
+    throw redirect(
+      path.to.operation(operationId),
+      await flash(
+        request,
+        success(`Your ${type.toLowerCase()} timer is already running`)
+      )
     );
   }
 

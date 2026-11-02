@@ -39,6 +39,7 @@ import type {
   scrapQuantityValidator,
   stepRecordValidator
 } from "./models";
+import { findOpenProductionEvent } from "./open-production-event";
 import { planStepBackflush } from "./step-backflush";
 import type { BaseOperationWithDetails, Job, StorageItem } from "./types";
 
@@ -2720,6 +2721,22 @@ export async function startProductionEvent(
   });
   if (!refs.ok) return notFoundResponse(refs.message);
 
+  // Already running for this person: keep that timer (see
+  // findOpenProductionEvent). Nothing is written.
+  const running = await findOpenProductionEvent(client, {
+    companyId: data.companyId,
+    jobOperationId: data.jobOperationId,
+    type: data.type,
+    employeeId: data.employeeId
+  });
+  if (running.error) return running;
+  if (running.data) {
+    return {
+      data: { id: running.data.id, alreadyRunning: true as const },
+      error: null
+    };
+  }
+
   // The tracked entity is the separate argument; productionEvent has no column for it.
   const { trackedEntityId: _trackedEntityId, ...event } = data;
 
@@ -2847,7 +2864,11 @@ export async function startMachineProductionEvent(
   unitIndex?: number,
   source: WorkSource = "mes"
 ): Promise<{
-  data: { id: string; endedEventIds: string[] } | null;
+  data: {
+    id: string;
+    endedEventIds: string[];
+    alreadyRunning?: true;
+  } | null;
   error: unknown;
 }> {
   const refs = await verifyProductionEventRefs(client, {
@@ -2858,6 +2879,23 @@ export async function startMachineProductionEvent(
     trackedEntityId
   });
   if (!refs.ok) return notFoundResponse(refs.message);
+
+  // This person's Machine time already runs on this operation: keep it rather
+  // than end it and start again. Nothing is written or ended. A press by
+  // another operator still takes the machine over, as before.
+  const running = await findOpenProductionEvent(client, {
+    companyId: data.companyId,
+    jobOperationId: data.jobOperationId,
+    type: "Machine",
+    employeeId: data.employeeId
+  });
+  if (running.error) return { data: null, error: running.error };
+  if (running.data) {
+    return {
+      data: { id: running.data.id, endedEventIds: [], alreadyRunning: true },
+      error: null
+    };
+  }
 
   // The tracked entity is the separate argument; productionEvent has no column for it.
   const { trackedEntityId: _trackedEntityId, ...event } = data;

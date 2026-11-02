@@ -799,6 +799,9 @@ msgstr "맞추기"
 msgid "Fix the highlighted quantities before completing."
 msgstr "완료하기 전에 강조된 수량을 수정하세요."
 
+msgid "For batch- or serial-tracked material you also pick the batch or serial. Tracked material is never taken automatically, so issue it here."
+msgstr ""
+
 msgid "Forgot to Clock Out?"
 msgstr "작업 종료를 잊었나요?"
 
@@ -907,6 +910,9 @@ msgstr "이슈"
 
 msgid "Issue Material"
 msgstr "자재 출고"
+
+msgid "Issue records material you take from stock for this job: stock goes down and the material counts toward the job."
+msgstr ""
 
 msgid "Issue Type"
 msgstr "이슈 유형"
@@ -1404,6 +1410,9 @@ msgstr "또는"
 
 msgid "Or enter this secret manually:"
 msgstr "또는 이 비밀을 수동으로 입력하세요:"
+
+msgid "Other material you don't issue, {BRAND_NAME} takes from stock automatically when you log finished pieces. What you already issued counts toward that, so nothing is taken twice."
+msgstr ""
 
 msgid "Out of calibration"
 msgstr "교정 기한 만료"
@@ -2291,6 +2300,9 @@ msgid "View or open"
 msgstr "보기 또는 열기"
 
 msgid "We've emailed you a sign-in link and a 6-digit code. Follow the link, or enter the code here."
+msgstr ""
+
+msgid "What does Issue do?"
 msgstr ""
 
 msgid "What is {translatedTerm}?"
