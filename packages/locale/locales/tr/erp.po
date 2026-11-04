@@ -11026,6 +11026,9 @@ msgstr "Brüt Kar"
 msgid "Group"
 msgstr "Grup"
 
+msgid "Group (inventory account)"
+msgstr ""
+
 msgid "Group as One Component"
 msgstr "Bir Bileşen Olarak Grupla"
 
@@ -12426,6 +12429,9 @@ msgstr ""
 msgid "Jobs Assigned to Me"
 msgstr "Bana Atanan İş emirleri"
 
+msgid "Jobs completed or due from"
+msgstr ""
+
 msgid "Jobs Missing Parts"
 msgstr ""
 
@@ -13605,6 +13611,9 @@ msgstr "Malzeme"
 msgid "Material"
 msgstr "Malzeme"
 
+msgid "Material cost"
+msgstr ""
+
 msgid "Material Cost"
 msgstr "Malzeme Maliyeti"
 
@@ -13652,6 +13661,9 @@ msgstr ""
 
 msgid "Material is pre-selected"
 msgstr "Malzeme önceden seçilmiş"
+
+msgid "material issued to these jobs, at the cost it came out of stock. The CSV lists every part."
+msgstr ""
 
 msgid "material item"
 msgstr "malzeme stok kartı"
@@ -13718,6 +13730,9 @@ msgstr "Malzeme Kullanım Sapması"
 
 msgid "Material Usage Variance (default)"
 msgstr "Malzeme Kullanım Sapması (varsayılan)"
+
+msgid "Material Used by Job"
+msgstr ""
 
 msgid "materials"
 msgstr "Malzemeler"
@@ -15873,6 +15888,9 @@ msgstr "Bu konumdaki servis kullanımı için korunacak minimum stok seviyesi"
 
 msgid "On-hand inventory remains"
 msgstr "Eldeki envanter kaldı"
+
+msgid "on-hand quantity × each part's unit cost, today."
+msgstr ""
 
 msgid "On-hand value by location or item, with GL tie-out"
 msgstr "Lokasyon veya stok kartına göre eldeki değer, büyük defter eşleştirmesi ile"
@@ -22072,6 +22090,15 @@ msgstr "Stok Transfer Sihirbazı"
 msgid "Stock Transfers"
 msgstr "Stok Transferleri"
 
+msgid "Stock value"
+msgstr ""
+
+msgid "Stock Value"
+msgstr ""
+
+msgid "Stock Value & Usage"
+msgstr ""
+
 #. placeholder {0}: successorItem.readableIdWithRevision
 msgid "Stocked for spares only — successor: <0>{0}</0>"
 msgstr "Sadece yedek parçalar için depolanmıştır — ardıl: <0>{0}</0>"
@@ -24708,6 +24735,9 @@ msgstr "Unvan"
 msgid "Title passes to the customer when the term ends."
 msgstr "Mülkiyet, dönem sona erdiğinde müşteri'ye geçer."
 
+msgid "to"
+msgstr ""
+
 msgid "To"
 msgstr "Kime"
 
@@ -24833,6 +24863,9 @@ msgstr "Araçlar"
 
 msgid "Tools"
 msgstr "Araçlar"
+
+msgid "Top 200 parts by value"
+msgstr ""
 
 msgid "Top-level classification (asset / liability / equity / revenue / expense); set only on root groups, inherited by children."
 msgstr "Üst düzey sınıflandırma (varlık / yükümlülük / özkaynak / hasılat / gider); yalnızca kök gruplar üzerinde ayarlayın, alt gruplar tarafından devralınır."
@@ -25313,6 +25346,9 @@ msgstr "Birim"
 msgid "Unit actions"
 msgstr "Adet İşlemleri"
 
+msgid "Unit cost"
+msgstr ""
+
 msgid "Unit Cost"
 msgstr "Birim Maliyeti"
 
@@ -25748,6 +25784,9 @@ msgstr "Alt Montajı Kullan"
 msgid "Used by"
 msgstr "Tarafından kullanılan"
 
+msgid "Used by job"
+msgstr ""
+
 msgid "Used in"
 msgstr "Kullanıldığı Yer"
 
@@ -25861,6 +25900,9 @@ msgstr "İş doğrulanıyor..."
 
 msgid "Value"
 msgstr "Değer"
+
+msgid "Value & Usage"
+msgstr ""
 
 msgid "Value Snapshot"
 msgstr "Değer Özeti"

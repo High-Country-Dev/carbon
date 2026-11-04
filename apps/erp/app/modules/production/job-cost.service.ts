@@ -6,7 +6,8 @@
 // make method of the job (the Estimates vs Actuals card only reads the root method).
 //
 //   material  estimated = Σ estimatedQuantity × jobMaterial.unitCost (the cost when the job was made)
-//             actual    = Σ quantityIssued × the item's current unit cost
+//             actual    = the cost ledger's Job Consumption cost for the job (what was issued, at its FIFO cost);
+//                         jobs with no ledger rows fall back to Σ quantityIssued × the item's current unit cost
 //             (Make to Order lines are left out: their cost is the sub-method's own steps and materials)
 //   labor     setup + labor hours × the step's laborRate
 //   machine   machine hours × machineRate
@@ -114,6 +115,23 @@ export async function getJobCosts(
       .eq("companyId", companyId)
       .in("itemId", c)
   );
+  // Actual material: the cost ledger's consumption cost (negative = issued to the job).
+  const consumed = await inChunks(jobIds, (c) =>
+    client
+      .from("costLedger")
+      .select("documentId, cost")
+      .eq("companyId", companyId)
+      .eq("itemLedgerType", "Consumption")
+      .in("documentId", c)
+  );
+  const consumedCost = new Map<string, number>();
+  for (const r of consumed) {
+    if (!r.documentId) continue;
+    consumedCost.set(
+      r.documentId,
+      (consumedCost.get(r.documentId) ?? 0) - Number(r.cost ?? 0)
+    );
+  }
   const soLineIds = [
     ...new Set(jobs.map((j) => j.salesOrderLineId).filter(Boolean))
   ] as string[];
@@ -219,9 +237,15 @@ export async function getJobCosts(
     if (!jc || m.methodType === "Make to Order") continue;
     jc.material.estimated +=
       Number(m.estimatedQuantity ?? 0) * Number(m.unitCost ?? 0);
-    jc.material.actual +=
-      Number(m.quantityIssued ?? 0) *
-      (currentCost.get(m.itemId) ?? Number(m.unitCost ?? 0));
+    if (!consumedCost.has(m.jobId)) {
+      jc.material.actual +=
+        Number(m.quantityIssued ?? 0) *
+        (currentCost.get(m.itemId) ?? Number(m.unitCost ?? 0));
+    }
+  }
+  for (const [jobId, cost] of consumedCost) {
+    const jc = result.get(jobId);
+    if (jc) jc.material.actual += cost;
   }
 
   for (const jc of result.values()) {

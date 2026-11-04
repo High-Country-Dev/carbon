@@ -11026,6 +11026,9 @@ msgstr "Zysk brutto"
 msgid "Group"
 msgstr "Grupa"
 
+msgid "Group (inventory account)"
+msgstr ""
+
 msgid "Group as One Component"
 msgstr "Grupuj jako jeden składnik"
 
@@ -12426,6 +12429,9 @@ msgstr ""
 msgid "Jobs Assigned to Me"
 msgstr "Zlecenia produkcyjne przypisane do mnie"
 
+msgid "Jobs completed or due from"
+msgstr ""
+
 msgid "Jobs Missing Parts"
 msgstr ""
 
@@ -13605,6 +13611,9 @@ msgstr "Materiał"
 msgid "Material"
 msgstr "Materiał"
 
+msgid "Material cost"
+msgstr ""
+
 msgid "Material Cost"
 msgstr "Koszt Materiału"
 
@@ -13652,6 +13661,9 @@ msgstr ""
 
 msgid "Material is pre-selected"
 msgstr "Materiały są wstępnie wybrane"
+
+msgid "material issued to these jobs, at the cost it came out of stock. The CSV lists every part."
+msgstr ""
 
 msgid "material item"
 msgstr "artykuł materiału"
@@ -13718,6 +13730,9 @@ msgstr "Odchylenie zużycia materiału"
 
 msgid "Material Usage Variance (default)"
 msgstr "Odchylenie zużycia materiału (domyślne)"
+
+msgid "Material Used by Job"
+msgstr ""
 
 msgid "materials"
 msgstr "Materiały"
@@ -15873,6 +15888,9 @@ msgstr "Minimalna ilość do utrzymania na potrzeby serwisu w tej lokalizacji"
 
 msgid "On-hand inventory remains"
 msgstr "Pozostały zapas w magazynie"
+
+msgid "on-hand quantity × each part's unit cost, today."
+msgstr ""
 
 msgid "On-hand value by location or item, with GL tie-out"
 msgstr "Wartość dostępna według lokalizacji lub pozycji, z powiązaniem do księgi głównej"
@@ -22072,6 +22090,15 @@ msgstr "Kreator Transferu Zapasów"
 msgid "Stock Transfers"
 msgstr "Transfery Zapasów"
 
+msgid "Stock value"
+msgstr ""
+
+msgid "Stock Value"
+msgstr ""
+
+msgid "Stock Value & Usage"
+msgstr ""
+
 #. placeholder {0}: successorItem.readableIdWithRevision
 msgid "Stocked for spares only — successor: <0>{0}</0>"
 msgstr "Przechowywane tylko do części zamiennych — następca: <0>{0}</0>"
@@ -24708,6 +24735,9 @@ msgstr "Tytuł"
 msgid "Title passes to the customer when the term ends."
 msgstr "Tytuł przechodzi do klienta po zakończeniu okresu."
 
+msgid "to"
+msgstr ""
+
 msgid "To"
 msgstr "Do"
 
@@ -24833,6 +24863,9 @@ msgstr "Narzędzia"
 
 msgid "Tools"
 msgstr "Narzędzia"
+
+msgid "Top 200 parts by value"
+msgstr ""
 
 msgid "Top-level classification (asset / liability / equity / revenue / expense); set only on root groups, inherited by children."
 msgstr "Klasyfikacja najwyższego poziomu (aktywa / pasywa / kapitał własny / przychody ze sprzedaży / wydatek) — ustawiana tylko na grupach głównych, dziedziczona przez podgrupy."
@@ -25313,6 +25346,9 @@ msgstr "Jednostka"
 msgid "Unit actions"
 msgstr "Akcje jednostki"
 
+msgid "Unit cost"
+msgstr ""
+
 msgid "Unit Cost"
 msgstr "Koszt jednostkowy"
 
@@ -25748,6 +25784,9 @@ msgstr "Użyj podzespołu"
 msgid "Used by"
 msgstr "Używane przez"
 
+msgid "Used by job"
+msgstr ""
+
 msgid "Used in"
 msgstr "Używane w"
 
@@ -25861,6 +25900,9 @@ msgstr "Walidacja zadania..."
 
 msgid "Value"
 msgstr "Wartość"
+
+msgid "Value & Usage"
+msgstr ""
 
 msgid "Value Snapshot"
 msgstr "Przegląd Wartości"

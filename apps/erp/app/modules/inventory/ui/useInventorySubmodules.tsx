@@ -54,6 +54,13 @@ export default function useInventorySubmodules() {
           icon: <LuClipboardCheck />,
           table: "inventoryCount"
         },
+        // LAND-299: stock value and material used by job, for accounting (costs: Resources access).
+        {
+          name: t`Value & Usage`,
+          to: path.to.inventoryValueAndUsage,
+          icon: <LuTally5 />,
+          permission: "resources"
+        },
         {
           name: t`Kanbans`,
           to: path.to.kanbans,
@@ -168,6 +175,8 @@ export default function useInventorySubmodules() {
         ...group,
         routes: group.routes
           .filter((route) => {
+            if (route.permission && !permissions.can("view", route.permission))
+              return false;
             if (route.role) {
               return permissions.is(route.role);
             } else {

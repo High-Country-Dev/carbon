@@ -1445,6 +1445,7 @@ export const path = {
     inventorySettings: `${x}/settings/inventory`,
     inventoryValuation: `${x}/reports/inventory-valuation`,
     inventoryValuationReconcile: `${x}/reports/inventory-valuation/reconcile`,
+    inventoryValueAndUsage: `${x}/inventory/value-and-usage`,
     investigationType: (id: string) =>
       generatePath(`${x}/quality/investigation-types/${id}`),
     investigationTypes: `${x}/quality/investigation-types`,

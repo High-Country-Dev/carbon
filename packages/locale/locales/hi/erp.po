@@ -11026,6 +11026,9 @@ msgstr "सकल लाभ"
 msgid "Group"
 msgstr "समूह"
 
+msgid "Group (inventory account)"
+msgstr ""
+
 msgid "Group as One Component"
 msgstr "एक घटक के रूप में समूह"
 
@@ -12426,6 +12429,9 @@ msgstr ""
 msgid "Jobs Assigned to Me"
 msgstr "मुझे असाइन किए गए जॉब"
 
+msgid "Jobs completed or due from"
+msgstr ""
+
 msgid "Jobs Missing Parts"
 msgstr ""
 
@@ -13605,6 +13611,9 @@ msgstr "सामग्री"
 msgid "Material"
 msgstr "सामग्री"
 
+msgid "Material cost"
+msgstr ""
+
 msgid "Material Cost"
 msgstr "सामग्री लागत"
 
@@ -13652,6 +13661,9 @@ msgstr ""
 
 msgid "Material is pre-selected"
 msgstr "सामग्री पूर्व-चयनित है"
+
+msgid "material issued to these jobs, at the cost it came out of stock. The CSV lists every part."
+msgstr ""
 
 msgid "material item"
 msgstr "सामग्री आइटम"
@@ -13718,6 +13730,9 @@ msgstr "सामग्री उपयोग विचलन"
 
 msgid "Material Usage Variance (default)"
 msgstr "सामग्री उपयोग विचलन (डिफ़ॉल्ट)"
+
+msgid "Material Used by Job"
+msgstr ""
 
 msgid "materials"
 msgstr "सामग्रियां"
@@ -15873,6 +15888,9 @@ msgstr "इस स्थान पर सेवा उपयोग के लि
 
 msgid "On-hand inventory remains"
 msgstr "हाथ में इन्वेंटरी बची है"
+
+msgid "on-hand quantity × each part's unit cost, today."
+msgstr ""
 
 msgid "On-hand value by location or item, with GL tie-out"
 msgstr "स्थान या आइटम के अनुसार हाथ पर मूल्य, सामान्य खाता बही समन्वय के साथ"
@@ -22072,6 +22090,15 @@ msgstr "स्टॉक ट्रांसफर विज़ार्ड"
 msgid "Stock Transfers"
 msgstr "स्टॉक ट्रांसफर"
 
+msgid "Stock value"
+msgstr ""
+
+msgid "Stock Value"
+msgstr ""
+
+msgid "Stock Value & Usage"
+msgstr ""
+
 #. placeholder {0}: successorItem.readableIdWithRevision
 msgid "Stocked for spares only — successor: <0>{0}</0>"
 msgstr "केवल स्पेयर के लिए स्टॉक किया गया — उत्तराधिकारी: <0>{0}</0>"
@@ -24708,6 +24735,9 @@ msgstr "शीर्षक"
 msgid "Title passes to the customer when the term ends."
 msgstr "अवधि समाप्त होने पर शीर्षक ग्राहक को हस्तांतरित हो जाता है।"
 
+msgid "to"
+msgstr ""
+
 msgid "To"
 msgstr "को"
 
@@ -24833,6 +24863,9 @@ msgstr "उपकरण"
 
 msgid "Tools"
 msgstr "उपकरण"
+
+msgid "Top 200 parts by value"
+msgstr ""
 
 msgid "Top-level classification (asset / liability / equity / revenue / expense); set only on root groups, inherited by children."
 msgstr "शीर्ष-स्तर वर्गीकरण (संपत्ति / देयता / इक्विटी / राजस्व / व्यय); केवल मूल समूहों पर सेट, बच्चों द्वारा विरासत में।"
@@ -25313,6 +25346,9 @@ msgstr "इकाई"
 msgid "Unit actions"
 msgstr "इकाई क्रियाएं"
 
+msgid "Unit cost"
+msgstr ""
+
 msgid "Unit Cost"
 msgstr "इकाई लागत"
 
@@ -25748,6 +25784,9 @@ msgstr "उप-विधानसभा का उपयोग करें"
 msgid "Used by"
 msgstr "द्वारा प्रयुक्त"
 
+msgid "Used by job"
+msgstr ""
+
 msgid "Used in"
 msgstr "में प्रयुक्त"
 
@@ -25861,6 +25900,9 @@ msgstr "नौकरी को मान्य कर रहे हैं..."
 
 msgid "Value"
 msgstr "मान"
+
+msgid "Value & Usage"
+msgstr ""
 
 msgid "Value Snapshot"
 msgstr "मूल्य स्नैपशॉट"

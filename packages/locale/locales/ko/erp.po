@@ -11026,6 +11026,9 @@ msgstr "매출총이익"
 msgid "Group"
 msgstr "그룹"
 
+msgid "Group (inventory account)"
+msgstr ""
+
 msgid "Group as One Component"
 msgstr "하나의 구성 요소로 그룹화"
 
@@ -12426,6 +12429,9 @@ msgstr ""
 msgid "Jobs Assigned to Me"
 msgstr "내게 할당된 작업 지시"
 
+msgid "Jobs completed or due from"
+msgstr ""
+
 msgid "Jobs Missing Parts"
 msgstr ""
 
@@ -13605,6 +13611,9 @@ msgstr "자재"
 msgid "Material"
 msgstr "자재"
 
+msgid "Material cost"
+msgstr ""
+
 msgid "Material Cost"
 msgstr "자재 원가"
 
@@ -13652,6 +13661,9 @@ msgstr ""
 
 msgid "Material is pre-selected"
 msgstr "자재가 사전 선택됨"
+
+msgid "material issued to these jobs, at the cost it came out of stock. The CSV lists every part."
+msgstr ""
 
 msgid "material item"
 msgstr "자재 품목"
@@ -13718,6 +13730,9 @@ msgstr "자재 사용차이"
 
 msgid "Material Usage Variance (default)"
 msgstr "자재 사용차이(기본값)"
+
+msgid "Material Used by Job"
+msgstr ""
 
 msgid "materials"
 msgstr "자재"
@@ -15873,6 +15888,9 @@ msgstr "이 위치에서 서비스용으로 유지해야 할 최소 보유 재�
 
 msgid "On-hand inventory remains"
 msgstr "보유 재고가 남아 있습니다"
+
+msgid "on-hand quantity × each part's unit cost, today."
+msgstr ""
 
 msgid "On-hand value by location or item, with GL tie-out"
 msgstr "사업장 또는 품목별 보유 가치, 총계정원장 조정 포함"
@@ -22072,6 +22090,15 @@ msgstr "재고 이동 마법사"
 msgid "Stock Transfers"
 msgstr "재고 이동"
 
+msgid "Stock value"
+msgstr ""
+
+msgid "Stock Value"
+msgstr ""
+
+msgid "Stock Value & Usage"
+msgstr ""
+
 #. placeholder {0}: successorItem.readableIdWithRevision
 msgid "Stocked for spares only — successor: <0>{0}</0>"
 msgstr "예비용으로만 재고 보유 — 후속 품목: <0>{0}</0>"
@@ -24708,6 +24735,9 @@ msgstr "제목"
 msgid "Title passes to the customer when the term ends."
 msgstr "약관이 종료되면 소유권이 고객에게 이전됩니다."
 
+msgid "to"
+msgstr ""
+
 msgid "To"
 msgstr "까지"
 
@@ -24833,6 +24863,9 @@ msgstr "공구"
 
 msgid "Tools"
 msgstr "공구"
+
+msgid "Top 200 parts by value"
+msgstr ""
 
 msgid "Top-level classification (asset / liability / equity / revenue / expense); set only on root groups, inherited by children."
 msgstr "최상위 분류 (자산 / 부채 / 자본 / 매출 / 비용); 루트 그룹에만 설정되며 자식이 상속합니다."
@@ -25313,6 +25346,9 @@ msgstr "단위"
 msgid "Unit actions"
 msgstr "항목 작업"
 
+msgid "Unit cost"
+msgstr ""
+
 msgid "Unit Cost"
 msgstr "단위원가"
 
@@ -25748,6 +25784,9 @@ msgstr "하위 어셈블리 사용"
 msgid "Used by"
 msgstr "사용처"
 
+msgid "Used by job"
+msgstr ""
+
 msgid "Used in"
 msgstr "사용 위치"
 
@@ -25861,6 +25900,9 @@ msgstr "작업 검증 중..."
 
 msgid "Value"
 msgstr "값"
+
+msgid "Value & Usage"
+msgstr ""
 
 msgid "Value Snapshot"
 msgstr "값 스냅샷"

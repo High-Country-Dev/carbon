@@ -11026,6 +11026,9 @@ msgstr "Gross Profit"
 msgid "Group"
 msgstr "Group"
 
+msgid "Group (inventory account)"
+msgstr "Group (inventory account)"
+
 msgid "Group as One Component"
 msgstr "Group as One Component"
 
@@ -12426,6 +12429,9 @@ msgstr "Jobs and orders pulling"
 msgid "Jobs Assigned to Me"
 msgstr "Jobs Assigned to Me"
 
+msgid "Jobs completed or due from"
+msgstr "Jobs completed or due from"
+
 msgid "Jobs Missing Parts"
 msgstr "Jobs Missing Parts"
 
@@ -13605,6 +13611,9 @@ msgstr "material"
 msgid "Material"
 msgstr "Material"
 
+msgid "Material cost"
+msgstr "Material cost"
+
 msgid "Material Cost"
 msgstr "Material Cost"
 
@@ -13652,6 +13661,9 @@ msgstr "Material IDs setting updated"
 
 msgid "Material is pre-selected"
 msgstr "Material is pre-selected"
+
+msgid "material issued to these jobs, at the cost it came out of stock. The CSV lists every part."
+msgstr "material issued to these jobs, at the cost it came out of stock. The CSV lists every part."
 
 msgid "material item"
 msgstr "material item"
@@ -13718,6 +13730,9 @@ msgstr "Material Usage Variance"
 
 msgid "Material Usage Variance (default)"
 msgstr "Material Usage Variance (default)"
+
+msgid "Material Used by Job"
+msgstr "Material Used by Job"
 
 msgid "materials"
 msgstr "materials"
@@ -15873,6 +15888,9 @@ msgstr "On-hand floor to maintain for service use at this location"
 
 msgid "On-hand inventory remains"
 msgstr "On-hand inventory remains"
+
+msgid "on-hand quantity × each part's unit cost, today."
+msgstr "on-hand quantity × each part's unit cost, today."
 
 msgid "On-hand value by location or item, with GL tie-out"
 msgstr "On-hand value by location or item, with GL tie-out"
@@ -22072,6 +22090,15 @@ msgstr "Stock Transfer Wizard"
 msgid "Stock Transfers"
 msgstr "Stock Transfers"
 
+msgid "Stock value"
+msgstr "Stock value"
+
+msgid "Stock Value"
+msgstr "Stock Value"
+
+msgid "Stock Value & Usage"
+msgstr "Stock Value & Usage"
+
 #. placeholder {0}: successorItem.readableIdWithRevision
 msgid "Stocked for spares only — successor: <0>{0}</0>"
 msgstr "Stocked for spares only — successor: <0>{0}</0>"
@@ -24708,6 +24735,9 @@ msgstr "Title"
 msgid "Title passes to the customer when the term ends."
 msgstr "Title passes to the customer when the term ends."
 
+msgid "to"
+msgstr "to"
+
 msgid "To"
 msgstr "To"
 
@@ -24833,6 +24863,9 @@ msgstr "tools"
 
 msgid "Tools"
 msgstr "Tools"
+
+msgid "Top 200 parts by value"
+msgstr "Top 200 parts by value"
 
 msgid "Top-level classification (asset / liability / equity / revenue / expense); set only on root groups, inherited by children."
 msgstr "Top-level classification (asset / liability / equity / revenue / expense); set only on root groups, inherited by children."
@@ -25313,6 +25346,9 @@ msgstr "Unit"
 msgid "Unit actions"
 msgstr "Unit actions"
 
+msgid "Unit cost"
+msgstr "Unit cost"
+
 msgid "Unit Cost"
 msgstr "Unit Cost"
 
@@ -25748,6 +25784,9 @@ msgstr "Use Sub-Assembly"
 msgid "Used by"
 msgstr "Used by"
 
+msgid "Used by job"
+msgstr "Used by job"
+
 msgid "Used in"
 msgstr "Used in"
 
@@ -25861,6 +25900,9 @@ msgstr "Validating job..."
 
 msgid "Value"
 msgstr "Value"
+
+msgid "Value & Usage"
+msgstr "Value & Usage"
 
 msgid "Value Snapshot"
 msgstr "Value Snapshot"

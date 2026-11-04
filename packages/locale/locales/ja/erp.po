@@ -11026,6 +11026,9 @@ msgstr "総利益"
 msgid "Group"
 msgstr "グループ"
 
+msgid "Group (inventory account)"
+msgstr ""
+
 msgid "Group as One Component"
 msgstr "1つのコンポーネントとしてグループ化"
 
@@ -12426,6 +12429,9 @@ msgstr ""
 msgid "Jobs Assigned to Me"
 msgstr "私に割り当てられた製造指図"
 
+msgid "Jobs completed or due from"
+msgstr ""
+
 msgid "Jobs Missing Parts"
 msgstr ""
 
@@ -13605,6 +13611,9 @@ msgstr "材料"
 msgid "Material"
 msgstr "材料"
 
+msgid "Material cost"
+msgstr ""
+
 msgid "Material Cost"
 msgstr "材料費"
 
@@ -13652,6 +13661,9 @@ msgstr ""
 
 msgid "Material is pre-selected"
 msgstr "材料は事前に選択されています"
+
+msgid "material issued to these jobs, at the cost it came out of stock. The CSV lists every part."
+msgstr ""
 
 msgid "material item"
 msgstr "材料品目"
@@ -13718,6 +13730,9 @@ msgstr "材料使用量差異"
 
 msgid "Material Usage Variance (default)"
 msgstr "材料使用量差異 (デフォルト)"
+
+msgid "Material Used by Job"
+msgstr ""
 
 msgid "materials"
 msgstr "材料"
@@ -15873,6 +15888,9 @@ msgstr "このロケーションでのサービス使用のために維持する
 
 msgid "On-hand inventory remains"
 msgstr "現在庫が残っています"
+
+msgid "on-hand quantity × each part's unit cost, today."
+msgstr ""
 
 msgid "On-hand value by location or item, with GL tie-out"
 msgstr "拠点または品目別の在庫額（総勘定元帳との照合付き）"
@@ -22072,6 +22090,15 @@ msgstr "在庫転送ウィザード"
 msgid "Stock Transfers"
 msgstr "在庫移動"
 
+msgid "Stock value"
+msgstr ""
+
+msgid "Stock Value"
+msgstr ""
+
+msgid "Stock Value & Usage"
+msgstr ""
+
 #. placeholder {0}: successorItem.readableIdWithRevision
 msgid "Stocked for spares only — successor: <0>{0}</0>"
 msgstr "予備品在庫のみ—後継品目：<0>{0}</0>"
@@ -24708,6 +24735,9 @@ msgstr "タイトル"
 msgid "Title passes to the customer when the term ends."
 msgstr "契約期間が終了すると、所有権が得意先に移転します。"
 
+msgid "to"
+msgstr ""
+
 msgid "To"
 msgstr "へ"
 
@@ -24833,6 +24863,9 @@ msgstr "ツール"
 
 msgid "Tools"
 msgstr "ツール"
+
+msgid "Top 200 parts by value"
+msgstr ""
 
 msgid "Top-level classification (asset / liability / equity / revenue / expense); set only on root groups, inherited by children."
 msgstr "トップレベルの分類（資産/負債/純資産/売上高/費用）；ルートグループにのみ設定され、子に継承されます。"
@@ -25313,6 +25346,9 @@ msgstr "単位"
 msgid "Unit actions"
 msgstr "ユニット操作"
 
+msgid "Unit cost"
+msgstr ""
+
 msgid "Unit Cost"
 msgstr "単位原価"
 
@@ -25748,6 +25784,9 @@ msgstr "サブアセンブリを使用"
 msgid "Used by"
 msgstr "で使用"
 
+msgid "Used by job"
+msgstr ""
+
 msgid "Used in"
 msgstr "で使用"
 
@@ -25861,6 +25900,9 @@ msgstr "ジョブを検証中..."
 
 msgid "Value"
 msgstr "値"
+
+msgid "Value & Usage"
+msgstr ""
 
 msgid "Value Snapshot"
 msgstr "バリュー スナップショット"

@@ -11026,6 +11026,9 @@ msgstr "毛利润"
 msgid "Group"
 msgstr "组"
 
+msgid "Group (inventory account)"
+msgstr ""
+
 msgid "Group as One Component"
 msgstr "分组为一个组件"
 
@@ -12426,6 +12429,9 @@ msgstr ""
 msgid "Jobs Assigned to Me"
 msgstr "分配给我的工单"
 
+msgid "Jobs completed or due from"
+msgstr ""
+
 msgid "Jobs Missing Parts"
 msgstr ""
 
@@ -13605,6 +13611,9 @@ msgstr "原材料"
 msgid "Material"
 msgstr "原材料"
 
+msgid "Material cost"
+msgstr ""
+
 msgid "Material Cost"
 msgstr "材料成本"
 
@@ -13652,6 +13661,9 @@ msgstr ""
 
 msgid "Material is pre-selected"
 msgstr "原材料已预选"
+
+msgid "material issued to these jobs, at the cost it came out of stock. The CSV lists every part."
+msgstr ""
 
 msgid "material item"
 msgstr "原材料物料"
@@ -13718,6 +13730,9 @@ msgstr "原材料使用差异"
 
 msgid "Material Usage Variance (default)"
 msgstr "原材料使用差异(默认)"
+
+msgid "Material Used by Job"
+msgstr ""
 
 msgid "materials"
 msgstr "原材料"
@@ -15873,6 +15888,9 @@ msgstr "在此位置维护用于服务的最低库存"
 
 msgid "On-hand inventory remains"
 msgstr "剩余可用库存"
+
+msgid "on-hand quantity × each part's unit cost, today."
+msgstr ""
 
 msgid "On-hand value by location or item, with GL tie-out"
 msgstr "按地点或物品统计的在手价值，含总账对账"
@@ -22072,6 +22090,15 @@ msgstr "库存转移向导"
 msgid "Stock Transfers"
 msgstr "库存转移"
 
+msgid "Stock value"
+msgstr ""
+
+msgid "Stock Value"
+msgstr ""
+
+msgid "Stock Value & Usage"
+msgstr ""
+
 #. placeholder {0}: successorItem.readableIdWithRevision
 msgid "Stocked for spares only — successor: <0>{0}</0>"
 msgstr "仅为备件存储 — 后继物料：<0>{0}</0>"
@@ -24708,6 +24735,9 @@ msgstr "标题"
 msgid "Title passes to the customer when the term ends."
 msgstr "期限结束时，所有权转移给客户。"
 
+msgid "to"
+msgstr ""
+
 msgid "To"
 msgstr "至"
 
@@ -24833,6 +24863,9 @@ msgstr "工具"
 
 msgid "Tools"
 msgstr "工具"
+
+msgid "Top 200 parts by value"
+msgstr ""
 
 msgid "Top-level classification (asset / liability / equity / revenue / expense); set only on root groups, inherited by children."
 msgstr "顶级分类（资产/负债/所有者权益/收入/费用）；仅在根组上设置，由子项继承。"
@@ -25313,6 +25346,9 @@ msgstr "单位"
 msgid "Unit actions"
 msgstr "件操作"
 
+msgid "Unit cost"
+msgstr ""
+
 msgid "Unit Cost"
 msgstr "单位成本"
 
@@ -25748,6 +25784,9 @@ msgstr "使用子装配体"
 msgid "Used by"
 msgstr "使用情况"
 
+msgid "Used by job"
+msgstr ""
+
 msgid "Used in"
 msgstr "用在"
 
@@ -25861,6 +25900,9 @@ msgstr "正在验证工作..."
 
 msgid "Value"
 msgstr "值"
+
+msgid "Value & Usage"
+msgstr ""
 
 msgid "Value Snapshot"
 msgstr "价值快照"
