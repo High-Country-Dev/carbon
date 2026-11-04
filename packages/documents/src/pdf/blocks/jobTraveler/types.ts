@@ -27,6 +27,8 @@ export interface JobTravelerMaterial {
   quantity: number;
   unitOfMeasureCode?: string | null;
   methodType?: string | null;
+  /** LAND-295: the bin the line pulls from, so the materials table doubles as the pull list. */
+  storageUnitName?: string | null;
 }
 
 /** Everything a Job Traveler block renderer might need. */

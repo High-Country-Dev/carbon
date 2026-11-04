@@ -190,7 +190,7 @@ export async function renderJobTravelerPdf(
       ? client
           .from("jobMaterial")
           .select(
-            "id, jobMakeMethodId, description, quantity, unitOfMeasureCode, methodType, item(readableIdWithRevision)"
+            "id, jobMakeMethodId, description, quantity, unitOfMeasureCode, methodType, item(readableIdWithRevision), storageUnit(name)"
           )
           .in("jobMakeMethodId", makeMethodIds)
           .eq("companyId", companyId)
@@ -248,7 +248,12 @@ export async function renderJobTravelerPdf(
         description: material.description,
         quantity: material.quantity,
         unitOfMeasureCode: material.unitOfMeasureCode,
-        methodType: material.methodType
+        methodType: material.methodType,
+        storageUnitName:
+          material.methodType === "Make to Order"
+            ? "Made in this job"
+            : ((material as { storageUnit?: { name?: string | null } | null })
+                .storageUnit?.name ?? null)
       }));
 
       return {

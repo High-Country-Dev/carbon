@@ -10,12 +10,15 @@ import type { JobTravelerData } from "./types";
 // alignment. They sum to 12/12; spacing between columns comes from in-cell
 // right padding (pr-4) rather than a flex gap, which previously pushed the
 // total width past 100% and made long item ids overlap the description.
-const COL_ITEM = "w-5/12 text-left pr-4";
-const COL_DESCRIPTION = "w-5/12 text-left pr-4";
-const COL_QUANTITY = "w-2/12 text-right";
+// LAND-295 (ABS pull list): Bin and Pulled columns, so the shop can pull from it.
+const COL_ITEM = "w-3/12 text-left pr-4";
+const COL_DESCRIPTION = "w-4/12 text-left pr-4";
+const COL_BIN = "w-2/12 text-left pr-4";
+const COL_QUANTITY = "w-2/12 text-right pr-4";
+const COL_PULLED = "w-1/12 text-center";
 
 /**
- * Opt-in Bill of Materials table (item, description, quantity).
+ * Opt-in Bill of Materials table (item, description, bin, quantity, a Pulled box) — the pull list.
  * Rendered only when the company setting `includeMaterialsOnTraveler` is on and
  * the make method has materials — see JobTravelerPageContent.
  *
@@ -35,7 +38,9 @@ export function MaterialsBlock({ data }: { data: JobTravelerData }) {
     >
       <Text style={tw(COL_ITEM)}>Item</Text>
       <Text style={tw(COL_DESCRIPTION)}>Description</Text>
+      <Text style={tw(COL_BIN)}>Bin</Text>
       <Text style={tw(COL_QUANTITY)}>Quantity</Text>
+      <Text style={tw(COL_PULLED)}>Pulled</Text>
     </View>
   );
 
@@ -48,12 +53,16 @@ export function MaterialsBlock({ data }: { data: JobTravelerData }) {
               {material.itemReadableId ?? ""}
             </Text>
             <Text style={tw(COL_DESCRIPTION)}>{material.description}</Text>
+            <Text style={tw(COL_BIN)}>{material.storageUnitName ?? ""}</Text>
             <Text style={tw(COL_QUANTITY)}>
               {material.quantity}
               {material.unitOfMeasureCode
                 ? ` ${material.unitOfMeasureCode}`
                 : ""}
             </Text>
+            <View style={tw(`${COL_PULLED} items-center`)}>
+              <View style={tw("w-3 h-3 border border-gray-500")} />
+            </View>
           </>
         );
 
