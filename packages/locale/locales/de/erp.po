@@ -16086,6 +16086,9 @@ msgstr "Oops! Der Link, auf den Sie zugreifen möchten, ist abgelaufen oder nich
 msgid "Oops! The link you're trying to access is not valid."
 msgstr "Oops! Der Link, auf den Sie zugreifen möchten, ist ungültig."
 
+msgid "open"
+msgstr ""
+
 msgid "Open"
 msgstr "Öffnen"
 

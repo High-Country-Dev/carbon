@@ -16086,6 +16086,9 @@ msgstr "Упс! Срок действия ссылки, к которой вы �
 msgid "Oops! The link you're trying to access is not valid."
 msgstr "Упс! Ссылка, которую вы пытаетесь открыть, недействительна."
 
+msgid "open"
+msgstr ""
+
 msgid "Open"
 msgstr "Открыть"
 

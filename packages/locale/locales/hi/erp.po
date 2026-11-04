@@ -16086,6 +16086,9 @@ msgstr "अरे! आप जिस लिंक को एक्सेस क�
 msgid "Oops! The link you're trying to access is not valid."
 msgstr "अरे! आप जिस लिंक को एक्सेस करने का प्रयास कर रहे हैं वह मान्य नहीं है।"
 
+msgid "open"
+msgstr ""
+
 msgid "Open"
 msgstr "खोलें"
 

@@ -16086,6 +16086,9 @@ msgstr "Ups! Link, do którego próbujesz uzyskać dostęp, wygasł lub nie jest
 msgid "Oops! The link you're trying to access is not valid."
 msgstr "Ups! Link, do którego próbujesz uzyskać dostęp, jest nieprawidłowy."
 
+msgid "open"
+msgstr ""
+
 msgid "Open"
 msgstr "Otwórz"
 

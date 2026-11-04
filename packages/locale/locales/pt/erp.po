@@ -16086,6 +16086,9 @@ msgstr "Oops! O link que você está tentando acessar está vencido ou não é m
 msgid "Oops! The link you're trying to access is not valid."
 msgstr "Oops! O link que está tentando acessar não é válido."
 
+msgid "open"
+msgstr ""
+
 msgid "Open"
 msgstr "Abrir"
 

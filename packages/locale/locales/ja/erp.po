@@ -16086,6 +16086,9 @@ msgstr "申し訳ございません。アクセスしようとしているリン
 msgid "Oops! The link you're trying to access is not valid."
 msgstr "申し訳ございません。アクセスしようとしているリンクは無効です。"
 
+msgid "open"
+msgstr ""
+
 msgid "Open"
 msgstr "開く"
 

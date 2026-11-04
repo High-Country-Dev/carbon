@@ -39,6 +39,7 @@ const STATUSES = [
   "Closed"
 ] as const;
 const LIMIT = 400;
+const FINISHED = ["Completed", "Closed"];
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {
@@ -48,7 +49,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const status = url.searchParams.getAll("status").filter(Boolean);
   const search = (url.searchParams.get("search") ?? "").trim();
-  const statuses = status.length ? status : [...STATUSES];
+  // Default: finished jobs — the actual cost of an open job isn't final yet.
+  const statuses = status.length ? status : ["Completed", "Closed"];
 
   let q = client
     .from("job")
@@ -149,15 +151,18 @@ export async function loader({ request }: LoaderFunctionArgs) {
     });
   }
 
-  const totals = rows.reduce(
-    (a, r) => {
-      a.estimated += r.cost.total.estimated;
-      a.actual += r.cost.total.actual;
-      a.revenue += r.cost.revenue ?? 0;
-      return a;
-    },
-    { estimated: 0, actual: 0, revenue: 0 }
-  );
+  // Totals and actual margin count finished jobs only; open jobs show their estimate and cost so far.
+  const totals = rows
+    .filter((r) => FINISHED.includes(r.status as string))
+    .reduce(
+      (a, r) => {
+        a.estimated += r.cost.total.estimated;
+        a.actual += r.cost.total.actual;
+        a.revenue += r.cost.revenue ?? 0;
+        return a;
+      },
+      { estimated: 0, actual: 0, revenue: 0 }
+    );
   return { rows, totals, statuses, search, limited: list.length === LIMIT };
 }
 
@@ -299,9 +304,11 @@ export default function JobCostsRoute() {
                     (c.margin?.actual ?? 0) < 0 && "text-red-500"
                   )}
                 >
-                  {c.margin
+                  {c.margin && FINISHED.includes(r.status as string)
                     ? money.format(c.margin.actual) + m(c.margin.actual)
-                    : ""}
+                    : c.margin
+                      ? t`open`
+                      : ""}
                 </Td>
               </Tr>
             );
