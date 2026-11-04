@@ -12120,6 +12120,9 @@ msgstr "Le fatture vengono inviate al cliente Stripe già collegato al cliente d
 msgid "Invoices could not be loaded"
 msgstr "Non è stato possibile caricare le fatture"
 
+msgid "Invoices issued in the dates above (not drafts or voided). Open orders are every order not yet completed. Margin is for sales-order jobs completed or closed in the dates above: sale price minus job cost."
+msgstr ""
+
 msgid "Invoices this memo has been applied to. Click a row to open the document."
 msgstr "Fatture a cui è stato applicato questo memo. Fare clic su una riga per aprire il documento."
 
@@ -12371,6 +12374,12 @@ msgstr "Lavoro bloccato"
 
 msgid "Job make method"
 msgstr "Metodo di produzione dell'ordine"
+
+msgid "Job margin actual"
+msgstr ""
+
+msgid "Job margin est."
+msgstr ""
 
 msgid "Job material issues"
 msgstr "Scarichi materiali dell'ordine"
@@ -16089,6 +16098,9 @@ msgstr "Ordini di produzione aperti senza unità di stoccaggio"
 msgid "Open menu"
 msgstr "Apri menu"
 
+msgid "Open orders"
+msgstr ""
+
 msgid "Open Orders"
 msgstr "Ordini aperti"
 
@@ -16607,6 +16619,12 @@ msgstr "Pagina"
 
 msgid "Page {pdfViewPage} of {documentPageCount}"
 msgstr "Pagina {pdfViewPage} di {documentPageCount}"
+
+msgid "Paid"
+msgstr ""
+
+msgid "Paid = invoiced minus what's still owed on those invoices."
+msgstr ""
 
 msgid "Paid Amount:"
 msgstr "Importo Pagato:"
@@ -18291,6 +18309,9 @@ msgstr "Data Quotata"
 
 msgid "Quotes"
 msgstr "Preventivi"
+
+msgid "Quotes (won)"
+msgstr ""
 
 msgid "Quotes with Lines"
 msgstr "Preventivi con Righe"
@@ -20076,6 +20097,9 @@ msgstr "Vendite e Preventivi"
 
 msgid "Sales & Revenue"
 msgstr "Vendite e ricavi"
+
+msgid "Sales by Customer"
+msgstr ""
 
 msgid "Sales contact"
 msgstr "Contatto vendite"
@@ -22011,6 +22035,9 @@ msgstr "Passi costruiti separatamente, quindi montati come un'unica parte: nel p
 
 msgid "Still dark out on the floor."
 msgstr "Ancora buio in officina."
+
+msgid "Still owed"
+msgstr ""
 
 msgid "Stock"
 msgstr "Giacenza"

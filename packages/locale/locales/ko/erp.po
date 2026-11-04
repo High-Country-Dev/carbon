@@ -12120,6 +12120,9 @@ msgstr "송장은 청구 고객에 이미 연결된 Stripe 고객에게 발송�
 msgid "Invoices could not be loaded"
 msgstr "송장을 불러올 수 없습니다."
 
+msgid "Invoices issued in the dates above (not drafts or voided). Open orders are every order not yet completed. Margin is for sales-order jobs completed or closed in the dates above: sale price minus job cost."
+msgstr ""
+
 msgid "Invoices this memo has been applied to. Click a row to open the document."
 msgstr "이 메모가 적용된 송장입니다. 행을 클릭하여 문서를 엽니다."
 
@@ -12371,6 +12374,12 @@ msgstr "작업 잠김"
 
 msgid "Job make method"
 msgstr "작업 지시 생산 방법"
+
+msgid "Job margin actual"
+msgstr ""
+
+msgid "Job margin est."
+msgstr ""
 
 msgid "Job material issues"
 msgstr "작업 지시 자재 불출"
@@ -16089,6 +16098,9 @@ msgstr "보관 단위가 없는 미결 작업 지시"
 msgid "Open menu"
 msgstr "메뉴 열기"
 
+msgid "Open orders"
+msgstr ""
+
 msgid "Open Orders"
 msgstr "미결 주문"
 
@@ -16607,6 +16619,12 @@ msgstr "페이지"
 
 msgid "Page {pdfViewPage} of {documentPageCount}"
 msgstr "{documentPageCount}페이지 중 {pdfViewPage}페이지"
+
+msgid "Paid"
+msgstr ""
+
+msgid "Paid = invoiced minus what's still owed on those invoices."
+msgstr ""
 
 msgid "Paid Amount:"
 msgstr "지급액:"
@@ -18291,6 +18309,9 @@ msgstr "견적일"
 
 msgid "Quotes"
 msgstr "견적"
+
+msgid "Quotes (won)"
+msgstr ""
 
 msgid "Quotes with Lines"
 msgstr "라인이 포함된 견적"
@@ -20076,6 +20097,9 @@ msgstr "영업 및 견적"
 
 msgid "Sales & Revenue"
 msgstr "영업 및 매출"
+
+msgid "Sales by Customer"
+msgstr ""
 
 msgid "Sales contact"
 msgstr "영업 담당자"
@@ -22011,6 +22035,9 @@ msgstr "단계들은 독립적으로 구축되며 하나의 부품으로 결합�
 
 msgid "Still dark out on the floor."
 msgstr "작업장은 여전히 어둡습니다."
+
+msgid "Still owed"
+msgstr ""
 
 msgid "Stock"
 msgstr "재고"

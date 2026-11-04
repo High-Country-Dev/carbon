@@ -2309,6 +2309,7 @@ export const path = {
     root: "/",
     routings: `${x}/items/routing`,
     sales: `${x}/sales`,
+    salesByCustomer: `${x}/sales/sales-by-customer`,
     salesInvoice: (id: string) => generatePath(`${x}/sales-invoice/${id}`),
     salesInvoiceDetails: (id: string) =>
       generatePath(`${x}/sales-invoice/${id}/details`),

@@ -45,6 +45,13 @@ export default function useSalesSubmodules() {
           to: path.to.customerPortals,
           role: "employee",
           icon: <LuGlobe />
+        },
+        // LAND-296: invoiced, paid, owed, open orders and job margin per customer.
+        {
+          name: t`Sales by Customer`,
+          to: path.to.salesByCustomer,
+          role: "employee",
+          icon: <LuSquareUser />
         }
       ]
     },

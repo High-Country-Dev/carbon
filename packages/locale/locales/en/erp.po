@@ -12120,6 +12120,9 @@ msgstr "Invoices are sent to the Stripe customer already linked to the billing c
 msgid "Invoices could not be loaded"
 msgstr "Invoices could not be loaded"
 
+msgid "Invoices issued in the dates above (not drafts or voided). Open orders are every order not yet completed. Margin is for sales-order jobs completed or closed in the dates above: sale price minus job cost."
+msgstr "Invoices issued in the dates above (not drafts or voided). Open orders are every order not yet completed. Margin is for sales-order jobs completed or closed in the dates above: sale price minus job cost."
+
 msgid "Invoices this memo has been applied to. Click a row to open the document."
 msgstr "Invoices this memo has been applied to. Click a row to open the document."
 
@@ -12371,6 +12374,12 @@ msgstr "Job locked"
 
 msgid "Job make method"
 msgstr "Job make method"
+
+msgid "Job margin actual"
+msgstr "Job margin actual"
+
+msgid "Job margin est."
+msgstr "Job margin est."
 
 msgid "Job material issues"
 msgstr "Job material issues"
@@ -16089,6 +16098,9 @@ msgstr "Open Jobs Missing a Storage Unit"
 msgid "Open menu"
 msgstr "Open menu"
 
+msgid "Open orders"
+msgstr "Open orders"
+
 msgid "Open Orders"
 msgstr "Open Orders"
 
@@ -16607,6 +16619,12 @@ msgstr "Page"
 
 msgid "Page {pdfViewPage} of {documentPageCount}"
 msgstr "Page {pdfViewPage} of {documentPageCount}"
+
+msgid "Paid"
+msgstr "Paid"
+
+msgid "Paid = invoiced minus what's still owed on those invoices."
+msgstr "Paid = invoiced minus what's still owed on those invoices."
 
 msgid "Paid Amount:"
 msgstr "Paid Amount:"
@@ -18291,6 +18309,9 @@ msgstr "Quoted Date"
 
 msgid "Quotes"
 msgstr "Quotes"
+
+msgid "Quotes (won)"
+msgstr "Quotes (won)"
 
 msgid "Quotes with Lines"
 msgstr "Quotes with Lines"
@@ -20076,6 +20097,9 @@ msgstr "Sales & Quoting"
 
 msgid "Sales & Revenue"
 msgstr "Sales & Revenue"
+
+msgid "Sales by Customer"
+msgstr "Sales by Customer"
 
 msgid "Sales contact"
 msgstr "Sales contact"
@@ -22011,6 +22035,9 @@ msgstr "Steps built on their own, then fitted as one piece: in the step that use
 
 msgid "Still dark out on the floor."
 msgstr "Still dark out on the floor."
+
+msgid "Still owed"
+msgstr "Still owed"
 
 msgid "Stock"
 msgstr "Stock"

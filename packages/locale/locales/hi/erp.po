@@ -12120,6 +12120,9 @@ msgstr "चालान Stripe ग्राहक को भेजे जात�
 msgid "Invoices could not be loaded"
 msgstr "चालान लोड नहीं किए जा सके"
 
+msgid "Invoices issued in the dates above (not drafts or voided). Open orders are every order not yet completed. Margin is for sales-order jobs completed or closed in the dates above: sale price minus job cost."
+msgstr ""
+
 msgid "Invoices this memo has been applied to. Click a row to open the document."
 msgstr "इस मेमो को लागू किए गए चालान। दस्तावेज़ खोलने के लिए एक पंक्ति पर क्लिक करें।"
 
@@ -12371,6 +12374,12 @@ msgstr "जॉब लॉक है"
 
 msgid "Job make method"
 msgstr "जॉब निर्माण विधि"
+
+msgid "Job margin actual"
+msgstr ""
+
+msgid "Job margin est."
+msgstr ""
 
 msgid "Job material issues"
 msgstr "जॉब सामग्री निर्गम"
@@ -16089,6 +16098,9 @@ msgstr "भंडारण इकाई के बिना खुले जॉ�
 msgid "Open menu"
 msgstr "मेनू खोलें"
 
+msgid "Open orders"
+msgstr ""
+
 msgid "Open Orders"
 msgstr "खुले आदेश"
 
@@ -16607,6 +16619,12 @@ msgstr "पृष्ठ"
 
 msgid "Page {pdfViewPage} of {documentPageCount}"
 msgstr "पृष्ठ {pdfViewPage} का {documentPageCount}"
+
+msgid "Paid"
+msgstr ""
+
+msgid "Paid = invoiced minus what's still owed on those invoices."
+msgstr ""
 
 msgid "Paid Amount:"
 msgstr "भुगतान की गई राशि:"
@@ -18291,6 +18309,9 @@ msgstr "उद्धृत तारीख"
 
 msgid "Quotes"
 msgstr "उद्धरण"
+
+msgid "Quotes (won)"
+msgstr ""
 
 msgid "Quotes with Lines"
 msgstr "पंक्तियों के साथ उद्धरण"
@@ -20076,6 +20097,9 @@ msgstr "बिक्रय और उद्धरण"
 
 msgid "Sales & Revenue"
 msgstr "बिक्रय और राजस्व"
+
+msgid "Sales by Customer"
+msgstr ""
 
 msgid "Sales contact"
 msgstr "बिक्रय संपर्क"
@@ -22011,6 +22035,9 @@ msgstr "चरणों को अलग से बनाया जाता ह
 
 msgid "Still dark out on the floor."
 msgstr "अभी भी फर्श पर अंधकार है।"
+
+msgid "Still owed"
+msgstr ""
 
 msgid "Stock"
 msgstr "स्टॉक"

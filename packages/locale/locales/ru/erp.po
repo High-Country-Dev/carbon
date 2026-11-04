@@ -12120,6 +12120,9 @@ msgstr "Счета-фактуры отправляются клиенту Stripe
 msgid "Invoices could not be loaded"
 msgstr "Не удалось загрузить счет-фактуры"
 
+msgid "Invoices issued in the dates above (not drafts or voided). Open orders are every order not yet completed. Margin is for sales-order jobs completed or closed in the dates above: sale price minus job cost."
+msgstr ""
+
 msgid "Invoices this memo has been applied to. Click a row to open the document."
 msgstr "Счета-фактуры, к которым применена эта справка. Нажмите строку, чтобы открыть документ."
 
@@ -12371,6 +12374,12 @@ msgstr "Задание заблокировано"
 
 msgid "Job make method"
 msgstr "Метод производства заказа"
+
+msgid "Job margin actual"
+msgstr ""
+
+msgid "Job margin est."
+msgstr ""
 
 msgid "Job material issues"
 msgstr "Списание материалов заказа"
@@ -16089,6 +16098,9 @@ msgstr "Открытые производственные заказы без е
 msgid "Open menu"
 msgstr "Открыть меню"
 
+msgid "Open orders"
+msgstr ""
+
 msgid "Open Orders"
 msgstr "Открытые заказы"
 
@@ -16607,6 +16619,12 @@ msgstr "Страница"
 
 msgid "Page {pdfViewPage} of {documentPageCount}"
 msgstr "Страница {pdfViewPage} из {documentPageCount}"
+
+msgid "Paid"
+msgstr ""
+
+msgid "Paid = invoiced minus what's still owed on those invoices."
+msgstr ""
 
 msgid "Paid Amount:"
 msgstr "Оплаченная сумма:"
@@ -18291,6 +18309,9 @@ msgstr "Дата предложения"
 
 msgid "Quotes"
 msgstr "Предложения"
+
+msgid "Quotes (won)"
+msgstr ""
 
 msgid "Quotes with Lines"
 msgstr "Предложения со строками"
@@ -20076,6 +20097,9 @@ msgstr "Продажи и котирование"
 
 msgid "Sales & Revenue"
 msgstr "Продажи и выручка"
+
+msgid "Sales by Customer"
+msgstr ""
 
 msgid "Sales contact"
 msgstr "контактное лицо по продажам"
@@ -22011,6 +22035,9 @@ msgstr "Шаги, построенные отдельно, затем собра
 
 msgid "Still dark out on the floor."
 msgstr "На производстве всё ещё темно."
+
+msgid "Still owed"
+msgstr ""
 
 msgid "Stock"
 msgstr "Запас"

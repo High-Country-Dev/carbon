@@ -12120,6 +12120,9 @@ msgstr "請求書は、請求顧客にすでにリンクされているStripeの
 msgid "Invoices could not be loaded"
 msgstr "請求書を読み込めませんでした"
 
+msgid "Invoices issued in the dates above (not drafts or voided). Open orders are every order not yet completed. Margin is for sales-order jobs completed or closed in the dates above: sale price minus job cost."
+msgstr ""
+
 msgid "Invoices this memo has been applied to. Click a row to open the document."
 msgstr "このメモが適用された請求書。行をクリックして文書を開きます。"
 
@@ -12371,6 +12374,12 @@ msgstr "ジョブはロック済み"
 
 msgid "Job make method"
 msgstr "ジョブ製造方法"
+
+msgid "Job margin actual"
+msgstr ""
+
+msgid "Job margin est."
+msgstr ""
 
 msgid "Job material issues"
 msgstr "指図材料出庫"
@@ -16089,6 +16098,9 @@ msgstr "保管ユニット未設定のオープン製造指図"
 msgid "Open menu"
 msgstr "メニューを開く"
 
+msgid "Open orders"
+msgstr ""
+
 msgid "Open Orders"
 msgstr "オープン注文"
 
@@ -16607,6 +16619,12 @@ msgstr "ページ"
 
 msgid "Page {pdfViewPage} of {documentPageCount}"
 msgstr "ページ {pdfViewPage} / {documentPageCount}"
+
+msgid "Paid"
+msgstr ""
+
+msgid "Paid = invoiced minus what's still owed on those invoices."
+msgstr ""
 
 msgid "Paid Amount:"
 msgstr "支払済み金額:"
@@ -18291,6 +18309,9 @@ msgstr "見積日"
 
 msgid "Quotes"
 msgstr "見積"
+
+msgid "Quotes (won)"
+msgstr ""
 
 msgid "Quotes with Lines"
 msgstr "明細付き見積"
@@ -20076,6 +20097,9 @@ msgstr "販売・見積"
 
 msgid "Sales & Revenue"
 msgstr "販売・売上高"
+
+msgid "Sales by Customer"
+msgstr ""
 
 msgid "Sales contact"
 msgstr "販売担当者"
@@ -22011,6 +22035,9 @@ msgstr "ステップは独立して構築された後、1つのピースとし�
 
 msgid "Still dark out on the floor."
 msgstr "まだフロアは暗い。"
+
+msgid "Still owed"
+msgstr ""
 
 msgid "Stock"
 msgstr "在庫"

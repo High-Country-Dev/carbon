@@ -12120,6 +12120,9 @@ msgstr "发票发送到已链接到计费客户的 Stripe 客户。"
 msgid "Invoices could not be loaded"
 msgstr "无法加载发票"
 
+msgid "Invoices issued in the dates above (not drafts or voided). Open orders are every order not yet completed. Margin is for sales-order jobs completed or closed in the dates above: sale price minus job cost."
+msgstr ""
+
 msgid "Invoices this memo has been applied to. Click a row to open the document."
 msgstr "此备忘录已应用的发票。点击一行打开文件。"
 
@@ -12371,6 +12374,12 @@ msgstr "工单已锁定"
 
 msgid "Job make method"
 msgstr "工单制造方法"
+
+msgid "Job margin actual"
+msgstr ""
+
+msgid "Job margin est."
+msgstr ""
 
 msgid "Job material issues"
 msgstr "工单物料领料"
@@ -16089,6 +16098,9 @@ msgstr "未结工单缺少存储单元"
 msgid "Open menu"
 msgstr "打开菜单"
 
+msgid "Open orders"
+msgstr ""
+
 msgid "Open Orders"
 msgstr "未结订单"
 
@@ -16607,6 +16619,12 @@ msgstr "页面"
 
 msgid "Page {pdfViewPage} of {documentPageCount}"
 msgstr "第 {pdfViewPage} 页，共 {documentPageCount} 页"
+
+msgid "Paid"
+msgstr ""
+
+msgid "Paid = invoiced minus what's still owed on those invoices."
+msgstr ""
 
 msgid "Paid Amount:"
 msgstr "已支付金额："
@@ -18291,6 +18309,9 @@ msgstr "报价日期"
 
 msgid "Quotes"
 msgstr "报价"
+
+msgid "Quotes (won)"
+msgstr ""
 
 msgid "Quotes with Lines"
 msgstr "带报价行的报价单"
@@ -20076,6 +20097,9 @@ msgstr "销售和报价"
 
 msgid "Sales & Revenue"
 msgstr "销售与收入"
+
+msgid "Sales by Customer"
+msgstr ""
 
 msgid "Sales contact"
 msgstr "销售联系人"
@@ -22011,6 +22035,9 @@ msgstr "步骤独自构建，然后作为一个整体拼接：在使用它的步
 
 msgid "Still dark out on the floor."
 msgstr "车间仍在黑暗中。"
+
+msgid "Still owed"
+msgstr ""
 
 msgid "Stock"
 msgstr "库存"

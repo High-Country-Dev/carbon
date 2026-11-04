@@ -12120,6 +12120,9 @@ msgstr "Las facturas se envían al cliente de Stripe ya vinculado al cliente de 
 msgid "Invoices could not be loaded"
 msgstr "No se pudieron cargar las facturas"
 
+msgid "Invoices issued in the dates above (not drafts or voided). Open orders are every order not yet completed. Margin is for sales-order jobs completed or closed in the dates above: sale price minus job cost."
+msgstr ""
+
 msgid "Invoices this memo has been applied to. Click a row to open the document."
 msgstr "Facturas a las que se ha aplicado este memorándum. Haga clic en una fila para abrir el documento."
 
@@ -12371,6 +12374,12 @@ msgstr "Trabajo bloqueado"
 
 msgid "Job make method"
 msgstr "Método de fabricación de la Orden de trabajo"
+
+msgid "Job margin actual"
+msgstr ""
+
+msgid "Job margin est."
+msgstr ""
 
 msgid "Job material issues"
 msgstr "Salidas de material de la orden"
@@ -16089,6 +16098,9 @@ msgstr "Órdenes de trabajo abiertas sin Unidad de almacenamiento"
 msgid "Open menu"
 msgstr "Abrir menú"
 
+msgid "Open orders"
+msgstr ""
+
 msgid "Open Orders"
 msgstr "Órdenes Abiertas"
 
@@ -16607,6 +16619,12 @@ msgstr "Página"
 
 msgid "Page {pdfViewPage} of {documentPageCount}"
 msgstr "Página {pdfViewPage} de {documentPageCount}"
+
+msgid "Paid"
+msgstr ""
+
+msgid "Paid = invoiced minus what's still owed on those invoices."
+msgstr ""
 
 msgid "Paid Amount:"
 msgstr "Monto Pagado:"
@@ -18291,6 +18309,9 @@ msgstr "Fecha de Cotización"
 
 msgid "Quotes"
 msgstr "Cotizaciones"
+
+msgid "Quotes (won)"
+msgstr ""
 
 msgid "Quotes with Lines"
 msgstr "Cotizaciones con Líneas"
@@ -20076,6 +20097,9 @@ msgstr "Ventas y Cotización"
 
 msgid "Sales & Revenue"
 msgstr "Ventas e Ingresos por ventas"
+
+msgid "Sales by Customer"
+msgstr ""
 
 msgid "Sales contact"
 msgstr "Contacto de ventas"
@@ -22011,6 +22035,9 @@ msgstr "Los pasos se construyen por su cuenta, luego se ajustan como una sola pi
 
 msgid "Still dark out on the floor."
 msgstr "Todavía está oscuro en el taller."
+
+msgid "Still owed"
+msgstr ""
 
 msgid "Stock"
 msgstr "Existencias"
