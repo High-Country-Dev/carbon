@@ -4273,6 +4273,9 @@ msgstr "बीटा"
 msgid "Biggest causes of scrap by reason, item, or work center"
 msgstr "कारण, आइटम या वर्क सेंटर के अनुसार स्क्रैप के सबसे बड़े कारण"
 
+msgid "Bill a Deposit"
+msgstr ""
+
 msgid "Bill a deposit or milestone"
 msgstr ""
 

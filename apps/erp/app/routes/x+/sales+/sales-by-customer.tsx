@@ -48,7 +48,10 @@ async function all<T>(
   const out: T[] = [];
   for (let from = 0; ; from += 1000) {
     const r = await q(from, from + 999);
-    if (r.error) throw r.error;
+    if (r.error)
+      throw new Error(
+        `sales by customer query failed: ${(r.error as any).message ?? r.error}`
+      );
     out.push(...(r.data ?? []));
     if ((r.data ?? []).length < 1000) break;
   }

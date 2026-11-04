@@ -4273,6 +4273,9 @@ msgstr "Bêta"
 msgid "Biggest causes of scrap by reason, item, or work center"
 msgstr "Principales causes de rebut par raison, article ou poste de travail"
 
+msgid "Bill a Deposit"
+msgstr ""
+
 msgid "Bill a deposit or milestone"
 msgstr ""
 

@@ -452,6 +452,22 @@ const SalesOrderHeader = () => {
               </Button>
             </RecordAction>
 
+            {/* LAND-299: deposit / milestone billing, whether or not the order has invoices yet */}
+            <RecordAction slot="overflow">
+              <Button
+                variant="secondary"
+                leftIcon={<LuCirclePlus />}
+                onClick={depositDisclosure.onOpen}
+                isDisabled={
+                  ["Cancelled", "Closed", "Draft"].includes(
+                    routeData?.salesOrder?.status ?? ""
+                  ) || !permissions.can("create", "invoicing")
+                }
+              >
+                <Trans>Bill a Deposit</Trans>
+              </Button>
+            </RecordAction>
+
             <RecordAction slot="overflow">
               <Button
                 variant="secondary"

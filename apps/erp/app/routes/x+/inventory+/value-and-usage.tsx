@@ -33,7 +33,10 @@ async function all<T>(
   const out: T[] = [];
   for (let from = 0; ; from += 1000) {
     const r = await q(from, from + 999);
-    if (r.error) throw r.error;
+    if (r.error)
+      throw new Error(
+        `value and usage query failed: ${(r.error as any).message ?? r.error}`
+      );
     out.push(...(r.data ?? []));
     if ((r.data ?? []).length < 1000) break;
   }
@@ -183,7 +186,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   });
   const ids = inRange.map((j) => j.id);
   const lines: any[] = [];
-  for (let i = 0; i < ids.length; i += 200) {
+  for (let i = 0; i < ids.length; i += 50) {
     lines.push(
       ...(await all((a, b) =>
         client
@@ -191,7 +194,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
           .select("documentId, itemId, quantity, cost")
           .eq("companyId", companyId)
           .eq("itemLedgerType", "Consumption")
-          .in("documentId", ids.slice(i, i + 200))
+          .in("documentId", ids.slice(i, i + 50))
           .range(a, b)
       ))
     );

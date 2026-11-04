@@ -4273,6 +4273,9 @@ msgstr "ベータ"
 msgid "Biggest causes of scrap by reason, item, or work center"
 msgstr "理由、品目、または作業区別の最大スクラップ原因"
 
+msgid "Bill a Deposit"
+msgstr ""
+
 msgid "Bill a deposit or milestone"
 msgstr ""
 

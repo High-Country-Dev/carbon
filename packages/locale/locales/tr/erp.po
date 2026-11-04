@@ -4273,6 +4273,9 @@ msgstr "Beta"
 msgid "Biggest causes of scrap by reason, item, or work center"
 msgstr "Fire'in nedene, stok kartına veya iş merkezine göre en büyük nedenleri"
 
+msgid "Bill a Deposit"
+msgstr ""
+
 msgid "Bill a deposit or milestone"
 msgstr ""
 

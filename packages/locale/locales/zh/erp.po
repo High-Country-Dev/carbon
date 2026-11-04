@@ -4273,6 +4273,9 @@ msgstr "测试版"
 msgid "Biggest causes of scrap by reason, item, or work center"
 msgstr "按原因、物料或工作中心显示最大报废原因"
 
+msgid "Bill a Deposit"
+msgstr ""
+
 msgid "Bill a deposit or milestone"
 msgstr ""
 

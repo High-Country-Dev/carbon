@@ -38,19 +38,27 @@ export type JobCost = {
 };
 
 const HOUR = 3600000;
-const CHUNK = 200;
+// Small id batches keep the PostgREST URL short (Kong rejects very long query strings), and each batch pages
+// past PostgREST's 1,000-row cap.
+const CHUNK = 50;
+const PAGE = 1000;
 
-async function inChunks<T>(
+export async function inChunks<T = any>(
   ids: string[],
-  fetch: (chunk: string[]) => PromiseLike<{ data: T[] | null; error: unknown }>
+  make: (chunk: string[]) => any
 ): Promise<T[]> {
   const out: T[] = [];
   for (let i = 0; i < ids.length; i += CHUNK) {
     const chunk = ids.slice(i, i + CHUNK);
     if (chunk.length === 0) continue;
-    const r = await fetch(chunk);
-    if (r.error) throw r.error;
-    out.push(...(r.data ?? []));
+    for (let from = 0; ; from += PAGE) {
+      const r = await make(chunk).range(from, from + PAGE - 1);
+      if (r.error)
+        throw new Error(`job cost query failed: ${r.error.message ?? r.error}`);
+      const rows = (r.data ?? []) as T[];
+      out.push(...rows);
+      if (rows.length < PAGE) break;
+    }
   }
   return out;
 }

@@ -11,8 +11,8 @@ import type { JobTravelerData } from "./types";
 // right padding (pr-4) rather than a flex gap, which previously pushed the
 // total width past 100% and made long item ids overlap the description.
 // LAND-295 (ABS pull list): Bin and Pulled columns, so the shop can pull from it.
-const COL_ITEM = "w-3/12 text-left pr-4";
-const COL_DESCRIPTION = "w-4/12 text-left pr-4";
+const COL_ITEM = "w-4/12 text-left pr-4";
+const COL_DESCRIPTION = "w-3/12 text-left pr-4";
 const COL_BIN = "w-2/12 text-left pr-4";
 const COL_QUANTITY = "w-2/12 text-right pr-4";
 const COL_PULLED = "w-1/12 text-center";

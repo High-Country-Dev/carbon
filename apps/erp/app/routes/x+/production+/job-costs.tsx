@@ -22,7 +22,7 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import type { LoaderFunctionArgs } from "react-router";
 import { Form, Link, useLoaderData, useSearchParams } from "react-router";
 import { useCurrencyFormatter, usePercentFormatter } from "~/hooks";
-import { getJobCosts } from "~/modules/production/job-cost.service";
+import { getJobCosts, inChunks } from "~/modules/production/job-cost.service";
 import type { Handle } from "~/utils/handle";
 import { path } from "~/utils/path";
 
@@ -71,23 +71,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
       companyId,
       list.map((j) => j.id)
     ),
-    client
-      .from("customer")
-      .select("id, name")
-      .in("id", [
-        ...new Set(list.map((j) => j.customerId).filter(Boolean))
-      ] as string[]),
-    client
-      .from("item")
-      .select("id, readableId")
-      .in("id", [
-        ...new Set(list.map((j) => j.itemId).filter(Boolean))
-      ] as string[])
+    inChunks<{ id: string; name: string }>(
+      [...new Set(list.map((j) => j.customerId).filter(Boolean))] as string[],
+      (c) => client.from("customer").select("id, name").in("id", c)
+    ),
+    inChunks<{ id: string; readableId: string }>(
+      [...new Set(list.map((j) => j.itemId).filter(Boolean))] as string[],
+      (c) => client.from("item").select("id, readableId").in("id", c)
+    )
   ]);
-  const customerName = new Map(
-    (customers.data ?? []).map((c) => [c.id, c.name])
-  );
-  const itemId = new Map((items.data ?? []).map((i) => [i.id, i.readableId]));
+  const customerName = new Map(customers.map((c) => [c.id, c.name]));
+  const itemId = new Map(items.map((i) => [i.id, i.readableId]));
   const rows = list.map((j) => ({
     id: j.id,
     jobId: j.jobId,
