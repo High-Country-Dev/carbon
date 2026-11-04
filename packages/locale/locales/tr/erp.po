@@ -14284,6 +14284,9 @@ msgstr "Sipariş gerekli"
 msgid "Needs Review"
 msgstr "İncelemesi Gerekli"
 
+msgid "Needs sign-off"
+msgstr ""
+
 msgid "Negative Adjustment"
 msgstr "Negatif düzeltme"
 
@@ -21591,6 +21594,9 @@ msgstr "Outlook ile giriş yap"
 msgid "Sign in with Passkey"
 msgstr "Geçiş anahtarıyla giriş yapın"
 
+msgid "Sign off"
+msgstr ""
+
 msgid "Sign out"
 msgstr "Çıkış yap"
 
@@ -21611,6 +21617,9 @@ msgstr "Bu sorun kapatılmadan önce kaydedilmesi gereken onaylar; iş akışı 
 
 msgid "Signed in as {name}"
 msgstr "Oturum açıldı olarak {name}"
+
+msgid "Signed off"
+msgstr ""
 
 msgid "Signed quantity — negative for outbound movements"
 msgstr "İmzalı miktar — giden hareketler için negatif"

@@ -14284,6 +14284,9 @@ msgstr "Wymaga zamówienia"
 msgid "Needs Review"
 msgstr "Wymaga przeglądu"
 
+msgid "Needs sign-off"
+msgstr ""
+
 msgid "Negative Adjustment"
 msgstr "Ujemna Korekta"
 
@@ -21591,6 +21594,9 @@ msgstr "Zaloguj się za pomocą Outlook"
 msgid "Sign in with Passkey"
 msgstr "Zaloguj się za pomocą klucza dostępu"
 
+msgid "Sign off"
+msgstr ""
+
 msgid "Sign out"
 msgstr "Wyloguj się"
 
@@ -21611,6 +21617,9 @@ msgstr "Zatwierdzenia, które muszą być zarejestrowane zanim ten problem zosta
 
 msgid "Signed in as {name}"
 msgstr "Zalogowano jako {name}"
+
+msgid "Signed off"
+msgstr ""
 
 msgid "Signed quantity — negative for outbound movements"
 msgstr "Ilość ze znakiem — ujemna dla ruchów wychodzących"

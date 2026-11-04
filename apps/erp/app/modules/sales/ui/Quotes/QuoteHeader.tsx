@@ -51,6 +51,7 @@ import { useAuditLog } from "~/components/AuditLog";
 import { usePanels } from "~/components/Layout";
 import { RecordAction, RecordHeader } from "~/components/Layout/RecordHeader";
 import ConfirmDelete from "~/components/Modals/ConfirmDelete";
+import SignOffButton from "~/components/SignOffButton";
 import { usePermissions, useRouteData, useUser } from "~/hooks";
 import { path } from "~/utils/path";
 import { isQuoteLocked } from "../../sales.models";
@@ -93,6 +94,8 @@ const QuoteHeader = () => {
   const createRevisionModal = useDisclosure();
   const deleteQuoteModal = useDisclosure();
   const [asRevision, setAsRevision] = useState(false);
+  // LAND-299: Finalize waits for a manager's sign-off (SignOffButton).
+  const [signedOff, setSignedOff] = useState(false);
 
   const statusFetcher = useFetcher<{}>();
 
@@ -252,13 +255,23 @@ const QuoteHeader = () => {
               </RecordAction>
             )}
 
+            <RecordAction slot="secondary">
+              <SignOffButton
+                table="quote"
+                id={quoteId}
+                editable={isDraft}
+                onChange={setSignedOff}
+              />
+            </RecordAction>
+
             <RecordAction slot={finalizeSlot}>
               <Button
                 onClick={finalizeModal.onOpen}
                 isDisabled={
                   routeData?.quote?.status !== "Draft" ||
                   !permissions.can("update", "sales") ||
-                  !eligibleLines?.length
+                  !eligibleLines?.length ||
+                  !signedOff
                 }
                 variant={isDraft ? "primary" : "secondary"}
                 leftIcon={<LuCheckCheck />}

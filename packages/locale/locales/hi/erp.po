@@ -14284,6 +14284,9 @@ msgstr "ऑर्डर करने की आवश्यकता"
 msgid "Needs Review"
 msgstr "समीक्षा की आवश्यकता है"
 
+msgid "Needs sign-off"
+msgstr ""
+
 msgid "Negative Adjustment"
 msgstr "नकारात्मक समायोजन"
 
@@ -21591,6 +21594,9 @@ msgstr "Outlook के साथ साइन इन करें"
 msgid "Sign in with Passkey"
 msgstr "पासकी के साथ साइन इन करें"
 
+msgid "Sign off"
+msgstr ""
+
 msgid "Sign out"
 msgstr "साइन आउट"
 
@@ -21611,6 +21617,9 @@ msgstr "साइन-ऑफ जो इस समस्या को बंद �
 
 msgid "Signed in as {name}"
 msgstr "{name} के रूप में साइन इन किया गया"
+
+msgid "Signed off"
+msgstr ""
 
 msgid "Signed quantity — negative for outbound movements"
 msgstr "हस्ताक्षरित मात्रा — बाहरी आंदोलनों के लिए नकारात्मक"

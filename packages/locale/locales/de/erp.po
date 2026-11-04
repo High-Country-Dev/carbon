@@ -14284,6 +14284,9 @@ msgstr "Bestellung erforderlich"
 msgid "Needs Review"
 msgstr "Überprüfung erforderlich"
 
+msgid "Needs sign-off"
+msgstr ""
+
 msgid "Negative Adjustment"
 msgstr "Negative Korrektur"
 
@@ -21591,6 +21594,9 @@ msgstr "Mit Outlook anmelden"
 msgid "Sign in with Passkey"
 msgstr "Mit Passkey anmelden"
 
+msgid "Sign off"
+msgstr ""
+
 msgid "Sign out"
 msgstr "Abmelden"
 
@@ -21611,6 +21617,9 @@ msgstr "Zeichen-Offs, die aufgezeichnet werden müssen, bevor diese Ausgabe gesc
 
 msgid "Signed in as {name}"
 msgstr "Angemeldet als {name}"
+
+msgid "Signed off"
+msgstr ""
 
 msgid "Signed quantity — negative for outbound movements"
 msgstr "Signierte Menge – negativ für ausgehende Bewegungen"

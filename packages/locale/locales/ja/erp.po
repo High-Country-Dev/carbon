@@ -14284,6 +14284,9 @@ msgstr "発注が必要"
 msgid "Needs Review"
 msgstr "レビューが必要"
 
+msgid "Needs sign-off"
+msgstr ""
+
 msgid "Negative Adjustment"
 msgstr "負の調整"
 
@@ -21591,6 +21594,9 @@ msgstr "Outlookでサインイン"
 msgid "Sign in with Passkey"
 msgstr "パスキーでサインイン"
 
+msgid "Sign off"
+msgstr ""
+
 msgid "Sign out"
 msgstr "ログアウト"
 
@@ -21611,6 +21617,9 @@ msgstr "この問題を閉じる前に記録する必要があるサインオフ
 
 msgid "Signed in as {name}"
 msgstr "{name}としてサインインしています"
+
+msgid "Signed off"
+msgstr ""
 
 msgid "Signed quantity — negative for outbound movements"
 msgstr "署名された数量 — アウトバウンド移動の場合は負数"
