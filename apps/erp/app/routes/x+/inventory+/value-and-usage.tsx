@@ -107,7 +107,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     for (const l of ledger as any[])
       onHand.set(
         l.itemId,
-        (onHand.get(l.itemId) ?? 0) + Number(l.quantity ?? 0)
+        (onHand.get(l.itemId) ?? 0) + Number(l.quantityOnHand ?? 0)
       );
     const cost = new Map((costs as any[]).map((c) => [c.itemId, c]));
     const groupName = new Map(
