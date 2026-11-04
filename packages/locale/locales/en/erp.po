@@ -2026,6 +2026,9 @@ msgstr "Actual"
 msgid "Actual <0>{0}</0>"
 msgstr "Actual <0>{0}</0>"
 
+msgid "Actual cost"
+msgstr "Actual cost"
+
 msgid "Actual Cost"
 msgstr "Actual Cost"
 
@@ -2034,6 +2037,9 @@ msgstr "Actual End"
 
 msgid "Actual Failure Mode"
 msgstr "Actual Failure Mode"
+
+msgid "Actual margin"
+msgstr "Actual margin"
 
 msgid "Actual Start"
 msgstr "Actual Start"
@@ -9406,8 +9412,14 @@ msgstr "Escalate to the project leads"
 msgid "Escalation"
 msgstr "Escalation"
 
+msgid "Est. cost"
+msgstr "Est. cost"
+
 msgid "Est. Duration"
 msgstr "Est. Duration"
+
+msgid "Est. margin"
+msgstr "Est. margin"
 
 msgid "Estimate"
 msgstr "Estimate"
@@ -9421,6 +9433,9 @@ msgstr "Estimated — no capacity reservation"
 #. placeholder {0}: duration(estimated.total)
 msgid "Estimated <0>{0}</0>"
 msgstr "Estimated <0>{0}</0>"
+
+msgid "Estimated cost"
+msgstr "Estimated cost"
 
 msgid "Estimated Duration"
 msgstr "Estimated Duration"
@@ -12336,6 +12351,12 @@ msgstr "Job completed successfully"
 msgid "Job completions"
 msgstr "Job completions"
 
+msgid "Job Cost"
+msgstr "Job Cost"
+
+msgid "Job Costs"
+msgstr "Job Costs"
+
 msgid "Job ID"
 msgstr "Job ID"
 
@@ -12359,6 +12380,9 @@ msgstr "Job Materials"
 
 msgid "Job notification settings updated"
 msgstr "Job notification settings updated"
+
+msgid "Job number"
+msgstr "Job number"
 
 msgid "Job operation"
 msgstr "Job operation"
@@ -12395,6 +12419,9 @@ msgstr "Jobs Assigned to Me"
 
 msgid "Jobs Missing Parts"
 msgstr "Jobs Missing Parts"
+
+msgid "Jobs on a sales order. Cost = material + labor + machine + overhead + outside processing; actual uses the hours clocked and the material issued. Margin = sale price − cost."
+msgstr "Jobs on a sales order. Cost = material + labor + machine + overhead + outside processing; actual uses the hours clocked and the material issued. Margin = sale price − cost."
 
 msgid "Jobs Required"
 msgstr "Jobs Required"
@@ -13442,6 +13469,9 @@ msgstr "Mapped devices"
 
 msgid "Mapped values"
 msgstr "Mapped values"
+
+msgid "Margin"
+msgstr "Margin"
 
 #. placeholder {0}: i18n._(step.gate)
 msgid "Mark \"{0}\" as passed?"
@@ -15557,6 +15587,9 @@ msgstr "Not mapped"
 msgid "Not now"
 msgstr "Not now"
 
+msgid "Not on a sales order"
+msgstr "Not on a sales order"
+
 msgid "Not reached"
 msgstr "Not reached"
 
@@ -16433,6 +16466,9 @@ msgstr "Output never outlasts its raw materials. Falls back to the fixed duratio
 msgid "Outside operation"
 msgstr "Outside operation"
 
+msgid "Outside processing"
+msgstr "Outside processing"
+
 msgid "Outside Processing"
 msgstr "Outside Processing"
 
@@ -16447,6 +16483,9 @@ msgstr "Overall result"
 
 msgid "Overdue"
 msgstr "Overdue"
+
+msgid "Overhead"
+msgstr "Overhead"
 
 msgid "Overhead Absorption"
 msgstr "Overhead Absorption"
@@ -20014,6 +20053,9 @@ msgstr "Safety Stock:"
 msgid "Sale"
 msgstr "Sale"
 
+msgid "Sale price"
+msgstr "Sale price"
+
 msgid "Sale Price"
 msgstr "Sale Price"
 
@@ -21461,6 +21503,9 @@ msgstr "Showing the first 500 lines"
 
 msgid "Showing the newest 200 journals"
 msgstr "Showing the newest 200 journals"
+
+msgid "Showing the newest 400; search to narrow."
+msgstr "Showing the newest 400; search to narrow."
 
 msgid "Showing the top 1,000 groups by amount"
 msgstr "Showing the top 1,000 groups by amount"
@@ -24792,6 +24837,9 @@ msgstr "Total capitalized cost of the asset (purchase price plus freight, instal
 
 msgid "Total Construction Cost:"
 msgstr "Total Construction Cost:"
+
+msgid "Total cost"
+msgstr "Total cost"
 
 msgid "Total Direct Cost"
 msgstr "Total Direct Cost"

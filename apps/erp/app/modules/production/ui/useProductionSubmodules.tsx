@@ -66,6 +66,21 @@ export default function useProductionSubmodules() {
           : [])
       ]
     },
+    // LAND-299: job cost report, for people who may see rates and costs (LAND-271).
+    ...(permissions.can("view", "resources")
+      ? [
+          {
+            name: t`Reports`,
+            routes: [
+              {
+                name: t`Job Costs`,
+                to: path.to.productionJobCosts,
+                icon: <LuChartLine />
+              }
+            ]
+          }
+        ]
+      : []),
     {
       name: t`Planning`,
       routes: [

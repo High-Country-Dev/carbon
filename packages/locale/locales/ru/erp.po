@@ -2026,6 +2026,9 @@ msgstr "Фактическое"
 msgid "Actual <0>{0}</0>"
 msgstr "Фактический <0>{0}</0>"
 
+msgid "Actual cost"
+msgstr ""
+
 msgid "Actual Cost"
 msgstr "Фактическая себестоимость"
 
@@ -2034,6 +2037,9 @@ msgstr "Фактическое окончание"
 
 msgid "Actual Failure Mode"
 msgstr "Фактический режим отказа"
+
+msgid "Actual margin"
+msgstr ""
 
 msgid "Actual Start"
 msgstr "Фактическое начало"
@@ -9406,8 +9412,14 @@ msgstr "Передайте проблему руководителям прое�
 msgid "Escalation"
 msgstr "Эскалация"
 
+msgid "Est. cost"
+msgstr ""
+
 msgid "Est. Duration"
 msgstr "Прибл. Длительность"
+
+msgid "Est. margin"
+msgstr ""
 
 msgid "Estimate"
 msgstr "Смета"
@@ -9421,6 +9433,9 @@ msgstr "Приблизительно — нет резервирования м�
 #. placeholder {0}: duration(estimated.total)
 msgid "Estimated <0>{0}</0>"
 msgstr "Расчетный <0>{0}</0>"
+
+msgid "Estimated cost"
+msgstr ""
 
 msgid "Estimated Duration"
 msgstr "Предполагаемая продолжительность"
@@ -12336,6 +12351,12 @@ msgstr ""
 msgid "Job completions"
 msgstr "Завершение производственных заказов"
 
+msgid "Job Cost"
+msgstr ""
+
+msgid "Job Costs"
+msgstr ""
+
 msgid "Job ID"
 msgstr "ID задания"
 
@@ -12358,6 +12379,9 @@ msgid "Job Materials"
 msgstr "Материалы заказа"
 
 msgid "Job notification settings updated"
+msgstr ""
+
+msgid "Job number"
 msgstr ""
 
 msgid "Job operation"
@@ -12394,6 +12418,9 @@ msgid "Jobs Assigned to Me"
 msgstr "Производственные заказы, назначенные мне"
 
 msgid "Jobs Missing Parts"
+msgstr ""
+
+msgid "Jobs on a sales order. Cost = material + labor + machine + overhead + outside processing; actual uses the hours clocked and the material issued. Margin = sale price − cost."
 msgstr ""
 
 msgid "Jobs Required"
@@ -13442,6 +13469,9 @@ msgstr "Сопоставленные устройства"
 
 msgid "Mapped values"
 msgstr "Отображенные значения"
+
+msgid "Margin"
+msgstr ""
 
 #. placeholder {0}: i18n._(step.gate)
 msgid "Mark \"{0}\" as passed?"
@@ -15557,6 +15587,9 @@ msgstr "Не сопоставлено"
 msgid "Not now"
 msgstr "Не сейчас"
 
+msgid "Not on a sales order"
+msgstr ""
+
 msgid "Not reached"
 msgstr "Не достигнуто"
 
@@ -16433,6 +16466,9 @@ msgstr "Готовая продукция никогда не превышает
 msgid "Outside operation"
 msgstr "Отклонение косвенных затрат"
 
+msgid "Outside processing"
+msgstr ""
+
 msgid "Outside Processing"
 msgstr "Кооперация"
 
@@ -16447,6 +16483,9 @@ msgstr "Общий результат"
 
 msgid "Overdue"
 msgstr "Просрочено"
+
+msgid "Overhead"
+msgstr ""
 
 msgid "Overhead Absorption"
 msgstr "Распределение накладных расходов"
@@ -20014,6 +20053,9 @@ msgstr "Страховой запас:"
 msgid "Sale"
 msgstr "Продажа"
 
+msgid "Sale price"
+msgstr ""
+
 msgid "Sale Price"
 msgstr "Цена продажи"
 
@@ -21461,6 +21503,9 @@ msgstr "Показано первые 500 строк"
 
 msgid "Showing the newest 200 journals"
 msgstr "Отображение 200 новейших операций"
+
+msgid "Showing the newest 400; search to narrow."
+msgstr ""
 
 msgid "Showing the top 1,000 groups by amount"
 msgstr "Показано топ 1000 групп по сумме"
@@ -24792,6 +24837,9 @@ msgstr "Общая капитализированная стоимость ак�
 
 msgid "Total Construction Cost:"
 msgstr "Общая стоимость строительства:"
+
+msgid "Total cost"
+msgstr ""
 
 msgid "Total Direct Cost"
 msgstr "Итоговая прямая себестоимость"

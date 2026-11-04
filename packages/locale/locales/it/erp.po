@@ -2026,6 +2026,9 @@ msgstr "Effettivo"
 msgid "Actual <0>{0}</0>"
 msgstr "Effettivo <0>{0}</0>"
 
+msgid "Actual cost"
+msgstr ""
+
 msgid "Actual Cost"
 msgstr "Costo Effettivo"
 
@@ -2034,6 +2037,9 @@ msgstr "Fine effettivo"
 
 msgid "Actual Failure Mode"
 msgstr "Modalità di guasto effettiva"
+
+msgid "Actual margin"
+msgstr ""
 
 msgid "Actual Start"
 msgstr "Inizio Effettivo"
@@ -9406,8 +9412,14 @@ msgstr "Escalare ai responsabili del progetto"
 msgid "Escalation"
 msgstr "Escalation"
 
+msgid "Est. cost"
+msgstr ""
+
 msgid "Est. Duration"
 msgstr "Durata stimata"
+
+msgid "Est. margin"
+msgstr ""
 
 msgid "Estimate"
 msgstr "Stima"
@@ -9421,6 +9433,9 @@ msgstr "Stimato — nessuna prenotazione di capacità"
 #. placeholder {0}: duration(estimated.total)
 msgid "Estimated <0>{0}</0>"
 msgstr "Stimato <0>{0}</0>"
+
+msgid "Estimated cost"
+msgstr ""
 
 msgid "Estimated Duration"
 msgstr "Durata Stimata"
@@ -12336,6 +12351,12 @@ msgstr ""
 msgid "Job completions"
 msgstr "Completamenti di ordini di produzione"
 
+msgid "Job Cost"
+msgstr ""
+
+msgid "Job Costs"
+msgstr ""
+
 msgid "Job ID"
 msgstr "ID Lavoro"
 
@@ -12358,6 +12379,9 @@ msgid "Job Materials"
 msgstr "Materiali dell'ordine"
 
 msgid "Job notification settings updated"
+msgstr ""
+
+msgid "Job number"
 msgstr ""
 
 msgid "Job operation"
@@ -12394,6 +12418,9 @@ msgid "Jobs Assigned to Me"
 msgstr "Ordini di produzione assegnati a me"
 
 msgid "Jobs Missing Parts"
+msgstr ""
+
+msgid "Jobs on a sales order. Cost = material + labor + machine + overhead + outside processing; actual uses the hours clocked and the material issued. Margin = sale price − cost."
 msgstr ""
 
 msgid "Jobs Required"
@@ -13442,6 +13469,9 @@ msgstr "Dispositivi associati"
 
 msgid "Mapped values"
 msgstr "Valori mappati"
+
+msgid "Margin"
+msgstr ""
 
 #. placeholder {0}: i18n._(step.gate)
 msgid "Mark \"{0}\" as passed?"
@@ -15557,6 +15587,9 @@ msgstr "Non associato"
 msgid "Not now"
 msgstr "Non ora"
 
+msgid "Not on a sales order"
+msgstr ""
+
 msgid "Not reached"
 msgstr "Non raggiunto"
 
@@ -16433,6 +16466,9 @@ msgstr "L'output non supera mai le sue materie prime. Ricade alla durata fissa q
 msgid "Outside operation"
 msgstr "Varianza Indiretta"
 
+msgid "Outside processing"
+msgstr ""
+
 msgid "Outside Processing"
 msgstr "Conto lavoro"
 
@@ -16447,6 +16483,9 @@ msgstr "Risultato complessivo"
 
 msgid "Overdue"
 msgstr "In ritardo"
+
+msgid "Overhead"
+msgstr ""
 
 msgid "Overhead Absorption"
 msgstr "Assorbimento dei Costi Generali"
@@ -20014,6 +20053,9 @@ msgstr "Scorta di sicurezza:"
 msgid "Sale"
 msgstr "Vendita"
 
+msgid "Sale price"
+msgstr ""
+
 msgid "Sale Price"
 msgstr "Prezzo di Vendita"
 
@@ -21461,6 +21503,9 @@ msgstr "Visualizzazione delle prime 500 righe"
 
 msgid "Showing the newest 200 journals"
 msgstr "Visualizzazione delle 200 prime note più recenti"
+
+msgid "Showing the newest 400; search to narrow."
+msgstr ""
 
 msgid "Showing the top 1,000 groups by amount"
 msgstr "Visualizzazione dei primi 1.000 gruppi per importo"
@@ -24792,6 +24837,9 @@ msgstr "Costo totale capitalizzato dell'asset (prezzo di acquisto più trasporto
 
 msgid "Total Construction Cost:"
 msgstr "Costo totale di costruzione:"
+
+msgid "Total cost"
+msgstr ""
 
 msgid "Total Direct Cost"
 msgstr "Costo totale diretto"

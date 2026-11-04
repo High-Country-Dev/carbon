@@ -2026,6 +2026,9 @@ msgstr "वास्तविक"
 msgid "Actual <0>{0}</0>"
 msgstr "वास्तविक <0>{0}</0>"
 
+msgid "Actual cost"
+msgstr ""
+
 msgid "Actual Cost"
 msgstr "वास्तविक लागत"
 
@@ -2034,6 +2037,9 @@ msgstr "वास्तविक अंत"
 
 msgid "Actual Failure Mode"
 msgstr "वास्तविक विफलता मोड"
+
+msgid "Actual margin"
+msgstr ""
 
 msgid "Actual Start"
 msgstr "वास्तविक शुरुआत"
@@ -9406,8 +9412,14 @@ msgstr "परियोजना नेताओं को बढ़ाएं"
 msgid "Escalation"
 msgstr "संवर्धन"
 
+msgid "Est. cost"
+msgstr ""
+
 msgid "Est. Duration"
 msgstr "अनुमानित अवधि"
+
+msgid "Est. margin"
+msgstr ""
 
 msgid "Estimate"
 msgstr "अनुमान"
@@ -9421,6 +9433,9 @@ msgstr "अनुमानित — कोई क्षमता आरक्�
 #. placeholder {0}: duration(estimated.total)
 msgid "Estimated <0>{0}</0>"
 msgstr "अनुमानित <0>{0}</0>"
+
+msgid "Estimated cost"
+msgstr ""
 
 msgid "Estimated Duration"
 msgstr "अनुमानित अवधि"
@@ -12336,6 +12351,12 @@ msgstr ""
 msgid "Job completions"
 msgstr "जॉब समाप्ति"
 
+msgid "Job Cost"
+msgstr ""
+
+msgid "Job Costs"
+msgstr ""
+
 msgid "Job ID"
 msgstr "जॉब आईडी"
 
@@ -12358,6 +12379,9 @@ msgid "Job Materials"
 msgstr "जॉब सामग्री"
 
 msgid "Job notification settings updated"
+msgstr ""
+
+msgid "Job number"
 msgstr ""
 
 msgid "Job operation"
@@ -12394,6 +12418,9 @@ msgid "Jobs Assigned to Me"
 msgstr "मुझे असाइन किए गए जॉब"
 
 msgid "Jobs Missing Parts"
+msgstr ""
+
+msgid "Jobs on a sales order. Cost = material + labor + machine + overhead + outside processing; actual uses the hours clocked and the material issued. Margin = sale price − cost."
 msgstr ""
 
 msgid "Jobs Required"
@@ -13442,6 +13469,9 @@ msgstr "मैप किए गए डिवाइस"
 
 msgid "Mapped values"
 msgstr "मैप किए गए मान"
+
+msgid "Margin"
+msgstr ""
 
 #. placeholder {0}: i18n._(step.gate)
 msgid "Mark \"{0}\" as passed?"
@@ -15557,6 +15587,9 @@ msgstr "मैप नहीं किया गया"
 msgid "Not now"
 msgstr "अभी नहीं"
 
+msgid "Not on a sales order"
+msgstr ""
+
 msgid "Not reached"
 msgstr "प्राप्त नहीं"
 
@@ -16433,6 +16466,9 @@ msgstr "आउटपुट कभी भी इसके कच्चे मा�
 msgid "Outside operation"
 msgstr "ओवरहेड विचरण"
 
+msgid "Outside processing"
+msgstr ""
+
 msgid "Outside Processing"
 msgstr "बाहरी प्रसंस्करण"
 
@@ -16447,6 +16483,9 @@ msgstr "समग्र परिणाम"
 
 msgid "Overdue"
 msgstr "अतिदेय"
+
+msgid "Overhead"
+msgstr ""
 
 msgid "Overhead Absorption"
 msgstr "उपरिव्यय अवशोषण"
@@ -20014,6 +20053,9 @@ msgstr "सुरक्षा स्टॉक:"
 msgid "Sale"
 msgstr "बिक्री"
 
+msgid "Sale price"
+msgstr ""
+
 msgid "Sale Price"
 msgstr "विक्रय मूल्य"
 
@@ -21461,6 +21503,9 @@ msgstr "पहली 500 लाइनें दिखा रहे हैं"
 
 msgid "Showing the newest 200 journals"
 msgstr "नवीनतम 200 जर्नल दिखाए जा रहे हैं"
+
+msgid "Showing the newest 400; search to narrow."
+msgstr ""
 
 msgid "Showing the top 1,000 groups by amount"
 msgstr "राशि द्वारा शीर्ष 1,000 समूह दिखा रहे हैं"
@@ -24792,6 +24837,9 @@ msgstr "संपत्ति की कुल पूंजीकृत ला�
 
 msgid "Total Construction Cost:"
 msgstr "कुल निर्माण लागत:"
+
+msgid "Total cost"
+msgstr ""
 
 msgid "Total Direct Cost"
 msgstr "कुल सीधी लागत"

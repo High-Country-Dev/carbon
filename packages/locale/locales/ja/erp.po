@@ -2026,6 +2026,9 @@ msgstr "実際"
 msgid "Actual <0>{0}</0>"
 msgstr "実績 <0>{0}</0>"
 
+msgid "Actual cost"
+msgstr ""
+
 msgid "Actual Cost"
 msgstr "実際原価"
 
@@ -2034,6 +2037,9 @@ msgstr "実際の終了"
 
 msgid "Actual Failure Mode"
 msgstr "実際の故障モード"
+
+msgid "Actual margin"
+msgstr ""
 
 msgid "Actual Start"
 msgstr "実際の開始"
@@ -9406,8 +9412,14 @@ msgstr "プロジェクトリーダーにエスカレートする"
 msgid "Escalation"
 msgstr "エスカレーション"
 
+msgid "Est. cost"
+msgstr ""
+
 msgid "Est. Duration"
 msgstr "推定期間"
+
+msgid "Est. margin"
+msgstr ""
 
 msgid "Estimate"
 msgstr "見積もり"
@@ -9421,6 +9433,9 @@ msgstr "推定 — 容量予約なし"
 #. placeholder {0}: duration(estimated.total)
 msgid "Estimated <0>{0}</0>"
 msgstr "見積もり <0>{0}</0>"
+
+msgid "Estimated cost"
+msgstr ""
 
 msgid "Estimated Duration"
 msgstr "推定期間"
@@ -12336,6 +12351,12 @@ msgstr ""
 msgid "Job completions"
 msgstr "製造指図完了"
 
+msgid "Job Cost"
+msgstr ""
+
+msgid "Job Costs"
+msgstr ""
+
 msgid "Job ID"
 msgstr "ジョブID"
 
@@ -12358,6 +12379,9 @@ msgid "Job Materials"
 msgstr "指図材料"
 
 msgid "Job notification settings updated"
+msgstr ""
+
+msgid "Job number"
 msgstr ""
 
 msgid "Job operation"
@@ -12394,6 +12418,9 @@ msgid "Jobs Assigned to Me"
 msgstr "私に割り当てられた製造指図"
 
 msgid "Jobs Missing Parts"
+msgstr ""
+
+msgid "Jobs on a sales order. Cost = material + labor + machine + overhead + outside processing; actual uses the hours clocked and the material issued. Margin = sale price − cost."
 msgstr ""
 
 msgid "Jobs Required"
@@ -13442,6 +13469,9 @@ msgstr "マッピング済みのデバイス"
 
 msgid "Mapped values"
 msgstr "マップされた値"
+
+msgid "Margin"
+msgstr ""
 
 #. placeholder {0}: i18n._(step.gate)
 msgid "Mark \"{0}\" as passed?"
@@ -15557,6 +15587,9 @@ msgstr "未マッピング"
 msgid "Not now"
 msgstr "後で"
 
+msgid "Not on a sales order"
+msgstr ""
+
 msgid "Not reached"
 msgstr "未到達"
 
@@ -16433,6 +16466,9 @@ msgstr "製品は原材料より長く保持されることはありません。
 msgid "Outside operation"
 msgstr "間接費差異"
 
+msgid "Outside processing"
+msgstr ""
+
 msgid "Outside Processing"
 msgstr "外注加工"
 
@@ -16447,6 +16483,9 @@ msgstr "総合結果"
 
 msgid "Overdue"
 msgstr "期限超過"
+
+msgid "Overhead"
+msgstr ""
 
 msgid "Overhead Absorption"
 msgstr "間接費配賦"
@@ -20014,6 +20053,9 @@ msgstr "安全在庫:"
 msgid "Sale"
 msgstr "販売"
 
+msgid "Sale price"
+msgstr ""
+
 msgid "Sale Price"
 msgstr "販売価格"
 
@@ -21461,6 +21503,9 @@ msgstr "最初の 500 行を表示中"
 
 msgid "Showing the newest 200 journals"
 msgstr "最新200件の仕訳を表示中"
+
+msgid "Showing the newest 400; search to narrow."
+msgstr ""
 
 msgid "Showing the top 1,000 groups by amount"
 msgstr "金額別上位 1,000 グループを表示中"
@@ -24792,6 +24837,9 @@ msgstr "資産の総資本化原価（購入価格、運賃、設置、および
 
 msgid "Total Construction Cost:"
 msgstr "合計建設原価："
+
+msgid "Total cost"
+msgstr ""
 
 msgid "Total Direct Cost"
 msgstr "総直接原価"

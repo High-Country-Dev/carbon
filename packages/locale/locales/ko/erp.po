@@ -2026,6 +2026,9 @@ msgstr "실제"
 msgid "Actual <0>{0}</0>"
 msgstr "실제 <0>{0}</0>"
 
+msgid "Actual cost"
+msgstr ""
+
 msgid "Actual Cost"
 msgstr "실제원가"
 
@@ -2034,6 +2037,9 @@ msgstr "실제 종료"
 
 msgid "Actual Failure Mode"
 msgstr "실제 고장 모드"
+
+msgid "Actual margin"
+msgstr ""
 
 msgid "Actual Start"
 msgstr "실제 시작"
@@ -9406,8 +9412,14 @@ msgstr "프로젝트 책임자에게 에스컬레이션"
 msgid "Escalation"
 msgstr "에스컬레이션"
 
+msgid "Est. cost"
+msgstr ""
+
 msgid "Est. Duration"
 msgstr "예상 소요시간"
+
+msgid "Est. margin"
+msgstr ""
 
 msgid "Estimate"
 msgstr "예상"
@@ -9421,6 +9433,9 @@ msgstr "예상 — 용량 예약 없음"
 #. placeholder {0}: duration(estimated.total)
 msgid "Estimated <0>{0}</0>"
 msgstr "예상 <0>{0}</0>"
+
+msgid "Estimated cost"
+msgstr ""
 
 msgid "Estimated Duration"
 msgstr "예상 소요시간"
@@ -12336,6 +12351,12 @@ msgstr ""
 msgid "Job completions"
 msgstr "작업 지시 완료"
 
+msgid "Job Cost"
+msgstr ""
+
+msgid "Job Costs"
+msgstr ""
+
 msgid "Job ID"
 msgstr "작업 ID"
 
@@ -12358,6 +12379,9 @@ msgid "Job Materials"
 msgstr "작업 지시 자재"
 
 msgid "Job notification settings updated"
+msgstr ""
+
+msgid "Job number"
 msgstr ""
 
 msgid "Job operation"
@@ -12394,6 +12418,9 @@ msgid "Jobs Assigned to Me"
 msgstr "내게 할당된 작업 지시"
 
 msgid "Jobs Missing Parts"
+msgstr ""
+
+msgid "Jobs on a sales order. Cost = material + labor + machine + overhead + outside processing; actual uses the hours clocked and the material issued. Margin = sale price − cost."
 msgstr ""
 
 msgid "Jobs Required"
@@ -13442,6 +13469,9 @@ msgstr "매핑된 장치"
 
 msgid "Mapped values"
 msgstr "매핑된 값"
+
+msgid "Margin"
+msgstr ""
 
 #. placeholder {0}: i18n._(step.gate)
 msgid "Mark \"{0}\" as passed?"
@@ -15557,6 +15587,9 @@ msgstr "매핑되지 않음"
 msgid "Not now"
 msgstr "나중에"
 
+msgid "Not on a sales order"
+msgstr ""
+
 msgid "Not reached"
 msgstr "도달하지 않음"
 
@@ -16433,6 +16466,9 @@ msgstr "산출물은 절대 원자재를 초과할 수 없습니다. 입력물�
 msgid "Outside operation"
 msgstr "외주 공정작업"
 
+msgid "Outside processing"
+msgstr ""
+
 msgid "Outside Processing"
 msgstr "외주 가공"
 
@@ -16447,6 +16483,9 @@ msgstr "전체 결과"
 
 msgid "Overdue"
 msgstr "기한 초과"
+
+msgid "Overhead"
+msgstr ""
 
 msgid "Overhead Absorption"
 msgstr "간접비 배부"
@@ -20014,6 +20053,9 @@ msgstr "안전 재고:"
 msgid "Sale"
 msgstr "판매"
 
+msgid "Sale price"
+msgstr ""
+
 msgid "Sale Price"
 msgstr "판매가"
 
@@ -21461,6 +21503,9 @@ msgstr "처음 500줄을 표시하고 있습니다"
 
 msgid "Showing the newest 200 journals"
 msgstr "최신 200개 전표 표시 중"
+
+msgid "Showing the newest 400; search to narrow."
+msgstr ""
 
 msgid "Showing the top 1,000 groups by amount"
 msgstr "금액별 상위 1,000개 그룹을 표시하고 있습니다"
@@ -24792,6 +24837,9 @@ msgstr "자산의 총 자본화 원가(구매가격에 운송비, 설치비 등 
 
 msgid "Total Construction Cost:"
 msgstr "총 구성 비용:"
+
+msgid "Total cost"
+msgstr ""
 
 msgid "Total Direct Cost"
 msgstr "총 직접 원가"

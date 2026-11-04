@@ -2026,6 +2026,9 @@ msgstr "Rzeczywista"
 msgid "Actual <0>{0}</0>"
 msgstr "Rzeczywisty <0>{0}</0>"
 
+msgid "Actual cost"
+msgstr ""
+
 msgid "Actual Cost"
 msgstr "Rzeczywisty koszt"
 
@@ -2034,6 +2037,9 @@ msgstr "Rzeczywisty koniec"
 
 msgid "Actual Failure Mode"
 msgstr "Rzeczywisty tryb awarii"
+
+msgid "Actual margin"
+msgstr ""
 
 msgid "Actual Start"
 msgstr "Rzeczywisty początek"
@@ -9406,8 +9412,14 @@ msgstr "Eskaluj do liderów projektu"
 msgid "Escalation"
 msgstr "Eskalacja"
 
+msgid "Est. cost"
+msgstr ""
+
 msgid "Est. Duration"
 msgstr "Szac. Czas trwania"
+
+msgid "Est. margin"
+msgstr ""
 
 msgid "Estimate"
 msgstr "Oszacowanie"
@@ -9421,6 +9433,9 @@ msgstr "Szacunkowe — brak rezerwacji pojemności"
 #. placeholder {0}: duration(estimated.total)
 msgid "Estimated <0>{0}</0>"
 msgstr "Szacowany <0>{0}</0>"
+
+msgid "Estimated cost"
+msgstr ""
 
 msgid "Estimated Duration"
 msgstr "Szacunkowy czas trwania"
@@ -12336,6 +12351,12 @@ msgstr ""
 msgid "Job completions"
 msgstr "Ukończenia zleceń produkcyjnych"
 
+msgid "Job Cost"
+msgstr ""
+
+msgid "Job Costs"
+msgstr ""
+
 msgid "Job ID"
 msgstr "ID zadania"
 
@@ -12358,6 +12379,9 @@ msgid "Job Materials"
 msgstr "Materiały zlecenia"
 
 msgid "Job notification settings updated"
+msgstr ""
+
+msgid "Job number"
 msgstr ""
 
 msgid "Job operation"
@@ -12394,6 +12418,9 @@ msgid "Jobs Assigned to Me"
 msgstr "Zlecenia produkcyjne przypisane do mnie"
 
 msgid "Jobs Missing Parts"
+msgstr ""
+
+msgid "Jobs on a sales order. Cost = material + labor + machine + overhead + outside processing; actual uses the hours clocked and the material issued. Margin = sale price − cost."
 msgstr ""
 
 msgid "Jobs Required"
@@ -13442,6 +13469,9 @@ msgstr "Przypisane urządzenia"
 
 msgid "Mapped values"
 msgstr "Zmapowane wartości"
+
+msgid "Margin"
+msgstr ""
 
 #. placeholder {0}: i18n._(step.gate)
 msgid "Mark \"{0}\" as passed?"
@@ -15557,6 +15587,9 @@ msgstr "Nieprzypisane"
 msgid "Not now"
 msgstr "Nie teraz"
 
+msgid "Not on a sales order"
+msgstr ""
+
 msgid "Not reached"
 msgstr "Nieosiągnięty"
 
@@ -16433,6 +16466,9 @@ msgstr "Produkcja nigdy nie przetrwa dłużej niż jej surowce. Przyjmuje stały
 msgid "Outside operation"
 msgstr "Odchylenie Kosztów Pośrednich"
 
+msgid "Outside processing"
+msgstr ""
+
 msgid "Outside Processing"
 msgstr "Kooperacja"
 
@@ -16447,6 +16483,9 @@ msgstr "Ogólny wynik"
 
 msgid "Overdue"
 msgstr "Po terminie"
+
+msgid "Overhead"
+msgstr ""
 
 msgid "Overhead Absorption"
 msgstr "Rozliczenie kosztów pośrednich"
@@ -20014,6 +20053,9 @@ msgstr "Zapas bezpieczeństwa:"
 msgid "Sale"
 msgstr "Sprzedaż"
 
+msgid "Sale price"
+msgstr ""
+
 msgid "Sale Price"
 msgstr "Cena sprzedaży"
 
@@ -21461,6 +21503,9 @@ msgstr "Pokazywanie pierwszych 500 linii"
 
 msgid "Showing the newest 200 journals"
 msgstr "Wyświetlanie 200 najnowszych dowodów księgowych"
+
+msgid "Showing the newest 400; search to narrow."
+msgstr ""
 
 msgid "Showing the top 1,000 groups by amount"
 msgstr "Pokazywanie 1000 najlepszych grup wg kwoty"
@@ -24792,6 +24837,9 @@ msgstr "Całkowity skapitalizowany koszt zasobu (cena nabycia plus fracht, insta
 
 msgid "Total Construction Cost:"
 msgstr "Suma kosztów budowy:"
+
+msgid "Total cost"
+msgstr ""
 
 msgid "Total Direct Cost"
 msgstr "Całkowity koszt bezpośredni"

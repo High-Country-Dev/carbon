@@ -33,6 +33,7 @@ import {
 } from "~/components";
 import { usePanels } from "~/components/Layout";
 import { usePermissions, useRouteData } from "~/hooks";
+import { getJobCosts } from "~/modules/production/job-cost.service";
 import {
   JOB_LOCKED_MESSAGE,
   jobValidator
@@ -56,6 +57,7 @@ import {
   JobNotes,
   JobRiskRegister
 } from "~/modules/production/ui/Jobs";
+import JobCostSummary from "~/modules/production/ui/Jobs/JobCostSummary";
 import JobMakeMethodTools from "~/modules/production/ui/Jobs/JobMakeMethodTools";
 import PurchasingStatus from "~/modules/purchasing/ui/PurchaseOrder/PurchasingStatus";
 import {
@@ -121,6 +123,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   return {
     notes: (job.data?.notes ?? {}) as JSONContent,
     purchaseOrderLines: getJobPurchaseOrderLines(client, jobId),
+    // LAND-299: job cost in dollars (all make methods); the card shows only with Resources access.
+    jobCost: getJobCosts(client, companyId, [jobId])
+      .then((m) => m.get(jobId) ?? null)
+      .catch(() => null),
     materials:
       materials?.data?.map((m) => ({
         ...m,
@@ -187,7 +193,8 @@ export default function JobDetailsRoute() {
     makeMethod,
     productionData,
     tags,
-    files
+    files,
+    jobCost
   } = useLoaderData<typeof loader>();
   const { jobId } = useParams();
   if (!jobId) throw new Error("Could not find jobId");
@@ -273,6 +280,18 @@ export default function JobDetailsRoute() {
             )}
           </Await>
         </Suspense>
+
+        {permissions.can("view", "resources") && jobCost && (
+          <Suspense fallback={null}>
+            <Await resolve={jobCost}>
+              {(resolvedJobCost) =>
+                resolvedJobCost ? (
+                  <JobCostSummary cost={resolvedJobCost} />
+                ) : null
+              }
+            </Await>
+          </Suspense>
+        )}
 
         <DeferredFiles resolve={files}>
           {(resolvedFiles) => (

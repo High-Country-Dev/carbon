@@ -2026,6 +2026,9 @@ msgstr "Gerçek"
 msgid "Actual <0>{0}</0>"
 msgstr "Gerçek <0>{0}</0>"
 
+msgid "Actual cost"
+msgstr ""
+
 msgid "Actual Cost"
 msgstr "Gerçek Maliyet"
 
@@ -2034,6 +2037,9 @@ msgstr "Gerçek Bitiş"
 
 msgid "Actual Failure Mode"
 msgstr "Gerçekleşen Arıza Modu"
+
+msgid "Actual margin"
+msgstr ""
 
 msgid "Actual Start"
 msgstr "Gerçek Başlangıç"
@@ -9406,8 +9412,14 @@ msgstr "Proje liderlerine yükselt"
 msgid "Escalation"
 msgstr "Yükseltme"
 
+msgid "Est. cost"
+msgstr ""
+
 msgid "Est. Duration"
 msgstr "Tahmini Süre"
+
+msgid "Est. margin"
+msgstr ""
 
 msgid "Estimate"
 msgstr "Tahmin"
@@ -9421,6 +9433,9 @@ msgstr "Tahmini — kapasite rezervasyonu yok"
 #. placeholder {0}: duration(estimated.total)
 msgid "Estimated <0>{0}</0>"
 msgstr "Tahmini <0>{0}</0>"
+
+msgid "Estimated cost"
+msgstr ""
 
 msgid "Estimated Duration"
 msgstr "Tahmini Süre"
@@ -12336,6 +12351,12 @@ msgstr ""
 msgid "Job completions"
 msgstr "İş emri tamamlamaları"
 
+msgid "Job Cost"
+msgstr ""
+
+msgid "Job Costs"
+msgstr ""
+
 msgid "Job ID"
 msgstr "İş Emri Kimliği"
 
@@ -12358,6 +12379,9 @@ msgid "Job Materials"
 msgstr "İş emri malzemeleri"
 
 msgid "Job notification settings updated"
+msgstr ""
+
+msgid "Job number"
 msgstr ""
 
 msgid "Job operation"
@@ -12394,6 +12418,9 @@ msgid "Jobs Assigned to Me"
 msgstr "Bana Atanan İş emirleri"
 
 msgid "Jobs Missing Parts"
+msgstr ""
+
+msgid "Jobs on a sales order. Cost = material + labor + machine + overhead + outside processing; actual uses the hours clocked and the material issued. Margin = sale price − cost."
 msgstr ""
 
 msgid "Jobs Required"
@@ -13442,6 +13469,9 @@ msgstr "Eşlenen cihazlar"
 
 msgid "Mapped values"
 msgstr "Eşlenen değerler"
+
+msgid "Margin"
+msgstr ""
 
 #. placeholder {0}: i18n._(step.gate)
 msgid "Mark \"{0}\" as passed?"
@@ -15557,6 +15587,9 @@ msgstr "Eşlenmedi"
 msgid "Not now"
 msgstr "Şimdi değil"
 
+msgid "Not on a sales order"
+msgstr ""
+
 msgid "Not reached"
 msgstr "Ulaşılmadı"
 
@@ -16433,6 +16466,9 @@ msgstr "Ürün asla hammaddelerinden daha uzun sürmez. Hiçbir girdinin son kul
 msgid "Outside operation"
 msgstr "Genel Gider Sapması"
 
+msgid "Outside processing"
+msgstr ""
+
 msgid "Outside Processing"
 msgstr "Fason işlem"
 
@@ -16447,6 +16483,9 @@ msgstr "Genel sonuç"
 
 msgid "Overdue"
 msgstr "Gecikmiş"
+
+msgid "Overhead"
+msgstr ""
 
 msgid "Overhead Absorption"
 msgstr "Genel üretim gideri dağıtımı"
@@ -20014,6 +20053,9 @@ msgstr "Emniyet Stoku:"
 msgid "Sale"
 msgstr "Satış"
 
+msgid "Sale price"
+msgstr ""
+
 msgid "Sale Price"
 msgstr "Satış Fiyatı"
 
@@ -21461,6 +21503,9 @@ msgstr "İlk 500 satır gösteriliyor"
 
 msgid "Showing the newest 200 journals"
 msgstr "En yeni 200 muhasebe fişi gösteriliyor"
+
+msgid "Showing the newest 400; search to narrow."
+msgstr ""
 
 msgid "Showing the top 1,000 groups by amount"
 msgstr "Miktar açısından ilk 1.000 grup gösteriliyor"
@@ -24792,6 +24837,9 @@ msgstr "Varlığın toplam kapitalize edilen maliyeti (satın alma fiyatı artı
 
 msgid "Total Construction Cost:"
 msgstr "Toplam İnşaat Maliyeti:"
+
+msgid "Total cost"
+msgstr ""
 
 msgid "Total Direct Cost"
 msgstr "Toplam Doğrudan Maliyet"

@@ -2026,6 +2026,9 @@ msgstr "实际"
 msgid "Actual <0>{0}</0>"
 msgstr "实际<0>{0}</0>"
 
+msgid "Actual cost"
+msgstr ""
+
 msgid "Actual Cost"
 msgstr "实际成本"
 
@@ -2034,6 +2037,9 @@ msgstr "实际结束"
 
 msgid "Actual Failure Mode"
 msgstr "实际故障模式"
+
+msgid "Actual margin"
+msgstr ""
 
 msgid "Actual Start"
 msgstr "实际开始"
@@ -9406,8 +9412,14 @@ msgstr "升级到项目负责人"
 msgid "Escalation"
 msgstr "升级"
 
+msgid "Est. cost"
+msgstr ""
+
 msgid "Est. Duration"
 msgstr "预计时长"
+
+msgid "Est. margin"
+msgstr ""
 
 msgid "Estimate"
 msgstr "估算"
@@ -9421,6 +9433,9 @@ msgstr "估计 — 无产能预留"
 #. placeholder {0}: duration(estimated.total)
 msgid "Estimated <0>{0}</0>"
 msgstr "预估<0>{0}</0>"
+
+msgid "Estimated cost"
+msgstr ""
 
 msgid "Estimated Duration"
 msgstr "预计时长"
@@ -12336,6 +12351,12 @@ msgstr ""
 msgid "Job completions"
 msgstr "工单完成"
 
+msgid "Job Cost"
+msgstr ""
+
+msgid "Job Costs"
+msgstr ""
+
 msgid "Job ID"
 msgstr "工作ID"
 
@@ -12358,6 +12379,9 @@ msgid "Job Materials"
 msgstr "工单物料"
 
 msgid "Job notification settings updated"
+msgstr ""
+
+msgid "Job number"
 msgstr ""
 
 msgid "Job operation"
@@ -12394,6 +12418,9 @@ msgid "Jobs Assigned to Me"
 msgstr "分配给我的工单"
 
 msgid "Jobs Missing Parts"
+msgstr ""
+
+msgid "Jobs on a sales order. Cost = material + labor + machine + overhead + outside processing; actual uses the hours clocked and the material issued. Margin = sale price − cost."
 msgstr ""
 
 msgid "Jobs Required"
@@ -13442,6 +13469,9 @@ msgstr "已映射的设备"
 
 msgid "Mapped values"
 msgstr "已映射的值"
+
+msgid "Margin"
+msgstr ""
 
 #. placeholder {0}: i18n._(step.gate)
 msgid "Mark \"{0}\" as passed?"
@@ -15557,6 +15587,9 @@ msgstr "未映射"
 msgid "Not now"
 msgstr "暂不"
 
+msgid "Not on a sales order"
+msgstr ""
+
 msgid "Not reached"
 msgstr "未到达"
 
@@ -16433,6 +16466,9 @@ msgstr "产出的有效期永远不会超过其原材料的有效期。当没有
 msgid "Outside operation"
 msgstr "间接费用差异"
 
+msgid "Outside processing"
+msgstr ""
+
 msgid "Outside Processing"
 msgstr "委外加工"
 
@@ -16447,6 +16483,9 @@ msgstr "总体结果"
 
 msgid "Overdue"
 msgstr "已逾期"
+
+msgid "Overhead"
+msgstr ""
 
 msgid "Overhead Absorption"
 msgstr "制造费用分配"
@@ -20014,6 +20053,9 @@ msgstr "安全库存："
 msgid "Sale"
 msgstr "销售"
 
+msgid "Sale price"
+msgstr ""
+
 msgid "Sale Price"
 msgstr "销售价格"
 
@@ -21461,6 +21503,9 @@ msgstr "显示前500行"
 
 msgid "Showing the newest 200 journals"
 msgstr "显示最新的 200 个凭证"
+
+msgid "Showing the newest 400; search to narrow."
+msgstr ""
 
 msgid "Showing the top 1,000 groups by amount"
 msgstr "按金额显示前1,000个分组"
@@ -24792,6 +24837,9 @@ msgstr "资产的总资本化成本（购买价格加运费、安装和其他成
 
 msgid "Total Construction Cost:"
 msgstr "总建设成本："
+
+msgid "Total cost"
+msgstr ""
 
 msgid "Total Direct Cost"
 msgstr "总直接成本"
