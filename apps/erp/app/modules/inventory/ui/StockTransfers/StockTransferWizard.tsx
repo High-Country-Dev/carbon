@@ -191,6 +191,51 @@ function TransferGrid({ locationId }: { locationId: string }) {
   const [sourceRows, setSourceRows] = useState<BinRow[]>([]);
   const [sourcesLoading, setSourcesLoading] = useState(false);
 
+  // LAND-299 (ABS, Pam: "Move stock between bins"): a destination can be any bin at the location, not only
+  // one that already holds the item. Picking one adds a row for (item, bin) at zero and focuses it, so the
+  // usual Transfer From list shows where to pull from.
+  const [storageUnits, setStorageUnits] = useState<
+    { id: string; name: string }[]
+  >([]);
+  useMount(() => {
+    const loadUnits = async () => {
+      if (!carbon) return;
+      const { data } = await carbon
+        .from("storageUnit")
+        .select("id, name")
+        .eq("companyId", companyId)
+        .eq("locationId", locationId)
+        .eq("active", true)
+        .order("name");
+      setStorageUnits((data ?? []) as { id: string; name: string }[]);
+    };
+    loadUnits();
+  });
+  const addDestination = useCallback(
+    (row: BinRow, unit: { id: string; name: string }) => {
+      setDestinationRows((rows) =>
+        rows.some((r) => r.itemId === row.itemId && r.storageUnitId === unit.id)
+          ? rows
+          : [
+              {
+                ...row,
+                quantityOnHand: 0,
+                quantityRequired: 0,
+                quantityAvailable: 0,
+                quantityIncoming: 0,
+                storageUnitId: unit.id,
+                storageUnitName: unit.name,
+                isDefaultStorageUnit: false
+              },
+              ...rows
+            ]
+      );
+      setSearch("");
+      setActiveDestination({ itemId: row.itemId, storageUnitId: unit.id });
+    },
+    []
+  );
+
   useMount(() => {
     const load = async () => {
       if (!carbon) return;
@@ -300,6 +345,8 @@ function TransferGrid({ locationId }: { locationId: string }) {
               onSearchChange={setSearch}
               activeDestination={activeDestination}
               lines={wizard.lines}
+              storageUnits={storageUnits}
+              onAddDestination={addDestination}
             />
           </ResizablePanel>
           <ResizableHandle withHandle />
@@ -363,7 +410,9 @@ function DestinationTable({
   search,
   onSearchChange,
   activeDestination,
-  lines
+  lines,
+  storageUnits,
+  onAddDestination
 }: {
   data: BinRow[];
   totalCount: number;
@@ -372,6 +421,8 @@ function DestinationTable({
   onSearchChange: (value: string) => void;
   activeDestination: StockTransferDestination | null;
   lines: StockTransferWizardLine[];
+  storageUnits: { id: string; name: string }[];
+  onAddDestination: (row: BinRow, unit: { id: string; name: string }) => void;
 }) {
   const { t } = useLingui();
   const formatter = useNumberFormatter();
@@ -502,6 +553,26 @@ function DestinationTable({
           return (
             <HStack spacing={2} className="justify-end">
               {lineCount > 0 && <Count count={lineCount} />}
+              <select
+                aria-label={t`Move to another bin`}
+                className="h-8 max-w-[150px] rounded-md border border-input bg-background px-2 text-xs"
+                value=""
+                onChange={(e) => {
+                  const unit = storageUnits.find(
+                    (u) => u.id === e.target.value
+                  );
+                  if (unit) onAddDestination(row.original, unit);
+                }}
+              >
+                <option value="">{t`Move to bin…`}</option>
+                {storageUnits
+                  .filter((u) => u.id !== row.original.storageUnitId)
+                  .map((u) => (
+                    <option key={u.id} value={u.id}>
+                      {u.name}
+                    </option>
+                  ))}
+              </select>
               <Button
                 variant={isActive ? "primary" : "secondary"}
                 rightIcon={<LuArrowRight />}
@@ -530,7 +601,15 @@ function DestinationTable({
         }
       }
     ],
-    [t, formatter, activeDestination, lines, incomingFor]
+    [
+      t,
+      formatter,
+      activeDestination,
+      lines,
+      incomingFor,
+      storageUnits,
+      onAddDestination
+    ]
   );
 
   return (

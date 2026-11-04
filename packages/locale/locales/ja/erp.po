@@ -14143,6 +14143,12 @@ msgstr "数量の一部を新しい処置行に移動して、MRBが各部分を
 msgid "Move to"
 msgstr "移動先"
 
+msgid "Move to another bin"
+msgstr ""
+
+msgid "Move to bin…"
+msgstr ""
+
 msgid "Move to Group"
 msgstr "グループに移動"
 

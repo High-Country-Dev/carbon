@@ -14143,6 +14143,12 @@ msgstr "Sposta parte della quantità in una nuova riga di disposizione in modo c
 msgid "Move to"
 msgstr "Sposta in"
 
+msgid "Move to another bin"
+msgstr ""
+
+msgid "Move to bin…"
+msgstr ""
+
 msgid "Move to Group"
 msgstr "Sposta in Gruppo"
 

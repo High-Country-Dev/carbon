@@ -14143,6 +14143,12 @@ msgstr "수량의 일부를 새로운 처분 결정 행으로 할당하여 MRB�
 msgid "Move to"
 msgstr "이동 대상"
 
+msgid "Move to another bin"
+msgstr ""
+
+msgid "Move to bin…"
+msgstr ""
+
 msgid "Move to Group"
 msgstr "그룹으로 이동"
 

@@ -14143,6 +14143,12 @@ msgstr "将部分数量移动到新的处置行，以便MRB可以分别决定每
 msgid "Move to"
 msgstr "移动到"
 
+msgid "Move to another bin"
+msgstr ""
+
+msgid "Move to bin…"
+msgstr ""
+
 msgid "Move to Group"
 msgstr "移动到组"
 

@@ -14143,6 +14143,12 @@ msgstr "Переместить часть количества в новую с�
 msgid "Move to"
 msgstr "Переместить в"
 
+msgid "Move to another bin"
+msgstr ""
+
+msgid "Move to bin…"
+msgstr ""
+
 msgid "Move to Group"
 msgstr "Переместить в группу"
 

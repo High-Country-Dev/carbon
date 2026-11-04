@@ -14143,6 +14143,12 @@ msgstr "Lagern Sie einen Teil der Menge in eine neue Verwendungsentscheid-Zeile 
 msgid "Move to"
 msgstr "Verschieben nach"
 
+msgid "Move to another bin"
+msgstr ""
+
+msgid "Move to bin…"
+msgstr ""
+
 msgid "Move to Group"
 msgstr "In Gruppe verschieben"
 

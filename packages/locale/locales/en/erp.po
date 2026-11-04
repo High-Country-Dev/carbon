@@ -14143,6 +14143,12 @@ msgstr "Move some of the quantity into a new disposition row so MRB can decide e
 msgid "Move to"
 msgstr "Move to"
 
+msgid "Move to another bin"
+msgstr "Move to another bin"
+
+msgid "Move to bin…"
+msgstr "Move to bin…"
+
 msgid "Move to Group"
 msgstr "Move to Group"
 

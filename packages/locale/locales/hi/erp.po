@@ -14143,6 +14143,12 @@ msgstr "कुछ मात्रा को एक नई निपटान प
 msgid "Move to"
 msgstr "को स्थानांतरित करें"
 
+msgid "Move to another bin"
+msgstr ""
+
+msgid "Move to bin…"
+msgstr ""
+
 msgid "Move to Group"
 msgstr "समूह में ले जाएँ"
 

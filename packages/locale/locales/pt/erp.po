@@ -14143,6 +14143,12 @@ msgstr "Mover parte da quantidade para uma nova linha de disposição para que o
 msgid "Move to"
 msgstr "Mover para"
 
+msgid "Move to another bin"
+msgstr ""
+
+msgid "Move to bin…"
+msgstr ""
+
 msgid "Move to Group"
 msgstr "Mover para Grupo"
 
