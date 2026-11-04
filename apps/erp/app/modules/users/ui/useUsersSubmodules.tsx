@@ -21,6 +21,12 @@ export default function useUsersSubmodules() {
           to: path.to.employeeAccounts,
           icon: <LuUsers />
         },
+        // LAND-299: who has which role, and change it (our own; Carbon's role screens are paid).
+        {
+          name: t`Roles`,
+          to: "/x/users/roles",
+          icon: <LuUsers />
+        },
         {
           name: t`Operators`,
           to: path.to.operators,

@@ -8575,6 +8575,9 @@ msgstr "각 기간은 마지막 날에 송장이 발행되며, 단위를 사용�
 msgid "Each period is one month, for the month rate."
 msgstr "각 기간은 1개월이며, 월별 요금으로 청구됩니다."
 
+msgid "Each person's role decides what they can see and change in BOSS. Pick a new role to change it; it applies on their next page."
+msgstr ""
+
 msgid "Each physical unit gets its own tracked entity and unique number — one entity, one unit."
 msgstr "각 물리적 개는 자신의 추적 대상과 고유 번호를 받습니다 — 하나의 추적 대상, 하나의 개."
 

@@ -8575,6 +8575,9 @@ msgstr "На каждый период выставляется счет в ег
 msgid "Each period is one month, for the month rate."
 msgstr "Каждый период — один месяц, по месячной ставке."
 
+msgid "Each person's role decides what they can see and change in BOSS. Pick a new role to change it; it applies on their next page."
+msgstr ""
+
 msgid "Each physical unit gets its own tracked entity and unique number — one entity, one unit."
 msgstr "Каждая физическая единица получает свой отслеживаемый объект и уникальный номер — один объект, одна единица."
 

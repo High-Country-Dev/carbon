@@ -8575,6 +8575,9 @@ msgstr "Cada período se factura el último día, después de que se usen las un
 msgid "Each period is one month, for the month rate."
 msgstr "Cada período es un mes, para la tarifa mensual."
 
+msgid "Each person's role decides what they can see and change in BOSS. Pick a new role to change it; it applies on their next page."
+msgstr ""
+
 msgid "Each physical unit gets its own tracked entity and unique number — one entity, one unit."
 msgstr "Cada unidad física obtiene su propia entidad rastreada y número único — una entidad, una unidad."
 
