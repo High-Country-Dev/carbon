@@ -176,69 +176,7 @@ export default function SpoolCalculator({
               </ModalTitle>
             </ModalHeader>
             <ModalBody>
-              <div className="flex flex-col gap-3 text-sm max-h-[60vh] overflow-y-auto">
-                <Table>
-                  <Thead>
-                    <Tr>
-                      <Th>
-                        <Trans>Pipe size</Trans>
-                      </Th>
-                      <Th>
-                        <Trans>Cuts</Trans>
-                      </Th>
-                      <Th>
-                        <Trans>Fittings</Trans>
-                      </Th>
-                      <Th>
-                        <Trans>Welds</Trans>
-                      </Th>
-                      <Th>
-                        <Trans>Passes</Trans>
-                      </Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {SIZES.map(([size], i) => (
-                      <Tr key={size}>
-                        <Td>{size}"</Td>
-                        <Td>{num(rows[i].cuts, (v) => set(i, "cuts", v))}</Td>
-                        <Td>
-                          {num(rows[i].fittings, (v) => set(i, "fittings", v))}
-                        </Td>
-                        <Td>{num(rows[i].welds, (v) => set(i, "welds", v))}</Td>
-                        <Td>
-                          {num(rows[i].passes, (v) => set(i, "passes", v))}
-                        </Td>
-                      </Tr>
-                    ))}
-                  </Tbody>
-                </Table>
-                <div className="flex flex-wrap gap-4">
-                  <label className="flex items-center gap-2">
-                    <Trans>O-lets</Trans>
-                    {num(extra.olets, (v) =>
-                      setExtra((e) => ({ ...e, olets: Number(v) || 0 }))
-                    )}
-                  </label>
-                  <label className="flex items-center gap-2">
-                    <Trans>Valves</Trans>
-                    {num(extra.valves, (v) =>
-                      setExtra((e) => ({ ...e, valves: Number(v) || 0 }))
-                    )}
-                  </label>
-                  <label className="flex items-center gap-2">
-                    <Trans>Other parts</Trans>
-                    {num(extra.other, (v) =>
-                      setExtra((e) => ({ ...e, other: Number(v) || 0 }))
-                    )}
-                  </label>
-                  <label className="flex items-center gap-2">
-                    <Trans>Pull parts</Trans>
-                    {num(extra.pull, (v) =>
-                      setExtra((e) => ({ ...e, pull: Number(v) || 0 }))
-                    )}
-                  </label>
-                </div>
+              <div className="flex flex-col gap-3 text-sm">
                 <Table>
                   <Thead>
                     <Tr>
@@ -275,6 +213,74 @@ export default function SpoolCalculator({
                     </Tr>
                   </Tbody>
                 </Table>
+                <div className="flex flex-col gap-3 max-h-[45vh] overflow-y-auto">
+                  <Table>
+                    <Thead>
+                      <Tr>
+                        <Th>
+                          <Trans>Pipe size</Trans>
+                        </Th>
+                        <Th>
+                          <Trans>Cuts</Trans>
+                        </Th>
+                        <Th>
+                          <Trans>Fittings</Trans>
+                        </Th>
+                        <Th>
+                          <Trans>Welds</Trans>
+                        </Th>
+                        <Th>
+                          <Trans>Passes</Trans>
+                        </Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {SIZES.map(([size], i) => (
+                        <Tr key={size}>
+                          <Td>{size}"</Td>
+                          <Td>{num(rows[i].cuts, (v) => set(i, "cuts", v))}</Td>
+                          <Td>
+                            {num(rows[i].fittings, (v) =>
+                              set(i, "fittings", v)
+                            )}
+                          </Td>
+                          <Td>
+                            {num(rows[i].welds, (v) => set(i, "welds", v))}
+                          </Td>
+                          <Td>
+                            {num(rows[i].passes, (v) => set(i, "passes", v))}
+                          </Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+                  <div className="flex flex-wrap gap-4">
+                    <label className="flex items-center gap-2">
+                      <Trans>O-lets</Trans>
+                      {num(extra.olets, (v) =>
+                        setExtra((e) => ({ ...e, olets: Number(v) || 0 }))
+                      )}
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <Trans>Valves</Trans>
+                      {num(extra.valves, (v) =>
+                        setExtra((e) => ({ ...e, valves: Number(v) || 0 }))
+                      )}
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <Trans>Other parts</Trans>
+                      {num(extra.other, (v) =>
+                        setExtra((e) => ({ ...e, other: Number(v) || 0 }))
+                      )}
+                    </label>
+                    <label className="flex items-center gap-2">
+                      <Trans>Pull parts</Trans>
+                      {num(extra.pull, (v) =>
+                        setExtra((e) => ({ ...e, pull: Number(v) || 0 }))
+                      )}
+                    </label>
+                  </div>
+                </div>
                 {fetcher.data?.error && (
                   <p className="text-red-500">{fetcher.data.error}</p>
                 )}
