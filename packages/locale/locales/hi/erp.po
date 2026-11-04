@@ -2631,6 +2631,9 @@ msgstr "आवंटित"
 msgid "Allows acknowledge & continue"
 msgstr "स्वीकार करने और जारी रखने की अनुमति देता है"
 
+msgid "Already invoiced on this order"
+msgstr ""
+
 msgid "also at {otherStationNames}"
 msgstr "यह भी {otherStationNames} पर"
 
@@ -4270,6 +4273,12 @@ msgstr "बीटा"
 msgid "Biggest causes of scrap by reason, item, or work center"
 msgstr "कारण, आइटम या वर्क सेंटर के अनुसार स्क्रैप के सबसे बड़े कारण"
 
+msgid "Bill a deposit or milestone"
+msgstr ""
+
+msgid "Bill a Deposit or Milestone"
+msgstr ""
+
 msgid "Bill calendar months, with a part month first. Off, each period starts on the start date's day of the month."
 msgstr "कैलेंडर महीनों के अनुसार बिल करें, पहले आंशिक महीने के साथ। बंद होने पर, प्रत्येक अवधि प्रारंभ तिथि के दिन से शुरू होती है।"
 
@@ -4430,6 +4439,9 @@ msgstr "पुस्तक मूल्यह्रास"
 
 msgid "Books lock date (manual)"
 msgstr "पुस्तकें लॉक तारीख (मैनुअल)"
+
+msgid "BOSS makes a Draft invoice with one line; check it and post it as usual. On the final invoice, take the deposit off with a negative line on \"Deposit / progress billing\"."
+msgstr ""
 
 msgid "Both"
 msgstr "दोनों"
@@ -7853,6 +7865,9 @@ msgstr "जमा"
 
 msgid "Deposit (its document's invoices only)"
 msgstr "जमा राशि (इसके दस्तावेज़ के चालान केवल)"
+
+msgid "Deposit 30% of the order"
+msgstr ""
 
 msgid "Deposit for"
 msgstr "के लिए जमा"
@@ -13356,6 +13371,9 @@ msgstr "डिफ़ॉल्ट बनाएं"
 msgid "Make Inactive"
 msgstr "निष्क्रिय करें"
 
+msgid "Make invoice"
+msgstr ""
+
 msgid "Make items cannot be invoiced directly. Change method to Pick to continue."
 msgstr "निर्माण आइटम को सीधे चालान नहीं किया जा सकता। जारी रखने के लिए विधि को पिकिंग में बदलें।"
 
@@ -16368,6 +16386,9 @@ msgstr "या"
 msgid "OR"
 msgstr "या"
 
+msgid "Or an amount"
+msgstr ""
+
 msgid "Or enter this secret manually:"
 msgstr "या इस गुप्त को मैन्युअल रूप से दर्ज करें:"
 
@@ -16417,6 +16438,9 @@ msgstr "ऑर्डर मात्रा इस संख्या के प�
 
 msgid "Order rules are evaluated in — for discounts only the highest-priority match applies (no stacking); markups all apply and compound in priority order."
 msgstr "ऑर्डर नियमों का मूल्यांकन क्रम में किया जाता है — छूट के लिए केवल उच्चतम-प्राथमिकता वाला मिलान लागू होता है (कोई स्टैकिंग नहीं); मार्कअप सभी लागू होते हैं और प्राथमिकता क्रम में मिश्रित होते हैं।"
+
+msgid "Order total"
+msgstr ""
 
 msgid "Order Total"
 msgstr "ऑर्डर कुल"
@@ -16969,6 +16993,9 @@ msgstr "ऑर्डर हेडर के पूर्ति स्थान �
 
 msgid "Per-line override of the PO header's Delivery Location; used for split deliveries to multiple warehouses or drop-shipments."
 msgstr "PO हेडर के डिलीवरी स्थान का प्रति-पंक्ति ओवरराइड; एकाधिक गोदाम या ड्रॉप-शिपमेंट के लिए विभाजित डिलीवरी के लिए उपयोग किया जाता है।"
+
+msgid "Percent of the order"
+msgstr ""
 
 msgid "Percentage"
 msgstr "प्रतिशत"

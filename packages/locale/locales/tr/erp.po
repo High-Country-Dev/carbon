@@ -2631,6 +2631,9 @@ msgstr "Tahsis edildi"
 msgid "Allows acknowledge & continue"
 msgstr "Onaylayıp devam etmeye izin verir"
 
+msgid "Already invoiced on this order"
+msgstr ""
+
 msgid "also at {otherStationNames}"
 msgstr "ayrıca {otherStationNames} adresinde"
 
@@ -4270,6 +4273,12 @@ msgstr "Beta"
 msgid "Biggest causes of scrap by reason, item, or work center"
 msgstr "Fire'in nedene, stok kartına veya iş merkezine göre en büyük nedenleri"
 
+msgid "Bill a deposit or milestone"
+msgstr ""
+
+msgid "Bill a Deposit or Milestone"
+msgstr ""
+
 msgid "Bill calendar months, with a part month first. Off, each period starts on the start date's day of the month."
 msgstr "Takvim aylarını faturalandır, kısmi aydan başlayarak. Kapalı, her dönem başlangıç tarihinin ayın gününde başlar."
 
@@ -4430,6 +4439,9 @@ msgstr "Defter Amortismanı"
 
 msgid "Books lock date (manual)"
 msgstr "Defterlerin kilitlenme tarihi (manuel)"
+
+msgid "BOSS makes a Draft invoice with one line; check it and post it as usual. On the final invoice, take the deposit off with a negative line on \"Deposit / progress billing\"."
+msgstr ""
 
 msgid "Both"
 msgstr "Her ikisi"
@@ -7853,6 +7865,9 @@ msgstr "Depozito"
 
 msgid "Deposit (its document's invoices only)"
 msgstr "Depozito (sadece belgesinin faturaları)"
+
+msgid "Deposit 30% of the order"
+msgstr ""
 
 msgid "Deposit for"
 msgstr "Şunun için depozito"
@@ -13356,6 +13371,9 @@ msgstr "Varsayılan Yap"
 msgid "Make Inactive"
 msgstr "Pasif Hale Getir"
 
+msgid "Make invoice"
+msgstr ""
+
 msgid "Make items cannot be invoiced directly. Change method to Pick to continue."
 msgstr "Üretim ürünleri doğrudan faturalandırılamaz. Devam etmek için yöntemi Seçime değiştirin."
 
@@ -16368,6 +16386,9 @@ msgstr "veya"
 msgid "OR"
 msgstr "VEYA"
 
+msgid "Or an amount"
+msgstr ""
+
 msgid "Or enter this secret manually:"
 msgstr "Veya bu sırrı manuel olarak girin:"
 
@@ -16417,6 +16438,9 @@ msgstr "Sipariş miktarları bu sayının tam katları olmalıdır (12'nin katı
 
 msgid "Order rules are evaluated in — for discounts only the highest-priority match applies (no stacking); markups all apply and compound in priority order."
 msgstr "Sipariş kuralları şu şekilde değerlendirilir — iskontolar için yalnızca en yüksek öncelikli kural uygulanır (yığılmaz); tüm fiyat artışları uygulanır ve öncelik sırasına göre birikir."
+
+msgid "Order total"
+msgstr ""
 
 msgid "Order Total"
 msgstr "Toplam Sipariş Tutarı"
@@ -16969,6 +16993,9 @@ msgstr "Sipariş başlığındaki sevkiyat lokasyonunun satır başına geçersi
 
 msgid "Per-line override of the PO header's Delivery Location; used for split deliveries to multiple warehouses or drop-shipments."
 msgstr "PO başlığındaki teslimat lokasyonunun satır başına geçersiz kılınması; birden fazla depoya bölünmüş teslimatlar veya doğrudan sevkiyatlar için kullanılır."
+
+msgid "Percent of the order"
+msgstr ""
 
 msgid "Percentage"
 msgstr "Yüzde"

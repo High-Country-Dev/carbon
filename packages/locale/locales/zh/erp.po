@@ -2631,6 +2631,9 @@ msgstr "已分配"
 msgid "Allows acknowledge & continue"
 msgstr "允许确认并继续"
 
+msgid "Already invoiced on this order"
+msgstr ""
+
 msgid "also at {otherStationNames}"
 msgstr "也在 {otherStationNames}"
 
@@ -4270,6 +4273,12 @@ msgstr "测试版"
 msgid "Biggest causes of scrap by reason, item, or work center"
 msgstr "按原因、物料或工作中心显示最大报废原因"
 
+msgid "Bill a deposit or milestone"
+msgstr ""
+
+msgid "Bill a Deposit or Milestone"
+msgstr ""
+
 msgid "Bill calendar months, with a part month first. Off, each period starts on the start date's day of the month."
 msgstr "按日历月计费,首月包含部分月份。关闭时,每个周期从开始日期的该日期开始。"
 
@@ -4430,6 +4439,9 @@ msgstr "账面折旧"
 
 msgid "Books lock date (manual)"
 msgstr "账册锁定日期（手动）"
+
+msgid "BOSS makes a Draft invoice with one line; check it and post it as usual. On the final invoice, take the deposit off with a negative line on \"Deposit / progress billing\"."
+msgstr ""
 
 msgid "Both"
 msgstr "两者"
@@ -7853,6 +7865,9 @@ msgstr "保证金"
 
 msgid "Deposit (its document's invoices only)"
 msgstr "定金（仅其文件的发票）"
+
+msgid "Deposit 30% of the order"
+msgstr ""
 
 msgid "Deposit for"
 msgstr "保证金 用于"
@@ -13356,6 +13371,9 @@ msgstr "设为默认"
 msgid "Make Inactive"
 msgstr "停用"
 
+msgid "Make invoice"
+msgstr ""
+
 msgid "Make items cannot be invoiced directly. Change method to Pick to continue."
 msgstr "自制物料无法直接开票。将方法更改为从库存领用以继续。"
 
@@ -16368,6 +16386,9 @@ msgstr "或"
 msgid "OR"
 msgstr "或"
 
+msgid "Or an amount"
+msgstr ""
+
 msgid "Or enter this secret manually:"
 msgstr "或手动输入此密码:"
 
@@ -16417,6 +16438,9 @@ msgstr "订单数量必须是此数字的整数倍（12的倍数→12、24、36�
 
 msgid "Order rules are evaluated in — for discounts only the highest-priority match applies (no stacking); markups all apply and compound in priority order."
 msgstr "订单规则按顺序评估 — 对于折扣，只应用最高优先级的匹配（不叠加）；加价全部应用并按优先级顺序复合。"
+
+msgid "Order total"
+msgstr ""
 
 msgid "Order Total"
 msgstr "订单总计"
@@ -16969,6 +16993,9 @@ msgstr "对订单标题的发货地点的按行覆盖；用于分批发货和直
 
 msgid "Per-line override of the PO header's Delivery Location; used for split deliveries to multiple warehouses or drop-shipments."
 msgstr "对采购订单标题的交货地点的按行覆盖；用于分批交货到多个仓库或直发。"
+
+msgid "Percent of the order"
+msgstr ""
 
 msgid "Percentage"
 msgstr "百分比"

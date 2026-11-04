@@ -2631,6 +2631,9 @@ msgstr "Alocado"
 msgid "Allows acknowledge & continue"
 msgstr "Permite reconhecer e continuar"
 
+msgid "Already invoiced on this order"
+msgstr ""
+
 msgid "also at {otherStationNames}"
 msgstr "também em {otherStationNames}"
 
@@ -4270,6 +4273,12 @@ msgstr "Beta"
 msgid "Biggest causes of scrap by reason, item, or work center"
 msgstr "Maiores causas de refugo por motivo, item ou centro de trabalho"
 
+msgid "Bill a deposit or milestone"
+msgstr ""
+
+msgid "Bill a Deposit or Milestone"
+msgstr ""
+
 msgid "Bill calendar months, with a part month first. Off, each period starts on the start date's day of the month."
 msgstr "Faturar meses do calendário, com um mês parcial primeiro. Desativado, cada período inicia no dia do mês da data de início."
 
@@ -4430,6 +4439,9 @@ msgstr "Depreciação Contábil"
 
 msgid "Books lock date (manual)"
 msgstr "Data de bloqueio de livros (manual)"
+
+msgid "BOSS makes a Draft invoice with one line; check it and post it as usual. On the final invoice, take the deposit off with a negative line on \"Deposit / progress billing\"."
+msgstr ""
 
 msgid "Both"
 msgstr "Ambos"
@@ -7853,6 +7865,9 @@ msgstr "Depósito"
 
 msgid "Deposit (its document's invoices only)"
 msgstr "Depósito (somente as faturas deste documento)"
+
+msgid "Deposit 30% of the order"
+msgstr ""
 
 msgid "Deposit for"
 msgstr "Depósito para"
@@ -13356,6 +13371,9 @@ msgstr "Definir como Padrão"
 msgid "Make Inactive"
 msgstr "Inativar"
 
+msgid "Make invoice"
+msgstr ""
+
 msgid "Make items cannot be invoiced directly. Change method to Pick to continue."
 msgstr "Itens de fabricação não podem ser faturados diretamente. Altere o método para Coleta para continuar."
 
@@ -16368,6 +16386,9 @@ msgstr "ou"
 msgid "OR"
 msgstr "OU"
 
+msgid "Or an amount"
+msgstr ""
+
 msgid "Or enter this secret manually:"
 msgstr "Ou introduza este segredo manualmente:"
 
@@ -16417,6 +16438,9 @@ msgstr "As quantidades de pedido devem ser múltiplos inteiros desse número (m�
 
 msgid "Order rules are evaluated in — for discounts only the highest-priority match applies (no stacking); markups all apply and compound in priority order."
 msgstr "As regras de pedido são avaliadas em ordem — para descontos, apenas a correspondência de maior prioridade se aplica (sem acumulação); as margens se aplicam todas e se compõem em ordem de prioridade."
+
+msgid "Order total"
+msgstr ""
 
 msgid "Order Total"
 msgstr "Total do Pedido"
@@ -16969,6 +16993,9 @@ msgstr "Sobrescrita por linha do local de expedição do cabeçalho do pedido; u
 
 msgid "Per-line override of the PO header's Delivery Location; used for split deliveries to multiple warehouses or drop-shipments."
 msgstr "Sobrescrita por linha do local de entrega do cabeçalho da OC; usada para entregas divididas a múltiplos armazéns ou entregas diretas."
+
+msgid "Percent of the order"
+msgstr ""
 
 msgid "Percentage"
 msgstr "Percentual"

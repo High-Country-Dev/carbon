@@ -2631,6 +2631,9 @@ msgstr "할당됨"
 msgid "Allows acknowledge & continue"
 msgstr "확인 후 계속 진행 허용"
 
+msgid "Already invoiced on this order"
+msgstr ""
+
 msgid "also at {otherStationNames}"
 msgstr "{otherStationNames}에서도"
 
@@ -4270,6 +4273,12 @@ msgstr "베타"
 msgid "Biggest causes of scrap by reason, item, or work center"
 msgstr "이유, 품목 또는 작업장별 스크랩의 가장 큰 원인"
 
+msgid "Bill a deposit or milestone"
+msgstr ""
+
+msgid "Bill a Deposit or Milestone"
+msgstr ""
+
 msgid "Bill calendar months, with a part month first. Off, each period starts on the start date's day of the month."
 msgstr "달력 월 단위로 청구하며, 첫 달은 부분 월입니다. 비활성화된 경우 각 기간은 시작일의 월별 날짜부터 시작됩니다."
 
@@ -4430,6 +4439,9 @@ msgstr "장부 감가상각"
 
 msgid "Books lock date (manual)"
 msgstr "장부 잠금 날짜(수동)"
+
+msgid "BOSS makes a Draft invoice with one line; check it and post it as usual. On the final invoice, take the deposit off with a negative line on \"Deposit / progress billing\"."
+msgstr ""
 
 msgid "Both"
 msgstr "모두"
@@ -7853,6 +7865,9 @@ msgstr "보증금"
 
 msgid "Deposit (its document's invoices only)"
 msgstr "선금액 (해당 문서의 송장만)"
+
+msgid "Deposit 30% of the order"
+msgstr ""
 
 msgid "Deposit for"
 msgstr "...을(를) 위한 보증금"
@@ -13356,6 +13371,9 @@ msgstr "기본값으로 설정"
 msgid "Make Inactive"
 msgstr "비활성으로 설정"
 
+msgid "Make invoice"
+msgstr ""
+
 msgid "Make items cannot be invoiced directly. Change method to Pick to continue."
 msgstr "사내 생산 품목은 직접 송장 발행할 수 없습니다. 계속하려면 방법을 피킹으로 변경하세요."
 
@@ -16368,6 +16386,9 @@ msgstr "또는"
 msgid "OR"
 msgstr "또는"
 
+msgid "Or an amount"
+msgstr ""
+
 msgid "Or enter this secret manually:"
 msgstr "또는 이 시크릿을 수동으로 입력하세요:"
 
@@ -16417,6 +16438,9 @@ msgstr "주문 수량은 이 숫자의 정수배여야 합니다(12의 배수 �
 
 msgid "Order rules are evaluated in — for discounts only the highest-priority match applies (no stacking); markups all apply and compound in priority order."
 msgstr "주문 규칙은 순서대로 평가됩니다 — 할인은 우선순위가 가장 높은 항목만 적용되며(중복 적용 없음), 마크업은 모두 적용되어 우선순위 순서대로 누적됩니다."
+
+msgid "Order total"
+msgstr ""
 
 msgid "Order Total"
 msgstr "주문 합계"
@@ -16969,6 +16993,9 @@ msgstr "주문 헤더의 출하 사업장에 대한 라인별 재정의; 분할 
 
 msgid "Per-line override of the PO header's Delivery Location; used for split deliveries to multiple warehouses or drop-shipments."
 msgstr "구매주문 헤더의 납품 위치를 라인별로 재정의한 값으로, 여러 창고로의 분할 납품이나 직송에 사용됩니다."
+
+msgid "Percent of the order"
+msgstr ""
 
 msgid "Percentage"
 msgstr "비율"

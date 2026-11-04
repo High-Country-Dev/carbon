@@ -2631,6 +2631,9 @@ msgstr "Распределено"
 msgid "Allows acknowledge & continue"
 msgstr "Позволяет подтвердить и продолжить"
 
+msgid "Already invoiced on this order"
+msgstr ""
+
 msgid "also at {otherStationNames}"
 msgstr "также на {otherStationNames}"
 
@@ -4270,6 +4273,12 @@ msgstr "Бета"
 msgid "Biggest causes of scrap by reason, item, or work center"
 msgstr "Основные причины брака по типу, номенклатуре или рабочему центру"
 
+msgid "Bill a deposit or milestone"
+msgstr ""
+
+msgid "Bill a Deposit or Milestone"
+msgstr ""
+
 msgid "Bill calendar months, with a part month first. Off, each period starts on the start date's day of the month."
 msgstr "Выставлять счета по календарным месяцам с неполным месяцем в начале. Отключено: каждый период начинается в число даты начала."
 
@@ -4430,6 +4439,9 @@ msgstr "Амортизация по книге"
 
 msgid "Books lock date (manual)"
 msgstr "Дата блокировки книг (вручную)"
+
+msgid "BOSS makes a Draft invoice with one line; check it and post it as usual. On the final invoice, take the deposit off with a negative line on \"Deposit / progress billing\"."
+msgstr ""
 
 msgid "Both"
 msgstr "Оба"
@@ -7853,6 +7865,9 @@ msgstr "Залог"
 
 msgid "Deposit (its document's invoices only)"
 msgstr "Авансовый платеж (только счета этого документа)"
+
+msgid "Deposit 30% of the order"
+msgstr ""
 
 msgid "Deposit for"
 msgstr "Залог для"
@@ -13356,6 +13371,9 @@ msgstr "Сделать по умолчанию"
 msgid "Make Inactive"
 msgstr "Сделать неактивным"
 
+msgid "Make invoice"
+msgstr ""
+
 msgid "Make items cannot be invoiced directly. Change method to Pick to continue."
 msgstr "Товары типа \"Make\" не могут быть выставлены счетом напрямую. Измените метод на \"Pick\" для продолжения."
 
@@ -16368,6 +16386,9 @@ msgstr "или"
 msgid "OR"
 msgstr "ИЛИ"
 
+msgid "Or an amount"
+msgstr ""
+
 msgid "Or enter this secret manually:"
 msgstr "Или введите этот секрет вручную:"
 
@@ -16417,6 +16438,9 @@ msgstr "Количества заказов должны быть целыми �
 
 msgid "Order rules are evaluated in — for discounts only the highest-priority match applies (no stacking); markups all apply and compound in priority order."
 msgstr "Правила заказов оцениваются по порядку — для скидок применяется только совпадение с наивысшим приоритетом (без накопления); наценки применяются все и накапливаются в порядке приоритета."
+
+msgid "Order total"
+msgstr ""
 
 msgid "Order Total"
 msgstr "Итого по заказу"
@@ -16969,6 +16993,9 @@ msgstr "Переопределение на уровне строки площа
 
 msgid "Per-line override of the PO header's Delivery Location; used for split deliveries to multiple warehouses or drop-shipments."
 msgstr "Переопределение по строкам местоположения доставки заголовка ПО; используется для разделенных доставок на несколько складов или дроп-шипов."
+
+msgid "Percent of the order"
+msgstr ""
 
 msgid "Percentage"
 msgstr "Процент"

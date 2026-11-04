@@ -2631,6 +2631,9 @@ msgstr "Zugewiesen"
 msgid "Allows acknowledge & continue"
 msgstr "Ermöglicht Bestätigung & Fortfahren"
 
+msgid "Already invoiced on this order"
+msgstr ""
+
 msgid "also at {otherStationNames}"
 msgstr "auch bei {otherStationNames}"
 
@@ -4270,6 +4273,12 @@ msgstr "Beta"
 msgid "Biggest causes of scrap by reason, item, or work center"
 msgstr "Größte Ursachen für Ausschuss nach Grund, Artikel oder Arbeitsplatz"
 
+msgid "Bill a deposit or milestone"
+msgstr ""
+
+msgid "Bill a Deposit or Milestone"
+msgstr ""
+
 msgid "Bill calendar months, with a part month first. Off, each period starts on the start date's day of the month."
 msgstr "Abrechnung nach Kalendermonaten mit Teilmonat zuerst. Aus: Jeder Zeitraum beginnt am Monatstag des Startdatums."
 
@@ -4430,6 +4439,9 @@ msgstr "Abschreibung buchen"
 
 msgid "Books lock date (manual)"
 msgstr "Büchersperrungsdatum (manuell)"
+
+msgid "BOSS makes a Draft invoice with one line; check it and post it as usual. On the final invoice, take the deposit off with a negative line on \"Deposit / progress billing\"."
+msgstr ""
 
 msgid "Both"
 msgstr "Beide"
@@ -7853,6 +7865,9 @@ msgstr "Kaution"
 
 msgid "Deposit (its document's invoices only)"
 msgstr "Anzahlung (nur die Rechnungen dieses Dokuments)"
+
+msgid "Deposit 30% of the order"
+msgstr ""
 
 msgid "Deposit for"
 msgstr "Kaution für"
@@ -13356,6 +13371,9 @@ msgstr "Als Standard festlegen"
 msgid "Make Inactive"
 msgstr "Inaktiv machen"
 
+msgid "Make invoice"
+msgstr ""
+
 msgid "Make items cannot be invoiced directly. Change method to Pick to continue."
 msgstr "Eigenfertigung-Artikel können nicht direkt fakturiert werden. Ändern Sie die Bereitstellungsart zu Kommissionierung, um fortzufahren."
 
@@ -16368,6 +16386,9 @@ msgstr "oder"
 msgid "OR"
 msgstr "ODER"
 
+msgid "Or an amount"
+msgstr ""
+
 msgid "Or enter this secret manually:"
 msgstr "Oder geben Sie dieses Geheimnis manuell ein:"
 
@@ -16417,6 +16438,9 @@ msgstr "Bestellmengen müssen ganze Vielfache dieser Zahl sein (ein Vielfaches v
 
 msgid "Order rules are evaluated in — for discounts only the highest-priority match applies (no stacking); markups all apply and compound in priority order."
 msgstr "Bestellregeln werden der Reihe nach ausgewertet — bei Rabatten gilt nur die Übereinstimmung mit der höchsten Priorität (keine Stapelung); Aufschläge gelten alle und werden in Prioritätsreihenfolge angewendet."
+
+msgid "Order total"
+msgstr ""
 
 msgid "Order Total"
 msgstr "Bestellsumme"
@@ -16969,6 +16993,9 @@ msgstr "Zeilenweise Übersteuerung des Versandstandorts im Bestellkopf; wird fü
 
 msgid "Per-line override of the PO header's Delivery Location; used for split deliveries to multiple warehouses or drop-shipments."
 msgstr "Zeilenweise Übersteuerung des Lieferorts im Bestellkopf; wird für Teillieferungen an mehrere Lager oder Direktlieferungen verwendet."
+
+msgid "Percent of the order"
+msgstr ""
 
 msgid "Percentage"
 msgstr "Prozentsatz"

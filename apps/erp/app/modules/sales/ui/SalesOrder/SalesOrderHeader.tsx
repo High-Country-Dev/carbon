@@ -65,6 +65,7 @@ import { path } from "~/utils/path";
 import { isSalesOrderLocked, salesConfirmValidator } from "../../sales.models";
 import type { Opportunity, SalesOrder, SalesOrderLine } from "../../types";
 import { CancelSalesOrderModal } from "./CancelSalesOrderModal";
+import SalesOrderDepositModal from "./SalesOrderDepositModal";
 import SalesOrderToContractModal from "./SalesOrderToContractModal";
 import SalesStatus from "./SalesStatus";
 import { useSalesOrder } from "./useSalesOrder";
@@ -223,6 +224,8 @@ const SalesOrderHeader = () => {
   const confirmDisclosure = useDisclosure();
   const deleteSalesOrderModal = useDisclosure();
   const cancelDisclosure = useDisclosure();
+  // LAND-299: deposit / milestone billing
+  const depositDisclosure = useDisclosure();
   const [customers] = useCustomers();
 
   // A contract takes Service lines no invoice has touched (decision 7).
@@ -588,6 +591,15 @@ const SalesOrderHeader = () => {
                                 <DropdownMenuIcon icon={<LuCirclePlus />} />
                                 <Trans>New Invoice</Trans>
                               </DropdownMenuItem>
+                              <DropdownMenuItem
+                                disabled={
+                                  !permissions.can("create", "invoicing")
+                                }
+                                onClick={depositDisclosure.onOpen}
+                              >
+                                <DropdownMenuIcon icon={<LuCirclePlus />} />
+                                <Trans>Bill a Deposit or Milestone</Trans>
+                              </DropdownMenuItem>
                               <DropdownMenuSeparator />
                               {invoices.map((invoice) => (
                                 <DropdownMenuItem key={invoice.id} asChild>
@@ -718,6 +730,17 @@ const SalesOrderHeader = () => {
           onSubmit={() => {
             deleteSalesOrderModal.onClose();
           }}
+        />
+      )}
+      {depositDisclosure.isOpen && (
+        <SalesOrderDepositModal
+          orderId={orderId}
+          orderTotal={Number(
+            (routeData?.salesOrder as { orderTotal?: number | null })
+              ?.orderTotal ?? 0
+          )}
+          alreadyBilled={0}
+          onClose={depositDisclosure.onClose}
         />
       )}
       {auditLogDrawer}

@@ -2631,6 +2631,9 @@ msgstr "Allocato"
 msgid "Allows acknowledge & continue"
 msgstr "Consente di riconoscere e continuare"
 
+msgid "Already invoiced on this order"
+msgstr ""
+
 msgid "also at {otherStationNames}"
 msgstr "anche presso {otherStationNames}"
 
@@ -4270,6 +4273,12 @@ msgstr "Beta"
 msgid "Biggest causes of scrap by reason, item, or work center"
 msgstr "Cause principali di scarto per motivo, articolo o centro di lavoro"
 
+msgid "Bill a deposit or milestone"
+msgstr ""
+
+msgid "Bill a Deposit or Milestone"
+msgstr ""
+
 msgid "Bill calendar months, with a part month first. Off, each period starts on the start date's day of the month."
 msgstr "Fatturare i mesi di calendario, con un mese parziale per primo. Disattivato, ogni periodo inizia il giorno del mese della data di inizio."
 
@@ -4430,6 +4439,9 @@ msgstr "Ammortamento Contabile"
 
 msgid "Books lock date (manual)"
 msgstr "Data di blocco dei registri (manuale)"
+
+msgid "BOSS makes a Draft invoice with one line; check it and post it as usual. On the final invoice, take the deposit off with a negative line on \"Deposit / progress billing\"."
+msgstr ""
 
 msgid "Both"
 msgstr "Entrambi"
@@ -7853,6 +7865,9 @@ msgstr "Deposito"
 
 msgid "Deposit (its document's invoices only)"
 msgstr "Deposito (solo le fatture di questo documento)"
+
+msgid "Deposit 30% of the order"
+msgstr ""
 
 msgid "Deposit for"
 msgstr "Deposito per"
@@ -13356,6 +13371,9 @@ msgstr "Imposta come predefinito"
 msgid "Make Inactive"
 msgstr "Rendi Inattivo"
 
+msgid "Make invoice"
+msgstr ""
+
 msgid "Make items cannot be invoiced directly. Change method to Pick to continue."
 msgstr "Gli articoli Make non possono essere fatturati direttamente. Cambia il metodo in Pick per continuare."
 
@@ -16368,6 +16386,9 @@ msgstr "o"
 msgid "OR"
 msgstr "O"
 
+msgid "Or an amount"
+msgstr ""
+
 msgid "Or enter this secret manually:"
 msgstr "Oppure inserisci questo segreto manualmente:"
 
@@ -16417,6 +16438,9 @@ msgstr "Le quantità ordinate devono essere multipli interi di questo numero (un
 
 msgid "Order rules are evaluated in — for discounts only the highest-priority match applies (no stacking); markups all apply and compound in priority order."
 msgstr "Le regole d'ordine vengono valutate in ordine — per gli sconti si applica solo la corrispondenza con la priorità più alta (nessun accumulo); i ricarichi si applicano tutti e si compongono in ordine di priorità."
+
+msgid "Order total"
+msgstr ""
 
 msgid "Order Total"
 msgstr "Totale Ordine"
@@ -16969,6 +16993,9 @@ msgstr "Forzatura per riga dell'ubicazione di spedizione dell'ordine; utilizzata
 
 msgid "Per-line override of the PO header's Delivery Location; used for split deliveries to multiple warehouses or drop-shipments."
 msgstr "Forzatura per riga dell'ubicazione di consegna dell'ordine d'acquisto; utilizzata per consegne suddivise a più depositi o consegne dirette."
+
+msgid "Percent of the order"
+msgstr ""
 
 msgid "Percentage"
 msgstr "Percentuale"
