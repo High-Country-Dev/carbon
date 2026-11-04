@@ -39,28 +39,42 @@ export type JobCost = {
 
 const HOUR = 3600000;
 // Small id batches keep the PostgREST URL short (Kong rejects very long query strings), and each batch pages
-// past PostgREST's 1,000-row cap.
+// past PostgREST's 1,000-row cap (every read has an ORDER BY, or the pages repeat and skip rows). Batches run a few at a time: a report over ~1,000 jobs is ~20 batches per
+// table, and one at a time that was ~370 round trips (Sales by Customer took most of a minute).
 const CHUNK = 50;
 const PAGE = 1000;
+const PARALLEL = 6;
 
 export async function inChunks<T = any>(
   ids: string[],
   make: (chunk: string[]) => any
 ): Promise<T[]> {
-  const out: T[] = [];
-  for (let i = 0; i < ids.length; i += CHUNK) {
-    const chunk = ids.slice(i, i + CHUNK);
-    if (chunk.length === 0) continue;
-    for (let from = 0; ; from += PAGE) {
-      const r = await make(chunk).range(from, from + PAGE - 1);
-      if (r.error)
-        throw new Error(`job cost query failed: ${r.error.message ?? r.error}`);
-      const rows = (r.data ?? []) as T[];
-      out.push(...rows);
-      if (rows.length < PAGE) break;
+  const chunks: string[][] = [];
+  for (let i = 0; i < ids.length; i += CHUNK)
+    chunks.push(ids.slice(i, i + CHUNK));
+  const results: T[][] = new Array(chunks.length);
+  let next = 0;
+  const worker = async () => {
+    while (next < chunks.length) {
+      const n = next++;
+      const rows: T[] = [];
+      for (let from = 0; ; from += PAGE) {
+        const r = await make(chunks[n]).range(from, from + PAGE - 1);
+        if (r.error)
+          throw new Error(
+            `job cost query failed: ${r.error.message ?? r.error}`
+          );
+        const page = (r.data ?? []) as T[];
+        rows.push(...page);
+        if (page.length < PAGE) break;
+      }
+      results[n] = rows;
     }
-  }
-  return out;
+  };
+  await Promise.all(
+    Array.from({ length: Math.min(PARALLEL, chunks.length) }, worker)
+  );
+  return results.flat();
 }
 
 const line = (): CostLine => ({ estimated: 0, actual: 0 });
@@ -73,65 +87,70 @@ export async function getJobCosts(
   const result = new Map<string, JobCost>();
   if (jobIds.length === 0) return result;
 
-  const jobs = await inChunks(jobIds, (c) =>
-    client
-      .from("job")
-      .select("id, quantity, productionQuantity, salesOrderLineId")
-      .eq("companyId", companyId)
-      .in("id", c)
-  );
-  const operations = await inChunks(jobIds, (c) =>
-    client
-      .from("jobOperation")
-      .select(
-        "id, jobId, operationType, operationQuantity, setupTime, setupUnit, laborTime, laborUnit, machineTime, machineUnit, laborRate, overheadRate, machineRate, operationUnitCost, operationMinimumCost"
+  // Everything keyed by job runs together; then what needs the materials (item costs) and the order lines.
+  // Clocked time and outside-processing POs are fetched by job too (through the step), not by step id:
+  // ~5x fewer batches.
+  const [jobs, operations, materials, events, outsidePo, consumed] =
+    await Promise.all([
+      inChunks(jobIds, (c) =>
+        client
+          .from("job")
+          .select("id, quantity, productionQuantity, salesOrderLineId")
+          .eq("companyId", companyId)
+          .in("id", c)
+          .order("id")
+      ),
+      inChunks(jobIds, (c) =>
+        client
+          .from("jobOperation")
+          .select(
+            "id, jobId, operationType, operationQuantity, setupTime, setupUnit, laborTime, laborUnit, machineTime, machineUnit, laborRate, overheadRate, machineRate, operationUnitCost, operationMinimumCost"
+          )
+          .eq("companyId", companyId)
+          .in("jobId", c)
+          .order("id")
+      ),
+      inChunks(jobIds, (c) =>
+        client
+          .from("jobMaterial")
+          .select(
+            "jobId, itemId, methodType, estimatedQuantity, quantityIssued, unitCost"
+          )
+          .eq("companyId", companyId)
+          .in("jobId", c)
+          .order("id")
+      ),
+      inChunks(jobIds, (c) =>
+        client
+          .from("productionEvent")
+          .select(
+            "jobOperationId, type, duration, startTime, endTime, jobOperation!inner(jobId)"
+          )
+          .eq("companyId", companyId)
+          .in("jobOperation.jobId", c)
+          .order("id")
+      ),
+      inChunks(jobIds, (c) =>
+        client
+          .from("purchaseOrderLine")
+          .select(
+            "jobOperationId, purchaseQuantity, unitPrice, jobOperation!inner(jobId)"
+          )
+          .eq("companyId", companyId)
+          .in("jobOperation.jobId", c)
+          .order("id")
+      ),
+      // Actual material: the cost ledger's consumption cost (negative = issued to the job).
+      inChunks(jobIds, (c) =>
+        client
+          .from("costLedger")
+          .select("documentId, cost")
+          .eq("companyId", companyId)
+          .eq("itemLedgerType", "Consumption")
+          .in("documentId", c)
+          .order("id")
       )
-      .eq("companyId", companyId)
-      .in("jobId", c)
-  );
-  const materials = await inChunks(jobIds, (c) =>
-    client
-      .from("jobMaterial")
-      .select(
-        "jobId, itemId, methodType, estimatedQuantity, quantityIssued, unitCost"
-      )
-      .eq("companyId", companyId)
-      .in("jobId", c)
-  );
-  const opIds = operations.map((o) => o.id);
-  const events = await inChunks(opIds, (c) =>
-    client
-      .from("productionEvent")
-      .select("jobOperationId, type, duration, startTime, endTime")
-      .eq("companyId", companyId)
-      .in("jobOperationId", c)
-  );
-  const outsidePo = await inChunks(opIds, (c) =>
-    client
-      .from("purchaseOrderLine")
-      .select("jobOperationId, purchaseQuantity, unitPrice")
-      .eq("companyId", companyId)
-      .in("jobOperationId", c)
-  );
-  const itemIds = [
-    ...new Set(materials.map((m) => m.itemId).filter(Boolean))
-  ] as string[];
-  const itemCosts = await inChunks(itemIds, (c) =>
-    client
-      .from("itemCost")
-      .select("itemId, unitCost")
-      .eq("companyId", companyId)
-      .in("itemId", c)
-  );
-  // Actual material: the cost ledger's consumption cost (negative = issued to the job).
-  const consumed = await inChunks(jobIds, (c) =>
-    client
-      .from("costLedger")
-      .select("documentId, cost")
-      .eq("companyId", companyId)
-      .eq("itemLedgerType", "Consumption")
-      .in("documentId", c)
-  );
+    ]);
   const consumedCost = new Map<string, number>();
   for (const r of consumed) {
     if (!r.documentId) continue;
@@ -140,12 +159,29 @@ export async function getJobCosts(
       (consumedCost.get(r.documentId) ?? 0) - Number(r.cost ?? 0)
     );
   }
+  const itemIds = [
+    ...new Set(materials.map((m) => m.itemId).filter(Boolean))
+  ] as string[];
   const soLineIds = [
     ...new Set(jobs.map((j) => j.salesOrderLineId).filter(Boolean))
   ] as string[];
-  const soLines = await inChunks(soLineIds, (c) =>
-    client.from("salesOrderLine").select("id, unitPrice").in("id", c)
-  );
+  const [itemCosts, soLines] = await Promise.all([
+    inChunks(itemIds, (c) =>
+      client
+        .from("itemCost")
+        .select("itemId, unitCost")
+        .eq("companyId", companyId)
+        .in("itemId", c)
+        .order("itemId")
+    ),
+    inChunks(soLineIds, (c) =>
+      client
+        .from("salesOrderLine")
+        .select("id, unitPrice")
+        .in("id", c)
+        .order("id")
+    )
+  ]);
 
   const currentCost = new Map(
     itemCosts.map((c) => [c.itemId, Number(c.unitCost ?? 0)])

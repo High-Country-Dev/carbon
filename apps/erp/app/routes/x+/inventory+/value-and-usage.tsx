@@ -74,6 +74,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       .from("item")
       .select("id, readableId, name, unitOfMeasureCode")
       .eq("companyId", companyId)
+      .order("id")
       .range(a, b)
   );
   const item = new Map((items as any[]).map((i) => [i.id, i]));
@@ -94,6 +95,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
           .from("itemCost")
           .select("itemId, unitCost, itemPostingGroupId")
           .eq("companyId", companyId)
+          .order("itemId")
           .range(a, b)
       ),
       client
@@ -182,6 +184,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
       .from("job")
       .select("id, jobId, status, customerId, completedDate, dueDate")
       .eq("companyId", companyId)
+      .order("id")
       .range(a, b)
   );
   // Paged: 50 jobs per page, newest first; the ledger is read only for this page's jobs (the CSV takes them all).
@@ -214,6 +217,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
           .eq("companyId", companyId)
           .eq("itemLedgerType", "Consumption")
           .in("documentId", ids.slice(i, i + 50))
+          .order("id")
           .range(a, b)
       ))
     );

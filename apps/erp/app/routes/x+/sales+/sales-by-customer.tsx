@@ -87,6 +87,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         .gte("dateIssued", from)
         .lte("dateIssued", to)
         .not("status", "in", '("Draft","Voided")')
+        .order("id")
         .range(a, b)
     ),
     all((a, b) =>
@@ -94,6 +95,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         .from("salesOrders")
         .select("id, customerId, status, orderDate, orderTotal")
         .eq("companyId", companyId)
+        .order("id")
         .range(a, b)
     ),
     all((a, b) =>
@@ -103,6 +105,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         .eq("companyId", companyId)
         .gte("createdAt", from)
         .lte("createdAt", `${to}T23:59:59`)
+        .order("id")
         .range(a, b)
     ),
     all((a, b) =>
@@ -110,6 +113,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         .from("customer")
         .select("id, name")
         .eq("companyId", companyId)
+        .order("id")
         .range(a, b)
     )
   ]);
@@ -202,6 +206,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
         .eq("companyId", companyId)
         .not("salesOrderLineId", "is", null)
         .in("status", ["Completed", "Closed"])
+        .order("id")
         .range(a, b)
     );
     const inRange = (jobs as any[]).filter((j) => {
