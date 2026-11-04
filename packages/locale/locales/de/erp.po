@@ -6970,6 +6970,9 @@ msgstr "Anpassen"
 msgid "Customize the layout of your PDF documents — reorder sections, hide what you don't need, and add your own blocks."
 msgstr "Passen Sie das Layout Ihrer PDF-Dokumente an – ordnen Sie Abschnitte neu an, verstecken Sie, was Sie nicht benötigen, und fügen Sie Ihre eigenen Blöcke hinzu."
 
+msgid "Cut & Prep"
+msgstr ""
+
 msgid "Cut over to {BRAND_NAME} and freeze the old system"
 msgstr "Zu {BRAND_NAME} wechseln und das alte System einfrieren"
 
@@ -6990,6 +6993,9 @@ msgstr "Umstellungsschritt"
 
 msgid "Cutover support"
 msgstr "Cutover-Unterstützung"
+
+msgid "Cuts"
+msgstr ""
 
 msgid "Cycle billing"
 msgstr "Zyklische Abrechnung"
@@ -8217,6 +8223,9 @@ msgstr "Keine Seriennummer vorhanden?"
 
 msgid "Don't show this again"
 msgstr "Nicht wieder anzeigen"
+
+msgid "Don't write"
+msgstr ""
 
 msgid "done"
 msgstr "erledigt"
@@ -10476,6 +10485,9 @@ msgstr "Geschäftsjahre"
 msgid "Fit view"
 msgstr "Ansicht anpassen"
 
+msgid "Fittings"
+msgstr ""
+
 msgid "Fix the problems with this workflow before testing it"
 msgstr "Beheben Sie die Probleme mit diesem Workflow, bevor Sie ihn testen"
 
@@ -11217,6 +11229,9 @@ msgstr "Noch nicht zugewiesene Stunden"
 
 msgid "Hours per Week"
 msgstr "Stunden pro Woche"
+
+msgid "Hours written to the steps."
+msgstr ""
 
 msgid "Hours/100 Pieces"
 msgstr "Stunden/100 Stück"
@@ -15795,6 +15810,9 @@ msgstr "Anzahl der Arbeitsgänge"
 msgid "Numbering sequence"
 msgstr "Nummernkreis"
 
+msgid "O-lets"
+msgstr ""
+
 msgid "OEE Impact"
 msgstr "OEE-Auswirkung"
 
@@ -16493,6 +16511,9 @@ msgstr "Sonstige-Erträge-Konto für die monatlich verdiente Verzinsung der Nett
 msgid "Other Income GL account for the monthly interest earned on the net investment in sales-type leases."
 msgstr "Sonstige-Erträge-Sachkonto für die monatlich verdiente Verzinsung der Nettoinvestitionen in Finanzierungsleasingverhältnisse."
 
+msgid "Other parts"
+msgstr ""
+
 msgid "Other Type"
 msgstr "Sonstiger Typ"
 
@@ -16808,6 +16829,9 @@ msgstr "Bestanden"
 
 msgid "Passed"
 msgstr "Bestanden"
+
+msgid "Passes"
+msgstr ""
 
 msgid "Passkey name"
 msgstr "Passkey-Name"
@@ -17209,6 +17233,9 @@ msgstr "Zum Zoomen zusammenziehen oder scrollen · zum Verschieben ziehen · zum
 
 msgid "Pinned"
 msgstr "Angeheftet"
+
+msgid "Pipe size"
+msgstr ""
 
 msgid "Plan"
 msgstr "Plan"
@@ -17931,6 +17958,12 @@ msgstr "Aus der Buchhaltung abrufen"
 
 msgid "Pull from Inventory"
 msgstr "Aus Bestand entnehmen"
+
+msgid "Pull parts"
+msgstr ""
+
+msgid "Pull Parts"
+msgstr ""
 
 msgid "Pull, map, and load your data"
 msgstr "Ziehen Sie Ihre Daten ab, ordnen Sie sie zu und laden Sie sie"
@@ -21901,6 +21934,9 @@ msgstr "Beleg-Position aufteilen"
 msgid "Split shipment line"
 msgstr "Lieferposition teilen"
 
+msgid "Spool Calculator"
+msgstr ""
+
 msgid "SSO/SAML"
 msgstr "SSO/SAML"
 
@@ -22775,6 +22811,9 @@ msgstr "Tabelle"
 
 msgid "Table actions"
 msgstr "Tabellenaktionen"
+
+msgid "Tack & Weld"
+msgstr ""
 
 msgid "Tags"
 msgstr "Tags"
@@ -25967,6 +26006,9 @@ msgstr "Die Werte wenden die heutigen Stückkosten auf historische Mengen an."
 msgid "Values in this run have been summarised. Full detail is kept for 7 days."
 msgstr "Werte in dieser Ausführung wurden zusammengefasst. Vollständige Details werden 7 Tage lang beibehalten."
 
+msgid "Valves"
+msgstr ""
+
 msgid "Variable lease cost"
 msgstr "Variabler Leasingaufwand"
 
@@ -26505,6 +26547,9 @@ msgstr "Willkommen bei {BRAND_NAME}"
 
 msgid "Welcome, {companyName}"
 msgstr "Willkommen, {companyName}"
+
+msgid "Welds"
+msgstr ""
 
 msgid "What a backup contains"
 msgstr "Was ein Backup enthält"
@@ -27081,8 +27126,14 @@ msgstr "Schreiben"
 msgid "Write a note…"
 msgstr "Notiz schreiben…"
 
+msgid "Write hours to steps"
+msgstr ""
+
 msgid "Write missing journals"
 msgstr "Fehlende Buchungssätze erstellen"
+
+msgid "Write to step"
+msgstr ""
 
 msgid "Write-Down Account"
 msgstr "Abwertungskonto"

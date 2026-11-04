@@ -6970,6 +6970,9 @@ msgstr "Настроить"
 msgid "Customize the layout of your PDF documents — reorder sections, hide what you don't need, and add your own blocks."
 msgstr "Настройте макет ваших PDF-документов — переупорядочивайте разделы, скрывайте ненужное и добавляйте собственные блоки."
 
+msgid "Cut & Prep"
+msgstr ""
+
 msgid "Cut over to {BRAND_NAME} and freeze the old system"
 msgstr "Перейти на {BRAND_NAME} и заморозить старую систему"
 
@@ -6990,6 +6993,9 @@ msgstr "Шаг перехода"
 
 msgid "Cutover support"
 msgstr "Поддержка при переходе"
+
+msgid "Cuts"
+msgstr ""
 
 msgid "Cycle billing"
 msgstr "Циклическое выставление счетов"
@@ -8217,6 +8223,9 @@ msgstr "Не видите серийный номер?"
 
 msgid "Don't show this again"
 msgstr "Не показывать снова"
+
+msgid "Don't write"
+msgstr ""
 
 msgid "done"
 msgstr "готово"
@@ -10476,6 +10485,9 @@ msgstr "Финансовые годы"
 msgid "Fit view"
 msgstr "Уместить в окно"
 
+msgid "Fittings"
+msgstr ""
+
 msgid "Fix the problems with this workflow before testing it"
 msgstr "Исправьте проблемы в этом рабочем процессе перед его тестированием"
 
@@ -11217,6 +11229,9 @@ msgstr "Часы, ещё не назначенные"
 
 msgid "Hours per Week"
 msgstr "Часов в неделю"
+
+msgid "Hours written to the steps."
+msgstr ""
 
 msgid "Hours/100 Pieces"
 msgstr "Часов/100 Штук"
@@ -15795,6 +15810,9 @@ msgstr "Количество операций"
 msgid "Numbering sequence"
 msgstr "Нумерационная последовательность"
 
+msgid "O-lets"
+msgstr ""
+
 msgid "OEE Impact"
 msgstr "Влияние OEE"
 
@@ -16493,6 +16511,9 @@ msgstr "Счет прочих доходов для ежемесячного п�
 msgid "Other Income GL account for the monthly interest earned on the net investment in sales-type leases."
 msgstr "Счет учета прочих доходов для ежемесячного процента, полученного по чистым инвестициям в лизинг продажного типа."
 
+msgid "Other parts"
+msgstr ""
+
 msgid "Other Type"
 msgstr "Другой тип"
 
@@ -16808,6 +16829,9 @@ msgstr "Пройти"
 
 msgid "Passed"
 msgstr "Пройдено"
+
+msgid "Passes"
+msgstr ""
 
 msgid "Passkey name"
 msgstr "Имя ключа доступа"
@@ -17209,6 +17233,9 @@ msgstr "Сведите пальцы или прокрутите для масш�
 
 msgid "Pinned"
 msgstr "Закреплено"
+
+msgid "Pipe size"
+msgstr ""
 
 msgid "Plan"
 msgstr "План"
@@ -17931,6 +17958,12 @@ msgstr "Из бухгалтерии"
 
 msgid "Pull from Inventory"
 msgstr "Со склада"
+
+msgid "Pull parts"
+msgstr ""
+
+msgid "Pull Parts"
+msgstr ""
 
 msgid "Pull, map, and load your data"
 msgstr "Извлеките, сопоставьте и загрузите ваши данные"
@@ -21901,6 +21934,9 @@ msgstr "Разделить строку приемки"
 msgid "Split shipment line"
 msgstr "Разделить строку отгрузки"
 
+msgid "Spool Calculator"
+msgstr ""
+
 msgid "SSO/SAML"
 msgstr "SSO/SAML"
 
@@ -22775,6 +22811,9 @@ msgstr "Таблица"
 
 msgid "Table actions"
 msgstr "Действия таблицы"
+
+msgid "Tack & Weld"
+msgstr ""
 
 msgid "Tags"
 msgstr "Теги"
@@ -25967,6 +26006,9 @@ msgstr "Значения применяют сегодняшние себест�
 msgid "Values in this run have been summarised. Full detail is kept for 7 days."
 msgstr "Значения в этом запуске были сведены. Полные детали хранятся 7 дней."
 
+msgid "Valves"
+msgstr ""
+
 msgid "Variable lease cost"
 msgstr "Переменная стоимость лизинга"
 
@@ -26505,6 +26547,9 @@ msgstr "Добро пожаловать в {BRAND_NAME}"
 
 msgid "Welcome, {companyName}"
 msgstr "Добро пожаловать, {companyName}"
+
+msgid "Welds"
+msgstr ""
 
 msgid "What a backup contains"
 msgstr "Что содержит резервная копия"
@@ -27081,8 +27126,14 @@ msgstr "Написать"
 msgid "Write a note…"
 msgstr "Написать примечание…"
 
+msgid "Write hours to steps"
+msgstr ""
+
 msgid "Write missing journals"
 msgstr "Записать недостающие операции"
+
+msgid "Write to step"
+msgstr ""
 
 msgid "Write-Down Account"
 msgstr "Счет уценки"

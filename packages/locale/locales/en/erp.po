@@ -6970,6 +6970,9 @@ msgstr "Customize"
 msgid "Customize the layout of your PDF documents — reorder sections, hide what you don't need, and add your own blocks."
 msgstr "Customize the layout of your PDF documents — reorder sections, hide what you don't need, and add your own blocks."
 
+msgid "Cut & Prep"
+msgstr "Cut & Prep"
+
 msgid "Cut over to {BRAND_NAME} and freeze the old system"
 msgstr "Cut over to {BRAND_NAME} and freeze the old system"
 
@@ -6990,6 +6993,9 @@ msgstr "Cutover step"
 
 msgid "Cutover support"
 msgstr "Cutover support"
+
+msgid "Cuts"
+msgstr "Cuts"
 
 msgid "Cycle billing"
 msgstr "Cycle billing"
@@ -8217,6 +8223,9 @@ msgstr "Don't see a serial number?"
 
 msgid "Don't show this again"
 msgstr "Don't show this again"
+
+msgid "Don't write"
+msgstr "Don't write"
 
 msgid "done"
 msgstr "done"
@@ -10476,6 +10485,9 @@ msgstr "Fiscal Years"
 msgid "Fit view"
 msgstr "Fit view"
 
+msgid "Fittings"
+msgstr "Fittings"
+
 msgid "Fix the problems with this workflow before testing it"
 msgstr "Fix the problems with this workflow before testing it"
 
@@ -11217,6 +11229,9 @@ msgstr "Hours not yet assigned"
 
 msgid "Hours per Week"
 msgstr "Hours per Week"
+
+msgid "Hours written to the steps."
+msgstr "Hours written to the steps."
 
 msgid "Hours/100 Pieces"
 msgstr "Hours/100 Pieces"
@@ -15795,6 +15810,9 @@ msgstr "Number of operations"
 msgid "Numbering sequence"
 msgstr "Numbering sequence"
 
+msgid "O-lets"
+msgstr "O-lets"
+
 msgid "OEE Impact"
 msgstr "OEE Impact"
 
@@ -16493,6 +16511,9 @@ msgstr "Other Income account for the monthly interest earned on the net investme
 msgid "Other Income GL account for the monthly interest earned on the net investment in sales-type leases."
 msgstr "Other Income GL account for the monthly interest earned on the net investment in sales-type leases."
 
+msgid "Other parts"
+msgstr "Other parts"
+
 msgid "Other Type"
 msgstr "Other Type"
 
@@ -16808,6 +16829,9 @@ msgstr "Pass"
 
 msgid "Passed"
 msgstr "Passed"
+
+msgid "Passes"
+msgstr "Passes"
 
 msgid "Passkey name"
 msgstr "Passkey name"
@@ -17209,6 +17233,9 @@ msgstr "Pinch or scroll to zoom · drag to pan · double-tap to reset"
 
 msgid "Pinned"
 msgstr "Pinned"
+
+msgid "Pipe size"
+msgstr "Pipe size"
 
 msgid "Plan"
 msgstr "Plan"
@@ -17931,6 +17958,12 @@ msgstr "Pull from accounting"
 
 msgid "Pull from Inventory"
 msgstr "Pull from Inventory"
+
+msgid "Pull parts"
+msgstr "Pull parts"
+
+msgid "Pull Parts"
+msgstr "Pull Parts"
 
 msgid "Pull, map, and load your data"
 msgstr "Pull, map, and load your data"
@@ -21901,6 +21934,9 @@ msgstr "Split receipt line"
 msgid "Split shipment line"
 msgstr "Split shipment line"
 
+msgid "Spool Calculator"
+msgstr "Spool Calculator"
+
 msgid "SSO/SAML"
 msgstr "SSO/SAML"
 
@@ -22775,6 +22811,9 @@ msgstr "Table"
 
 msgid "Table actions"
 msgstr "Table actions"
+
+msgid "Tack & Weld"
+msgstr "Tack & Weld"
 
 msgid "Tags"
 msgstr "Tags"
@@ -25967,6 +26006,9 @@ msgstr "Values apply today's unit costs to historical quantities."
 msgid "Values in this run have been summarised. Full detail is kept for 7 days."
 msgstr "Values in this run have been summarised. Full detail is kept for 7 days."
 
+msgid "Valves"
+msgstr "Valves"
+
 msgid "Variable lease cost"
 msgstr "Variable lease cost"
 
@@ -26505,6 +26547,9 @@ msgstr "Welcome to {BRAND_NAME}"
 
 msgid "Welcome, {companyName}"
 msgstr "Welcome, {companyName}"
+
+msgid "Welds"
+msgstr "Welds"
 
 msgid "What a backup contains"
 msgstr "What a backup contains"
@@ -27081,8 +27126,14 @@ msgstr "Write"
 msgid "Write a note…"
 msgstr "Write a note…"
 
+msgid "Write hours to steps"
+msgstr "Write hours to steps"
+
 msgid "Write missing journals"
 msgstr "Write missing journals"
+
+msgid "Write to step"
+msgstr "Write to step"
 
 msgid "Write-Down Account"
 msgstr "Write-Down Account"

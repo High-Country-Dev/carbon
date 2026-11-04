@@ -170,6 +170,7 @@ import type {
 import { OperationRowDetails, OperationRowTitle } from "./MethodRow";
 import type { ReleaseLockProps } from "./ReleaseLockAlert";
 import ReleaseLockAlert, { getReleaseLockFlags } from "./ReleaseLockAlert";
+import SpoolCalculator from "./SpoolCalculator";
 
 type Operation = z.infer<typeof methodOperationValidator> & {
   workInstruction: JSONContent | null;
@@ -865,6 +866,11 @@ const BillOfProcess = ({
                 <Trans>Delete Selected</Trans>
               </Button>
             )}
+            {/* LAND-299: ABS's Estimate Time Calculator, writing hours onto steps */}
+            <SpoolCalculator
+              operations={operations}
+              isDisabled={isReadOnly || operations.length === 0}
+            />
             <Button
               ref={addOperationButtonRef}
               variant="secondary"

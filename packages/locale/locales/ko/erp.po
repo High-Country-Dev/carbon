@@ -6970,6 +6970,9 @@ msgstr "사용자 지정"
 msgid "Customize the layout of your PDF documents — reorder sections, hide what you don't need, and add your own blocks."
 msgstr "PDF 문서의 레이아웃을 사용자 지정하세요 — 섹션 순서를 변경하고, 필요 없는 항목을 숨기고, 원하는 블록을 추가할 수 있습니다."
 
+msgid "Cut & Prep"
+msgstr ""
+
 msgid "Cut over to {BRAND_NAME} and freeze the old system"
 msgstr "{BRAND_NAME}으로 전환하고 기존 시스템을 동결하세요"
 
@@ -6990,6 +6993,9 @@ msgstr "전환 단계"
 
 msgid "Cutover support"
 msgstr "전환 지원"
+
+msgid "Cuts"
+msgstr ""
 
 msgid "Cycle billing"
 msgstr "주기 청구"
@@ -8217,6 +8223,9 @@ msgstr "시리얼 번호가 보이지 않으세요?"
 
 msgid "Don't show this again"
 msgstr "다시 표시하지 않기"
+
+msgid "Don't write"
+msgstr ""
 
 msgid "done"
 msgstr "완료"
@@ -10476,6 +10485,9 @@ msgstr "회계연도"
 msgid "Fit view"
 msgstr "보기에 맞춤"
 
+msgid "Fittings"
+msgstr ""
+
 msgid "Fix the problems with this workflow before testing it"
 msgstr "테스트하기 전에 이 워크플로우의 문제를 해결하십시오"
 
@@ -11217,6 +11229,9 @@ msgstr "아직 배정되지 않은 시간"
 
 msgid "Hours per Week"
 msgstr "주당 시간"
+
+msgid "Hours written to the steps."
+msgstr ""
 
 msgid "Hours/100 Pieces"
 msgstr "시간/100개"
@@ -15795,6 +15810,9 @@ msgstr "공정의 수"
 msgid "Numbering sequence"
 msgstr "채번 규칙"
 
+msgid "O-lets"
+msgstr ""
+
 msgid "OEE Impact"
 msgstr "OEE 영향"
 
@@ -16493,6 +16511,9 @@ msgstr "판매형 리스의 순투자에서 발생한 매월 이자에 대한 �
 msgid "Other Income GL account for the monthly interest earned on the net investment in sales-type leases."
 msgstr "판매형 리스의 순투자에서 발생한 매월 이자에 대한 영업외수익 계정과목."
 
+msgid "Other parts"
+msgstr ""
+
 msgid "Other Type"
 msgstr "기타 유형"
 
@@ -16808,6 +16829,9 @@ msgstr "합격"
 
 msgid "Passed"
 msgstr "통과"
+
+msgid "Passes"
+msgstr ""
 
 msgid "Passkey name"
 msgstr "패스키 이름"
@@ -17209,6 +17233,9 @@ msgstr "핀치하거나 스크롤하여 확대/축소 · 드래그하여 이동 
 
 msgid "Pinned"
 msgstr "고정됨"
+
+msgid "Pipe size"
+msgstr ""
 
 msgid "Plan"
 msgstr "계획"
@@ -17931,6 +17958,12 @@ msgstr "회계에서 가져오기"
 
 msgid "Pull from Inventory"
 msgstr "재고 사용"
+
+msgid "Pull parts"
+msgstr ""
+
+msgid "Pull Parts"
+msgstr ""
 
 msgid "Pull, map, and load your data"
 msgstr "데이터를 가져와서 매핑하고 로드하세요"
@@ -21901,6 +21934,9 @@ msgstr "입고 라인 분할"
 msgid "Split shipment line"
 msgstr "출하 라인 분할"
 
+msgid "Spool Calculator"
+msgstr ""
+
 msgid "SSO/SAML"
 msgstr "SSO/SAML"
 
@@ -22775,6 +22811,9 @@ msgstr "테이블"
 
 msgid "Table actions"
 msgstr "테이블 작업"
+
+msgid "Tack & Weld"
+msgstr ""
 
 msgid "Tags"
 msgstr "태그"
@@ -25967,6 +26006,9 @@ msgstr "값은 과거 수량에 오늘의 단위 원가를 적용합니다."
 msgid "Values in this run have been summarised. Full detail is kept for 7 days."
 msgstr "이 실행의 값이 요약되었습니다. 전체 세부정보는 7일간 유지됩니다."
 
+msgid "Valves"
+msgstr ""
+
 msgid "Variable lease cost"
 msgstr "변동 임차 원가"
 
@@ -26505,6 +26547,9 @@ msgstr "{BRAND_NAME}에 오신 것을 환영합니다"
 
 msgid "Welcome, {companyName}"
 msgstr "환영합니다, {companyName}님"
+
+msgid "Welds"
+msgstr ""
 
 msgid "What a backup contains"
 msgstr "백업에 포함된 내용"
@@ -27081,8 +27126,14 @@ msgstr "작성"
 msgid "Write a note…"
 msgstr "메모 작성…"
 
+msgid "Write hours to steps"
+msgstr ""
+
 msgid "Write missing journals"
 msgstr "누락된 전표 작성"
+
+msgid "Write to step"
+msgstr ""
 
 msgid "Write-Down Account"
 msgstr "평가감 계정"

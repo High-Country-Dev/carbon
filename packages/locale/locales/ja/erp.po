@@ -6970,6 +6970,9 @@ msgstr "カスタマイズ"
 msgid "Customize the layout of your PDF documents — reorder sections, hide what you don't need, and add your own blocks."
 msgstr "PDFドキュメントのレイアウトをカスタマイズ — セクションを並べ替え、不要な部分を非表示にし、独自のブロックを追加できます。"
 
+msgid "Cut & Prep"
+msgstr ""
+
 msgid "Cut over to {BRAND_NAME} and freeze the old system"
 msgstr "{BRAND_NAME}に切り替えて古いシステムを凍結する"
 
@@ -6990,6 +6993,9 @@ msgstr "カットオーバーステップ"
 
 msgid "Cutover support"
 msgstr "カットオーバーサポート"
+
+msgid "Cuts"
+msgstr ""
 
 msgid "Cycle billing"
 msgstr "サイクル請求"
@@ -8217,6 +8223,9 @@ msgstr "シリアル番号が見つかりませんか?"
 
 msgid "Don't show this again"
 msgstr "今後表示しない"
+
+msgid "Don't write"
+msgstr ""
 
 msgid "done"
 msgstr "完了"
@@ -10476,6 +10485,9 @@ msgstr "会計年度"
 msgid "Fit view"
 msgstr "ビューに合わせる"
 
+msgid "Fittings"
+msgstr ""
+
 msgid "Fix the problems with this workflow before testing it"
 msgstr "テストする前に、このワークフローの問題を修正してください"
 
@@ -11217,6 +11229,9 @@ msgstr "未配置の時間"
 
 msgid "Hours per Week"
 msgstr "週間あたりの時間"
+
+msgid "Hours written to the steps."
+msgstr ""
 
 msgid "Hours/100 Pieces"
 msgstr "時間/100個"
@@ -15795,6 +15810,9 @@ msgstr "工程の数"
 msgid "Numbering sequence"
 msgstr "採番"
 
+msgid "O-lets"
+msgstr ""
+
 msgid "OEE Impact"
 msgstr "OEE影響"
 
@@ -16493,6 +16511,9 @@ msgstr "セールスタイプリースのリース投資純額から得られる
 msgid "Other Income GL account for the monthly interest earned on the net investment in sales-type leases."
 msgstr "セールスタイプリースのリース投資純額から得られる毎月利息の営業外収益勘定科目。"
 
+msgid "Other parts"
+msgstr ""
+
 msgid "Other Type"
 msgstr "その他のタイプ"
 
@@ -16808,6 +16829,9 @@ msgstr "合格"
 
 msgid "Passed"
 msgstr "合格"
+
+msgid "Passes"
+msgstr ""
 
 msgid "Passkey name"
 msgstr "パスキー名"
@@ -17209,6 +17233,9 @@ msgstr "ピンチまたはスクロールで拡大縮小 · ドラッグで移�
 
 msgid "Pinned"
 msgstr "ピン留め"
+
+msgid "Pipe size"
+msgstr ""
 
 msgid "Plan"
 msgstr "計画"
@@ -17931,6 +17958,12 @@ msgstr "会計から引き出す"
 
 msgid "Pull from Inventory"
 msgstr "在庫から引当"
+
+msgid "Pull parts"
+msgstr ""
+
+msgid "Pull Parts"
+msgstr ""
 
 msgid "Pull, map, and load your data"
 msgstr "データをプル、マップ、ロードする"
@@ -21901,6 +21934,9 @@ msgstr "領収書行を分割"
 msgid "Split shipment line"
 msgstr "出荷明細を分割"
 
+msgid "Spool Calculator"
+msgstr ""
+
 msgid "SSO/SAML"
 msgstr "SSO/SAML"
 
@@ -22775,6 +22811,9 @@ msgstr "テーブル"
 
 msgid "Table actions"
 msgstr "テーブルアクション"
+
+msgid "Tack & Weld"
+msgstr ""
 
 msgid "Tags"
 msgstr "タグ"
@@ -25967,6 +26006,9 @@ msgstr "値は本日の単位原価を過去の数量に適用します。"
 msgid "Values in this run have been summarised. Full detail is kept for 7 days."
 msgstr "このランの値が要約されました。詳細は7日間保持されます。"
 
+msgid "Valves"
+msgstr ""
+
 msgid "Variable lease cost"
 msgstr "変動リースコスト"
 
@@ -26505,6 +26547,9 @@ msgstr "{BRAND_NAME}へようこそ"
 
 msgid "Welcome, {companyName}"
 msgstr "ようこそ、{companyName}"
+
+msgid "Welds"
+msgstr ""
 
 msgid "What a backup contains"
 msgstr "バックアップに含まれる内容"
@@ -27081,8 +27126,14 @@ msgstr "書く"
 msgid "Write a note…"
 msgstr "メモを書く…"
 
+msgid "Write hours to steps"
+msgstr ""
+
 msgid "Write missing journals"
 msgstr "欠落した仕訳を記入"
+
+msgid "Write to step"
+msgstr ""
 
 msgid "Write-Down Account"
 msgstr "評価減勘定"

@@ -6970,6 +6970,9 @@ msgstr "自定义"
 msgid "Customize the layout of your PDF documents — reorder sections, hide what you don't need, and add your own blocks."
 msgstr "自定义您的 PDF 文档布局 — 重新排列部分、隐藏不需要的内容，并添加您自己的块。"
 
+msgid "Cut & Prep"
+msgstr ""
+
 msgid "Cut over to {BRAND_NAME} and freeze the old system"
 msgstr "切换到 {BRAND_NAME} 并冻结旧系统"
 
@@ -6990,6 +6993,9 @@ msgstr "转换步骤"
 
 msgid "Cutover support"
 msgstr "转换支持"
+
+msgid "Cuts"
+msgstr ""
 
 msgid "Cycle billing"
 msgstr "循环计费"
@@ -8217,6 +8223,9 @@ msgstr "看不到序列号？"
 
 msgid "Don't show this again"
 msgstr "不再显示"
+
+msgid "Don't write"
+msgstr ""
 
 msgid "done"
 msgstr "完成"
@@ -10476,6 +10485,9 @@ msgstr "会计年度"
 msgid "Fit view"
 msgstr "缩放到适应"
 
+msgid "Fittings"
+msgstr ""
+
 msgid "Fix the problems with this workflow before testing it"
 msgstr "在测试之前修复此工作流的问题"
 
@@ -11217,6 +11229,9 @@ msgstr "未分配的小时数"
 
 msgid "Hours per Week"
 msgstr "每周小时数"
+
+msgid "Hours written to the steps."
+msgstr ""
 
 msgid "Hours/100 Pieces"
 msgstr "小时/100件"
@@ -15795,6 +15810,9 @@ msgstr "工序数量"
 msgid "Numbering sequence"
 msgstr "编号规则"
 
+msgid "O-lets"
+msgstr ""
+
 msgid "OEE Impact"
 msgstr "OEE 影响"
 
@@ -16493,6 +16511,9 @@ msgstr "营业外收入账户，用于记录销售型租赁净投资每月赚取
 msgid "Other Income GL account for the monthly interest earned on the net investment in sales-type leases."
 msgstr "营业外收入总账科目，用于记录销售型租赁净投资每月赚取的利息。"
 
+msgid "Other parts"
+msgstr ""
+
 msgid "Other Type"
 msgstr "其他类型"
 
@@ -16808,6 +16829,9 @@ msgstr "合格"
 
 msgid "Passed"
 msgstr "已通过"
+
+msgid "Passes"
+msgstr ""
 
 msgid "Passkey name"
 msgstr "通行密钥名称"
@@ -17209,6 +17233,9 @@ msgstr "双指捏合或滚动以缩放 · 拖动以平移 · 双击以重置"
 
 msgid "Pinned"
 msgstr "已固定"
+
+msgid "Pipe size"
+msgstr ""
 
 msgid "Plan"
 msgstr "计划"
@@ -17931,6 +17958,12 @@ msgstr "从会计系统拉取"
 
 msgid "Pull from Inventory"
 msgstr "从库存领用"
+
+msgid "Pull parts"
+msgstr ""
+
+msgid "Pull Parts"
+msgstr ""
 
 msgid "Pull, map, and load your data"
 msgstr "拉取、映射和加载您的数据"
@@ -21901,6 +21934,9 @@ msgstr "拆分收据行"
 msgid "Split shipment line"
 msgstr "拆分发货行"
 
+msgid "Spool Calculator"
+msgstr ""
+
 msgid "SSO/SAML"
 msgstr "SSO/SAML"
 
@@ -22775,6 +22811,9 @@ msgstr "表"
 
 msgid "Table actions"
 msgstr "表格操作"
+
+msgid "Tack & Weld"
+msgstr ""
 
 msgid "Tags"
 msgstr "标签"
@@ -25967,6 +26006,9 @@ msgstr "价值采用今日的单位成本应用于历史数量。"
 msgid "Values in this run have been summarised. Full detail is kept for 7 days."
 msgstr "该运行中的值已汇总。完整详情保留 7 天。"
 
+msgid "Valves"
+msgstr ""
+
 msgid "Variable lease cost"
 msgstr "可变租赁成本"
 
@@ -26505,6 +26547,9 @@ msgstr "欢迎来到 {BRAND_NAME}"
 
 msgid "Welcome, {companyName}"
 msgstr "欢迎，{companyName}"
+
+msgid "Welds"
+msgstr ""
 
 msgid "What a backup contains"
 msgstr "备份包含的内容"
@@ -27081,8 +27126,14 @@ msgstr "撰写"
 msgid "Write a note…"
 msgstr "输入备注…"
 
+msgid "Write hours to steps"
+msgstr ""
+
 msgid "Write missing journals"
 msgstr "编制缺失凭证"
+
+msgid "Write to step"
+msgstr ""
 
 msgid "Write-Down Account"
 msgstr "减值账户"

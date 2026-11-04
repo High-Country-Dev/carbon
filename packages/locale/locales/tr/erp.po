@@ -6970,6 +6970,9 @@ msgstr "Özelleştir"
 msgid "Customize the layout of your PDF documents — reorder sections, hide what you don't need, and add your own blocks."
 msgstr "PDF belgelerinizin düzenini özelleştirin — bölümleri yeniden sıralayın, ihtiyacınız olmayanları gizleyin ve kendi bloklarınızı ekleyin."
 
+msgid "Cut & Prep"
+msgstr ""
+
 msgid "Cut over to {BRAND_NAME} and freeze the old system"
 msgstr "{BRAND_NAME}'a geçiş yapın ve eski sistemi dondurun"
 
@@ -6990,6 +6993,9 @@ msgstr "Geçiş adımı"
 
 msgid "Cutover support"
 msgstr "Geçiş desteği"
+
+msgid "Cuts"
+msgstr ""
 
 msgid "Cycle billing"
 msgstr "Döngü faturalandırması"
@@ -8217,6 +8223,9 @@ msgstr "Seri numarası göremiyorsunuz?"
 
 msgid "Don't show this again"
 msgstr "Bunu bir daha gösterme"
+
+msgid "Don't write"
+msgstr ""
 
 msgid "done"
 msgstr "bitti"
@@ -10476,6 +10485,9 @@ msgstr "Mali Yıllar"
 msgid "Fit view"
 msgstr "Uygun görünümü"
 
+msgid "Fittings"
+msgstr ""
+
 msgid "Fix the problems with this workflow before testing it"
 msgstr "Bu iş akışının problemlerini test etmeden önce düzeltiniz"
 
@@ -11217,6 +11229,9 @@ msgstr "Henüz atanmayan saatler"
 
 msgid "Hours per Week"
 msgstr "Haftalık Saat"
+
+msgid "Hours written to the steps."
+msgstr ""
 
 msgid "Hours/100 Pieces"
 msgstr "Saat/100 Parça"
@@ -15795,6 +15810,9 @@ msgstr "Operasyon sayısı"
 msgid "Numbering sequence"
 msgstr "Numaralandırma Sırası"
 
+msgid "O-lets"
+msgstr ""
+
 msgid "OEE Impact"
 msgstr "OEE Etkisi"
 
@@ -16493,6 +16511,9 @@ msgstr "Satış türü kiralamalarda net kiralama yatırımından elde edilen ay
 msgid "Other Income GL account for the monthly interest earned on the net investment in sales-type leases."
 msgstr "Satış türü kiralamalarda net kiralama yatırımından elde edilen aylık faiz için Diğer gelirler muhasebe hesabı."
 
+msgid "Other parts"
+msgstr ""
+
 msgid "Other Type"
 msgstr "Diğer Tür"
 
@@ -16808,6 +16829,9 @@ msgstr "Geçerli"
 
 msgid "Passed"
 msgstr "Geçti"
+
+msgid "Passes"
+msgstr ""
 
 msgid "Passkey name"
 msgstr "Geçiş Anahtarı Adı"
@@ -17209,6 +17233,9 @@ msgstr "Yakınlaştırmak için kıstırın veya kaydırın · kaydırmak için 
 
 msgid "Pinned"
 msgstr "Sabitlenmiş"
+
+msgid "Pipe size"
+msgstr ""
 
 msgid "Plan"
 msgstr "Plan"
@@ -17931,6 +17958,12 @@ msgstr "Muhasebeden çek"
 
 msgid "Pull from Inventory"
 msgstr "Stoktan kullan"
+
+msgid "Pull parts"
+msgstr ""
+
+msgid "Pull Parts"
+msgstr ""
 
 msgid "Pull, map, and load your data"
 msgstr "Verilerinizi çekin, eşleyin ve yükleyin"
@@ -21901,6 +21934,9 @@ msgstr "Fiş hattını böl"
 msgid "Split shipment line"
 msgstr "Sevkiyat satırını böl"
 
+msgid "Spool Calculator"
+msgstr ""
+
 msgid "SSO/SAML"
 msgstr "SSO/SAML"
 
@@ -22775,6 +22811,9 @@ msgstr "Tablo"
 
 msgid "Table actions"
 msgstr "Tablo işlemleri"
+
+msgid "Tack & Weld"
+msgstr ""
 
 msgid "Tags"
 msgstr "Etiketler"
@@ -25967,6 +26006,9 @@ msgstr "Değerler, tarihsel miktarlara bugünün birim maliyetlerini uygular."
 msgid "Values in this run have been summarised. Full detail is kept for 7 days."
 msgstr "Bu çalışmadaki değerler özetlenmiştir. Tam ayrıntılar 7 gün boyunca tutulur."
 
+msgid "Valves"
+msgstr ""
+
 msgid "Variable lease cost"
 msgstr "Değişken kiralama maliyeti"
 
@@ -26505,6 +26547,9 @@ msgstr "{BRAND_NAME}'a Hoş Geldiniz"
 
 msgid "Welcome, {companyName}"
 msgstr "Hoş geldiniz, {companyName}"
+
+msgid "Welds"
+msgstr ""
 
 msgid "What a backup contains"
 msgstr "Bir yedek neler içerir"
@@ -27081,8 +27126,14 @@ msgstr "Yaz"
 msgid "Write a note…"
 msgstr "Not yazın…"
 
+msgid "Write hours to steps"
+msgstr ""
+
 msgid "Write missing journals"
 msgstr "Eksik muhasebe fişlerini oluştur"
+
+msgid "Write to step"
+msgstr ""
 
 msgid "Write-Down Account"
 msgstr "Değer Düşüklüğü Hesabı"

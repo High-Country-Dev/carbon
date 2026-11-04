@@ -6970,6 +6970,9 @@ msgstr "अनुकूलित करें"
 msgid "Customize the layout of your PDF documents — reorder sections, hide what you don't need, and add your own blocks."
 msgstr "अपने PDF दस्तावेज़ों के लेआउट को कस्टमाइज़ करें — अनुभागों को पुनः व्यवस्थित करें, जो आपको आवश्यकता नहीं है उसे छिपाएं, और अपने स्वयं के ब्लॉक जोड़ें।"
 
+msgid "Cut & Prep"
+msgstr ""
+
 msgid "Cut over to {BRAND_NAME} and freeze the old system"
 msgstr ""
 
@@ -6990,6 +6993,9 @@ msgstr "कटओवर चरण"
 
 msgid "Cutover support"
 msgstr "कटओवर सहायता"
+
+msgid "Cuts"
+msgstr ""
 
 msgid "Cycle billing"
 msgstr "चक्रीय बिलिंग"
@@ -8217,6 +8223,9 @@ msgstr "सीरियल नंबर नहीं दिख रहा?"
 
 msgid "Don't show this again"
 msgstr "दोबारा न दिखाएं"
+
+msgid "Don't write"
+msgstr ""
 
 msgid "done"
 msgstr "हो गया"
@@ -10476,6 +10485,9 @@ msgstr "वित्तीय वर्ष"
 msgid "Fit view"
 msgstr "व्यू फिट करें"
 
+msgid "Fittings"
+msgstr ""
+
 msgid "Fix the problems with this workflow before testing it"
 msgstr "इसे परीक्षण करने से पहले इस वर्कफ़्लो की समस्याओं को ठीक करें"
 
@@ -11217,6 +11229,9 @@ msgstr "अभी तक असाइन न किए गए घंटे"
 
 msgid "Hours per Week"
 msgstr "सप्ताह में घंटे"
+
+msgid "Hours written to the steps."
+msgstr ""
 
 msgid "Hours/100 Pieces"
 msgstr "घंटे/100 पीस"
@@ -15795,6 +15810,9 @@ msgstr "ऑपरेशन की संख्या"
 msgid "Numbering sequence"
 msgstr "संख्या अनुक्रम"
 
+msgid "O-lets"
+msgstr ""
+
 msgid "OEE Impact"
 msgstr "OEE प्रभाव"
 
@@ -16493,6 +16511,9 @@ msgstr "बिक्रय-प्रकार पट्टों में श�
 msgid "Other Income GL account for the monthly interest earned on the net investment in sales-type leases."
 msgstr "बिक्रय-प्रकार पट्टों में शुद्ध निवेश पर अर्जित मासिक ब्याज के लिए अन्य आय लेजर खाता।"
 
+msgid "Other parts"
+msgstr ""
+
 msgid "Other Type"
 msgstr "अन्य प्रकार"
 
@@ -16808,6 +16829,9 @@ msgstr "पास"
 
 msgid "Passed"
 msgstr "उत्तीर्ण"
+
+msgid "Passes"
+msgstr ""
 
 msgid "Passkey name"
 msgstr "पासकी का नाम"
@@ -17209,6 +17233,9 @@ msgstr "ज़ूम करने के लिए पिंच या स्क
 
 msgid "Pinned"
 msgstr "पिन किया गया"
+
+msgid "Pipe size"
+msgstr ""
 
 msgid "Plan"
 msgstr "योजना"
@@ -17931,6 +17958,12 @@ msgstr "लेखांकन से खींचें"
 
 msgid "Pull from Inventory"
 msgstr "इन्वेंटरी से लें"
+
+msgid "Pull parts"
+msgstr ""
+
+msgid "Pull Parts"
+msgstr ""
 
 msgid "Pull, map, and load your data"
 msgstr "अपना डेटा खींचें, मैप करें, और लोड करें"
@@ -21901,6 +21934,9 @@ msgstr "रसीद लाइन को विभाजित करें"
 msgid "Split shipment line"
 msgstr "शिपमेंट पंक्ति को विभाजित करें"
 
+msgid "Spool Calculator"
+msgstr ""
+
 msgid "SSO/SAML"
 msgstr "SSO/SAML"
 
@@ -22775,6 +22811,9 @@ msgstr "तालिका"
 
 msgid "Table actions"
 msgstr "तालिका क्रियाएं"
+
+msgid "Tack & Weld"
+msgstr ""
 
 msgid "Tags"
 msgstr "टैग"
@@ -25967,6 +26006,9 @@ msgstr "मान ऐतिहासिक मात्राओं पर आ�
 msgid "Values in this run have been summarised. Full detail is kept for 7 days."
 msgstr "इस रन में मान सारांशित किए गए हैं। पूर्ण विस्तार 7 दिनों के लिए रखा जाता है।"
 
+msgid "Valves"
+msgstr ""
+
 msgid "Variable lease cost"
 msgstr "परिवर्तनशील पट्टा लागत"
 
@@ -26505,6 +26547,9 @@ msgstr ""
 
 msgid "Welcome, {companyName}"
 msgstr "स्वागत है, {companyName}"
+
+msgid "Welds"
+msgstr ""
 
 msgid "What a backup contains"
 msgstr "बैकअप में क्या शामिल है"
@@ -27081,8 +27126,14 @@ msgstr "लिखें"
 msgid "Write a note…"
 msgstr "एक नोट लिखें…"
 
+msgid "Write hours to steps"
+msgstr ""
+
 msgid "Write missing journals"
 msgstr "लापता जर्नल लिखें"
+
+msgid "Write to step"
+msgstr ""
 
 msgid "Write-Down Account"
 msgstr "अवमूल्यन खाता"
