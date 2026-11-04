@@ -184,6 +184,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
     if (["Ordered", "Partial"].includes(q.status)) r.quotesWon += 1;
   }
 
+  const sorted = [...rows.values()].sort((a, b) => b.invoiced - a.invoiced);
+  // Paged (25 customers): job margins are worked out only for the customers on this page; the CSV takes them all.
+  const isCsv = url.searchParams.get("format") === "csv";
+  const PAGE_SIZE = 25;
+  const page = Math.max(1, Number(url.searchParams.get("page") || 1));
+  const pages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
+  const list = isCsv
+    ? sorted
+    : sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const pageCustomers = new Set(list.map((r) => r.id));
   if (canSeeCosts) {
     const jobs = await all((a, b) =>
       client
@@ -196,7 +206,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
     );
     const inRange = (jobs as any[]).filter((j) => {
       const d = (j.completedDate ?? j.dueDate ?? "").slice(0, 10);
-      return j.customerId && d >= from && d <= to;
+      return (
+        j.customerId && pageCustomers.has(j.customerId) && d >= from && d <= to
+      );
     });
     const costs = await getJobCosts(
       client,
@@ -214,7 +226,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
     }
   }
 
-  const list = [...rows.values()].sort((a, b) => b.invoiced - a.invoiced);
   if (url.searchParams.get("format") === "csv") {
     const esc = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
     const head = [
@@ -272,19 +283,40 @@ export async function loader({ request }: LoaderFunctionArgs) {
       }
     );
   }
-  return { rows: list, from, to };
+  const sum = (k: "invoiced" | "paid" | "open" | "overdue") =>
+    sorted.reduce((a, r) => a + r[k], 0);
+  const totals = {
+    invoiced: sum("invoiced"),
+    paid: sum("paid"),
+    open: sum("open"),
+    overdue: sum("overdue")
+  };
+  return {
+    rows: list,
+    from,
+    to,
+    page,
+    pages,
+    customers: sorted.length,
+    totals
+  };
 }
 
 export default function SalesByCustomerRoute() {
-  const { rows, from, to } = useLoaderData<typeof loader>();
+  const { rows, from, to, page, pages, customers, totals } =
+    useLoaderData<typeof loader>();
   const { t } = useLingui();
   const money = useCurrencyFormatter();
   const pct = usePercentFormatter();
   const canSeeCosts = usePermissions().can("view", "resources");
   const [params] = useSearchParams();
-  const csvHref = `?${new URLSearchParams([...params.entries(), ["format", "csv"]]).toString()}`;
-  const sum = (k: "invoiced" | "paid" | "open" | "overdue") =>
-    rows.reduce((a, r) => a + r[k], 0);
+  const csvHref = `?${new URLSearchParams([...[...params.entries()].filter(([k]) => k !== "page"), ["format", "csv"]]).toString()}`;
+  const sum = (k: "invoiced" | "paid" | "open" | "overdue") => totals[k];
+  const pageHref = (p: number) => {
+    const q = new URLSearchParams(params);
+    q.set("page", String(p));
+    return `?${q.toString()}`;
+  };
   return (
     <VStack spacing={4} className="p-4 w-full h-full overflow-y-auto">
       <HStack className="w-full justify-between">
@@ -424,6 +456,23 @@ export default function SalesByCustomerRoute() {
           })}
         </Tbody>
       </Table>
+      <HStack spacing={4} className="text-sm">
+        {page > 1 && (
+          <Link className="underline" to={pageHref(page - 1)}>
+            <Trans>Previous</Trans>
+          </Link>
+        )}
+        <span>
+          <Trans>
+            Page {page} of {pages} ({customers} customers, most invoiced first)
+          </Trans>
+        </span>
+        {page < pages && (
+          <Link className="underline" to={pageHref(page + 1)}>
+            <Trans>Next</Trans>
+          </Link>
+        )}
+      </HStack>
       <p className="text-xs text-muted-foreground">{t`Paid = invoiced minus what's still owed on those invoices.`}</p>
     </VStack>
   );

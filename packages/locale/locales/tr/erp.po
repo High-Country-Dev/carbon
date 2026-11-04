@@ -652,6 +652,9 @@ msgstr "{hidden, plural, one {Ve # daha fazla kayıt.} other {Ve # daha fazla ka
 msgid "{hiddenCount} more: {hiddenNames}"
 msgstr "{hiddenCount} daha: {hiddenNames}"
 
+msgid "{hiddenEmpty} jobs with no cost hidden on this page."
+msgstr ""
+
 msgid "{inserted, plural, one {# part created} other {# parts created}}"
 msgstr ""
 
@@ -11666,6 +11669,9 @@ msgstr "Fazla parçaları sevkiyata dahil et"
 msgid "Include Inactive"
 msgstr "Pasifleri Dahil Et"
 
+msgid "Include jobs with no cost"
+msgstr ""
+
 msgid "Included"
 msgstr "Dahil"
 
@@ -16698,6 +16704,18 @@ msgstr "Miktarları para biriminin ondalık basamaklarına göre doldur, böylec
 msgid "Page"
 msgstr "Sayfa"
 
+msgid "Page {page} of {pages}"
+msgstr ""
+
+msgid "Page {page} of {pages} ({customers} customers, most invoiced first)"
+msgstr ""
+
+msgid "Page {page} of {pages} ({jobCount} jobs, newest first; jobs with no material are left out); the total is for this page."
+msgstr ""
+
+msgid "Page {page} of {pages} ({totalJobs} jobs, newest due first); totals are for this page."
+msgstr ""
+
 msgid "Page {pdfViewPage} of {documentPageCount}"
 msgstr "Sayfa {pdfViewPage} / {documentPageCount}"
 
@@ -21623,9 +21641,6 @@ msgstr "İlk 500 satır gösteriliyor"
 
 msgid "Showing the newest 200 journals"
 msgstr "En yeni 200 muhasebe fişi gösteriliyor"
-
-msgid "Showing the newest 400; search to narrow."
-msgstr ""
 
 msgid "Showing the top 1,000 groups by amount"
 msgstr "Miktar açısından ilk 1.000 grup gösteriliyor"

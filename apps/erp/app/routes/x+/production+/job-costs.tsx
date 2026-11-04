@@ -38,7 +38,8 @@ const STATUSES = [
   "Completed",
   "Closed"
 ] as const;
-const LIMIT = 400;
+const PAGE_SIZE = 50;
+const CSV_LIMIT = 2000;
 const FINISHED = ["Completed", "Closed"];
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -52,20 +53,29 @@ export async function loader({ request }: LoaderFunctionArgs) {
   // Default: finished jobs — the actual cost of an open job isn't final yet.
   const statuses = status.length ? status : ["Completed", "Closed"];
 
+  // Paged: job costs are worked out only for the jobs on this page (the CSV takes them all, up to CSV_LIMIT).
+  const isCsv = url.searchParams.get("format") === "csv";
+  const page = Math.max(1, Number(url.searchParams.get("page") || 1));
+  const showEmpty = url.searchParams.get("empty") === "1";
   let q = client
     .from("job")
     .select(
-      "id, jobId, status, dueDate, completedDate, customerId, itemId, quantity, salesOrderLineId"
+      "id, jobId, status, dueDate, completedDate, customerId, itemId, quantity, salesOrderLineId",
+      { count: "exact" }
     )
     .eq("companyId", companyId)
     .not("salesOrderLineId", "is", null)
     .in("status", statuses as any)
     .order("dueDate", { ascending: false, nullsFirst: false })
-    .limit(LIMIT);
+    .order("jobId", { ascending: true });
   if (search) q = q.ilike("jobId", `%${search}%`);
+  q = isCsv
+    ? q.range(0, CSV_LIMIT - 1)
+    : q.range((page - 1) * PAGE_SIZE, page * PAGE_SIZE - 1);
   const jobs = await q;
   if (jobs.error) throw jobs.error;
   const list = jobs.data ?? [];
+  const totalJobs = jobs.count ?? list.length;
 
   const [costs, customers, items] = await Promise.all([
     getJobCosts(
@@ -84,7 +94,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   ]);
   const customerName = new Map(customers.map((c) => [c.id, c.name]));
   const itemId = new Map(items.map((i) => [i.id, i.readableId]));
-  const rows = list.map((j) => ({
+  const allRows = list.map((j) => ({
     id: j.id,
     jobId: j.jobId,
     status: j.status,
@@ -93,8 +103,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
     part: (j.itemId && itemId.get(j.itemId)) || "",
     cost: costs.get(j.id)!
   }));
+  // Jobs with no cost at all (resale, surcharges, lines billed without a job's work) are hidden unless asked for.
+  const hasCost = (r: (typeof allRows)[number]) =>
+    r.cost.total.estimated !== 0 || r.cost.total.actual !== 0;
+  const rows = showEmpty || isCsv ? allRows : allRows.filter(hasCost);
+  const hiddenEmpty = allRows.length - rows.length;
 
-  if (url.searchParams.get("format") === "csv") {
+  if (isCsv) {
     const esc = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
     const head = [
       "Job",
@@ -163,17 +178,41 @@ export async function loader({ request }: LoaderFunctionArgs) {
       },
       { estimated: 0, actual: 0, revenue: 0 }
     );
-  return { rows, totals, statuses, search, limited: list.length === LIMIT };
+  return {
+    rows,
+    totals,
+    statuses,
+    search,
+    page,
+    pages: Math.max(1, Math.ceil(totalJobs / PAGE_SIZE)),
+    totalJobs,
+    hiddenEmpty,
+    showEmpty
+  };
 }
 
 export default function JobCostsRoute() {
-  const { rows, totals, statuses, search, limited } =
-    useLoaderData<typeof loader>();
+  const {
+    rows,
+    totals,
+    statuses,
+    search,
+    page,
+    pages,
+    totalJobs,
+    hiddenEmpty,
+    showEmpty
+  } = useLoaderData<typeof loader>();
   const { t } = useLingui();
   const money = useCurrencyFormatter();
   const pct = usePercentFormatter();
   const [params] = useSearchParams();
-  const csvHref = `?${new URLSearchParams([...params.entries(), ["format", "csv"]]).toString()}`;
+  const csvHref = `?${new URLSearchParams([...[...params.entries()].filter(([k]) => k !== "page"), ["format", "csv"]]).toString()}`;
+  const pageHref = (p: number) => {
+    const q = new URLSearchParams(params);
+    q.set("page", String(p));
+    return `?${q.toString()}`;
+  };
   return (
     <VStack spacing={4} className="p-4 w-full h-full overflow-y-auto">
       <HStack className="w-full justify-between">
@@ -202,6 +241,15 @@ export default function JobCostsRoute() {
             {s}
           </label>
         ))}
+        <label className="flex items-center gap-1">
+          <input
+            type="checkbox"
+            name="empty"
+            value="1"
+            defaultChecked={showEmpty}
+          />
+          <Trans>Include jobs with no cost</Trans>
+        </label>
         <button type="submit" className="border rounded px-3 py-1">
           <Trans>Show</Trans>
         </button>
@@ -212,7 +260,16 @@ export default function JobCostsRoute() {
           outside processing; actual uses the hours clocked and the material
           issued. Margin = sale price − cost.
         </Trans>{" "}
-        {limited && <Trans>Showing the newest 400; search to narrow.</Trans>}
+        <Trans>
+          Page {page} of {pages} ({totalJobs} jobs, newest due first); totals
+          are for this page.
+        </Trans>
+        {hiddenEmpty > 0 && (
+          <>
+            {" "}
+            <Trans>{hiddenEmpty} jobs with no cost hidden on this page.</Trans>
+          </>
+        )}
       </p>
       <HStack spacing={6} className="text-sm">
         <span>
@@ -315,6 +372,23 @@ export default function JobCostsRoute() {
           })}
         </Tbody>
       </Table>
+      <HStack spacing={4} className="text-sm">
+        {page > 1 && (
+          <Link className="underline" to={pageHref(page - 1)}>
+            <Trans>Previous</Trans>
+          </Link>
+        )}
+        <span>
+          <Trans>
+            Page {page} of {pages}
+          </Trans>
+        </span>
+        {page < pages && (
+          <Link className="underline" to={pageHref(page + 1)}>
+            <Trans>Next</Trans>
+          </Link>
+        )}
+      </HStack>
     </VStack>
   );
 }

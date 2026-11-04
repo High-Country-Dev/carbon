@@ -652,6 +652,9 @@ msgstr "{hidden, plural, one {他に # 件のレコード} other {他に # 件�
 msgid "{hiddenCount} more: {hiddenNames}"
 msgstr "{hiddenCount} 件さらに表示: {hiddenNames}"
 
+msgid "{hiddenEmpty} jobs with no cost hidden on this page."
+msgstr ""
+
 msgid "{inserted, plural, one {# part created} other {# parts created}}"
 msgstr ""
 
@@ -11666,6 +11669,9 @@ msgstr "出荷に追加部品を含める"
 msgid "Include Inactive"
 msgstr "無効を含める"
 
+msgid "Include jobs with no cost"
+msgstr ""
+
 msgid "Included"
 msgstr "含まれています"
 
@@ -16698,6 +16704,18 @@ msgstr "金額をその通貨の小数点以下の桁に合わせます。例え
 msgid "Page"
 msgstr "ページ"
 
+msgid "Page {page} of {pages}"
+msgstr ""
+
+msgid "Page {page} of {pages} ({customers} customers, most invoiced first)"
+msgstr ""
+
+msgid "Page {page} of {pages} ({jobCount} jobs, newest first; jobs with no material are left out); the total is for this page."
+msgstr ""
+
+msgid "Page {page} of {pages} ({totalJobs} jobs, newest due first); totals are for this page."
+msgstr ""
+
 msgid "Page {pdfViewPage} of {documentPageCount}"
 msgstr "ページ {pdfViewPage} / {documentPageCount}"
 
@@ -21623,9 +21641,6 @@ msgstr "最初の 500 行を表示中"
 
 msgid "Showing the newest 200 journals"
 msgstr "最新200件の仕訳を表示中"
-
-msgid "Showing the newest 400; search to narrow."
-msgstr ""
 
 msgid "Showing the top 1,000 groups by amount"
 msgstr "金額別上位 1,000 グループを表示中"

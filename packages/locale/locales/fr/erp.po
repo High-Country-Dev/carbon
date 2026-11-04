@@ -652,6 +652,9 @@ msgstr "{hidden, plural, one {Et # enregistrement de plus.} other {Et # enregist
 msgid "{hiddenCount} more: {hiddenNames}"
 msgstr "{hiddenCount} autres : {hiddenNames}"
 
+msgid "{hiddenEmpty} jobs with no cost hidden on this page."
+msgstr ""
+
 msgid "{inserted, plural, one {# part created} other {# parts created}}"
 msgstr ""
 
@@ -11666,6 +11669,9 @@ msgstr "Inclure les pièces supplémentaires dans l'expédition"
 msgid "Include Inactive"
 msgstr "Inclure les inactifs"
 
+msgid "Include jobs with no cost"
+msgstr ""
+
 msgid "Included"
 msgstr "Inclus"
 
@@ -16698,6 +16704,18 @@ msgstr "Complétez les montants selon les décimales de leur devise, de sorte qu
 msgid "Page"
 msgstr "Page"
 
+msgid "Page {page} of {pages}"
+msgstr ""
+
+msgid "Page {page} of {pages} ({customers} customers, most invoiced first)"
+msgstr ""
+
+msgid "Page {page} of {pages} ({jobCount} jobs, newest first; jobs with no material are left out); the total is for this page."
+msgstr ""
+
+msgid "Page {page} of {pages} ({totalJobs} jobs, newest due first); totals are for this page."
+msgstr ""
+
 msgid "Page {pdfViewPage} of {documentPageCount}"
 msgstr "Page {pdfViewPage} of {documentPageCount}"
 
@@ -21623,9 +21641,6 @@ msgstr "Affichage des 500 premières lignes"
 
 msgid "Showing the newest 200 journals"
 msgstr "Affichage des 200 dernières écritures"
-
-msgid "Showing the newest 400; search to narrow."
-msgstr ""
 
 msgid "Showing the top 1,000 groups by amount"
 msgstr "Affichage des 1 000 meilleurs groupes par montant"

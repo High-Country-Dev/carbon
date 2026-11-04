@@ -652,6 +652,9 @@ msgstr "{hidden, plural, one {और # अधिक रिकॉर्ड।} ot
 msgid "{hiddenCount} more: {hiddenNames}"
 msgstr "और {hiddenCount}: {hiddenNames}"
 
+msgid "{hiddenEmpty} jobs with no cost hidden on this page."
+msgstr ""
+
 msgid "{inserted, plural, one {# part created} other {# parts created}}"
 msgstr ""
 
@@ -11666,6 +11669,9 @@ msgstr "शिपमेंट में अतिरिक्त पार्ट
 msgid "Include Inactive"
 msgstr "निष्क्रिय शामिल करें"
 
+msgid "Include jobs with no cost"
+msgstr ""
+
 msgid "Included"
 msgstr "शामिल"
 
@@ -16698,6 +16704,18 @@ msgstr "राशियों को उनकी मुद्रा के द�
 msgid "Page"
 msgstr "पृष्ठ"
 
+msgid "Page {page} of {pages}"
+msgstr ""
+
+msgid "Page {page} of {pages} ({customers} customers, most invoiced first)"
+msgstr ""
+
+msgid "Page {page} of {pages} ({jobCount} jobs, newest first; jobs with no material are left out); the total is for this page."
+msgstr ""
+
+msgid "Page {page} of {pages} ({totalJobs} jobs, newest due first); totals are for this page."
+msgstr ""
+
 msgid "Page {pdfViewPage} of {documentPageCount}"
 msgstr "पृष्ठ {pdfViewPage} का {documentPageCount}"
 
@@ -21623,9 +21641,6 @@ msgstr "पहली 500 लाइनें दिखा रहे हैं"
 
 msgid "Showing the newest 200 journals"
 msgstr "नवीनतम 200 जर्नल दिखाए जा रहे हैं"
-
-msgid "Showing the newest 400; search to narrow."
-msgstr ""
 
 msgid "Showing the top 1,000 groups by amount"
 msgstr "राशि द्वारा शीर्ष 1,000 समूह दिखा रहे हैं"

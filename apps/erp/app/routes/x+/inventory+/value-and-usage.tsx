@@ -81,11 +81,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
   if (view === "value") {
     const [ledger, costs, groups] = await Promise.all([
       all((a, b) =>
+        // Carbon's own on-hand table (one row per item and location), not a scan of the whole ledger
         client
-          .from("itemLedger")
-          .select("itemId, quantity")
+          .from("itemStockQuantities")
+          .select("itemId, quantityOnHand")
           .eq("companyId", companyId)
-          .order("id")
+          .order("itemId")
           .range(a, b)
       ),
       all((a, b) =>
@@ -168,7 +169,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
         .map(([name, g]) => ({ name, ...g }))
         .sort((a, b) => b.value - a.value),
       parts: rows.slice(0, 200),
-      jobs: [] as any[]
+      jobs: [] as any[],
+      page: 1,
+      pages: 1,
+      jobCount: 0
     };
   }
 
@@ -180,10 +184,25 @@ export async function loader({ request }: LoaderFunctionArgs) {
       .eq("companyId", companyId)
       .range(a, b)
   );
-  const inRange = (jobs as any[]).filter((j) => {
-    const d = String(j.completedDate ?? j.dueDate ?? "").slice(0, 10);
-    return d >= from && d <= to;
-  });
+  // Paged: 50 jobs per page, newest first; the ledger is read only for this page's jobs (the CSV takes them all).
+  const isCsv = format === "csv";
+  const PAGE_SIZE = 50;
+  const page = Math.max(1, Number(url.searchParams.get("page") || 1));
+  const allInRange = (jobs as any[])
+    .filter((j) => {
+      const d = String(j.completedDate ?? j.dueDate ?? "").slice(0, 10);
+      return d >= from && d <= to;
+    })
+    .sort(
+      (a, b) =>
+        String(b.completedDate ?? b.dueDate ?? "").localeCompare(
+          String(a.completedDate ?? a.dueDate ?? "")
+        ) || String(a.jobId).localeCompare(String(b.jobId))
+    );
+  const pages = Math.max(1, Math.ceil(allInRange.length / PAGE_SIZE));
+  const inRange = isCsv
+    ? allInRange
+    : allInRange.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   const ids = inRange.map((j) => j.id);
   const lines: any[] = [];
   for (let i = 0; i < ids.length; i += 50) {
@@ -283,17 +302,25 @@ export async function loader({ request }: LoaderFunctionArgs) {
     total: jobRows.reduce((a, r) => a + r.cost, 0),
     groups: [],
     parts: [],
-    jobs: jobRows
+    jobs: jobRows,
+    page,
+    pages,
+    jobCount: allInRange.length
   };
 }
 
 export default function ValueAndUsageRoute() {
-  const { view, from, to, total, groups, parts, jobs } =
+  const { view, from, to, total, groups, parts, jobs, page, pages, jobCount } =
     useLoaderData<typeof loader>();
   const { t } = useLingui();
   const money = useCurrencyFormatter();
   const [params] = useSearchParams();
-  const csvHref = `?${new URLSearchParams([...params.entries(), ["view", view], ["format", "csv"]]).toString()}`;
+  const csvHref = `?${new URLSearchParams([...[...params.entries()].filter(([k]) => k !== "page" && k !== "view"), ["view", view], ["format", "csv"]]).toString()}`;
+  const pageHref = (p: number) => {
+    const q = new URLSearchParams(params);
+    q.set("page", String(p));
+    return `?${q.toString()}`;
+  };
   return (
     <VStack spacing={4} className="p-4 w-full h-full overflow-y-auto">
       <HStack className="w-full justify-between">
@@ -473,6 +500,26 @@ export default function ValueAndUsageRoute() {
             ))}
           </Tbody>
         </Table>
+      )}
+      {view === "usage" && (
+        <HStack spacing={4} className="text-sm">
+          {page > 1 && (
+            <Link className="underline" to={pageHref(page - 1)}>
+              <Trans>Previous</Trans>
+            </Link>
+          )}
+          <span>
+            <Trans>
+              Page {page} of {pages} ({jobCount} jobs, newest first; jobs with
+              no material are left out); the total is for this page.
+            </Trans>
+          </span>
+          {page < pages && (
+            <Link className="underline" to={pageHref(page + 1)}>
+              <Trans>Next</Trans>
+            </Link>
+          )}
+        </HStack>
       )}
     </VStack>
   );

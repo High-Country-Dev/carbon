@@ -652,6 +652,9 @@ msgstr "{hidden, plural, one {还有 # 条记录。} other {还有 # 条记录�
 msgid "{hiddenCount} more: {hiddenNames}"
 msgstr "还有{hiddenCount}个：{hiddenNames}"
 
+msgid "{hiddenEmpty} jobs with no cost hidden on this page."
+msgstr ""
+
 msgid "{inserted, plural, one {# part created} other {# parts created}}"
 msgstr ""
 
@@ -11666,6 +11669,9 @@ msgstr "在发货中包含额外零件"
 msgid "Include Inactive"
 msgstr "包括已停用"
 
+msgid "Include jobs with no cost"
+msgstr ""
+
 msgid "Included"
 msgstr "已包含"
 
@@ -16698,6 +16704,18 @@ msgstr "将金额填充到其货币的小数位数，使300显示为300.00，数
 msgid "Page"
 msgstr "页面"
 
+msgid "Page {page} of {pages}"
+msgstr ""
+
+msgid "Page {page} of {pages} ({customers} customers, most invoiced first)"
+msgstr ""
+
+msgid "Page {page} of {pages} ({jobCount} jobs, newest first; jobs with no material are left out); the total is for this page."
+msgstr ""
+
+msgid "Page {page} of {pages} ({totalJobs} jobs, newest due first); totals are for this page."
+msgstr ""
+
 msgid "Page {pdfViewPage} of {documentPageCount}"
 msgstr "第 {pdfViewPage} 页，共 {documentPageCount} 页"
 
@@ -21623,9 +21641,6 @@ msgstr "显示前500行"
 
 msgid "Showing the newest 200 journals"
 msgstr "显示最新的 200 个凭证"
-
-msgid "Showing the newest 400; search to narrow."
-msgstr ""
 
 msgid "Showing the top 1,000 groups by amount"
 msgstr "按金额显示前1,000个分组"

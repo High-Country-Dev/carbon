@@ -652,6 +652,9 @@ msgstr "{hidden, plural, one {그리고 # 개 이상의 기록.} other {그리�
 msgid "{hiddenCount} more: {hiddenNames}"
 msgstr "{hiddenCount}개 추가: {hiddenNames}"
 
+msgid "{hiddenEmpty} jobs with no cost hidden on this page."
+msgstr ""
+
 msgid "{inserted, plural, one {# part created} other {# parts created}}"
 msgstr ""
 
@@ -11666,6 +11669,9 @@ msgstr "출하에 여분 부품 포함"
 msgid "Include Inactive"
 msgstr "비활성 포함"
 
+msgid "Include jobs with no cost"
+msgstr ""
+
 msgid "Included"
 msgstr "포함됨"
 
@@ -16698,6 +16704,18 @@ msgstr "금액을 통화의 소수 자릿수만큼 패딩하면 300이 300.00으
 msgid "Page"
 msgstr "페이지"
 
+msgid "Page {page} of {pages}"
+msgstr ""
+
+msgid "Page {page} of {pages} ({customers} customers, most invoiced first)"
+msgstr ""
+
+msgid "Page {page} of {pages} ({jobCount} jobs, newest first; jobs with no material are left out); the total is for this page."
+msgstr ""
+
+msgid "Page {page} of {pages} ({totalJobs} jobs, newest due first); totals are for this page."
+msgstr ""
+
 msgid "Page {pdfViewPage} of {documentPageCount}"
 msgstr "{documentPageCount}페이지 중 {pdfViewPage}페이지"
 
@@ -21623,9 +21641,6 @@ msgstr "처음 500줄을 표시하고 있습니다"
 
 msgid "Showing the newest 200 journals"
 msgstr "최신 200개 전표 표시 중"
-
-msgid "Showing the newest 400; search to narrow."
-msgstr ""
 
 msgid "Showing the top 1,000 groups by amount"
 msgstr "금액별 상위 1,000개 그룹을 표시하고 있습니다"

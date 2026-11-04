@@ -652,6 +652,9 @@ msgstr "{hidden, plural, one {And # more record.} other {And # more records.}}"
 msgid "{hiddenCount} more: {hiddenNames}"
 msgstr "{hiddenCount} more: {hiddenNames}"
 
+msgid "{hiddenEmpty} jobs with no cost hidden on this page."
+msgstr "{hiddenEmpty} jobs with no cost hidden on this page."
+
 msgid "{inserted, plural, one {# part created} other {# parts created}}"
 msgstr "{inserted, plural, one {# part created} other {# parts created}}"
 
@@ -11666,6 +11669,9 @@ msgstr "Include extra parts in shipment"
 msgid "Include Inactive"
 msgstr "Include Inactive"
 
+msgid "Include jobs with no cost"
+msgstr "Include jobs with no cost"
+
 msgid "Included"
 msgstr "Included"
 
@@ -16698,6 +16704,18 @@ msgstr "Pad amounts to their currency's decimal places, so 300 appears as 300.00
 msgid "Page"
 msgstr "Page"
 
+msgid "Page {page} of {pages}"
+msgstr "Page {page} of {pages}"
+
+msgid "Page {page} of {pages} ({customers} customers, most invoiced first)"
+msgstr "Page {page} of {pages} ({customers} customers, most invoiced first)"
+
+msgid "Page {page} of {pages} ({jobCount} jobs, newest first; jobs with no material are left out); the total is for this page."
+msgstr "Page {page} of {pages} ({jobCount} jobs, newest first; jobs with no material are left out); the total is for this page."
+
+msgid "Page {page} of {pages} ({totalJobs} jobs, newest due first); totals are for this page."
+msgstr "Page {page} of {pages} ({totalJobs} jobs, newest due first); totals are for this page."
+
 msgid "Page {pdfViewPage} of {documentPageCount}"
 msgstr "Page {pdfViewPage} of {documentPageCount}"
 
@@ -21623,9 +21641,6 @@ msgstr "Showing the first 500 lines"
 
 msgid "Showing the newest 200 journals"
 msgstr "Showing the newest 200 journals"
-
-msgid "Showing the newest 400; search to narrow."
-msgstr "Showing the newest 400; search to narrow."
 
 msgid "Showing the top 1,000 groups by amount"
 msgstr "Showing the top 1,000 groups by amount"

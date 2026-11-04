@@ -652,6 +652,9 @@ msgstr "{hidden, plural, one {Еще # запись.} other {Еще # запис
 msgid "{hiddenCount} more: {hiddenNames}"
 msgstr "{hiddenCount} еще: {hiddenNames}"
 
+msgid "{hiddenEmpty} jobs with no cost hidden on this page."
+msgstr ""
+
 msgid "{inserted, plural, one {# part created} other {# parts created}}"
 msgstr ""
 
@@ -11666,6 +11669,9 @@ msgstr "Включить дополнительные детали в отгру
 msgid "Include Inactive"
 msgstr "Включить неактивные"
 
+msgid "Include jobs with no cost"
+msgstr ""
+
 msgid "Included"
 msgstr "Включено"
 
@@ -16698,6 +16704,18 @@ msgstr "Дополняйте суммы нулями в соответствии
 msgid "Page"
 msgstr "Страница"
 
+msgid "Page {page} of {pages}"
+msgstr ""
+
+msgid "Page {page} of {pages} ({customers} customers, most invoiced first)"
+msgstr ""
+
+msgid "Page {page} of {pages} ({jobCount} jobs, newest first; jobs with no material are left out); the total is for this page."
+msgstr ""
+
+msgid "Page {page} of {pages} ({totalJobs} jobs, newest due first); totals are for this page."
+msgstr ""
+
 msgid "Page {pdfViewPage} of {documentPageCount}"
 msgstr "Страница {pdfViewPage} из {documentPageCount}"
 
@@ -21623,9 +21641,6 @@ msgstr "Показано первые 500 строк"
 
 msgid "Showing the newest 200 journals"
 msgstr "Отображение 200 новейших операций"
-
-msgid "Showing the newest 400; search to narrow."
-msgstr ""
 
 msgid "Showing the top 1,000 groups by amount"
 msgstr "Показано топ 1000 групп по сумме"
