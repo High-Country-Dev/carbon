@@ -14,7 +14,9 @@
 //   overhead  setup + labor + machine hours × overheadRate
 //   outside   estimated = max(operationUnitCost × quantity, operationMinimumCost);
 //             actual    = Σ PO lines on the step (purchaseQuantity × unitPrice)
-//   revenue   the job's sales order line: unitPrice × job quantity (none for stock / sub-jobs)
+//   revenue   the job's sales order line: unitPrice × job quantity (none for stock / sub-jobs). A $0 line (JobBOSS
+//             lines like TECHNICIAN or supplies, billed on another line) counts as no sale price: revenue null,
+//             noPrice true, and the job is left out of margins.
 //
 // Estimated hours come from makeDurations (the same unit rules as the job page); actual hours from the step's
 // production events (an open timer counts up to now).
@@ -34,6 +36,7 @@ export type JobCost = {
   total: CostLine;
   hours: CostLine;
   revenue: number | null;
+  noPrice: boolean; // on a sales order, but the line's price is $0
   margin: CostLine | null; // revenue − cost
 };
 
@@ -219,6 +222,11 @@ export async function getJobCosts(
   }
 
   for (const j of jobs) {
+    const revenue =
+      j.salesOrderLineId && soPrice.has(j.salesOrderLineId)
+        ? soPrice.get(j.salesOrderLineId)! *
+          Number(j.productionQuantity ?? j.quantity ?? 0)
+        : 0;
     result.set(j.id, {
       jobId: j.id,
       material: line(),
@@ -228,11 +236,8 @@ export async function getJobCosts(
       outside: line(),
       total: line(),
       hours: line(),
-      revenue:
-        j.salesOrderLineId && soPrice.has(j.salesOrderLineId)
-          ? soPrice.get(j.salesOrderLineId)! *
-            Number(j.productionQuantity ?? j.quantity ?? 0)
-          : null,
+      revenue: revenue > 0 ? revenue : null,
+      noPrice: !!j.salesOrderLineId && !(revenue > 0),
       margin: null
     });
   }

@@ -106,9 +106,11 @@ export default function JobCostSummary({ cost }: { cost: JobCost }) {
                 <Trans>Sale price</Trans>
               </Td>
               <Td className="text-right" colSpan={3}>
-                {cost.revenue === null
-                  ? t`Not on a sales order`
-                  : money.format(cost.revenue)}
+                {cost.revenue !== null
+                  ? money.format(cost.revenue)
+                  : cost.noPrice
+                    ? t`$0 on the sales order line, so no margin`
+                    : t`Not on a sales order`}
               </Td>
             </Tr>
             {cost.margin && (

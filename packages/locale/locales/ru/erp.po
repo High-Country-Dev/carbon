@@ -226,6 +226,10 @@ msgstr "{0} записей к проведению · {amount}"
 msgid "{0} entries to recognize · {amount}"
 msgstr "{0} записей к признанию · {amount}"
 
+#. placeholder {0}: totals.noPrice
+msgid "{0} finished jobs have a $0 sale price and are left out of the margin."
+msgstr ""
+
 #. placeholder {0}: nameOf(lineId)
 msgid "{0} has <0/> left to invoice."
 msgstr "{0} остаток счета-фактуры: <0/>."
@@ -903,6 +907,12 @@ msgstr "≈ {0}"
 #. placeholder {0}: formatDate(moveDate, { dateStyle: "long" }, locale)
 msgid "🚨 Heads up: on {0} your account will be moved to erp.try.carbon.ms"
 msgstr "🚨 Внимание: {0} ваша учётная запись будет перенесена на erp.try.carbon.ms"
+
+msgid "$0 on order"
+msgstr ""
+
+msgid "$0 on the sales order line, so no margin"
+msgstr ""
 
 msgid "0 operations"
 msgstr "0 операций"

@@ -167,16 +167,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 
   // Totals and actual margin count finished jobs only; open jobs show their estimate and cost so far.
+  // Margin counts only jobs with a sale price: a $0 order line has no price to measure against.
   const totals = rows
     .filter((r) => FINISHED.includes(r.status as string))
     .reduce(
       (a, r) => {
         a.estimated += r.cost.total.estimated;
         a.actual += r.cost.total.actual;
-        a.revenue += r.cost.revenue ?? 0;
+        if (r.cost.revenue !== null) {
+          a.revenue += r.cost.revenue;
+          a.pricedActual += r.cost.total.actual;
+        } else if (r.cost.noPrice) a.noPrice += 1;
         return a;
       },
-      { estimated: 0, actual: 0, revenue: 0 }
+      { estimated: 0, actual: 0, revenue: 0, pricedActual: 0, noPrice: 0 }
     );
   return {
     rows,
@@ -283,10 +287,18 @@ export default function JobCostsRoute() {
         </span>
         <span>
           <Trans>Margin</Trans>:{" "}
-          <b>{money.format(totals.revenue - totals.actual)}</b>
+          <b>{money.format(totals.revenue - totals.pricedActual)}</b>
           {totals.revenue > 0 &&
-            ` (${pct.format((totals.revenue - totals.actual) / totals.revenue)})`}
+            ` (${pct.format((totals.revenue - totals.pricedActual) / totals.revenue)})`}
         </span>
+        {totals.noPrice > 0 && (
+          <span className="text-muted-foreground">
+            <Trans>
+              {totals.noPrice} finished jobs have a $0 sale price and are left
+              out of the margin.
+            </Trans>
+          </span>
+        )}
       </HStack>
       <Table>
         <Thead>
@@ -348,7 +360,15 @@ export default function JobCostsRoute() {
                   {money.format(c.total.actual)}
                 </Td>
                 <Td className="text-right">
-                  {c.revenue === null ? "" : money.format(c.revenue)}
+                  {c.revenue !== null ? (
+                    money.format(c.revenue)
+                  ) : c.noPrice ? (
+                    <span className="text-muted-foreground">
+                      <Trans>$0 on order</Trans>
+                    </span>
+                  ) : (
+                    ""
+                  )}
                 </Td>
                 <Td className="text-right">
                   {c.margin

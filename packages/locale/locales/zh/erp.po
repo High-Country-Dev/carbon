@@ -226,6 +226,10 @@ msgstr "{0} 张凭证待过账 · {amount}"
 msgid "{0} entries to recognize · {amount}"
 msgstr "{0} 项待确认分录 · {amount}"
 
+#. placeholder {0}: totals.noPrice
+msgid "{0} finished jobs have a $0 sale price and are left out of the margin."
+msgstr ""
+
 #. placeholder {0}: nameOf(lineId)
 msgid "{0} has <0/> left to invoice."
 msgstr "{0} 还有 <0/> 待开票"
@@ -903,6 +907,12 @@ msgstr "≈ {0}"
 #. placeholder {0}: formatDate(moveDate, { dateStyle: "long" }, locale)
 msgid "🚨 Heads up: on {0} your account will be moved to erp.try.carbon.ms"
 msgstr "🚨 提醒：您的账户将于 {0} 迁移至 erp.try.carbon.ms"
+
+msgid "$0 on order"
+msgstr ""
+
+msgid "$0 on the sales order line, so no margin"
+msgstr ""
 
 msgid "0 operations"
 msgstr "0个工序"

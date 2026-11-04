@@ -226,6 +226,10 @@ msgstr "{0}개 항목을 전기할 · {amount}"
 msgid "{0} entries to recognize · {amount}"
 msgstr "{0}개의 인식할 항목 · {amount}"
 
+#. placeholder {0}: totals.noPrice
+msgid "{0} finished jobs have a $0 sale price and are left out of the margin."
+msgstr ""
+
 #. placeholder {0}: nameOf(lineId)
 msgid "{0} has <0/> left to invoice."
 msgstr "{0}은(는) 송장 발행할 <0/>이(가) 남아 있습니다."
@@ -903,6 +907,12 @@ msgstr "≈ {0}"
 #. placeholder {0}: formatDate(moveDate, { dateStyle: "long" }, locale)
 msgid "🚨 Heads up: on {0} your account will be moved to erp.try.carbon.ms"
 msgstr "🚨 안내: {0}에 계정이 erp.try.carbon.ms(으)로 이전됩니다"
+
+msgid "$0 on order"
+msgstr ""
+
+msgid "$0 on the sales order line, so no margin"
+msgstr ""
 
 msgid "0 operations"
 msgstr "0개 공정"
