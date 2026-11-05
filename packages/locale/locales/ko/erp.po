@@ -12618,6 +12618,9 @@ msgstr "마지막 실행"
 msgid "Last scheduled push {when}:"
 msgstr "마지막 예약된 푸시 {when}:"
 
+msgid "Last Sign-In"
+msgstr ""
+
 msgid "Last synced: <0/>"
 msgstr "마지막 동기화: <0/>"
 
