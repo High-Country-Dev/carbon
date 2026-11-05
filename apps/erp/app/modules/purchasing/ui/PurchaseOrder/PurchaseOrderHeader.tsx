@@ -219,17 +219,20 @@ const PurchaseOrderHeader = () => {
     status
   );
   const isFinalizable = ["Draft", "Planned"].includes(status);
-  // LAND-299: POs of $5,000 and up wait for a manager's sign-off before Finalize (assumption; Eric to confirm).
+  // POs wait for a manager's sign-off before Finalize when $5,000 or more of them
+  // is NOT for a job (stock, supplies, overhead). Lines bought for a job are left
+  // out: the job itself was already approved.
   const SIGN_OFF_FROM = 5000;
-  const poTotal = (routeData?.lines ?? []).reduce(
-    (sum, line) =>
+  const poTotal = (routeData?.lines ?? []).reduce((sum, line) => {
+    if ((line as { jobId?: string | null }).jobId) return sum;
+    return (
       sum +
       Number(
         (line as { extendedPrice?: number | null }).extendedPrice ??
           Number(line.purchaseQuantity ?? 0) * Number(line.unitPrice ?? 0)
-      ),
-    0
-  );
+      )
+    );
+  }, 0);
   const needsSignOff = poTotal >= SIGN_OFF_FROM;
   const [signedOff, setSignedOff] = useState(false);
   const isInvoiceStep = ["To Invoice", "To Receive and Invoice"].includes(
