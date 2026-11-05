@@ -15,12 +15,14 @@ import {
   TooltipTrigger,
   useDisclosure
 } from "@carbon/react";
+import { formatDateTime } from "@carbon/utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import type { ColumnDef } from "@tanstack/react-table";
 import { memo, useCallback, useMemo, useState } from "react";
 import {
   LuBan,
   LuBriefcase,
+  LuLogIn,
   LuMail,
   LuMailCheck,
   LuPencil,
@@ -52,6 +54,8 @@ type EmployeesTableProps = {
   employeeTypes: ListItem[];
   unrevokedInviteEmails: string[];
   mfaEnrolledUserIds: string[];
+  /** user id -> last sign-in (ISO) or null for never; the whole map is null when the lookup failed */
+  lastSignInByUserId?: Record<string, string | null> | null;
 };
 
 const defaultColumnVisibility = {
@@ -65,7 +69,8 @@ const EmployeesTable = memo(
     count,
     employeeTypes,
     unrevokedInviteEmails,
-    mfaEnrolledUserIds
+    mfaEnrolledUserIds,
+    lastSignInByUserId
   }: EmployeesTableProps) => {
     const { t } = useLingui();
     const navigate = useNavigate();
@@ -236,6 +241,36 @@ const EmployeesTable = memo(
             ] as ColumnDef<(typeof data)[number]>[])
           : []),
         {
+          id: "lastSignIn",
+          header: t`Last Sign-In`,
+          cell: ({ row }) => {
+            // Console operators cannot sign in.
+            if (
+              !lastSignInByUserId ||
+              row.original.email?.endsWith("@console.internal")
+            ) {
+              return null;
+            }
+            const at = lastSignInByUserId[row.original.id!];
+            return at ? (
+              <span className="text-sm">{formatDateTime(at)}</span>
+            ) : (
+              <Badge variant="secondary">{t`Never`}</Badge>
+            );
+          },
+          meta: {
+            icon: <LuLogIn />,
+            exportValue: (row: (typeof data)[number]) => {
+              const at = lastSignInByUserId?.[row.id!];
+              return at
+                ? formatDateTime(at)
+                : lastSignInByUserId
+                  ? "Never"
+                  : "";
+            }
+          }
+        },
+        {
           accessorKey: "active",
           header: t`Active`,
           cell: (item) => {
@@ -274,7 +309,7 @@ const EmployeesTable = memo(
           }
         }
       ];
-    }, [params, mfaEnrolledSet, requireMfa]);
+    }, [params, mfaEnrolledSet, requireMfa, lastSignInByUserId]);
 
     const renderActions = useCallback(
       (selectedRows: typeof data) => {

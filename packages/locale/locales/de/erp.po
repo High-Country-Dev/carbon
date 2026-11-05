@@ -12618,6 +12618,9 @@ msgstr "Letzte Ausführung"
 msgid "Last scheduled push {when}:"
 msgstr "Letzte geplante Übertragung {when}:"
 
+msgid "Last Sign-In"
+msgstr ""
+
 msgid "Last synced: <0/>"
 msgstr "Zuletzt synchronisiert: <0/>"
 

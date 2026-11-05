@@ -11,6 +11,7 @@ import { redirect } from "@carbon/utils";
 import { msg } from "@lingui/core/macro";
 import type { LoaderFunctionArgs } from "react-router";
 import { useLoaderData } from "react-router";
+import { getLastSignInByUserId } from "~/modules/users/lastSignIn.server";
 import { EmployeesTable } from "~/modules/users/ui";
 import {
   getEmployees,
@@ -41,12 +42,26 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const { limit, offset, sorts, filters } =
     getGenericQueryFilters(searchParams);
 
-  const [employees, employeeTypes, invites, mfaUsers] = await Promise.all([
-    getEmployees(client, companyId, { search, limit, offset, sorts, filters }),
-    getEmployeeTypes(client, companyId),
-    getUnrevokedInviteEmails(client, companyId),
-    getUsersWithVerifiedMfa(client, companyId)
-  ]);
+  const [employees, employeeTypes, invites, mfaUsers, lastSignIns] =
+    await Promise.all([
+      getEmployees(client, companyId, {
+        search,
+        limit,
+        offset,
+        sorts,
+        filters
+      }),
+      getEmployeeTypes(client, companyId),
+      getUnrevokedInviteEmails(client, companyId),
+      getUsersWithVerifiedMfa(client, companyId),
+      getLastSignInByUserId().catch((e) => {
+        getLogger("users").error("Failed to load last sign-in times", {
+          error: e,
+          companyId
+        });
+        return null;
+      })
+    ]);
 
   if (mfaUsers.error) {
     getLogger("users").error("Failed to load MFA status for employees", {
@@ -76,6 +91,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
     employees: employees.data ?? [],
     employeeTypes: employeeTypes.data,
     unrevokedInviteEmails: invites.data?.map((i) => i.email) ?? [],
+    // Only this page's employees, so the whole auth user list never reaches the browser.
+    // null = the lookup failed (shown as blank, not as "Never").
+    lastSignInByUserId: lastSignIns
+      ? Object.fromEntries(
+          (employees.data ?? [])
+            .filter((e) => e.id)
+            .map((e) => [e.id!, lastSignIns.get(e.id!) ?? null])
+        )
+      : null,
     // Surfaced rather than swallowed: a missing/stale RPC (e.g. PostgREST's
     // schema cache not yet reloaded after the migration) otherwise looks
     // exactly like "nobody has 2FA", which is a silently wrong answer.
@@ -92,7 +116,8 @@ export default function UsersEmployeesRoute() {
     employees,
     employeeTypes,
     unrevokedInviteEmails,
-    mfaEnrolledUserIds
+    mfaEnrolledUserIds,
+    lastSignInByUserId
   } = useLoaderData<typeof loader>();
 
   return (
@@ -103,6 +128,7 @@ export default function UsersEmployeesRoute() {
         employeeTypes={employeeTypes}
         unrevokedInviteEmails={unrevokedInviteEmails}
         mfaEnrolledUserIds={mfaEnrolledUserIds}
+        lastSignInByUserId={lastSignInByUserId}
       />
       <RecordOutlet />
     </VStack>
