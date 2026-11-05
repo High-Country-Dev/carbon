@@ -4,7 +4,6 @@
 
 import { CONTROLLED_ENVIRONMENT, error } from "@carbon/auth";
 import { requirePermissions } from "@carbon/auth/auth.server";
-import { getCarbonServiceRole } from "@carbon/auth/client.server";
 import { flash } from "@carbon/auth/session.server";
 import { VStack } from "@carbon/react";
 import { redirect } from "@carbon/utils";
@@ -15,6 +14,7 @@ import {
   ItarCertificationsTable,
   ItarEntityCertificationStatus
 } from "~/modules/settings/ui";
+import { getLastSignInByUserId } from "~/modules/users/lastSignIn.server";
 import {
   getItarCertificationReport,
   getItarEntityCertification
@@ -26,32 +26,6 @@ export const handle: Handle = {
   breadcrumb: msg`ITAR Certifications`,
   to: path.to.itarCertifications
 };
-
-/**
- * Last login is not stored in the app DB — it lives in Supabase Auth. Page
- * through the admin API (service role) and index by user id. This is a full
- * scan of the auth users; acceptable for an occasional compliance report.
- */
-async function getLastLoginByUserId(): Promise<Map<string, string | null>> {
-  const serviceRole = getCarbonServiceRole();
-  const map = new Map<string, string | null>();
-  const perPage = 1000;
-  const maxPages = 50; // ~50k users backstop against an unbounded loop
-
-  for (let page = 1; page <= maxPages; page++) {
-    const { data, error } = await serviceRole.auth.admin.listUsers({
-      page,
-      perPage
-    });
-    if (error || !data?.users?.length) break;
-    for (const user of data.users) {
-      map.set(user.id, user.last_sign_in_at ?? null);
-    }
-    if (data.users.length < perPage) break;
-  }
-
-  return map;
-}
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const { client, companyId } = await requirePermissions(request, {
@@ -67,7 +41,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const [report, entityCertification, lastLoginByUserId] = await Promise.all([
     getItarCertificationReport(client, companyId),
     getItarEntityCertification(client, companyId),
-    getLastLoginByUserId()
+    getLastSignInByUserId()
   ]);
 
   // Never render this page from a failed read. A missing entity row and a failed

@@ -12712,6 +12712,9 @@ msgstr "अंतिम रन"
 msgid "Last scheduled push {when}:"
 msgstr "अंतिम निर्धारित पुश {when}:"
 
+msgid "Last Sign-In"
+msgstr ""
+
 msgid "Last synced: <0/>"
 msgstr "अंतिम सिंक: <0/>"
 

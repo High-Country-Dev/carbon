@@ -12712,6 +12712,9 @@ msgstr "Son Çalıştırma"
 msgid "Last scheduled push {when}:"
 msgstr "Son planlanan gönderim {when}:"
 
+msgid "Last Sign-In"
+msgstr ""
+
 msgid "Last synced: <0/>"
 msgstr "Son senkronizasyon: <0/>"
 
