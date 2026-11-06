@@ -12,6 +12,17 @@ type PurchasingStatusProps = {
   iconOnly?: boolean;
 };
 
+// What ABS calls each step. "Invoice" here is the vendor's bill, but ABS read
+// "To Receive and Invoice" as invoicing the customer (Pam, 11/6), so the
+// badge says "Bill". Only the words change: the stored status, filters and
+// the Invoice button stay as they are.
+const STATUS_LABELS: Partial<
+  Record<(typeof purchaseOrderStatusType)[number], string>
+> = {
+  "To Invoice": "To Bill",
+  "To Receive and Invoice": "To Receive and Bill"
+};
+
 const PurchasingStatus = ({ status, iconOnly }: PurchasingStatusProps) => {
   if (!status) return null;
   // Every status renders the same way; only its colour differs. An unknown
@@ -20,7 +31,7 @@ const PurchasingStatus = ({ status, iconOnly }: PurchasingStatusProps) => {
   if (!color) return null;
   return (
     <Status color={color} iconOnly={iconOnly}>
-      {status}
+      {STATUS_LABELS[status] ?? status}
     </Status>
   );
 };
