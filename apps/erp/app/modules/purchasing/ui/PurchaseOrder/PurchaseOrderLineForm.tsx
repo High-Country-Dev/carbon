@@ -159,6 +159,8 @@ const PurchaseOrderLineForm = ({
     fallbackUnitPrice: number;
     inventoryUom: string;
     minimumOrderQuantity?: number;
+    // The vendor sells it in lots of this many purchase units (a 21' stick).
+    orderMultiple?: number;
     pricing: SupplierPartPricing | null;
     purchaseQuantity: number;
     purchaseUom: string;
@@ -420,9 +422,19 @@ const PurchaseOrderLineForm = ({
         const itemReplenishment = item?.data?.itemReplenishment;
         const initialQty = supplierPart?.data?.minimumOrderQuantity ?? 1;
         const leadTime = item?.data?.itemReplenishment?.leadTime ?? 0;
-        // The item's cost is in BASE currency; the line wants the order's.
+        // A service is always bought and "stocked" in EA, 1:1.
+        const isServiceItem = item.data?.type === "Service";
+        const conversionFactor = isServiceItem
+          ? 1
+          : (supplierPart?.data?.conversionFactor ??
+            itemReplenishment?.conversionFactor ??
+            1);
+        // The item's cost is per STOCK unit and in BASE currency; the line is
+        // priced per PURCHASE unit in the order's currency. Without the factor
+        // a part stocked in inches and bought in feet showed its per-inch cost
+        // as the price per foot (LAND-312: $0.99/ft for $11.88/ft pipe).
         const fallbackUnitPrice = convertUnitPrice(
-          itemCost?.unitCost ?? 0,
+          (itemCost?.unitCost ?? 0) * conversionFactor,
           { currencyCode: company.baseCurrencyCode, exchangeRate: 1 },
           orderCurrencyRate
         );
@@ -447,8 +459,6 @@ const PurchaseOrderLineForm = ({
           fallbackUnitPrice
         );
 
-        // A service is always bought and "stocked" in EA, 1:1.
-        const isServiceItem = item.data?.type === "Service";
         setItemData({
           itemId: itemId,
           description: item.data?.name ?? "",
@@ -464,11 +474,10 @@ const PurchaseOrderLineForm = ({
           inventoryUom: isServiceItem
             ? EACH_UNIT_OF_MEASURE_CODE
             : (item.data?.unitOfMeasureCode ?? "EA"),
-          conversionFactor: isServiceItem
-            ? 1
-            : (supplierPart?.data?.conversionFactor ??
-              itemReplenishment?.conversionFactor ??
-              1),
+          conversionFactor,
+          minimumOrderQuantity:
+            supplierPart?.data?.minimumOrderQuantity ?? undefined,
+          orderMultiple: supplierPart?.data?.orderMultiple ?? undefined,
           requiredDate:
             leadTime === 0
               ? null
@@ -731,9 +740,10 @@ const PurchaseOrderLineForm = ({
                         />
 
                         <NumberControlled
-                          minValue={itemData.minimumOrderQuantity}
+                          minValue={0}
                           name="purchaseQuantity"
                           label={t`Quantity`}
+                          helperText={quantityHint(itemData)}
                           value={itemData.purchaseQuantity}
                           onChange={(value) => {
                             setItemData((d) => ({
@@ -1153,6 +1163,39 @@ const PurchaseOrderLineForm = ({
 };
 
 export default PurchaseOrderLineForm;
+
+/** "3 × 21 FOOT = 756 INCH": how the vendor sells it and what it is in stock
+ *  units, so nobody redoes the 1/12 math (LAND-310). The vendor's minimum is
+ *  where a line starts, not a floor: JobBOSS let Pam go below it too. */
+function quantityHint(d: {
+  purchaseQuantity: number;
+  purchaseUom: string;
+  inventoryUom: string;
+  conversionFactor: number;
+  orderMultiple?: number;
+}): string | undefined {
+  const parts: string[] = [];
+  const qty = Number(d.purchaseQuantity) || 0;
+  const mult = Number(d.orderMultiple) || 0;
+  if (mult > 1 && qty > 0) {
+    const lots = qty / mult;
+    parts.push(
+      Number.isInteger(lots)
+        ? `${lots} × ${mult} ${d.purchaseUom}`
+        : `Sold in ${mult} ${d.purchaseUom}: ${Math.ceil(lots) * mult} is ${Math.ceil(lots)} × ${mult}`
+    );
+  }
+  const f = Number(d.conversionFactor) || 1;
+  if (
+    f !== 1 &&
+    qty > 0 &&
+    d.inventoryUom &&
+    d.inventoryUom !== d.purchaseUom
+  ) {
+    parts.push(`= ${Math.round(qty * f * 1000) / 1000} ${d.inventoryUom}`);
+  }
+  return parts.length ? parts.join(" ") : undefined;
+}
 
 function JobOperationSelect(initialValues: { jobId?: string }) {
   const { t } = useLingui();
