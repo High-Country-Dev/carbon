@@ -534,14 +534,21 @@ function PickingListLineItem({
           type={(item?.type as "Part") ?? "Part"}
         />
         <VStack spacing={0} className="flex-1 min-w-0">
-          <p className="truncate text-base font-medium sm:text-sm">
+          {/* VStack is items-start, so a child is only as wide as its text and
+              truncate never clips: w-full bounds it. Long ABS descriptions end
+              in the vendor P/N, so the name wraps to two lines rather than
+              cutting off; the full name is on hover. */}
+          <p
+            className="w-full line-clamp-2 break-words text-base font-medium sm:text-sm"
+            title={itemName}
+          >
             {itemName}
           </p>
-          <p className="truncate font-mono text-sm text-muted-foreground sm:text-xs">
+          <p className="w-full truncate font-mono text-sm text-muted-foreground sm:text-xs">
             {item?.readableIdWithRevision ?? line.item?.readableId}
           </p>
           {substitutedFrom && (
-            <p className="truncate text-sm text-blue-700 dark:text-blue-300 sm:text-xs">
+            <p className="w-full truncate text-sm text-blue-700 dark:text-blue-300 sm:text-xs">
               ↩{" "}
               {assemblies !== null ? (
                 <Trans>
