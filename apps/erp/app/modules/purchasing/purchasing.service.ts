@@ -1377,10 +1377,64 @@ export async function finalizePurchaseOrder(
     updateData.orderDate = datetime.today(companyTz).toString();
   }
 
-  return client
+  const finalized = await client
     .from("purchaseOrder")
     .update(updateData)
     .eq("id", purchaseOrderId);
+  if (!finalized.error && purchaseOrder.data?.companyId) {
+    await rememberPurchasePrices(
+      client,
+      { ...purchaseOrder.data, companyId: purchaseOrder.data.companyId },
+      lines.data ?? [],
+      userId
+    );
+  }
+  return finalized;
+}
+
+/**
+ * ABS keeps the vendor's price current from its POs: Pam fixes prices from the
+ * vendor's order confirmation, reprocesses the PO, and the price carries to the
+ * part (JobBOSS did this; LAND-311). On finalize, each Part line's price becomes
+ * that vendor's price for the part, per the vendor part's own buying unit. Lines
+ * in another currency than the vendor part are skipped. Never fails the
+ * finalize: a failed write is logged.
+ */
+async function rememberPurchasePrices(
+  client: SupabaseClient<Database>,
+  purchaseOrder: { supplierId: string | null; currencyCode?: string | null; companyId: string },
+  lines: {
+    itemId?: string | null;
+    purchaseOrderLineType?: string | null;
+    supplierUnitPrice?: number | null;
+    conversionFactor?: number | null;
+  }[],
+  userId: string
+) {
+  const priced = lines.filter(
+    (l) => l.purchaseOrderLineType === "Part" && l.itemId && Number(l.supplierUnitPrice ?? 0) > 0
+  );
+  if (!purchaseOrder.supplierId || priced.length === 0) return;
+  const parts = await client
+    .from("supplierPart")
+    .select("id, itemId, conversionFactor, currencyCode, supplierUnitPrice")
+    .eq("companyId", purchaseOrder.companyId)
+    .eq("supplierId", purchaseOrder.supplierId)
+    .in("itemId", [...new Set(priced.map((l) => l.itemId!))]);
+  if (parts.error) return;
+  for (const l of priced) {
+    const sp = parts.data?.find((p) => p.itemId === l.itemId);
+    if (!sp) continue;
+    if (sp.currencyCode && purchaseOrder.currencyCode && sp.currencyCode !== purchaseOrder.currencyCode) continue;
+    const perStock = Number(l.supplierUnitPrice) / (Number(l.conversionFactor) || 1);
+    const price = Math.round(perStock * (Number(sp.conversionFactor) || 1) * 100000) / 100000;
+    if (Math.abs(price - Number(sp.supplierUnitPrice ?? 0)) < 0.000005) continue;
+    await client
+      .from("supplierPart")
+      .update({ supplierUnitPrice: price, updatedBy: userId, updatedAt: datetime.timestamp() })
+      .eq("id", sp.id)
+      .eq("companyId", purchaseOrder.companyId);
+  }
 }
 
 /** Not published: `purchasing_sendSupplierQuoteToSupplier` sends a quote, with its share link and email. */
