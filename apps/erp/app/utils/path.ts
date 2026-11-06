@@ -2121,6 +2121,7 @@ export const path = {
     purchasesReport: `${x}/reports/purchases`,
     purchasing: `${x}/purchasing`,
     purchasingPlanning: `${x}/purchasing/planning`,
+    purchasingFillJobs: `${x}/purchasing/fill-jobs`,
 
     // Purchasing RFQ paths
     purchasingRfq: (id: string) => generatePath(`${x}/purchasing-rfq/${id}`),

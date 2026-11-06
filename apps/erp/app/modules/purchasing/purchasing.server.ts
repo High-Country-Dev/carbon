@@ -6964,3 +6964,4 @@ export const getLeaseRelatedDocuments = defineServiceFn({
     );
   }
 });
+export { fillJobFromStock, orderJobShortages } from "./fill-jobs.server";

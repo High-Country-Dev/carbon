@@ -4,6 +4,7 @@
 
 import { useLingui } from "@lingui/react/macro";
 import {
+  LuClipboardCheck,
   LuContainer,
   LuFileText,
   LuKeyRound,
@@ -38,6 +39,12 @@ export default function usePurchasingSubmodules() {
     {
       name: t`Orders`,
       routes: [
+        {
+          // Released jobs: fill from stock, then order the rest (LAND-306)
+          name: t`Fill Jobs`,
+          to: path.to.purchasingFillJobs,
+          icon: <LuClipboardCheck />
+        },
         {
           name: t`Purchase Orders`,
           to: path.to.purchaseOrders,
