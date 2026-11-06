@@ -60,13 +60,16 @@ type SuppliersTableProps = {
   count: number;
   tags: { name: string }[];
   supplierReportContacts: SupplierReportContactsBySupplierId;
+  /** The list defaulted to Active suppliers (no status filter in the URL). */
+  showingActiveOnly?: boolean;
 };
 
 const SuppliersTable = memo(function SuppliersTable({
   data,
   count,
   tags,
-  supplierReportContacts
+  supplierReportContacts,
+  showingActiveOnly
 }: SuppliersTableProps) {
   const { t } = useLingui();
   const navigate = useNavigate();
@@ -178,7 +181,7 @@ const SuppliersTable = memo(function SuppliersTable({
       },
       {
         id: "accountManagerId",
-        header: t`Account Manager`,
+        header: t`Our Account Manager`,
         cell: ({ row }) => (
           <EmployeeAvatar employeeId={row.original.accountManagerId} />
         ),
@@ -487,6 +490,21 @@ const SuppliersTable = memo(function SuppliersTable({
         primaryAction={
           permissions.can("create", "purchasing") && (
             <div className="flex items-center gap-2">
+              <Button variant="ghost" className="max-md:hidden" asChild>
+                <Link
+                  to={
+                    showingActiveOnly
+                      ? `${path.to.suppliers}?status=all`
+                      : path.to.suppliers
+                  }
+                >
+                  {showingActiveOnly ? (
+                    <Trans>Active only · Show all</Trans>
+                  ) : (
+                    <Trans>Show active only</Trans>
+                  )}
+                </Link>
+              </Button>
               <Button
                 className="max-md:hidden"
                 variant="secondary"

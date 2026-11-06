@@ -2023,6 +2023,9 @@ msgstr "Órdenes de trabajo activas"
 msgid "Active Methods Missing a Pull From"
 msgstr "Métodos Activos sin Extraer de"
 
+msgid "Active only · Show all"
+msgstr ""
+
 msgid "Active Statuses"
 msgstr "Estados Activos"
 
@@ -16545,6 +16548,9 @@ msgstr "Otro Tipo"
 msgid "Otherwise"
 msgstr "De lo contrario"
 
+msgid "Our Account Manager"
+msgstr ""
+
 msgid "Out"
 msgstr "Fuera"
 
@@ -21569,6 +21575,9 @@ msgstr "Mostrar una columna de ID de cliente legible en la lista de clientes, fo
 msgid "Show a readable Supplier ID column on the supplier list, supplier forms, and dropdowns. Suppliers are still identified internally either way."
 msgstr "Mostrar una columna de ID de Proveedor legible en la lista de proveedores, formularios de proveedores y menús desplegables. Los proveedores se identifican internamente de cualquier forma."
 
+msgid "Show active only"
+msgstr ""
+
 msgid "Show All"
 msgstr "Mostrar todo"
 
@@ -22607,6 +22616,9 @@ msgstr "Ubicación del proveedor"
 
 msgid "Supplier Location"
 msgstr "Ubicación del Proveedor"
+
+msgid "Supplier Order / Quote Number"
+msgstr ""
 
 msgid "Supplier Order Number"
 msgstr "Número de Pedido del Proveedor"

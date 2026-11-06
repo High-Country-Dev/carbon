@@ -2023,6 +2023,9 @@ msgstr "Aktif İş emirleri"
 msgid "Active Methods Missing a Pull From"
 msgstr "Çekme Kaynağı Olmayan Aktif Yöntemler"
 
+msgid "Active only · Show all"
+msgstr ""
+
 msgid "Active Statuses"
 msgstr "Aktif Durumlar"
 
@@ -16545,6 +16548,9 @@ msgstr "Diğer Tür"
 msgid "Otherwise"
 msgstr "Aksi takdirde"
 
+msgid "Our Account Manager"
+msgstr ""
+
 msgid "Out"
 msgstr "Dışı"
 
@@ -21569,6 +21575,9 @@ msgstr "Müşteri listesinde, müşteri formlarında ve açılır menülerde oku
 msgid "Show a readable Supplier ID column on the supplier list, supplier forms, and dropdowns. Suppliers are still identified internally either way."
 msgstr "Tedarikçi listesinde, tedarikçi formlarında ve açılır menülerde okunabilir bir Tedarikçi Kimliği sütunu gösterir. Tedarikçiler her iki durumda da dahili olarak tanımlanmaya devam eder."
 
+msgid "Show active only"
+msgstr ""
+
 msgid "Show All"
 msgstr "Tümünü göster"
 
@@ -22607,6 +22616,9 @@ msgstr "Tedarikçi konumu"
 
 msgid "Supplier Location"
 msgstr "Tedarikçi Konumu"
+
+msgid "Supplier Order / Quote Number"
+msgstr ""
 
 msgid "Supplier Order Number"
 msgstr "Tedarikçi Sipariş Numarası"

@@ -2023,6 +2023,9 @@ msgstr "启用的工单"
 msgid "Active Methods Missing a Pull From"
 msgstr "启用的方法缺少拉取来源"
 
+msgid "Active only · Show all"
+msgstr ""
+
 msgid "Active Statuses"
 msgstr "启用的状态"
 
@@ -16545,6 +16548,9 @@ msgstr "其他类型"
 msgid "Otherwise"
 msgstr "否则"
 
+msgid "Our Account Manager"
+msgstr ""
+
 msgid "Out"
 msgstr "出"
 
@@ -21569,6 +21575,9 @@ msgstr "在客户列表、客户表单和下拉菜单上显示可读的客户ID�
 msgid "Show a readable Supplier ID column on the supplier list, supplier forms, and dropdowns. Suppliers are still identified internally either way."
 msgstr "在供应商列表、供应商表单和下拉菜单上显示可读的供应商 ID 列。无论哪种方式，供应商在内部仍然可以被识别。"
 
+msgid "Show active only"
+msgstr ""
+
 msgid "Show All"
 msgstr "显示全部"
 
@@ -22607,6 +22616,9 @@ msgstr "供应商位置"
 
 msgid "Supplier Location"
 msgstr "供应商位置"
+
+msgid "Supplier Order / Quote Number"
+msgstr ""
 
 msgid "Supplier Order Number"
 msgstr "供应商订单号"

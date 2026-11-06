@@ -2023,6 +2023,9 @@ msgstr "Active Jobs"
 msgid "Active Methods Missing a Pull From"
 msgstr "Active Methods Missing a Pull From"
 
+msgid "Active only · Show all"
+msgstr "Active only · Show all"
+
 msgid "Active Statuses"
 msgstr "Active Statuses"
 
@@ -16545,6 +16548,9 @@ msgstr "Other Type"
 msgid "Otherwise"
 msgstr "Otherwise"
 
+msgid "Our Account Manager"
+msgstr "Our Account Manager"
+
 msgid "Out"
 msgstr "Out"
 
@@ -21569,6 +21575,9 @@ msgstr "Show a readable Customer ID column on the customer list, customer forms,
 msgid "Show a readable Supplier ID column on the supplier list, supplier forms, and dropdowns. Suppliers are still identified internally either way."
 msgstr "Show a readable Supplier ID column on the supplier list, supplier forms, and dropdowns. Suppliers are still identified internally either way."
 
+msgid "Show active only"
+msgstr "Show active only"
+
 msgid "Show All"
 msgstr "Show All"
 
@@ -22607,6 +22616,9 @@ msgstr "Supplier location"
 
 msgid "Supplier Location"
 msgstr "Supplier Location"
+
+msgid "Supplier Order / Quote Number"
+msgstr "Supplier Order / Quote Number"
 
 msgid "Supplier Order Number"
 msgstr "Supplier Order Number"

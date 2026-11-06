@@ -37,10 +37,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const searchParams = new URLSearchParams(url.search);
   const search = searchParams.get("search");
   const type = searchParams.get("type");
-  const status = searchParams.get("status");
-
   const { limit, offset, sorts, filters } =
     getGenericQueryFilters(searchParams);
+
+  // Active suppliers by default: 546 of the 919 suppliers from JobBOSS are
+  // QuickBooks payees nobody buys from (LAND-316). ?status=all shows every
+  // status; a Supplier Status filter from the table wins.
+  const statusParam = searchParams.get("status");
+  const filtersOnStatus = (filters ?? []).some((f) => f.column === "status");
+  const showingActiveOnly = statusParam === null && !filtersOnStatus;
+  const status =
+    statusParam === "all" ? null : showingActiveOnly ? "Active" : statusParam;
 
   const [suppliers, tags] = await Promise.all([
     getSuppliers(client, companyId, {
@@ -91,12 +98,13 @@ export async function loader({ request }: LoaderFunctionArgs) {
     count: suppliers.count ?? 0,
     suppliers: suppliers.data ?? [],
     tags: tags.data ?? [],
-    supplierReportContacts
+    supplierReportContacts,
+    showingActiveOnly
   };
 }
 
 export default function PurchasingSuppliersRoute() {
-  const { count, suppliers, tags, supplierReportContacts } =
+  const { count, suppliers, tags, supplierReportContacts, showingActiveOnly } =
     useLoaderData<typeof loader>();
 
   return (
@@ -106,6 +114,7 @@ export default function PurchasingSuppliersRoute() {
         count={count}
         tags={tags}
         supplierReportContacts={supplierReportContacts}
+        showingActiveOnly={showingActiveOnly}
       />
       <RecordOutlet />
     </VStack>

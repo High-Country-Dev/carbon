@@ -292,7 +292,7 @@ const SupplierHeader = () => {
               </CardAttribute>
               <CardAttribute>
                 <CardAttributeLabel>
-                  <Trans>Account Manager</Trans>
+                  <Trans>Our Account Manager</Trans>
                 </CardAttributeLabel>
                 <CardAttributeValue>
                   {routeData?.supplier?.accountManagerId ? (

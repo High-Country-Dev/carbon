@@ -2023,6 +2023,9 @@ msgstr "Bieżące zlecenia produkcyjne"
 msgid "Active Methods Missing a Pull From"
 msgstr "Aktywne metody bez Pull From"
 
+msgid "Active only · Show all"
+msgstr ""
+
 msgid "Active Statuses"
 msgstr "Aktywne statusy"
 
@@ -16545,6 +16548,9 @@ msgstr "Inny typ"
 msgid "Otherwise"
 msgstr "W przeciwnym razie"
 
+msgid "Our Account Manager"
+msgstr ""
+
 msgid "Out"
 msgstr "Poza"
 
@@ -21569,6 +21575,9 @@ msgstr "Pokaż kolumnę czytelnego identyfikatora klienta na liście klientów, 
 msgid "Show a readable Supplier ID column on the supplier list, supplier forms, and dropdowns. Suppliers are still identified internally either way."
 msgstr "Pokaż kolumnę czytelnego identyfikatora dostawcy na liście dostawców, formularzach dostawcy i listach rozwijanych. Dostawcy są nadal identyfikowani wewnętrznie w każdym przypadku."
 
+msgid "Show active only"
+msgstr ""
+
 msgid "Show All"
 msgstr "Pokaż wszystko"
 
@@ -22607,6 +22616,9 @@ msgstr "Lokalizacja dostawcy"
 
 msgid "Supplier Location"
 msgstr "Lokalizacja dostawcy"
+
+msgid "Supplier Order / Quote Number"
+msgstr ""
 
 msgid "Supplier Order Number"
 msgstr "Numer zamówienia dostawcy"

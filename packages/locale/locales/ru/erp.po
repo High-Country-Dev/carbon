@@ -2023,6 +2023,9 @@ msgstr "Активные производственные заказы"
 msgid "Active Methods Missing a Pull From"
 msgstr "Активные методы без источника"
 
+msgid "Active only · Show all"
+msgstr ""
+
 msgid "Active Statuses"
 msgstr "Активные статусы"
 
@@ -16545,6 +16548,9 @@ msgstr "Другой тип"
 msgid "Otherwise"
 msgstr "В противном случае"
 
+msgid "Our Account Manager"
+msgstr ""
+
 msgid "Out"
 msgstr "Вне"
 
@@ -21569,6 +21575,9 @@ msgstr "Показывать столбец с читаемым ID Покупа�
 msgid "Show a readable Supplier ID column on the supplier list, supplier forms, and dropdowns. Suppliers are still identified internally either way."
 msgstr "Показать читаемый столбец ID поставщика в списке поставщиков, формах поставщиков и раскрывающихся списках. Поставщики по-прежнему идентифицируются внутри системы в любом случае."
 
+msgid "Show active only"
+msgstr ""
+
 msgid "Show All"
 msgstr "Показать все"
 
@@ -22607,6 +22616,9 @@ msgstr "Место расположения поставщика"
 
 msgid "Supplier Location"
 msgstr "Местоположение поставщика"
+
+msgid "Supplier Order / Quote Number"
+msgstr ""
 
 msgid "Supplier Order Number"
 msgstr "Номер заказа поставщика"

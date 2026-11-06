@@ -2023,6 +2023,9 @@ msgstr "Aktive Fertigungsaufträge"
 msgid "Active Methods Missing a Pull From"
 msgstr "Aktive Methoden ohne Entnahme"
 
+msgid "Active only · Show all"
+msgstr ""
+
 msgid "Active Statuses"
 msgstr "Aktive Status"
 
@@ -16545,6 +16548,9 @@ msgstr "Sonstiger Typ"
 msgid "Otherwise"
 msgstr "Andernfalls"
 
+msgid "Our Account Manager"
+msgstr ""
+
 msgid "Out"
 msgstr "Aus"
 
@@ -21569,6 +21575,9 @@ msgstr "Zeigen Sie eine lesbare Kundennummern-Spalte in der Kundenliste, Kundenf
 msgid "Show a readable Supplier ID column on the supplier list, supplier forms, and dropdowns. Suppliers are still identified internally either way."
 msgstr "Zeigen Sie eine lesbare Lieferanten-ID-Spalte in der Lieferantenliste, Lieferantenformularen und Dropdowns an. Lieferanten werden intern in jedem Fall identifiziert."
 
+msgid "Show active only"
+msgstr ""
+
 msgid "Show All"
 msgstr "Alles zeigen"
 
@@ -22607,6 +22616,9 @@ msgstr "Lieferantenstandort"
 
 msgid "Supplier Location"
 msgstr "Lieferantenstandort"
+
+msgid "Supplier Order / Quote Number"
+msgstr ""
 
 msgid "Supplier Order Number"
 msgstr "Lieferantennummer"

@@ -191,7 +191,7 @@ const SupplierForm = ({
                   />
                   <Employee
                     name="accountManagerId"
-                    label={t`Account Manager`}
+                    label={t`Our Account Manager`}
                     termId="supplier-account-manager"
                   />
                   {isEditing && (

@@ -2023,6 +2023,9 @@ msgstr "有効な製造指図"
 msgid "Active Methods Missing a Pull From"
 msgstr "引き出し元未設定の有効な製法"
 
+msgid "Active only · Show all"
+msgstr ""
+
 msgid "Active Statuses"
 msgstr "アクティブなステータス"
 
@@ -16545,6 +16548,9 @@ msgstr "その他のタイプ"
 msgid "Otherwise"
 msgstr "その他"
 
+msgid "Our Account Manager"
+msgstr ""
+
 msgid "Out"
 msgstr "対象外"
 
@@ -21569,6 +21575,9 @@ msgstr "得意先リスト、得意先フォーム、ドロップダウンで読
 msgid "Show a readable Supplier ID column on the supplier list, supplier forms, and dropdowns. Suppliers are still identified internally either way."
 msgstr "仕入先リスト、仕入先フォーム、ドロップダウンで読みやすい仕入先IDカラムを表示します。仕入先はどちらの方法でも内部的に識別されます。"
 
+msgid "Show active only"
+msgstr ""
+
 msgid "Show All"
 msgstr "すべて表示"
 
@@ -22607,6 +22616,9 @@ msgstr "仕入先所在地"
 
 msgid "Supplier Location"
 msgstr "仕入先の場所"
+
+msgid "Supplier Order / Quote Number"
+msgstr ""
 
 msgid "Supplier Order Number"
 msgstr "仕入先注文番号"

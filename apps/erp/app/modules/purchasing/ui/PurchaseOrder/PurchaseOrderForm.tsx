@@ -29,8 +29,7 @@ import {
   SequenceOrCustomId,
   Submit,
   Supplier,
-  SupplierContact,
-  SupplierLocation
+  SupplierContact
 } from "~/components/Form";
 import {
   usePermissions,
@@ -162,14 +161,12 @@ const PurchaseOrderForm = ({ initialValues }: PurchaseOrderFormProps) => {
               />
               <Input
                 name="supplierReference"
-                label={t`Supplier Order Number`}
+                label={t`Supplier Order / Quote Number`}
                 termId="purchase-order-supplier-order-number"
               />
-              <SupplierLocation
-                name="supplierLocationId"
-                label={t`Supplier Location`}
-                supplier={supplier.id}
-              />
+              {/* ABS doesn't use a supplier location on POs (Pam, 11/6,
+                  LAND-324); the value still round-trips so edits keep it. */}
+              <Hidden name="supplierLocationId" />
               <SupplierContact
                 name="supplierContactId"
                 label={t`Supplier Contact`}

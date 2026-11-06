@@ -2023,6 +2023,9 @@ msgstr "सक्रिय जॉब"
 msgid "Active Methods Missing a Pull From"
 msgstr "Pull From के बिना सक्रिय विधि"
 
+msgid "Active only · Show all"
+msgstr ""
+
 msgid "Active Statuses"
 msgstr "सक्रिय स्थितियाँ"
 
@@ -16545,6 +16548,9 @@ msgstr "अन्य प्रकार"
 msgid "Otherwise"
 msgstr "अन्यथा"
 
+msgid "Our Account Manager"
+msgstr ""
+
 msgid "Out"
 msgstr "बाहर"
 
@@ -21569,6 +21575,9 @@ msgstr "ग्राहक सूची, ग्राहक फॉर्म औ�
 msgid "Show a readable Supplier ID column on the supplier list, supplier forms, and dropdowns. Suppliers are still identified internally either way."
 msgstr "आपूर्तिकर्ता सूची, आपूर्तिकर्ता फॉर्म और ड्रॉपडाउन पर एक पठनीय आपूर्तिकर्ता ID कॉलम दिखाएं। आपूर्तिकर्ता अभी भी किसी भी तरह से आंतरिक रूप से पहचाने जाते हैं।"
 
+msgid "Show active only"
+msgstr ""
+
 msgid "Show All"
 msgstr "सभी दिखाएँ"
 
@@ -22607,6 +22616,9 @@ msgstr "आपूर्तिकर्ता स्थान"
 
 msgid "Supplier Location"
 msgstr "आपूर्तिकर्ता स्थान"
+
+msgid "Supplier Order / Quote Number"
+msgstr ""
 
 msgid "Supplier Order Number"
 msgstr "आपूर्तिकर्ता ऑर्डर संख्या"
