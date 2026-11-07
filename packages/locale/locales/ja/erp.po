@@ -8298,6 +8298,9 @@ msgstr "テンプレートをダウンロード"
 msgid "Download the template. Each row is a default account {BRAND_NAME} posts to. In Account Number, enter the number of the account in your chart that takes it. {BRAND_NAME} updates the default account to match."
 msgstr "テンプレートをダウンロードしてください。各行は {BRAND_NAME} が転記するデフォルト勘定です。勘定番号に、自社の勘定科目表でそれを取得する勘定の番号を入力してください。{BRAND_NAME} はデフォルト勘定を更新して一致させます。"
 
+msgid "draft"
+msgstr ""
+
 msgid "Draft"
 msgstr "下書き"
 

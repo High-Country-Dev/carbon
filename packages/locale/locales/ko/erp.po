@@ -8298,6 +8298,9 @@ msgstr "템플릿 다운로드"
 msgid "Download the template. Each row is a default account {BRAND_NAME} posts to. In Account Number, enter the number of the account in your chart that takes it. {BRAND_NAME} updates the default account to match."
 msgstr "템플릿을 다운로드합니다. 각 행은 {BRAND_NAME}이 전기하는 기본 계정과목입니다. 계정 번호에 자신의 계정과목표에서 이를 담당할 계정의 번호를 입력합니다. {BRAND_NAME}은 기본 계정과목을 이에 맞게 업데이트합니다."
 
+msgid "draft"
+msgstr ""
+
 msgid "Draft"
 msgstr "초안"
 

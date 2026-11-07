@@ -8298,6 +8298,9 @@ msgstr "Download template"
 msgid "Download the template. Each row is a default account {BRAND_NAME} posts to. In Account Number, enter the number of the account in your chart that takes it. {BRAND_NAME} updates the default account to match."
 msgstr "Download the template. Each row is a default account {BRAND_NAME} posts to. In Account Number, enter the number of the account in your chart that takes it. {BRAND_NAME} updates the default account to match."
 
+msgid "draft"
+msgstr "draft"
+
 msgid "Draft"
 msgstr "Draft"
 

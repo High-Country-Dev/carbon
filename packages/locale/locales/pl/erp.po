@@ -8298,6 +8298,9 @@ msgstr "Pobierz szablon"
 msgid "Download the template. Each row is a default account {BRAND_NAME} posts to. In Account Number, enter the number of the account in your chart that takes it. {BRAND_NAME} updates the default account to match."
 msgstr "Pobierz szablon. Każdy wiersz to domyślne konto, na które {BRAND_NAME} dokonuje księgowań. W polu Numer konta wpisz numer konta w twoim planie, które go zastępuje. {BRAND_NAME} aktualizuje domyślne konto, aby się zgadzało."
 
+msgid "draft"
+msgstr ""
+
 msgid "Draft"
 msgstr "Wersja robocza"
 

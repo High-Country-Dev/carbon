@@ -8298,6 +8298,9 @@ msgstr "Vorlage herunterladen"
 msgid "Download the template. Each row is a default account {BRAND_NAME} posts to. In Account Number, enter the number of the account in your chart that takes it. {BRAND_NAME} updates the default account to match."
 msgstr "Laden Sie die Vorlage herunter. Jede Zeile ist ein Standardkonto, auf das {BRAND_NAME} bucht. Geben Sie in Kontonummer die Nummer des Kontos in Ihrem Kontenplan ein, das es übernimmt. {BRAND_NAME} aktualisiert das Standardkonto, um es anzupassen."
 
+msgid "draft"
+msgstr ""
+
 msgid "Draft"
 msgstr "Entwurf"
 

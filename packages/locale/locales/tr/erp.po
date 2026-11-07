@@ -8298,6 +8298,9 @@ msgstr "Şablon indir"
 msgid "Download the template. Each row is a default account {BRAND_NAME} posts to. In Account Number, enter the number of the account in your chart that takes it. {BRAND_NAME} updates the default account to match."
 msgstr "Şablonu indir. Her satır, {BRAND_NAME}'un muhasebeleştirdiği varsayılan bir hesaptır. Hesap Numarası'nda, bunu alan hesap planınızdaki hesabın numarasını girin. {BRAND_NAME} varsayılan hesabı eşleştirecek şekilde günceller."
 
+msgid "draft"
+msgstr ""
+
 msgid "Draft"
 msgstr "Taslak"
 

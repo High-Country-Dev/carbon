@@ -46,13 +46,19 @@ export async function getFillJobs(
     .select("id, jobId, status, releasedDate, dueDate, item(readableId, name)")
     .eq("companyId", args.companyId)
     .eq("locationId", args.locationId)
-    .in("status", FILL_JOB_STATUSES as unknown as Database["public"]["Enums"]["jobStatus"][])
+    .in(
+      "status",
+      FILL_JOB_STATUSES as unknown as Database["public"]["Enums"]["jobStatus"][]
+    )
     .order("releasedDate", { ascending: false, nullsFirst: false })
     .limit(500);
   return {
     error: res.error,
     data: (res.data ?? []).map((j) => {
-      const item = j.item as unknown as { readableId: string; name: string } | null;
+      const item = j.item as unknown as {
+        readableId: string;
+        name: string;
+      } | null;
       return {
         id: j.id,
         jobId: j.jobId,
@@ -84,7 +90,13 @@ export type FillJobLine = FillLine & {
 export async function getFillJobLines(
   client: SupabaseClient<Database>,
   args: { companyId: string; locationId: string; jobId: string }
-): Promise<{ data: { job: { id: string; jobId: string; locationId: string | null }; lines: FillJobLine[] } | null; error: unknown }> {
+): Promise<{
+  data: {
+    job: { id: string; jobId: string; locationId: string | null };
+    lines: FillJobLine[];
+  } | null;
+  error: unknown;
+}> {
   const { companyId, jobId } = args;
   const job = await client
     .from("job")
@@ -92,7 +104,8 @@ export async function getFillJobLines(
     .eq("id", jobId)
     .eq("companyId", companyId)
     .single();
-  if (job.error || !job.data) return { data: null, error: job.error ?? new Error("Job not found") };
+  if (job.error || !job.data)
+    return { data: null, error: job.error ?? new Error("Job not found") };
   const locationId = job.data.locationId ?? args.locationId;
 
   const mats = await client
@@ -115,13 +128,21 @@ export async function getFillJobLines(
     quantityToIssue: number | null;
     methodType: string;
     storageUnitId: string | null;
-    item: { readableId: string; name: string; unitOfMeasureCode: string | null } | null;
+    item: {
+      readableId: string;
+      name: string;
+      unitOfMeasureCode: string | null;
+    } | null;
     storageUnit: { name: string } | null;
   }[];
   const itemIds = [...new Set(rows.map((r) => r.itemId))];
-  if (itemIds.length === 0) return { data: { job: { ...job.data, locationId }, lines: [] }, error: null };
+  if (itemIds.length === 0)
+    return {
+      data: { job: { ...job.data, locationId }, lines: [] },
+      error: null
+    };
 
-  const [stock, openPos, repl, parts, costs] = await Promise.all([
+  const [stock, openPos, draftPos, repl, parts, costs] = await Promise.all([
     client
       .from("itemStockQuantities")
       .select("itemId, quantityOnHand")
@@ -130,8 +151,21 @@ export async function getFillJobLines(
       .in("itemId", itemIds),
     client
       .from("openPurchaseOrderLines")
-      .select("itemId, purchaseOrderReadableId, quantityToReceive, promisedDate, dueDate")
+      .select(
+        "itemId, purchaseOrderReadableId, quantityToReceive, promisedDate, dueDate"
+      )
       .eq("companyId", companyId)
+      .in("itemId", itemIds),
+    // Drafts aren't in openPurchaseOrderLines; count them so a second "Order the
+    // rest" doesn't raise a duplicate PO.
+    client
+      .from("purchaseOrderLine")
+      .select(
+        "itemId, quantityToReceive, conversionFactor, requiredDate, purchaseOrder!inner(purchaseOrderId, status)"
+      )
+      .eq("companyId", companyId)
+      .eq("purchaseOrder.status", "Draft")
+      .neq("purchaseOrderLineType", "Service")
       .in("itemId", itemIds),
     client
       .from("itemReplenishment")
@@ -145,12 +179,21 @@ export async function getFillJobLines(
       )
       .eq("companyId", companyId)
       .in("itemId", itemIds),
-    client.from("itemCost").select("itemId, unitCost").eq("companyId", companyId).in("itemId", itemIds)
+    client
+      .from("itemCost")
+      .select("itemId, unitCost")
+      .eq("companyId", companyId)
+      .in("itemId", itemIds)
   ]);
-  for (const r of [stock, openPos, repl, parts, costs]) if (r.error) return { data: null, error: r.error };
+  for (const r of [stock, openPos, draftPos, repl, parts, costs])
+    if (r.error) return { data: null, error: r.error };
 
   const onHand = new Map<string, number>();
-  for (const s of stock.data ?? []) onHand.set(s.itemId!, (onHand.get(s.itemId!) ?? 0) + Number(s.quantityOnHand ?? 0));
+  for (const s of stock.data ?? [])
+    onHand.set(
+      s.itemId!,
+      (onHand.get(s.itemId!) ?? 0) + Number(s.quantityOnHand ?? 0)
+    );
   const orders = new Map<string, FillLine["onOrder"]>();
   for (const o of openPos.data ?? []) {
     const list = orders.get(o.itemId!) ?? [];
@@ -161,29 +204,63 @@ export async function getFillJobLines(
     });
     orders.set(o.itemId!, list);
   }
-  const preferred = new Map((repl.data ?? []).map((r) => [r.itemId, r.preferredSupplierId]));
-  const cost = new Map((costs.data ?? []).map((c) => [c.itemId, Number(c.unitCost ?? 0)]));
+  for (const o of (draftPos.data ?? []) as unknown as {
+    itemId: string;
+    quantityToReceive: number | null;
+    conversionFactor: number | null;
+    requiredDate: string | null;
+    purchaseOrder: { purchaseOrderId: string };
+  }[]) {
+    const list = orders.get(o.itemId) ?? [];
+    list.push({
+      purchaseOrderReadableId: o.purchaseOrder.purchaseOrderId,
+      quantity:
+        Number(o.quantityToReceive ?? 0) *
+        (Number(o.conversionFactor ?? 1) || 1),
+      promisedDate: o.requiredDate,
+      draft: true
+    });
+    orders.set(o.itemId, list);
+  }
+  const preferred = new Map(
+    (repl.data ?? []).map((r) => [r.itemId, r.preferredSupplierId])
+  );
+  const cost = new Map(
+    (costs.data ?? []).map((c) => [c.itemId, Number(c.unitCost ?? 0)])
+  );
   const vendorFor = (itemId: string): FillJobLine["vendor"] => {
-    const all = ((parts.data ?? []) as unknown as {
-      itemId: string;
-      supplierId: string;
-      supplierUnitOfMeasureCode: string | null;
-      conversionFactor: number | null;
-      minimumOrderQuantity: number | null;
-      orderMultiple: number | null;
-      supplierUnitPrice: number | null;
-      supplier: { name: string; supplierStatus: string } | null;
-    }[]).filter((p) => p.itemId === itemId && p.supplier?.supplierStatus !== "Inactive");
-    const pick = all.find((p) => p.supplierId === preferred.get(itemId)) ?? all.find((p) => p.supplierUnitPrice != null) ?? all[0];
+    const all = (
+      (parts.data ?? []) as unknown as {
+        itemId: string;
+        supplierId: string;
+        supplierUnitOfMeasureCode: string | null;
+        conversionFactor: number | null;
+        minimumOrderQuantity: number | null;
+        orderMultiple: number | null;
+        supplierUnitPrice: number | null;
+        supplier: { name: string; supplierStatus: string } | null;
+      }[]
+    ).filter(
+      (p) => p.itemId === itemId && p.supplier?.supplierStatus !== "Inactive"
+    );
+    const pick =
+      all.find((p) => p.supplierId === preferred.get(itemId)) ??
+      all.find((p) => p.supplierUnitPrice != null) ??
+      all[0];
     if (!pick) return null;
     return {
       supplierId: pick.supplierId,
       name: pick.supplier?.name ?? "",
       supplierUnitOfMeasureCode: pick.supplierUnitOfMeasureCode,
       conversionFactor: Number(pick.conversionFactor ?? 1) || 1,
-      minimumOrderQuantity: pick.minimumOrderQuantity != null ? Number(pick.minimumOrderQuantity) : null,
-      orderMultiple: pick.orderMultiple != null ? Number(pick.orderMultiple) : null,
-      supplierUnitPrice: pick.supplierUnitPrice != null ? Number(pick.supplierUnitPrice) : null
+      minimumOrderQuantity:
+        pick.minimumOrderQuantity != null
+          ? Number(pick.minimumOrderQuantity)
+          : null,
+      orderMultiple:
+        pick.orderMultiple != null ? Number(pick.orderMultiple) : null,
+      supplierUnitPrice:
+        pick.supplierUnitPrice != null ? Number(pick.supplierUnitPrice) : null
     };
   };
 
@@ -194,7 +271,8 @@ export async function getFillJobLines(
       itemId: r.itemId,
       readableId: r.item?.readableId ?? "",
       name: r.item?.name ?? r.description ?? "",
-      unitOfMeasureCode: r.unitOfMeasureCode ?? r.item?.unitOfMeasureCode ?? null,
+      unitOfMeasureCode:
+        r.unitOfMeasureCode ?? r.item?.unitOfMeasureCode ?? null,
       needed: Number(r.estimatedQuantity ?? 0),
       posted: Number(r.quantityIssued ?? 0),
       stillNeeded: Number(r.quantityToIssue ?? 0),
@@ -215,7 +293,8 @@ export async function getFillJobLines(
   for (let i = 0; i < lines.length; i++) {
     const l = lines[i];
     const avail = left.get(l.itemId) ?? 0;
-    if (avail !== l.onHand) lines[i] = { ...l, ...classifyLine({ ...l, onHand: avail }) };
+    if (avail !== l.onHand)
+      lines[i] = { ...l, ...classifyLine({ ...l, onHand: avail }) };
     left.set(l.itemId, Math.max(0, avail - lines[i].fromStock));
   }
   return { data: { job: { ...job.data, locationId }, lines }, error: null };
@@ -231,11 +310,20 @@ export const fillJobFromStock = defineServiceFn({
   input: selection,
   permission: { update: "inventory" },
   async run(ctx, { jobId, materialIds }) {
-    const loaded = await getFillJobLines(ctx.asCaller.supabase, { companyId: ctx.company.id, locationId: "", jobId });
-    if (!loaded.data) return ctx.error("notFound", "Job not found", loaded.error);
+    const loaded = await getFillJobLines(ctx.asCaller.supabase, {
+      companyId: ctx.company.id,
+      locationId: "",
+      jobId
+    });
+    if (!loaded.data)
+      return ctx.error("notFound", "Job not found", loaded.error);
     const want = materialIds ? new Set(materialIds) : null;
     const todo = loaded.data.lines.filter(
-      (l) => !l.hidden && l.fromStock > 0 && l.jobOperationId && (!want || want.has(l.materialId))
+      (l) =>
+        !l.hidden &&
+        l.fromStock > 0 &&
+        l.jobOperationId &&
+        (!want || want.has(l.materialId))
     );
     const filled: { readableId: string; quantity: number }[] = [];
     const failed: { readableId: string; message: string }[] = [];
@@ -249,14 +337,21 @@ export const fillJobFromStock = defineServiceFn({
           itemId: l.itemId,
           materialId: l.materialId,
           quantity: l.fromStock,
-          adjustmentType: "Positive Adjmt."
+          // "Negative Adjmt." = stock goes out to the job (the MES consume path).
+          // "Positive Adjmt." is the return-to-stock direction.
+          adjustmentType: "Negative Adjmt."
         },
         issueMaterial
       );
-      if (res.error) failed.push({ readableId: l.readableId, message: res.error.message });
+      if (res.error)
+        failed.push({ readableId: l.readableId, message: res.error.message });
       else filled.push({ readableId: l.readableId, quantity: l.fromStock });
     }
-    logger.info("Filled job from stock", { jobId, filled: filled.length, failed: failed.length });
+    logger.info("Filled job from stock", {
+      jobId,
+      filled: filled.length,
+      failed: failed.length
+    });
     return { filled, failed };
   }
 });
@@ -267,20 +362,35 @@ export const orderJobShortages = defineServiceFn({
   async run(ctx, { jobId, materialIds }) {
     const client = ctx.asCaller.supabase;
     const companyId = ctx.company.id;
-    const loaded = await getFillJobLines(client, { companyId, locationId: "", jobId });
-    if (!loaded.data) return ctx.error("notFound", "Job not found", loaded.error);
+    const loaded = await getFillJobLines(client, {
+      companyId,
+      locationId: "",
+      jobId
+    });
+    if (!loaded.data)
+      return ctx.error("notFound", "Job not found", loaded.error);
     const { job, lines } = loaded.data;
     const want = materialIds ? new Set(materialIds) : null;
-    const todo = lines.filter((l) => !l.hidden && l.toBuy > 0 && (!want || want.has(l.materialId)));
+    const todo = lines.filter(
+      (l) => !l.hidden && l.toBuy > 0 && (!want || want.has(l.materialId))
+    );
 
     const noVendor = todo.filter((l) => !l.vendor).map((l) => l.readableId);
     const bySupplier = new Map<string, FillJobLine[]>();
     for (const l of todo) {
       if (!l.vendor) continue;
-      bySupplier.set(l.vendor.supplierId, [...(bySupplier.get(l.vendor.supplierId) ?? []), l]);
+      bySupplier.set(l.vendor.supplierId, [
+        ...(bySupplier.get(l.vendor.supplierId) ?? []),
+        l
+      ]);
     }
 
-    const created: { id: string; purchaseOrderId: string; supplier: string; lines: number }[] = [];
+    const created: {
+      id: string;
+      purchaseOrderId: string;
+      supplier: string;
+      lines: number;
+    }[] = [];
     const failed: string[] = [];
     for (const [supplierId, group] of bySupplier) {
       const po = await service.insertPurchaseOrder(client, {
@@ -293,21 +403,26 @@ export const orderJobShortages = defineServiceFn({
         createdBy: ctx.auditUserId
       });
       if (po.error || !po.data) {
-        failed.push(`${group[0].vendor!.name}: ${po.error?.message ?? "PO not created"}`);
+        failed.push(
+          `${group[0].vendor!.name}: ${po.error?.message ?? "PO not created"}`
+        );
         continue;
       }
       let n = 0;
       for (const l of group) {
         const v = l.vendor!;
         const purchaseQuantity = purchaseQuantityFor(l.toBuy, v);
-        const price = v.supplierUnitPrice ?? Math.round(l.unitCost * v.conversionFactor * 100000) / 100000;
+        const price =
+          v.supplierUnitPrice ??
+          Math.round(l.unitCost * v.conversionFactor * 100000) / 100000;
         const line = await service.upsertPurchaseOrderLine(client, {
           purchaseOrderId: po.data.id,
           purchaseOrderLineType: "Part",
           itemId: l.itemId,
           description: l.name,
           purchaseQuantity,
-          purchaseUnitOfMeasureCode: v.supplierUnitOfMeasureCode ?? l.unitOfMeasureCode ?? "EA",
+          purchaseUnitOfMeasureCode:
+            v.supplierUnitOfMeasureCode ?? l.unitOfMeasureCode ?? "EA",
           inventoryUnitOfMeasureCode: l.unitOfMeasureCode ?? "EA",
           conversionFactor: v.conversionFactor,
           supplierUnitPrice: price,
@@ -322,10 +437,19 @@ export const orderJobShortages = defineServiceFn({
         if (line.error) failed.push(`${l.readableId}: ${line.error.message}`);
         else n++;
       }
-      created.push({ id: po.data.id, purchaseOrderId: po.data.purchaseOrderId, supplier: group[0].vendor!.name, lines: n });
+      created.push({
+        id: po.data.id,
+        purchaseOrderId: po.data.purchaseOrderId,
+        supplier: group[0].vendor!.name,
+        lines: n
+      });
     }
     if (created.length === 0 && failed.length) {
-      return ctx.error("internal", `No purchase orders created: ${failed.join("; ")}`, new CarbonError("internal", failed.join("; ")));
+      return ctx.error(
+        "internal",
+        `No purchase orders created: ${failed.join("; ")}`,
+        new CarbonError("internal", failed.join("; "))
+      );
     }
     return { created, noVendor, failed };
   }

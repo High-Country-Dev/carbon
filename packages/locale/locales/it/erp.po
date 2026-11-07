@@ -8298,6 +8298,9 @@ msgstr "Scarica modello"
 msgid "Download the template. Each row is a default account {BRAND_NAME} posts to. In Account Number, enter the number of the account in your chart that takes it. {BRAND_NAME} updates the default account to match."
 msgstr "Scarica il modello. Ogni riga è un conto predefinito su cui {BRAND_NAME} registra le transazioni. Nel campo Numero di conto, inserisci il numero del conto nel tuo piano dei conti che lo sostituisce. {BRAND_NAME} aggiorna il conto predefinito per farlo corrispondere."
 
+msgid "draft"
+msgstr ""
+
 msgid "Draft"
 msgstr "Bozza"
 

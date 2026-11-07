@@ -8298,6 +8298,9 @@ msgstr "下载模板"
 msgid "Download the template. Each row is a default account {BRAND_NAME} posts to. In Account Number, enter the number of the account in your chart that takes it. {BRAND_NAME} updates the default account to match."
 msgstr "下载模板。每一行是一个 {BRAND_NAME} 过账的默认账户。在账户编号中，输入您的科目表中对应账户的编号。{BRAND_NAME} 会更新默认账户以匹配。"
 
+msgid "draft"
+msgstr ""
+
 msgid "Draft"
 msgstr "草稿"
 

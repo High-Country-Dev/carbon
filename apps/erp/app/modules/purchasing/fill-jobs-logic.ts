@@ -18,10 +18,20 @@ export type FillLineInput = {
   posted: number; // jobMaterial.quantityIssued
   stillNeeded: number; // jobMaterial.quantityToIssue
   onHand: number; // at the job's location
-  onOrder: { purchaseOrderReadableId: string; quantity: number; promisedDate: string | null }[];
+  onOrder: {
+    purchaseOrderReadableId: string;
+    quantity: number;
+    promisedDate: string | null;
+    draft?: boolean;
+  }[];
 };
 
-export type FillLineStatus = "filled" | "inStock" | "partial" | "onOrder" | "short";
+export type FillLineStatus =
+  | "filled"
+  | "inStock"
+  | "partial"
+  | "onOrder"
+  | "short";
 
 export type FillLine = FillLineInput & {
   status: FillLineStatus;
@@ -35,10 +45,17 @@ export type FillLine = FillLineInput & {
 // they are recognised by unit (days / hours) or name. Pam: "I can't order per
 // diem" — they are hidden, behind a "show hidden lines" toggle (LAND-308).
 const SERVICE_UNITS = new Set(["DAY", "HR", "HOUR", "HOURS", "DAYS"]);
-const SERVICE_WORDS = /\b(per\s*diem|labor|labour|travel|mileage|hotel|meals?)\b/i;
+const SERVICE_WORDS =
+  /\b(per\s*diem|labor|labour|travel|mileage|hotel|meals?)\b/i;
 
-export function isServiceLine(l: Pick<FillLineInput, "unitOfMeasureCode" | "readableId" | "name">): boolean {
-  if (l.unitOfMeasureCode && SERVICE_UNITS.has(l.unitOfMeasureCode.toUpperCase())) return true;
+export function isServiceLine(
+  l: Pick<FillLineInput, "unitOfMeasureCode" | "readableId" | "name">
+): boolean {
+  if (
+    l.unitOfMeasureCode &&
+    SERVICE_UNITS.has(l.unitOfMeasureCode.toUpperCase())
+  )
+    return true;
   return SERVICE_WORDS.test(l.readableId) || SERVICE_WORDS.test(l.name);
 }
 
@@ -47,7 +64,10 @@ const round = (n: number) => Math.round(n * 100000) / 100000;
 export function classifyLine(l: FillLineInput): FillLine {
   const stillNeeded = Math.max(0, l.stillNeeded);
   const onHand = Math.max(0, l.onHand);
-  const onOrderTotal = l.onOrder.reduce((s, o) => s + Math.max(0, o.quantity), 0);
+  const onOrderTotal = l.onOrder.reduce(
+    (s, o) => s + Math.max(0, o.quantity),
+    0
+  );
   const fromStock = round(Math.min(stillNeeded, onHand));
   const afterStock = round(stillNeeded - fromStock);
   const toBuy = round(Math.max(0, afterStock - onOrderTotal));
@@ -68,13 +88,24 @@ export function classifyLine(l: FillLineInput): FillLine {
  */
 export function purchaseQuantityFor(
   stockQty: number,
-  vendor: { conversionFactor?: number | null; minimumOrderQuantity?: number | null; orderMultiple?: number | null }
+  vendor: {
+    conversionFactor?: number | null;
+    minimumOrderQuantity?: number | null;
+    orderMultiple?: number | null;
+  }
 ): number {
-  const f = vendor.conversionFactor && vendor.conversionFactor > 0 ? vendor.conversionFactor : 1;
+  const f =
+    vendor.conversionFactor && vendor.conversionFactor > 0
+      ? vendor.conversionFactor
+      : 1;
   let q = Math.ceil(round(stockQty / f) * 100000) / 100000;
-  const min = vendor.minimumOrderQuantity && vendor.minimumOrderQuantity > 0 ? vendor.minimumOrderQuantity : 0;
+  const min =
+    vendor.minimumOrderQuantity && vendor.minimumOrderQuantity > 0
+      ? vendor.minimumOrderQuantity
+      : 0;
   if (q < min) q = min;
-  const mult = vendor.orderMultiple && vendor.orderMultiple > 0 ? vendor.orderMultiple : 0;
+  const mult =
+    vendor.orderMultiple && vendor.orderMultiple > 0 ? vendor.orderMultiple : 0;
   if (mult > 0) q = Math.ceil(round(q / mult)) * mult;
   return round(q);
 }

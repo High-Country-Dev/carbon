@@ -71,12 +71,22 @@ export async function action({ request }: ActionFunctionArgs) {
       jobId,
       materialIds: materialIds.length ? materialIds : undefined
     });
-    if (res.error) throw redirect(back, await flash(request, error(res.error, res.error.message)));
+    if (res.error)
+      throw redirect(
+        back,
+        await flash(request, error(res.error, res.error.message))
+      );
     const { filled, failed } = res.data;
     const msgText = failed.length
       ? `Filled ${filled.length} from stock; ${failed.length} failed: ${failed.map((f) => `${f.readableId} (${f.message})`).join("; ")}`
       : `Filled ${filled.length} line${filled.length === 1 ? "" : "s"} from stock`;
-    throw redirect(back, await flash(request, failed.length ? error(null, msgText) : success(msgText)));
+    throw redirect(
+      back,
+      await flash(
+        request,
+        failed.length ? error(null, msgText) : success(msgText)
+      )
+    );
   }
 
   if (intent === "order") {
@@ -84,7 +94,11 @@ export async function action({ request }: ActionFunctionArgs) {
       jobId,
       materialIds: materialIds.length ? materialIds : undefined
     });
-    if (res.error) throw redirect(back, await flash(request, error(res.error, res.error.message)));
+    if (res.error)
+      throw redirect(
+        back,
+        await flash(request, error(res.error, res.error.message))
+      );
     const { created, noVendor, failed } = res.data;
     const parts = [
       created.length
@@ -93,7 +107,15 @@ export async function action({ request }: ActionFunctionArgs) {
       noVendor.length ? `no vendor for ${noVendor.join(", ")}` : "",
       failed.length ? `failed: ${failed.join("; ")}` : ""
     ].filter(Boolean);
-    throw redirect(back, await flash(request, failed.length || noVendor.length ? error(null, parts.join("; ")) : success(parts.join("; "))));
+    throw redirect(
+      back,
+      await flash(
+        request,
+        failed.length || noVendor.length
+          ? error(null, parts.join("; "))
+          : success(parts.join("; "))
+      )
+    );
   }
 
   throw redirect(back);
@@ -108,12 +130,21 @@ const STATUS: Record<FillJobLine["status"], { dot: string; label: string }> = {
 };
 
 const qty = (n: number) =>
-  Number.isInteger(n) ? n.toLocaleString() : n.toLocaleString(undefined, { maximumFractionDigits: 3 });
-const day = (d: string | null) => (d ? new Date(d).toLocaleDateString(undefined, { month: "short", day: "numeric" }) : "");
+  Number.isInteger(n)
+    ? n.toLocaleString()
+    : n.toLocaleString(undefined, { maximumFractionDigits: 3 });
+const day = (d: string | null) =>
+  d
+    ? new Date(d).toLocaleDateString(undefined, {
+        month: "short",
+        day: "numeric"
+      })
+    : "";
 const LAST_SEEN = "fillJobs.lastSeen";
 
 export default function FillJobsRoute() {
-  const { jobs, selected, lines, jobReadableId } = useLoaderData<typeof loader>();
+  const { jobs, selected, lines, jobReadableId } =
+    useLoaderData<typeof loader>();
   const nav = useNavigation();
   const busy = nav.state !== "idle";
   const [showHidden, setShowHidden] = useState(false);
@@ -129,9 +160,14 @@ export default function FillJobsRoute() {
     }
   }, []);
 
-  const shown = useMemo(() => lines.filter((l) => showHidden || !l.hidden), [lines, showHidden]);
+  const shown = useMemo(
+    () => lines.filter((l) => showHidden || !l.hidden),
+    [lines, showHidden]
+  );
   const hiddenCount = lines.length - lines.filter((l) => !l.hidden).length;
-  const canFill = shown.filter((l) => !l.hidden && l.fromStock > 0 && l.jobOperationId);
+  const canFill = shown.filter(
+    (l) => !l.hidden && l.fromStock > 0 && l.jobOperationId
+  );
   const canOrder = shown.filter((l) => !l.hidden && l.toBuy > 0);
   const counts = useMemo(() => {
     const c: Record<string, number> = {};
@@ -158,7 +194,11 @@ export default function FillJobsRoute() {
         ) : (
           <ul>
             {jobs.map((j) => {
-              const isNew = !!(lastSeen && j.releasedDate && j.releasedDate > lastSeen);
+              const isNew = !!(
+                lastSeen &&
+                j.releasedDate &&
+                j.releasedDate > lastSeen
+              );
               return (
                 <li key={j.id}>
                   <Link
@@ -172,10 +212,14 @@ export default function FillJobsRoute() {
                       <span className="font-medium">{j.jobId}</span>
                       {isNew && <Badge variant="blue">New</Badge>}
                     </HStack>
-                    <p className="truncate text-xs text-muted-foreground">{j.itemName ?? j.itemReadableId}</p>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {j.itemName ?? j.itemReadableId}
+                    </p>
                     <p className="text-xs text-muted-foreground">
                       {j.status}
-                      {j.releasedDate ? ` · released ${day(j.releasedDate)}` : ""}
+                      {j.releasedDate
+                        ? ` · released ${day(j.releasedDate)}`
+                        : ""}
                     </p>
                   </Link>
                 </li>
@@ -197,12 +241,30 @@ export default function FillJobsRoute() {
                     {jobReadableId ?? job.jobId}
                   </Link>
                 </h1>
-                <p className="text-sm text-muted-foreground">{job.itemName ?? job.itemReadableId}</p>
+                <p className="text-sm text-muted-foreground">
+                  {job.itemName ?? job.itemReadableId}
+                </p>
                 <HStack className="mt-2 flex-wrap gap-3 text-xs">
-                  {(["short", "partial", "onOrder", "inStock", "filled"] as const).map((s) =>
+                  {(
+                    [
+                      "short",
+                      "partial",
+                      "onOrder",
+                      "inStock",
+                      "filled"
+                    ] as const
+                  ).map((s) =>
                     counts[s] ? (
-                      <span key={s} className="inline-flex items-center gap-1.5">
-                        <span className={cn("h-2.5 w-2.5 rounded-full", STATUS[s].dot)} />
+                      <span
+                        key={s}
+                        className="inline-flex items-center gap-1.5"
+                      >
+                        <span
+                          className={cn(
+                            "h-2.5 w-2.5 rounded-full",
+                            STATUS[s].dot
+                          )}
+                        />
                         {counts[s]} {STATUS[s].label.toLowerCase()}
                       </span>
                     ) : null
@@ -211,21 +273,34 @@ export default function FillJobsRoute() {
               </div>
               <HStack className="flex-wrap gap-2">
                 <Button variant="secondary" leftIcon={<LuPrinter />} asChild>
-                  <a href={path.to.file.jobTravelerByJobId(job.id)} target="_blank" rel="noreferrer">
+                  <a
+                    href={path.to.file.jobTravelerByJobId(job.id)}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     <Trans>Traveler</Trans>
                   </a>
                 </Button>
                 <Form method="post">
                   <input type="hidden" name="intent" value="fill" />
                   <input type="hidden" name="jobId" value={job.id} />
-                  <Button type="submit" variant="secondary" leftIcon={<LuPackageCheck />} isDisabled={busy || canFill.length === 0}>
+                  <Button
+                    type="submit"
+                    variant="secondary"
+                    leftIcon={<LuPackageCheck />}
+                    isDisabled={busy || canFill.length === 0}
+                  >
                     <Trans>Fill from stock</Trans> ({canFill.length})
                   </Button>
                 </Form>
                 <Form method="post">
                   <input type="hidden" name="intent" value="order" />
                   <input type="hidden" name="jobId" value={job.id} />
-                  <Button type="submit" leftIcon={<LuShoppingCart />} isDisabled={busy || canOrder.length === 0}>
+                  <Button
+                    type="submit"
+                    leftIcon={<LuShoppingCart />}
+                    isDisabled={busy || canOrder.length === 0}
+                  >
                     <Trans>Order the rest</Trans> ({canOrder.length})
                   </Button>
                 </Form>
@@ -234,8 +309,10 @@ export default function FillJobsRoute() {
 
             <p className="text-xs text-muted-foreground">
               <Trans>
-                Fill from stock posts what's on the shelf to this job. Order the rest makes one draft PO per vendor, in
-                whole sticks or packs; the extra goes to stock. Check the drafts, then finalize them as usual.
+                Fill from stock posts what's on the shelf to this job. Order the
+                rest makes one draft PO per vendor, in whole sticks or packs;
+                the extra goes to stock. Check the drafts, then finalize them as
+                usual.
               </Trans>
             </p>
 
@@ -244,52 +321,124 @@ export default function FillJobsRoute() {
                 <thead className="bg-muted/40 text-left text-xs text-muted-foreground">
                   <tr>
                     <th className="px-3 py-2" />
-                    <th className="px-3 py-2"><Trans>Part</Trans></th>
-                    <th className="px-3 py-2 text-right"><Trans>Needed</Trans></th>
-                    <th className="px-3 py-2 text-right"><Trans>Posted</Trans></th>
-                    <th className="px-3 py-2 text-right"><Trans>On hand</Trans></th>
-                    <th className="px-3 py-2"><Trans>On order</Trans></th>
-                    <th className="px-3 py-2 text-right"><Trans>To buy</Trans></th>
-                    <th className="px-3 py-2"><Trans>Vendor</Trans></th>
-                    <th className="px-3 py-2"><Trans>Bin</Trans></th>
+                    <th className="px-3 py-2">
+                      <Trans>Part</Trans>
+                    </th>
+                    <th className="px-3 py-2 text-right">
+                      <Trans>Needed</Trans>
+                    </th>
+                    <th className="px-3 py-2 text-right">
+                      <Trans>Posted</Trans>
+                    </th>
+                    <th className="px-3 py-2 text-right">
+                      <Trans>On hand</Trans>
+                    </th>
+                    <th className="px-3 py-2">
+                      <Trans>On order</Trans>
+                    </th>
+                    <th className="px-3 py-2 text-right">
+                      <Trans>To buy</Trans>
+                    </th>
+                    <th className="px-3 py-2">
+                      <Trans>Vendor</Trans>
+                    </th>
+                    <th className="px-3 py-2">
+                      <Trans>Bin</Trans>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {shown.map((l) => (
-                    <tr key={l.materialId} className={cn("border-t align-top", l.hidden && "opacity-50")}>
+                    <tr
+                      key={l.materialId}
+                      className={cn(
+                        "border-t align-top",
+                        l.hidden && "opacity-50"
+                      )}
+                    >
                       <td className="px-3 py-2.5">
-                        <span title={STATUS[l.status].label} className={cn("mt-1 block h-2.5 w-2.5 rounded-full", STATUS[l.status].dot)} />
+                        <span
+                          title={STATUS[l.status].label}
+                          className={cn(
+                            "mt-1 block h-2.5 w-2.5 rounded-full",
+                            STATUS[l.status].dot
+                          )}
+                        />
                       </td>
                       <td className="max-w-[360px] px-3 py-2.5">
                         <p className="font-mono text-xs">{l.readableId}</p>
-                        <p className="line-clamp-2 text-xs text-muted-foreground" title={l.name}>{l.name}</p>
+                        <p
+                          className="line-clamp-2 text-xs text-muted-foreground"
+                          title={l.name}
+                        >
+                          {l.name}
+                        </p>
                       </td>
                       <td className="whitespace-nowrap px-3 py-2.5 text-right tabular-nums">
-                        {qty(l.needed)} <span className="text-xs text-muted-foreground">{l.unitOfMeasureCode}</span>
+                        {qty(l.needed)}{" "}
+                        <span className="text-xs text-muted-foreground">
+                          {l.unitOfMeasureCode}
+                        </span>
                       </td>
-                      <td className="px-3 py-2.5 text-right tabular-nums">{qty(l.posted)}</td>
-                      <td className="px-3 py-2.5 text-right tabular-nums">{qty(l.onHand)}</td>
+                      <td className="px-3 py-2.5 text-right tabular-nums">
+                        {qty(l.posted)}
+                      </td>
+                      <td className="px-3 py-2.5 text-right tabular-nums">
+                        {qty(l.onHand)}
+                      </td>
                       <td className="px-3 py-2.5 text-xs">
                         {l.onOrder.map((o) => (
-                          <div key={o.purchaseOrderReadableId + o.quantity} className="whitespace-nowrap">
-                            PO {o.purchaseOrderReadableId} · {qty(o.quantity)}
+                          <div
+                            key={o.purchaseOrderReadableId + o.quantity}
+                            className="whitespace-nowrap"
+                          >
+                            PO {o.purchaseOrderReadableId}
+                            {o.draft ? (
+                              <>
+                                {" "}
+                                (<Trans>draft</Trans>)
+                              </>
+                            ) : null}{" "}
+                            · {qty(o.quantity)}
                             {o.promisedDate ? ` · ${day(o.promisedDate)}` : ""}
                           </div>
                         ))}
                       </td>
-                      <td className={cn("px-3 py-2.5 text-right tabular-nums", l.toBuy > 0 && "font-medium text-red-600")}>
+                      <td
+                        className={cn(
+                          "px-3 py-2.5 text-right tabular-nums",
+                          l.toBuy > 0 && "font-medium text-red-600"
+                        )}
+                      >
                         {l.toBuy > 0 ? qty(l.toBuy) : "—"}
                       </td>
-                      <td className="px-3 py-2.5 text-xs">{l.vendor?.name ?? (l.toBuy > 0 ? <span className="text-red-600">No vendor</span> : "")}</td>
-                      <td className="px-3 py-2.5 text-xs">{l.storageUnitName ?? ""}</td>
+                      <td className="px-3 py-2.5 text-xs">
+                        {l.vendor?.name ??
+                          (l.toBuy > 0 ? (
+                            <span className="text-red-600">No vendor</span>
+                          ) : (
+                            ""
+                          ))}
+                      </td>
+                      <td className="px-3 py-2.5 text-xs">
+                        {l.storageUnitName ?? ""}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
             {hiddenCount > 0 && (
-              <Button variant="ghost" size="sm" onClick={() => setShowHidden((v) => !v)}>
-                {showHidden ? <Trans>Hide per diem and labor lines</Trans> : <Trans>Show {hiddenCount} per diem and labor lines</Trans>}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowHidden((v) => !v)}
+              >
+                {showHidden ? (
+                  <Trans>Hide per diem and labor lines</Trans>
+                ) : (
+                  <Trans>Show {hiddenCount} per diem and labor lines</Trans>
+                )}
               </Button>
             )}
           </VStack>

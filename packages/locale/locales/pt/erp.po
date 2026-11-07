@@ -8298,6 +8298,9 @@ msgstr "Baixar modelo"
 msgid "Download the template. Each row is a default account {BRAND_NAME} posts to. In Account Number, enter the number of the account in your chart that takes it. {BRAND_NAME} updates the default account to match."
 msgstr "Baixe o modelo. Cada linha é uma conta padrão em que o {BRAND_NAME} contabiliza. No Número da conta, insira o número da conta em seu plano que a corresponde. {BRAND_NAME} atualiza a conta padrão para corresponder."
 
+msgid "draft"
+msgstr ""
+
 msgid "Draft"
 msgstr "Rascunho"
 

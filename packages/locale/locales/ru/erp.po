@@ -8298,6 +8298,9 @@ msgstr "Скачать шаблон"
 msgid "Download the template. Each row is a default account {BRAND_NAME} posts to. In Account Number, enter the number of the account in your chart that takes it. {BRAND_NAME} updates the default account to match."
 msgstr "Скачайте шаблон. Каждая строка — это стандартный счет, на который {BRAND_NAME} проводит операции. В поле «Номер счета» введите номер счета из вашего плана счетов, который его заменяет. {BRAND_NAME} обновит стандартный счет, чтобы он соответствовал."
 
+msgid "draft"
+msgstr ""
+
 msgid "Draft"
 msgstr "Черновик"
 

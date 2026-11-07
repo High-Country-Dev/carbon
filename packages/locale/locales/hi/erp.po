@@ -8298,6 +8298,9 @@ msgstr "टेम्पलेट डाउनलोड करें"
 msgid "Download the template. Each row is a default account {BRAND_NAME} posts to. In Account Number, enter the number of the account in your chart that takes it. {BRAND_NAME} updates the default account to match."
 msgstr "टेम्पलेट डाउनलोड करें। प्रत्येक पंक्ति एक डिफ़ॉल्ट खाता है जो {BRAND_NAME} पोस्ट करता है। खाता संख्या में, अपने चार्ट में उस खाते की संख्या दर्ज करें जो इसे लेता है। {BRAND_NAME} डिफ़ॉल्ट खाते को मेल खाने के लिए अपडेट करता है।"
 
+msgid "draft"
+msgstr ""
+
 msgid "Draft"
 msgstr "ड्राफ्ट"
 
