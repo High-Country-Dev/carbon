@@ -4379,6 +4379,9 @@ msgstr "部品表"
 msgid "Bills until it is cancelled"
 msgstr "キャンセルされるまで請求します。"
 
+msgid "Bin"
+msgstr ""
+
 msgid "Blank = computed from the ability's recertification period"
 msgstr "空白 = スキルの再認定期間から計算"
 
@@ -10369,6 +10372,15 @@ msgstr "ここに添付されたファイルは、デフォルトではすべて
 msgid "Files attached here ride along on every purchase order email sent to this supplier (in addition to company-wide defaults)."
 msgstr "ここに添付されたファイルは、この仕入先に送信されるすべての発注書メールに付属します(会社全体のデフォルトに加えて)。"
 
+msgid "Fill from stock"
+msgstr ""
+
+msgid "Fill from stock posts what's on the shelf to this job. Order the rest makes one draft PO per vendor, in whole sticks or packs; the extra goes to stock. Check the drafts, then finalize them as usual."
+msgstr ""
+
+msgid "Fill Jobs"
+msgstr ""
+
 msgid "Fill this company with a realistic industry story so every screen has something in it. You can put back what was here before."
 msgstr "この会社に現実的な業界ストーリーを入れて、すべての画面に何かが表示されるようにします。以前ここにあったものを戻すことができます。"
 
@@ -11170,6 +11182,9 @@ msgstr "明細を非表示"
 
 msgid "Hide monthly revenue"
 msgstr "計算を非表示"
+
+msgid "Hide per diem and labor lines"
+msgstr ""
 
 msgid "Hide raw"
 msgstr "生データを非表示"
@@ -14738,6 +14753,9 @@ msgstr "新規ワークフロー"
 msgid "Newest first"
 msgstr "最新順"
 
+msgid "Newest release first"
+msgstr ""
+
 msgid "Next"
 msgstr "次へ"
 
@@ -15416,6 +15434,9 @@ msgstr "レコードが見つかりません"
 
 msgid "No reference image"
 msgstr "参照画像がありません"
+
+msgid "No released jobs right now."
+msgstr ""
 
 msgid "No remaining entities to inspect."
 msgstr "検査する残りのエンティティはありません。"
@@ -16487,6 +16508,9 @@ msgstr "注文数量はこの数の整数倍である必要があります（12�
 
 msgid "Order rules are evaluated in — for discounts only the highest-priority match applies (no stacking); markups all apply and compound in priority order."
 msgstr "発注ルールは優先度順に評価されます — 値引では最優先度のマッチのみが適用されます（積み重ねなし）。マークアップはすべて適用され、優先度順に複合します。"
+
+msgid "Order the rest"
+msgstr ""
 
 msgid "Order total"
 msgstr ""
@@ -19054,6 +19078,9 @@ msgstr "リリース済み"
 msgid "Released date"
 msgstr "リリース日"
 
+msgid "Released jobs"
+msgstr ""
+
 msgid "Released jobs whose parts can't all come from stock. Red: the job needs more than is on hand now. Amber: on hand covers this job, but all the jobs and orders pulling on the part need more than is on hand and on order. The bars are the part's projected stock by week; open a part to see the jobs pulling it and the orders arriving each week."
 msgstr ""
 
@@ -21565,6 +21592,9 @@ msgstr "あと{0}個表示"
 
 msgid "Show {count} results"
 msgstr "{count}件の結果を表示"
+
+msgid "Show {hiddenCount} per diem and labor lines"
+msgstr ""
 
 msgid "Show {label}"
 msgstr "{label}を表示"
@@ -24874,6 +24904,9 @@ msgstr "へ"
 msgid "To {sentTo} on {sentDate}"
 msgstr "{sentDate}に{sentTo}に送信"
 
+msgid "To buy"
+msgstr ""
+
 msgid "To Date"
 msgstr "終了日"
 
@@ -25264,6 +25297,9 @@ msgstr "トランジット・機関番号"
 
 msgid "Trash"
 msgstr "ゴミ箱"
+
+msgid "Traveler"
+msgstr ""
 
 msgid "Traveler materials disabled"
 msgstr ""
@@ -26093,6 +26129,9 @@ msgstr "資産によって異なります"
 
 msgid "VAT Number"
 msgstr "VAT番号"
+
+msgid "Vendor"
+msgstr ""
 
 msgid "Verdict"
 msgstr "判定"

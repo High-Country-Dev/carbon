@@ -4379,6 +4379,9 @@ msgstr "자재명세서"
 msgid "Bills until it is cancelled"
 msgstr "취소될 때까지 청구됩니다."
 
+msgid "Bin"
+msgstr ""
+
 msgid "Blank = computed from the ability's recertification period"
 msgstr "공백 = 역량의 재인증 기간에서 계산"
 
@@ -10369,6 +10372,15 @@ msgstr "여기에 첨부된 파일은 기본적으로 모든 발주서 이메일
 msgid "Files attached here ride along on every purchase order email sent to this supplier (in addition to company-wide defaults)."
 msgstr "여기에 첨부된 파일은 이 공급업체로 전송되는 모든 발주서 이메일에 포함됩니다(회사 전체 기본값 외에)."
 
+msgid "Fill from stock"
+msgstr ""
+
+msgid "Fill from stock posts what's on the shelf to this job. Order the rest makes one draft PO per vendor, in whole sticks or packs; the extra goes to stock. Check the drafts, then finalize them as usual."
+msgstr ""
+
+msgid "Fill Jobs"
+msgstr ""
+
 msgid "Fill this company with a realistic industry story so every screen has something in it. You can put back what was here before."
 msgstr "이 회사를 현실적인 산업 시나리오로 채워서 모든 화면에 데이터가 표시되도록 합니다. 이전 상태로 복원할 수 있습니다."
 
@@ -11170,6 +11182,9 @@ msgstr "라인 숨기기"
 
 msgid "Hide monthly revenue"
 msgstr "월간 매출 숨기기"
+
+msgid "Hide per diem and labor lines"
+msgstr ""
 
 msgid "Hide raw"
 msgstr "원본 숨기기"
@@ -14738,6 +14753,9 @@ msgstr "새 워크플로우"
 msgid "Newest first"
 msgstr "최신순"
 
+msgid "Newest release first"
+msgstr ""
+
 msgid "Next"
 msgstr "다음"
 
@@ -15416,6 +15434,9 @@ msgstr "기록을 찾을 수 없습니다"
 
 msgid "No reference image"
 msgstr "참조 이미지 없음"
+
+msgid "No released jobs right now."
+msgstr ""
 
 msgid "No remaining entities to inspect."
 msgstr "검사할 개체가 남아 있지 않습니다."
@@ -16487,6 +16508,9 @@ msgstr "주문 수량은 이 숫자의 정수배여야 합니다(12의 배수 �
 
 msgid "Order rules are evaluated in — for discounts only the highest-priority match applies (no stacking); markups all apply and compound in priority order."
 msgstr "주문 규칙은 순서대로 평가됩니다 — 할인은 우선순위가 가장 높은 항목만 적용되며(중복 적용 없음), 마크업은 모두 적용되어 우선순위 순서대로 누적됩니다."
+
+msgid "Order the rest"
+msgstr ""
 
 msgid "Order total"
 msgstr ""
@@ -19054,6 +19078,9 @@ msgstr "릴리즈됨"
 msgid "Released date"
 msgstr "출시일"
 
+msgid "Released jobs"
+msgstr ""
+
 msgid "Released jobs whose parts can't all come from stock. Red: the job needs more than is on hand now. Amber: on hand covers this job, but all the jobs and orders pulling on the part need more than is on hand and on order. The bars are the part's projected stock by week; open a part to see the jobs pulling it and the orders arriving each week."
 msgstr ""
 
@@ -21565,6 +21592,9 @@ msgstr "{0}개 더 표시"
 
 msgid "Show {count} results"
 msgstr "{count}개 결과 표시"
+
+msgid "Show {hiddenCount} per diem and labor lines"
+msgstr ""
 
 msgid "Show {label}"
 msgstr "{label} 표시"
@@ -24874,6 +24904,9 @@ msgstr "까지"
 msgid "To {sentTo} on {sentDate}"
 msgstr "{sentDate}에 {sentTo}로"
 
+msgid "To buy"
+msgstr ""
+
 msgid "To Date"
 msgstr "마감일"
 
@@ -25264,6 +25297,9 @@ msgstr "운송 및 기관"
 
 msgid "Trash"
 msgstr "휴지통"
+
+msgid "Traveler"
+msgstr ""
 
 msgid "Traveler materials disabled"
 msgstr ""
@@ -26093,6 +26129,9 @@ msgstr "자산에 따라 다름"
 
 msgid "VAT Number"
 msgstr "사업자등록번호"
+
+msgid "Vendor"
+msgstr ""
 
 msgid "Verdict"
 msgstr "판정"

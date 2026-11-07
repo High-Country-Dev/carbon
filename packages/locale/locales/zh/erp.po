@@ -4379,6 +4379,9 @@ msgstr "物料清单"
 msgid "Bills until it is cancelled"
 msgstr "持续开票直到被取消"
 
+msgid "Bin"
+msgstr ""
+
 msgid "Blank = computed from the ability's recertification period"
 msgstr "空白 = 从能力的再认证期间计算"
 
@@ -10369,6 +10372,15 @@ msgstr "此处附加的文件将默认随每封采购订单电子邮件一起发
 msgid "Files attached here ride along on every purchase order email sent to this supplier (in addition to company-wide defaults)."
 msgstr "此处附加的文件将随附在发送给此供应商的每份采购订单电子邮件中（除了公司范围的默认设置）。"
 
+msgid "Fill from stock"
+msgstr ""
+
+msgid "Fill from stock posts what's on the shelf to this job. Order the rest makes one draft PO per vendor, in whole sticks or packs; the extra goes to stock. Check the drafts, then finalize them as usual."
+msgstr ""
+
+msgid "Fill Jobs"
+msgstr ""
+
 msgid "Fill this company with a realistic industry story so every screen has something in it. You can put back what was here before."
 msgstr "用逼真的行业故事填充此公司，使每个屏幕都有内容。您可以恢复之前的内容。"
 
@@ -11170,6 +11182,9 @@ msgstr "隐藏行"
 
 msgid "Hide monthly revenue"
 msgstr "隐藏月度收入"
+
+msgid "Hide per diem and labor lines"
+msgstr ""
 
 msgid "Hide raw"
 msgstr "隐藏原始内容"
@@ -14738,6 +14753,9 @@ msgstr "新工作流"
 msgid "Newest first"
 msgstr "最新优先"
 
+msgid "Newest release first"
+msgstr ""
+
 msgid "Next"
 msgstr "下一步"
 
@@ -15416,6 +15434,9 @@ msgstr "未找到记录"
 
 msgid "No reference image"
 msgstr "没有参考图像"
+
+msgid "No released jobs right now."
+msgstr ""
 
 msgid "No remaining entities to inspect."
 msgstr "没有剩余的实体可检查。"
@@ -16487,6 +16508,9 @@ msgstr "订单数量必须是此数字的整数倍（12的倍数→12、24、36�
 
 msgid "Order rules are evaluated in — for discounts only the highest-priority match applies (no stacking); markups all apply and compound in priority order."
 msgstr "订单规则按顺序评估 — 对于折扣，只应用最高优先级的匹配（不叠加）；加价全部应用并按优先级顺序复合。"
+
+msgid "Order the rest"
+msgstr ""
 
 msgid "Order total"
 msgstr ""
@@ -19054,6 +19078,9 @@ msgstr "已下达"
 msgid "Released date"
 msgstr "下达日期"
 
+msgid "Released jobs"
+msgstr ""
+
 msgid "Released jobs whose parts can't all come from stock. Red: the job needs more than is on hand now. Amber: on hand covers this job, but all the jobs and orders pulling on the part need more than is on hand and on order. The bars are the part's projected stock by week; open a part to see the jobs pulling it and the orders arriving each week."
 msgstr ""
 
@@ -21565,6 +21592,9 @@ msgstr "显示{0}个更多"
 
 msgid "Show {count} results"
 msgstr "显示 {count} 条结果"
+
+msgid "Show {hiddenCount} per diem and labor lines"
+msgstr ""
 
 msgid "Show {label}"
 msgstr "显示 {label}"
@@ -24874,6 +24904,9 @@ msgstr "至"
 msgid "To {sentTo} on {sentDate}"
 msgstr "已发送至 {sentTo}，{sentDate}"
 
+msgid "To buy"
+msgstr ""
+
 msgid "To Date"
 msgstr "截止日期"
 
@@ -25264,6 +25297,9 @@ msgstr "中转与机构"
 
 msgid "Trash"
 msgstr "垃圾桶"
+
+msgid "Traveler"
+msgstr ""
 
 msgid "Traveler materials disabled"
 msgstr ""
@@ -26093,6 +26129,9 @@ msgstr "按资产而异"
 
 msgid "VAT Number"
 msgstr "增值税号"
+
+msgid "Vendor"
+msgstr ""
 
 msgid "Verdict"
 msgstr "结果"

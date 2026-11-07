@@ -4379,6 +4379,9 @@ msgstr "सामग्री के बिल"
 msgid "Bills until it is cancelled"
 msgstr "जब तक यह रद्द न हो जाए तब तक बिल करता है"
 
+msgid "Bin"
+msgstr ""
+
 msgid "Blank = computed from the ability's recertification period"
 msgstr "खाली = कौशल की पुनः प्रमाणन अवधि से गणना की गई।"
 
@@ -10369,6 +10372,15 @@ msgstr "यहां संलग्न फाइलें डिफ़ॉल्
 msgid "Files attached here ride along on every purchase order email sent to this supplier (in addition to company-wide defaults)."
 msgstr "यहां संलग्न की गई फाइलें इस आपूर्तिकर्ता को भेजे गए प्रत्येक क्रय आदेश ईमेल के साथ जाती हैं (कंपनी-व्यापी डिफ़ॉल्ट के अतिरिक्त)।"
 
+msgid "Fill from stock"
+msgstr ""
+
+msgid "Fill from stock posts what's on the shelf to this job. Order the rest makes one draft PO per vendor, in whole sticks or packs; the extra goes to stock. Check the drafts, then finalize them as usual."
+msgstr ""
+
+msgid "Fill Jobs"
+msgstr ""
+
 msgid "Fill this company with a realistic industry story so every screen has something in it. You can put back what was here before."
 msgstr "इस कंपनी को एक यथार्थवादी उद्योग की कहानी से भरें ताकि हर स्क्रीन में कुछ न कुछ हो। आप पहले जो यहां था उसे वापस डाल सकते हैं।"
 
@@ -11170,6 +11182,9 @@ msgstr "पंक्तियां छुपाएं"
 
 msgid "Hide monthly revenue"
 msgstr "गणना को छिपाएं"
+
+msgid "Hide per diem and labor lines"
+msgstr ""
 
 msgid "Hide raw"
 msgstr "कच्चे को छुपाएं"
@@ -14738,6 +14753,9 @@ msgstr "नया वर्कफ़्लो"
 msgid "Newest first"
 msgstr "नवीनतम पहले"
 
+msgid "Newest release first"
+msgstr ""
+
 msgid "Next"
 msgstr "अगला"
 
@@ -15416,6 +15434,9 @@ msgstr "कोई रिकॉर्ड नहीं मिला"
 
 msgid "No reference image"
 msgstr "कोई संदर्भ छवि नहीं"
+
+msgid "No released jobs right now."
+msgstr ""
 
 msgid "No remaining entities to inspect."
 msgstr "निरीक्षण के लिए कोई शेष इकाई नहीं है।"
@@ -16487,6 +16508,9 @@ msgstr "ऑर्डर मात्रा इस संख्या के प�
 
 msgid "Order rules are evaluated in — for discounts only the highest-priority match applies (no stacking); markups all apply and compound in priority order."
 msgstr "ऑर्डर नियमों का मूल्यांकन क्रम में किया जाता है — छूट के लिए केवल उच्चतम-प्राथमिकता वाला मिलान लागू होता है (कोई स्टैकिंग नहीं); मार्कअप सभी लागू होते हैं और प्राथमिकता क्रम में मिश्रित होते हैं।"
+
+msgid "Order the rest"
+msgstr ""
 
 msgid "Order total"
 msgstr ""
@@ -19054,6 +19078,9 @@ msgstr "जारी किया गया"
 msgid "Released date"
 msgstr "जारी की गई तारीख"
 
+msgid "Released jobs"
+msgstr ""
+
 msgid "Released jobs whose parts can't all come from stock. Red: the job needs more than is on hand now. Amber: on hand covers this job, but all the jobs and orders pulling on the part need more than is on hand and on order. The bars are the part's projected stock by week; open a part to see the jobs pulling it and the orders arriving each week."
 msgstr ""
 
@@ -21565,6 +21592,9 @@ msgstr "{0} और दिखाएं"
 
 msgid "Show {count} results"
 msgstr "{count} परिणाम दिखाएं"
+
+msgid "Show {hiddenCount} per diem and labor lines"
+msgstr ""
 
 msgid "Show {label}"
 msgstr "{label} दिखाएँ"
@@ -24874,6 +24904,9 @@ msgstr "को"
 msgid "To {sentTo} on {sentDate}"
 msgstr "{sentDate} को {sentTo} को"
 
+msgid "To buy"
+msgstr ""
+
 msgid "To Date"
 msgstr "दिनांक तक"
 
@@ -25264,6 +25297,9 @@ msgstr "ट्रांजिट और संस्था"
 
 msgid "Trash"
 msgstr "ट्रैश"
+
+msgid "Traveler"
+msgstr ""
 
 msgid "Traveler materials disabled"
 msgstr ""
@@ -26093,6 +26129,9 @@ msgstr "संपत्ति के अनुसार भिन्न हो�
 
 msgid "VAT Number"
 msgstr "वैट नंबर"
+
+msgid "Vendor"
+msgstr ""
 
 msgid "Verdict"
 msgstr "परिणाम"

@@ -4379,6 +4379,9 @@ msgstr "Distinte base"
 msgid "Bills until it is cancelled"
 msgstr "Fattura fino a quando non viene annullato"
 
+msgid "Bin"
+msgstr ""
+
 msgid "Blank = computed from the ability's recertification period"
 msgstr "Vuoto = calcolato dal periodo di ricertificazione della competenza"
 
@@ -10369,6 +10372,15 @@ msgstr "I file allegati qui vengono inviati automaticamente con ogni email di or
 msgid "Files attached here ride along on every purchase order email sent to this supplier (in addition to company-wide defaults)."
 msgstr "I file allegati qui vengono inclusi in ogni email di ordine d'acquisto inviata a questo fornitore (in aggiunta ai valori predefiniti a livello aziendale)."
 
+msgid "Fill from stock"
+msgstr ""
+
+msgid "Fill from stock posts what's on the shelf to this job. Order the rest makes one draft PO per vendor, in whole sticks or packs; the extra goes to stock. Check the drafts, then finalize them as usual."
+msgstr ""
+
+msgid "Fill Jobs"
+msgstr ""
+
 msgid "Fill this company with a realistic industry story so every screen has something in it. You can put back what was here before."
 msgstr "Riempi questa azienda con una storia industriale realistica in modo che ogni schermata abbia qualcosa. Puoi ripristinare quello che era qui prima."
 
@@ -11170,6 +11182,9 @@ msgstr "Nascondi righe"
 
 msgid "Hide monthly revenue"
 msgstr "Nascondi ricavi mensili"
+
+msgid "Hide per diem and labor lines"
+msgstr ""
 
 msgid "Hide raw"
 msgstr "Nascondi raw"
@@ -14738,6 +14753,9 @@ msgstr "Nuovo flusso di lavoro"
 msgid "Newest first"
 msgstr "Più recenti prima"
 
+msgid "Newest release first"
+msgstr ""
+
 msgid "Next"
 msgstr "Avanti"
 
@@ -15416,6 +15434,9 @@ msgstr "Nessun record trovato"
 
 msgid "No reference image"
 msgstr "Nessuna immagine di riferimento"
+
+msgid "No released jobs right now."
+msgstr ""
 
 msgid "No remaining entities to inspect."
 msgstr "Nessuna entità rimanente da ispezionare."
@@ -16487,6 +16508,9 @@ msgstr "Le quantità ordinate devono essere multipli interi di questo numero (un
 
 msgid "Order rules are evaluated in — for discounts only the highest-priority match applies (no stacking); markups all apply and compound in priority order."
 msgstr "Le regole d'ordine vengono valutate in ordine — per gli sconti si applica solo la corrispondenza con la priorità più alta (nessun accumulo); i ricarichi si applicano tutti e si compongono in ordine di priorità."
+
+msgid "Order the rest"
+msgstr ""
 
 msgid "Order total"
 msgstr ""
@@ -19054,6 +19078,9 @@ msgstr "Rilasciato"
 msgid "Released date"
 msgstr "Data di rilascio"
 
+msgid "Released jobs"
+msgstr ""
+
 msgid "Released jobs whose parts can't all come from stock. Red: the job needs more than is on hand now. Amber: on hand covers this job, but all the jobs and orders pulling on the part need more than is on hand and on order. The bars are the part's projected stock by week; open a part to see the jobs pulling it and the orders arriving each week."
 msgstr ""
 
@@ -21565,6 +21592,9 @@ msgstr "Mostra altri {0}"
 
 msgid "Show {count} results"
 msgstr "Mostra {count} risultati"
+
+msgid "Show {hiddenCount} per diem and labor lines"
+msgstr ""
 
 msgid "Show {label}"
 msgstr "Mostra {label}"
@@ -24874,6 +24904,9 @@ msgstr "A"
 msgid "To {sentTo} on {sentDate}"
 msgstr "A {sentTo} il {sentDate}"
 
+msgid "To buy"
+msgstr ""
+
 msgid "To Date"
 msgstr "A data"
 
@@ -25264,6 +25297,9 @@ msgstr "Transito e Istituzione"
 
 msgid "Trash"
 msgstr "Cestino"
+
+msgid "Traveler"
+msgstr ""
 
 msgid "Traveler materials disabled"
 msgstr ""
@@ -26093,6 +26129,9 @@ msgstr "Varia in base al cespite"
 
 msgid "VAT Number"
 msgstr "Partita IVA"
+
+msgid "Vendor"
+msgstr ""
 
 msgid "Verdict"
 msgstr "Verdetto"

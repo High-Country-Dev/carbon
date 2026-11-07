@@ -4379,6 +4379,9 @@ msgstr "Спецификации материалов"
 msgid "Bills until it is cancelled"
 msgstr "Выставляет счета до отмены"
 
+msgid "Bin"
+msgstr ""
+
 msgid "Blank = computed from the ability's recertification period"
 msgstr "Пусто = рассчитывается из периода переаттестации навыка"
 
@@ -10369,6 +10372,15 @@ msgstr "Файлы, прикрепленные здесь, автоматиче�
 msgid "Files attached here ride along on every purchase order email sent to this supplier (in addition to company-wide defaults)."
 msgstr "Файлы, прикрепленные здесь, отправляются вместе с каждым письмом заказа на покупку, отправленным этому поставщику (в дополнение к общекорпоративным значениям по умолчанию)."
 
+msgid "Fill from stock"
+msgstr ""
+
+msgid "Fill from stock posts what's on the shelf to this job. Order the rest makes one draft PO per vendor, in whole sticks or packs; the extra goes to stock. Check the drafts, then finalize them as usual."
+msgstr ""
+
+msgid "Fill Jobs"
+msgstr ""
+
 msgid "Fill this company with a realistic industry story so every screen has something in it. You can put back what was here before."
 msgstr "Заполните организацию реалистичной историей отрасли, чтобы каждый экран содержал данные. Вы можете восстановить то, что было здесь раньше."
 
@@ -11170,6 +11182,9 @@ msgstr "Скрыть строки"
 
 msgid "Hide monthly revenue"
 msgstr "Скрыть ежемесячную выручку"
+
+msgid "Hide per diem and labor lines"
+msgstr ""
 
 msgid "Hide raw"
 msgstr "Скрыть исходное"
@@ -14738,6 +14753,9 @@ msgstr "Новый рабочий процесс"
 msgid "Newest first"
 msgstr "Сначала новые"
 
+msgid "Newest release first"
+msgstr ""
+
 msgid "Next"
 msgstr "Далее"
 
@@ -15416,6 +15434,9 @@ msgstr "Записи не найдены"
 
 msgid "No reference image"
 msgstr "Нет эталонного изображения"
+
+msgid "No released jobs right now."
+msgstr ""
 
 msgid "No remaining entities to inspect."
 msgstr "Нет оставшихся объектов для проверки."
@@ -16487,6 +16508,9 @@ msgstr "Количества заказов должны быть целыми �
 
 msgid "Order rules are evaluated in — for discounts only the highest-priority match applies (no stacking); markups all apply and compound in priority order."
 msgstr "Правила заказов оцениваются по порядку — для скидок применяется только совпадение с наивысшим приоритетом (без накопления); наценки применяются все и накапливаются в порядке приоритета."
+
+msgid "Order the rest"
+msgstr ""
 
 msgid "Order total"
 msgstr ""
@@ -19054,6 +19078,9 @@ msgstr "Выпущено"
 msgid "Released date"
 msgstr "Дата выпуска"
 
+msgid "Released jobs"
+msgstr ""
+
 msgid "Released jobs whose parts can't all come from stock. Red: the job needs more than is on hand now. Amber: on hand covers this job, but all the jobs and orders pulling on the part need more than is on hand and on order. The bars are the part's projected stock by week; open a part to see the jobs pulling it and the orders arriving each week."
 msgstr ""
 
@@ -21565,6 +21592,9 @@ msgstr "Показать еще {0}"
 
 msgid "Show {count} results"
 msgstr "Показать {count} результатов"
+
+msgid "Show {hiddenCount} per diem and labor lines"
+msgstr ""
 
 msgid "Show {label}"
 msgstr "Показать {label}"
@@ -24874,6 +24904,9 @@ msgstr "До"
 msgid "To {sentTo} on {sentDate}"
 msgstr "Для {sentTo} на {sentDate}"
 
+msgid "To buy"
+msgstr ""
+
 msgid "To Date"
 msgstr "До даты"
 
@@ -25264,6 +25297,9 @@ msgstr "Транзит и учреждение"
 
 msgid "Trash"
 msgstr "Корзина"
+
+msgid "Traveler"
+msgstr ""
 
 msgid "Traveler materials disabled"
 msgstr ""
@@ -26093,6 +26129,9 @@ msgstr "Варьируется в зависимости от актива"
 
 msgid "VAT Number"
 msgstr "ИНН"
+
+msgid "Vendor"
+msgstr ""
 
 msgid "Verdict"
 msgstr "Вывод"

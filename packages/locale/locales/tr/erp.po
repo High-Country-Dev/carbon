@@ -4379,6 +4379,9 @@ msgstr "Malzeme Faturaları"
 msgid "Bills until it is cancelled"
 msgstr "İptal edilene kadar faturalandırır"
 
+msgid "Bin"
+msgstr ""
+
 msgid "Blank = computed from the ability's recertification period"
 msgstr "Boş = yetkinliğin yeniden sertifikasyon döneminden hesaplanır"
 
@@ -10369,6 +10372,15 @@ msgstr "Buraya eklenen dosyalar varsayılan olarak her satın alma siparişi e-p
 msgid "Files attached here ride along on every purchase order email sent to this supplier (in addition to company-wide defaults)."
 msgstr "Buraya eklenen dosyalar, bu tedarikçiye gönderilen her satın alma siparişi e-postasında yer alır (şirket genelindeki varsayılanlara ek olarak)."
 
+msgid "Fill from stock"
+msgstr ""
+
+msgid "Fill from stock posts what's on the shelf to this job. Order the rest makes one draft PO per vendor, in whole sticks or packs; the extra goes to stock. Check the drafts, then finalize them as usual."
+msgstr ""
+
+msgid "Fill Jobs"
+msgstr ""
+
 msgid "Fill this company with a realistic industry story so every screen has something in it. You can put back what was here before."
 msgstr "Bu şirketi gerçekçi bir endüstri hikayesiyle doldurun, böylece her ekran bir şey içerir. Önceki durumu geri getirebilirsiniz."
 
@@ -11170,6 +11182,9 @@ msgstr "Satırları Gizle"
 
 msgid "Hide monthly revenue"
 msgstr "Hesaplamayı gizle"
+
+msgid "Hide per diem and labor lines"
+msgstr ""
 
 msgid "Hide raw"
 msgstr "Ham verileri gizle"
@@ -14738,6 +14753,9 @@ msgstr "Yeni İş Akışı"
 msgid "Newest first"
 msgstr "En yeniden önce"
 
+msgid "Newest release first"
+msgstr ""
+
 msgid "Next"
 msgstr "İleri"
 
@@ -15416,6 +15434,9 @@ msgstr "Kayıt bulunamadı"
 
 msgid "No reference image"
 msgstr "Referans resim yok"
+
+msgid "No released jobs right now."
+msgstr ""
 
 msgid "No remaining entities to inspect."
 msgstr "İncelenecek kalan varlık yok."
@@ -16487,6 +16508,9 @@ msgstr "Sipariş miktarları bu sayının tam katları olmalıdır (12'nin katı
 
 msgid "Order rules are evaluated in — for discounts only the highest-priority match applies (no stacking); markups all apply and compound in priority order."
 msgstr "Sipariş kuralları şu şekilde değerlendirilir — iskontolar için yalnızca en yüksek öncelikli kural uygulanır (yığılmaz); tüm fiyat artışları uygulanır ve öncelik sırasına göre birikir."
+
+msgid "Order the rest"
+msgstr ""
 
 msgid "Order total"
 msgstr ""
@@ -19054,6 +19078,9 @@ msgstr "Yayınlandı"
 msgid "Released date"
 msgstr "Yayın tarihi"
 
+msgid "Released jobs"
+msgstr ""
+
 msgid "Released jobs whose parts can't all come from stock. Red: the job needs more than is on hand now. Amber: on hand covers this job, but all the jobs and orders pulling on the part need more than is on hand and on order. The bars are the part's projected stock by week; open a part to see the jobs pulling it and the orders arriving each week."
 msgstr ""
 
@@ -21565,6 +21592,9 @@ msgstr "{0} daha göster"
 
 msgid "Show {count} results"
 msgstr "{count} sonuç göster"
+
+msgid "Show {hiddenCount} per diem and labor lines"
+msgstr ""
 
 msgid "Show {label}"
 msgstr "{label}'ı göster"
@@ -24874,6 +24904,9 @@ msgstr "Kime"
 msgid "To {sentTo} on {sentDate}"
 msgstr "{sentDate} tarihinde {sentTo}'a"
 
+msgid "To buy"
+msgstr ""
+
 msgid "To Date"
 msgstr "Bitiş Tarihi"
 
@@ -25264,6 +25297,9 @@ msgstr "Geçiş ve Kurum"
 
 msgid "Trash"
 msgstr "Çöp Kutusu"
+
+msgid "Traveler"
+msgstr ""
 
 msgid "Traveler materials disabled"
 msgstr ""
@@ -26093,6 +26129,9 @@ msgstr "Varlığa göre değişir"
 
 msgid "VAT Number"
 msgstr "Vergi numarası"
+
+msgid "Vendor"
+msgstr ""
 
 msgid "Verdict"
 msgstr "Sonuç"

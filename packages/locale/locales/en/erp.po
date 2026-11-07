@@ -4379,6 +4379,9 @@ msgstr "Bills of material"
 msgid "Bills until it is cancelled"
 msgstr "Bills until it is cancelled"
 
+msgid "Bin"
+msgstr "Bin"
+
 msgid "Blank = computed from the ability's recertification period"
 msgstr "Blank = computed from the ability's recertification period"
 
@@ -10369,6 +10372,15 @@ msgstr "Files attached here ride along on every purchase order email by default.
 msgid "Files attached here ride along on every purchase order email sent to this supplier (in addition to company-wide defaults)."
 msgstr "Files attached here ride along on every purchase order email sent to this supplier (in addition to company-wide defaults)."
 
+msgid "Fill from stock"
+msgstr "Fill from stock"
+
+msgid "Fill from stock posts what's on the shelf to this job. Order the rest makes one draft PO per vendor, in whole sticks or packs; the extra goes to stock. Check the drafts, then finalize them as usual."
+msgstr "Fill from stock posts what's on the shelf to this job. Order the rest makes one draft PO per vendor, in whole sticks or packs; the extra goes to stock. Check the drafts, then finalize them as usual."
+
+msgid "Fill Jobs"
+msgstr "Fill Jobs"
+
 msgid "Fill this company with a realistic industry story so every screen has something in it. You can put back what was here before."
 msgstr "Fill this company with a realistic industry story so every screen has something in it. You can put back what was here before."
 
@@ -11170,6 +11182,9 @@ msgstr "Hide lines"
 
 msgid "Hide monthly revenue"
 msgstr "Hide monthly revenue"
+
+msgid "Hide per diem and labor lines"
+msgstr "Hide per diem and labor lines"
 
 msgid "Hide raw"
 msgstr "Hide raw"
@@ -14738,6 +14753,9 @@ msgstr "New Workflow"
 msgid "Newest first"
 msgstr "Newest first"
 
+msgid "Newest release first"
+msgstr "Newest release first"
+
 msgid "Next"
 msgstr "Next"
 
@@ -15416,6 +15434,9 @@ msgstr "No records found"
 
 msgid "No reference image"
 msgstr "No reference image"
+
+msgid "No released jobs right now."
+msgstr "No released jobs right now."
 
 msgid "No remaining entities to inspect."
 msgstr "No remaining entities to inspect."
@@ -16487,6 +16508,9 @@ msgstr "Order quantities must be whole multiples of this number (a multiple of 1
 
 msgid "Order rules are evaluated in — for discounts only the highest-priority match applies (no stacking); markups all apply and compound in priority order."
 msgstr "Order rules are evaluated in — for discounts only the highest-priority match applies (no stacking); markups all apply and compound in priority order."
+
+msgid "Order the rest"
+msgstr "Order the rest"
 
 msgid "Order total"
 msgstr "Order total"
@@ -19054,6 +19078,9 @@ msgstr "Released"
 msgid "Released date"
 msgstr "Released date"
 
+msgid "Released jobs"
+msgstr "Released jobs"
+
 msgid "Released jobs whose parts can't all come from stock. Red: the job needs more than is on hand now. Amber: on hand covers this job, but all the jobs and orders pulling on the part need more than is on hand and on order. The bars are the part's projected stock by week; open a part to see the jobs pulling it and the orders arriving each week."
 msgstr "Released jobs whose parts can't all come from stock. Red: the job needs more than is on hand now. Amber: on hand covers this job, but all the jobs and orders pulling on the part need more than is on hand and on order. The bars are the part's projected stock by week; open a part to see the jobs pulling it and the orders arriving each week."
 
@@ -21565,6 +21592,9 @@ msgstr "Show {0} more"
 
 msgid "Show {count} results"
 msgstr "Show {count} results"
+
+msgid "Show {hiddenCount} per diem and labor lines"
+msgstr "Show {hiddenCount} per diem and labor lines"
 
 msgid "Show {label}"
 msgstr "Show {label}"
@@ -24874,6 +24904,9 @@ msgstr "To"
 msgid "To {sentTo} on {sentDate}"
 msgstr "To {sentTo} on {sentDate}"
 
+msgid "To buy"
+msgstr "To buy"
+
 msgid "To Date"
 msgstr "To Date"
 
@@ -25264,6 +25297,9 @@ msgstr "Transit & Institution"
 
 msgid "Trash"
 msgstr "Trash"
+
+msgid "Traveler"
+msgstr "Traveler"
 
 msgid "Traveler materials disabled"
 msgstr "Traveler materials disabled"
@@ -26093,6 +26129,9 @@ msgstr "Varies by asset"
 
 msgid "VAT Number"
 msgstr "VAT Number"
+
+msgid "Vendor"
+msgstr "Vendor"
 
 msgid "Verdict"
 msgstr "Verdict"
