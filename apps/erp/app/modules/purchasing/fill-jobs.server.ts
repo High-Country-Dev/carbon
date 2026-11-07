@@ -411,7 +411,13 @@ export const orderJobShortages = defineServiceFn({
       let n = 0;
       for (const l of group) {
         const v = l.vendor!;
-        const purchaseQuantity = purchaseQuantityFor(l.toBuy, v);
+        // Whole units and stick multiples only. The vendor minimum came from
+        // JobBOSS's first price-break quantity (7 flanges when the job needs 2),
+        // so it isn't applied here; Pam can raise a draft line herself.
+        const purchaseQuantity = purchaseQuantityFor(l.toBuy, {
+          ...v,
+          minimumOrderQuantity: null
+        });
         const price =
           v.supplierUnitPrice ??
           Math.round(l.unitCost * v.conversionFactor * 100000) / 100000;

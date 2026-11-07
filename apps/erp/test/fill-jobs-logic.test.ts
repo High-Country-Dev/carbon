@@ -62,6 +62,11 @@ describe("purchaseQuantityFor", () => {
   it("each-items without a vendor setup buy exactly what's short", () => {
     expect(purchaseQuantityFor(3, {})).toBe(3);
   });
+  it("rounds up to whole purchase units", () => {
+    expect(purchaseQuantityFor(72, { conversionFactor: 120 })).toBe(1); // 72 in of a 120 in sheet
+    expect(purchaseQuantityFor(224, { conversionFactor: 12 })).toBe(19); // 18.67 ft of beam
+    expect(purchaseQuantityFor(240, { conversionFactor: 12 })).toBe(20); // exact stays exact
+  });
   it("a minimum without a multiple is a floor only", () => {
     expect(purchaseQuantityFor(5, { minimumOrderQuantity: 20 })).toBe(20);
     expect(purchaseQuantityFor(25, { minimumOrderQuantity: 20 })).toBe(25);

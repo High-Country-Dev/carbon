@@ -98,7 +98,8 @@ export function purchaseQuantityFor(
     vendor.conversionFactor && vendor.conversionFactor > 0
       ? vendor.conversionFactor
       : 1;
-  let q = Math.ceil(round(stockQty / f) * 100000) / 100000;
+  // Whole purchase units: you can't order 0.6 of a sheet or 18.67 ft of beam.
+  let q = Math.ceil(round(stockQty / f) - 1e-6);
   const min =
     vendor.minimumOrderQuantity && vendor.minimumOrderQuantity > 0
       ? vendor.minimumOrderQuantity
